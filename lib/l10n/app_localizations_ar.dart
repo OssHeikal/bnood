@@ -18,7 +18,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navClients => 'العملاء';
 
   @override
-  String get navDirectory => 'الموردين والصنايعية';
+  String get navDirectory => 'الدليل';
+
+  @override
+  String get directoryTitle => 'الموردين والصنايعية';
 
   @override
   String get navItems => 'البنود';

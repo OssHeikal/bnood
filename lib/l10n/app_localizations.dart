@@ -122,6 +122,12 @@ abstract class AppLocalizations {
   /// **'Directory'**
   String get navDirectory;
 
+  /// No description provided for @directoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Directory'**
+  String get directoryTitle;
+
   /// No description provided for @navItems.
   ///
   /// In en, this message translates to:

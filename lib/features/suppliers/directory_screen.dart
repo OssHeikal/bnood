@@ -22,7 +22,7 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(l10n.navDirectory),
+          title: Text(l10n.directoryTitle),
           bottom: TabBar(
               tabs: [Tab(text: l10n.suppliers), Tab(text: l10n.craftsmen)]),
         ),

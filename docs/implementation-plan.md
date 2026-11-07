@@ -16,7 +16,7 @@ Standing rules during build:
 - Planned shared widgets stubbed per [Shared components](shared-components.md)
 - `CustomBottomSheet` + nested navigator pattern demo route
 - Drift DB + auto workspace migration
-- go_router shell with ≤5 tabs (placeholder screens)
+- go_router shell with floating **pill** (four destinations) + voucher **satellite** (see [ux-flows.md](ux-flows.md); legacy ≤5-tab center-FAB is obsolete)
 
 **Acceptance:**
 

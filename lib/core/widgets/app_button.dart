@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppButtonVariant {
-  primary,
-  secondary,
-  destructive,
-  outlined,
-  text,
-  success,
-  warning
-}
+enum AppButtonVariant { primary, secondary, destructive, outlined, text, success, warning }
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -30,41 +22,28 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final child = icon == null
         ? Text(label)
-        : Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 20),
-              const SizedBox(width: 8),
-              Text(label)
-            ],
-          );
+        : Row(mainAxisSize: MainAxisSize.min, children: [Icon(icon, size: 20), const SizedBox(width: 8), Text(label)]);
 
     final button = switch (variant) {
-      AppButtonVariant.primary =>
-        FilledButton(onPressed: onPressed, child: child),
-      AppButtonVariant.secondary =>
-        FilledButton.tonal(onPressed: onPressed, child: child),
+      AppButtonVariant.primary => FilledButton(onPressed: onPressed, child: child),
+      AppButtonVariant.secondary => FilledButton.tonal(onPressed: onPressed, child: child),
       AppButtonVariant.destructive => FilledButton(
-          style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error),
-          onPressed: onPressed,
-          child: child,
-        ),
-      AppButtonVariant.outlined =>
-        OutlinedButton(onPressed: onPressed, child: child),
+        style: FilledButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.error),
+        onPressed: onPressed,
+        child: child,
+      ),
+      AppButtonVariant.outlined => OutlinedButton(onPressed: onPressed, child: child),
       AppButtonVariant.text => TextButton(onPressed: onPressed, child: child),
       AppButtonVariant.success => FilledButton(
-          style:
-              FilledButton.styleFrom(backgroundColor: const Color(0xFF1B9E5A)),
-          onPressed: onPressed,
-          child: child,
-        ),
+        style: FilledButton.styleFrom(backgroundColor: const Color(0xFF1B9E5A)),
+        onPressed: onPressed,
+        child: child,
+      ),
       AppButtonVariant.warning => FilledButton(
-          style:
-              FilledButton.styleFrom(backgroundColor: const Color(0xFFE6A23C)),
-          onPressed: onPressed,
-          child: child,
-        ),
+        style: FilledButton.styleFrom(backgroundColor: const Color(0xFFE6A23C)),
+        onPressed: onPressed,
+        child: child,
+      ),
     };
 
     if (!expanded) return button;

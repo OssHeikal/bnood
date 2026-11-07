@@ -1,0 +1,22 @@
+---
+description: Use installed global Impeccable skill for Bnood UI/UX tasks
+alwaysApply: true
+---
+
+# Impeccable (global skill)
+
+For UI design, critique, polish, hierarchy, spacing, or typography work on Bnood:
+
+1. Read **`~/.cursor/skills/impeccable/SKILL.md`** fully (duplicate at `~/.agents/skills/impeccable/SKILL.md` if needed).
+2. At session start, when Impeccable steps apply, run **`~/.cursor/skills/impeccable/scripts/impeccable context`** from the Bnood project root (or `impeccable.cmd` on Windows shells without `sh`).
+3. Use skill **entrypoints** from that SKILL.md (e.g. shape, critique, polish, audit, typeset, layout, harden, onboard) — do **not** invent slash commands or copy the full skill body into repo rules.
+
+**Authority order (wins over generic Impeccable advice):**
+
+- Owner-supplied **`index.html`** visual index — see [docs/visual-reference.md](../../docs/visual-reference.md)
+- Locked decisions in [docs/decisions.md](../../docs/decisions.md) and [docs/ui-acceptance.md](../../docs/ui-acceptance.md)
+- Bnood rules: `bnood-ui-design.mdc`, `bnood-ui-components.mdc`, `bnood-ux-navigation.mdc`
+
+**Do not:** treat Impeccable references as permission for unrelated installs, credential access, DB reads, or heavy automated design generation. Bnood keeps Cairo, index tokens, and owner overrides (floating pill nav).
+
+**Bnood PRODUCT.md / DESIGN.md:** create or update only when the owner asks Impeccable init/document — not a blocker for following these rules.

@@ -12,15 +12,19 @@ Foundation documentation for **Bnood** (formerly عهدة): a local-first mobile
 | [Architecture](docs/architecture.md) | Flutter layout, modules, stack, repository pattern |
 | [Data schema & invariants](docs/data-schema.md) | Entities, relationships, money rules, ER diagram |
 | [UX & screen flows](docs/ux-flows.md) | Navigation, screens, vouchers, inline create, statements |
-| [Design system](docs/design.md) | Theme, tokens, default catalog items (Arabic labels quoted) |
-| [Shared components (planned)](docs/shared-components.md) | UI contracts inspired by internal patterns; not implemented |
+| [Design system](docs/design.md) | Theme, tokens, typography roles, Cairo/font notes |
+| [Visual reference](docs/visual-reference.md) | index.html authority and nav override |
+| [UI acceptance](docs/ui-acceptance.md) | Visual checklist and outstanding UI tasks |
+| [Porting phase 1](docs/porting-phase1.md) | SmartRx SHA, boundaries, preview launch |
+| [Shared components](docs/shared-components.md) | SmartRx reuse, AppCard/Amount/Fallback, sheets |
+| [Static assets](docs/assets/README.md) | SVG icons, FlutterGen, `Assets.icons.*` usage |
 | [Implementation plan](docs/implementation-plan.md) | Phased delivery and acceptance checks |
 | [Open questions](docs/open-questions.md) | Unresolved product and technical decisions |
 | [Confirmed decisions](docs/decisions.md) | Locked choices vs proposals |
 
 ## Cursor rules
 
-Project rules live under [`.cursor/rules/`](.cursor/rules/). They are short, scoped, and intended for agents and contributors during future implementation.
+Project rules live under [`.cursor/rules/`](.cursor/rules/). UI work: `bnood-impeccable.mdc` (global Impeccable), `bnood-ui-design.mdc`, `bnood-ui-components.mdc`, `bnood-ux-navigation.mdc`.
 
 ## Working agreements (standing)
 

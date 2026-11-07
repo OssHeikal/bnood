@@ -2,17 +2,26 @@
 
 **Confirmed** navigation and flows unless noted **Proposal** or **Open**.
 
-## Primary navigation (≤5)
+## Primary navigation (floating pill + satellite)
 
-| Slot | Destination |
-|------|-------------|
-| 1 | **Home** — totals, active clients, supplier quick access |
-| 2 | **Clients** |
-| 3 | **Center +** — new voucher (contextual) |
-| 4 | **Directory** — suppliers and craftsmen (separate lists; shared tab shell) |
-| 5 | **Items** — global catalog |
+**Confirmed (owner override, 2026-11):** Supersedes legacy index HTML **5-tab center FAB** and older “five slots” wording.
 
-**Confirmed:** No dedicated summary tab.
+| Pill destination | Route purpose |
+|------------------|---------------|
+| **Home** | Totals, active clients, supplier quick access |
+| **Clients** | Client list |
+| **Directory** | Suppliers and craftsmen (separate lists; shared tab shell) |
+| **Items** | Global catalog |
+
+| Satellite | Purpose |
+|-----------|---------|
+| **+** (circular, beside pill end) | New voucher (contextual) — **not** a center tab slot |
+
+**Open (product):** Exact satellite side (start vs end in RTL/LTR), pill width, and + diameter — implement only after owner picks or approves a mock.
+
+**Confirmed:** No dedicated summary tab. Content scrolls behind dock; bottom gradient fade + scroll padding per [design.md](design.md).
+
+**Reference:** [visual-reference.md](visual-reference.md) for non-nav UI; [ui-acceptance.md](ui-acceptance.md) for checklist.
 
 ## Home
 

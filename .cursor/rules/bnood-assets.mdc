@@ -1,0 +1,14 @@
+---
+description: Assets and FlutterGen — no raw asset paths in UI
+globs: lib/**/*
+alwaysApply: false
+---
+
+# Assets
+
+Read [docs/assets/README.md](../../docs/assets/README.md).
+
+- Icons: `Assets.icons.<camelCase>` from `lib/core/resources/gen/assets.gen.dart`.
+- Never string-literal `assets/icons/...` in `lib/` (except codegen config).
+- Regenerate: `fvm dart run flutter_gen:flutter_gen_command` after asset changes.
+- Do not map icons to product screens until owner approves (CSV is rename audit only).

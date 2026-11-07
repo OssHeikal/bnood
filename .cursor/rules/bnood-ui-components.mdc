@@ -1,0 +1,54 @@
+---
+description: Component contracts, SmartRx reuse, AppCard/Amount/Fallback
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# UI components
+
+[docs/shared-components.md](../../docs/shared-components.md) · [docs/ux-flows.md](../../docs/ux-flows.md)
+
+## SmartRx reuse (portable, not re-drawn)
+
+When implementing or refactoring shell widgets, **copy/adapt existing SmartRx patient `core` sources** for:
+
+- `AppButton` / `AppPressable`
+- `CustomTextField` (one `.search` variant — no duplicate search field)
+- `Toaster` above floating dock (`rootNavigatorKey`, bottom inset)
+- `AppDecision.show` (no raw `showDialog` for standard confirms)
+- `CustomBottomSheet` **shell** (drag handle, content sizing, root navigator from shell)
+
+**Adapt only:** theme tokens, `l10n`, assets, Bnood routes/errors. **Do not** reimplement “similar” buttons, toasts, or fields.
+
+### CustomBottomSheet — SmartRx vs Bnood
+
+| SmartRx (Dog handoff) | Bnood |
+|------------------------|--------|
+| `.actions` / `.choices` layouts | Same patterns where applicable |
+| **No** nested `Navigator` | **Bnood-only:** single sheet hosts **local** `Navigator` for inline-create subflows |
+
+Rules: one sheet at a time; push/pop inner routes; cancel restores parent draft; save returns selected entity; Back pops inner route — never stack sheets/dialogs.
+
+## Bnood-specific components (to implement / converge)
+
+### AppCard
+
+Reusable surface: child content, optional gradient/border/shadow, radius (8/16/24), padding, tap via **`AppPressable`** (no parallel `GestureDetector` + `InkWell` stacks). Prefer **semantic presets** (stat receive/spend/remain, list row, fee card) over a mega-constructor with dozens of parameters.
+
+### AppAmount
+
+- Input: **integer piastres** only.
+- Roles: receive (green), spend (red), remaining (teal), neutral.
+- Centralize locale grouping, decimals, currency label, LTR isolation / direction — **one widget**, not per-screen `Text` formatting.
+
+### AppFallback
+
+Empty or error: icon, title, description, optional CTA (add / retry). Works full-screen or inside a section. No stack traces or HTTP codes in UI.
+
+### Icons
+
+Owner will supply **SVG** assets. Do not invent final icon mappings or swap in unrelated repeated placeholders in production polish.
+
+## Loading
+
+No loading-state redesign in current UI phase unless owner asks.

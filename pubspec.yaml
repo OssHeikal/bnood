@@ -25,6 +25,8 @@ dependencies:
   pdf: ^3.11.1
   collection: ^1.19.0
   url_launcher: ^6.3.1
+  flutter_svg: ^2.0.17
+  vector_graphics: ^1.2.6
 
 dev_dependencies:
   flutter_test:
@@ -32,11 +34,22 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   drift_dev: ^2.22.1
   build_runner: ^2.4.13
+  flutter_gen: ^5.15.0
+  flutter_gen_runner: ^5.15.0
+
+flutter_gen:
+  output: lib/core/resources/gen/
+  line_length: 120
+  integrations:
+    flutter_svg: true
+  assets:
+    enabled: true
 
 flutter:
   uses-material-design: true
   generate: true
   assets:
+    - assets/icons/
     - assets/fonts/Cairo-Regular.ttf
     - assets/fonts/Cairo-Bold.ttf
     - assets/fonts/OFL.txt

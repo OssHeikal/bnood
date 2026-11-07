@@ -20,7 +20,7 @@ Use this page with [Open questions](open-questions.md) and domain-specific docs.
 | Payment methods | Cash or transfer only (no wallet) |
 | Engineer fee | Optional percentage on project; informational estimated profit only; not deducted; not on default client PDF |
 | Statements V1 | Client in-app + shareable PDF; supplier statement/history in V1 |
-| Navigation | ≤5 tabs: Home, Clients, center +, supplier/craftsman directory, Items; no summary tab |
+| Navigation | Floating **pill** with **four** destinations (Home, Clients, supplier/craftsman directory, Items); **+** voucher on independent **satellite** beside pill end (not center tab); no summary tab; content scrolls behind dock with bottom gradient + scroll padding — **supersedes** index center-FAB bar |
 
 ## Confirmed — data model
 

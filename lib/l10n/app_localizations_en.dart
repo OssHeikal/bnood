@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navDirectory => 'Directory';
 
   @override
+  String get directoryTitle => 'Directory';
+
+  @override
   String get navItems => 'Items';
 
   @override
