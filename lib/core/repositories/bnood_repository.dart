@@ -400,6 +400,11 @@ class BnoodRepository {
               a.projectId.equals(projectId) &
               a.craftsmanId.equals(craftsmanId)))
         .getSingleOrNull();
+    final amountWrite = clearInitial
+        ? const Value<int?>(null)
+        : initialAmountPiastres == null && existing != null
+            ? const Value<int?>.absent()
+            : Value<int?>(initialAmountPiastres);
     if (existing == null) {
       final id = _uuid.v4();
       await _db
@@ -409,8 +414,7 @@ class BnoodRepository {
             workspaceId: ws,
             projectId: projectId,
             craftsmanId: craftsmanId,
-            initialAmountPiastres:
-                clearInitial ? const Value(null) : Value(initialAmountPiastres),
+            initialAmountPiastres: amountWrite,
             createdAt: now,
             updatedAt: now,
           ));
@@ -422,8 +426,7 @@ class BnoodRepository {
           ..where((a) => a.id.equals(existing.id)))
         .write(
       ProjectCraftsmanAgreementsCompanion(
-        initialAmountPiastres:
-            clearInitial ? const Value(null) : Value(initialAmountPiastres),
+        initialAmountPiastres: amountWrite,
         updatedAt: Value(now),
       ),
     );

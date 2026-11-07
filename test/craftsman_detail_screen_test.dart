@@ -104,7 +104,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
 
-    expect(find.text('Ahmed Plumber'), findsNWidgets(2));
+    expect(find.text('Ahmed Plumber'), findsOneWidget);
     expect(find.text('Craftsman'), findsNothing);
     expect(find.text('Plumbing'), findsOneWidget);
     expect(find.textContaining('01012345678'), findsOneWidget);

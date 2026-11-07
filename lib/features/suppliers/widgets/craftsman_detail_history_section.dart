@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_fallback.dart';
-import '../../../core/widgets/app_pressable.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../clients/widgets/client_detail_movement_row.dart';
+import '../../clients/widgets/client_movement_card.dart';
 import '../../home/widgets/home_section_header.dart';
 import '../craftsman_detail_snapshot.dart';
 
@@ -68,37 +67,12 @@ class _HistoryBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = context.text;
-    final colors = context.colors;
-    final clientId = entry.clientId;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSize.spaceSM),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (clientId.isNotEmpty)
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: AppPressable(
-                onPressed: () => context.push('/clients/$clientId'),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: Text(
-                    entry.clientName,
-                    style: textTheme.caption.copyWith(
-                      color: colors.primaryDark,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-            ),
-          ClientDetailMovementRow(line: entry.line, localeCode: localeCode),
-        ],
-      ),
+    return ClientDetailMovementRow(
+      line: entry.line,
+      localeCode: localeCode,
+      contextMode: ClientMovementCardContext.partyDetail,
+      partyClientId: entry.clientId,
+      partyClientName: entry.clientName,
     );
   }
 }

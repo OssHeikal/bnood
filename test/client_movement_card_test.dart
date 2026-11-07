@@ -184,6 +184,68 @@ void main() {
     expect(tester.getTopRight(amountFinder).dx, closeTo(tester.getTopRight(find.text(dateLabel)).dx, 1));
   });
 
+  testWidgets('party detail context shows client subtitle not payee', (tester) async {
+    final date = DateTime(2026, 11, 7);
+    final line = _line(
+      transaction: _tx(amount: 50000, date: date, expenseType: 'labor', description: 'Install'),
+      itemName: 'Plumbing',
+      payeeName: 'Ahmed Plumber',
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppFoundationTheme.light(),
+        locale: const Locale('en'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: ClientMovementCard(
+            line: line,
+            localeCode: 'en',
+            contextMode: ClientMovementCardContext.partyDetail,
+            partyClientId: 'c-osama',
+            partyClientName: 'Osama',
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Plumbing'), findsOneWidget);
+    expect(find.text('Osama'), findsOneWidget);
+    expect(find.text('Ahmed Plumber'), findsNothing);
+  });
+
+  testWidgets('party detail omits payee when client link missing', (tester) async {
+    final line = _line(
+      transaction: _tx(amount: 50000, date: DateTime(2026, 11, 7)),
+      itemName: 'Steel',
+      payeeName: 'Steel Co',
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppFoundationTheme.light(),
+        locale: const Locale('en'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: ClientMovementCard(
+            line: line,
+            localeCode: 'en',
+            contextMode: ClientMovementCardContext.partyDetail,
+            partyClientId: '',
+            partyClientName: '—',
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Steel Co'), findsNothing);
+    expect(find.text('—'), findsNothing);
+  });
+
   test('formatMovementDate uses Western digits', () {
     final label = ClientMovementCard.formatMovementDate(DateTime(2026, 11, 7), 'en');
     expect(label, contains('07'));

@@ -93,7 +93,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
 
-    expect(find.text('Steel Co'), findsNWidgets(2));
+    expect(find.text('Steel Co'), findsOneWidget);
     expect(find.text('Materials supplier'), findsNothing);
     expect(find.textContaining('01098765432'), findsOneWidget);
     expect(find.text('Total paid to supplier'), findsOneWidget);

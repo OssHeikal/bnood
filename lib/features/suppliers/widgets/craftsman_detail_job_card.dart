@@ -41,6 +41,7 @@ class CraftsmanDetailJobCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: job.clientId.isNotEmpty
@@ -53,11 +54,19 @@ class CraftsmanDetailJobCard extends ConsumerWidget {
                             style: text.bodyEmphasis.copyWith(color: colors.primaryDark),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.start,
                           ),
                         ),
                       )
-                    : Text(job.clientName, style: text.bodyEmphasis),
+                    : Text(
+                        job.clientName,
+                        style: text.bodyEmphasis,
+                        textAlign: TextAlign.start,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
               ),
+              const SizedBox(width: AppSize.spaceSM),
               AppPressable(
                 key: Key('craftsman_detail_edit_agreement_${job.projectId}'),
                 onPressed: () async {
@@ -74,56 +83,81 @@ class CraftsmanDetailJobCard extends ConsumerWidget {
                   if (context.mounted) await onAgreementSaved();
                 },
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: const EdgeInsetsDirectional.fromSTEB(
+                    AppSize.spaceSM,
+                    AppSize.spaceXS,
+                    AppSize.spaceSM,
+                    AppSize.spaceXS,
+                  ),
                   child: Text(
                     l10n.craftsmanDetailEditAgreement,
                     style: text.caption.copyWith(
                       color: colors.primaryDark,
                       fontWeight: FontWeight.w700,
                     ),
+                    textAlign: TextAlign.end,
                   ),
                 ),
               ),
             ],
           ),
           if (!hasAgreed) ...[
-            AppSize.spaceXS.gap,
+            AppSize.spaceSM.gap,
             Text(
               l10n.craftsmanDetailNoAgreedAmount,
               style: text.caption.copyWith(color: colors.onSurfaceMuted),
+              textAlign: TextAlign.start,
             ),
           ],
           AppSize.spaceMD.gap,
-          Row(
-            children: [
-              if (hasAgreed)
-                Expanded(
-                  child: _Metric(
-                    label: l10n.craftsmanAgreedAmount,
-                    piastres: job.agreedPiastres!,
-                    role: AppAmountRole.neutral,
-                    localeCode: localeCode,
+          if (hasAgreed)
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _Metric(
+                      key: const Key('craftsman_job_metric_agreed'),
+                      label: l10n.craftsmanAgreedAmount,
+                      piastres: job.agreedPiastres!,
+                      role: AppAmountRole.neutral,
+                      localeCode: localeCode,
+                    ),
                   ),
-                ),
-              Expanded(
+                  Expanded(
+                    child: _Metric(
+                      key: const Key('craftsman_job_metric_paid'),
+                      label: l10n.paid,
+                      piastres: job.paidPiastres,
+                      role: AppAmountRole.spend,
+                      localeCode: localeCode,
+                    ),
+                  ),
+                  Expanded(
+                    child: _Metric(
+                      key: const Key('craftsman_job_metric_remaining'),
+                      label: l10n.remaining,
+                      piastres: job.remainingPiastres!,
+                      role: AppAmountRole.remaining,
+                      localeCode: localeCode,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: IntrinsicWidth(
                 child: _Metric(
+                  key: const Key('craftsman_job_metric_paid'),
                   label: l10n.paid,
                   piastres: job.paidPiastres,
                   role: AppAmountRole.spend,
                   localeCode: localeCode,
                 ),
               ),
-              if (hasAgreed)
-                Expanded(
-                  child: _Metric(
-                    label: l10n.remaining,
-                    piastres: job.remainingPiastres!,
-                    role: AppAmountRole.remaining,
-                    localeCode: localeCode,
-                  ),
-                ),
-            ],
-          ),
+            ),
         ],
       ),
     );
@@ -132,6 +166,7 @@ class CraftsmanDetailJobCard extends ConsumerWidget {
 
 class _Metric extends StatelessWidget {
   const _Metric({
+    super.key,
     required this.label,
     required this.piastres,
     required this.role,
@@ -145,13 +180,30 @@ class _Metric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(label, style: context.text.caption.copyWith(color: context.colors.onSurfaceMuted)),
-        AppSize.spaceXS.gap,
-        AppAmount(piastres: piastres, role: role, size: AppAmountSize.small, localeCode: localeCode),
-      ],
+    final text = context.text;
+    final colors = context.colors;
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: AppSize.spaceXS),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: text.caption.copyWith(color: colors.onSurfaceMuted),
+            textAlign: TextAlign.start,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          AppSize.spaceXS.gap,
+          AppAmount(
+            piastres: piastres,
+            role: role,
+            size: AppAmountSize.small,
+            localeCode: localeCode,
+          ),
+        ],
+      ),
     );
   }
 }
