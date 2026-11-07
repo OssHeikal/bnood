@@ -65,6 +65,10 @@ class CustomTextField extends StatefulWidget {
     this.enableFocus = true,
     this.autofocus = false,
     this.showPasswordLeading = true,
+    this.fieldHeight,
+    this.ltrValue = false,
+    this.textInputAction,
+    this.autofillHints,
   }) : search = false,
        assert(controller == null || initialValue == null, 'Pass a controller or an initial value, not both.');
 
@@ -111,7 +115,11 @@ class CustomTextField extends StatefulWidget {
        enablePaste = false,
        enableFocus = true,
        autofocus = false,
-       showPasswordLeading = true;
+       showPasswordLeading = true,
+       fieldHeight = null,
+       ltrValue = false,
+       textInputAction = null,
+       autofillHints = null;
 
   final String? label;
   final TextEditingController? controller;
@@ -154,6 +162,10 @@ class CustomTextField extends StatefulWidget {
   final bool enableFocus;
   final bool autofocus;
   final bool showPasswordLeading;
+  final double? fieldHeight;
+  final bool ltrValue;
+  final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
   final bool search;
 
   @override
@@ -349,7 +361,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   TextDirection _textDirection(BuildContext context) {
-    if (widget.type.isObscured) {
+    if (widget.ltrValue || widget.type.isObscured) {
       return TextDirection.ltr;
     }
     final ambient = Directionality.of(context);
@@ -431,17 +443,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
       AppInputState(disabled: widget.disabled, invalid: invalid, focused: _focused),
     );
     final floated = widget.label == null || _focused || text.isNotEmpty;
+    final resolvedHeight = widget.fieldHeight ??
+        (_multiline
+            ? widget.multilineHeight ?? AppSize.multilineFieldHeight
+            : widget.search
+                ? AppSize.searchFieldHeight
+                : AppSize.fieldHeight);
     final showClear =
         widget.clearable && !_multiline && _focused && text.isNotEmpty && !widget.disabled && !widget.readOnly;
     final frame = AppInputFrame(
       style: style,
       variant: widget.variant,
       multiline: _multiline,
-      height: _multiline
-          ? widget.multilineHeight ?? AppSize.multilineFieldHeight
-          : widget.search
-          ? AppSize.searchFieldHeight
-          : AppSize.fieldHeight,
+      height: resolvedHeight,
       floated: floated,
       label: widget.search || widget.variant == AppInputVariant.bare ? null : widget.label,
       field: _input(context, style, floated, shownError, invalid),
@@ -520,7 +534,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         readOnly: widget.readOnly,
         obscureText: _obscure && widget.type.isObscured,
         keyboardType: _keyboard,
-        textInputAction: widget.type.textInputAction,
+        textInputAction: widget.textInputAction ?? widget.type.textInputAction,
+        autofillHints: widget.autofillHints,
         textCapitalization: widget.textCapitalization,
         textAlign: TextAlign.start,
         textDirection: _textDirection(context),

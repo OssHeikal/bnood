@@ -87,7 +87,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientName => 'Client name';
 
   @override
+  String get clientNameRequired => 'Enter client name';
+
+  @override
+  String get clientNameHint => 'e.g. Tower North';
+
+  @override
   String get phoneOptional => 'Phone (optional)';
+
+  @override
+  String get clientPhoneHint => '01XXXXXXXXX';
 
   @override
   String get whatsapp => 'WhatsApp';

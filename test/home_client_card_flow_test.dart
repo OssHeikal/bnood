@@ -1,7 +1,6 @@
-import 'dart:math' as math;
-
 import 'package:bnood/app/widgets/shell_nav_icon.dart';
 import 'package:bnood/core/config/theme/app_size.dart';
+import 'package:bnood/core/widgets/app_card.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_amount.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
@@ -16,9 +15,11 @@ void main() {
     required Locale locale,
     required int received,
     required int spent,
+    required int remaining,
     TextScaler textScaler = TextScaler.noScaling,
+    Size surface = const Size(390, 220),
   }) async {
-    await tester.binding.setSurfaceSize(const Size(390, 220));
+    await tester.binding.setSurfaceSize(surface);
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(
@@ -35,7 +36,7 @@ void main() {
                 name: 'Osama Client',
                 receivedPiastres: received,
                 spentPiastres: spent,
-                amountPiastres: received - spent,
+                amountPiastres: remaining,
                 accentKey: 'teal',
                 localeCode: locale.languageCode,
                 onTap: () {},
@@ -48,82 +49,112 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  void expectCompactInOutRow(WidgetTester tester, {required String name}) {
+  void expectTrailingInOutColumn(WidgetTester tester, {required Locale locale, required String name}) {
     final icons = find.byType(ShellNavIcon);
     expect(icons, findsNWidgets(2));
-    final firstIcon = tester.getRect(icons.at(0));
-    final secondIcon = tester.getRect(icons.at(1));
-    expect((firstIcon.center.dy - secondIcon.center.dy).abs(), lessThan(6));
 
-    final amounts = find.descendant(of: find.byType(HomePersonCard), matching: find.byType(AppAmount));
-    final receiveAmount = tester.getRect(amounts.at(0));
-    final spendAmount = tester.getRect(amounts.at(1));
-
-    final receivePairGap = math.min(
-      (receiveAmount.left - firstIcon.right).abs(),
-      (firstIcon.left - receiveAmount.right).abs(),
-    );
-    final spendPairGap = math.min(
-      (spendAmount.left - secondIcon.right).abs(),
-      (secondIcon.left - spendAmount.right).abs(),
-    );
-    expect(receivePairGap, lessThanOrEqualTo(AppSize.spaceXS + 4));
-    expect(spendPairGap, lessThanOrEqualTo(AppSize.spaceXS + 4));
-
-    final groupOneEnd = math.max(firstIcon.right, receiveAmount.right);
-    final groupTwoStart = math.min(secondIcon.left, spendAmount.left);
-    final groupOneStart = math.min(firstIcon.left, receiveAmount.left);
-    final groupTwoEnd = math.max(secondIcon.right, spendAmount.right);
-    final between = math.min(
-      (groupTwoStart - groupOneEnd).abs(),
-      (groupOneStart - groupTwoEnd).abs(),
-    );
-    expect(between, closeTo(AppSize.spaceSM, 20));
+    final receiveIcon = tester.getRect(icons.at(0));
+    final spendIcon = tester.getRect(icons.at(1));
+    expect(spendIcon.center.dy - receiveIcon.center.dy, greaterThan(AppSize.spaceXS));
 
     final nameRect = tester.getRect(find.text(name));
-    final subtitleStart = [firstIcon.left, receiveAmount.left, secondIcon.left, spendAmount.left].reduce(math.min);
-    expect(subtitleStart, closeTo(nameRect.left, 6));
+    final remainingLabel = find.text(locale.languageCode == 'ar' ? 'المتبقي' : 'Remaining');
+    expect(remainingLabel, findsOneWidget);
+    final remainingRect = tester.getRect(remainingLabel);
+    expect(remainingRect.top, greaterThan(nameRect.bottom - 2));
+
+    final card = tester.getRect(find.byType(AppCard));
+    if (locale.languageCode == 'en') {
+      expect(receiveIcon.center.dx, greaterThan(nameRect.center.dx));
+      expect(receiveIcon.right, greaterThan(nameRect.right - 8));
+    } else {
+      expect(receiveIcon.center.dx, lessThan(nameRect.center.dx));
+      expect(receiveIcon.left, lessThan(nameRect.left + 8));
+    }
+
+    final amounts = find.descendant(of: find.byType(HomePersonCard), matching: find.byType(AppAmount));
+    expect(amounts, findsNWidgets(3));
   }
 
-  testWidgets('receive and spend share one horizontal subtitle row', (tester) async {
-    await pumpCard(tester, locale: const Locale('en'), received: 100000, spent: 25000);
+  testWidgets('client card: remaining under name, in/out in trailing column EN', (tester) async {
+    await pumpCard(tester, locale: const Locale('en'), received: 100000, spent: 25000, remaining: 75000);
 
-    expect(find.byType(AppAmount), findsNWidgets(3));
     expect(find.textContaining(AppAmount.format(piastres: 100000, localeCode: 'en')), findsOneWidget);
     expect(find.textContaining(AppAmount.format(piastres: 25000, localeCode: 'en')), findsOneWidget);
-    expectCompactInOutRow(tester, name: 'Osama Client');
+    expectTrailingInOutColumn(tester, locale: const Locale('en'), name: 'Osama Client');
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('compact in-out row for zero amounts', (tester) async {
-    await pumpCard(tester, locale: const Locale('en'), received: 0, spent: 0);
-    expectCompactInOutRow(tester, name: 'Osama Client');
+  testWidgets('trailing column for zero in/out amounts', (tester) async {
+    await pumpCard(tester, locale: const Locale('en'), received: 0, spent: 0, remaining: 0);
+    expectTrailingInOutColumn(tester, locale: const Locale('en'), name: 'Osama Client');
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Arabic at 1.2 text scale keeps in-out row without overflow', (tester) async {
+  testWidgets('Arabic at 1.2 text scale without overflow', (tester) async {
     await pumpCard(
       tester,
       locale: const Locale('ar'),
       received: 99999999,
       spent: 12345678,
+      remaining: 87654321,
       textScaler: TextScaler.linear(1.2),
     );
-    expectCompactInOutRow(tester, name: 'Osama Client');
+    expectTrailingInOutColumn(tester, locale: const Locale('ar'), name: 'Osama Client');
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('English narrow width keeps in-out row without overflow', (tester) async {
-    await tester.binding.setSurfaceSize(const Size(320, 220));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+  testWidgets('English narrow 320 keeps layout', (tester) async {
     await pumpCard(
       tester,
       locale: const Locale('en'),
       received: 88888888,
       spent: 77777777,
+      remaining: 11111111,
       textScaler: TextScaler.linear(1.2),
+      surface: const Size(320, 220),
     );
-    expectCompactInOutRow(tester, name: 'Osama Client');
+    expectTrailingInOutColumn(tester, locale: const Locale('en'), name: 'Osama Client');
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('negative remaining keeps minus under name', (tester) async {
+    await pumpCard(tester, locale: const Locale('en'), received: 10000, spent: 50000, remaining: -40000);
+    expect(find.textContaining('−'), findsWidgets);
+    final amounts = find.byType(AppAmount);
+    expect(amounts, findsNWidgets(3));
+  });
+
+  testWidgets('supplier meta mode keeps amount in trailing not in/out column', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 200));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppFoundationTheme.light(),
+        locale: const Locale('en'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: HomeFoundationScope(
+          child: Scaffold(
+            body: HomePersonCard(
+              name: 'Supplier X',
+              meta: 'Total spend',
+              amountPiastres: 120000,
+              amountRole: AppAmountRole.spend,
+              accentKey: 'blue',
+              localeCode: 'en',
+              onTap: () {},
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ShellNavIcon), findsNothing);
+    expect(find.text('Total spend'), findsOneWidget);
+    expect(find.text('Remaining'), findsOneWidget);
+    expect(find.byType(AppAmount), findsOneWidget);
   });
 }

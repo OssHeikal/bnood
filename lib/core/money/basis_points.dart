@@ -1,3 +1,5 @@
+import '../formatting/display_digits.dart';
+
 /// V1 **implementation choice** (not a locked product decision — see docs/technical-choices.md).
 class BasisPoints {
   const BasisPoints(this.value);
@@ -8,7 +10,7 @@ class BasisPoints {
   static const int max = 10000;
 
   static BasisPoints? parsePercentInput(String input) {
-    final t = input.trim().replaceAll('%', '');
+    final t = DisplayDigits.toWesternDigits(input.trim().replaceAll('%', ''));
     if (t.isEmpty) return null;
     final parts = t.split('.');
     final whole = int.tryParse(parts.first);

@@ -98,18 +98,22 @@ class _PersonCardBone extends StatelessWidget {
                 children: [
                   const SkeletonText(role: SkeletonTextRole.body, width: 120),
                   AppSize.spaceXS.gap,
-                  Row(
-                    children: [
-                      const SkeletonBox(width: 64, height: 14, radius: AppSize.radiusSM),
-                      AppSize.spaceSM.gap,
-                      const SkeletonBox(width: 64, height: 14, radius: AppSize.radiusSM),
-                    ],
-                  ),
+                  const SkeletonText(role: SkeletonTextRole.label, width: 56),
+                  AppSize.spaceXS.gap,
+                  const SkeletonText(role: SkeletonTextRole.label, width: 72),
                 ],
               ),
             ),
             AppSize.spaceMD.gap,
-            const SkeletonText(role: SkeletonTextRole.label, width: 72),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const SkeletonBox(width: 72, height: 14, radius: AppSize.radiusSM),
+                AppSize.spaceXS.gap,
+                const SkeletonBox(width: 72, height: 14, radius: AppSize.radiusSM),
+              ],
+            ),
           ],
         ),
       ),

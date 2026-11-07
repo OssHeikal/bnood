@@ -248,11 +248,29 @@ abstract class AppLocalizations {
   /// **'Client name'**
   String get clientName;
 
+  /// No description provided for @clientNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter client name'**
+  String get clientNameRequired;
+
+  /// No description provided for @clientNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Tower North'**
+  String get clientNameHint;
+
   /// No description provided for @phoneOptional.
   ///
   /// In en, this message translates to:
   /// **'Phone (optional)'**
   String get phoneOptional;
+
+  /// No description provided for @clientPhoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'01XXXXXXXXX'**
+  String get clientPhoneHint;
 
   /// No description provided for @whatsapp.
   ///

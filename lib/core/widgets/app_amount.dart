@@ -38,7 +38,7 @@ class AppAmount extends StatelessWidget {
     final locale = localeCode == 'ar' ? 'ar_EG' : 'en_US';
     final text = MoneyFormat.formatPiastres(piastres, locale: locale);
     if (!showCurrency) {
-      return text.replaceAll(RegExp(r'\s*ج\.م\s*$'), '').replaceAll(RegExp(r'\s*EGP\s*$', caseSensitive: false), '');
+      return MoneyFormat.withoutCurrencySuffix(text);
     }
     return text;
   }

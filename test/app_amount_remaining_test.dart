@@ -40,7 +40,7 @@ void main() {
   testWidgets('remaining zero is neutral AR', (tester) async {
     final text = await pumpAmount(tester, piastres: 0, localeCode: 'ar');
     expect(text.style?.color, AppColors.light.onSurface);
-    expect(text.data, contains('ج.م'));
+    expect(text.data, contains('EGP'));
   });
 
   testWidgets('receive role still uses magnitude without forced minus', (tester) async {

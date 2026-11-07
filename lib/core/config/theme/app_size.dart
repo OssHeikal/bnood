@@ -21,6 +21,8 @@ abstract final class AppSize {
   static const buttonHeightSmall = 40.0;
   static const buttonHeightLarge = 52.0;
   static const fieldHeight = 48.0;
+  /// Opt-in taller single-line fields (forms); scales with content, not a hard text clip.
+  static const fieldHeightComfortable = buttonHeightLarge;
   static const searchFieldHeight = hitMin;
   static const borderWidth = 1.0;
   static const spaceXS = 4.0;

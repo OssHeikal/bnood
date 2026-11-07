@@ -37,12 +37,14 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen> {
                 context: context,
                 builder: (_) => const InlineCreateSupplierPage(),
                 title: l10n.supplier,
+                nestedNavigator: false,
               );
             } else {
               CustomBottomSheet.show(
                 context: context,
                 builder: (_) => const InlineCreateCraftsmanPage(),
                 title: l10n.craftsman,
+                nestedNavigator: false,
               );
             }
           },

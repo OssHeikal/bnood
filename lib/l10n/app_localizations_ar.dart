@@ -86,7 +86,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientName => 'اسم العميل';
 
   @override
+  String get clientNameRequired => 'أدخل اسم العميل';
+
+  @override
+  String get clientNameHint => 'مثال: برج الشمال';
+
+  @override
   String get phoneOptional => 'التليفون (اختياري)';
+
+  @override
+  String get clientPhoneHint => '01XXXXXXXXX';
 
   @override
   String get whatsapp => 'واتساب';

@@ -26,6 +26,9 @@ void refreshHomeDashboard(WidgetRef ref) {
   ref.read(homeSupplierSpendsProvider.notifier).refreshSilently();
 }
 
+/// After client create/update/archive — keeps Home and Clients list in sync (silent).
+void refreshAfterClientMutation(WidgetRef ref) => refreshHomeDashboard(ref);
+
 class HomeTotalsNotifier extends SilentAsyncNotifier<HomeTotals> {
   @override
   Future<HomeTotals> fetch() => ref.read(repositoryProvider).homeTotals();
