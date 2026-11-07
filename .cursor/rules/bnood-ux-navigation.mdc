@@ -1,0 +1,17 @@
+---
+description: Navigation, sheets, and voucher UX
+globs: lib/**/*
+alwaysApply: false
+---
+
+# UX
+
+[docs/ux-flows.md](../../docs/ux-flows.md) · [docs/shared-components.md](../../docs/shared-components.md)
+
+- ≤5 tabs: Home, Clients, center +, Directory, Items — no summary tab.
+- Inline create: **one** `CustomBottomSheet`, nested local `Navigator`, never stacked sheets/dialogs.
+- Materials/labor: segmented control, not dropdown. Cash/transfer only.
+- Receive: hide expense fields. Client change: clear invalid craftsman.
+- Green incoming / red outgoing movement styling.
+
+Planned widgets only — do not claim `AppButton` / toaster / etc. exist until implemented.

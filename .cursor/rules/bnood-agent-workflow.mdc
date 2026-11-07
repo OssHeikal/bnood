@@ -1,0 +1,10 @@
+---
+description: Cloud agent and model selection standing rules
+alwaysApply: true
+---
+
+# Agent workflow
+
+- Ask before heavy cloud-agent cost; **one cloud agent at a time**.
+- Planning: explicit **Grok 4.7 / 4.6**. Implementation/doc edits: **Composer 2.5** with `fast: false`. No **Auto**.
+- Implementation phases: [docs/implementation-plan.md](../../docs/implementation-plan.md) — not automatic execution permission.

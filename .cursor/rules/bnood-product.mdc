@@ -1,0 +1,15 @@
+---
+description: Bnood product identity and doc-first workflow
+alwaysApply: true
+---
+
+# Bnood بنود
+
+Local-first app for finishing/site engineers (formerly عهدة). **Docs:** [README](../../README.md), [scope](../../docs/scope.md).
+
+- V1: single engineer, Drift/SQLite, no auth/sync/subscription/team UI.
+- Arabic-first UX; **English** for commits, PRs, rules, and `docs/`.
+- Money: integer **piastres** only — see [data-schema](../../docs/data-schema.md).
+- Do not implement backend, sync, or SaaS unless scope explicitly expands.
+
+Unresolved items: [open-questions](../../docs/open-questions.md). Do not guess closed behavior.

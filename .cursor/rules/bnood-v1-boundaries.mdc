@@ -1,0 +1,15 @@
+---
+description: V1 feature boundaries when editing Flutter code
+globs: lib/**/*
+alwaysApply: false
+---
+
+# V1 boundaries
+
+Before adding features, read [docs/scope.md](../../docs/scope.md).
+
+**Out of scope:** PIN, backup/restore, overspend alerts, budget vs actual, wallet payments, login, sync, team permissions, subscription UI.
+
+**In scope highlights:** auto workspace; client + auto project; vouchers; archive-not-delete; client & supplier statements; edit/delete transactions locally.
+
+Client page = primary project UI for the auto-created project. Adding a client must not add extra project-creation steps.
