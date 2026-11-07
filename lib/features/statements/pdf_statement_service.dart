@@ -1,12 +1,14 @@
 import 'dart:typed_data';
 
-import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
+import '../../core/money/period_bounds.dart';
+import '../../core/money/supplier_period_math.dart';
+import '../../core/pdf/pdf_fonts.dart';
 
 class PdfStatementService {
   Future<Uint8List> buildClientStatement({
@@ -15,47 +17,55 @@ class PdfStatementService {
     required List<Transaction> periodSpend,
     required List<Transaction> periodReceive,
     required Map<String, String> itemNames,
-    required DateTime periodStart,
-    required DateTime periodEnd,
+    required PeriodBounds bounds,
+    bool sampleWatermark = false,
   }) async {
+    final fonts = await PdfFonts.load();
     final doc = pw.Document();
-    final font = await PdfGoogleFonts.cairoRegular();
-    final fontBold = await PdfGoogleFonts.cairoBold();
-    final theme = pw.ThemeData.withFont(base: font, bold: fontBold);
+    final periodLabel =
+        '${bounds.start.day}/${bounds.start.month}/${bounds.start.year} — '
+        '${bounds.end.day}/${bounds.end.month}/${bounds.end.year}';
 
     doc.addPage(
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
-        theme: theme,
+        theme: pw.ThemeData.withFont(base: fonts.regular, bold: fonts.bold),
         textDirection: pw.TextDirection.rtl,
         build: (context) => [
+          if (sampleWatermark)
+            pw.Text(
+              'عينة — SAMPLE',
+              style: pw.TextStyle(
+                  color: PdfColors.teal700, fontWeight: pw.FontWeight.bold),
+            ),
           pw.Text('بنود',
               style:
                   pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold)),
-          pw.Text('كشف حساب عميل', style: const pw.TextStyle(fontSize: 14)),
-          pw.SizedBox(height: 8),
+          pw.Text('كشف حساب عميل'),
+          pw.SizedBox(height: 6),
           pw.Text(client.name,
               style:
                   pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+          pw.Text('الفترة: $periodLabel'),
           pw.Text(
-            'الفترة: ${periodStart.day}/${periodStart.month}/${periodStart.year} — '
-            '${periodEnd.day}/${periodEnd.month}/${periodEnd.year}',
+            'رصيد أول + وارد − صادر = رصيد آخر',
+            style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700),
           ),
-          pw.SizedBox(height: 12),
+          pw.SizedBox(height: 10),
           _summaryTable([
             ('رصيد أول المدة', totals.openingBalancePiastres),
             ('وارد الفترة', totals.periodReceivedPiastres),
             ('صادر الفترة', totals.periodSpentPiastres),
             ('رصيد آخر المدة', totals.closingBalancePiastres),
-            ('خامات', totals.materialsPiastres),
-            ('شغل يد', totals.laborPiastres),
+            ('خامات الفترة', totals.materialsPiastres),
+            ('شغل يد الفترة', totals.laborPiastres),
           ]),
-          pw.SizedBox(height: 16),
+          pw.SizedBox(height: 14),
           pw.Text('مصروفات الفترة حسب البند',
               style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
           ..._groupedExpenseTables(periodSpend, itemNames),
-          pw.SizedBox(height: 16),
-          pw.Text('إيصالات الاستلام (منفصلة)',
+          pw.SizedBox(height: 14),
+          pw.Text('إيصالات الاستلام (منفصلة عن البنود)',
               style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
           _movementTable(periodReceive, includeType: false),
         ],
@@ -66,37 +76,31 @@ class PdfStatementService {
 
   Future<Uint8List> buildSupplierStatement({
     required Supplier supplier,
-    required int openingPiastres,
-    required int periodPiastres,
-    required int closingPiastres,
-    required List<Transaction> rows,
-    required DateTime periodStart,
-    required DateTime periodEnd,
+    required SupplierPeriodTotals totals,
+    required List<Transaction> periodRows,
+    required PeriodBounds bounds,
   }) async {
+    final fonts = await PdfFonts.load();
     final doc = pw.Document();
-    final font = await PdfGoogleFonts.cairoRegular();
-    final fontBold = await PdfGoogleFonts.cairoBold();
-    final periodRows = rows.where((t) {
-      return !t.date.isBefore(
-              DateTime(periodStart.year, periodStart.month, periodStart.day)) &&
-          !t.date.isAfter(DateTime(
-              periodEnd.year, periodEnd.month, periodEnd.day, 23, 59, 59));
-    }).toList();
+    final periodLabel =
+        '${bounds.start.day}/${bounds.start.month}/${bounds.start.year} — '
+        '${bounds.end.day}/${bounds.end.month}/${bounds.end.year}';
 
     doc.addPage(
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
-        theme: pw.ThemeData.withFont(base: font, bold: fontBold),
+        theme: pw.ThemeData.withFont(base: fonts.regular, bold: fonts.bold),
         textDirection: pw.TextDirection.rtl,
         build: (context) => [
           pw.Text('بنود — كشف مورد',
               style:
                   pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
           pw.Text(supplier.name),
+          pw.Text('الفترة: $periodLabel'),
           _summaryTable([
-            ('رصيد سابق', openingPiastres),
-            ('مدفوعات الفترة', periodPiastres),
-            ('إجمالي', closingPiastres),
+            ('مدفوع قبل الفترة', totals.openingPaidPiastres),
+            ('مدفوع خلال الفترة', totals.periodPaidPiastres),
+            ('إجمالي مدفوع', totals.closingPaidPiastres),
           ]),
           pw.SizedBox(height: 12),
           _movementTable(periodRows, includeType: true),
@@ -125,7 +129,9 @@ class PdfStatementService {
   }
 
   List<pw.Widget> _groupedExpenseTables(
-      List<Transaction> spend, Map<String, String> itemNames) {
+    List<Transaction> spend,
+    Map<String, String> itemNames,
+  ) {
     final byItem = <String, List<Transaction>>{};
     for (final t in spend) {
       byItem.putIfAbsent(t.itemId ?? 'unknown', () => []).add(t);
@@ -143,11 +149,11 @@ class PdfStatementService {
         style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
       ));
       if (mats.isNotEmpty) {
-        out.add(pw.Text('خامات', style: pw.TextStyle(fontSize: 11)));
+        out.add(pw.Text('خامات', style: const pw.TextStyle(fontSize: 11)));
         out.add(_movementTable(mats, includeType: true));
       }
       if (lab.isNotEmpty) {
-        out.add(pw.Text('شغل يد', style: pw.TextStyle(fontSize: 11)));
+        out.add(pw.Text('شغل يد', style: const pw.TextStyle(fontSize: 11)));
         out.add(_movementTable(lab, includeType: true));
       }
     }

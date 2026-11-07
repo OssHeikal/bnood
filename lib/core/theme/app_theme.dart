@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'app_colors.dart';
 
 abstract final class AppTheme {
@@ -26,7 +24,7 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
     );
     return base.copyWith(
-      textTheme: GoogleFonts.cairoTextTheme(base.textTheme),
+      textTheme: base.textTheme.apply(fontFamily: 'Cairo'),
       appBarTheme: AppBarTheme(
         centerTitle: true,
         backgroundColor:

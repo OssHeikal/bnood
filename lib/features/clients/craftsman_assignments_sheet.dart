@@ -48,10 +48,25 @@ class _CraftsmanAssignmentsSheetState
     final repo = ref.watch(repositoryProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.craftsmen),
+        title: const Text('تحديد الصنايعية'),
         actions: [
+          TextButton(
+            onPressed: () async {
+              final id = await Navigator.of(context).push<String>(
+                MaterialPageRoute(
+                    builder: (_) => const InlineCreateCraftsmanPage()),
+              );
+              if (id != null) {
+                await repo.upsertAgreement(
+                    projectId: widget.projectId, craftsmanId: id);
+                if (mounted) setState(() {});
+              }
+            },
+            child: Text(l10n.createNew),
+          ),
           IconButton(
-            icon: const Icon(Icons.add),
+            tooltip: 'اختيار من القائمة',
+            icon: const Icon(Icons.playlist_add),
             onPressed: () async {
               final roster = await repo.watchActiveCraftsmen().first;
               final agreements =

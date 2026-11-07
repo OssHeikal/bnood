@@ -5,8 +5,11 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../core/database/database.dart';
 import '../../core/money/money_format.dart';
+import '../../core/money/period_bounds.dart';
+import '../../core/money/supplier_period_math.dart';
 import '../../core/providers/app_providers.dart';
 import 'pdf_statement_service.dart';
+import 'statement_period_controls.dart';
 
 class SupplierStatementScreen extends ConsumerStatefulWidget {
   const SupplierStatementScreen({super.key, required this.supplierId});
@@ -20,8 +23,10 @@ class SupplierStatementScreen extends ConsumerStatefulWidget {
 
 class _SupplierStatementScreenState
     extends ConsumerState<SupplierStatementScreen> {
-  DateTime _start = DateTime(DateTime.now().year, DateTime.now().month, 1);
-  DateTime _end = DateTime.now();
+  late PeriodBounds _bounds = PeriodBounds.normalize(
+    start: DateTime(DateTime.now().year, DateTime.now().month, 1),
+    end: DateTime.now(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +35,7 @@ class _SupplierStatementScreenState
     return Scaffold(
       appBar: AppBar(title: Text(l10n.statement)),
       body: FutureBuilder(
+        key: ValueKey('${_bounds.start}-${_bounds.end}'),
         future: _load(repo),
         builder: (context, snap) {
           if (!snap.hasData) {
@@ -39,26 +45,26 @@ class _SupplierStatementScreenState
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              StatementPeriodControls(
+                bounds: _bounds,
+                onChanged: (b) => setState(() => _bounds = b),
+              ),
               Text(data.supplier.name,
                   style: Theme.of(context).textTheme.titleLarge),
               ListTile(
-                title: Text(l10n.period),
-                subtitle: Text(
-                    '${_start.day}/${_start.month} — ${_end.day}/${_end.month}'),
-              ),
-              ListTile(
                 title: Text(l10n.openingBalance),
-                trailing:
-                    Text(MoneyFormat.formatPiastres(data.openingPiastres)),
+                trailing: Text(MoneyFormat.formatPiastres(
+                    data.totals.openingPaidPiastres)),
               ),
               ListTile(
                 title: Text(l10n.spent),
-                trailing: Text(MoneyFormat.formatPiastres(data.periodPiastres)),
+                trailing: Text(
+                    MoneyFormat.formatPiastres(data.totals.periodPaidPiastres)),
               ),
               ListTile(
                 title: Text(l10n.closingBalance),
-                trailing:
-                    Text(MoneyFormat.formatPiastres(data.closingPiastres)),
+                trailing: Text(MoneyFormat.formatPiastres(
+                    data.totals.closingPaidPiastres)),
               ),
               FilledButton.icon(
                 onPressed: () => _share(data),
@@ -76,35 +82,19 @@ class _SupplierStatementScreenState
     final supplier = await repo.getSupplier(widget.supplierId);
     if (supplier == null) throw StateError('supplier');
     final rows = await repo.supplierTransactions(widget.supplierId);
-    var before = 0;
-    var period = 0;
-    final start = DateTime(_start.year, _start.month, _start.day);
-    final end = DateTime(_end.year, _end.month, _end.day, 23, 59, 59);
-    for (final t in rows) {
-      if (t.date.isBefore(start)) {
-        before += t.amountPiastres as int;
-      } else if (!t.date.isAfter(end)) {
-        period += t.amountPiastres as int;
-      }
-    }
-    return _Data(
-      supplier: supplier,
-      openingPiastres: before,
-      periodPiastres: period,
-      closingPiastres: before + period,
-      rows: rows,
-    );
+    final totals =
+        SupplierPeriodMath.totals(supplierSpends: rows, bounds: _bounds);
+    final periodRows =
+        rows.where((t) => _bounds.containsLocalDate(t.date)).toList();
+    return _Data(supplier: supplier, totals: totals, periodRows: periodRows);
   }
 
   Future<void> _share(_Data data) async {
     final bytes = await PdfStatementService().buildSupplierStatement(
       supplier: data.supplier,
-      openingPiastres: data.openingPiastres,
-      periodPiastres: data.periodPiastres,
-      closingPiastres: data.closingPiastres,
-      rows: data.rows,
-      periodStart: _start,
-      periodEnd: _end,
+      totals: data.totals,
+      periodRows: data.periodRows,
+      bounds: _bounds,
     );
     await Share.shareXFiles([
       XFile.fromData(bytes,
@@ -114,16 +104,9 @@ class _SupplierStatementScreenState
 }
 
 class _Data {
-  _Data({
-    required this.supplier,
-    required this.openingPiastres,
-    required this.periodPiastres,
-    required this.closingPiastres,
-    required this.rows,
-  });
+  _Data(
+      {required this.supplier, required this.totals, required this.periodRows});
   final Supplier supplier;
-  final int openingPiastres;
-  final int periodPiastres;
-  final int closingPiastres;
-  final List<Transaction> rows;
+  final SupplierPeriodTotals totals;
+  final List<Transaction> periodRows;
 }

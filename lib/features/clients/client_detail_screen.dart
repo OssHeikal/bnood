@@ -91,7 +91,7 @@ class ClientDetailScreen extends ConsumerWidget {
                   projectId: data.project.id,
                 ),
                 icon: const Icon(Icons.handyman),
-                label: Text(l10n.createNew),
+                label: const Text('تحديد الصنايعية'),
               ),
               ...data.craftsmanPreviews.map((p) => ListTile(
                     title: Text(p.name),
