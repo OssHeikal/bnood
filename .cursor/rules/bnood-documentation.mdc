@@ -1,0 +1,13 @@
+---
+description: Editing foundation documentation
+globs: docs/**/*.md
+alwaysApply: false
+---
+
+# Documentation
+
+- Keep docs **English**; Arabic only for quoted UI/product labels.
+- Mark **Confirmed** vs **Proposal** vs **Open** — move resolved opens to [decisions.md](../../docs/decisions.md).
+- Cross-link related pages; update [README.md](../../README.md) index when adding files.
+- Do not state that Flutter app code, tests, or CI exist unless they do in the repo.
+- Mermaid diagrams must match [data-schema.md](../../docs/data-schema.md) entities.

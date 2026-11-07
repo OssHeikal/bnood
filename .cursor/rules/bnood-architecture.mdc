@@ -1,0 +1,16 @@
+---
+description: Flutter architecture and stack
+globs: lib/**/*
+alwaysApply: false
+---
+
+# Architecture
+
+[docs/architecture.md](../../docs/architecture.md)
+
+- FVM; feature-first `lib/app`, `lib/core`, `lib/features/{home,clients,vouchers,suppliers,items,statements}`.
+- Riverpod + go_router (shell only) + Drift.
+- UI → repository interface → Drift; no SQL in widgets.
+- No backend/auth/sync scaffold in V1; interfaces stay swap-friendly for V2.
+
+Nested navigator inside bottom sheets is **not** go_router.

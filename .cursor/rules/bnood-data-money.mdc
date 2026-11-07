@@ -1,0 +1,17 @@
+---
+description: Data model and financial rules for implementation
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# Data & money
+
+Source of truth: [docs/data-schema.md](../../docs/data-schema.md).
+
+- Store amounts as `int` piastres; no `double` money.
+- `projectBalance = receipts - spend`; home totals = **active** projects only.
+- Craftsman `remaining` only when agreement amount is non-null; agreement is not spend.
+- Engineer % → informational profit from total spend; no deduction; omit from default client PDF.
+- Receive transactions: no item/expense/supplier/craftsman fields.
+- Archive linked entities; keep FK history; exclude archived from pickers.
+- Negative balance: **open** — do not silently block without product decision.
