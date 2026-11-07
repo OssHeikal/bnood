@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/money/money_format.dart';
@@ -20,9 +20,10 @@ class MovementsListScreen extends ConsumerWidget {
       future: repo.primaryActiveProject(clientId),
       builder: (context, projectSnap) {
         final project = projectSnap.data;
-        if (project == null)
+        if (project == null) {
           return const Scaffold(
               body: Center(child: CircularProgressIndicator()));
+        }
         return Scaffold(
           appBar: AppBar(title: Text(l10n.movements)),
           body: StreamBuilder(

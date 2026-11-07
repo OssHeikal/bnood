@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/money/ledger_math.dart';
@@ -20,9 +20,10 @@ class CraftsmanDetailScreen extends ConsumerWidget {
     return FutureBuilder(
       future: _load(repo),
       builder: (context, snap) {
-        if (!snap.hasData)
+        if (!snap.hasData) {
           return const Scaffold(
               body: Center(child: CircularProgressIndicator()));
+        }
         final rows = snap.data!;
         return Scaffold(
           appBar: AppBar(title: Text(l10n.craftsman)),

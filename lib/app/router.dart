@@ -29,70 +29,50 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
         branches: [
           StatefulShellBranch(
-            routes: [
-              GoRoute(path: '/home', builder: (_, __) => const HomeScreen()),
-            ],
+            routes: [GoRoute(path: '/home', builder: (_, _) => const HomeScreen())],
           ),
           StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: '/clients',
-                  builder: (_, __) => const ClientsListScreen()),
-            ],
+            routes: [GoRoute(path: '/clients', builder: (_, _) => const ClientsListScreen())],
           ),
           StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: '/directory',
-                  builder: (_, __) => const DirectoryScreen()),
-            ],
+            routes: [GoRoute(path: '/directory', builder: (_, _) => const DirectoryScreen())],
           ),
           StatefulShellBranch(
-            routes: [
-              GoRoute(path: '/items', builder: (_, __) => const ItemsScreen()),
-            ],
+            routes: [GoRoute(path: '/items', builder: (_, _) => const ItemsScreen())],
           ),
         ],
       ),
       GoRoute(
         path: '/clients/:clientId',
-        builder: (_, state) =>
-            ClientDetailScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) => ClientDetailScreen(clientId: state.pathParameters['clientId']!),
       ),
       GoRoute(
         path: '/clients/:clientId/movements',
-        builder: (_, state) =>
-            MovementsListScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) => MovementsListScreen(clientId: state.pathParameters['clientId']!),
       ),
       GoRoute(
         path: '/clients/:clientId/craftsmen',
-        builder: (_, state) => ClientCraftsmenListScreen(
-            clientId: state.pathParameters['clientId']!),
+        builder: (_, state) => ClientCraftsmenListScreen(clientId: state.pathParameters['clientId']!),
       ),
       GoRoute(
         path: '/clients/:clientId/items',
-        builder: (_, state) =>
-            ClientItemsStatsScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) => ClientItemsStatsScreen(clientId: state.pathParameters['clientId']!),
       ),
       GoRoute(
         path: '/clients/:clientId/statement',
-        builder: (_, state) =>
-            ClientStatementScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) => ClientStatementScreen(clientId: state.pathParameters['clientId']!),
       ),
       GoRoute(
         path: '/suppliers/:supplierId',
-        builder: (_, state) => SupplierDetailScreen(
-            supplierId: state.pathParameters['supplierId']!),
+        builder: (_, state) => SupplierDetailScreen(supplierId: state.pathParameters['supplierId']!),
       ),
       GoRoute(
         path: '/suppliers/:supplierId/statement',
-        builder: (_, state) => SupplierStatementScreen(
-            supplierId: state.pathParameters['supplierId']!),
+        builder: (_, state) => SupplierStatementScreen(supplierId: state.pathParameters['supplierId']!),
       ),
       GoRoute(
         path: '/craftsmen/:craftsmanId',
-        builder: (_, state) => CraftsmanDetailScreen(
-            craftsmanId: state.pathParameters['craftsmanId']!),
+        builder: (_, state) => CraftsmanDetailScreen(craftsmanId: state.pathParameters['craftsmanId']!),
       ),
     ],
   );

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/repositories/bnood_repository.dart';
 
 class ClientCraftsmenListScreen extends ConsumerWidget {
   const ClientCraftsmenListScreen({super.key, required this.clientId});
@@ -19,8 +20,7 @@ class ClientCraftsmenListScreen extends ConsumerWidget {
       future: _load(repo),
       builder: (context, snap) {
         if (!snap.hasData) {
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
         final rows = snap.data!;
         return Scaffold(
@@ -30,11 +30,8 @@ class ClientCraftsmenListScreen extends ConsumerWidget {
               for (final r in rows)
                 ListTile(
                   title: Text(r.name),
-                  subtitle: Text(
-                      '${l10n.paid}: ${MoneyFormat.formatPiastres(r.paid)}'),
-                  trailing: r.remaining != null
-                      ? Text(MoneyFormat.formatPiastres(r.remaining!))
-                      : null,
+                  subtitle: Text('${l10n.paid}: ${MoneyFormat.formatPiastres(r.paid)}'),
+                  trailing: r.remaining != null ? Text(MoneyFormat.formatPiastres(r.remaining!)) : null,
                 ),
             ],
           ),
@@ -43,7 +40,7 @@ class ClientCraftsmenListScreen extends ConsumerWidget {
     );
   }
 
-  Future<List<_Row>> _load(repo) async {
+  Future<List<_Row>> _load(BnoodRepository repo) async {
     final project = await repo.primaryActiveProject(clientId);
     if (project == null) return [];
     final agreements = await repo.agreementsForProject(project.id);
@@ -54,8 +51,7 @@ class ClientCraftsmenListScreen extends ConsumerWidget {
         () {
           final c = craftsmen.where((x) => x.id == a.craftsmanId).firstOrNull;
           if (c == null) return null;
-          final paid = LedgerMath.craftsmanPaidPiastres(
-              rows: tx, craftsmanId: a.craftsmanId);
+          final paid = LedgerMath.craftsmanPaidPiastres(rows: tx, craftsmanId: a.craftsmanId);
           return _Row(
             name: c.name,
             paid: paid,

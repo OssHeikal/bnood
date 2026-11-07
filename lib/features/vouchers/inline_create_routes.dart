@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/app_providers.dart';
@@ -205,8 +205,9 @@ class _InlineCreateCraftsmanPageState
             AppButton(
               label: l10n.save,
               onPressed: () async {
-                if (_name.text.trim().isEmpty || _phone.text.trim().isEmpty)
+                if (_name.text.trim().isEmpty || _phone.text.trim().isEmpty) {
                   return;
+                }
                 final c = await ref.read(repositoryProvider).createCraftsman(
                       name: _name.text.trim(),
                       phone: _phone.text.trim(),

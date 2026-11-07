@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:collection/collection.dart';
@@ -27,9 +27,7 @@ class ClientDetailScreen extends ConsumerWidget {
     return FutureBuilder(
       future: _load(repo),
       builder: (context, snap) {
-        if (!snap.hasData)
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
+        if (!snap.hasData) return const Scaffold(body: Center(child: CircularProgressIndicator()));
         final data = snap.data!;
         return Scaffold(
           appBar: AppBar(
@@ -76,39 +74,30 @@ class ClientDetailScreen extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(l10n.craftsmen,
-                      style: Theme.of(context).textTheme.titleMedium),
-                  TextButton(
-                    onPressed: () =>
-                        context.push('/clients/$clientId/craftsmen'),
-                    child: Text(l10n.seeAll),
-                  ),
+                  Text(l10n.craftsmen, style: Theme.of(context).textTheme.titleMedium),
+                  TextButton(onPressed: () => context.push('/clients/$clientId/craftsmen'), child: Text(l10n.seeAll)),
                 ],
               ),
               OutlinedButton.icon(
-                onPressed: () => showCraftsmanAssignmentsSheet(
-                  context: context,
-                  projectId: data.project.id,
-                ),
+                onPressed: () => showCraftsmanAssignmentsSheet(context: context, projectId: data.project.id),
                 icon: const Icon(Icons.handyman),
                 label: const Text('تحديد الصنايعية'),
               ),
-              ...data.craftsmanPreviews.map((p) => ListTile(
-                    title: Text(p.name),
-                    subtitle: Text(
-                        '${l10n.paid}: ${MoneyFormat.formatPiastres(p.paid)}'
-                        '${p.remaining != null ? ' • ${l10n.remaining}: ${MoneyFormat.formatPiastres(p.remaining!)}' : ''}'),
-                  )),
+              ...data.craftsmanPreviews.map(
+                (p) => ListTile(
+                  title: Text(p.name),
+                  subtitle: Text(
+                    '${l10n.paid}: ${MoneyFormat.formatPiastres(p.paid)}'
+                    '${p.remaining != null ? ' • ${l10n.remaining}: ${MoneyFormat.formatPiastres(p.remaining!)}' : ''}',
+                  ),
+                ),
+              ),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(l10n.navItems,
-                      style: Theme.of(context).textTheme.titleMedium),
-                  TextButton(
-                    onPressed: () => context.push('/clients/$clientId/items'),
-                    child: Text(l10n.seeAll),
-                  ),
+                  Text(l10n.navItems, style: Theme.of(context).textTheme.titleMedium),
+                  TextButton(onPressed: () => context.push('/clients/$clientId/items'), child: Text(l10n.seeAll)),
                 ],
               ),
               ...data.topItems.map((e) {
@@ -126,11 +115,9 @@ class ClientDetailScreen extends ConsumerWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: LinearProgressIndicator(
-                          value: total == 0
-                              ? 0
-                              : e.value.materialsPiastres / total,
+                          value: total == 0 ? 0 : e.value.materialsPiastres / total,
                           minHeight: 8,
-                          backgroundColor: Colors.red.withOpacity(0.15),
+                          backgroundColor: Colors.red.withValues(alpha: 0.15),
                           color: Colors.green,
                         ),
                       ),
@@ -140,12 +127,9 @@ class ClientDetailScreen extends ConsumerWidget {
                 );
               }),
               const SizedBox(height: 8),
-              Text(l10n.movements,
-                  style: Theme.of(context).textTheme.titleMedium),
+              Text(l10n.movements, style: Theme.of(context).textTheme.titleMedium),
               ...data.latestMovements.map((t) => _MovementTile(t: t)),
-              TextButton(
-                  onPressed: () => context.push('/clients/$clientId/movements'),
-                  child: Text(l10n.seeAll)),
+              TextButton(onPressed: () => context.push('/clients/$clientId/movements'), child: Text(l10n.seeAll)),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -164,8 +148,7 @@ class ClientDetailScreen extends ConsumerWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: FilledButton(
-                      style:
-                          FilledButton.styleFrom(backgroundColor: Colors.red),
+                      style: FilledButton.styleFrom(backgroundColor: Colors.red),
                       onPressed: () => VoucherLauncher.openForClient(
                         context,
                         clientId: clientId,
@@ -212,25 +195,24 @@ class ClientDetailScreen extends ConsumerWidget {
     for (final a in agreements.take(3)) {
       final c = craftsmen.where((x) => x.id == a.craftsmanId).firstOrNull;
       if (c == null) continue;
-      final paid = LedgerMath.craftsmanPaidPiastres(
-          rows: tx, craftsmanId: a.craftsmanId);
-      previews.add(_CraftsmanPreview(
-        name: c.name,
-        paid: paid,
-        remaining: LedgerMath.craftsmanRemainingPiastres(
-            initialAmountPiastres: a.initialAmountPiastres, paidPiastres: paid),
-      ));
+      final paid = LedgerMath.craftsmanPaidPiastres(rows: tx, craftsmanId: a.craftsmanId);
+      previews.add(
+        _CraftsmanPreview(
+          name: c.name,
+          paid: paid,
+          remaining: LedgerMath.craftsmanRemainingPiastres(
+            initialAmountPiastres: a.initialAmountPiastres,
+            paidPiastres: paid,
+          ),
+        ),
+      );
     }
     final spend = tx.where((t) => t.kind == 'spend').toList();
     final breakdown = LedgerMath.itemBreakdown(spend);
     final items = await repo.watchActiveItems().first;
     final itemNames = {for (final i in items) i.id: i.name};
-    final topItems = breakdown.entries.toList()
-      ..sort((a, b) => b.value.totalPiastres.compareTo(a.value.totalPiastres));
-    final topItemsNamed = topItems
-        .take(3)
-        .map((e) => MapEntry(itemNames[e.key] ?? e.key, e.value))
-        .toList();
+    final topItems = breakdown.entries.toList()..sort((a, b) => b.value.totalPiastres.compareTo(a.value.totalPiastres));
+    final topItemsNamed = topItems.take(3).map((e) => MapEntry(itemNames[e.key] ?? e.key, e.value)).toList();
     final latest = [...tx]..sort((a, b) => b.date.compareTo(a.date));
     return _DetailData(
       client: client,
@@ -285,8 +267,7 @@ class _BalanceHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(l10n.remaining, style: Theme.of(context).textTheme.labelLarge),
-            Text(MoneyFormat.formatPiastres(balance),
-                style: Theme.of(context).textTheme.headlineSmall),
+            Text(MoneyFormat.formatPiastres(balance), style: Theme.of(context).textTheme.headlineSmall),
           ],
         ),
       ),
@@ -295,12 +276,7 @@ class _BalanceHeader extends StatelessWidget {
 }
 
 class _EngineerCard extends StatelessWidget {
-  const _EngineerCard({
-    required this.project,
-    required this.profit,
-    required this.client,
-    required this.onEdit,
-  });
+  const _EngineerCard({required this.project, required this.profit, required this.client, required this.onEdit});
   final Project project;
   final int? profit;
   final Client client;
@@ -317,12 +293,9 @@ class _EngineerCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (client.phone != null) Text(client.phone!),
-            if (project.unitAddress != null && project.unitAddress!.isNotEmpty)
-              Text(project.unitAddress!),
+            if (project.unitAddress != null && project.unitAddress!.isNotEmpty) Text(project.unitAddress!),
             if (project.engineerBasisPoints != null)
-              Text(
-                '${l10n.engineerFee}: ${profit == null ? '—' : MoneyFormat.formatPiastres(profit!)}',
-              ),
+              Text('${l10n.engineerFee}: ${profit == null ? '—' : MoneyFormat.formatPiastres(profit!)}'),
           ],
         ),
         trailing: const Icon(Icons.edit),
@@ -339,8 +312,7 @@ class _MovementTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isReceive = t.kind == 'receive';
     return ListTile(
-      leading: Icon(isReceive ? Icons.south_west : Icons.north_east,
-          color: isReceive ? Colors.green : Colors.red),
+      leading: Icon(isReceive ? Icons.south_west : Icons.north_east, color: isReceive ? Colors.green : Colors.red),
       title: Text(MoneyFormat.formatPiastres(t.amountPiastres)),
       subtitle: Text(t.description ?? ''),
       trailing: Text('${t.date.day}/${t.date.month}'),

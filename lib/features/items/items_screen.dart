@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/app_providers.dart';
@@ -35,7 +35,7 @@ class ItemsScreen extends ConsumerWidget {
               return ListTile(
                 leading: CircleAvatar(
                   backgroundColor:
-                      AppColors.accent(item.colorKey).withOpacity(0.15),
+                      AppColors.accent(item.colorKey).withValues(alpha: 0.15),
                   child: Icon(_iconData(item.iconName),
                       color: AppColors.accent(item.colorKey)),
                 ),
