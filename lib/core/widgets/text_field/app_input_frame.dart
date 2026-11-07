@@ -7,6 +7,44 @@ import '../../config/theme/app_colors.dart';
 import 'app_input_style.dart';
 import 'app_input_type.dart';
 
+/// Fixed-size adornment gutter (currency suffix, icons); optional chip background.
+class AppInputAdornmentSlot extends StatelessWidget {
+  const AppInputAdornmentSlot({
+    super.key,
+    required this.child,
+    this.width = AppSize.adornmentSlotWidth,
+    this.background,
+    this.padding = EdgeInsets.zero,
+  });
+
+  final Widget child;
+  final double width;
+  final Color? background;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget content = Padding(
+      padding: padding,
+      child: Center(child: child),
+    );
+    if (background != null) {
+      content = DecoratedBox(
+        decoration: BoxDecoration(
+          color: background,
+          borderRadius: BorderRadius.circular(AppSize.radiusSM),
+        ),
+        child: content,
+      );
+    }
+    return SizedBox(
+      width: width,
+      height: AppSize.valueRowHeight,
+      child: content,
+    );
+  }
+}
+
 class AppInputFrame extends StatelessWidget {
   const AppInputFrame({
     super.key,
@@ -45,22 +83,13 @@ class AppInputFrame extends StatelessWidget {
   final Widget? passwordToggle;
   final Widget? paste;
 
-  static const _insetDefault = AppSize.spaceLG;
-  static const _insetWithIcon = AppSize.spaceXS;
-
-  bool get _compactStartInset => leading != null || (suffixAtStart && suffix != null);
-
-  bool get _compactEndInset =>
-      trailing != null ||
-      passwordToggle != null ||
-      paste != null ||
-      clear != null ||
-      (!suffixAtStart && suffix != null);
+  static const _insetHorizontal = AppSize.spaceLG;
+  static const _slotGap = AppSize.spaceSM;
 
   EdgeInsetsDirectional _contentPadding() {
     return EdgeInsetsDirectional.only(
-      start: _compactStartInset ? _insetWithIcon : _insetDefault,
-      end: _compactEndInset ? _insetWithIcon : _insetDefault,
+      start: _insetHorizontal,
+      end: _insetHorizontal,
       top: multiline ? AppSize.spaceSM : 0,
       bottom: multiline ? AppSize.spaceSM : 0,
     );
@@ -93,7 +122,7 @@ class AppInputFrame extends StatelessWidget {
         return;
       }
       if (slots.isNotEmpty) {
-        slots.add(const SizedBox(width: AppSize.spaceXS));
+        slots.add(const SizedBox(width: _slotGap));
       }
       slots.add(slot);
     }
@@ -133,7 +162,10 @@ class AppInputFrame extends StatelessWidget {
         Positioned.fill(
           child: Padding(
             padding: EdgeInsets.only(top: floated ? AppSize.floatedLabelHeight : 0),
-            child: editor,
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: editor,
+            ),
           ),
         ),
         _label(context),
@@ -173,9 +205,12 @@ class AppInputFrame extends StatelessWidget {
     if (child == null) {
       return null;
     }
-    return IconTheme(
-      data: IconThemeData(color: style.trailing, size: AppSize.iconSmall),
-      child: child,
+    return AppInputAdornmentSlot(
+      width: AppSize.hitMin,
+      child: IconTheme(
+        data: IconThemeData(color: style.trailing, size: AppSize.iconSmall),
+        child: child,
+      ),
     );
   }
 
@@ -184,7 +219,9 @@ class AppInputFrame extends StatelessWidget {
     if (child == null) {
       return null;
     }
-    return _colored(context, child, style.suffix, AppSize.iconSmall);
+    return AppInputAdornmentSlot(
+      child: _colored(context, child, style.suffix, AppSize.iconSmall),
+    );
   }
 
   Widget? _icon(Widget? child, Color color, double size) {

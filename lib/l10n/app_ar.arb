@@ -35,7 +35,7 @@
   "cash": "كاش",
   "transfer": "تحويل",
   "materials": "خامات",
-  "labor": "شغل يد",
+  "labor": "مصنعية",
   "amount": "المبلغ",
   "date": "التاريخ",
   "descriptionOptional": "وصف (اختياري)",
@@ -46,9 +46,42 @@
   "cancel": "إلغاء",
   "seeAll": "عرض الكل",
   "movements": "الحركات",
-  "engineerFee": "نسبة المهندس (معلومات)",
+  "whatsappLaunchFailed": "تعذّر فتح واتساب",
+  "whatsappInvalidPhone": "رقم الهاتف ده مش صالح لفتح واتساب",
+  "engineerFee": "نسبة الربح (معلومات)",
   "paid": "مدفوع",
   "craftsmen": "صنايعية",
+  "assignCraftsmen": "تحديد الصنايعية",
+  "clientDetailNoCraftsmen": "مفيش صنايعية على المشروع ده لسه",
+  "clientDetailNoItemSpend": "مفيش صرف بنود مسجّل لسه",
+  "clientDetailNoMovements": "مفيش حركات لسه",
+  "clientDetailCraftsmenEmptyDescription": "اختار الصنايعية من دليلك العام لربطهم بهذا المشروع.",
+  "engineerEstimatedProfitTitle": "ربح تقديري",
+  "engineerFeeNoRate": "بدون نسبة",
+  "engineerFeePercentCaption": "{percent} من المصروف",
+  "@engineerFeePercentCaption": {
+    "placeholders": {
+      "percent": { "type": "String" }
+    }
+  },
+  "engineerFeeInternalOnly": "داخلي فقط",
+  "engineerFeeUndefined": "غير محدد",
+  "engineerFeeSheetTitle": "نسبة الربح",
+  "engineerFeePercentFieldLabel": "نسبة الربح",
+  "engineerFeePercentPlaceholder": "غير محددة",
+  "engineerFeeSheetCaption": "ربح تقديري داخلي فقط؛ لا يُخصم من العهدة ولا ينشئ مستحقات على العميل، ولا يظهر في كشف حسابه أو ملف PDF. اترك النسبة فارغة لإلغاء الاحتساب.",
+  "engineerFeePercentInvalid": "أدخل نسبة من 0 إلى 100 أو اتركها فارغة",
+  "clientReceiveMovementDetail": "دفعة من العميل",
+  "clientDetailUnspecifiedItem": "بند غير محدد",
+  "clientDetailNoDescription": "بدون وصف",
+  "archiveClientTitle": "أرشفة العميل؟",
+  "archiveClientDescription": "هتنقل عهدة {name} للأرشيف. تقدر ترجعها بعدين.",
+  "@archiveClientDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "craftsmanAgreedAmount": "المتفق عليه",
   "suppliers": "موردين",
   "statement": "كشف حساب",
   "period": "الفترة",
@@ -58,5 +91,38 @@
   "createNew": "إنشاء جديد",
   "archive": "أرشفة",
   "edit": "تعديل",
-  "delete": "حذف"
+  "delete": "حذف",
+  "voucherAmountRequired": "أدخل مبلغًا أكبر من صفر",
+  "voucherSelectClient": "اختر العميل",
+  "voucherSelectItem": "اختر البند",
+  "voucherSelectCraftsman": "اختر الصنايعي",
+  "voucherPickerSearchHint": "بحث",
+  "voucherPickerNoResults": "لا توجد نتائج",
+  "voucherPickerEmptyTitle": "لا يوجد شيء بعد",
+  "voucherReceiptPhoto": "صورة إيصال",
+  "voucherAttachCamera": "الكاميرا",
+  "voucherAttachGallery": "المعرض",
+  "voucherReceiptCameraDenied": "تم رفض الوصول إلى الكاميرا. يمكنك تفعيله من الإعدادات لتصوير الإيصالات.",
+  "voucherReceiptCameraRestricted": "الوصول إلى الكاميرا مقيّد على هذا الجهاز.",
+  "voucherReceiptGalleryDenied": "تم رفض الوصول إلى الصور. يمكنك تفعيله من الإعدادات لإرفاق إيصالات من المعرض.",
+  "voucherReceiptGalleryRestricted": "الوصول إلى الصور مقيّد على هذا الجهاز.",
+  "voucherReceiptAttachFailed": "تعذّر إرفاق الإيصال. حاول مرة أخرى.",
+  "voucherAssignCraftsmanFirst": "عيّن صنايعية للمشروع أولًا",
+  "amountHint": "0.00",
+  "voucherReceiveTitle": "سند قبض",
+  "voucherSpendTitle": "سند صرف",
+  "voucherSaveReceive": "حفظ القبض",
+  "voucherSaveSpend": "حفظ الصرف",
+  "expenseCategory": "تصنيف المصروف",
+  "voucherContextGeneric": "سند عام · اختار العميل ونوع الحركة",
+  "voucherContextClient": "سند للعميل: {clientName} · يمكنك تغيير العميل أدناه",
+  "@voucherContextClient": {
+    "placeholders": {
+      "clientName": {
+        "type": "String"
+      }
+    }
+  },
+  "noteOptionalHint": "اختياري…",
+  "paymentMethod": "طريقة الدفع"
 }

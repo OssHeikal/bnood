@@ -21,6 +21,7 @@ dependencies:
   uuid: ^4.5.1
   intl: ^0.20.2
   image_picker: ^1.1.2
+  image_picker_android: ^0.8.13
   share_plus: ^10.1.4
   pdf: ^3.11.1
   collection: ^1.19.0

@@ -150,13 +150,89 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movements => 'Movements';
 
   @override
-  String get engineerFee => 'Engineer fee (info)';
+  String get whatsappLaunchFailed => 'Couldn\'t open WhatsApp';
+
+  @override
+  String get whatsappInvalidPhone =>
+      'This phone number can\'t open in WhatsApp';
+
+  @override
+  String get engineerFee => 'Profit percentage (info)';
 
   @override
   String get paid => 'Paid';
 
   @override
   String get craftsmen => 'Craftsmen';
+
+  @override
+  String get assignCraftsmen => 'Assign craftsmen';
+
+  @override
+  String get clientDetailNoCraftsmen => 'No craftsmen on this project yet';
+
+  @override
+  String get clientDetailNoItemSpend => 'No item spend recorded yet';
+
+  @override
+  String get clientDetailNoMovements => 'No movements yet';
+
+  @override
+  String get clientDetailCraftsmenEmptyDescription =>
+      'Choose craftsmen from your directory to link them to this project.';
+
+  @override
+  String get engineerEstimatedProfitTitle => 'Estimated profit';
+
+  @override
+  String get engineerFeeNoRate => 'No rate set';
+
+  @override
+  String engineerFeePercentCaption(String percent) {
+    return '$percent of spend';
+  }
+
+  @override
+  String get engineerFeeInternalOnly => 'Internal only';
+
+  @override
+  String get engineerFeeUndefined => 'Not set';
+
+  @override
+  String get engineerFeeSheetTitle => 'Profit percentage';
+
+  @override
+  String get engineerFeePercentFieldLabel => 'Profit percentage';
+
+  @override
+  String get engineerFeePercentPlaceholder => 'Not set';
+
+  @override
+  String get engineerFeeSheetCaption =>
+      'Estimated internal profit only. It is not deducted from the fund, does not create client receivables, and does not appear on the client statement or PDF. Leave blank to clear.';
+
+  @override
+  String get engineerFeePercentInvalid => 'Enter 0–100 or leave blank';
+
+  @override
+  String get clientReceiveMovementDetail => 'Payment from client';
+
+  @override
+  String get clientDetailUnspecifiedItem => 'Unspecified item';
+
+  @override
+  String get clientDetailNoDescription => 'No description';
+
+  @override
+  String get archiveClientTitle => 'Archive client?';
+
+  @override
+  String archiveClientDescription(String name) {
+    return 'This moves $name\'s project to the archive. You can restore it later.';
+  }
+
+  @override
+  String get craftsmanAgreedAmount => 'Agreed';
 
   @override
   String get suppliers => 'Suppliers';
@@ -187,4 +263,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get delete => 'Delete';
+
+  @override
+  String get voucherAmountRequired => 'Enter an amount greater than zero';
+
+  @override
+  String get voucherSelectClient => 'Select a client';
+
+  @override
+  String get voucherSelectItem => 'Select an item';
+
+  @override
+  String get voucherSelectCraftsman => 'Select a craftsman';
+
+  @override
+  String get voucherPickerSearchHint => 'Search';
+
+  @override
+  String get voucherPickerNoResults => 'No matches';
+
+  @override
+  String get voucherPickerEmptyTitle => 'Nothing here yet';
+
+  @override
+  String get voucherReceiptPhoto => 'Receipt photo';
+
+  @override
+  String get voucherAttachCamera => 'Camera';
+
+  @override
+  String get voucherAttachGallery => 'Gallery';
+
+  @override
+  String get voucherReceiptCameraDenied =>
+      'Camera access was denied. You can enable it in Settings to photograph receipts.';
+
+  @override
+  String get voucherReceiptCameraRestricted =>
+      'Camera access is restricted on this device.';
+
+  @override
+  String get voucherReceiptGalleryDenied =>
+      'Photo access was denied. You can enable it in Settings to attach gallery receipts.';
+
+  @override
+  String get voucherReceiptGalleryRestricted =>
+      'Photo access is restricted on this device.';
+
+  @override
+  String get voucherReceiptAttachFailed =>
+      'Could not attach the receipt. Try again.';
+
+  @override
+  String get voucherAssignCraftsmanFirst =>
+      'Assign craftsmen to the project first';
+
+  @override
+  String get amountHint => '0.00';
+
+  @override
+  String get voucherReceiveTitle => 'Receive voucher';
+
+  @override
+  String get voucherSpendTitle => 'Spend voucher';
+
+  @override
+  String get voucherSaveReceive => 'Save receive';
+
+  @override
+  String get voucherSaveSpend => 'Save spend';
+
+  @override
+  String get expenseCategory => 'Expense category';
+
+  @override
+  String get voucherContextGeneric =>
+      'General voucher · choose client and movement type';
+
+  @override
+  String voucherContextClient(String clientName) {
+    return 'Voucher for $clientName · you can change the client below';
+  }
+
+  @override
+  String get noteOptionalHint => 'Optional…';
+
+  @override
+  String get paymentMethod => 'Payment method';
 }

@@ -116,7 +116,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get materials => 'خامات';
 
   @override
-  String get labor => 'شغل يد';
+  String get labor => 'مصنعية';
 
   @override
   String get amount => 'المبلغ';
@@ -149,13 +149,89 @@ class AppLocalizationsAr extends AppLocalizations {
   String get movements => 'الحركات';
 
   @override
-  String get engineerFee => 'نسبة المهندس (معلومات)';
+  String get whatsappLaunchFailed => 'تعذّر فتح واتساب';
+
+  @override
+  String get whatsappInvalidPhone => 'رقم الهاتف ده مش صالح لفتح واتساب';
+
+  @override
+  String get engineerFee => 'نسبة الربح (معلومات)';
 
   @override
   String get paid => 'مدفوع';
 
   @override
   String get craftsmen => 'صنايعية';
+
+  @override
+  String get assignCraftsmen => 'تحديد الصنايعية';
+
+  @override
+  String get clientDetailNoCraftsmen => 'مفيش صنايعية على المشروع ده لسه';
+
+  @override
+  String get clientDetailNoItemSpend => 'مفيش صرف بنود مسجّل لسه';
+
+  @override
+  String get clientDetailNoMovements => 'مفيش حركات لسه';
+
+  @override
+  String get clientDetailCraftsmenEmptyDescription =>
+      'اختار الصنايعية من دليلك العام لربطهم بهذا المشروع.';
+
+  @override
+  String get engineerEstimatedProfitTitle => 'ربح تقديري';
+
+  @override
+  String get engineerFeeNoRate => 'بدون نسبة';
+
+  @override
+  String engineerFeePercentCaption(String percent) {
+    return '$percent من المصروف';
+  }
+
+  @override
+  String get engineerFeeInternalOnly => 'داخلي فقط';
+
+  @override
+  String get engineerFeeUndefined => 'غير محدد';
+
+  @override
+  String get engineerFeeSheetTitle => 'نسبة الربح';
+
+  @override
+  String get engineerFeePercentFieldLabel => 'نسبة الربح';
+
+  @override
+  String get engineerFeePercentPlaceholder => 'غير محددة';
+
+  @override
+  String get engineerFeeSheetCaption =>
+      'ربح تقديري داخلي فقط؛ لا يُخصم من العهدة ولا ينشئ مستحقات على العميل، ولا يظهر في كشف حسابه أو ملف PDF. اترك النسبة فارغة لإلغاء الاحتساب.';
+
+  @override
+  String get engineerFeePercentInvalid =>
+      'أدخل نسبة من 0 إلى 100 أو اتركها فارغة';
+
+  @override
+  String get clientReceiveMovementDetail => 'دفعة من العميل';
+
+  @override
+  String get clientDetailUnspecifiedItem => 'بند غير محدد';
+
+  @override
+  String get clientDetailNoDescription => 'بدون وصف';
+
+  @override
+  String get archiveClientTitle => 'أرشفة العميل؟';
+
+  @override
+  String archiveClientDescription(String name) {
+    return 'هتنقل عهدة $name للأرشيف. تقدر ترجعها بعدين.';
+  }
+
+  @override
+  String get craftsmanAgreedAmount => 'المتفق عليه';
 
   @override
   String get suppliers => 'موردين';
@@ -186,4 +262,89 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get delete => 'حذف';
+
+  @override
+  String get voucherAmountRequired => 'أدخل مبلغًا أكبر من صفر';
+
+  @override
+  String get voucherSelectClient => 'اختر العميل';
+
+  @override
+  String get voucherSelectItem => 'اختر البند';
+
+  @override
+  String get voucherSelectCraftsman => 'اختر الصنايعي';
+
+  @override
+  String get voucherPickerSearchHint => 'بحث';
+
+  @override
+  String get voucherPickerNoResults => 'لا توجد نتائج';
+
+  @override
+  String get voucherPickerEmptyTitle => 'لا يوجد شيء بعد';
+
+  @override
+  String get voucherReceiptPhoto => 'صورة إيصال';
+
+  @override
+  String get voucherAttachCamera => 'الكاميرا';
+
+  @override
+  String get voucherAttachGallery => 'المعرض';
+
+  @override
+  String get voucherReceiptCameraDenied =>
+      'تم رفض الوصول إلى الكاميرا. يمكنك تفعيله من الإعدادات لتصوير الإيصالات.';
+
+  @override
+  String get voucherReceiptCameraRestricted =>
+      'الوصول إلى الكاميرا مقيّد على هذا الجهاز.';
+
+  @override
+  String get voucherReceiptGalleryDenied =>
+      'تم رفض الوصول إلى الصور. يمكنك تفعيله من الإعدادات لإرفاق إيصالات من المعرض.';
+
+  @override
+  String get voucherReceiptGalleryRestricted =>
+      'الوصول إلى الصور مقيّد على هذا الجهاز.';
+
+  @override
+  String get voucherReceiptAttachFailed =>
+      'تعذّر إرفاق الإيصال. حاول مرة أخرى.';
+
+  @override
+  String get voucherAssignCraftsmanFirst => 'عيّن صنايعية للمشروع أولًا';
+
+  @override
+  String get amountHint => '0.00';
+
+  @override
+  String get voucherReceiveTitle => 'سند قبض';
+
+  @override
+  String get voucherSpendTitle => 'سند صرف';
+
+  @override
+  String get voucherSaveReceive => 'حفظ القبض';
+
+  @override
+  String get voucherSaveSpend => 'حفظ الصرف';
+
+  @override
+  String get expenseCategory => 'تصنيف المصروف';
+
+  @override
+  String get voucherContextGeneric => 'سند عام · اختار العميل ونوع الحركة';
+
+  @override
+  String voucherContextClient(String clientName) {
+    return 'سند للعميل: $clientName · يمكنك تغيير العميل أدناه';
+  }
+
+  @override
+  String get noteOptionalHint => 'اختياري…';
+
+  @override
+  String get paymentMethod => 'طريقة الدفع';
 }

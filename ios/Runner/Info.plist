@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Bnood needs the camera to photograph receipt images for vouchers.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Bnood needs photo library access so you can attach receipt images from your gallery to vouchers.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

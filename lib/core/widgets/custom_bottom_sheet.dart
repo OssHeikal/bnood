@@ -4,6 +4,7 @@ import '../config/theme/app_colors.dart';
 import '../config/theme/app_shape.dart';
 import '../config/theme/app_size.dart';
 import '../../features/home/home_foundation_scope.dart';
+import 'bounded_sheet_navigator.dart';
 
 /// Root bottom sheet with nested [Navigator] for inline-create flows.
 class CustomBottomSheet extends StatelessWidget {
@@ -22,6 +23,7 @@ class CustomBottomSheet extends StatelessWidget {
     String? title,
     bool useRootNavigator = true,
     bool nestedNavigator = true,
+    bool showDragHandle = true,
   }) {
     final brightness = Theme.of(context).brightness;
     final colors = brightness == Brightness.dark ? AppColors.dark : AppColors.light;
@@ -29,18 +31,19 @@ class CustomBottomSheet extends StatelessWidget {
       context: context,
       useRootNavigator: useRootNavigator,
       isScrollControlled: true,
-      showDragHandle: true,
+      showDragHandle: showDragHandle,
       backgroundColor: colors.surface,
       shape: AppShape.superellipse(radius: AppSize.radiusLG),
       builder: (ctx) {
         final insets = MediaQuery.viewInsetsOf(ctx);
+        final keyboardGap = insets.bottom > 0 ? AppSize.spaceMD : 0.0;
         return Padding(
-          padding: EdgeInsets.only(bottom: insets.bottom),
+          padding: EdgeInsets.only(bottom: insets.bottom > 0 ? insets.bottom + keyboardGap : 0),
           child: CustomBottomSheet(
             title: title,
             child: nestedNavigator
-                ? _BoundedSheetNavigator(builder: builder)
-                : Builder(builder: builder),
+                ? BoundedSheetNavigator(builder: builder)
+                : _BoundedStandaloneChild(builder: builder),
           ),
         );
       },
@@ -53,23 +56,31 @@ class CustomBottomSheet extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (title != null) ...[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSize.screenPadding,
-                      0,
-                      AppSize.screenPadding,
-                      AppSize.spaceSM,
-                    ),
-                    child: Text(title!, style: context.text.titleLarge),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final maxHeight =
+                    SheetContentBounds.maxHeight(constraints, MediaQuery.of(context));
+                return SizedBox(
+                  height: maxHeight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (title != null) ...[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSize.screenPadding,
+                            0,
+                            AppSize.screenPadding,
+                            AppSize.spaceSM,
+                          ),
+                          child: Text(title!, style: context.text.titleLarge),
+                        ),
+                      ],
+                      Expanded(child: child),
+                    ],
                   ),
-                ],
-                child,
-              ],
+                );
+              },
             ),
           );
         },
@@ -78,9 +89,8 @@ class CustomBottomSheet extends StatelessWidget {
   }
 }
 
-/// Nested [Navigator] needs finite max height inside content-sized sheet (Overlay sizing).
-class _BoundedSheetNavigator extends StatelessWidget {
-  const _BoundedSheetNavigator({required this.builder});
+class _BoundedStandaloneChild extends StatelessWidget {
+  const _BoundedStandaloneChild({required this.builder});
 
   final WidgetBuilder builder;
 
@@ -88,28 +98,13 @@ class _BoundedSheetNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final media = MediaQuery.of(context);
-        final maxHeight = _navigatorMaxHeight(constraints, media);
-        return ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: constraints.maxWidth,
-            maxHeight: maxHeight,
-          ),
-          child: Navigator(
-            onGenerateRoute: (settings) => MaterialPageRoute(builder: builder),
-          ),
+        final maxHeight = SheetContentBounds.maxHeight(constraints, MediaQuery.of(context));
+        return SizedBox(
+          height: maxHeight,
+          width: constraints.maxWidth,
+          child: Builder(builder: builder),
         );
       },
     );
-  }
-
-  static double _navigatorMaxHeight(BoxConstraints constraints, MediaQueryData media) {
-    final reservedTop = media.viewPadding.top + AppSize.space2XL;
-    final viewportCap = media.size.height - reservedTop;
-    final parent = constraints.maxHeight;
-    if (!parent.isFinite) {
-      return viewportCap;
-    }
-    return parent < viewportCap ? parent : viewportCap;
   }
 }

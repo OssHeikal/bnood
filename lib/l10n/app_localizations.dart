@@ -374,10 +374,22 @@ abstract class AppLocalizations {
   /// **'Movements'**
   String get movements;
 
+  /// No description provided for @whatsappLaunchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open WhatsApp'**
+  String get whatsappLaunchFailed;
+
+  /// No description provided for @whatsappInvalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone number can\'t open in WhatsApp'**
+  String get whatsappInvalidPhone;
+
   /// No description provided for @engineerFee.
   ///
   /// In en, this message translates to:
-  /// **'Engineer fee (info)'**
+  /// **'Profit percentage (info)'**
   String get engineerFee;
 
   /// No description provided for @paid.
@@ -391,6 +403,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Craftsmen'**
   String get craftsmen;
+
+  /// No description provided for @assignCraftsmen.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign craftsmen'**
+  String get assignCraftsmen;
+
+  /// No description provided for @clientDetailNoCraftsmen.
+  ///
+  /// In en, this message translates to:
+  /// **'No craftsmen on this project yet'**
+  String get clientDetailNoCraftsmen;
+
+  /// No description provided for @clientDetailNoItemSpend.
+  ///
+  /// In en, this message translates to:
+  /// **'No item spend recorded yet'**
+  String get clientDetailNoItemSpend;
+
+  /// No description provided for @clientDetailNoMovements.
+  ///
+  /// In en, this message translates to:
+  /// **'No movements yet'**
+  String get clientDetailNoMovements;
+
+  /// No description provided for @clientDetailCraftsmenEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose craftsmen from your directory to link them to this project.'**
+  String get clientDetailCraftsmenEmptyDescription;
+
+  /// No description provided for @engineerEstimatedProfitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated profit'**
+  String get engineerEstimatedProfitTitle;
+
+  /// No description provided for @engineerFeeNoRate.
+  ///
+  /// In en, this message translates to:
+  /// **'No rate set'**
+  String get engineerFeeNoRate;
+
+  /// No description provided for @engineerFeePercentCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} of spend'**
+  String engineerFeePercentCaption(String percent);
+
+  /// No description provided for @engineerFeeInternalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal only'**
+  String get engineerFeeInternalOnly;
+
+  /// No description provided for @engineerFeeUndefined.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get engineerFeeUndefined;
+
+  /// No description provided for @engineerFeeSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit percentage'**
+  String get engineerFeeSheetTitle;
+
+  /// No description provided for @engineerFeePercentFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit percentage'**
+  String get engineerFeePercentFieldLabel;
+
+  /// No description provided for @engineerFeePercentPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get engineerFeePercentPlaceholder;
+
+  /// No description provided for @engineerFeeSheetCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated internal profit only. It is not deducted from the fund, does not create client receivables, and does not appear on the client statement or PDF. Leave blank to clear.'**
+  String get engineerFeeSheetCaption;
+
+  /// No description provided for @engineerFeePercentInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 0–100 or leave blank'**
+  String get engineerFeePercentInvalid;
+
+  /// No description provided for @clientReceiveMovementDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment from client'**
+  String get clientReceiveMovementDetail;
+
+  /// No description provided for @clientDetailUnspecifiedItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Unspecified item'**
+  String get clientDetailUnspecifiedItem;
+
+  /// No description provided for @clientDetailNoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No description'**
+  String get clientDetailNoDescription;
+
+  /// No description provided for @archiveClientTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive client?'**
+  String get archiveClientTitle;
+
+  /// No description provided for @archiveClientDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This moves {name}\'s project to the archive. You can restore it later.'**
+  String archiveClientDescription(String name);
+
+  /// No description provided for @craftsmanAgreedAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreed'**
+  String get craftsmanAgreedAmount;
 
   /// No description provided for @suppliers.
   ///
@@ -451,6 +589,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get delete;
+
+  /// No description provided for @voucherAmountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an amount greater than zero'**
+  String get voucherAmountRequired;
+
+  /// No description provided for @voucherSelectClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a client'**
+  String get voucherSelectClient;
+
+  /// No description provided for @voucherSelectItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Select an item'**
+  String get voucherSelectItem;
+
+  /// No description provided for @voucherSelectCraftsman.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a craftsman'**
+  String get voucherSelectCraftsman;
+
+  /// No description provided for @voucherPickerSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get voucherPickerSearchHint;
+
+  /// No description provided for @voucherPickerNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No matches'**
+  String get voucherPickerNoResults;
+
+  /// No description provided for @voucherPickerEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet'**
+  String get voucherPickerEmptyTitle;
+
+  /// No description provided for @voucherReceiptPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt photo'**
+  String get voucherReceiptPhoto;
+
+  /// No description provided for @voucherAttachCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get voucherAttachCamera;
+
+  /// No description provided for @voucherAttachGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get voucherAttachGallery;
+
+  /// No description provided for @voucherReceiptCameraDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access was denied. You can enable it in Settings to photograph receipts.'**
+  String get voucherReceiptCameraDenied;
+
+  /// No description provided for @voucherReceiptCameraRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is restricted on this device.'**
+  String get voucherReceiptCameraRestricted;
+
+  /// No description provided for @voucherReceiptGalleryDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo access was denied. You can enable it in Settings to attach gallery receipts.'**
+  String get voucherReceiptGalleryDenied;
+
+  /// No description provided for @voucherReceiptGalleryRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo access is restricted on this device.'**
+  String get voucherReceiptGalleryRestricted;
+
+  /// No description provided for @voucherReceiptAttachFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not attach the receipt. Try again.'**
+  String get voucherReceiptAttachFailed;
+
+  /// No description provided for @voucherAssignCraftsmanFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign craftsmen to the project first'**
+  String get voucherAssignCraftsmanFirst;
+
+  /// No description provided for @amountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'0.00'**
+  String get amountHint;
+
+  /// No description provided for @voucherReceiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive voucher'**
+  String get voucherReceiveTitle;
+
+  /// No description provided for @voucherSpendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Spend voucher'**
+  String get voucherSpendTitle;
+
+  /// No description provided for @voucherSaveReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'Save receive'**
+  String get voucherSaveReceive;
+
+  /// No description provided for @voucherSaveSpend.
+  ///
+  /// In en, this message translates to:
+  /// **'Save spend'**
+  String get voucherSaveSpend;
+
+  /// No description provided for @expenseCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense category'**
+  String get expenseCategory;
+
+  /// No description provided for @voucherContextGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'General voucher · choose client and movement type'**
+  String get voucherContextGeneric;
+
+  /// No description provided for @voucherContextClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher for {clientName} · you can change the client below'**
+  String voucherContextClient(String clientName);
+
+  /// No description provided for @noteOptionalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional…'**
+  String get noteOptionalHint;
+
+  /// No description provided for @paymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment method'**
+  String get paymentMethod;
 }
 
 class _AppLocalizationsDelegate

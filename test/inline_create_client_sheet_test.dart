@@ -47,9 +47,9 @@ void main() {
                       onPressed: () {
                         CustomBottomSheet.show<String?>(
                           context: hostContext,
-                          title: AppLocalizations.of(hostContext).addClient,
-                          builder: (_) => const InlineCreateClientPage(),
+                          builder: (_) => const InlineCreateClientPage(padForSystemChrome: false),
                           nestedNavigator: false,
+                          showDragHandle: false,
                         );
                       },
                       child: const Text('Open'),
@@ -173,9 +173,9 @@ void main() {
                       child: ElevatedButton(
                         onPressed: () => CustomBottomSheet.show<String?>(
                           context: context,
-                          title: AppLocalizations.of(context).addClient,
-                          builder: (_) => const InlineCreateClientPage(),
+                          builder: (_) => const InlineCreateClientPage(padForSystemChrome: false),
                           nestedNavigator: false,
+                          showDragHandle: false,
                         ),
                         child: const Text('Open'),
                       ),
@@ -222,9 +222,9 @@ void main() {
                   builder: (context) => ElevatedButton(
                     onPressed: () => CustomBottomSheet.show<String?>(
                       context: context,
-                      title: AppLocalizations.of(context).addClient,
-                      builder: (_) => const InlineCreateClientPage(),
+                      builder: (_) => const InlineCreateClientPage(padForSystemChrome: false),
                       nestedNavigator: true,
+                      showDragHandle: false,
                     ),
                     child: const Text('Open nested'),
                   ),

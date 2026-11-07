@@ -46,9 +46,42 @@
   "cancel": "Cancel",
   "seeAll": "See all",
   "movements": "Movements",
-  "engineerFee": "Engineer fee (info)",
+  "whatsappLaunchFailed": "Couldn't open WhatsApp",
+  "whatsappInvalidPhone": "This phone number can't open in WhatsApp",
+  "engineerFee": "Profit percentage (info)",
   "paid": "Paid",
   "craftsmen": "Craftsmen",
+  "assignCraftsmen": "Assign craftsmen",
+  "clientDetailNoCraftsmen": "No craftsmen on this project yet",
+  "clientDetailNoItemSpend": "No item spend recorded yet",
+  "clientDetailNoMovements": "No movements yet",
+  "clientDetailCraftsmenEmptyDescription": "Choose craftsmen from your directory to link them to this project.",
+  "engineerEstimatedProfitTitle": "Estimated profit",
+  "engineerFeeNoRate": "No rate set",
+  "engineerFeePercentCaption": "{percent} of spend",
+  "@engineerFeePercentCaption": {
+    "placeholders": {
+      "percent": { "type": "String" }
+    }
+  },
+  "engineerFeeInternalOnly": "Internal only",
+  "engineerFeeUndefined": "Not set",
+  "engineerFeeSheetTitle": "Profit percentage",
+  "engineerFeePercentFieldLabel": "Profit percentage",
+  "engineerFeePercentPlaceholder": "Not set",
+  "engineerFeeSheetCaption": "Estimated internal profit only. It is not deducted from the fund, does not create client receivables, and does not appear on the client statement or PDF. Leave blank to clear.",
+  "engineerFeePercentInvalid": "Enter 0–100 or leave blank",
+  "clientReceiveMovementDetail": "Payment from client",
+  "clientDetailUnspecifiedItem": "Unspecified item",
+  "clientDetailNoDescription": "No description",
+  "archiveClientTitle": "Archive client?",
+  "archiveClientDescription": "This moves {name}'s project to the archive. You can restore it later.",
+  "@archiveClientDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "craftsmanAgreedAmount": "Agreed",
   "suppliers": "Suppliers",
   "statement": "Statement",
   "period": "Period",
@@ -58,5 +91,38 @@
   "createNew": "Create new",
   "archive": "Archive",
   "edit": "Edit",
-  "delete": "Delete"
+  "delete": "Delete",
+  "voucherAmountRequired": "Enter an amount greater than zero",
+  "voucherSelectClient": "Select a client",
+  "voucherSelectItem": "Select an item",
+  "voucherSelectCraftsman": "Select a craftsman",
+  "voucherPickerSearchHint": "Search",
+  "voucherPickerNoResults": "No matches",
+  "voucherPickerEmptyTitle": "Nothing here yet",
+  "voucherReceiptPhoto": "Receipt photo",
+  "voucherAttachCamera": "Camera",
+  "voucherAttachGallery": "Gallery",
+  "voucherReceiptCameraDenied": "Camera access was denied. You can enable it in Settings to photograph receipts.",
+  "voucherReceiptCameraRestricted": "Camera access is restricted on this device.",
+  "voucherReceiptGalleryDenied": "Photo access was denied. You can enable it in Settings to attach gallery receipts.",
+  "voucherReceiptGalleryRestricted": "Photo access is restricted on this device.",
+  "voucherReceiptAttachFailed": "Could not attach the receipt. Try again.",
+  "voucherAssignCraftsmanFirst": "Assign craftsmen to the project first",
+  "amountHint": "0.00",
+  "voucherReceiveTitle": "Receive voucher",
+  "voucherSpendTitle": "Spend voucher",
+  "voucherSaveReceive": "Save receive",
+  "voucherSaveSpend": "Save spend",
+  "expenseCategory": "Expense category",
+  "voucherContextGeneric": "General voucher · choose client and movement type",
+  "voucherContextClient": "Voucher for {clientName} · you can change the client below",
+  "@voucherContextClient": {
+    "placeholders": {
+      "clientName": {
+        "type": "String"
+      }
+    }
+  },
+  "noteOptionalHint": "Optional…",
+  "paymentMethod": "Payment method"
 }

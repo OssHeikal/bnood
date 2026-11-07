@@ -242,6 +242,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
     if (oldWidget.type.isObscured != widget.type.isObscured) {
       _obscure = widget.type.isObscured;
     }
+    if (widget.controller == null && widget.initialValue != oldWidget.initialValue) {
+      final next = widget.initialValue ?? '';
+      if (_controller.text != next) {
+        _controller.value = _controller.value.copyWith(
+          text: next,
+          selection: TextSelection.collapsed(offset: next.length),
+        );
+      }
+    }
     _syncPickerFocus();
   }
 
@@ -361,6 +370,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   TextDirection _textDirection(BuildContext context) {
+    if (widget.type == AppInputType.currency) {
+      return Directionality.of(context);
+    }
     if (widget.ltrValue || widget.type.isObscured) {
       return TextDirection.ltr;
     }
@@ -460,7 +472,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
       label: widget.search || widget.variant == AppInputVariant.bare ? null : widget.label,
       field: _input(context, style, floated, shownError, invalid),
       onSurfaceTap: _handleTap,
-      suffixAtStart: widget.type.isNumeric && Directionality.of(context) == TextDirection.rtl,
+      suffixAtStart: widget.type.isNumeric &&
+          widget.type != AppInputType.currency &&
+          widget.suffix == null &&
+          Directionality.of(context) == TextDirection.rtl,
       leading: _leading,
       trailing: widget.trailing,
       prefix: widget.prefix,
