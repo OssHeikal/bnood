@@ -70,6 +70,7 @@ void main() {
         itemB: 'سيراميك وحمامات',
       },
       bounds: bounds,
+      issuedAt: DateTime(2025, 11, 7),
       sampleWatermark: true,
     );
 
