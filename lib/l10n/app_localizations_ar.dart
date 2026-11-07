@@ -579,4 +579,152 @@ class AppLocalizationsAr extends AppLocalizations {
   String archiveItemDescription(String name) {
     return 'سيُخفى $name من القوائم. سجل المصروفات يبقى محفوظًا.';
   }
+
+  @override
+  String get statementClientHeading => 'عهدة / كشف حساب العميل';
+
+  @override
+  String get statementPeriodToday => 'اليوم';
+
+  @override
+  String get statementPeriodMonth => 'هذا الشهر';
+
+  @override
+  String get statementPeriodAll => 'كل الفترة';
+
+  @override
+  String get statementTotalReceived => 'إجمالي المقبوض';
+
+  @override
+  String get statementTotalSpent => 'إجمالي المصروف';
+
+  @override
+  String get statementClosingLabel => 'المتبقي';
+
+  @override
+  String get statementClosingEndOfPeriod => 'المتبقي بنهاية الفترة';
+
+  @override
+  String statementMaterialsLaborSummary(String materials, String labor) {
+    return 'إجمالي مونة (خامات): $materials | إجمالي مصنعية: $labor';
+  }
+
+  @override
+  String statementOpeningPeriodNet(String opening, String net) {
+    return 'رصيد أول الفترة: $opening · صافي حركة الفترة: $net';
+  }
+
+  @override
+  String get statementReceiptsSectionTitle => 'المقبوضات من العميل';
+
+  @override
+  String get statementReceiptsSectionCaption =>
+      'تُعرض الدفعات هنا فقط، ولا تُكرر داخل بنود المصروفات.';
+
+  @override
+  String get statementEmptyReceipts => 'لا توجد مقبوضات في الفترة المحددة.';
+
+  @override
+  String statementItemSectionTitle(String name) {
+    return 'بند: $name';
+  }
+
+  @override
+  String statementItemSectionTotal(String total) {
+    return 'الإجمالي: $total';
+  }
+
+  @override
+  String statementItemMaterialsLabor(String materials, String labor) {
+    return 'إجمالي مونة (خامات): $materials | إجمالي مصنعية: $labor';
+  }
+
+  @override
+  String statementReconcileSpend(String materials, String labor, String spent) {
+    return 'مراجعة المصروفات: $materials خامات + $labor مصنعية = $spent';
+  }
+
+  @override
+  String statementReconcileBalance(
+    String openingPrefix,
+    String received,
+    String spent,
+    String closing,
+  ) {
+    return '$openingPrefix$received مقبوض − $spent مصروف = $closing متبقي';
+  }
+
+  @override
+  String statementIssuedOn(String date) {
+    return 'تاريخ الكشف: $date';
+  }
+
+  @override
+  String statementPeriodDisplay(String label) {
+    return 'الفترة: $label';
+  }
+
+  @override
+  String get statementCurrencyNote => 'العملة: الجنيه المصري (EGP)';
+
+  @override
+  String get statementTableSerial => 'م';
+
+  @override
+  String get statementTableAmount => 'مبلغ';
+
+  @override
+  String get statementTableDetail => 'بيان';
+
+  @override
+  String get statementPdfExporting => 'جاري إعداد الملف…';
+
+  @override
+  String get statementSupplierHeading => 'كشف حساب مورد';
+
+  @override
+  String statementPageFooter(String page, String pages) {
+    return 'صفحة $page من $pages';
+  }
+
+  @override
+  String get statementPeriodCustomize => 'تخصيص الفترة';
+
+  @override
+  String get statementPeriodSinceLastExport => 'من آخر تصدير';
+
+  @override
+  String get statementSinceLastExportUnavailable =>
+      'لا يوجد تصدير سابق بعد — اختر فترة أخرى.';
+
+  @override
+  String get statementPeriodDatesHint =>
+      'التواريخ باليوم المحلي، شاملة لأول وآخر يوم.';
+
+  @override
+  String get statementReconcileSectionTitle => 'مراجعة الرصيد';
+
+  @override
+  String statementLastExportAt(String date) {
+    return 'آخر تصدير PDF ناجح: $date';
+  }
+
+  @override
+  String get statementExportFailed => 'تعذّر إعداد ملف PDF';
+
+  @override
+  String get statementPeriodFrom => 'من';
+
+  @override
+  String get statementPeriodTo => 'إلى';
+
+  @override
+  String get statementSupplierPaymentsTitle => 'مدفوعات الفترة';
+
+  @override
+  String get statementSupplierPaymentsCaption =>
+      'حركات صرف خامات مرتبطة بالمورد فقط.';
+
+  @override
+  String get statementEmptyPayments => 'لا توجد مدفوعات في الفترة المحددة.';
 }

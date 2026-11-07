@@ -14,6 +14,114 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart' as _svg;
 import 'package:vector_graphics/vector_graphics.dart' as _vg;
 
+class $AssetsBrandGen {
+  const $AssetsBrandGen();
+
+  /// File path: assets/brand/hero_ar_dark.png
+  AssetGenImage get heroArDarkPng => const AssetGenImage('assets/brand/hero_ar_dark.png');
+
+  /// File path: assets/brand/hero_ar_dark.svg
+  SvgGenImage get heroArDarkSvg => const SvgGenImage('assets/brand/hero_ar_dark.svg');
+
+  /// File path: assets/brand/hero_ar_light.png
+  AssetGenImage get heroArLightPng => const AssetGenImage('assets/brand/hero_ar_light.png');
+
+  /// File path: assets/brand/hero_ar_light.svg
+  SvgGenImage get heroArLightSvg => const SvgGenImage('assets/brand/hero_ar_light.svg');
+
+  /// File path: assets/brand/icon_black.svg
+  SvgGenImage get iconBlack => const SvgGenImage('assets/brand/icon_black.svg');
+
+  /// File path: assets/brand/icon_black@2x.png
+  AssetGenImage get iconBlack2x => const AssetGenImage('assets/brand/icon_black@2x.png');
+
+  /// File path: assets/brand/icon_primary.png
+  AssetGenImage get iconPrimaryPng => const AssetGenImage('assets/brand/icon_primary.png');
+
+  /// File path: assets/brand/icon_primary.svg
+  SvgGenImage get iconPrimarySvg => const SvgGenImage('assets/brand/icon_primary.svg');
+
+  /// File path: assets/brand/icon_primary@2x.png
+  AssetGenImage get iconPrimary2x => const AssetGenImage('assets/brand/icon_primary@2x.png');
+
+  /// File path: assets/brand/icon_white.svg
+  SvgGenImage get iconWhite => const SvgGenImage('assets/brand/icon_white.svg');
+
+  /// File path: assets/brand/icon_white@2x.png
+  AssetGenImage get iconWhite2x => const AssetGenImage('assets/brand/icon_white@2x.png');
+
+  /// File path: assets/brand/logo_ar_horizontal_black.svg
+  SvgGenImage get logoArHorizontalBlack => const SvgGenImage('assets/brand/logo_ar_horizontal_black.svg');
+
+  /// File path: assets/brand/logo_ar_horizontal_black@2x.png
+  AssetGenImage get logoArHorizontalBlack2x => const AssetGenImage('assets/brand/logo_ar_horizontal_black@2x.png');
+
+  /// File path: assets/brand/logo_ar_horizontal_primary.svg
+  SvgGenImage get logoArHorizontalPrimary => const SvgGenImage('assets/brand/logo_ar_horizontal_primary.svg');
+
+  /// File path: assets/brand/logo_ar_horizontal_primary@2x.png
+  AssetGenImage get logoArHorizontalPrimary2x => const AssetGenImage('assets/brand/logo_ar_horizontal_primary@2x.png');
+
+  /// File path: assets/brand/logo_ar_horizontal_white.svg
+  SvgGenImage get logoArHorizontalWhite => const SvgGenImage('assets/brand/logo_ar_horizontal_white.svg');
+
+  /// File path: assets/brand/logo_ar_horizontal_white@2x.png
+  AssetGenImage get logoArHorizontalWhite2x => const AssetGenImage('assets/brand/logo_ar_horizontal_white@2x.png');
+
+  /// File path: assets/brand/logo_ar_primary.png
+  AssetGenImage get logoArPrimaryPng => const AssetGenImage('assets/brand/logo_ar_primary.png');
+
+  /// File path: assets/brand/logo_ar_primary.svg
+  SvgGenImage get logoArPrimarySvg => const SvgGenImage('assets/brand/logo_ar_primary.svg');
+
+  /// File path: assets/brand/logo_ar_vertical_black.svg
+  SvgGenImage get logoArVerticalBlack => const SvgGenImage('assets/brand/logo_ar_vertical_black.svg');
+
+  /// File path: assets/brand/logo_ar_vertical_black@2x.png
+  AssetGenImage get logoArVerticalBlack2x => const AssetGenImage('assets/brand/logo_ar_vertical_black@2x.png');
+
+  /// File path: assets/brand/logo_ar_vertical_primary.svg
+  SvgGenImage get logoArVerticalPrimary => const SvgGenImage('assets/brand/logo_ar_vertical_primary.svg');
+
+  /// File path: assets/brand/logo_ar_vertical_primary@2x.png
+  AssetGenImage get logoArVerticalPrimary2x => const AssetGenImage('assets/brand/logo_ar_vertical_primary@2x.png');
+
+  /// File path: assets/brand/logo_ar_vertical_white.svg
+  SvgGenImage get logoArVerticalWhite => const SvgGenImage('assets/brand/logo_ar_vertical_white.svg');
+
+  /// File path: assets/brand/logo_ar_vertical_white@2x.png
+  AssetGenImage get logoArVerticalWhite2x => const AssetGenImage('assets/brand/logo_ar_vertical_white@2x.png');
+
+  /// List of all assets
+  List<dynamic> get values => [
+    heroArDarkPng,
+    heroArDarkSvg,
+    heroArLightPng,
+    heroArLightSvg,
+    iconBlack,
+    iconBlack2x,
+    iconPrimaryPng,
+    iconPrimarySvg,
+    iconPrimary2x,
+    iconWhite,
+    iconWhite2x,
+    logoArHorizontalBlack,
+    logoArHorizontalBlack2x,
+    logoArHorizontalPrimary,
+    logoArHorizontalPrimary2x,
+    logoArHorizontalWhite,
+    logoArHorizontalWhite2x,
+    logoArPrimaryPng,
+    logoArPrimarySvg,
+    logoArVerticalBlack,
+    logoArVerticalBlack2x,
+    logoArVerticalPrimary,
+    logoArVerticalPrimary2x,
+    logoArVerticalWhite,
+    logoArVerticalWhite2x,
+  ];
+}
+
 class $AssetsFontsGen {
   const $AssetsFontsGen();
 
@@ -331,8 +439,88 @@ class $AssetsIconsGen {
 }
 
 abstract final class Assets {
+  static const $AssetsBrandGen brand = $AssetsBrandGen();
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+}
+
+class AssetGenImage {
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}, this.animation});
+
+  final String _assetName;
+
+  final Size? size;
+  final Set<String> flavors;
+  final AssetGenImageAnimation? animation;
+
+  Image image({
+    Key? key,
+    AssetBundle? bundle,
+    ImageFrameBuilder? frameBuilder,
+    ImageErrorWidgetBuilder? errorBuilder,
+    String? semanticLabel,
+    bool excludeFromSemantics = false,
+    double? scale,
+    double? width,
+    double? height,
+    Color? color,
+    Animation<double>? opacity,
+    BlendMode? colorBlendMode,
+    BoxFit? fit,
+    AlignmentGeometry alignment = Alignment.center,
+    ImageRepeat repeat = ImageRepeat.noRepeat,
+    Rect? centerSlice,
+    bool matchTextDirection = false,
+    bool gaplessPlayback = true,
+    bool isAntiAlias = false,
+    String? package,
+    FilterQuality filterQuality = FilterQuality.medium,
+    int? cacheWidth,
+    int? cacheHeight,
+  }) {
+    return Image.asset(
+      _assetName,
+      key: key,
+      bundle: bundle,
+      frameBuilder: frameBuilder,
+      errorBuilder: errorBuilder,
+      semanticLabel: semanticLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      scale: scale,
+      width: width,
+      height: height,
+      color: color,
+      opacity: opacity,
+      colorBlendMode: colorBlendMode,
+      fit: fit,
+      alignment: alignment,
+      repeat: repeat,
+      centerSlice: centerSlice,
+      matchTextDirection: matchTextDirection,
+      gaplessPlayback: gaplessPlayback,
+      isAntiAlias: isAntiAlias,
+      package: package,
+      filterQuality: filterQuality,
+      cacheWidth: cacheWidth,
+      cacheHeight: cacheHeight,
+    );
+  }
+
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
+  }
+
+  String get path => _assetName;
+
+  String get keyName => _assetName;
+}
+
+class AssetGenImageAnimation {
+  const AssetGenImageAnimation({required this.isAnimation, required this.duration, required this.frames});
+
+  final bool isAnimation;
+  final Duration duration;
+  final int frames;
 }
 
 class SvgGenImage {

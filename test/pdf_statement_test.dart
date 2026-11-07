@@ -4,6 +4,8 @@ import 'package:bnood/core/money/period_bounds.dart';
 import 'package:bnood/core/pdf/pdf_fonts.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/features/statements/pdf_statement_service.dart';
+import 'package:bnood/features/statements/statement_pdf_copy.dart';
+import 'package:bnood/l10n/app_localizations_ar.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -46,15 +48,19 @@ void main() {
     );
     final spend = rows.where((t) => t.kind == 'spend').toList();
     final recv = rows.where((t) => t.kind == 'receive').toList();
+    final copy = StatementPdfCopy(AppLocalizationsAr());
     final bytes = await PdfStatementService().buildClientStatement(
       client: client,
       totals: totals,
       periodSpend: spend,
       periodReceive: recv,
       itemNames: {item.id: item.name},
+      supplierNames: const {},
+      craftsmanNames: const {},
       bounds: bounds,
+      copy: copy,
     );
     expect(bytes.isNotEmpty, isTrue);
-    expect(bytes.length, greaterThan(1500));
+    expect(bytes.length, greaterThan(2000));
   });
 }

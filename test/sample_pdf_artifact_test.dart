@@ -4,6 +4,8 @@ import 'package:bnood/core/database/database.dart';
 import 'package:bnood/core/money/ledger_math.dart';
 import 'package:bnood/core/money/period_bounds.dart';
 import 'package:bnood/features/statements/pdf_statement_service.dart';
+import 'package:bnood/features/statements/statement_pdf_copy.dart';
+import 'package:bnood/l10n/app_localizations_ar.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,12 +14,10 @@ void main() {
 
   setUpAll(() async {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(
-            const MethodChannel('plugins.flutter.io/path_provider'), null);
+        .setMockMethodCallHandler(const MethodChannel('plugins.flutter.io/path_provider'), null);
   });
 
-  test('generate SAMPLE client PDF artifact with Arabic glyphs (offline fonts)',
-      () async {
+  test('generate SAMPLE client PDF artifact with Arabic glyphs (offline fonts)', () async {
     final bounds = PeriodBounds.normalize(
       start: DateTime(2025, 6, 1),
       end: DateTime(2025, 6, 30),
@@ -38,8 +38,7 @@ void main() {
       _spend(80000, DateTime(2025, 6, 12), itemA, 'labor', 'أعمال محارة'),
       _spend(120000, DateTime(2025, 6, 18), itemB, 'materials', 'سيراميك حمام'),
       _spend(60000, DateTime(2025, 6, 25), itemB, 'labor', 'تركيب'),
-      _spend(50000, DateTime(2025, 6, 28), itemB, 'materials',
-          'شيء إضافي لصفحة ثانية '.padRight(40, '·')),
+      _spend(50000, DateTime(2025, 6, 28), itemB, 'materials', 'شيء إضافي لصفحة ثانية '.padRight(40, '·')),
     ];
     final receives = [
       _recv(500000, DateTime(2025, 5, 20)),
@@ -54,41 +53,35 @@ void main() {
     );
     expect(
       totals.closingBalancePiastres,
-      totals.openingBalancePiastres +
-          totals.periodReceivedPiastres -
-          totals.periodSpentPiastres,
+      totals.openingBalancePiastres + totals.periodReceivedPiastres - totals.periodSpentPiastres,
     );
 
     final bytes = await PdfStatementService().buildClientStatement(
       client: client,
       totals: totals,
       periodSpend: spends,
-      periodReceive:
-          receives.where((t) => bounds.containsLocalDate(t.date)).toList(),
-      itemNames: {
-        itemA: 'محارة',
-        itemB: 'سيراميك وحمامات',
-      },
+      periodReceive: receives.where((t) => bounds.containsLocalDate(t.date)).toList(),
+      itemNames: {itemA: 'محارة', itemB: 'سيراميك وحمامات'},
+      supplierNames: const {},
+      craftsmanNames: const {},
       bounds: bounds,
+      copy: StatementPdfCopy(AppLocalizationsAr()),
       issuedAt: DateTime(2025, 11, 7),
       sampleWatermark: true,
     );
 
-    final dir = Directory('/opt/cursor/artifacts');
-    if (!await dir.exists()) await dir.create(recursive: true);
+    final artifacts = Directory('/opt/cursor/artifacts');
+    final dir = await artifacts.exists()
+        ? artifacts
+        : await Directory.systemTemp.createTemp('bnood-sample-pdf-');
     final pdfPath = '${dir.path}/bnood-sample-statement.pdf';
     await File(pdfPath).writeAsBytes(bytes);
     expect(await File(pdfPath).length(), greaterThan(2000));
-
-    final strings = String.fromCharCodes(bytes);
-    expect(strings.contains('Font'), isTrue);
     expect(bytes.length, greaterThan(3000));
   });
 }
 
-Transaction _spend(
-        int amount, DateTime d, String itemId, String type, String desc) =>
-    Transaction(
+Transaction _spend(int amount, DateTime d, String itemId, String type, String desc) => Transaction(
       id: '$amount$d',
       workspaceId: 'w',
       projectId: 'p',

@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Bnood'**
+  /// **'بنود'**
   String get appTitle;
 
   /// No description provided for @navHome.
@@ -1165,6 +1165,245 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} will be hidden from lists. Expense history is kept.'**
   String archiveItemDescription(String name);
+
+  /// No description provided for @statementClientHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund / client statement'**
+  String get statementClientHeading;
+
+  /// No description provided for @statementPeriodToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get statementPeriodToday;
+
+  /// No description provided for @statementPeriodMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get statementPeriodMonth;
+
+  /// No description provided for @statementPeriodAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All time'**
+  String get statementPeriodAll;
+
+  /// No description provided for @statementTotalReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Total received'**
+  String get statementTotalReceived;
+
+  /// No description provided for @statementTotalSpent.
+  ///
+  /// In en, this message translates to:
+  /// **'Total spent'**
+  String get statementTotalSpent;
+
+  /// No description provided for @statementClosingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get statementClosingLabel;
+
+  /// No description provided for @statementClosingEndOfPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining at period end'**
+  String get statementClosingEndOfPeriod;
+
+  /// No description provided for @statementMaterialsLaborSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Materials total: {materials} | Labor total: {labor}'**
+  String statementMaterialsLaborSummary(String materials, String labor);
+
+  /// No description provided for @statementOpeningPeriodNet.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening balance: {opening} · Net movement: {net}'**
+  String statementOpeningPeriodNet(String opening, String net);
+
+  /// No description provided for @statementReceiptsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipts from client'**
+  String get statementReceiptsSectionTitle;
+
+  /// No description provided for @statementReceiptsSectionCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments appear here only and are not repeated under expense items.'**
+  String get statementReceiptsSectionCaption;
+
+  /// No description provided for @statementEmptyReceipts.
+  ///
+  /// In en, this message translates to:
+  /// **'No receipts in the selected period.'**
+  String get statementEmptyReceipts;
+
+  /// No description provided for @statementItemSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Item: {name}'**
+  String statementItemSectionTitle(String name);
+
+  /// No description provided for @statementItemSectionTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total: {total}'**
+  String statementItemSectionTotal(String total);
+
+  /// No description provided for @statementItemMaterialsLabor.
+  ///
+  /// In en, this message translates to:
+  /// **'Materials: {materials} | Labor: {labor}'**
+  String statementItemMaterialsLabor(String materials, String labor);
+
+  /// No description provided for @statementReconcileSpend.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense check: {materials} materials + {labor} labor = {spent}'**
+  String statementReconcileSpend(String materials, String labor, String spent);
+
+  /// No description provided for @statementReconcileBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'{openingPrefix}{received} received − {spent} spent = {closing} remaining'**
+  String statementReconcileBalance(
+    String openingPrefix,
+    String received,
+    String spent,
+    String closing,
+  );
+
+  /// No description provided for @statementIssuedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Issued: {date}'**
+  String statementIssuedOn(String date);
+
+  /// No description provided for @statementPeriodDisplay.
+  ///
+  /// In en, this message translates to:
+  /// **'Period: {label}'**
+  String statementPeriodDisplay(String label);
+
+  /// No description provided for @statementCurrencyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency: Egyptian pound (EGP)'**
+  String get statementCurrencyNote;
+
+  /// No description provided for @statementTableSerial.
+  ///
+  /// In en, this message translates to:
+  /// **'#'**
+  String get statementTableSerial;
+
+  /// No description provided for @statementTableAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get statementTableAmount;
+
+  /// No description provided for @statementTableDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Detail'**
+  String get statementTableDetail;
+
+  /// No description provided for @statementPdfExporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing PDF…'**
+  String get statementPdfExporting;
+
+  /// No description provided for @statementSupplierHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplier statement'**
+  String get statementSupplierHeading;
+
+  /// No description provided for @statementPageFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page} of {pages}'**
+  String statementPageFooter(String page, String pages);
+
+  /// No description provided for @statementPeriodCustomize.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom range'**
+  String get statementPeriodCustomize;
+
+  /// No description provided for @statementPeriodSinceLastExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Since last export'**
+  String get statementPeriodSinceLastExport;
+
+  /// No description provided for @statementSinceLastExportUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No prior export yet — choose another range.'**
+  String get statementSinceLastExportUnavailable;
+
+  /// No description provided for @statementPeriodDatesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates use inclusive local calendar days.'**
+  String get statementPeriodDatesHint;
+
+  /// No description provided for @statementReconcileSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance review'**
+  String get statementReconcileSectionTitle;
+
+  /// No description provided for @statementLastExportAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Last successful PDF: {date}'**
+  String statementLastExportAt(String date);
+
+  /// No description provided for @statementExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not prepare PDF'**
+  String get statementExportFailed;
+
+  /// No description provided for @statementPeriodFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get statementPeriodFrom;
+
+  /// No description provided for @statementPeriodTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get statementPeriodTo;
+
+  /// No description provided for @statementSupplierPaymentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments in period'**
+  String get statementSupplierPaymentsTitle;
+
+  /// No description provided for @statementSupplierPaymentsCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Material spend rows linked to this supplier only.'**
+  String get statementSupplierPaymentsCaption;
+
+  /// No description provided for @statementEmptyPayments.
+  ///
+  /// In en, this message translates to:
+  /// **'No payments in the selected period.'**
+  String get statementEmptyPayments;
 }
 
 class _AppLocalizationsDelegate

@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Bnood';
+  String get appTitle => 'بنود';
 
   @override
   String get navHome => 'Home';
@@ -584,4 +584,152 @@ class AppLocalizationsEn extends AppLocalizations {
   String archiveItemDescription(String name) {
     return '$name will be hidden from lists. Expense history is kept.';
   }
+
+  @override
+  String get statementClientHeading => 'Fund / client statement';
+
+  @override
+  String get statementPeriodToday => 'Today';
+
+  @override
+  String get statementPeriodMonth => 'This month';
+
+  @override
+  String get statementPeriodAll => 'All time';
+
+  @override
+  String get statementTotalReceived => 'Total received';
+
+  @override
+  String get statementTotalSpent => 'Total spent';
+
+  @override
+  String get statementClosingLabel => 'Remaining';
+
+  @override
+  String get statementClosingEndOfPeriod => 'Remaining at period end';
+
+  @override
+  String statementMaterialsLaborSummary(String materials, String labor) {
+    return 'Materials total: $materials | Labor total: $labor';
+  }
+
+  @override
+  String statementOpeningPeriodNet(String opening, String net) {
+    return 'Opening balance: $opening · Net movement: $net';
+  }
+
+  @override
+  String get statementReceiptsSectionTitle => 'Receipts from client';
+
+  @override
+  String get statementReceiptsSectionCaption =>
+      'Payments appear here only and are not repeated under expense items.';
+
+  @override
+  String get statementEmptyReceipts => 'No receipts in the selected period.';
+
+  @override
+  String statementItemSectionTitle(String name) {
+    return 'Item: $name';
+  }
+
+  @override
+  String statementItemSectionTotal(String total) {
+    return 'Total: $total';
+  }
+
+  @override
+  String statementItemMaterialsLabor(String materials, String labor) {
+    return 'Materials: $materials | Labor: $labor';
+  }
+
+  @override
+  String statementReconcileSpend(String materials, String labor, String spent) {
+    return 'Expense check: $materials materials + $labor labor = $spent';
+  }
+
+  @override
+  String statementReconcileBalance(
+    String openingPrefix,
+    String received,
+    String spent,
+    String closing,
+  ) {
+    return '$openingPrefix$received received − $spent spent = $closing remaining';
+  }
+
+  @override
+  String statementIssuedOn(String date) {
+    return 'Issued: $date';
+  }
+
+  @override
+  String statementPeriodDisplay(String label) {
+    return 'Period: $label';
+  }
+
+  @override
+  String get statementCurrencyNote => 'Currency: Egyptian pound (EGP)';
+
+  @override
+  String get statementTableSerial => '#';
+
+  @override
+  String get statementTableAmount => 'Amount';
+
+  @override
+  String get statementTableDetail => 'Detail';
+
+  @override
+  String get statementPdfExporting => 'Preparing PDF…';
+
+  @override
+  String get statementSupplierHeading => 'Supplier statement';
+
+  @override
+  String statementPageFooter(String page, String pages) {
+    return 'Page $page of $pages';
+  }
+
+  @override
+  String get statementPeriodCustomize => 'Custom range';
+
+  @override
+  String get statementPeriodSinceLastExport => 'Since last export';
+
+  @override
+  String get statementSinceLastExportUnavailable =>
+      'No prior export yet — choose another range.';
+
+  @override
+  String get statementPeriodDatesHint =>
+      'Dates use inclusive local calendar days.';
+
+  @override
+  String get statementReconcileSectionTitle => 'Balance review';
+
+  @override
+  String statementLastExportAt(String date) {
+    return 'Last successful PDF: $date';
+  }
+
+  @override
+  String get statementExportFailed => 'Could not prepare PDF';
+
+  @override
+  String get statementPeriodFrom => 'From';
+
+  @override
+  String get statementPeriodTo => 'To';
+
+  @override
+  String get statementSupplierPaymentsTitle => 'Payments in period';
+
+  @override
+  String get statementSupplierPaymentsCaption =>
+      'Material spend rows linked to this supplier only.';
+
+  @override
+  String get statementEmptyPayments => 'No payments in the selected period.';
 }

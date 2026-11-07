@@ -226,5 +226,108 @@
     "placeholders": {
       "name": { "type": "String" }
     }
-  }
+  },
+  "statementClientHeading": "عهدة / كشف حساب العميل",
+  "statementPeriodToday": "اليوم",
+  "statementPeriodMonth": "هذا الشهر",
+  "statementPeriodAll": "كل الفترة",
+  "statementTotalReceived": "إجمالي المقبوض",
+  "statementTotalSpent": "إجمالي المصروف",
+  "statementClosingLabel": "المتبقي",
+  "statementClosingEndOfPeriod": "المتبقي بنهاية الفترة",
+  "statementMaterialsLaborSummary": "إجمالي مونة (خامات): {materials} | إجمالي مصنعية: {labor}",
+  "@statementMaterialsLaborSummary": {
+    "placeholders": {
+      "materials": { "type": "String" },
+      "labor": { "type": "String" }
+    }
+  },
+  "statementOpeningPeriodNet": "رصيد أول الفترة: {opening} · صافي حركة الفترة: {net}",
+  "@statementOpeningPeriodNet": {
+    "placeholders": {
+      "opening": { "type": "String" },
+      "net": { "type": "String" }
+    }
+  },
+  "statementReceiptsSectionTitle": "المقبوضات من العميل",
+  "statementReceiptsSectionCaption": "تُعرض الدفعات هنا فقط، ولا تُكرر داخل بنود المصروفات.",
+  "statementEmptyReceipts": "لا توجد مقبوضات في الفترة المحددة.",
+  "statementItemSectionTitle": "بند: {name}",
+  "@statementItemSectionTitle": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "statementItemSectionTotal": "الإجمالي: {total}",
+  "@statementItemSectionTotal": {
+    "placeholders": {
+      "total": { "type": "String" }
+    }
+  },
+  "statementItemMaterialsLabor": "إجمالي مونة (خامات): {materials} | إجمالي مصنعية: {labor}",
+  "@statementItemMaterialsLabor": {
+    "placeholders": {
+      "materials": { "type": "String" },
+      "labor": { "type": "String" }
+    }
+  },
+  "statementReconcileSpend": "مراجعة المصروفات: {materials} خامات + {labor} مصنعية = {spent}",
+  "@statementReconcileSpend": {
+    "placeholders": {
+      "materials": { "type": "String" },
+      "labor": { "type": "String" },
+      "spent": { "type": "String" }
+    }
+  },
+  "statementReconcileBalance": "{openingPrefix}{received} مقبوض − {spent} مصروف = {closing} متبقي",
+  "@statementReconcileBalance": {
+    "placeholders": {
+      "openingPrefix": { "type": "String" },
+      "received": { "type": "String" },
+      "spent": { "type": "String" },
+      "closing": { "type": "String" }
+    }
+  },
+  "statementIssuedOn": "تاريخ الكشف: {date}",
+  "@statementIssuedOn": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "statementPeriodDisplay": "الفترة: {label}",
+  "@statementPeriodDisplay": {
+    "placeholders": {
+      "label": { "type": "String" }
+    }
+  },
+  "statementCurrencyNote": "العملة: الجنيه المصري (EGP)",
+  "statementTableSerial": "م",
+  "statementTableAmount": "مبلغ",
+  "statementTableDetail": "بيان",
+  "statementPdfExporting": "جاري إعداد الملف…",
+  "statementSupplierHeading": "كشف حساب مورد",
+  "statementPageFooter": "صفحة {page} من {pages}",
+  "@statementPageFooter": {
+    "placeholders": {
+      "page": { "type": "String" },
+      "pages": { "type": "String" }
+    }
+  },
+  "statementPeriodCustomize": "تخصيص الفترة",
+  "statementPeriodSinceLastExport": "من آخر تصدير",
+  "statementSinceLastExportUnavailable": "لا يوجد تصدير سابق بعد — اختر فترة أخرى.",
+  "statementPeriodDatesHint": "التواريخ باليوم المحلي، شاملة لأول وآخر يوم.",
+  "statementReconcileSectionTitle": "مراجعة الرصيد",
+  "statementLastExportAt": "آخر تصدير PDF ناجح: {date}",
+  "@statementLastExportAt": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "statementExportFailed": "تعذّر إعداد ملف PDF",
+  "statementPeriodFrom": "من",
+  "statementPeriodTo": "إلى",
+  "statementSupplierPaymentsTitle": "مدفوعات الفترة",
+  "statementSupplierPaymentsCaption": "حركات صرف خامات مرتبطة بالمورد فقط.",
+  "statementEmptyPayments": "لا توجد مدفوعات في الفترة المحددة."
 }
