@@ -106,6 +106,23 @@ class AppLocalizationsEn extends AppLocalizations {
       'Supplier purchases for active clients will show here after you record material expenses.';
 
   @override
+  String get homeCraftsmenSection => 'Craftsmen with recent labor';
+
+  @override
+  String get homeNoCraftsmenTitle => 'No recent labor payments';
+
+  @override
+  String get homeNoCraftsmenDescription =>
+      'Labor spend for active clients will show here after you record craftsman payments.';
+
+  @override
+  String get deleteMovementTitle => 'Delete this transaction?';
+
+  @override
+  String get deleteMovementBody =>
+      'This cannot be undone. Balances and statements will update.';
+
+  @override
   String get retry => 'Retry';
 
   @override
@@ -747,6 +764,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statementExportFailed => 'Could not prepare PDF';
+
+  @override
+  String get statementExportShareFailed =>
+      'PDF ready but sharing failed. Try again.';
 
   @override
   String get statementPeriodFrom => 'From';

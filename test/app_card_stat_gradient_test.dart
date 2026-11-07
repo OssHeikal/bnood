@@ -29,4 +29,14 @@ void main() {
     ) as LinearGradient;
     expect(remaining.colors.first, AppColors.dark.infoBg);
   });
+
+  test('dark foundation colors use dark stat palette when theme brightness is light', () {
+    expect(AppCard.usesDarkStatPalette(AppColors.dark, Brightness.light), isTrue);
+    final receive = AppCard.statCardGradient(
+      AppCardPreset.statReceive,
+      AppColors.dark,
+      Brightness.light,
+    ) as LinearGradient;
+    expect(receive.colors.first, AppColors.dark.successBg);
+  });
 }

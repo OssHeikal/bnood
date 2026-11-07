@@ -35,7 +35,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             routes: [GoRoute(path: '/clients', builder: (_, _) => const ClientsListScreen())],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: '/directory', builder: (_, _) => const DirectoryScreen())],
+            routes: [
+              GoRoute(
+                path: '/directory',
+                builder: (_, state) {
+                  final tab = state.uri.queryParameters['tab'];
+                  return DirectoryScreen(initialTabIndex: tab == 'craftsmen' ? 1 : 0);
+                },
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: '/items', builder: (_, _) => const ItemsScreen())],

@@ -20,6 +20,7 @@ import '../../core/widgets/skeleton/async_value_body.dart';
 import 'widgets/home_loading_skeleton.dart';
 import 'widgets/home_section_header.dart';
 import 'widgets/home_stat_grid.dart';
+import '../suppliers/widgets/directory_person_card.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -37,6 +38,7 @@ class HomeScreen extends ConsumerWidget {
           final totals = ref.watch(homeTotalsProvider);
           final clients = ref.watch(homeClientBalancesProvider);
           final suppliers = ref.watch(homeSupplierSpendsProvider);
+          final craftsmen = ref.watch(homeCraftsmenProvider);
 
           final topInset = MediaQuery.paddingOf(context).top;
 
@@ -168,6 +170,63 @@ class HomeScreen extends ConsumerWidget {
                             accentKey: homeAccentKeyFor(rows[i].supplier.id),
                             localeCode: localeCode,
                             onTap: () => context.push('/suppliers/${rows[i].supplier.id}'),
+                          ),
+                        ],
+                      ],
+                    );
+                  },
+                ),
+                AppSize.spaceXL.gap,
+                HomeSectionHeader(
+                  title: l10n.homeCraftsmenSection,
+                  seeAllLabel: l10n.seeAll,
+                  onSeeAll: () => context.go('/directory?tab=craftsmen'),
+                ),
+                AppSize.spaceSM.gap,
+                AsyncValueBody(
+                  value: craftsmen,
+                  loadingPlaceholder: const HomePersonListSkeleton(count: 1),
+                  error: (e, _) => AppFallback(
+                    isError: true,
+                    icon: Icons.error_outline,
+                    title: l10n.homeLoadErrorTitle,
+                    description: e.toString(),
+                    actionLabel: l10n.retry,
+                    onAction: () => ref.read(homeCraftsmenProvider.notifier).refreshSilently(),
+                  ),
+                  data: (rows) {
+                    if (rows.isEmpty) {
+                      return AppCard(
+                        child: AppFallback.section(
+                          leading: ShellNavIcon(
+                            asset: Assets.icons.directoryOutline,
+                            color: context.colors.muted,
+                            size: AppSize.icon,
+                          ),
+                          title: l10n.homeNoCraftsmenTitle,
+                          description: l10n.homeNoCraftsmenDescription,
+                          actions: [
+                            AppFallbackAction(
+                              label: l10n.seeAll,
+                              onPressed: () => context.go('/directory?tab=craftsmen'),
+                              role: AppFallbackActionRole.tertiary,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return Column(
+                      children: [
+                        for (var i = 0; i < rows.length; i++) ...[
+                          if (i > 0) AppSize.spaceMD.gap,
+                          DirectoryPersonCard(
+                            name: rows[i].craftsman.name,
+                            trade: rows[i].craftsman.trade,
+                            paidPiastres: rows[i].paidPiastres,
+                            accentKey: homeAccentKeyFor(rows[i].craftsman.id),
+                            localeCode: localeCode,
+                            showOverflowMenu: false,
+                            onOpenDetail: () => context.push('/craftsmen/${rows[i].craftsman.id}'),
                           ),
                         ],
                       ],

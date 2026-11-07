@@ -9,6 +9,7 @@ import '../../core/widgets/app_amount.dart';
 import '../../core/widgets/app_card.dart';
 import 'statement_movement_list.dart';
 import 'statement_reconcile_card.dart';
+import 'statement_summary_widgets.dart';
 
 class StatementSupplierDocument extends StatelessWidget {
   const StatementSupplierDocument({
@@ -41,14 +42,32 @@ class StatementSupplierDocument extends StatelessWidget {
         Text(supplierName, style: text.pageTitle),
         const SizedBox(height: AppSize.spaceMD),
         AppCard(
-          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceMD, vertical: AppSize.spaceSM),
+          key: const Key('statement_supplier_summary'),
+          padding: statementOpeningBalancePadding,
           child: Column(
             children: [
-              _summaryRow(context, l10n.openingBalance, totals.openingPaidPiastres),
-              const Divider(height: 1),
-              _summaryRow(context, l10n.spent, totals.periodPaidPiastres, role: AppAmountRole.spend),
-              const Divider(height: 1),
-              _summaryRow(context, l10n.closingBalance, totals.closingPaidPiastres, emphasized: true),
+              StatementLabeledAmountRow(
+                rowKey: const Key('statement_supplier_opening'),
+                label: l10n.openingBalance,
+                piastres: totals.openingPaidPiastres,
+                localeCode: localeCode,
+              ),
+              Divider(height: 1, color: colors.outlineSubtle),
+              StatementLabeledAmountRow(
+                rowKey: const Key('statement_supplier_spent'),
+                label: l10n.spent,
+                piastres: totals.periodPaidPiastres,
+                localeCode: localeCode,
+                role: AppAmountRole.spend,
+              ),
+              Divider(height: 1, color: colors.outlineSubtle),
+              StatementLabeledAmountRow(
+                rowKey: const Key('statement_supplier_closing'),
+                label: l10n.closingBalance,
+                piastres: totals.closingPaidPiastres,
+                localeCode: localeCode,
+                emphasized: true,
+              ),
             ],
           ),
         ),
@@ -76,32 +95,4 @@ class StatementSupplierDocument extends StatelessWidget {
     );
   }
 
-  Widget _summaryRow(
-    BuildContext context,
-    String label,
-    int piastres, {
-    AppAmountRole role = AppAmountRole.neutral,
-    bool emphasized = false,
-  }) {
-    final text = context.text;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSize.spaceSM),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              label,
-              style: emphasized ? text.sectionTitle : text.body,
-            ),
-          ),
-          AppAmount(
-            piastres: piastres,
-            localeCode: localeCode,
-            size: emphasized ? AppAmountSize.medium : AppAmountSize.small,
-            role: role,
-          ),
-        ],
-      ),
-    );
-  }
 }

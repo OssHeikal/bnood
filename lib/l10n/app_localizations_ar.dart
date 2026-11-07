@@ -105,6 +105,22 @@ class AppLocalizationsAr extends AppLocalizations {
       'مصروفات الخامات من الموردين للعملاء الناشطين هتظهر هنا بعد ما تسجّل صرف خامات.';
 
   @override
+  String get homeCraftsmenSection => 'صنايعية بآخر أعمال';
+
+  @override
+  String get homeNoCraftsmenTitle => 'مفيش مدفوعات عمالة حديثة';
+
+  @override
+  String get homeNoCraftsmenDescription =>
+      'مدفوعات العمالة للعملاء الناشطين هتظهر هنا بعد تسجيل صرف عمالة.';
+
+  @override
+  String get deleteMovementTitle => 'حذف الحركة دي؟';
+
+  @override
+  String get deleteMovementBody => 'لا يمكن التراجع. الأرصدة والكشوف هتتحدّث.';
+
+  @override
   String get retry => 'إعادة المحاولة';
 
   @override
@@ -742,6 +758,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get statementExportFailed => 'تعذّر إعداد ملف PDF';
+
+  @override
+  String get statementExportShareFailed =>
+      'تم إعداد الملف ولكن تعذّرت المشاركة. أعد المحاولة.';
 
   @override
   String get statementPeriodFrom => 'من';

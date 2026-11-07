@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
@@ -6,8 +7,8 @@ import '../../../core/config/theme/app_size.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_fallback.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../clients/widgets/client_detail_movement_row.dart';
 import '../../clients/widgets/client_movement_card.dart';
+import '../../clients/widgets/interactive_movement_card.dart';
 import '../../home/widgets/home_section_header.dart';
 import '../supplier_detail_snapshot.dart';
 
@@ -39,27 +40,23 @@ class SupplierDetailHistorySection extends StatelessWidget {
             ),
           )
         else
-          AppCard(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceXS),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (var i = 0; i < history.length; i++) ...[
-                  if (i > 0) Divider(height: 1, color: colors.outlineSubtle),
-                  _SupplierHistoryBlock(
-                    entry: history[i],
-                    localeCode: localeCode,
-                  ),
-                ],
+          Column(
+            children: [
+              for (var i = 0; i < history.length; i++) ...[
+                if (i > 0) AppSize.spaceMD.gap,
+                _SupplierHistoryBlock(
+                  entry: history[i],
+                  localeCode: localeCode,
+                ),
               ],
-            ),
+            ],
           ),
       ],
     );
   }
 }
 
-class _SupplierHistoryBlock extends StatelessWidget {
+class _SupplierHistoryBlock extends ConsumerWidget {
   const _SupplierHistoryBlock({
     required this.entry,
     required this.localeCode,
@@ -69,10 +66,11 @@ class _SupplierHistoryBlock extends StatelessWidget {
   final String localeCode;
 
   @override
-  Widget build(BuildContext context) {
-    return ClientDetailMovementRow(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return InteractiveMovementCard(
       line: entry.line,
       localeCode: localeCode,
+      mutationsEnabled: true,
       contextMode: ClientMovementCardContext.partyDetail,
       partyClientId: entry.clientId,
       partyClientName: entry.clientName,

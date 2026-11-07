@@ -553,6 +553,71 @@ class BnoodRepository {
     ]..sort((a, b) => b.spentPiastres.compareTo(a.spentPiastres));
   }
 
+  /// Active-client labor spends; ranked by most recent transaction (then name).
+  Future<List<HomeCraftsmanActivityRow>> homeCraftsmenByRecentLabor() async {
+    final activeClients = await watchActiveClients();
+    if (activeClients.isEmpty) return const [];
+    final clientIds = activeClients.map((c) => c.id).toList();
+    final projects = await (_db.select(_db.projects)
+          ..where((p) => p.status.equals('active') & p.clientId.isIn(clientIds)))
+        .get();
+    final projectIds = projects.map((p) => p.id).toSet();
+    if (projectIds.isEmpty) return const [];
+
+    final labor = await (_db.select(_db.transactions)
+          ..where(
+            (t) =>
+                t.kind.equals('spend') &
+                t.expenseType.equals('labor') &
+                t.craftsmanId.isNotNull() &
+                t.projectId.isIn(projectIds.toList()),
+          ))
+        .get();
+    if (labor.isEmpty) return const [];
+
+    final paidTotals = await craftsmanLaborPaidTotals();
+    final lastByCraftsman = <String, ({DateTime date, DateTime createdAt, String txId})>{};
+    for (final row in labor) {
+      final id = row.craftsmanId;
+      if (id == null) continue;
+      final candidate = (date: row.date, createdAt: row.createdAt, txId: row.id);
+      final prev = lastByCraftsman[id];
+      if (prev == null ||
+          candidate.date.isAfter(prev.date) ||
+          (candidate.date == prev.date && candidate.createdAt.isAfter(prev.createdAt)) ||
+          (candidate.date == prev.date &&
+              candidate.createdAt == prev.createdAt &&
+              candidate.txId.compareTo(prev.txId) > 0)) {
+        lastByCraftsman[id] = candidate;
+      }
+    }
+
+    final craftsmen = await (_db.select(_db.craftsmen)
+          ..where((c) => c.id.isIn(lastByCraftsman.keys.toList()) & c.archivedAt.isNull()))
+        .get();
+
+    final rows = [
+      for (final c in craftsmen)
+        HomeCraftsmanActivityRow(
+          craftsman: c,
+          paidPiastres: paidTotals[c.id] ?? 0,
+          lastLaborAt: lastByCraftsman[c.id]!.date,
+        ),
+    ]..sort((a, b) {
+        final aStamp = lastByCraftsman[a.craftsman.id]!;
+        final bStamp = lastByCraftsman[b.craftsman.id]!;
+        final byDate = bStamp.date.compareTo(aStamp.date);
+        if (byDate != 0) return byDate;
+        final byCreated = bStamp.createdAt.compareTo(aStamp.createdAt);
+        if (byCreated != 0) return byCreated;
+        final byName = a.craftsman.name.compareTo(b.craftsman.name);
+        if (byName != 0) return byName;
+        return a.craftsman.id.compareTo(b.craftsman.id);
+      });
+
+    return rows;
+  }
+
   Future<HomeTotals> homeTotals() async {
     final activeProjects = await (_db.select(_db.projects)
           ..where((p) => p.status.equals('active')))
@@ -831,6 +896,18 @@ class HomeSupplierSpendRow {
   const HomeSupplierSpendRow({required this.supplier, required this.spentPiastres});
   final Supplier supplier;
   final int spentPiastres;
+}
+
+class HomeCraftsmanActivityRow {
+  const HomeCraftsmanActivityRow({
+    required this.craftsman,
+    required this.paidPiastres,
+    required this.lastLaborAt,
+  });
+
+  final CraftsmenData craftsman;
+  final int paidPiastres;
+  final DateTime lastLaborAt;
 }
 
 class HomeClientBalanceRow {

@@ -22,7 +22,9 @@ class DirectoryPersonCard extends StatelessWidget {
     required this.accentKey,
     required this.localeCode,
     required this.onOpenDetail,
-    required this.onArchive,
+    this.onArchive,
+    this.trade,
+    this.showOverflowMenu = true,
   });
 
   final String name;
@@ -30,7 +32,9 @@ class DirectoryPersonCard extends StatelessWidget {
   final String accentKey;
   final String localeCode;
   final VoidCallback onOpenDetail;
-  final Future<void> Function() onArchive;
+  final Future<void> Function()? onArchive;
+  final String? trade;
+  final bool showOverflowMenu;
 
   static const _stripeWidth = 4.0;
 
@@ -78,6 +82,15 @@ class DirectoryPersonCard extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
+                            if (trade != null && trade!.trim().isNotEmpty) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                trade!,
+                                style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                             const SizedBox(height: 2),
                             Row(
                               children: [
@@ -105,38 +118,39 @@ class DirectoryPersonCard extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(end: AppSize.spaceSM),
-              child: Center(
-                child: PopupMenuButton<_DirectoryPersonMenuAction>(
-                  key: Key('directory_person_menu_$name'),
-                  padding: EdgeInsets.zero,
-                  icon: Icon(Icons.more_vert, size: AppSize.icon, color: colors.onSurfaceMuted),
-                  shape: AppShape.superellipse(
-                    radius: AppSize.radiusSM,
-                    side: BorderSide(color: colors.outline),
+            if (showOverflowMenu && onArchive != null)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(end: AppSize.spaceSM),
+                child: Center(
+                  child: PopupMenuButton<_DirectoryPersonMenuAction>(
+                    key: Key('directory_person_menu_$name'),
+                    padding: EdgeInsets.zero,
+                    icon: Icon(Icons.more_vert, size: AppSize.icon, color: colors.onSurfaceMuted),
+                    shape: AppShape.superellipse(
+                      radius: AppSize.radiusSM,
+                      side: BorderSide(color: colors.outline),
+                    ),
+                    onSelected: (action) async {
+                      switch (action) {
+                        case _DirectoryPersonMenuAction.details:
+                          onOpenDetail();
+                        case _DirectoryPersonMenuAction.archive:
+                          await onArchive!();
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: _DirectoryPersonMenuAction.details,
+                        child: Text(l10n.directoryViewDetails),
+                      ),
+                      PopupMenuItem(
+                        value: _DirectoryPersonMenuAction.archive,
+                        child: Text(l10n.archive),
+                      ),
+                    ],
                   ),
-                  onSelected: (action) async {
-                    switch (action) {
-                      case _DirectoryPersonMenuAction.details:
-                        onOpenDetail();
-                      case _DirectoryPersonMenuAction.archive:
-                        await onArchive();
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: _DirectoryPersonMenuAction.details,
-                      child: Text(l10n.directoryViewDetails),
-                    ),
-                    PopupMenuItem(
-                      value: _DirectoryPersonMenuAction.archive,
-                      child: Text(l10n.archive),
-                    ),
-                  ],
                 ),
               ),
-            ),
           ],
         ),
       ),

@@ -11,6 +11,7 @@ import '../../core/widgets/app_card.dart';
 import 'statement_grouping.dart';
 import 'statement_movement_list.dart';
 import 'statement_reconcile_card.dart';
+import 'statement_summary_widgets.dart';
 
 class StatementClientDocument extends StatelessWidget {
   const StatementClientDocument({
@@ -62,43 +63,17 @@ class StatementClientDocument extends StatelessWidget {
             child: Text(unitAddress!, style: text.supporting.copyWith(color: colors.onSurfaceMuted)),
           ),
         const SizedBox(height: AppSize.spaceMD),
-        Row(
-          children: [
-            Expanded(
-              child: _statCard(context, l10n.statementTotalReceived, totals.periodReceivedPiastres, AppCardPreset.statReceive),
-            ),
-            const SizedBox(width: AppSize.spaceSM),
-            Expanded(
-              child: _statCard(context, l10n.statementTotalSpent, totals.periodSpentPiastres, AppCardPreset.statSpend),
-            ),
-            const SizedBox(width: AppSize.spaceSM),
-            Expanded(
-              child: _statCard(
-                context,
-                showPeriodOpening ? l10n.statementClosingEndOfPeriod : l10n.statementClosingLabel,
-                totals.closingBalancePiastres,
-                AppCardPreset.statRemaining,
-              ),
-            ),
-          ],
+        _summaryStats(
+          context,
+          l10n,
+          showPeriodOpening: showPeriodOpening,
         ),
         if (showPeriodOpening) ...[
           const SizedBox(height: AppSize.spaceSM),
-          AppCard(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceMD, vertical: AppSize.spaceSM),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(l10n.openingBalance, style: text.label),
-                ),
-                AppAmount(
-                  piastres: totals.openingBalancePiastres,
-                  localeCode: localeCode,
-                  size: AppAmountSize.small,
-                  role: AppAmountRole.remaining,
-                ),
-              ],
-            ),
+          StatementOpeningBalanceStrip(
+            label: l10n.openingBalance,
+            piastres: totals.openingBalancePiastres,
+            localeCode: localeCode,
           ),
         ],
         const SizedBox(height: AppSize.spaceLG),
@@ -134,24 +109,85 @@ class StatementClientDocument extends StatelessWidget {
     );
   }
 
-  Widget _statCard(BuildContext context, String label, int piastres, AppCardPreset preset) {
-    final text = context.text;
-    return AppCard(
-      preset: preset,
-      padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceSM, vertical: AppSize.spaceMD),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            label,
-            style: text.caption,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: AppSize.spaceXS),
-          AppAmount(piastres: piastres, localeCode: localeCode, size: AppAmountSize.small),
-        ],
+  Widget _summaryStats(BuildContext context, AppLocalizations l10n, {required bool showPeriodOpening}) {
+    const cardWidth = 124.0;
+    final cards = [
+      _StatSpec(
+        l10n.statementTotalReceived,
+        totals.periodReceivedPiastres,
+        AppCardPreset.statReceive,
+        AppAmountRole.receive,
       ),
+      _StatSpec(
+        l10n.statementTotalSpent,
+        totals.periodSpentPiastres,
+        AppCardPreset.statSpend,
+        AppAmountRole.spend,
+      ),
+      _StatSpec(
+        showPeriodOpening ? l10n.statementClosingEndOfPeriod : l10n.statementClosingLabel,
+        totals.closingBalancePiastres,
+        AppCardPreset.statRemaining,
+        AppAmountRole.remaining,
+      ),
+    ];
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final fitsRow = constraints.maxWidth >= cardWidth * cards.length + AppSize.spaceSM * (cards.length - 1);
+        if (fitsRow) {
+          return IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (var i = 0; i < cards.length; i++) ...[
+                  if (i > 0) const SizedBox(width: AppSize.spaceSM),
+                  Expanded(
+                    child: _statCard(
+                      context,
+                      cards[i],
+                      key: Key('statement_stat_${cards[i].preset.name}'),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          );
+        }
+        return IntrinsicHeight(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (var i = 0; i < cards.length; i++) ...[
+                  if (i > 0) const SizedBox(width: AppSize.spaceSM),
+                  SizedBox(
+                    width: cardWidth,
+                    child: _statCard(
+                      context,
+                      cards[i],
+                      key: Key('statement_stat_${cards[i].preset.name}'),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _statCard(BuildContext context, _StatSpec spec, {Key? key}) {
+    return StatementSummaryStatCard(
+      key: key,
+      cardKey: key,
+      label: spec.label,
+      piastres: spec.piastres,
+      preset: spec.preset,
+      role: spec.role,
+      localeCode: localeCode,
     );
   }
 
@@ -170,7 +206,6 @@ class StatementClientDocument extends StatelessWidget {
 
   Widget _itemGroupHeader(BuildContext context, ItemStatementGroup g, AppLocalizations l10n) {
     final text = context.text;
-    final colors = context.colors;
     return AppCard(
       padding: const EdgeInsets.all(AppSize.spaceMD),
       child: Column(
@@ -214,4 +249,13 @@ class StatementClientDocument extends StatelessWidget {
       ),
     );
   }
+}
+
+class _StatSpec {
+  const _StatSpec(this.label, this.piastres, this.preset, this.role);
+
+  final String label;
+  final int piastres;
+  final AppCardPreset preset;
+  final AppAmountRole role;
 }

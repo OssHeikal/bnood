@@ -284,6 +284,36 @@ abstract class AppLocalizations {
   /// **'Supplier purchases for active clients will show here after you record material expenses.'**
   String get homeNoSupplierSpendDescription;
 
+  /// No description provided for @homeCraftsmenSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Craftsmen with recent labor'**
+  String get homeCraftsmenSection;
+
+  /// No description provided for @homeNoCraftsmenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent labor payments'**
+  String get homeNoCraftsmenTitle;
+
+  /// No description provided for @homeNoCraftsmenDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Labor spend for active clients will show here after you record craftsman payments.'**
+  String get homeNoCraftsmenDescription;
+
+  /// No description provided for @deleteMovementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this transaction?'**
+  String get deleteMovementTitle;
+
+  /// No description provided for @deleteMovementBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This cannot be undone. Balances and statements will update.'**
+  String get deleteMovementBody;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
@@ -1434,6 +1464,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not prepare PDF'**
   String get statementExportFailed;
+
+  /// No description provided for @statementExportShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF ready but sharing failed. Try again.'**
+  String get statementExportShareFailed;
 
   /// No description provided for @statementPeriodFrom.
   ///

@@ -18,7 +18,6 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/database/database.dart' show TransactionsCompanion;
 import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
-import '../../core/providers/dashboard_providers.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_list_tile.dart';
@@ -26,7 +25,9 @@ import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/entity_picker_page.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../../core/widgets/app_card.dart';
+import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_pressable.dart';
+import '../../core/widgets/toast/app_tone.dart';
 import 'inline_create_routes.dart';
 import 'receipt_image_codec.dart';
 import 'voucher_date_sheet.dart';
@@ -35,8 +36,10 @@ import 'voucher_form_chrome.dart';
 import 'voucher_launcher.dart';
 import 'voucher_picker_cards.dart';
 import 'voucher_selector_field.dart';
+import 'voucher_camera_pick_route.dart';
 import 'voucher_receipt_picker.dart';
 import 'voucher_transaction_date_bounds.dart';
+import '../../core/providers/transaction_mutation_refresh.dart';
 
 class VoucherSheet extends ConsumerStatefulWidget {
   const VoucherSheet({super.key});
@@ -54,6 +57,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   var _recoveringLostPick = false;
   var _attemptedSubmit = false;
   var _saving = false;
+  var _deleting = false;
   String? _clientPickerError;
   String? _itemPickerError;
   String? _craftsmanPickerError;
@@ -297,8 +301,48 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     return valid;
   }
 
+  Future<void> _confirmDelete() async {
+    if (_saving || _deleting) return;
+    final draft = ref.read(voucherDraftProvider);
+    final txId = draft.editingTransactionId;
+    if (txId == null) return;
+
+    final l10n = AppLocalizations.of(context);
+    final answer = await AppDecision.show(
+      context,
+      title: l10n.deleteMovementTitle,
+      description: l10n.deleteMovementBody,
+      confirmLabel: l10n.delete,
+      cancelLabel: l10n.cancel,
+      tone: AppTone.danger,
+      iconWidget: AppDecision.archiveDangerIcon(context),
+    );
+    if (answer != OverlayAnswer.confirmed || !mounted) return;
+
+    setState(() => _deleting = true);
+    final repo = ref.read(repositoryProvider);
+    try {
+      final tx = await repo.getTransaction(txId);
+      if (tx == null) return;
+      await repo.deleteTransaction(txId);
+      final project = await repo.projectById(tx.projectId);
+      refreshAfterTransactionMutation(
+        ref,
+        clientId: draft.clientId ?? project?.clientId,
+        supplierId: tx.supplierId,
+        craftsmanId: tx.craftsmanId,
+      );
+      AppToaster.show(l10n.delete, kind: ToastKind.success);
+      if (mounted) Navigator.of(context, rootNavigator: true).pop();
+    } catch (e) {
+      if (mounted) AppToaster.show('$e', kind: ToastKind.failure);
+    } finally {
+      if (mounted) setState(() => _deleting = false);
+    }
+  }
+
   Future<void> _save() async {
-    if (_saving) return;
+    if (_saving || _deleting) return;
     final l10n = AppLocalizations.of(context);
     setState(() => _attemptedSubmit = true);
     final draft = ref.read(voucherDraftProvider);
@@ -350,7 +394,12 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           craftsmanId: draft.expenseType == 'labor' ? draft.craftsmanId : null,
         );
       }
-      refreshAfterClientMutation(ref, clientId: draft.clientId);
+      refreshAfterTransactionMutation(
+        ref,
+        clientId: draft.clientId,
+        supplierId: draft.expenseType == 'materials' ? draft.supplierId : null,
+        craftsmanId: draft.expenseType == 'labor' ? draft.craftsmanId : null,
+      );
       AppToaster.show(l10n.save, kind: ToastKind.success);
       if (mounted) Navigator.of(context, rootNavigator: true).pop();
     } catch (e) {
@@ -400,7 +449,24 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   Future<void> _attachFromCamera() async {
     final l10n = AppLocalizations.of(context);
     try {
-      final file = await _receiptPicker.pickCamera();
+      final result = await Navigator.of(context).push<VoucherCameraPickResult>(
+        PageRouteBuilder(
+          opaque: false,
+          barrierColor: Colors.transparent,
+          pageBuilder: (_, __, ___) => VoucherCameraPickRoute(picker: _receiptPicker),
+        ),
+      );
+      if (result == null || !mounted) {
+        return;
+      }
+      if (result.error != null) {
+        AppToaster.show(
+          voucherReceiptPickUserMessage(l10n, result.error!),
+          kind: ToastKind.warning,
+        );
+        return;
+      }
+      final file = result.file;
       if (file == null) {
         return;
       }
@@ -408,14 +474,6 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       if (saved != null) {
         await _appendPaths([saved]);
       }
-    } on VoucherReceiptPickException catch (e) {
-      if (!mounted) {
-        return;
-      }
-      AppToaster.show(
-        voucherReceiptPickUserMessage(l10n, e),
-        kind: ToastKind.warning,
-      );
     } catch (_) {
       if (!mounted) {
         return;
@@ -480,13 +538,27 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
         ? AppButton.destructive(
             text: saveLabel,
             isLoading: _saving,
-            onPressed: _saving ? null : _save,
+            onPressed: (_saving || _deleting) ? null : _save,
           )
         : AppButton.primary(
             text: saveLabel,
             isLoading: _saving,
-            onPressed: _saving ? null : _save,
+            onPressed: (_saving || _deleting) ? null : _save,
           );
+
+    final footerActions = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: AppSize.spaceSM,
+      children: [
+        saveButton,
+        if (isEditing)
+          AppButton.destructive(
+            text: l10n.delete,
+            isLoading: _deleting,
+            onPressed: (_saving || _deleting) ? null : _confirmDelete,
+          ),
+      ],
+    );
 
     final viewPadding = MediaQuery.viewPaddingOf(context);
     final viewInsets = MediaQuery.viewInsetsOf(context);
@@ -734,7 +806,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
                   AppSize.screenPadding,
                   footerBottom,
                 ),
-                child: saveButton,
+                child: footerActions,
               ),
             ),
           ],

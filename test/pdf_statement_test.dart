@@ -1,11 +1,14 @@
 import 'package:bnood/core/database/connection.dart';
 import 'package:bnood/core/money/ledger_math.dart';
+import 'package:bnood/core/money/supplier_period_math.dart';
 import 'package:bnood/core/money/period_bounds.dart';
 import 'package:bnood/core/pdf/pdf_fonts.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/features/statements/pdf_statement_service.dart';
 import 'package:bnood/features/statements/statement_pdf_copy.dart';
 import 'package:bnood/l10n/app_localizations_ar.dart';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -62,5 +65,58 @@ void main() {
     );
     expect(bytes.isNotEmpty, isTrue);
     expect(bytes.length, greaterThan(2000));
+    expect(String.fromCharCodes(bytes.take(4)), '%PDF');
+
+    final fixtures = Platform.environment['WRITE_STATEMENT_FIXTURES'];
+    if (fixtures == '1') {
+      final dir = Directory('test/artifacts');
+      dir.createSync(recursive: true);
+      File('${dir.path}/bnood-fixture-client-statement.pdf').writeAsBytesSync(bytes);
+    }
+  });
+
+  test('supplier pdf uses bundled fonts without network', () async {
+    final db = openTestDatabase();
+    addTearDown(db.close);
+    final repo = BnoodRepository(db);
+    final supplier = await repo.createSupplier(name: 'مورد PDF');
+    final client = await repo.createClient(name: 'عميل');
+    final project = (await repo.primaryActiveProject(client.id))!;
+    final item = (await repo.watchActiveItems().first).first;
+    await repo.insertTransaction(
+      projectId: project.id,
+      kind: 'spend',
+      amountPiastres: 25000,
+      date: DateTime(2025, 4, 10),
+      method: 'cash',
+      itemId: item.id,
+      expenseType: 'materials',
+      supplierId: supplier.id,
+    );
+    final rows = await repo.supplierTransactions(supplier.id);
+    final bounds = PeriodBounds.normalize(
+      start: DateTime(2025, 4, 1),
+      end: DateTime(2025, 4, 30),
+    );
+    final totals = SupplierPeriodMath.totals(supplierSpends: rows, bounds: bounds);
+    final periodRows = rows.where((t) => bounds.containsLocalDate(t.date)).toList();
+    final copy = StatementPdfCopy(AppLocalizationsAr());
+    final bytes = await PdfStatementService().buildSupplierStatement(
+      supplier: supplier,
+      totals: totals,
+      periodRows: periodRows,
+      clientNamesByProjectId: {project.id: client.name},
+      bounds: bounds,
+      copy: copy,
+    );
+    expect(bytes.isNotEmpty, isTrue);
+    expect(String.fromCharCodes(bytes.take(4)), '%PDF');
+
+    final fixtures = Platform.environment['WRITE_STATEMENT_FIXTURES'];
+    if (fixtures == '1') {
+      final dir = Directory('test/artifacts');
+      dir.createSync(recursive: true);
+      File('${dir.path}/bnood-fixture-supplier-statement.pdf').writeAsBytesSync(bytes);
+    }
   });
 }

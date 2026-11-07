@@ -35,7 +35,7 @@ import 'widgets/client_detail_craftsman_row.dart';
 import 'widgets/client_detail_engineer_card.dart';
 import 'widgets/client_detail_item_row.dart';
 import 'widgets/client_detail_loading_skeleton.dart';
-import 'widgets/client_detail_movement_row.dart';
+import 'widgets/interactive_movement_card.dart';
 import 'widgets/client_detail_stat_grid.dart';
 
 class ClientDetailScreen extends ConsumerWidget {
@@ -441,17 +441,17 @@ class _ClientDetailBody extends ConsumerWidget {
             ),
           )
         else
-          AppCard(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceXS),
-            child: Column(
-              children: [
-                for (var i = 0; i < data.latestMovements.length; i++) ...[
-                  if (i > 0)
-                    Divider(height: 1, color: colors.outlineSubtle),
-                  ClientDetailMovementRow(line: data.latestMovements[i], localeCode: localeCode),
-                ],
+          Column(
+            children: [
+              for (var i = 0; i < data.latestMovements.length; i++) ...[
+                if (i > 0) AppSize.spaceMD.gap,
+                InteractiveMovementCard(
+                  line: data.latestMovements[i],
+                  localeCode: localeCode,
+                  mutationsEnabled: mutationsEnabled,
+                ),
               ],
-            ),
+            ],
           ),
       ],
     );

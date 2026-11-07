@@ -31,10 +31,16 @@ final homeSupplierSpendsProvider =
   HomeSupplierSpendsNotifier.new,
 );
 
+final homeCraftsmenProvider =
+    AsyncNotifierProvider<HomeCraftsmenNotifier, List<HomeCraftsmanActivityRow>>(
+  HomeCraftsmenNotifier.new,
+);
+
 void refreshHomeDashboard(WidgetRef ref) {
   ref.read(homeTotalsProvider.notifier).refreshSilently();
   ref.read(homeClientBalancesProvider.notifier).refreshSilently();
   ref.read(homeSupplierSpendsProvider.notifier).refreshSilently();
+  ref.read(homeCraftsmenProvider.notifier).refreshSilently();
   ref.read(clientsListBalancesProvider.notifier).refreshSilently();
 }
 
@@ -112,4 +118,10 @@ class HomeSupplierSpendsNotifier extends SilentAsyncNotifier<List<HomeSupplierSp
   @override
   Future<List<HomeSupplierSpendRow>> fetch() =>
       ref.read(repositoryProvider).homeSupplierSpendsForActiveClients();
+}
+
+class HomeCraftsmenNotifier extends SilentAsyncNotifier<List<HomeCraftsmanActivityRow>> {
+  @override
+  Future<List<HomeCraftsmanActivityRow>> fetch() =>
+      ref.read(repositoryProvider).homeCraftsmenByRecentLabor();
 }

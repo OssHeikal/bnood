@@ -46,6 +46,12 @@ class AppCard extends StatelessWidget {
   final AppCardPreset preset;
 
   @visibleForTesting
+  static bool usesDarkStatPalette(AppColors colors, Brightness brightness) {
+    if (brightness == Brightness.dark) return true;
+    return colors.canvas.computeLuminance() < 0.25;
+  }
+
+  @visibleForTesting
   static Gradient? statCardGradient(
     AppCardPreset preset,
     AppColors colors,
@@ -53,7 +59,8 @@ class AppCard extends StatelessWidget {
   ) {
     const begin = AlignmentDirectional(-0.9, -1);
     const end = AlignmentDirectional(0.9, 1);
-    if (brightness == Brightness.light) {
+    final isDark = usesDarkStatPalette(colors, brightness);
+    if (!isDark) {
       return switch (preset) {
         AppCardPreset.statReceive => const LinearGradient(
             begin: begin,
@@ -73,7 +80,7 @@ class AppCard extends StatelessWidget {
         AppCardPreset.plain => null,
       };
     }
-    Color blendTint(Color tint) => Color.lerp(tint, colors.surface, 0.5)!;
+    Color blendTint(Color tint) => Color.lerp(tint, colors.surface, 0.28)!;
     return switch (preset) {
       AppCardPreset.statReceive => LinearGradient(
           begin: begin,

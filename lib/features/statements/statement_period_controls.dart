@@ -40,45 +40,52 @@ class StatementPeriodControls extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Wrap(
-          spacing: AppSize.spaceSM,
-          runSpacing: AppSize.spaceSM,
-          children: [
-            _chip(context, l10n.statementPeriodToday, StatementPeriodPreset.today),
-            _chip(context, l10n.statementPeriodMonth, StatementPeriodPreset.month),
-            _chip(context, l10n.statementPeriodAll, StatementPeriodPreset.all),
-            _chip(
-              context,
-              l10n.statementPeriodSinceLastExport,
-              StatementPeriodPreset.sinceLastExport,
-              enabled: sinceLastExportAvailable,
-            ),
-            _chip(context, l10n.statementPeriodCustomize, StatementPeriodPreset.custom),
-          ],
-        ),
-        const SizedBox(height: AppSize.spaceSM),
-        Text(
-          l10n.statementPeriodDisplay(rangeLabel),
-          style: text.supporting.copyWith(color: colors.onSurfaceMuted),
-        ),
-        if (!sinceLastExportAvailable && preset == StatementPeriodPreset.sinceLastExport) ...[
-          const SizedBox(height: AppSize.spaceXS),
-          Text(
-            l10n.statementSinceLastExportUnavailable,
-            style: text.caption.copyWith(color: colors.onSurfaceMuted),
+        AppCard(
+          padding: const EdgeInsets.all(AppSize.spaceMD),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Wrap(
+                spacing: AppSize.spaceSM,
+                runSpacing: AppSize.spaceSM,
+                children: [
+                  _chip(context, l10n.statementPeriodToday, StatementPeriodPreset.today),
+                  _chip(context, l10n.statementPeriodMonth, StatementPeriodPreset.month),
+                  _chip(context, l10n.statementPeriodAll, StatementPeriodPreset.all),
+                  _chip(
+                    context,
+                    l10n.statementPeriodSinceLastExport,
+                    StatementPeriodPreset.sinceLastExport,
+                    enabled: sinceLastExportAvailable,
+                  ),
+                  _chip(context, l10n.statementPeriodCustomize, StatementPeriodPreset.custom),
+                ],
+              ),
+              const SizedBox(height: AppSize.spaceMD),
+              Divider(height: 1, color: colors.outlineSubtle),
+              const SizedBox(height: AppSize.spaceSM),
+              Text(l10n.statementPeriodDisplay(rangeLabel), style: text.sectionTitle),
+              if (!sinceLastExportAvailable && preset == StatementPeriodPreset.sinceLastExport) ...[
+                const SizedBox(height: AppSize.spaceXS),
+                Text(
+                  l10n.statementSinceLastExportUnavailable,
+                  style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                ),
+              ],
+              if (lastExport != null) ...[
+                const SizedBox(height: AppSize.spaceXS),
+                Text(
+                  l10n.statementLastExportAt(fmt.format(lastExport!.exportedAt)),
+                  style: text.supporting.copyWith(color: colors.onSurfaceMuted),
+                ),
+              ],
+              const SizedBox(height: AppSize.spaceXS),
+              Text(
+                l10n.statementPeriodDatesHint,
+                style: text.caption.copyWith(color: colors.onSurfaceMuted),
+              ),
+            ],
           ),
-        ],
-        if (lastExport != null) ...[
-          const SizedBox(height: AppSize.spaceXS),
-          Text(
-            l10n.statementLastExportAt(fmt.format(lastExport!.exportedAt)),
-            style: text.caption,
-          ),
-        ],
-        const SizedBox(height: AppSize.spaceXS),
-        Text(
-          l10n.statementPeriodDatesHint,
-          style: text.caption.copyWith(color: colors.onSurfaceMuted),
         ),
         if (preset == StatementPeriodPreset.custom) ...[
           const SizedBox(height: AppSize.spaceMD),
