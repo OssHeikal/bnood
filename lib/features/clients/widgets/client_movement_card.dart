@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/config/extensions/num_extensions.dart';
+import '../../../core/widgets/app_pressable.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_shape.dart';
 import '../../../core/config/theme/app_size.dart';
@@ -12,6 +14,15 @@ import '../../../app/widgets/shell_nav_icon.dart';
 import '../../../l10n/app_localizations.dart';
 import '../client_detail_snapshot.dart';
 
+/// Subtitle semantics for [ClientMovementCard].
+enum ClientMovementCardContext {
+  /// Client detail, movements list, and home previews — counterparty when known.
+  clientLedger,
+
+  /// Craftsman or supplier detail history — linked client, not the page subject.
+  partyDetail,
+}
+
 /// Approved transaction card body (detail grouped card and full movements list).
 class ClientMovementCard extends StatelessWidget {
   const ClientMovementCard({
@@ -19,11 +30,17 @@ class ClientMovementCard extends StatelessWidget {
     required this.line,
     required this.localeCode,
     this.padding = const EdgeInsets.symmetric(vertical: AppSize.spaceSM),
+    this.contextMode = ClientMovementCardContext.clientLedger,
+    this.partyClientId,
+    this.partyClientName,
   });
 
   final ClientDetailMovementLine line;
   final String localeCode;
   final EdgeInsetsGeometry padding;
+  final ClientMovementCardContext contextMode;
+  final String? partyClientId;
+  final String? partyClientName;
 
   static String formatMovementDate(DateTime date, String localeCode) {
     final locale = localeCode == 'ar' ? 'ar_EG' : 'en_US';
@@ -43,7 +60,21 @@ class ClientMovementCard extends StatelessWidget {
     final icon = isReceive ? Assets.icons.arrowDownLeftCircleOutline : Assets.icons.arrowUpRightCircleOutline;
 
     final title = isReceive ? l10n.clientReceiveMovementDetail : (line.itemName ?? l10n.clientDetailUnspecifiedItem);
-    final subtitle = line.payeeName?.trim();
+    final String? subtitle;
+    final String? subtitleClientId;
+    if (contextMode == ClientMovementCardContext.partyDetail) {
+      final clientId = partyClientId?.trim();
+      if (clientId != null && clientId.isNotEmpty) {
+        subtitle = partyClientName?.trim();
+        subtitleClientId = clientId;
+      } else {
+        subtitle = null;
+        subtitleClientId = null;
+      }
+    } else {
+      subtitle = line.payeeName?.trim();
+      subtitleClientId = null;
+    }
     final description = t.description?.trim();
     final showDescription = description != null && description.isNotEmpty;
 
@@ -71,6 +102,7 @@ class ClientMovementCard extends StatelessWidget {
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
+            textDirection: Directionality.of(context),
             children: [
               Material(
                 color: tintBg,
@@ -97,23 +129,43 @@ class ClientMovementCard extends StatelessWidget {
                     ),
                     if (subtitle != null && subtitle.isNotEmpty) ...[
                       AppSize.spaceXS.gap,
-                      Text(
-                        subtitle,
-                        style: text.caption.copyWith(color: colors.onSurfaceMuted),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      _MovementSubtitle(
+                        label: subtitle,
+                        clientId: subtitleClientId,
+                        style: text.caption.copyWith(
+                          color: subtitleClientId != null ? colors.primaryDark : colors.onSurfaceMuted,
+                          fontWeight: subtitleClientId != null ? FontWeight.w700 : null,
+                        ),
                       ),
                     ],
                   ],
                 ),
               ),
               AppSize.spaceSM.gap,
-              Flexible(
-                child: AppAmount(
-                  piastres: t.amountPiastres,
-                  role: isReceive ? AppAmountRole.receive : AppAmountRole.spend,
-                  size: AppAmountSize.small,
-                  localeCode: localeCode,
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 160),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: AppAmount(
+                        piastres: t.amountPiastres,
+                        role: isReceive ? AppAmountRole.receive : AppAmountRole.spend,
+                        size: AppAmountSize.medium,
+                        localeCode: localeCode,
+                      ),
+                    ),
+                    AppSize.spaceXS.gap,
+                    Text(
+                      dateLabel,
+                      style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                      textAlign: TextAlign.end,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -127,32 +179,50 @@ class ClientMovementCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ],
-          AppSize.spaceSM.gap,
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Wrap(
-                  spacing: AppSize.spaceXS,
-                  runSpacing: AppSize.spaceXS,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    for (final badge in badges)
-                      _MovementBadge(label: badge.label, color: badge.color, bg: badge.bg),
-                  ],
-                ),
+          if (badges.isNotEmpty) ...[
+            AppSize.spaceSM.gap,
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Wrap(
+                spacing: AppSize.spaceXS,
+                runSpacing: AppSize.spaceXS,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  for (final badge in badges)
+                    _MovementBadge(label: badge.label, color: badge.color, bg: badge.bg),
+                ],
               ),
-              AppSize.spaceSM.gap,
-              Text(
-                dateLabel,
-                style: text.caption.copyWith(color: colors.onSurfaceMuted),
-                textAlign: TextAlign.end,
-                maxLines: 2,
-              ),
-            ],
-          ),
+            ),
+          ],
         ],
       ),
+    );
+  }
+}
+
+class _MovementSubtitle extends StatelessWidget {
+  const _MovementSubtitle({
+    required this.label,
+    required this.style,
+    this.clientId,
+  });
+
+  final String label;
+  final TextStyle style;
+  final String? clientId;
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Text(
+      label,
+      style: style,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+    );
+    if (clientId == null) return child;
+    return AppPressable(
+      onPressed: () => context.push('/clients/$clientId'),
+      child: child,
     );
   }
 }

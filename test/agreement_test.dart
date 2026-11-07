@@ -33,4 +33,27 @@ void main() {
             initialAmountPiastres: null, paidPiastres: 0),
         isNull);
   });
+
+  test('link-only upsert keeps stored agreement amount', () async {
+    final db = openTestDatabase();
+    addTearDown(db.close);
+    final repo = BnoodRepository(db);
+    final client = await repo.createClient(name: 'Client A');
+    final project = (await repo.primaryActiveProject(client.id))!;
+    final craftsman = await repo.createCraftsman(name: 'Craftsman B', phone: '01000');
+
+    await repo.upsertAgreement(
+      projectId: project.id,
+      craftsmanId: craftsman.id,
+      initialAmountPiastres: 1_000_000,
+    );
+    await repo.upsertAgreement(
+      projectId: project.id,
+      craftsmanId: craftsman.id,
+    );
+
+    final stored =
+        (await repo.agreementsForProject(project.id)).single.initialAmountPiastres;
+    expect(stored, 1_000_000);
+  });
 }

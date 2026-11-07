@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Bnood';
+  String get appTitle => 'بنود';
 
   @override
   String get navHome => 'Home';
@@ -150,13 +150,89 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movements => 'Movements';
 
   @override
-  String get engineerFee => 'Engineer fee (info)';
+  String get whatsappLaunchFailed => 'Couldn\'t open WhatsApp';
+
+  @override
+  String get whatsappInvalidPhone =>
+      'This phone number can\'t open in WhatsApp';
+
+  @override
+  String get engineerFee => 'Profit percentage (info)';
 
   @override
   String get paid => 'Paid';
 
   @override
   String get craftsmen => 'Craftsmen';
+
+  @override
+  String get assignCraftsmen => 'Assign craftsmen';
+
+  @override
+  String get clientDetailNoCraftsmen => 'No craftsmen on this project yet';
+
+  @override
+  String get clientDetailNoItemSpend => 'No item spend recorded yet';
+
+  @override
+  String get clientDetailNoMovements => 'No movements yet';
+
+  @override
+  String get clientDetailCraftsmenEmptyDescription =>
+      'Choose craftsmen from your directory to link them to this project.';
+
+  @override
+  String get engineerEstimatedProfitTitle => 'Estimated profit';
+
+  @override
+  String get engineerFeeNoRate => 'No rate set';
+
+  @override
+  String engineerFeePercentCaption(String percent) {
+    return '$percent of spend';
+  }
+
+  @override
+  String get engineerFeeInternalOnly => 'Internal only';
+
+  @override
+  String get engineerFeeUndefined => 'Not set';
+
+  @override
+  String get engineerFeeSheetTitle => 'Profit percentage';
+
+  @override
+  String get engineerFeePercentFieldLabel => 'Profit percentage';
+
+  @override
+  String get engineerFeePercentPlaceholder => 'Not set';
+
+  @override
+  String get engineerFeeSheetCaption =>
+      'Estimated internal profit only. It is not deducted from the fund, does not create client receivables, and does not appear on the client statement or PDF. Leave blank to clear.';
+
+  @override
+  String get engineerFeePercentInvalid => 'Enter 0–100 or leave blank';
+
+  @override
+  String get clientReceiveMovementDetail => 'Payment from client';
+
+  @override
+  String get clientDetailUnspecifiedItem => 'Unspecified item';
+
+  @override
+  String get clientDetailNoDescription => 'No description';
+
+  @override
+  String get archiveClientTitle => 'Archive client?';
+
+  @override
+  String archiveClientDescription(String name) {
+    return 'This moves $name\'s project to the archive. You can restore it later.';
+  }
+
+  @override
+  String get craftsmanAgreedAmount => 'Agreed';
 
   @override
   String get suppliers => 'Suppliers';
@@ -183,8 +259,477 @@ class AppLocalizationsEn extends AppLocalizations {
   String get archive => 'Archive';
 
   @override
+  String get unarchive => 'Unarchive';
+
+  @override
+  String get clientsFilterAll => 'All';
+
+  @override
+  String get clientsFilterActive => 'Active';
+
+  @override
+  String get clientsFilterArchived => 'Archived';
+
+  @override
+  String get clientsNoArchivedTitle => 'No archived clients';
+
+  @override
+  String get clientsNoArchivedDescription =>
+      'Archived clients appear here after you archive a project.';
+
+  @override
+  String get clientsNoClientsTitle => 'No clients yet';
+
+  @override
   String get edit => 'Edit';
 
   @override
   String get delete => 'Delete';
+
+  @override
+  String get voucherAmountRequired => 'Enter an amount greater than zero';
+
+  @override
+  String get voucherSelectClient => 'Select a client';
+
+  @override
+  String get voucherSelectItem => 'Select an item';
+
+  @override
+  String get voucherSelectCraftsman => 'Select a craftsman';
+
+  @override
+  String get voucherPickerSearchHint => 'Search';
+
+  @override
+  String get voucherPickerNoResults => 'No matches';
+
+  @override
+  String get voucherPickerEmptyTitle => 'Nothing here yet';
+
+  @override
+  String get voucherReceiptPhoto => 'Receipt photo';
+
+  @override
+  String get voucherAttachCamera => 'Camera';
+
+  @override
+  String get voucherAttachGallery => 'Gallery';
+
+  @override
+  String get voucherReceiptCameraDenied =>
+      'Camera access was denied. You can enable it in Settings to photograph receipts.';
+
+  @override
+  String get voucherReceiptCameraRestricted =>
+      'Camera access is restricted on this device.';
+
+  @override
+  String get voucherReceiptGalleryDenied =>
+      'Photo access was denied. You can enable it in Settings to attach gallery receipts.';
+
+  @override
+  String get voucherReceiptGalleryRestricted =>
+      'Photo access is restricted on this device.';
+
+  @override
+  String get voucherReceiptAttachFailed =>
+      'Could not attach the receipt. Try again.';
+
+  @override
+  String get voucherAssignCraftsmanFirst =>
+      'Assign craftsmen to the project first';
+
+  @override
+  String get amountHint => '0.00';
+
+  @override
+  String get voucherReceiveTitle => 'Receive voucher';
+
+  @override
+  String get voucherSpendTitle => 'Spend voucher';
+
+  @override
+  String get voucherSaveReceive => 'Save receive';
+
+  @override
+  String get voucherSaveSpend => 'Save spend';
+
+  @override
+  String get expenseCategory => 'Expense category';
+
+  @override
+  String get voucherContextGeneric =>
+      'General voucher · choose client and movement type';
+
+  @override
+  String voucherContextClient(String clientName) {
+    return 'Voucher for $clientName · you can change the client below';
+  }
+
+  @override
+  String get noteOptionalHint => 'Optional…';
+
+  @override
+  String get paymentMethod => 'Payment method';
+
+  @override
+  String get directorySuppliersHint =>
+      'Material suppliers · recorded payments only, no payables or credit balances.';
+
+  @override
+  String get directoryCraftsmenHint =>
+      'Your general craftsman roster · a craftsman can be linked to more than one client.';
+
+  @override
+  String get directorySupplierKindMeta => 'Materials supplier';
+
+  @override
+  String get directoryEmptySuppliersTitle => 'No suppliers yet';
+
+  @override
+  String get directoryEmptySuppliersDescription =>
+      'Add a supplier to your directory, then link them on material spend vouchers.';
+
+  @override
+  String get directoryEmptyCraftsmenTitle => 'No craftsmen yet';
+
+  @override
+  String get directoryEmptyCraftsmenDescription =>
+      'Add a craftsman to your directory, then assign them from a client project.';
+
+  @override
+  String get directoryAddSupplier => 'Add supplier';
+
+  @override
+  String get directoryAddCraftsman => 'Add craftsman';
+
+  @override
+  String directoryCraftsmanProjectsCount(int count) {
+    return '$count projects';
+  }
+
+  @override
+  String get directoryViewDetails => 'View details';
+
+  @override
+  String get archiveSupplierTitle => 'Archive supplier?';
+
+  @override
+  String archiveSupplierDescription(String name) {
+    return '$name will be hidden from pickers. Payment history is kept.';
+  }
+
+  @override
+  String get archiveCraftsmanTitle => 'Archive craftsman?';
+
+  @override
+  String archiveCraftsmanDescription(String name) {
+    return '$name will be hidden from pickers. Labor history is kept.';
+  }
+
+  @override
+  String get supplierNameRequired => 'Enter supplier name';
+
+  @override
+  String get craftsmanNameRequired => 'Enter craftsman name';
+
+  @override
+  String get craftsmanPhoneLabel => 'Phone';
+
+  @override
+  String get craftsmanPhoneRequired => 'Enter a phone number';
+
+  @override
+  String get directorySupplierNameHint => 'e.g. Materials supplier';
+
+  @override
+  String get directoryCraftsmanNameHint => 'e.g. Plumber';
+
+  @override
+  String get supplierTotalPaidLabel => 'Total paid to supplier';
+
+  @override
+  String get supplierSpendRecordedCaption =>
+      'Recorded payment transactions only';
+
+  @override
+  String get supplierDetailTransactionsSection => 'Transaction history';
+
+  @override
+  String get supplierDetailNoTransactions => 'No transactions recorded';
+
+  @override
+  String get supplierDetailNotFoundTitle => 'Supplier not found';
+
+  @override
+  String get supplierProfilePhoneLabel => 'Phone';
+
+  @override
+  String get supplierProfileNotesLabel => 'Notes';
+
+  @override
+  String get directoryCraftsmanKindMeta => 'Craftsman';
+
+  @override
+  String get craftsmanTotalLaborPaidLabel => 'Total labor paid';
+
+  @override
+  String craftsmanLaborStatCaption(int count) {
+    return 'Across $count projects · labor payments only';
+  }
+
+  @override
+  String get craftsmanDetailJobsSection => 'Work by client';
+
+  @override
+  String get craftsmanDetailEditAgreement => 'Edit agreement';
+
+  @override
+  String get craftsmanDetailNoAgreedAmount => 'No agreed amount';
+
+  @override
+  String get craftsmanDetailNoJobs => 'No linked client projects';
+
+  @override
+  String get craftsmanDetailLaborHistorySection => 'Labor payment history';
+
+  @override
+  String get craftsmanDetailNoLaborHistory => 'No labor payments recorded';
+
+  @override
+  String get craftsmanDetailNotFoundTitle => 'Craftsman not found';
+
+  @override
+  String get craftsmanProfileTradeLabel => 'Trade';
+
+  @override
+  String get craftsmanProfileNotesLabel => 'Notes';
+
+  @override
+  String get crewAssignmentsIntro =>
+      'Pick from your directory. Agreed amount is optional for this project.';
+
+  @override
+  String crewAssignmentsProjectContext(String name) {
+    return 'Project $name';
+  }
+
+  @override
+  String get craftsmanSetAgreedAmount => 'Set agreed amount';
+
+  @override
+  String get craftsmanEditAgreedAmount => 'Edit agreed amount';
+
+  @override
+  String get craftsmanAgreedAmountSheetTitle => 'Agreed amount';
+
+  @override
+  String get craftsmanAgreedForClientLabel =>
+      'Agreed for this client (optional)';
+
+  @override
+  String get craftsmanAgreementAmountPlaceholder => 'Not set';
+
+  @override
+  String get craftsmanAgreementAmountCaption =>
+      'Leave empty if nothing was agreed. Enter 0 when the agreed amount is zero.';
+
+  @override
+  String get craftsmanAgreementAmountInvalid =>
+      'Enter a non-negative amount or leave blank';
+
+  @override
+  String get craftsmanAgreementHasPayments => 'Has recorded payments';
+
+  @override
+  String get directoryAddCraftsmanToRoster => 'Add craftsman to directory';
+
+  @override
+  String get crewAssignmentsSaved => 'Craftsman choices saved for this client';
+
+  @override
+  String get itemsCatalogCaption =>
+      'Default items — you can add, edit, and archive';
+
+  @override
+  String get addItem => 'Add item';
+
+  @override
+  String get itemCreateSheetTitle => 'New item';
+
+  @override
+  String get itemEditSheetTitle => 'Edit item';
+
+  @override
+  String get itemNameLabel => 'Item name';
+
+  @override
+  String get itemNameRequired => 'Enter item name';
+
+  @override
+  String get itemNameHint => 'e.g. Insulation';
+
+  @override
+  String get itemsEmptyTitle => 'No items yet';
+
+  @override
+  String get itemsEmptyDescription =>
+      'Add an item to categorize project spend.';
+
+  @override
+  String get archiveItemTitle => 'Archive item?';
+
+  @override
+  String archiveItemDescription(String name) {
+    return '$name will be hidden from lists. Expense history is kept.';
+  }
+
+  @override
+  String get statementClientHeading => 'Fund / client statement';
+
+  @override
+  String get statementPeriodToday => 'Today';
+
+  @override
+  String get statementPeriodMonth => 'This month';
+
+  @override
+  String get statementPeriodAll => 'All time';
+
+  @override
+  String get statementTotalReceived => 'Total received';
+
+  @override
+  String get statementTotalSpent => 'Total spent';
+
+  @override
+  String get statementClosingLabel => 'Remaining';
+
+  @override
+  String get statementClosingEndOfPeriod => 'Remaining at period end';
+
+  @override
+  String statementMaterialsLaborSummary(String materials, String labor) {
+    return 'Materials total: $materials | Labor total: $labor';
+  }
+
+  @override
+  String statementOpeningPeriodNet(String opening, String net) {
+    return 'Opening balance: $opening · Net movement: $net';
+  }
+
+  @override
+  String get statementReceiptsSectionTitle => 'Receipts from client';
+
+  @override
+  String get statementReceiptsSectionCaption =>
+      'Payments appear here only and are not repeated under expense items.';
+
+  @override
+  String get statementEmptyReceipts => 'No receipts in the selected period.';
+
+  @override
+  String statementItemSectionTitle(String name) {
+    return 'Item: $name';
+  }
+
+  @override
+  String statementItemSectionTotal(String total) {
+    return 'Total: $total';
+  }
+
+  @override
+  String statementItemMaterialsLabor(String materials, String labor) {
+    return 'Materials: $materials | Labor: $labor';
+  }
+
+  @override
+  String statementReconcileSpend(String materials, String labor, String spent) {
+    return 'Expense check: $materials materials + $labor labor = $spent';
+  }
+
+  @override
+  String statementReconcileBalance(
+    String openingPrefix,
+    String received,
+    String spent,
+    String closing,
+  ) {
+    return '$openingPrefix$received received − $spent spent = $closing remaining';
+  }
+
+  @override
+  String statementIssuedOn(String date) {
+    return 'Issued: $date';
+  }
+
+  @override
+  String statementPeriodDisplay(String label) {
+    return 'Period: $label';
+  }
+
+  @override
+  String get statementCurrencyNote => 'Currency: Egyptian pound (EGP)';
+
+  @override
+  String get statementTableSerial => '#';
+
+  @override
+  String get statementTableAmount => 'Amount';
+
+  @override
+  String get statementTableDetail => 'Detail';
+
+  @override
+  String get statementPdfExporting => 'Preparing PDF…';
+
+  @override
+  String get statementSupplierHeading => 'Supplier statement';
+
+  @override
+  String statementPageFooter(String page, String pages) {
+    return 'Page $page of $pages';
+  }
+
+  @override
+  String get statementPeriodCustomize => 'Custom range';
+
+  @override
+  String get statementPeriodSinceLastExport => 'Since last export';
+
+  @override
+  String get statementSinceLastExportUnavailable =>
+      'No prior export yet — choose another range.';
+
+  @override
+  String get statementPeriodDatesHint =>
+      'Dates use inclusive local calendar days.';
+
+  @override
+  String get statementReconcileSectionTitle => 'Balance review';
+
+  @override
+  String statementLastExportAt(String date) {
+    return 'Last successful PDF: $date';
+  }
+
+  @override
+  String get statementExportFailed => 'Could not prepare PDF';
+
+  @override
+  String get statementPeriodFrom => 'From';
+
+  @override
+  String get statementPeriodTo => 'To';
+
+  @override
+  String get statementSupplierPaymentsTitle => 'Payments in period';
+
+  @override
+  String get statementSupplierPaymentsCaption =>
+      'Material spend rows linked to this supplier only.';
+
+  @override
+  String get statementEmptyPayments => 'No payments in the selected period.';
 }

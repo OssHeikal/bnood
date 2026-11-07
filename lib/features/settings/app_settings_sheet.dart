@@ -3,12 +3,12 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/settings_provider.dart';
+import '../../core/widgets/bnood_modal_sheet.dart';
 
 Future<void> showAppSettingsSheet(BuildContext context) {
-  return showModalBottomSheet<void>(
+  return BnoodModalSheet.show<void>(
     context: context,
-    showDragHandle: true,
-    builder: (ctx) => const AppSettingsSheet(),
+    builder: (_) => const AppSettingsSheet(),
   );
 }
 

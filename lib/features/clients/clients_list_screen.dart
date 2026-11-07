@@ -8,6 +8,7 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/providers/dashboard_providers.dart';
+import '../../core/repositories/bnood_repository.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
@@ -19,17 +20,17 @@ import '../home/home_foundation_scope.dart';
 import '../home/widgets/home_loading_skeleton.dart';
 import '../vouchers/inline_create_routes.dart';
 import 'widgets/client_balance_card.dart';
+import 'widgets/clients_list_filter_chips.dart';
 
 class ClientsListScreen extends ConsumerWidget {
   const ClientsListScreen({super.key});
 
   Future<void> _addClient(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context);
     final createdId = await CustomBottomSheet.show<String?>(
       context: context,
-      builder: (_) => const InlineCreateClientPage(),
-      title: l10n.addClient,
+      builder: (_) => const InlineCreateClientPage(padForSystemChrome: false),
       nestedNavigator: false,
+      showDragHandle: false,
     );
     if (createdId != null) {
       refreshAfterClientMutation(ref);
@@ -40,7 +41,8 @@ class ClientsListScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
-    final balances = ref.watch(homeClientBalancesProvider);
+    final filter = ref.watch(clientsListFilterProvider);
+    final balances = ref.watch(clientsListBalancesProvider);
 
     return HomeFoundationScope(
       child: Builder(
@@ -53,6 +55,18 @@ class ClientsListScreen extends ConsumerWidget {
               backgroundColor: colors.canvas,
               elevation: 0,
               title: Text(l10n.navClients, style: text.pageTitle),
+              bottom: const PreferredSize(
+                preferredSize: Size.fromHeight(48),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    AppSize.screenPadding,
+                    0,
+                    AppSize.screenPadding,
+                    AppSize.spaceSM,
+                  ),
+                  child: ClientsListFilterChips(),
+                ),
+              ),
               actions: [
                 Padding(
                   padding: const EdgeInsetsDirectional.only(end: AppSize.spaceMD),
@@ -102,7 +116,7 @@ class ClientsListScreen extends ConsumerWidget {
                       actions: [
                         AppFallbackAction(
                           label: l10n.retry,
-                          onPressed: () => ref.read(homeClientBalancesProvider.notifier).refreshSilently(),
+                          onPressed: () => ref.read(clientsListBalancesProvider.notifier).refreshSilently(),
                           role: AppFallbackActionRole.tertiary,
                         ),
                       ],
@@ -110,17 +124,35 @@ class ClientsListScreen extends ConsumerWidget {
                   ),
                   data: (rows) {
                     if (rows.isEmpty) {
+                      final empty = switch (filter) {
+                        ClientListArchiveFilter.archived => (
+                            title: l10n.clientsNoArchivedTitle,
+                            description: l10n.clientsNoArchivedDescription,
+                            showAdd: false,
+                          ),
+                        ClientListArchiveFilter.all => (
+                            title: l10n.clientsNoClientsTitle,
+                            description: l10n.homeNoActiveClientsDescription,
+                            showAdd: true,
+                          ),
+                        ClientListArchiveFilter.active => (
+                            title: l10n.homeNoActiveClientsTitle,
+                            description: l10n.homeNoActiveClientsDescription,
+                            showAdd: true,
+                          ),
+                      };
                       return AppCard(
                         child: AppFallback.section(
                           icon: Icons.people_outline,
-                          title: l10n.homeNoActiveClientsTitle,
-                          description: l10n.homeNoActiveClientsDescription,
+                          title: empty.title,
+                          description: empty.description,
                           actions: [
-                            AppFallbackAction(
-                              label: l10n.addClient,
-                              onPressed: () => _addClient(context, ref),
-                              role: AppFallbackActionRole.tertiary,
-                            ),
+                            if (empty.showAdd)
+                              AppFallbackAction(
+                                label: l10n.addClient,
+                                onPressed: () => _addClient(context, ref),
+                                role: AppFallbackActionRole.tertiary,
+                              ),
                           ],
                         ),
                       );

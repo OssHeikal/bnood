@@ -1,0 +1,2 @@
+"NSCameraUsageDescription" = "Bnood needs the camera to photograph receipt images for vouchers.";
+"NSPhotoLibraryUsageDescription" = "Bnood needs photo library access so you can attach receipt images from your gallery to vouchers.";

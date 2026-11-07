@@ -12,20 +12,34 @@ class $WorkspacesTable extends Workspaces
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [id, createdAt, updatedAt];
   @override
@@ -34,8 +48,10 @@ class $WorkspacesTable extends Workspaces
   String get actualTableName => $name;
   static const String $name = 'workspaces';
   @override
-  VerificationContext validateIntegrity(Insertable<Workspace> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Workspace> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -44,14 +60,18 @@ class $WorkspacesTable extends Workspaces
       context.missing(_idMeta);
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -64,12 +84,18 @@ class $WorkspacesTable extends Workspaces
   Workspace map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Workspace(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
     );
   }
 
@@ -83,8 +109,11 @@ class Workspace extends DataClass implements Insertable<Workspace> {
   final String id;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const Workspace(
-      {required this.id, required this.createdAt, required this.updatedAt});
+  const Workspace({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -102,8 +131,10 @@ class Workspace extends DataClass implements Insertable<Workspace> {
     );
   }
 
-  factory Workspace.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Workspace.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Workspace(
       id: serializer.fromJson<String>(json['id']),
@@ -172,9 +203,9 @@ class WorkspacesCompanion extends UpdateCompanion<Workspace> {
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        createdAt = Value(createdAt),
-        updatedAt = Value(updatedAt);
+  }) : id = Value(id),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
   static Insertable<Workspace> custom({
     Expression<String>? id,
     Expression<DateTime>? createdAt,
@@ -189,11 +220,12 @@ class WorkspacesCompanion extends UpdateCompanion<Workspace> {
     });
   }
 
-  WorkspacesCompanion copyWith(
-      {Value<String>? id,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt,
-      Value<int>? rowid}) {
+  WorkspacesCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
     return WorkspacesCompanion(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
@@ -240,53 +272,94 @@ class $ClientsTable extends Clients with TableInfo<$ClientsTable, Client> {
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _workspaceIdMeta =
-      const VerificationMeta('workspaceId');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _workspaceIdMeta = const VerificationMeta(
+    'workspaceId',
+  );
   @override
   late final GeneratedColumn<String> workspaceId = GeneratedColumn<String>(
-      'workspace_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'workspace_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
   @override
   late final GeneratedColumn<String> phone = GeneratedColumn<String>(
-      'phone', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _archivedAtMeta =
-      const VerificationMeta('archivedAt');
+    'phone',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _archivedAtMeta = const VerificationMeta(
+    'archivedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> archivedAt = GeneratedColumn<DateTime>(
-      'archived_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'archived_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, workspaceId, name, phone, archivedAt, createdAt, updatedAt];
+  List<GeneratedColumn> get $columns => [
+    id,
+    workspaceId,
+    name,
+    phone,
+    archivedAt,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'clients';
   @override
-  VerificationContext validateIntegrity(Insertable<Client> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Client> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -296,37 +369,48 @@ class $ClientsTable extends Clients with TableInfo<$ClientsTable, Client> {
     }
     if (data.containsKey('workspace_id')) {
       context.handle(
+        _workspaceIdMeta,
+        workspaceId.isAcceptableOrUnknown(
+          data['workspace_id']!,
           _workspaceIdMeta,
-          workspaceId.isAcceptableOrUnknown(
-              data['workspace_id']!, _workspaceIdMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_workspaceIdMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('phone')) {
       context.handle(
-          _phoneMeta, phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta));
+        _phoneMeta,
+        phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta),
+      );
     }
     if (data.containsKey('archived_at')) {
       context.handle(
-          _archivedAtMeta,
-          archivedAt.isAcceptableOrUnknown(
-              data['archived_at']!, _archivedAtMeta));
+        _archivedAtMeta,
+        archivedAt.isAcceptableOrUnknown(data['archived_at']!, _archivedAtMeta),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -339,20 +423,34 @@ class $ClientsTable extends Clients with TableInfo<$ClientsTable, Client> {
   Client map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Client(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      workspaceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}workspace_id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      phone: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}phone']),
-      archivedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}archived_at']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      workspaceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}workspace_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      phone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}phone'],
+      ),
+      archivedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}archived_at'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
     );
   }
 
@@ -370,14 +468,15 @@ class Client extends DataClass implements Insertable<Client> {
   final DateTime? archivedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const Client(
-      {required this.id,
-      required this.workspaceId,
-      required this.name,
-      this.phone,
-      this.archivedAt,
-      required this.createdAt,
-      required this.updatedAt});
+  const Client({
+    required this.id,
+    required this.workspaceId,
+    required this.name,
+    this.phone,
+    this.archivedAt,
+    required this.createdAt,
+    required this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -400,8 +499,9 @@ class Client extends DataClass implements Insertable<Client> {
       id: Value(id),
       workspaceId: Value(workspaceId),
       name: Value(name),
-      phone:
-          phone == null && nullToAbsent ? const Value.absent() : Value(phone),
+      phone: phone == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phone),
       archivedAt: archivedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(archivedAt),
@@ -410,8 +510,10 @@ class Client extends DataClass implements Insertable<Client> {
     );
   }
 
-  factory Client.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Client.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Client(
       id: serializer.fromJson<String>(json['id']),
@@ -437,32 +539,34 @@ class Client extends DataClass implements Insertable<Client> {
     };
   }
 
-  Client copyWith(
-          {String? id,
-          String? workspaceId,
-          String? name,
-          Value<String?> phone = const Value.absent(),
-          Value<DateTime?> archivedAt = const Value.absent(),
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      Client(
-        id: id ?? this.id,
-        workspaceId: workspaceId ?? this.workspaceId,
-        name: name ?? this.name,
-        phone: phone.present ? phone.value : this.phone,
-        archivedAt: archivedAt.present ? archivedAt.value : this.archivedAt,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  Client copyWith({
+    String? id,
+    String? workspaceId,
+    String? name,
+    Value<String?> phone = const Value.absent(),
+    Value<DateTime?> archivedAt = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => Client(
+    id: id ?? this.id,
+    workspaceId: workspaceId ?? this.workspaceId,
+    name: name ?? this.name,
+    phone: phone.present ? phone.value : this.phone,
+    archivedAt: archivedAt.present ? archivedAt.value : this.archivedAt,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
   Client copyWithCompanion(ClientsCompanion data) {
     return Client(
       id: data.id.present ? data.id.value : this.id,
-      workspaceId:
-          data.workspaceId.present ? data.workspaceId.value : this.workspaceId,
+      workspaceId: data.workspaceId.present
+          ? data.workspaceId.value
+          : this.workspaceId,
       name: data.name.present ? data.name.value : this.name,
       phone: data.phone.present ? data.phone.value : this.phone,
-      archivedAt:
-          data.archivedAt.present ? data.archivedAt.value : this.archivedAt,
+      archivedAt: data.archivedAt.present
+          ? data.archivedAt.value
+          : this.archivedAt,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -484,7 +588,14 @@ class Client extends DataClass implements Insertable<Client> {
 
   @override
   int get hashCode => Object.hash(
-      id, workspaceId, name, phone, archivedAt, createdAt, updatedAt);
+    id,
+    workspaceId,
+    name,
+    phone,
+    archivedAt,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -526,11 +637,11 @@ class ClientsCompanion extends UpdateCompanion<Client> {
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        workspaceId = Value(workspaceId),
-        name = Value(name),
-        createdAt = Value(createdAt),
-        updatedAt = Value(updatedAt);
+  }) : id = Value(id),
+       workspaceId = Value(workspaceId),
+       name = Value(name),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
   static Insertable<Client> custom({
     Expression<String>? id,
     Expression<String>? workspaceId,
@@ -553,15 +664,16 @@ class ClientsCompanion extends UpdateCompanion<Client> {
     });
   }
 
-  ClientsCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? workspaceId,
-      Value<String>? name,
-      Value<String?>? phone,
-      Value<DateTime?>? archivedAt,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt,
-      Value<int>? rowid}) {
+  ClientsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? workspaceId,
+    Value<String>? name,
+    Value<String?>? phone,
+    Value<DateTime?>? archivedAt,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
     return ClientsCompanion(
       id: id ?? this.id,
       workspaceId: workspaceId ?? this.workspaceId,
@@ -628,74 +740,117 @@ class $ProjectsTable extends Projects with TableInfo<$ProjectsTable, Project> {
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _workspaceIdMeta =
-      const VerificationMeta('workspaceId');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _workspaceIdMeta = const VerificationMeta(
+    'workspaceId',
+  );
   @override
   late final GeneratedColumn<String> workspaceId = GeneratedColumn<String>(
-      'workspace_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _clientIdMeta =
-      const VerificationMeta('clientId');
+    'workspace_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _clientIdMeta = const VerificationMeta(
+    'clientId',
+  );
   @override
   late final GeneratedColumn<String> clientId = GeneratedColumn<String>(
-      'client_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'client_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _unitAddressMeta =
-      const VerificationMeta('unitAddress');
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _unitAddressMeta = const VerificationMeta(
+    'unitAddress',
+  );
   @override
   late final GeneratedColumn<String> unitAddress = GeneratedColumn<String>(
-      'unit_address', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'unit_address',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<String> status = GeneratedColumn<String>(
-      'status', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _engineerBasisPointsMeta =
       const VerificationMeta('engineerBasisPoints');
   @override
   late final GeneratedColumn<int> engineerBasisPoints = GeneratedColumn<int>(
-      'engineer_basis_points', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'engineer_basis_points',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        workspaceId,
-        clientId,
-        name,
-        unitAddress,
-        status,
-        engineerBasisPoints,
-        createdAt,
-        updatedAt
-      ];
+    id,
+    workspaceId,
+    clientId,
+    name,
+    unitAddress,
+    status,
+    engineerBasisPoints,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'projects';
   @override
-  VerificationContext validateIntegrity(Insertable<Project> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Project> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -705,51 +860,70 @@ class $ProjectsTable extends Projects with TableInfo<$ProjectsTable, Project> {
     }
     if (data.containsKey('workspace_id')) {
       context.handle(
+        _workspaceIdMeta,
+        workspaceId.isAcceptableOrUnknown(
+          data['workspace_id']!,
           _workspaceIdMeta,
-          workspaceId.isAcceptableOrUnknown(
-              data['workspace_id']!, _workspaceIdMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_workspaceIdMeta);
     }
     if (data.containsKey('client_id')) {
-      context.handle(_clientIdMeta,
-          clientId.isAcceptableOrUnknown(data['client_id']!, _clientIdMeta));
+      context.handle(
+        _clientIdMeta,
+        clientId.isAcceptableOrUnknown(data['client_id']!, _clientIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_clientIdMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('unit_address')) {
       context.handle(
+        _unitAddressMeta,
+        unitAddress.isAcceptableOrUnknown(
+          data['unit_address']!,
           _unitAddressMeta,
-          unitAddress.isAcceptableOrUnknown(
-              data['unit_address']!, _unitAddressMeta));
+        ),
+      );
     }
     if (data.containsKey('status')) {
-      context.handle(_statusMeta,
-          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
     } else if (isInserting) {
       context.missing(_statusMeta);
     }
     if (data.containsKey('engineer_basis_points')) {
       context.handle(
+        _engineerBasisPointsMeta,
+        engineerBasisPoints.isAcceptableOrUnknown(
+          data['engineer_basis_points']!,
           _engineerBasisPointsMeta,
-          engineerBasisPoints.isAcceptableOrUnknown(
-              data['engineer_basis_points']!, _engineerBasisPointsMeta));
+        ),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -762,24 +936,42 @@ class $ProjectsTable extends Projects with TableInfo<$ProjectsTable, Project> {
   Project map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Project(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      workspaceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}workspace_id'])!,
-      clientId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}client_id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      unitAddress: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}unit_address']),
-      status: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      workspaceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}workspace_id'],
+      )!,
+      clientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}client_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      unitAddress: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}unit_address'],
+      ),
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
       engineerBasisPoints: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}engineer_basis_points']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}engineer_basis_points'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
     );
   }
 
@@ -799,16 +991,17 @@ class Project extends DataClass implements Insertable<Project> {
   final int? engineerBasisPoints;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const Project(
-      {required this.id,
-      required this.workspaceId,
-      required this.clientId,
-      required this.name,
-      this.unitAddress,
-      required this.status,
-      this.engineerBasisPoints,
-      required this.createdAt,
-      required this.updatedAt});
+  const Project({
+    required this.id,
+    required this.workspaceId,
+    required this.clientId,
+    required this.name,
+    this.unitAddress,
+    required this.status,
+    this.engineerBasisPoints,
+    required this.createdAt,
+    required this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -846,8 +1039,10 @@ class Project extends DataClass implements Insertable<Project> {
     );
   }
 
-  factory Project.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Project.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Project(
       id: serializer.fromJson<String>(json['id']),
@@ -856,8 +1051,9 @@ class Project extends DataClass implements Insertable<Project> {
       name: serializer.fromJson<String>(json['name']),
       unitAddress: serializer.fromJson<String?>(json['unitAddress']),
       status: serializer.fromJson<String>(json['status']),
-      engineerBasisPoints:
-          serializer.fromJson<int?>(json['engineerBasisPoints']),
+      engineerBasisPoints: serializer.fromJson<int?>(
+        json['engineerBasisPoints'],
+      ),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -878,38 +1074,40 @@ class Project extends DataClass implements Insertable<Project> {
     };
   }
 
-  Project copyWith(
-          {String? id,
-          String? workspaceId,
-          String? clientId,
-          String? name,
-          Value<String?> unitAddress = const Value.absent(),
-          String? status,
-          Value<int?> engineerBasisPoints = const Value.absent(),
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      Project(
-        id: id ?? this.id,
-        workspaceId: workspaceId ?? this.workspaceId,
-        clientId: clientId ?? this.clientId,
-        name: name ?? this.name,
-        unitAddress: unitAddress.present ? unitAddress.value : this.unitAddress,
-        status: status ?? this.status,
-        engineerBasisPoints: engineerBasisPoints.present
-            ? engineerBasisPoints.value
-            : this.engineerBasisPoints,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  Project copyWith({
+    String? id,
+    String? workspaceId,
+    String? clientId,
+    String? name,
+    Value<String?> unitAddress = const Value.absent(),
+    String? status,
+    Value<int?> engineerBasisPoints = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => Project(
+    id: id ?? this.id,
+    workspaceId: workspaceId ?? this.workspaceId,
+    clientId: clientId ?? this.clientId,
+    name: name ?? this.name,
+    unitAddress: unitAddress.present ? unitAddress.value : this.unitAddress,
+    status: status ?? this.status,
+    engineerBasisPoints: engineerBasisPoints.present
+        ? engineerBasisPoints.value
+        : this.engineerBasisPoints,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
   Project copyWithCompanion(ProjectsCompanion data) {
     return Project(
       id: data.id.present ? data.id.value : this.id,
-      workspaceId:
-          data.workspaceId.present ? data.workspaceId.value : this.workspaceId,
+      workspaceId: data.workspaceId.present
+          ? data.workspaceId.value
+          : this.workspaceId,
       clientId: data.clientId.present ? data.clientId.value : this.clientId,
       name: data.name.present ? data.name.value : this.name,
-      unitAddress:
-          data.unitAddress.present ? data.unitAddress.value : this.unitAddress,
+      unitAddress: data.unitAddress.present
+          ? data.unitAddress.value
+          : this.unitAddress,
       status: data.status.present ? data.status.value : this.status,
       engineerBasisPoints: data.engineerBasisPoints.present
           ? data.engineerBasisPoints.value
@@ -936,8 +1134,17 @@ class Project extends DataClass implements Insertable<Project> {
   }
 
   @override
-  int get hashCode => Object.hash(id, workspaceId, clientId, name, unitAddress,
-      status, engineerBasisPoints, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    workspaceId,
+    clientId,
+    name,
+    unitAddress,
+    status,
+    engineerBasisPoints,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -987,13 +1194,13 @@ class ProjectsCompanion extends UpdateCompanion<Project> {
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        workspaceId = Value(workspaceId),
-        clientId = Value(clientId),
-        name = Value(name),
-        status = Value(status),
-        createdAt = Value(createdAt),
-        updatedAt = Value(updatedAt);
+  }) : id = Value(id),
+       workspaceId = Value(workspaceId),
+       clientId = Value(clientId),
+       name = Value(name),
+       status = Value(status),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
   static Insertable<Project> custom({
     Expression<String>? id,
     Expression<String>? workspaceId,
@@ -1021,17 +1228,18 @@ class ProjectsCompanion extends UpdateCompanion<Project> {
     });
   }
 
-  ProjectsCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? workspaceId,
-      Value<String>? clientId,
-      Value<String>? name,
-      Value<String?>? unitAddress,
-      Value<String>? status,
-      Value<int?>? engineerBasisPoints,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt,
-      Value<int>? rowid}) {
+  ProjectsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? workspaceId,
+    Value<String>? clientId,
+    Value<String>? name,
+    Value<String?>? unitAddress,
+    Value<String>? status,
+    Value<int?>? engineerBasisPoints,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
     return ProjectsCompanion(
       id: id ?? this.id,
       workspaceId: workspaceId ?? this.workspaceId,
@@ -1108,68 +1316,108 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, Item> {
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _workspaceIdMeta =
-      const VerificationMeta('workspaceId');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _workspaceIdMeta = const VerificationMeta(
+    'workspaceId',
+  );
   @override
   late final GeneratedColumn<String> workspaceId = GeneratedColumn<String>(
-      'workspace_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'workspace_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _colorKeyMeta =
-      const VerificationMeta('colorKey');
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _colorKeyMeta = const VerificationMeta(
+    'colorKey',
+  );
   @override
   late final GeneratedColumn<String> colorKey = GeneratedColumn<String>(
-      'color_key', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _iconNameMeta =
-      const VerificationMeta('iconName');
+    'color_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _iconNameMeta = const VerificationMeta(
+    'iconName',
+  );
   @override
   late final GeneratedColumn<String> iconName = GeneratedColumn<String>(
-      'icon_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _archivedAtMeta =
-      const VerificationMeta('archivedAt');
+    'icon_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _archivedAtMeta = const VerificationMeta(
+    'archivedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> archivedAt = GeneratedColumn<DateTime>(
-      'archived_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'archived_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        workspaceId,
-        name,
-        colorKey,
-        iconName,
-        archivedAt,
-        createdAt,
-        updatedAt
-      ];
+    id,
+    workspaceId,
+    name,
+    colorKey,
+    iconName,
+    archivedAt,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'items';
   @override
-  VerificationContext validateIntegrity(Insertable<Item> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Item> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -1179,45 +1427,58 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, Item> {
     }
     if (data.containsKey('workspace_id')) {
       context.handle(
+        _workspaceIdMeta,
+        workspaceId.isAcceptableOrUnknown(
+          data['workspace_id']!,
           _workspaceIdMeta,
-          workspaceId.isAcceptableOrUnknown(
-              data['workspace_id']!, _workspaceIdMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_workspaceIdMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('color_key')) {
-      context.handle(_colorKeyMeta,
-          colorKey.isAcceptableOrUnknown(data['color_key']!, _colorKeyMeta));
+      context.handle(
+        _colorKeyMeta,
+        colorKey.isAcceptableOrUnknown(data['color_key']!, _colorKeyMeta),
+      );
     } else if (isInserting) {
       context.missing(_colorKeyMeta);
     }
     if (data.containsKey('icon_name')) {
-      context.handle(_iconNameMeta,
-          iconName.isAcceptableOrUnknown(data['icon_name']!, _iconNameMeta));
+      context.handle(
+        _iconNameMeta,
+        iconName.isAcceptableOrUnknown(data['icon_name']!, _iconNameMeta),
+      );
     } else if (isInserting) {
       context.missing(_iconNameMeta);
     }
     if (data.containsKey('archived_at')) {
       context.handle(
-          _archivedAtMeta,
-          archivedAt.isAcceptableOrUnknown(
-              data['archived_at']!, _archivedAtMeta));
+        _archivedAtMeta,
+        archivedAt.isAcceptableOrUnknown(data['archived_at']!, _archivedAtMeta),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -1230,22 +1491,38 @@ class $ItemsTable extends Items with TableInfo<$ItemsTable, Item> {
   Item map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Item(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      workspaceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}workspace_id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      colorKey: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}color_key'])!,
-      iconName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}icon_name'])!,
-      archivedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}archived_at']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      workspaceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}workspace_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      colorKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}color_key'],
+      )!,
+      iconName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}icon_name'],
+      )!,
+      archivedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}archived_at'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
     );
   }
 
@@ -1264,15 +1541,16 @@ class Item extends DataClass implements Insertable<Item> {
   final DateTime? archivedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const Item(
-      {required this.id,
-      required this.workspaceId,
-      required this.name,
-      required this.colorKey,
-      required this.iconName,
-      this.archivedAt,
-      required this.createdAt,
-      required this.updatedAt});
+  const Item({
+    required this.id,
+    required this.workspaceId,
+    required this.name,
+    required this.colorKey,
+    required this.iconName,
+    this.archivedAt,
+    required this.createdAt,
+    required this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1304,8 +1582,10 @@ class Item extends DataClass implements Insertable<Item> {
     );
   }
 
-  factory Item.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Item.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Item(
       id: serializer.fromJson<String>(json['id']),
@@ -1333,35 +1613,37 @@ class Item extends DataClass implements Insertable<Item> {
     };
   }
 
-  Item copyWith(
-          {String? id,
-          String? workspaceId,
-          String? name,
-          String? colorKey,
-          String? iconName,
-          Value<DateTime?> archivedAt = const Value.absent(),
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      Item(
-        id: id ?? this.id,
-        workspaceId: workspaceId ?? this.workspaceId,
-        name: name ?? this.name,
-        colorKey: colorKey ?? this.colorKey,
-        iconName: iconName ?? this.iconName,
-        archivedAt: archivedAt.present ? archivedAt.value : this.archivedAt,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  Item copyWith({
+    String? id,
+    String? workspaceId,
+    String? name,
+    String? colorKey,
+    String? iconName,
+    Value<DateTime?> archivedAt = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => Item(
+    id: id ?? this.id,
+    workspaceId: workspaceId ?? this.workspaceId,
+    name: name ?? this.name,
+    colorKey: colorKey ?? this.colorKey,
+    iconName: iconName ?? this.iconName,
+    archivedAt: archivedAt.present ? archivedAt.value : this.archivedAt,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
   Item copyWithCompanion(ItemsCompanion data) {
     return Item(
       id: data.id.present ? data.id.value : this.id,
-      workspaceId:
-          data.workspaceId.present ? data.workspaceId.value : this.workspaceId,
+      workspaceId: data.workspaceId.present
+          ? data.workspaceId.value
+          : this.workspaceId,
       name: data.name.present ? data.name.value : this.name,
       colorKey: data.colorKey.present ? data.colorKey.value : this.colorKey,
       iconName: data.iconName.present ? data.iconName.value : this.iconName,
-      archivedAt:
-          data.archivedAt.present ? data.archivedAt.value : this.archivedAt,
+      archivedAt: data.archivedAt.present
+          ? data.archivedAt.value
+          : this.archivedAt,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -1383,8 +1665,16 @@ class Item extends DataClass implements Insertable<Item> {
   }
 
   @override
-  int get hashCode => Object.hash(id, workspaceId, name, colorKey, iconName,
-      archivedAt, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    workspaceId,
+    name,
+    colorKey,
+    iconName,
+    archivedAt,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1430,13 +1720,13 @@ class ItemsCompanion extends UpdateCompanion<Item> {
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        workspaceId = Value(workspaceId),
-        name = Value(name),
-        colorKey = Value(colorKey),
-        iconName = Value(iconName),
-        createdAt = Value(createdAt),
-        updatedAt = Value(updatedAt);
+  }) : id = Value(id),
+       workspaceId = Value(workspaceId),
+       name = Value(name),
+       colorKey = Value(colorKey),
+       iconName = Value(iconName),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
   static Insertable<Item> custom({
     Expression<String>? id,
     Expression<String>? workspaceId,
@@ -1461,16 +1751,17 @@ class ItemsCompanion extends UpdateCompanion<Item> {
     });
   }
 
-  ItemsCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? workspaceId,
-      Value<String>? name,
-      Value<String>? colorKey,
-      Value<String>? iconName,
-      Value<DateTime?>? archivedAt,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt,
-      Value<int>? rowid}) {
+  ItemsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? workspaceId,
+    Value<String>? name,
+    Value<String>? colorKey,
+    Value<String>? iconName,
+    Value<DateTime?>? archivedAt,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
     return ItemsCompanion(
       id: id ?? this.id,
       workspaceId: workspaceId ?? this.workspaceId,
@@ -1543,58 +1834,104 @@ class $SuppliersTable extends Suppliers
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _workspaceIdMeta =
-      const VerificationMeta('workspaceId');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _workspaceIdMeta = const VerificationMeta(
+    'workspaceId',
+  );
   @override
   late final GeneratedColumn<String> workspaceId = GeneratedColumn<String>(
-      'workspace_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'workspace_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
   @override
   late final GeneratedColumn<String> phone = GeneratedColumn<String>(
-      'phone', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'phone',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
-      'notes', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _archivedAtMeta =
-      const VerificationMeta('archivedAt');
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _archivedAtMeta = const VerificationMeta(
+    'archivedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> archivedAt = GeneratedColumn<DateTime>(
-      'archived_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'archived_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, workspaceId, name, phone, notes, archivedAt, createdAt, updatedAt];
+  List<GeneratedColumn> get $columns => [
+    id,
+    workspaceId,
+    name,
+    phone,
+    notes,
+    archivedAt,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'suppliers';
   @override
-  VerificationContext validateIntegrity(Insertable<Supplier> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Supplier> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -1604,41 +1941,54 @@ class $SuppliersTable extends Suppliers
     }
     if (data.containsKey('workspace_id')) {
       context.handle(
+        _workspaceIdMeta,
+        workspaceId.isAcceptableOrUnknown(
+          data['workspace_id']!,
           _workspaceIdMeta,
-          workspaceId.isAcceptableOrUnknown(
-              data['workspace_id']!, _workspaceIdMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_workspaceIdMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('phone')) {
       context.handle(
-          _phoneMeta, phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta));
+        _phoneMeta,
+        phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta),
+      );
     }
     if (data.containsKey('notes')) {
       context.handle(
-          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
     }
     if (data.containsKey('archived_at')) {
       context.handle(
-          _archivedAtMeta,
-          archivedAt.isAcceptableOrUnknown(
-              data['archived_at']!, _archivedAtMeta));
+        _archivedAtMeta,
+        archivedAt.isAcceptableOrUnknown(data['archived_at']!, _archivedAtMeta),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -1651,22 +2001,38 @@ class $SuppliersTable extends Suppliers
   Supplier map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Supplier(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      workspaceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}workspace_id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      phone: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}phone']),
-      notes: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
-      archivedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}archived_at']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      workspaceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}workspace_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      phone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}phone'],
+      ),
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+      archivedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}archived_at'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
     );
   }
 
@@ -1685,15 +2051,16 @@ class Supplier extends DataClass implements Insertable<Supplier> {
   final DateTime? archivedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const Supplier(
-      {required this.id,
-      required this.workspaceId,
-      required this.name,
-      this.phone,
-      this.notes,
-      this.archivedAt,
-      required this.createdAt,
-      required this.updatedAt});
+  const Supplier({
+    required this.id,
+    required this.workspaceId,
+    required this.name,
+    this.phone,
+    this.notes,
+    this.archivedAt,
+    required this.createdAt,
+    required this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1719,10 +2086,12 @@ class Supplier extends DataClass implements Insertable<Supplier> {
       id: Value(id),
       workspaceId: Value(workspaceId),
       name: Value(name),
-      phone:
-          phone == null && nullToAbsent ? const Value.absent() : Value(phone),
-      notes:
-          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      phone: phone == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phone),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
       archivedAt: archivedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(archivedAt),
@@ -1731,8 +2100,10 @@ class Supplier extends DataClass implements Insertable<Supplier> {
     );
   }
 
-  factory Supplier.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Supplier.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Supplier(
       id: serializer.fromJson<String>(json['id']),
@@ -1760,35 +2131,37 @@ class Supplier extends DataClass implements Insertable<Supplier> {
     };
   }
 
-  Supplier copyWith(
-          {String? id,
-          String? workspaceId,
-          String? name,
-          Value<String?> phone = const Value.absent(),
-          Value<String?> notes = const Value.absent(),
-          Value<DateTime?> archivedAt = const Value.absent(),
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      Supplier(
-        id: id ?? this.id,
-        workspaceId: workspaceId ?? this.workspaceId,
-        name: name ?? this.name,
-        phone: phone.present ? phone.value : this.phone,
-        notes: notes.present ? notes.value : this.notes,
-        archivedAt: archivedAt.present ? archivedAt.value : this.archivedAt,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  Supplier copyWith({
+    String? id,
+    String? workspaceId,
+    String? name,
+    Value<String?> phone = const Value.absent(),
+    Value<String?> notes = const Value.absent(),
+    Value<DateTime?> archivedAt = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => Supplier(
+    id: id ?? this.id,
+    workspaceId: workspaceId ?? this.workspaceId,
+    name: name ?? this.name,
+    phone: phone.present ? phone.value : this.phone,
+    notes: notes.present ? notes.value : this.notes,
+    archivedAt: archivedAt.present ? archivedAt.value : this.archivedAt,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
   Supplier copyWithCompanion(SuppliersCompanion data) {
     return Supplier(
       id: data.id.present ? data.id.value : this.id,
-      workspaceId:
-          data.workspaceId.present ? data.workspaceId.value : this.workspaceId,
+      workspaceId: data.workspaceId.present
+          ? data.workspaceId.value
+          : this.workspaceId,
       name: data.name.present ? data.name.value : this.name,
       phone: data.phone.present ? data.phone.value : this.phone,
       notes: data.notes.present ? data.notes.value : this.notes,
-      archivedAt:
-          data.archivedAt.present ? data.archivedAt.value : this.archivedAt,
+      archivedAt: data.archivedAt.present
+          ? data.archivedAt.value
+          : this.archivedAt,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -1811,7 +2184,15 @@ class Supplier extends DataClass implements Insertable<Supplier> {
 
   @override
   int get hashCode => Object.hash(
-      id, workspaceId, name, phone, notes, archivedAt, createdAt, updatedAt);
+    id,
+    workspaceId,
+    name,
+    phone,
+    notes,
+    archivedAt,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1857,11 +2238,11 @@ class SuppliersCompanion extends UpdateCompanion<Supplier> {
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        workspaceId = Value(workspaceId),
-        name = Value(name),
-        createdAt = Value(createdAt),
-        updatedAt = Value(updatedAt);
+  }) : id = Value(id),
+       workspaceId = Value(workspaceId),
+       name = Value(name),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
   static Insertable<Supplier> custom({
     Expression<String>? id,
     Expression<String>? workspaceId,
@@ -1886,16 +2267,17 @@ class SuppliersCompanion extends UpdateCompanion<Supplier> {
     });
   }
 
-  SuppliersCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? workspaceId,
-      Value<String>? name,
-      Value<String?>? phone,
-      Value<String?>? notes,
-      Value<DateTime?>? archivedAt,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt,
-      Value<int>? rowid}) {
+  SuppliersCompanion copyWith({
+    Value<String>? id,
+    Value<String>? workspaceId,
+    Value<String>? name,
+    Value<String?>? phone,
+    Value<String?>? notes,
+    Value<DateTime?>? archivedAt,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
     return SuppliersCompanion(
       id: id ?? this.id,
       workspaceId: workspaceId ?? this.workspaceId,
@@ -1968,72 +2350,114 @@ class $CraftsmenTable extends Craftsmen
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _workspaceIdMeta =
-      const VerificationMeta('workspaceId');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _workspaceIdMeta = const VerificationMeta(
+    'workspaceId',
+  );
   @override
   late final GeneratedColumn<String> workspaceId = GeneratedColumn<String>(
-      'workspace_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'workspace_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
   @override
   late final GeneratedColumn<String> phone = GeneratedColumn<String>(
-      'phone', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'phone',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _tradeMeta = const VerificationMeta('trade');
   @override
   late final GeneratedColumn<String> trade = GeneratedColumn<String>(
-      'trade', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'trade',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
-      'notes', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _archivedAtMeta =
-      const VerificationMeta('archivedAt');
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _archivedAtMeta = const VerificationMeta(
+    'archivedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> archivedAt = GeneratedColumn<DateTime>(
-      'archived_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'archived_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        workspaceId,
-        name,
-        phone,
-        trade,
-        notes,
-        archivedAt,
-        createdAt,
-        updatedAt
-      ];
+    id,
+    workspaceId,
+    name,
+    phone,
+    trade,
+    notes,
+    archivedAt,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'craftsmen';
   @override
-  VerificationContext validateIntegrity(Insertable<CraftsmenData> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<CraftsmenData> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -2043,47 +2467,62 @@ class $CraftsmenTable extends Craftsmen
     }
     if (data.containsKey('workspace_id')) {
       context.handle(
+        _workspaceIdMeta,
+        workspaceId.isAcceptableOrUnknown(
+          data['workspace_id']!,
           _workspaceIdMeta,
-          workspaceId.isAcceptableOrUnknown(
-              data['workspace_id']!, _workspaceIdMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_workspaceIdMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('phone')) {
       context.handle(
-          _phoneMeta, phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta));
+        _phoneMeta,
+        phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta),
+      );
     } else if (isInserting) {
       context.missing(_phoneMeta);
     }
     if (data.containsKey('trade')) {
       context.handle(
-          _tradeMeta, trade.isAcceptableOrUnknown(data['trade']!, _tradeMeta));
+        _tradeMeta,
+        trade.isAcceptableOrUnknown(data['trade']!, _tradeMeta),
+      );
     }
     if (data.containsKey('notes')) {
       context.handle(
-          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
     }
     if (data.containsKey('archived_at')) {
       context.handle(
-          _archivedAtMeta,
-          archivedAt.isAcceptableOrUnknown(
-              data['archived_at']!, _archivedAtMeta));
+        _archivedAtMeta,
+        archivedAt.isAcceptableOrUnknown(data['archived_at']!, _archivedAtMeta),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -2096,24 +2535,42 @@ class $CraftsmenTable extends Craftsmen
   CraftsmenData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CraftsmenData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      workspaceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}workspace_id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      phone: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}phone'])!,
-      trade: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}trade']),
-      notes: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
-      archivedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}archived_at']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      workspaceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}workspace_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      phone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}phone'],
+      )!,
+      trade: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}trade'],
+      ),
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+      archivedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}archived_at'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
     );
   }
 
@@ -2133,16 +2590,17 @@ class CraftsmenData extends DataClass implements Insertable<CraftsmenData> {
   final DateTime? archivedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const CraftsmenData(
-      {required this.id,
-      required this.workspaceId,
-      required this.name,
-      required this.phone,
-      this.trade,
-      this.notes,
-      this.archivedAt,
-      required this.createdAt,
-      required this.updatedAt});
+  const CraftsmenData({
+    required this.id,
+    required this.workspaceId,
+    required this.name,
+    required this.phone,
+    this.trade,
+    this.notes,
+    this.archivedAt,
+    required this.createdAt,
+    required this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2170,10 +2628,12 @@ class CraftsmenData extends DataClass implements Insertable<CraftsmenData> {
       workspaceId: Value(workspaceId),
       name: Value(name),
       phone: Value(phone),
-      trade:
-          trade == null && nullToAbsent ? const Value.absent() : Value(trade),
-      notes:
-          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      trade: trade == null && nullToAbsent
+          ? const Value.absent()
+          : Value(trade),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
       archivedAt: archivedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(archivedAt),
@@ -2182,8 +2642,10 @@ class CraftsmenData extends DataClass implements Insertable<CraftsmenData> {
     );
   }
 
-  factory CraftsmenData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory CraftsmenData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CraftsmenData(
       id: serializer.fromJson<String>(json['id']),
@@ -2213,38 +2675,40 @@ class CraftsmenData extends DataClass implements Insertable<CraftsmenData> {
     };
   }
 
-  CraftsmenData copyWith(
-          {String? id,
-          String? workspaceId,
-          String? name,
-          String? phone,
-          Value<String?> trade = const Value.absent(),
-          Value<String?> notes = const Value.absent(),
-          Value<DateTime?> archivedAt = const Value.absent(),
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      CraftsmenData(
-        id: id ?? this.id,
-        workspaceId: workspaceId ?? this.workspaceId,
-        name: name ?? this.name,
-        phone: phone ?? this.phone,
-        trade: trade.present ? trade.value : this.trade,
-        notes: notes.present ? notes.value : this.notes,
-        archivedAt: archivedAt.present ? archivedAt.value : this.archivedAt,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  CraftsmenData copyWith({
+    String? id,
+    String? workspaceId,
+    String? name,
+    String? phone,
+    Value<String?> trade = const Value.absent(),
+    Value<String?> notes = const Value.absent(),
+    Value<DateTime?> archivedAt = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => CraftsmenData(
+    id: id ?? this.id,
+    workspaceId: workspaceId ?? this.workspaceId,
+    name: name ?? this.name,
+    phone: phone ?? this.phone,
+    trade: trade.present ? trade.value : this.trade,
+    notes: notes.present ? notes.value : this.notes,
+    archivedAt: archivedAt.present ? archivedAt.value : this.archivedAt,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
   CraftsmenData copyWithCompanion(CraftsmenCompanion data) {
     return CraftsmenData(
       id: data.id.present ? data.id.value : this.id,
-      workspaceId:
-          data.workspaceId.present ? data.workspaceId.value : this.workspaceId,
+      workspaceId: data.workspaceId.present
+          ? data.workspaceId.value
+          : this.workspaceId,
       name: data.name.present ? data.name.value : this.name,
       phone: data.phone.present ? data.phone.value : this.phone,
       trade: data.trade.present ? data.trade.value : this.trade,
       notes: data.notes.present ? data.notes.value : this.notes,
-      archivedAt:
-          data.archivedAt.present ? data.archivedAt.value : this.archivedAt,
+      archivedAt: data.archivedAt.present
+          ? data.archivedAt.value
+          : this.archivedAt,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -2267,8 +2731,17 @@ class CraftsmenData extends DataClass implements Insertable<CraftsmenData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, workspaceId, name, phone, trade, notes,
-      archivedAt, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    workspaceId,
+    name,
+    phone,
+    trade,
+    notes,
+    archivedAt,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2318,12 +2791,12 @@ class CraftsmenCompanion extends UpdateCompanion<CraftsmenData> {
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        workspaceId = Value(workspaceId),
-        name = Value(name),
-        phone = Value(phone),
-        createdAt = Value(createdAt),
-        updatedAt = Value(updatedAt);
+  }) : id = Value(id),
+       workspaceId = Value(workspaceId),
+       name = Value(name),
+       phone = Value(phone),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
   static Insertable<CraftsmenData> custom({
     Expression<String>? id,
     Expression<String>? workspaceId,
@@ -2350,17 +2823,18 @@ class CraftsmenCompanion extends UpdateCompanion<CraftsmenData> {
     });
   }
 
-  CraftsmenCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? workspaceId,
-      Value<String>? name,
-      Value<String>? phone,
-      Value<String?>? trade,
-      Value<String?>? notes,
-      Value<DateTime?>? archivedAt,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt,
-      Value<int>? rowid}) {
+  CraftsmenCompanion copyWith({
+    Value<String>? id,
+    Value<String>? workspaceId,
+    Value<String>? name,
+    Value<String>? phone,
+    Value<String?>? trade,
+    Value<String?>? notes,
+    Value<DateTime?>? archivedAt,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
     return CraftsmenCompanion(
       id: id ?? this.id,
       workspaceId: workspaceId ?? this.workspaceId,
@@ -2439,54 +2913,87 @@ class $ProjectCraftsmanAgreementsTable extends ProjectCraftsmanAgreements
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _workspaceIdMeta =
-      const VerificationMeta('workspaceId');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _workspaceIdMeta = const VerificationMeta(
+    'workspaceId',
+  );
   @override
   late final GeneratedColumn<String> workspaceId = GeneratedColumn<String>(
-      'workspace_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _projectIdMeta =
-      const VerificationMeta('projectId');
+    'workspace_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _projectIdMeta = const VerificationMeta(
+    'projectId',
+  );
   @override
   late final GeneratedColumn<String> projectId = GeneratedColumn<String>(
-      'project_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _craftsmanIdMeta =
-      const VerificationMeta('craftsmanId');
+    'project_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _craftsmanIdMeta = const VerificationMeta(
+    'craftsmanId',
+  );
   @override
   late final GeneratedColumn<String> craftsmanId = GeneratedColumn<String>(
-      'craftsman_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'craftsman_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _initialAmountPiastresMeta =
       const VerificationMeta('initialAmountPiastres');
   @override
   late final GeneratedColumn<int> initialAmountPiastres = GeneratedColumn<int>(
-      'initial_amount_piastres', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'initial_amount_piastres',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        workspaceId,
-        projectId,
-        craftsmanId,
-        initialAmountPiastres,
-        createdAt,
-        updatedAt
-      ];
+    id,
+    workspaceId,
+    projectId,
+    craftsmanId,
+    initialAmountPiastres,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2494,8 +3001,9 @@ class $ProjectCraftsmanAgreementsTable extends ProjectCraftsmanAgreements
   static const String $name = 'project_craftsman_agreements';
   @override
   VerificationContext validateIntegrity(
-      Insertable<ProjectCraftsmanAgreement> instance,
-      {bool isInserting = false}) {
+    Insertable<ProjectCraftsmanAgreement> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -2505,41 +3013,56 @@ class $ProjectCraftsmanAgreementsTable extends ProjectCraftsmanAgreements
     }
     if (data.containsKey('workspace_id')) {
       context.handle(
+        _workspaceIdMeta,
+        workspaceId.isAcceptableOrUnknown(
+          data['workspace_id']!,
           _workspaceIdMeta,
-          workspaceId.isAcceptableOrUnknown(
-              data['workspace_id']!, _workspaceIdMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_workspaceIdMeta);
     }
     if (data.containsKey('project_id')) {
-      context.handle(_projectIdMeta,
-          projectId.isAcceptableOrUnknown(data['project_id']!, _projectIdMeta));
+      context.handle(
+        _projectIdMeta,
+        projectId.isAcceptableOrUnknown(data['project_id']!, _projectIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_projectIdMeta);
     }
     if (data.containsKey('craftsman_id')) {
       context.handle(
+        _craftsmanIdMeta,
+        craftsmanId.isAcceptableOrUnknown(
+          data['craftsman_id']!,
           _craftsmanIdMeta,
-          craftsmanId.isAcceptableOrUnknown(
-              data['craftsman_id']!, _craftsmanIdMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_craftsmanIdMeta);
     }
     if (data.containsKey('initial_amount_piastres')) {
       context.handle(
+        _initialAmountPiastresMeta,
+        initialAmountPiastres.isAcceptableOrUnknown(
+          data['initial_amount_piastres']!,
           _initialAmountPiastresMeta,
-          initialAmountPiastres.isAcceptableOrUnknown(
-              data['initial_amount_piastres']!, _initialAmountPiastresMeta));
+        ),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -2549,24 +3072,40 @@ class $ProjectCraftsmanAgreementsTable extends ProjectCraftsmanAgreements
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ProjectCraftsmanAgreement map(Map<String, dynamic> data,
-      {String? tablePrefix}) {
+  ProjectCraftsmanAgreement map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ProjectCraftsmanAgreement(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      workspaceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}workspace_id'])!,
-      projectId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}project_id'])!,
-      craftsmanId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}craftsman_id'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      workspaceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}workspace_id'],
+      )!,
+      projectId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}project_id'],
+      )!,
+      craftsmanId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}craftsman_id'],
+      )!,
       initialAmountPiastres: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}initial_amount_piastres']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}initial_amount_piastres'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
     );
   }
 
@@ -2585,14 +3124,15 @@ class ProjectCraftsmanAgreement extends DataClass
   final int? initialAmountPiastres;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const ProjectCraftsmanAgreement(
-      {required this.id,
-      required this.workspaceId,
-      required this.projectId,
-      required this.craftsmanId,
-      this.initialAmountPiastres,
-      required this.createdAt,
-      required this.updatedAt});
+  const ProjectCraftsmanAgreement({
+    required this.id,
+    required this.workspaceId,
+    required this.projectId,
+    required this.craftsmanId,
+    this.initialAmountPiastres,
+    required this.createdAt,
+    required this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2622,16 +3162,19 @@ class ProjectCraftsmanAgreement extends DataClass
     );
   }
 
-  factory ProjectCraftsmanAgreement.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory ProjectCraftsmanAgreement.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ProjectCraftsmanAgreement(
       id: serializer.fromJson<String>(json['id']),
       workspaceId: serializer.fromJson<String>(json['workspaceId']),
       projectId: serializer.fromJson<String>(json['projectId']),
       craftsmanId: serializer.fromJson<String>(json['craftsmanId']),
-      initialAmountPiastres:
-          serializer.fromJson<int?>(json['initialAmountPiastres']),
+      initialAmountPiastres: serializer.fromJson<int?>(
+        json['initialAmountPiastres'],
+      ),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -2650,34 +3193,37 @@ class ProjectCraftsmanAgreement extends DataClass
     };
   }
 
-  ProjectCraftsmanAgreement copyWith(
-          {String? id,
-          String? workspaceId,
-          String? projectId,
-          String? craftsmanId,
-          Value<int?> initialAmountPiastres = const Value.absent(),
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      ProjectCraftsmanAgreement(
-        id: id ?? this.id,
-        workspaceId: workspaceId ?? this.workspaceId,
-        projectId: projectId ?? this.projectId,
-        craftsmanId: craftsmanId ?? this.craftsmanId,
-        initialAmountPiastres: initialAmountPiastres.present
-            ? initialAmountPiastres.value
-            : this.initialAmountPiastres,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  ProjectCraftsmanAgreement copyWith({
+    String? id,
+    String? workspaceId,
+    String? projectId,
+    String? craftsmanId,
+    Value<int?> initialAmountPiastres = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => ProjectCraftsmanAgreement(
+    id: id ?? this.id,
+    workspaceId: workspaceId ?? this.workspaceId,
+    projectId: projectId ?? this.projectId,
+    craftsmanId: craftsmanId ?? this.craftsmanId,
+    initialAmountPiastres: initialAmountPiastres.present
+        ? initialAmountPiastres.value
+        : this.initialAmountPiastres,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
   ProjectCraftsmanAgreement copyWithCompanion(
-      ProjectCraftsmanAgreementsCompanion data) {
+    ProjectCraftsmanAgreementsCompanion data,
+  ) {
     return ProjectCraftsmanAgreement(
       id: data.id.present ? data.id.value : this.id,
-      workspaceId:
-          data.workspaceId.present ? data.workspaceId.value : this.workspaceId,
+      workspaceId: data.workspaceId.present
+          ? data.workspaceId.value
+          : this.workspaceId,
       projectId: data.projectId.present ? data.projectId.value : this.projectId,
-      craftsmanId:
-          data.craftsmanId.present ? data.craftsmanId.value : this.craftsmanId,
+      craftsmanId: data.craftsmanId.present
+          ? data.craftsmanId.value
+          : this.craftsmanId,
       initialAmountPiastres: data.initialAmountPiastres.present
           ? data.initialAmountPiastres.value
           : this.initialAmountPiastres,
@@ -2701,8 +3247,15 @@ class ProjectCraftsmanAgreement extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, workspaceId, projectId, craftsmanId,
-      initialAmountPiastres, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    workspaceId,
+    projectId,
+    craftsmanId,
+    initialAmountPiastres,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2745,12 +3298,12 @@ class ProjectCraftsmanAgreementsCompanion
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        workspaceId = Value(workspaceId),
-        projectId = Value(projectId),
-        craftsmanId = Value(craftsmanId),
-        createdAt = Value(createdAt),
-        updatedAt = Value(updatedAt);
+  }) : id = Value(id),
+       workspaceId = Value(workspaceId),
+       projectId = Value(projectId),
+       craftsmanId = Value(craftsmanId),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
   static Insertable<ProjectCraftsmanAgreement> custom({
     Expression<String>? id,
     Expression<String>? workspaceId,
@@ -2774,15 +3327,16 @@ class ProjectCraftsmanAgreementsCompanion
     });
   }
 
-  ProjectCraftsmanAgreementsCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? workspaceId,
-      Value<String>? projectId,
-      Value<String>? craftsmanId,
-      Value<int?>? initialAmountPiastres,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt,
-      Value<int>? rowid}) {
+  ProjectCraftsmanAgreementsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? workspaceId,
+    Value<String>? projectId,
+    Value<String>? craftsmanId,
+    Value<int?>? initialAmountPiastres,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
     return ProjectCraftsmanAgreementsCompanion(
       id: id ?? this.id,
       workspaceId: workspaceId ?? this.workspaceId,
@@ -2812,8 +3366,9 @@ class ProjectCraftsmanAgreementsCompanion
       map['craftsman_id'] = Variable<String>(craftsmanId.value);
     }
     if (initialAmountPiastres.present) {
-      map['initial_amount_piastres'] =
-          Variable<int>(initialAmountPiastres.value);
+      map['initial_amount_piastres'] = Variable<int>(
+        initialAmountPiastres.value,
+      );
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -2852,114 +3407,186 @@ class $TransactionsTable extends Transactions
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _workspaceIdMeta =
-      const VerificationMeta('workspaceId');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _workspaceIdMeta = const VerificationMeta(
+    'workspaceId',
+  );
   @override
   late final GeneratedColumn<String> workspaceId = GeneratedColumn<String>(
-      'workspace_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _projectIdMeta =
-      const VerificationMeta('projectId');
+    'workspace_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _projectIdMeta = const VerificationMeta(
+    'projectId',
+  );
   @override
   late final GeneratedColumn<String> projectId = GeneratedColumn<String>(
-      'project_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'project_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _kindMeta = const VerificationMeta('kind');
   @override
   late final GeneratedColumn<String> kind = GeneratedColumn<String>(
-      'kind', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _amountPiastresMeta =
-      const VerificationMeta('amountPiastres');
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _amountPiastresMeta = const VerificationMeta(
+    'amountPiastres',
+  );
   @override
   late final GeneratedColumn<int> amountPiastres = GeneratedColumn<int>(
-      'amount_piastres', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'amount_piastres',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
   late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
-      'date', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _methodMeta = const VerificationMeta('method');
   @override
   late final GeneratedColumn<String> method = GeneratedColumn<String>(
-      'method', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
+    'method',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
   @override
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _receiptImagePathMeta =
-      const VerificationMeta('receiptImagePath');
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _receiptImagePathMeta = const VerificationMeta(
+    'receiptImagePath',
+  );
   @override
   late final GeneratedColumn<String> receiptImagePath = GeneratedColumn<String>(
-      'receipt_image_path', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'receipt_image_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
   @override
   late final GeneratedColumn<String> itemId = GeneratedColumn<String>(
-      'item_id', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _expenseTypeMeta =
-      const VerificationMeta('expenseType');
+    'item_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _expenseTypeMeta = const VerificationMeta(
+    'expenseType',
+  );
   @override
   late final GeneratedColumn<String> expenseType = GeneratedColumn<String>(
-      'expense_type', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _supplierIdMeta =
-      const VerificationMeta('supplierId');
+    'expense_type',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _supplierIdMeta = const VerificationMeta(
+    'supplierId',
+  );
   @override
   late final GeneratedColumn<String> supplierId = GeneratedColumn<String>(
-      'supplier_id', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _craftsmanIdMeta =
-      const VerificationMeta('craftsmanId');
+    'supplier_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _craftsmanIdMeta = const VerificationMeta(
+    'craftsmanId',
+  );
   @override
   late final GeneratedColumn<String> craftsmanId = GeneratedColumn<String>(
-      'craftsman_id', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'craftsman_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        workspaceId,
-        projectId,
-        kind,
-        amountPiastres,
-        date,
-        method,
-        description,
-        receiptImagePath,
-        itemId,
-        expenseType,
-        supplierId,
-        craftsmanId,
-        createdAt,
-        updatedAt
-      ];
+    id,
+    workspaceId,
+    projectId,
+    kind,
+    amountPiastres,
+    date,
+    method,
+    description,
+    receiptImagePath,
+    itemId,
+    expenseType,
+    supplierId,
+    craftsmanId,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'transactions';
   @override
-  VerificationContext validateIntegrity(Insertable<Transaction> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Transaction> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -2969,87 +3596,119 @@ class $TransactionsTable extends Transactions
     }
     if (data.containsKey('workspace_id')) {
       context.handle(
+        _workspaceIdMeta,
+        workspaceId.isAcceptableOrUnknown(
+          data['workspace_id']!,
           _workspaceIdMeta,
-          workspaceId.isAcceptableOrUnknown(
-              data['workspace_id']!, _workspaceIdMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_workspaceIdMeta);
     }
     if (data.containsKey('project_id')) {
-      context.handle(_projectIdMeta,
-          projectId.isAcceptableOrUnknown(data['project_id']!, _projectIdMeta));
+      context.handle(
+        _projectIdMeta,
+        projectId.isAcceptableOrUnknown(data['project_id']!, _projectIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_projectIdMeta);
     }
     if (data.containsKey('kind')) {
       context.handle(
-          _kindMeta, kind.isAcceptableOrUnknown(data['kind']!, _kindMeta));
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
     } else if (isInserting) {
       context.missing(_kindMeta);
     }
     if (data.containsKey('amount_piastres')) {
       context.handle(
+        _amountPiastresMeta,
+        amountPiastres.isAcceptableOrUnknown(
+          data['amount_piastres']!,
           _amountPiastresMeta,
-          amountPiastres.isAcceptableOrUnknown(
-              data['amount_piastres']!, _amountPiastresMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_amountPiastresMeta);
     }
     if (data.containsKey('date')) {
       context.handle(
-          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
     if (data.containsKey('method')) {
-      context.handle(_methodMeta,
-          method.isAcceptableOrUnknown(data['method']!, _methodMeta));
+      context.handle(
+        _methodMeta,
+        method.isAcceptableOrUnknown(data['method']!, _methodMeta),
+      );
     } else if (isInserting) {
       context.missing(_methodMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
           _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
+        ),
+      );
     }
     if (data.containsKey('receipt_image_path')) {
       context.handle(
+        _receiptImagePathMeta,
+        receiptImagePath.isAcceptableOrUnknown(
+          data['receipt_image_path']!,
           _receiptImagePathMeta,
-          receiptImagePath.isAcceptableOrUnknown(
-              data['receipt_image_path']!, _receiptImagePathMeta));
+        ),
+      );
     }
     if (data.containsKey('item_id')) {
-      context.handle(_itemIdMeta,
-          itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta));
+      context.handle(
+        _itemIdMeta,
+        itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta),
+      );
     }
     if (data.containsKey('expense_type')) {
       context.handle(
+        _expenseTypeMeta,
+        expenseType.isAcceptableOrUnknown(
+          data['expense_type']!,
           _expenseTypeMeta,
-          expenseType.isAcceptableOrUnknown(
-              data['expense_type']!, _expenseTypeMeta));
+        ),
+      );
     }
     if (data.containsKey('supplier_id')) {
       context.handle(
-          _supplierIdMeta,
-          supplierId.isAcceptableOrUnknown(
-              data['supplier_id']!, _supplierIdMeta));
+        _supplierIdMeta,
+        supplierId.isAcceptableOrUnknown(data['supplier_id']!, _supplierIdMeta),
+      );
     }
     if (data.containsKey('craftsman_id')) {
       context.handle(
+        _craftsmanIdMeta,
+        craftsmanId.isAcceptableOrUnknown(
+          data['craftsman_id']!,
           _craftsmanIdMeta,
-          craftsmanId.isAcceptableOrUnknown(
-              data['craftsman_id']!, _craftsmanIdMeta));
+        ),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -3062,36 +3721,66 @@ class $TransactionsTable extends Transactions
   Transaction map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Transaction(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      workspaceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}workspace_id'])!,
-      projectId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}project_id'])!,
-      kind: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}kind'])!,
-      amountPiastres: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}amount_piastres'])!,
-      date: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
-      method: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}method'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description']),
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      workspaceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}workspace_id'],
+      )!,
+      projectId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}project_id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      amountPiastres: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}amount_piastres'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+      method: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}method'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
       receiptImagePath: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}receipt_image_path']),
-      itemId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}item_id']),
-      expenseType: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}expense_type']),
-      supplierId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}supplier_id']),
-      craftsmanId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}craftsman_id']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}receipt_image_path'],
+      ),
+      itemId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}item_id'],
+      ),
+      expenseType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}expense_type'],
+      ),
+      supplierId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}supplier_id'],
+      ),
+      craftsmanId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}craftsman_id'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
     );
   }
 
@@ -3117,22 +3806,23 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final String? craftsmanId;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const Transaction(
-      {required this.id,
-      required this.workspaceId,
-      required this.projectId,
-      required this.kind,
-      required this.amountPiastres,
-      required this.date,
-      required this.method,
-      this.description,
-      this.receiptImagePath,
-      this.itemId,
-      this.expenseType,
-      this.supplierId,
-      this.craftsmanId,
-      required this.createdAt,
-      required this.updatedAt});
+  const Transaction({
+    required this.id,
+    required this.workspaceId,
+    required this.projectId,
+    required this.kind,
+    required this.amountPiastres,
+    required this.date,
+    required this.method,
+    this.description,
+    this.receiptImagePath,
+    this.itemId,
+    this.expenseType,
+    this.supplierId,
+    this.craftsmanId,
+    required this.createdAt,
+    required this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3181,8 +3871,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       receiptImagePath: receiptImagePath == null && nullToAbsent
           ? const Value.absent()
           : Value(receiptImagePath),
-      itemId:
-          itemId == null && nullToAbsent ? const Value.absent() : Value(itemId),
+      itemId: itemId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(itemId),
       expenseType: expenseType == null && nullToAbsent
           ? const Value.absent()
           : Value(expenseType),
@@ -3197,8 +3888,10 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     );
   }
 
-  factory Transaction.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Transaction.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Transaction(
       id: serializer.fromJson<String>(json['id']),
@@ -3240,46 +3933,47 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     };
   }
 
-  Transaction copyWith(
-          {String? id,
-          String? workspaceId,
-          String? projectId,
-          String? kind,
-          int? amountPiastres,
-          DateTime? date,
-          String? method,
-          Value<String?> description = const Value.absent(),
-          Value<String?> receiptImagePath = const Value.absent(),
-          Value<String?> itemId = const Value.absent(),
-          Value<String?> expenseType = const Value.absent(),
-          Value<String?> supplierId = const Value.absent(),
-          Value<String?> craftsmanId = const Value.absent(),
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      Transaction(
-        id: id ?? this.id,
-        workspaceId: workspaceId ?? this.workspaceId,
-        projectId: projectId ?? this.projectId,
-        kind: kind ?? this.kind,
-        amountPiastres: amountPiastres ?? this.amountPiastres,
-        date: date ?? this.date,
-        method: method ?? this.method,
-        description: description.present ? description.value : this.description,
-        receiptImagePath: receiptImagePath.present
-            ? receiptImagePath.value
-            : this.receiptImagePath,
-        itemId: itemId.present ? itemId.value : this.itemId,
-        expenseType: expenseType.present ? expenseType.value : this.expenseType,
-        supplierId: supplierId.present ? supplierId.value : this.supplierId,
-        craftsmanId: craftsmanId.present ? craftsmanId.value : this.craftsmanId,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  Transaction copyWith({
+    String? id,
+    String? workspaceId,
+    String? projectId,
+    String? kind,
+    int? amountPiastres,
+    DateTime? date,
+    String? method,
+    Value<String?> description = const Value.absent(),
+    Value<String?> receiptImagePath = const Value.absent(),
+    Value<String?> itemId = const Value.absent(),
+    Value<String?> expenseType = const Value.absent(),
+    Value<String?> supplierId = const Value.absent(),
+    Value<String?> craftsmanId = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => Transaction(
+    id: id ?? this.id,
+    workspaceId: workspaceId ?? this.workspaceId,
+    projectId: projectId ?? this.projectId,
+    kind: kind ?? this.kind,
+    amountPiastres: amountPiastres ?? this.amountPiastres,
+    date: date ?? this.date,
+    method: method ?? this.method,
+    description: description.present ? description.value : this.description,
+    receiptImagePath: receiptImagePath.present
+        ? receiptImagePath.value
+        : this.receiptImagePath,
+    itemId: itemId.present ? itemId.value : this.itemId,
+    expenseType: expenseType.present ? expenseType.value : this.expenseType,
+    supplierId: supplierId.present ? supplierId.value : this.supplierId,
+    craftsmanId: craftsmanId.present ? craftsmanId.value : this.craftsmanId,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
   Transaction copyWithCompanion(TransactionsCompanion data) {
     return Transaction(
       id: data.id.present ? data.id.value : this.id,
-      workspaceId:
-          data.workspaceId.present ? data.workspaceId.value : this.workspaceId,
+      workspaceId: data.workspaceId.present
+          ? data.workspaceId.value
+          : this.workspaceId,
       projectId: data.projectId.present ? data.projectId.value : this.projectId,
       kind: data.kind.present ? data.kind.value : this.kind,
       amountPiastres: data.amountPiastres.present
@@ -3287,18 +3981,22 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           : this.amountPiastres,
       date: data.date.present ? data.date.value : this.date,
       method: data.method.present ? data.method.value : this.method,
-      description:
-          data.description.present ? data.description.value : this.description,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
       receiptImagePath: data.receiptImagePath.present
           ? data.receiptImagePath.value
           : this.receiptImagePath,
       itemId: data.itemId.present ? data.itemId.value : this.itemId,
-      expenseType:
-          data.expenseType.present ? data.expenseType.value : this.expenseType,
-      supplierId:
-          data.supplierId.present ? data.supplierId.value : this.supplierId,
-      craftsmanId:
-          data.craftsmanId.present ? data.craftsmanId.value : this.craftsmanId,
+      expenseType: data.expenseType.present
+          ? data.expenseType.value
+          : this.expenseType,
+      supplierId: data.supplierId.present
+          ? data.supplierId.value
+          : this.supplierId,
+      craftsmanId: data.craftsmanId.present
+          ? data.craftsmanId.value
+          : this.craftsmanId,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -3328,21 +4026,22 @@ class Transaction extends DataClass implements Insertable<Transaction> {
 
   @override
   int get hashCode => Object.hash(
-      id,
-      workspaceId,
-      projectId,
-      kind,
-      amountPiastres,
-      date,
-      method,
-      description,
-      receiptImagePath,
-      itemId,
-      expenseType,
-      supplierId,
-      craftsmanId,
-      createdAt,
-      updatedAt);
+    id,
+    workspaceId,
+    projectId,
+    kind,
+    amountPiastres,
+    date,
+    method,
+    description,
+    receiptImagePath,
+    itemId,
+    expenseType,
+    supplierId,
+    craftsmanId,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3416,15 +4115,15 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        workspaceId = Value(workspaceId),
-        projectId = Value(projectId),
-        kind = Value(kind),
-        amountPiastres = Value(amountPiastres),
-        date = Value(date),
-        method = Value(method),
-        createdAt = Value(createdAt),
-        updatedAt = Value(updatedAt);
+  }) : id = Value(id),
+       workspaceId = Value(workspaceId),
+       projectId = Value(projectId),
+       kind = Value(kind),
+       amountPiastres = Value(amountPiastres),
+       date = Value(date),
+       method = Value(method),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
   static Insertable<Transaction> custom({
     Expression<String>? id,
     Expression<String>? workspaceId,
@@ -3463,23 +4162,24 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     });
   }
 
-  TransactionsCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? workspaceId,
-      Value<String>? projectId,
-      Value<String>? kind,
-      Value<int>? amountPiastres,
-      Value<DateTime>? date,
-      Value<String>? method,
-      Value<String?>? description,
-      Value<String?>? receiptImagePath,
-      Value<String?>? itemId,
-      Value<String?>? expenseType,
-      Value<String?>? supplierId,
-      Value<String?>? craftsmanId,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt,
-      Value<int>? rowid}) {
+  TransactionsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? workspaceId,
+    Value<String>? projectId,
+    Value<String>? kind,
+    Value<int>? amountPiastres,
+    Value<DateTime>? date,
+    Value<String>? method,
+    Value<String?>? description,
+    Value<String?>? receiptImagePath,
+    Value<String?>? itemId,
+    Value<String?>? expenseType,
+    Value<String?>? supplierId,
+    Value<String?>? craftsmanId,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
     return TransactionsCompanion(
       id: id ?? this.id,
       workspaceId: workspaceId ?? this.workspaceId,
@@ -3595,29 +4295,31 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-        workspaces,
-        clients,
-        projects,
-        items,
-        suppliers,
-        craftsmen,
-        projectCraftsmanAgreements,
-        transactions
-      ];
+    workspaces,
+    clients,
+    projects,
+    items,
+    suppliers,
+    craftsmen,
+    projectCraftsmanAgreements,
+    transactions,
+  ];
 }
 
-typedef $$WorkspacesTableCreateCompanionBuilder = WorkspacesCompanion Function({
-  required String id,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<int> rowid,
-});
-typedef $$WorkspacesTableUpdateCompanionBuilder = WorkspacesCompanion Function({
-  Value<String> id,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<int> rowid,
-});
+typedef $$WorkspacesTableCreateCompanionBuilder =
+    WorkspacesCompanion Function({
+      required String id,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$WorkspacesTableUpdateCompanionBuilder =
+    WorkspacesCompanion Function({
+      Value<String> id,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
 
 class $$WorkspacesTableFilterComposer
     extends Composer<_$AppDatabase, $WorkspacesTable> {
@@ -3629,13 +4331,19 @@ class $$WorkspacesTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$WorkspacesTableOrderingComposer
@@ -3648,13 +4356,19 @@ class $$WorkspacesTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$WorkspacesTableAnnotationComposer
@@ -3676,20 +4390,27 @@ class $$WorkspacesTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$WorkspacesTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $WorkspacesTable,
-    Workspace,
-    $$WorkspacesTableFilterComposer,
-    $$WorkspacesTableOrderingComposer,
-    $$WorkspacesTableAnnotationComposer,
-    $$WorkspacesTableCreateCompanionBuilder,
-    $$WorkspacesTableUpdateCompanionBuilder,
-    (Workspace, BaseReferences<_$AppDatabase, $WorkspacesTable, Workspace>),
-    Workspace,
-    PrefetchHooks Function()> {
+class $$WorkspacesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $WorkspacesTable,
+          Workspace,
+          $$WorkspacesTableFilterComposer,
+          $$WorkspacesTableOrderingComposer,
+          $$WorkspacesTableAnnotationComposer,
+          $$WorkspacesTableCreateCompanionBuilder,
+          $$WorkspacesTableUpdateCompanionBuilder,
+          (
+            Workspace,
+            BaseReferences<_$AppDatabase, $WorkspacesTable, Workspace>,
+          ),
+          Workspace,
+          PrefetchHooks Function()
+        > {
   $$WorkspacesTableTableManager(_$AppDatabase db, $WorkspacesTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -3698,69 +4419,74 @@ class $$WorkspacesTableTableManager extends RootTableManager<
               $$WorkspacesTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$WorkspacesTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              WorkspacesCompanion(
-            id: id,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required DateTime createdAt,
-            required DateTime updatedAt,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              WorkspacesCompanion.insert(
-            id: id,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WorkspacesCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => WorkspacesCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$WorkspacesTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $WorkspacesTable,
-    Workspace,
-    $$WorkspacesTableFilterComposer,
-    $$WorkspacesTableOrderingComposer,
-    $$WorkspacesTableAnnotationComposer,
-    $$WorkspacesTableCreateCompanionBuilder,
-    $$WorkspacesTableUpdateCompanionBuilder,
-    (Workspace, BaseReferences<_$AppDatabase, $WorkspacesTable, Workspace>),
-    Workspace,
-    PrefetchHooks Function()>;
-typedef $$ClientsTableCreateCompanionBuilder = ClientsCompanion Function({
-  required String id,
-  required String workspaceId,
-  required String name,
-  Value<String?> phone,
-  Value<DateTime?> archivedAt,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<int> rowid,
-});
-typedef $$ClientsTableUpdateCompanionBuilder = ClientsCompanion Function({
-  Value<String> id,
-  Value<String> workspaceId,
-  Value<String> name,
-  Value<String?> phone,
-  Value<DateTime?> archivedAt,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<int> rowid,
-});
+typedef $$WorkspacesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $WorkspacesTable,
+      Workspace,
+      $$WorkspacesTableFilterComposer,
+      $$WorkspacesTableOrderingComposer,
+      $$WorkspacesTableAnnotationComposer,
+      $$WorkspacesTableCreateCompanionBuilder,
+      $$WorkspacesTableUpdateCompanionBuilder,
+      (Workspace, BaseReferences<_$AppDatabase, $WorkspacesTable, Workspace>),
+      Workspace,
+      PrefetchHooks Function()
+    >;
+typedef $$ClientsTableCreateCompanionBuilder =
+    ClientsCompanion Function({
+      required String id,
+      required String workspaceId,
+      required String name,
+      Value<String?> phone,
+      Value<DateTime?> archivedAt,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$ClientsTableUpdateCompanionBuilder =
+    ClientsCompanion Function({
+      Value<String> id,
+      Value<String> workspaceId,
+      Value<String> name,
+      Value<String?> phone,
+      Value<DateTime?> archivedAt,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
 
 class $$ClientsTableFilterComposer
     extends Composer<_$AppDatabase, $ClientsTable> {
@@ -3772,25 +4498,39 @@ class $$ClientsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnFilters(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get phone => $composableBuilder(
-      column: $table.phone, builder: (column) => ColumnFilters(column));
+    column: $table.phone,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => ColumnFilters(column));
+    column: $table.archivedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$ClientsTableOrderingComposer
@@ -3803,25 +4543,39 @@ class $$ClientsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnOrderings(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get phone => $composableBuilder(
-      column: $table.phone, builder: (column) => ColumnOrderings(column));
+    column: $table.phone,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.archivedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ClientsTableAnnotationComposer
@@ -3837,7 +4591,9 @@ class $$ClientsTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => column);
+    column: $table.workspaceId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
@@ -3846,7 +4602,9 @@ class $$ClientsTableAnnotationComposer
       $composableBuilder(column: $table.phone, builder: (column) => column);
 
   GeneratedColumn<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => column);
+    column: $table.archivedAt,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -3855,20 +4613,24 @@ class $$ClientsTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$ClientsTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ClientsTable,
-    Client,
-    $$ClientsTableFilterComposer,
-    $$ClientsTableOrderingComposer,
-    $$ClientsTableAnnotationComposer,
-    $$ClientsTableCreateCompanionBuilder,
-    $$ClientsTableUpdateCompanionBuilder,
-    (Client, BaseReferences<_$AppDatabase, $ClientsTable, Client>),
-    Client,
-    PrefetchHooks Function()> {
+class $$ClientsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ClientsTable,
+          Client,
+          $$ClientsTableFilterComposer,
+          $$ClientsTableOrderingComposer,
+          $$ClientsTableAnnotationComposer,
+          $$ClientsTableCreateCompanionBuilder,
+          $$ClientsTableUpdateCompanionBuilder,
+          (Client, BaseReferences<_$AppDatabase, $ClientsTable, Client>),
+          Client,
+          PrefetchHooks Function()
+        > {
   $$ClientsTableTableManager(_$AppDatabase db, $ClientsTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -3877,89 +4639,94 @@ class $$ClientsTableTableManager extends RootTableManager<
               $$ClientsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$ClientsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> workspaceId = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<String?> phone = const Value.absent(),
-            Value<DateTime?> archivedAt = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ClientsCompanion(
-            id: id,
-            workspaceId: workspaceId,
-            name: name,
-            phone: phone,
-            archivedAt: archivedAt,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String workspaceId,
-            required String name,
-            Value<String?> phone = const Value.absent(),
-            Value<DateTime?> archivedAt = const Value.absent(),
-            required DateTime createdAt,
-            required DateTime updatedAt,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ClientsCompanion.insert(
-            id: id,
-            workspaceId: workspaceId,
-            name: name,
-            phone: phone,
-            archivedAt: archivedAt,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> workspaceId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> phone = const Value.absent(),
+                Value<DateTime?> archivedAt = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ClientsCompanion(
+                id: id,
+                workspaceId: workspaceId,
+                name: name,
+                phone: phone,
+                archivedAt: archivedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String workspaceId,
+                required String name,
+                Value<String?> phone = const Value.absent(),
+                Value<DateTime?> archivedAt = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ClientsCompanion.insert(
+                id: id,
+                workspaceId: workspaceId,
+                name: name,
+                phone: phone,
+                archivedAt: archivedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$ClientsTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $ClientsTable,
-    Client,
-    $$ClientsTableFilterComposer,
-    $$ClientsTableOrderingComposer,
-    $$ClientsTableAnnotationComposer,
-    $$ClientsTableCreateCompanionBuilder,
-    $$ClientsTableUpdateCompanionBuilder,
-    (Client, BaseReferences<_$AppDatabase, $ClientsTable, Client>),
-    Client,
-    PrefetchHooks Function()>;
-typedef $$ProjectsTableCreateCompanionBuilder = ProjectsCompanion Function({
-  required String id,
-  required String workspaceId,
-  required String clientId,
-  required String name,
-  Value<String?> unitAddress,
-  required String status,
-  Value<int?> engineerBasisPoints,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<int> rowid,
-});
-typedef $$ProjectsTableUpdateCompanionBuilder = ProjectsCompanion Function({
-  Value<String> id,
-  Value<String> workspaceId,
-  Value<String> clientId,
-  Value<String> name,
-  Value<String?> unitAddress,
-  Value<String> status,
-  Value<int?> engineerBasisPoints,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<int> rowid,
-});
+typedef $$ClientsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ClientsTable,
+      Client,
+      $$ClientsTableFilterComposer,
+      $$ClientsTableOrderingComposer,
+      $$ClientsTableAnnotationComposer,
+      $$ClientsTableCreateCompanionBuilder,
+      $$ClientsTableUpdateCompanionBuilder,
+      (Client, BaseReferences<_$AppDatabase, $ClientsTable, Client>),
+      Client,
+      PrefetchHooks Function()
+    >;
+typedef $$ProjectsTableCreateCompanionBuilder =
+    ProjectsCompanion Function({
+      required String id,
+      required String workspaceId,
+      required String clientId,
+      required String name,
+      Value<String?> unitAddress,
+      required String status,
+      Value<int?> engineerBasisPoints,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$ProjectsTableUpdateCompanionBuilder =
+    ProjectsCompanion Function({
+      Value<String> id,
+      Value<String> workspaceId,
+      Value<String> clientId,
+      Value<String> name,
+      Value<String?> unitAddress,
+      Value<String> status,
+      Value<int?> engineerBasisPoints,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
 
 class $$ProjectsTableFilterComposer
     extends Composer<_$AppDatabase, $ProjectsTable> {
@@ -3971,32 +4738,49 @@ class $$ProjectsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnFilters(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get clientId => $composableBuilder(
-      column: $table.clientId, builder: (column) => ColumnFilters(column));
+    column: $table.clientId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get unitAddress => $composableBuilder(
-      column: $table.unitAddress, builder: (column) => ColumnFilters(column));
+    column: $table.unitAddress,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get status => $composableBuilder(
-      column: $table.status, builder: (column) => ColumnFilters(column));
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get engineerBasisPoints => $composableBuilder(
-      column: $table.engineerBasisPoints,
-      builder: (column) => ColumnFilters(column));
+    column: $table.engineerBasisPoints,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$ProjectsTableOrderingComposer
@@ -4009,32 +4793,49 @@ class $$ProjectsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnOrderings(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get clientId => $composableBuilder(
-      column: $table.clientId, builder: (column) => ColumnOrderings(column));
+    column: $table.clientId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get unitAddress => $composableBuilder(
-      column: $table.unitAddress, builder: (column) => ColumnOrderings(column));
+    column: $table.unitAddress,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get status => $composableBuilder(
-      column: $table.status, builder: (column) => ColumnOrderings(column));
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get engineerBasisPoints => $composableBuilder(
-      column: $table.engineerBasisPoints,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.engineerBasisPoints,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ProjectsTableAnnotationComposer
@@ -4050,7 +4851,9 @@ class $$ProjectsTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => column);
+    column: $table.workspaceId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get clientId =>
       $composableBuilder(column: $table.clientId, builder: (column) => column);
@@ -4059,13 +4862,17 @@ class $$ProjectsTableAnnotationComposer
       $composableBuilder(column: $table.name, builder: (column) => column);
 
   GeneratedColumn<String> get unitAddress => $composableBuilder(
-      column: $table.unitAddress, builder: (column) => column);
+    column: $table.unitAddress,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get status =>
       $composableBuilder(column: $table.status, builder: (column) => column);
 
   GeneratedColumn<int> get engineerBasisPoints => $composableBuilder(
-      column: $table.engineerBasisPoints, builder: (column) => column);
+    column: $table.engineerBasisPoints,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -4074,20 +4881,24 @@ class $$ProjectsTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$ProjectsTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ProjectsTable,
-    Project,
-    $$ProjectsTableFilterComposer,
-    $$ProjectsTableOrderingComposer,
-    $$ProjectsTableAnnotationComposer,
-    $$ProjectsTableCreateCompanionBuilder,
-    $$ProjectsTableUpdateCompanionBuilder,
-    (Project, BaseReferences<_$AppDatabase, $ProjectsTable, Project>),
-    Project,
-    PrefetchHooks Function()> {
+class $$ProjectsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ProjectsTable,
+          Project,
+          $$ProjectsTableFilterComposer,
+          $$ProjectsTableOrderingComposer,
+          $$ProjectsTableAnnotationComposer,
+          $$ProjectsTableCreateCompanionBuilder,
+          $$ProjectsTableUpdateCompanionBuilder,
+          (Project, BaseReferences<_$AppDatabase, $ProjectsTable, Project>),
+          Project,
+          PrefetchHooks Function()
+        > {
   $$ProjectsTableTableManager(_$AppDatabase db, $ProjectsTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -4096,95 +4907,100 @@ class $$ProjectsTableTableManager extends RootTableManager<
               $$ProjectsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$ProjectsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> workspaceId = const Value.absent(),
-            Value<String> clientId = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<String?> unitAddress = const Value.absent(),
-            Value<String> status = const Value.absent(),
-            Value<int?> engineerBasisPoints = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ProjectsCompanion(
-            id: id,
-            workspaceId: workspaceId,
-            clientId: clientId,
-            name: name,
-            unitAddress: unitAddress,
-            status: status,
-            engineerBasisPoints: engineerBasisPoints,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String workspaceId,
-            required String clientId,
-            required String name,
-            Value<String?> unitAddress = const Value.absent(),
-            required String status,
-            Value<int?> engineerBasisPoints = const Value.absent(),
-            required DateTime createdAt,
-            required DateTime updatedAt,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ProjectsCompanion.insert(
-            id: id,
-            workspaceId: workspaceId,
-            clientId: clientId,
-            name: name,
-            unitAddress: unitAddress,
-            status: status,
-            engineerBasisPoints: engineerBasisPoints,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> workspaceId = const Value.absent(),
+                Value<String> clientId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> unitAddress = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<int?> engineerBasisPoints = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ProjectsCompanion(
+                id: id,
+                workspaceId: workspaceId,
+                clientId: clientId,
+                name: name,
+                unitAddress: unitAddress,
+                status: status,
+                engineerBasisPoints: engineerBasisPoints,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String workspaceId,
+                required String clientId,
+                required String name,
+                Value<String?> unitAddress = const Value.absent(),
+                required String status,
+                Value<int?> engineerBasisPoints = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ProjectsCompanion.insert(
+                id: id,
+                workspaceId: workspaceId,
+                clientId: clientId,
+                name: name,
+                unitAddress: unitAddress,
+                status: status,
+                engineerBasisPoints: engineerBasisPoints,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$ProjectsTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $ProjectsTable,
-    Project,
-    $$ProjectsTableFilterComposer,
-    $$ProjectsTableOrderingComposer,
-    $$ProjectsTableAnnotationComposer,
-    $$ProjectsTableCreateCompanionBuilder,
-    $$ProjectsTableUpdateCompanionBuilder,
-    (Project, BaseReferences<_$AppDatabase, $ProjectsTable, Project>),
-    Project,
-    PrefetchHooks Function()>;
-typedef $$ItemsTableCreateCompanionBuilder = ItemsCompanion Function({
-  required String id,
-  required String workspaceId,
-  required String name,
-  required String colorKey,
-  required String iconName,
-  Value<DateTime?> archivedAt,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<int> rowid,
-});
-typedef $$ItemsTableUpdateCompanionBuilder = ItemsCompanion Function({
-  Value<String> id,
-  Value<String> workspaceId,
-  Value<String> name,
-  Value<String> colorKey,
-  Value<String> iconName,
-  Value<DateTime?> archivedAt,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<int> rowid,
-});
+typedef $$ProjectsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ProjectsTable,
+      Project,
+      $$ProjectsTableFilterComposer,
+      $$ProjectsTableOrderingComposer,
+      $$ProjectsTableAnnotationComposer,
+      $$ProjectsTableCreateCompanionBuilder,
+      $$ProjectsTableUpdateCompanionBuilder,
+      (Project, BaseReferences<_$AppDatabase, $ProjectsTable, Project>),
+      Project,
+      PrefetchHooks Function()
+    >;
+typedef $$ItemsTableCreateCompanionBuilder =
+    ItemsCompanion Function({
+      required String id,
+      required String workspaceId,
+      required String name,
+      required String colorKey,
+      required String iconName,
+      Value<DateTime?> archivedAt,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$ItemsTableUpdateCompanionBuilder =
+    ItemsCompanion Function({
+      Value<String> id,
+      Value<String> workspaceId,
+      Value<String> name,
+      Value<String> colorKey,
+      Value<String> iconName,
+      Value<DateTime?> archivedAt,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
 
 class $$ItemsTableFilterComposer extends Composer<_$AppDatabase, $ItemsTable> {
   $$ItemsTableFilterComposer({
@@ -4195,28 +5011,44 @@ class $$ItemsTableFilterComposer extends Composer<_$AppDatabase, $ItemsTable> {
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnFilters(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get colorKey => $composableBuilder(
-      column: $table.colorKey, builder: (column) => ColumnFilters(column));
+    column: $table.colorKey,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get iconName => $composableBuilder(
-      column: $table.iconName, builder: (column) => ColumnFilters(column));
+    column: $table.iconName,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => ColumnFilters(column));
+    column: $table.archivedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$ItemsTableOrderingComposer
@@ -4229,28 +5061,44 @@ class $$ItemsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnOrderings(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get colorKey => $composableBuilder(
-      column: $table.colorKey, builder: (column) => ColumnOrderings(column));
+    column: $table.colorKey,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get iconName => $composableBuilder(
-      column: $table.iconName, builder: (column) => ColumnOrderings(column));
+    column: $table.iconName,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.archivedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ItemsTableAnnotationComposer
@@ -4266,7 +5114,9 @@ class $$ItemsTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => column);
+    column: $table.workspaceId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
@@ -4278,7 +5128,9 @@ class $$ItemsTableAnnotationComposer
       $composableBuilder(column: $table.iconName, builder: (column) => column);
 
   GeneratedColumn<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => column);
+    column: $table.archivedAt,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -4287,20 +5139,24 @@ class $$ItemsTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$ItemsTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ItemsTable,
-    Item,
-    $$ItemsTableFilterComposer,
-    $$ItemsTableOrderingComposer,
-    $$ItemsTableAnnotationComposer,
-    $$ItemsTableCreateCompanionBuilder,
-    $$ItemsTableUpdateCompanionBuilder,
-    (Item, BaseReferences<_$AppDatabase, $ItemsTable, Item>),
-    Item,
-    PrefetchHooks Function()> {
+class $$ItemsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ItemsTable,
+          Item,
+          $$ItemsTableFilterComposer,
+          $$ItemsTableOrderingComposer,
+          $$ItemsTableAnnotationComposer,
+          $$ItemsTableCreateCompanionBuilder,
+          $$ItemsTableUpdateCompanionBuilder,
+          (Item, BaseReferences<_$AppDatabase, $ItemsTable, Item>),
+          Item,
+          PrefetchHooks Function()
+        > {
   $$ItemsTableTableManager(_$AppDatabase db, $ItemsTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -4309,91 +5165,96 @@ class $$ItemsTableTableManager extends RootTableManager<
               $$ItemsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$ItemsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> workspaceId = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<String> colorKey = const Value.absent(),
-            Value<String> iconName = const Value.absent(),
-            Value<DateTime?> archivedAt = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ItemsCompanion(
-            id: id,
-            workspaceId: workspaceId,
-            name: name,
-            colorKey: colorKey,
-            iconName: iconName,
-            archivedAt: archivedAt,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String workspaceId,
-            required String name,
-            required String colorKey,
-            required String iconName,
-            Value<DateTime?> archivedAt = const Value.absent(),
-            required DateTime createdAt,
-            required DateTime updatedAt,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ItemsCompanion.insert(
-            id: id,
-            workspaceId: workspaceId,
-            name: name,
-            colorKey: colorKey,
-            iconName: iconName,
-            archivedAt: archivedAt,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> workspaceId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> colorKey = const Value.absent(),
+                Value<String> iconName = const Value.absent(),
+                Value<DateTime?> archivedAt = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ItemsCompanion(
+                id: id,
+                workspaceId: workspaceId,
+                name: name,
+                colorKey: colorKey,
+                iconName: iconName,
+                archivedAt: archivedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String workspaceId,
+                required String name,
+                required String colorKey,
+                required String iconName,
+                Value<DateTime?> archivedAt = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ItemsCompanion.insert(
+                id: id,
+                workspaceId: workspaceId,
+                name: name,
+                colorKey: colorKey,
+                iconName: iconName,
+                archivedAt: archivedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$ItemsTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $ItemsTable,
-    Item,
-    $$ItemsTableFilterComposer,
-    $$ItemsTableOrderingComposer,
-    $$ItemsTableAnnotationComposer,
-    $$ItemsTableCreateCompanionBuilder,
-    $$ItemsTableUpdateCompanionBuilder,
-    (Item, BaseReferences<_$AppDatabase, $ItemsTable, Item>),
-    Item,
-    PrefetchHooks Function()>;
-typedef $$SuppliersTableCreateCompanionBuilder = SuppliersCompanion Function({
-  required String id,
-  required String workspaceId,
-  required String name,
-  Value<String?> phone,
-  Value<String?> notes,
-  Value<DateTime?> archivedAt,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<int> rowid,
-});
-typedef $$SuppliersTableUpdateCompanionBuilder = SuppliersCompanion Function({
-  Value<String> id,
-  Value<String> workspaceId,
-  Value<String> name,
-  Value<String?> phone,
-  Value<String?> notes,
-  Value<DateTime?> archivedAt,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<int> rowid,
-});
+typedef $$ItemsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ItemsTable,
+      Item,
+      $$ItemsTableFilterComposer,
+      $$ItemsTableOrderingComposer,
+      $$ItemsTableAnnotationComposer,
+      $$ItemsTableCreateCompanionBuilder,
+      $$ItemsTableUpdateCompanionBuilder,
+      (Item, BaseReferences<_$AppDatabase, $ItemsTable, Item>),
+      Item,
+      PrefetchHooks Function()
+    >;
+typedef $$SuppliersTableCreateCompanionBuilder =
+    SuppliersCompanion Function({
+      required String id,
+      required String workspaceId,
+      required String name,
+      Value<String?> phone,
+      Value<String?> notes,
+      Value<DateTime?> archivedAt,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$SuppliersTableUpdateCompanionBuilder =
+    SuppliersCompanion Function({
+      Value<String> id,
+      Value<String> workspaceId,
+      Value<String> name,
+      Value<String?> phone,
+      Value<String?> notes,
+      Value<DateTime?> archivedAt,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
 
 class $$SuppliersTableFilterComposer
     extends Composer<_$AppDatabase, $SuppliersTable> {
@@ -4405,28 +5266,44 @@ class $$SuppliersTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnFilters(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get phone => $composableBuilder(
-      column: $table.phone, builder: (column) => ColumnFilters(column));
+    column: $table.phone,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnFilters(column));
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => ColumnFilters(column));
+    column: $table.archivedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$SuppliersTableOrderingComposer
@@ -4439,28 +5316,44 @@ class $$SuppliersTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnOrderings(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get phone => $composableBuilder(
-      column: $table.phone, builder: (column) => ColumnOrderings(column));
+    column: $table.phone,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnOrderings(column));
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.archivedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SuppliersTableAnnotationComposer
@@ -4476,7 +5369,9 @@ class $$SuppliersTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => column);
+    column: $table.workspaceId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
@@ -4488,7 +5383,9 @@ class $$SuppliersTableAnnotationComposer
       $composableBuilder(column: $table.notes, builder: (column) => column);
 
   GeneratedColumn<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => column);
+    column: $table.archivedAt,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -4497,20 +5394,24 @@ class $$SuppliersTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$SuppliersTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $SuppliersTable,
-    Supplier,
-    $$SuppliersTableFilterComposer,
-    $$SuppliersTableOrderingComposer,
-    $$SuppliersTableAnnotationComposer,
-    $$SuppliersTableCreateCompanionBuilder,
-    $$SuppliersTableUpdateCompanionBuilder,
-    (Supplier, BaseReferences<_$AppDatabase, $SuppliersTable, Supplier>),
-    Supplier,
-    PrefetchHooks Function()> {
+class $$SuppliersTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SuppliersTable,
+          Supplier,
+          $$SuppliersTableFilterComposer,
+          $$SuppliersTableOrderingComposer,
+          $$SuppliersTableAnnotationComposer,
+          $$SuppliersTableCreateCompanionBuilder,
+          $$SuppliersTableUpdateCompanionBuilder,
+          (Supplier, BaseReferences<_$AppDatabase, $SuppliersTable, Supplier>),
+          Supplier,
+          PrefetchHooks Function()
+        > {
   $$SuppliersTableTableManager(_$AppDatabase db, $SuppliersTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -4519,93 +5420,98 @@ class $$SuppliersTableTableManager extends RootTableManager<
               $$SuppliersTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$SuppliersTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> workspaceId = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<String?> phone = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
-            Value<DateTime?> archivedAt = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              SuppliersCompanion(
-            id: id,
-            workspaceId: workspaceId,
-            name: name,
-            phone: phone,
-            notes: notes,
-            archivedAt: archivedAt,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String workspaceId,
-            required String name,
-            Value<String?> phone = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
-            Value<DateTime?> archivedAt = const Value.absent(),
-            required DateTime createdAt,
-            required DateTime updatedAt,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              SuppliersCompanion.insert(
-            id: id,
-            workspaceId: workspaceId,
-            name: name,
-            phone: phone,
-            notes: notes,
-            archivedAt: archivedAt,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> workspaceId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> phone = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<DateTime?> archivedAt = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SuppliersCompanion(
+                id: id,
+                workspaceId: workspaceId,
+                name: name,
+                phone: phone,
+                notes: notes,
+                archivedAt: archivedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String workspaceId,
+                required String name,
+                Value<String?> phone = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<DateTime?> archivedAt = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => SuppliersCompanion.insert(
+                id: id,
+                workspaceId: workspaceId,
+                name: name,
+                phone: phone,
+                notes: notes,
+                archivedAt: archivedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$SuppliersTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $SuppliersTable,
-    Supplier,
-    $$SuppliersTableFilterComposer,
-    $$SuppliersTableOrderingComposer,
-    $$SuppliersTableAnnotationComposer,
-    $$SuppliersTableCreateCompanionBuilder,
-    $$SuppliersTableUpdateCompanionBuilder,
-    (Supplier, BaseReferences<_$AppDatabase, $SuppliersTable, Supplier>),
-    Supplier,
-    PrefetchHooks Function()>;
-typedef $$CraftsmenTableCreateCompanionBuilder = CraftsmenCompanion Function({
-  required String id,
-  required String workspaceId,
-  required String name,
-  required String phone,
-  Value<String?> trade,
-  Value<String?> notes,
-  Value<DateTime?> archivedAt,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<int> rowid,
-});
-typedef $$CraftsmenTableUpdateCompanionBuilder = CraftsmenCompanion Function({
-  Value<String> id,
-  Value<String> workspaceId,
-  Value<String> name,
-  Value<String> phone,
-  Value<String?> trade,
-  Value<String?> notes,
-  Value<DateTime?> archivedAt,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<int> rowid,
-});
+typedef $$SuppliersTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SuppliersTable,
+      Supplier,
+      $$SuppliersTableFilterComposer,
+      $$SuppliersTableOrderingComposer,
+      $$SuppliersTableAnnotationComposer,
+      $$SuppliersTableCreateCompanionBuilder,
+      $$SuppliersTableUpdateCompanionBuilder,
+      (Supplier, BaseReferences<_$AppDatabase, $SuppliersTable, Supplier>),
+      Supplier,
+      PrefetchHooks Function()
+    >;
+typedef $$CraftsmenTableCreateCompanionBuilder =
+    CraftsmenCompanion Function({
+      required String id,
+      required String workspaceId,
+      required String name,
+      required String phone,
+      Value<String?> trade,
+      Value<String?> notes,
+      Value<DateTime?> archivedAt,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$CraftsmenTableUpdateCompanionBuilder =
+    CraftsmenCompanion Function({
+      Value<String> id,
+      Value<String> workspaceId,
+      Value<String> name,
+      Value<String> phone,
+      Value<String?> trade,
+      Value<String?> notes,
+      Value<DateTime?> archivedAt,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
 
 class $$CraftsmenTableFilterComposer
     extends Composer<_$AppDatabase, $CraftsmenTable> {
@@ -4617,31 +5523,49 @@ class $$CraftsmenTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnFilters(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get phone => $composableBuilder(
-      column: $table.phone, builder: (column) => ColumnFilters(column));
+    column: $table.phone,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get trade => $composableBuilder(
-      column: $table.trade, builder: (column) => ColumnFilters(column));
+    column: $table.trade,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnFilters(column));
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => ColumnFilters(column));
+    column: $table.archivedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$CraftsmenTableOrderingComposer
@@ -4654,31 +5578,49 @@ class $$CraftsmenTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnOrderings(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get phone => $composableBuilder(
-      column: $table.phone, builder: (column) => ColumnOrderings(column));
+    column: $table.phone,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get trade => $composableBuilder(
-      column: $table.trade, builder: (column) => ColumnOrderings(column));
+    column: $table.trade,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnOrderings(column));
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.archivedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$CraftsmenTableAnnotationComposer
@@ -4694,7 +5636,9 @@ class $$CraftsmenTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => column);
+    column: $table.workspaceId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
@@ -4709,7 +5653,9 @@ class $$CraftsmenTableAnnotationComposer
       $composableBuilder(column: $table.notes, builder: (column) => column);
 
   GeneratedColumn<DateTime> get archivedAt => $composableBuilder(
-      column: $table.archivedAt, builder: (column) => column);
+    column: $table.archivedAt,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -4718,23 +5664,27 @@ class $$CraftsmenTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$CraftsmenTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $CraftsmenTable,
-    CraftsmenData,
-    $$CraftsmenTableFilterComposer,
-    $$CraftsmenTableOrderingComposer,
-    $$CraftsmenTableAnnotationComposer,
-    $$CraftsmenTableCreateCompanionBuilder,
-    $$CraftsmenTableUpdateCompanionBuilder,
-    (
-      CraftsmenData,
-      BaseReferences<_$AppDatabase, $CraftsmenTable, CraftsmenData>
-    ),
-    CraftsmenData,
-    PrefetchHooks Function()> {
+class $$CraftsmenTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CraftsmenTable,
+          CraftsmenData,
+          $$CraftsmenTableFilterComposer,
+          $$CraftsmenTableOrderingComposer,
+          $$CraftsmenTableAnnotationComposer,
+          $$CraftsmenTableCreateCompanionBuilder,
+          $$CraftsmenTableUpdateCompanionBuilder,
+          (
+            CraftsmenData,
+            BaseReferences<_$AppDatabase, $CraftsmenTable, CraftsmenData>,
+          ),
+          CraftsmenData,
+          PrefetchHooks Function()
+        > {
   $$CraftsmenTableTableManager(_$AppDatabase db, $CraftsmenTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -4743,98 +5693,101 @@ class $$CraftsmenTableTableManager extends RootTableManager<
               $$CraftsmenTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$CraftsmenTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> workspaceId = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<String> phone = const Value.absent(),
-            Value<String?> trade = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
-            Value<DateTime?> archivedAt = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              CraftsmenCompanion(
-            id: id,
-            workspaceId: workspaceId,
-            name: name,
-            phone: phone,
-            trade: trade,
-            notes: notes,
-            archivedAt: archivedAt,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String workspaceId,
-            required String name,
-            required String phone,
-            Value<String?> trade = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
-            Value<DateTime?> archivedAt = const Value.absent(),
-            required DateTime createdAt,
-            required DateTime updatedAt,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              CraftsmenCompanion.insert(
-            id: id,
-            workspaceId: workspaceId,
-            name: name,
-            phone: phone,
-            trade: trade,
-            notes: notes,
-            archivedAt: archivedAt,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> workspaceId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> phone = const Value.absent(),
+                Value<String?> trade = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<DateTime?> archivedAt = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CraftsmenCompanion(
+                id: id,
+                workspaceId: workspaceId,
+                name: name,
+                phone: phone,
+                trade: trade,
+                notes: notes,
+                archivedAt: archivedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String workspaceId,
+                required String name,
+                required String phone,
+                Value<String?> trade = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<DateTime?> archivedAt = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => CraftsmenCompanion.insert(
+                id: id,
+                workspaceId: workspaceId,
+                name: name,
+                phone: phone,
+                trade: trade,
+                notes: notes,
+                archivedAt: archivedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$CraftsmenTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $CraftsmenTable,
-    CraftsmenData,
-    $$CraftsmenTableFilterComposer,
-    $$CraftsmenTableOrderingComposer,
-    $$CraftsmenTableAnnotationComposer,
-    $$CraftsmenTableCreateCompanionBuilder,
-    $$CraftsmenTableUpdateCompanionBuilder,
-    (
+typedef $$CraftsmenTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CraftsmenTable,
       CraftsmenData,
-      BaseReferences<_$AppDatabase, $CraftsmenTable, CraftsmenData>
-    ),
-    CraftsmenData,
-    PrefetchHooks Function()>;
-typedef $$ProjectCraftsmanAgreementsTableCreateCompanionBuilder
-    = ProjectCraftsmanAgreementsCompanion Function({
-  required String id,
-  required String workspaceId,
-  required String projectId,
-  required String craftsmanId,
-  Value<int?> initialAmountPiastres,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<int> rowid,
-});
-typedef $$ProjectCraftsmanAgreementsTableUpdateCompanionBuilder
-    = ProjectCraftsmanAgreementsCompanion Function({
-  Value<String> id,
-  Value<String> workspaceId,
-  Value<String> projectId,
-  Value<String> craftsmanId,
-  Value<int?> initialAmountPiastres,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<int> rowid,
-});
+      $$CraftsmenTableFilterComposer,
+      $$CraftsmenTableOrderingComposer,
+      $$CraftsmenTableAnnotationComposer,
+      $$CraftsmenTableCreateCompanionBuilder,
+      $$CraftsmenTableUpdateCompanionBuilder,
+      (
+        CraftsmenData,
+        BaseReferences<_$AppDatabase, $CraftsmenTable, CraftsmenData>,
+      ),
+      CraftsmenData,
+      PrefetchHooks Function()
+    >;
+typedef $$ProjectCraftsmanAgreementsTableCreateCompanionBuilder =
+    ProjectCraftsmanAgreementsCompanion Function({
+      required String id,
+      required String workspaceId,
+      required String projectId,
+      required String craftsmanId,
+      Value<int?> initialAmountPiastres,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$ProjectCraftsmanAgreementsTableUpdateCompanionBuilder =
+    ProjectCraftsmanAgreementsCompanion Function({
+      Value<String> id,
+      Value<String> workspaceId,
+      Value<String> projectId,
+      Value<String> craftsmanId,
+      Value<int?> initialAmountPiastres,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
 
 class $$ProjectCraftsmanAgreementsTableFilterComposer
     extends Composer<_$AppDatabase, $ProjectCraftsmanAgreementsTable> {
@@ -4846,26 +5799,39 @@ class $$ProjectCraftsmanAgreementsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnFilters(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get projectId => $composableBuilder(
-      column: $table.projectId, builder: (column) => ColumnFilters(column));
+    column: $table.projectId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get craftsmanId => $composableBuilder(
-      column: $table.craftsmanId, builder: (column) => ColumnFilters(column));
+    column: $table.craftsmanId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get initialAmountPiastres => $composableBuilder(
-      column: $table.initialAmountPiastres,
-      builder: (column) => ColumnFilters(column));
+    column: $table.initialAmountPiastres,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$ProjectCraftsmanAgreementsTableOrderingComposer
@@ -4878,26 +5844,39 @@ class $$ProjectCraftsmanAgreementsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnOrderings(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get projectId => $composableBuilder(
-      column: $table.projectId, builder: (column) => ColumnOrderings(column));
+    column: $table.projectId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get craftsmanId => $composableBuilder(
-      column: $table.craftsmanId, builder: (column) => ColumnOrderings(column));
+    column: $table.craftsmanId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get initialAmountPiastres => $composableBuilder(
-      column: $table.initialAmountPiastres,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.initialAmountPiastres,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ProjectCraftsmanAgreementsTableAnnotationComposer
@@ -4913,16 +5892,22 @@ class $$ProjectCraftsmanAgreementsTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => column);
+    column: $table.workspaceId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get projectId =>
       $composableBuilder(column: $table.projectId, builder: (column) => column);
 
   GeneratedColumn<String> get craftsmanId => $composableBuilder(
-      column: $table.craftsmanId, builder: (column) => column);
+    column: $table.craftsmanId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get initialAmountPiastres => $composableBuilder(
-      column: $table.initialAmountPiastres, builder: (column) => column);
+    column: $table.initialAmountPiastres,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -4931,138 +5916,157 @@ class $$ProjectCraftsmanAgreementsTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$ProjectCraftsmanAgreementsTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ProjectCraftsmanAgreementsTable,
-    ProjectCraftsmanAgreement,
-    $$ProjectCraftsmanAgreementsTableFilterComposer,
-    $$ProjectCraftsmanAgreementsTableOrderingComposer,
-    $$ProjectCraftsmanAgreementsTableAnnotationComposer,
-    $$ProjectCraftsmanAgreementsTableCreateCompanionBuilder,
-    $$ProjectCraftsmanAgreementsTableUpdateCompanionBuilder,
-    (
-      ProjectCraftsmanAgreement,
-      BaseReferences<_$AppDatabase, $ProjectCraftsmanAgreementsTable,
-          ProjectCraftsmanAgreement>
-    ),
-    ProjectCraftsmanAgreement,
-    PrefetchHooks Function()> {
+class $$ProjectCraftsmanAgreementsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ProjectCraftsmanAgreementsTable,
+          ProjectCraftsmanAgreement,
+          $$ProjectCraftsmanAgreementsTableFilterComposer,
+          $$ProjectCraftsmanAgreementsTableOrderingComposer,
+          $$ProjectCraftsmanAgreementsTableAnnotationComposer,
+          $$ProjectCraftsmanAgreementsTableCreateCompanionBuilder,
+          $$ProjectCraftsmanAgreementsTableUpdateCompanionBuilder,
+          (
+            ProjectCraftsmanAgreement,
+            BaseReferences<
+              _$AppDatabase,
+              $ProjectCraftsmanAgreementsTable,
+              ProjectCraftsmanAgreement
+            >,
+          ),
+          ProjectCraftsmanAgreement,
+          PrefetchHooks Function()
+        > {
   $$ProjectCraftsmanAgreementsTableTableManager(
-      _$AppDatabase db, $ProjectCraftsmanAgreementsTable table)
-      : super(TableManagerState(
+    _$AppDatabase db,
+    $ProjectCraftsmanAgreementsTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
               $$ProjectCraftsmanAgreementsTableFilterComposer(
-                  $db: db, $table: table),
+                $db: db,
+                $table: table,
+              ),
           createOrderingComposer: () =>
               $$ProjectCraftsmanAgreementsTableOrderingComposer(
-                  $db: db, $table: table),
+                $db: db,
+                $table: table,
+              ),
           createComputedFieldComposer: () =>
               $$ProjectCraftsmanAgreementsTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> workspaceId = const Value.absent(),
-            Value<String> projectId = const Value.absent(),
-            Value<String> craftsmanId = const Value.absent(),
-            Value<int?> initialAmountPiastres = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ProjectCraftsmanAgreementsCompanion(
-            id: id,
-            workspaceId: workspaceId,
-            projectId: projectId,
-            craftsmanId: craftsmanId,
-            initialAmountPiastres: initialAmountPiastres,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String workspaceId,
-            required String projectId,
-            required String craftsmanId,
-            Value<int?> initialAmountPiastres = const Value.absent(),
-            required DateTime createdAt,
-            required DateTime updatedAt,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ProjectCraftsmanAgreementsCompanion.insert(
-            id: id,
-            workspaceId: workspaceId,
-            projectId: projectId,
-            craftsmanId: craftsmanId,
-            initialAmountPiastres: initialAmountPiastres,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> workspaceId = const Value.absent(),
+                Value<String> projectId = const Value.absent(),
+                Value<String> craftsmanId = const Value.absent(),
+                Value<int?> initialAmountPiastres = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ProjectCraftsmanAgreementsCompanion(
+                id: id,
+                workspaceId: workspaceId,
+                projectId: projectId,
+                craftsmanId: craftsmanId,
+                initialAmountPiastres: initialAmountPiastres,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String workspaceId,
+                required String projectId,
+                required String craftsmanId,
+                Value<int?> initialAmountPiastres = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ProjectCraftsmanAgreementsCompanion.insert(
+                id: id,
+                workspaceId: workspaceId,
+                projectId: projectId,
+                craftsmanId: craftsmanId,
+                initialAmountPiastres: initialAmountPiastres,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$ProjectCraftsmanAgreementsTableProcessedTableManager
-    = ProcessedTableManager<
-        _$AppDatabase,
-        $ProjectCraftsmanAgreementsTable,
+typedef $$ProjectCraftsmanAgreementsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ProjectCraftsmanAgreementsTable,
+      ProjectCraftsmanAgreement,
+      $$ProjectCraftsmanAgreementsTableFilterComposer,
+      $$ProjectCraftsmanAgreementsTableOrderingComposer,
+      $$ProjectCraftsmanAgreementsTableAnnotationComposer,
+      $$ProjectCraftsmanAgreementsTableCreateCompanionBuilder,
+      $$ProjectCraftsmanAgreementsTableUpdateCompanionBuilder,
+      (
         ProjectCraftsmanAgreement,
-        $$ProjectCraftsmanAgreementsTableFilterComposer,
-        $$ProjectCraftsmanAgreementsTableOrderingComposer,
-        $$ProjectCraftsmanAgreementsTableAnnotationComposer,
-        $$ProjectCraftsmanAgreementsTableCreateCompanionBuilder,
-        $$ProjectCraftsmanAgreementsTableUpdateCompanionBuilder,
-        (
-          ProjectCraftsmanAgreement,
-          BaseReferences<_$AppDatabase, $ProjectCraftsmanAgreementsTable,
-              ProjectCraftsmanAgreement>
-        ),
-        ProjectCraftsmanAgreement,
-        PrefetchHooks Function()>;
-typedef $$TransactionsTableCreateCompanionBuilder = TransactionsCompanion
-    Function({
-  required String id,
-  required String workspaceId,
-  required String projectId,
-  required String kind,
-  required int amountPiastres,
-  required DateTime date,
-  required String method,
-  Value<String?> description,
-  Value<String?> receiptImagePath,
-  Value<String?> itemId,
-  Value<String?> expenseType,
-  Value<String?> supplierId,
-  Value<String?> craftsmanId,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<int> rowid,
-});
-typedef $$TransactionsTableUpdateCompanionBuilder = TransactionsCompanion
-    Function({
-  Value<String> id,
-  Value<String> workspaceId,
-  Value<String> projectId,
-  Value<String> kind,
-  Value<int> amountPiastres,
-  Value<DateTime> date,
-  Value<String> method,
-  Value<String?> description,
-  Value<String?> receiptImagePath,
-  Value<String?> itemId,
-  Value<String?> expenseType,
-  Value<String?> supplierId,
-  Value<String?> craftsmanId,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<int> rowid,
-});
+        BaseReferences<
+          _$AppDatabase,
+          $ProjectCraftsmanAgreementsTable,
+          ProjectCraftsmanAgreement
+        >,
+      ),
+      ProjectCraftsmanAgreement,
+      PrefetchHooks Function()
+    >;
+typedef $$TransactionsTableCreateCompanionBuilder =
+    TransactionsCompanion Function({
+      required String id,
+      required String workspaceId,
+      required String projectId,
+      required String kind,
+      required int amountPiastres,
+      required DateTime date,
+      required String method,
+      Value<String?> description,
+      Value<String?> receiptImagePath,
+      Value<String?> itemId,
+      Value<String?> expenseType,
+      Value<String?> supplierId,
+      Value<String?> craftsmanId,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$TransactionsTableUpdateCompanionBuilder =
+    TransactionsCompanion Function({
+      Value<String> id,
+      Value<String> workspaceId,
+      Value<String> projectId,
+      Value<String> kind,
+      Value<int> amountPiastres,
+      Value<DateTime> date,
+      Value<String> method,
+      Value<String?> description,
+      Value<String?> receiptImagePath,
+      Value<String?> itemId,
+      Value<String?> expenseType,
+      Value<String?> supplierId,
+      Value<String?> craftsmanId,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
 
 class $$TransactionsTableFilterComposer
     extends Composer<_$AppDatabase, $TransactionsTable> {
@@ -5074,51 +6078,79 @@ class $$TransactionsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnFilters(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get projectId => $composableBuilder(
-      column: $table.projectId, builder: (column) => ColumnFilters(column));
+    column: $table.projectId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get kind => $composableBuilder(
-      column: $table.kind, builder: (column) => ColumnFilters(column));
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get amountPiastres => $composableBuilder(
-      column: $table.amountPiastres,
-      builder: (column) => ColumnFilters(column));
+    column: $table.amountPiastres,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get date => $composableBuilder(
-      column: $table.date, builder: (column) => ColumnFilters(column));
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get method => $composableBuilder(
-      column: $table.method, builder: (column) => ColumnFilters(column));
+    column: $table.method,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => ColumnFilters(column));
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get receiptImagePath => $composableBuilder(
-      column: $table.receiptImagePath,
-      builder: (column) => ColumnFilters(column));
+    column: $table.receiptImagePath,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get itemId => $composableBuilder(
-      column: $table.itemId, builder: (column) => ColumnFilters(column));
+    column: $table.itemId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get expenseType => $composableBuilder(
-      column: $table.expenseType, builder: (column) => ColumnFilters(column));
+    column: $table.expenseType,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get supplierId => $composableBuilder(
-      column: $table.supplierId, builder: (column) => ColumnFilters(column));
+    column: $table.supplierId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get craftsmanId => $composableBuilder(
-      column: $table.craftsmanId, builder: (column) => ColumnFilters(column));
+    column: $table.craftsmanId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$TransactionsTableOrderingComposer
@@ -5131,51 +6163,79 @@ class $$TransactionsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => ColumnOrderings(column));
+    column: $table.workspaceId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get projectId => $composableBuilder(
-      column: $table.projectId, builder: (column) => ColumnOrderings(column));
+    column: $table.projectId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get kind => $composableBuilder(
-      column: $table.kind, builder: (column) => ColumnOrderings(column));
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get amountPiastres => $composableBuilder(
-      column: $table.amountPiastres,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.amountPiastres,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get date => $composableBuilder(
-      column: $table.date, builder: (column) => ColumnOrderings(column));
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get method => $composableBuilder(
-      column: $table.method, builder: (column) => ColumnOrderings(column));
+    column: $table.method,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => ColumnOrderings(column));
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get receiptImagePath => $composableBuilder(
-      column: $table.receiptImagePath,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.receiptImagePath,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get itemId => $composableBuilder(
-      column: $table.itemId, builder: (column) => ColumnOrderings(column));
+    column: $table.itemId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get expenseType => $composableBuilder(
-      column: $table.expenseType, builder: (column) => ColumnOrderings(column));
+    column: $table.expenseType,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get supplierId => $composableBuilder(
-      column: $table.supplierId, builder: (column) => ColumnOrderings(column));
+    column: $table.supplierId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get craftsmanId => $composableBuilder(
-      column: $table.craftsmanId, builder: (column) => ColumnOrderings(column));
+    column: $table.craftsmanId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$TransactionsTableAnnotationComposer
@@ -5191,7 +6251,9 @@ class $$TransactionsTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get workspaceId => $composableBuilder(
-      column: $table.workspaceId, builder: (column) => column);
+    column: $table.workspaceId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get projectId =>
       $composableBuilder(column: $table.projectId, builder: (column) => column);
@@ -5200,7 +6262,9 @@ class $$TransactionsTableAnnotationComposer
       $composableBuilder(column: $table.kind, builder: (column) => column);
 
   GeneratedColumn<int> get amountPiastres => $composableBuilder(
-      column: $table.amountPiastres, builder: (column) => column);
+    column: $table.amountPiastres,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get date =>
       $composableBuilder(column: $table.date, builder: (column) => column);
@@ -5209,22 +6273,32 @@ class $$TransactionsTableAnnotationComposer
       $composableBuilder(column: $table.method, builder: (column) => column);
 
   GeneratedColumn<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => column);
+    column: $table.description,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get receiptImagePath => $composableBuilder(
-      column: $table.receiptImagePath, builder: (column) => column);
+    column: $table.receiptImagePath,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get itemId =>
       $composableBuilder(column: $table.itemId, builder: (column) => column);
 
   GeneratedColumn<String> get expenseType => $composableBuilder(
-      column: $table.expenseType, builder: (column) => column);
+    column: $table.expenseType,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get supplierId => $composableBuilder(
-      column: $table.supplierId, builder: (column) => column);
+    column: $table.supplierId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get craftsmanId => $composableBuilder(
-      column: $table.craftsmanId, builder: (column) => column);
+    column: $table.craftsmanId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -5233,23 +6307,27 @@ class $$TransactionsTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$TransactionsTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $TransactionsTable,
-    Transaction,
-    $$TransactionsTableFilterComposer,
-    $$TransactionsTableOrderingComposer,
-    $$TransactionsTableAnnotationComposer,
-    $$TransactionsTableCreateCompanionBuilder,
-    $$TransactionsTableUpdateCompanionBuilder,
-    (
-      Transaction,
-      BaseReferences<_$AppDatabase, $TransactionsTable, Transaction>
-    ),
-    Transaction,
-    PrefetchHooks Function()> {
+class $$TransactionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TransactionsTable,
+          Transaction,
+          $$TransactionsTableFilterComposer,
+          $$TransactionsTableOrderingComposer,
+          $$TransactionsTableAnnotationComposer,
+          $$TransactionsTableCreateCompanionBuilder,
+          $$TransactionsTableUpdateCompanionBuilder,
+          (
+            Transaction,
+            BaseReferences<_$AppDatabase, $TransactionsTable, Transaction>,
+          ),
+          Transaction,
+          PrefetchHooks Function()
+        > {
   $$TransactionsTableTableManager(_$AppDatabase db, $TransactionsTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -5258,100 +6336,103 @@ class $$TransactionsTableTableManager extends RootTableManager<
               $$TransactionsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$TransactionsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> workspaceId = const Value.absent(),
-            Value<String> projectId = const Value.absent(),
-            Value<String> kind = const Value.absent(),
-            Value<int> amountPiastres = const Value.absent(),
-            Value<DateTime> date = const Value.absent(),
-            Value<String> method = const Value.absent(),
-            Value<String?> description = const Value.absent(),
-            Value<String?> receiptImagePath = const Value.absent(),
-            Value<String?> itemId = const Value.absent(),
-            Value<String?> expenseType = const Value.absent(),
-            Value<String?> supplierId = const Value.absent(),
-            Value<String?> craftsmanId = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              TransactionsCompanion(
-            id: id,
-            workspaceId: workspaceId,
-            projectId: projectId,
-            kind: kind,
-            amountPiastres: amountPiastres,
-            date: date,
-            method: method,
-            description: description,
-            receiptImagePath: receiptImagePath,
-            itemId: itemId,
-            expenseType: expenseType,
-            supplierId: supplierId,
-            craftsmanId: craftsmanId,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String workspaceId,
-            required String projectId,
-            required String kind,
-            required int amountPiastres,
-            required DateTime date,
-            required String method,
-            Value<String?> description = const Value.absent(),
-            Value<String?> receiptImagePath = const Value.absent(),
-            Value<String?> itemId = const Value.absent(),
-            Value<String?> expenseType = const Value.absent(),
-            Value<String?> supplierId = const Value.absent(),
-            Value<String?> craftsmanId = const Value.absent(),
-            required DateTime createdAt,
-            required DateTime updatedAt,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              TransactionsCompanion.insert(
-            id: id,
-            workspaceId: workspaceId,
-            projectId: projectId,
-            kind: kind,
-            amountPiastres: amountPiastres,
-            date: date,
-            method: method,
-            description: description,
-            receiptImagePath: receiptImagePath,
-            itemId: itemId,
-            expenseType: expenseType,
-            supplierId: supplierId,
-            craftsmanId: craftsmanId,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> workspaceId = const Value.absent(),
+                Value<String> projectId = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<int> amountPiastres = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<String> method = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<String?> receiptImagePath = const Value.absent(),
+                Value<String?> itemId = const Value.absent(),
+                Value<String?> expenseType = const Value.absent(),
+                Value<String?> supplierId = const Value.absent(),
+                Value<String?> craftsmanId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TransactionsCompanion(
+                id: id,
+                workspaceId: workspaceId,
+                projectId: projectId,
+                kind: kind,
+                amountPiastres: amountPiastres,
+                date: date,
+                method: method,
+                description: description,
+                receiptImagePath: receiptImagePath,
+                itemId: itemId,
+                expenseType: expenseType,
+                supplierId: supplierId,
+                craftsmanId: craftsmanId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String workspaceId,
+                required String projectId,
+                required String kind,
+                required int amountPiastres,
+                required DateTime date,
+                required String method,
+                Value<String?> description = const Value.absent(),
+                Value<String?> receiptImagePath = const Value.absent(),
+                Value<String?> itemId = const Value.absent(),
+                Value<String?> expenseType = const Value.absent(),
+                Value<String?> supplierId = const Value.absent(),
+                Value<String?> craftsmanId = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => TransactionsCompanion.insert(
+                id: id,
+                workspaceId: workspaceId,
+                projectId: projectId,
+                kind: kind,
+                amountPiastres: amountPiastres,
+                date: date,
+                method: method,
+                description: description,
+                receiptImagePath: receiptImagePath,
+                itemId: itemId,
+                expenseType: expenseType,
+                supplierId: supplierId,
+                craftsmanId: craftsmanId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$TransactionsTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $TransactionsTable,
-    Transaction,
-    $$TransactionsTableFilterComposer,
-    $$TransactionsTableOrderingComposer,
-    $$TransactionsTableAnnotationComposer,
-    $$TransactionsTableCreateCompanionBuilder,
-    $$TransactionsTableUpdateCompanionBuilder,
-    (
+typedef $$TransactionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TransactionsTable,
       Transaction,
-      BaseReferences<_$AppDatabase, $TransactionsTable, Transaction>
-    ),
-    Transaction,
-    PrefetchHooks Function()>;
+      $$TransactionsTableFilterComposer,
+      $$TransactionsTableOrderingComposer,
+      $$TransactionsTableAnnotationComposer,
+      $$TransactionsTableCreateCompanionBuilder,
+      $$TransactionsTableUpdateCompanionBuilder,
+      (
+        Transaction,
+        BaseReferences<_$AppDatabase, $TransactionsTable, Transaction>,
+      ),
+      Transaction,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5369,9 +6450,11 @@ class $AppDatabaseManager {
   $$CraftsmenTableTableManager get craftsmen =>
       $$CraftsmenTableTableManager(_db, _db.craftsmen);
   $$ProjectCraftsmanAgreementsTableTableManager
-      get projectCraftsmanAgreements =>
-          $$ProjectCraftsmanAgreementsTableTableManager(
-              _db, _db.projectCraftsmanAgreements);
+  get projectCraftsmanAgreements =>
+      $$ProjectCraftsmanAgreementsTableTableManager(
+        _db,
+        _db.projectCraftsmanAgreements,
+      );
   $$TransactionsTableTableManager get transactions =>
       $$TransactionsTableTableManager(_db, _db.transactions);
 }

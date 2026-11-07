@@ -40,6 +40,8 @@ abstract final class AppSize {
   static const labelStackHeight = 40.0;
   static const floatedLabelHeight = 16.0;
   static const valueRowHeight = 24.0;
+  /// Inline suffix/prefix gutter (e.g. EGP) inside bordered fields.
+  static const adornmentSlotWidth = 40.0;
   static const multilineFieldHeight = 128.0;
   static const mobileScaleWidth = 390.0;
 }

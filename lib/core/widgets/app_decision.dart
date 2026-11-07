@@ -3,11 +3,14 @@ import '../config/extensions/num_extensions.dart';
 import '../config/extensions/text_style_extensions.dart';
 import '../config/theme/app_size.dart';
 import '../config/theme/app_colors.dart';
+import '../resources/gen/assets.gen.dart';
+import '../../app/widgets/shell_nav_icon.dart';
 import 'bnood_failure.dart';
 import 'foundation_icon.dart';
 import 'sheet_drag_handle.dart';
 import 'buttons/app_button.dart';
 import 'custom_text_field.dart';
+import 'bnood_modal_sheet.dart';
 import 'toast/app_tone.dart';
 
 /// Safe (cancel) action on decision surfaces: neutral outline, not brand secondary.
@@ -43,6 +46,17 @@ String _retryLabel(BuildContext context) {
 }
 
 abstract final class AppDecision {
+  /// Archive confirmations: owner SVG tinted for [AppTone.danger] dialogs.
+  static Widget archiveDangerIcon(BuildContext context) {
+    final colors = context.colors;
+    return ShellNavIcon(
+      asset: Assets.icons.archiveRestoreOutline,
+      color: AppTone.danger.glyph(colors),
+      size: AppSize.icon,
+      semanticsLabel: 'Archive',
+    );
+  }
+
   static Future<OverlayAnswer> show(
     BuildContext context, {
     required String title,
@@ -52,17 +66,15 @@ abstract final class AppDecision {
     String? confirmProgressLabel,
     AppTone tone = AppTone.brand,
     IconData? icon,
+    Widget? iconWidget,
     bool? dismissible,
     Future<void> Function()? onConfirm,
     String? typedConfirmation,
   }) {
     final useSheet = typedConfirmation != null && typedConfirmation.isNotEmpty;
     if (useSheet) {
-      return showModalBottomSheet<OverlayAnswer>(
+      return BnoodModalSheet.show<OverlayAnswer>(
         context: context,
-        isScrollControlled: true,
-        isDismissible: _barrierDismissible(tone: tone, dismissible: dismissible, locked: false),
-        enableDrag: _barrierDismissible(tone: tone, dismissible: dismissible, locked: false),
         backgroundColor: context.colors.surface,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.cardRadius)),
@@ -75,6 +87,7 @@ abstract final class AppDecision {
           confirmProgressLabel: confirmProgressLabel,
           tone: tone,
           icon: icon,
+          iconWidget: iconWidget,
           dismissible: dismissible,
           onConfirm: onConfirm,
           typedConfirmation: typedConfirmation,
@@ -95,6 +108,7 @@ abstract final class AppDecision {
         confirmProgressLabel: confirmProgressLabel,
         tone: tone,
         icon: icon,
+        iconWidget: iconWidget,
         dismissible: dismissible,
         onConfirm: onConfirm,
       ),
@@ -126,6 +140,7 @@ class _AppDecisionDialog extends StatefulWidget {
     required this.confirmProgressLabel,
     required this.tone,
     required this.icon,
+    required this.iconWidget,
     required this.dismissible,
     required this.onConfirm,
   });
@@ -137,6 +152,7 @@ class _AppDecisionDialog extends StatefulWidget {
   final String? confirmProgressLabel;
   final AppTone tone;
   final IconData? icon;
+  final Widget? iconWidget;
   final bool? dismissible;
   final Future<void> Function()? onConfirm;
 
@@ -233,6 +249,7 @@ class _AppDecisionDialogState extends State<_AppDecisionDialog> {
       confirmText: _confirmText(),
       tone: widget.tone,
       icon: widget.icon,
+      iconWidget: widget.iconWidget,
       locked: _locked,
       autofocusCancel: widget.tone == AppTone.danger && !_locked,
       onCancel: widget.cancelLabel == null ? null : _onCancelPressed,
@@ -273,6 +290,7 @@ class _AppDecisionSheet extends StatefulWidget {
     required this.confirmProgressLabel,
     required this.tone,
     required this.icon,
+    required this.iconWidget,
     required this.dismissible,
     required this.onConfirm,
     required this.typedConfirmation,
@@ -285,6 +303,7 @@ class _AppDecisionSheet extends StatefulWidget {
   final String? confirmProgressLabel;
   final AppTone tone;
   final IconData? icon;
+  final Widget? iconWidget;
   final bool? dismissible;
   final Future<void> Function()? onConfirm;
   final String typedConfirmation;
@@ -418,6 +437,7 @@ class _AppDecisionSheetState extends State<_AppDecisionSheet> {
           confirmText: _confirmText(),
           tone: widget.tone,
           icon: widget.icon,
+          iconWidget: widget.iconWidget,
           locked: _locked,
           confirmEnabled: _typedMatches,
           autofocusCancel: widget.tone == AppTone.danger && !_locked,
@@ -440,6 +460,7 @@ class _DecisionBody extends StatelessWidget {
     required this.confirmText,
     required this.tone,
     required this.icon,
+    this.iconWidget,
     required this.locked,
     required this.autofocusCancel,
     required this.onConfirm,
@@ -459,6 +480,7 @@ class _DecisionBody extends StatelessWidget {
   final String confirmText;
   final AppTone tone;
   final IconData? icon;
+  final Widget? iconWidget;
   final bool locked;
   final bool autofocusCancel;
   final VoidCallback? onCancel;
@@ -499,13 +521,14 @@ class _DecisionBody extends StatelessWidget {
             _DecisionDialogHeader(
               tone: tone,
               icon: icon,
+              iconWidget: iconWidget,
               onDismiss: locked ? null : onCancel,
             ),
             AppSize.gap.gap,
             Text(title, style: context.text.title),
           ] else ...[
             if (!showHandle && tone != AppTone.brand) ...[
-              _DecisionToneIcon(tone: tone, icon: icon),
+              _DecisionToneIcon(tone: tone, icon: icon, iconWidget: iconWidget),
               AppSize.gap.gap,
             ],
             Text(title, style: context.text.title),
@@ -541,11 +564,13 @@ class _DecisionDialogHeader extends StatelessWidget {
   const _DecisionDialogHeader({
     required this.tone,
     required this.icon,
+    this.iconWidget,
     required this.onDismiss,
   });
 
   final AppTone tone;
   final IconData? icon;
+  final Widget? iconWidget;
   final VoidCallback? onDismiss;
 
   @override
@@ -553,7 +578,10 @@ class _DecisionDialogHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (tone != AppTone.brand) _DecisionToneIcon(tone: tone, icon: icon) else const SizedBox.shrink(),
+        if (tone != AppTone.brand)
+          _DecisionToneIcon(tone: tone, icon: icon, iconWidget: iconWidget)
+        else
+          const SizedBox.shrink(),
         const Spacer(),
         AppButton(
           text: '',
@@ -570,20 +598,26 @@ class _DecisionDialogHeader extends StatelessWidget {
 }
 
 class _DecisionToneIcon extends StatelessWidget {
-  const _DecisionToneIcon({required this.tone, this.icon});
+  const _DecisionToneIcon({required this.tone, this.icon, this.iconWidget});
 
   final AppTone tone;
   final IconData? icon;
+  final Widget? iconWidget;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final glyphColor = tone.glyph(colors);
-    final child = icon != null
-        ? FoundationIcon(icon!, size: AppSize.icon, color: glyphColor)
-        : tone == AppTone.danger
-        ? FoundationIcon(Icons.logout, size: AppSize.icon, color: glyphColor)
-        : tone.glyphWidget(size: AppSize.icon, color: glyphColor);
+    final Widget child;
+    if (iconWidget != null) {
+      child = iconWidget!;
+    } else if (icon != null) {
+      child = FoundationIcon(icon!, size: AppSize.icon, color: glyphColor);
+    } else if (tone == AppTone.danger) {
+      child = FoundationIcon(Icons.logout, size: AppSize.icon, color: glyphColor);
+    } else {
+      child = tone.glyphWidget(size: AppSize.icon, color: glyphColor);
+    }
     return DecoratedBox(
       decoration: BoxDecoration(color: tone.tint(colors), borderRadius: BorderRadius.circular(AppSize.radius)),
       child: Padding(

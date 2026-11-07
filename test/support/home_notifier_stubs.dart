@@ -78,6 +78,18 @@ Override homeTotalsOverride(HomeTotals totals) =>
 Override homeClientBalancesOverride(List<HomeClientBalanceRow> rows) =>
     homeClientBalancesProvider.overrideWith(() => StubHomeClientBalancesNotifier(rows));
 
+class StubClientsListBalancesNotifier extends ClientsListBalancesNotifier {
+  StubClientsListBalancesNotifier(this.rows);
+
+  final List<HomeClientBalanceRow> rows;
+
+  @override
+  Future<List<HomeClientBalanceRow>> fetch() async => rows;
+}
+
+Override clientsListBalancesOverride(List<HomeClientBalanceRow> rows) =>
+    clientsListBalancesProvider.overrideWith(() => StubClientsListBalancesNotifier(rows));
+
 Override homeSupplierSpendsOverride(List<HomeSupplierSpendRow> rows) =>
     homeSupplierSpendsProvider.overrideWith(() => StubHomeSupplierSpendsNotifier(rows));
 

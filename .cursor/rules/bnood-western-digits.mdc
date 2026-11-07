@@ -21,6 +21,8 @@ User-visible **numbers the app generates** must use ASCII digits `0`–`9`, even
 
 Do not use `NumberFormat.decimalPattern('ar')` for on-screen amounts. Dates: when formatting for display, force Western digits in the numeric parts (see `DateFormat` call sites).
 
+**Layout:** Western/LTR runs use `LtrIsolate`; alignment follows locale start/end — see `bnood-bidi-layout.mdc` (do not force `TextDirection.ltr` on full lines in RTL headers).
+
 Stored DB values and user free text are unchanged; parsing accepts Eastern digits where we already parse amounts.
 
 ## Tests

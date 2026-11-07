@@ -303,6 +303,7 @@ extension ThemeContext on BuildContext {
 class AppText extends ThemeExtension<AppText> {
   const AppText({
     required this.balance,
+    required this.appBarTitle,
     required this.pageTitle,
     required this.sectionTitle,
     required this.cardTitle,
@@ -337,6 +338,7 @@ class AppText extends ThemeExtension<AppText> {
 
     return AppText(
       balance: role(size: 28, height: 1.15, wght: 700),
+      appBarTitle: role(size: 22, height: 1.2, wght: 500),
       pageTitle: role(size: 22, height: 1.2, wght: 700),
       sectionTitle: role(size: 15, height: 1.25, wght: 700),
       cardTitle: role(size: 14, height: 1.3, wght: 700),
@@ -357,6 +359,7 @@ class AppText extends ThemeExtension<AppText> {
   }
 
   final TextStyle balance;
+  final TextStyle appBarTitle;
   final TextStyle pageTitle;
   final TextStyle sectionTitle;
   final TextStyle cardTitle;
@@ -380,6 +383,7 @@ class AppText extends ThemeExtension<AppText> {
   @override
   AppText copyWith({
     TextStyle? balance,
+    TextStyle? appBarTitle,
     TextStyle? pageTitle,
     TextStyle? sectionTitle,
     TextStyle? cardTitle,
@@ -395,6 +399,7 @@ class AppText extends ThemeExtension<AppText> {
   }) {
     return AppText(
       balance: balance ?? this.balance,
+      appBarTitle: appBarTitle ?? this.appBarTitle,
       pageTitle: pageTitle ?? this.pageTitle,
       sectionTitle: sectionTitle ?? this.sectionTitle,
       cardTitle: cardTitle ?? this.cardTitle,
@@ -416,6 +421,7 @@ class AppText extends ThemeExtension<AppText> {
     TextStyle? l(TextStyle a, TextStyle b) => TextStyle.lerp(a, b, t);
     return AppText(
       balance: l(balance, other.balance)!,
+      appBarTitle: l(appBarTitle, other.appBarTitle)!,
       pageTitle: l(pageTitle, other.pageTitle)!,
       sectionTitle: l(sectionTitle, other.sectionTitle)!,
       cardTitle: l(cardTitle, other.cardTitle)!,

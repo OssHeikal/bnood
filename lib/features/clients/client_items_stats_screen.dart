@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/money/ledger_math.dart';
-import '../../core/money/money_format.dart';
-import '../../core/providers/app_providers.dart';
-import '../../core/repositories/bnood_repository.dart';
+import '../../core/config/extensions/num_extensions.dart';
+import '../../core/config/theme/app_colors.dart';
+import '../../core/config/theme/app_size.dart';
+import '../../core/widgets/app_card.dart';
+import '../../core/widgets/app_fallback.dart';
+import '../../core/widgets/foundation_app_bar_title.dart';
+import '../../core/widgets/skeleton/async_value_body.dart';
+import '../home/home_foundation_scope.dart';
+import 'client_items_stats_provider.dart';
+import 'widgets/client_detail_item_row.dart';
+import 'widgets/client_items_stats_skeleton.dart';
 
 class ClientItemsStatsScreen extends ConsumerWidget {
   const ClientItemsStatsScreen({super.key, required this.clientId});
@@ -15,73 +22,79 @@ class ClientItemsStatsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final repo = ref.watch(repositoryProvider);
-    return FutureBuilder(
-      future: _load(repo),
-      builder: (context, snap) {
-        if (!snap.hasData) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
-        }
-        final rows = snap.data!;
-        return Scaffold(
-          appBar: AppBar(title: Text(l10n.navItems)),
-          body: ListView(
-            children: [
-              for (final r in rows)
-                ListTile(
-                  title: Text(r.name),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${l10n.materials}: ${MoneyFormat.formatPiastres(r.materials)}'),
-                      Text('${l10n.labor}: ${MoneyFormat.formatPiastres(r.labor)}'),
-                      const SizedBox(height: 4),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: LinearProgressIndicator(
-                          value: r.total == 0 ? 0 : r.materials / r.total,
-                          minHeight: 8,
-                          backgroundColor: Colors.red.withValues(alpha: 0.2),
-                          color: Colors.green,
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final items = ref.watch(clientItemsStatsProvider(clientId));
+
+    return HomeFoundationScope(
+      child: Builder(
+        builder: (context) {
+          final colors = context.colors;
+          return Scaffold(
+            backgroundColor: colors.canvas,
+            appBar: AppBar(
+              backgroundColor: colors.canvas,
+              surfaceTintColor: Colors.transparent,
+              scrolledUnderElevation: 0,
+              elevation: 0,
+              centerTitle: false,
+              title: FoundationAppBarTitle(title: l10n.navItems),
+            ),
+            body: ListView(
+              padding: EdgeInsets.fromLTRB(
+                AppSize.screenPadding,
+                AppSize.spaceSM,
+                AppSize.screenPadding,
+                AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
+              ),
+              children: [
+                AsyncValueBody(
+                  value: items,
+                  loadingPlaceholder: const ClientItemsStatsSkeleton(),
+                  error: (e, _) => AppCard(
+                    child: AppFallback.section(
+                      icon: Icons.error_outline,
+                      title: l10n.homeLoadErrorTitle,
+                      description: e.toString(),
+                      actions: [
+                        AppFallbackAction(
+                          label: l10n.retry,
+                          onPressed: () => ref.read(clientItemsStatsProvider(clientId).notifier).refreshSilently(),
+                          role: AppFallbackActionRole.tertiary,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  trailing: Text(MoneyFormat.formatPiastres(r.total)),
+                  data: (rows) {
+                    if (rows.isEmpty) {
+                      return AppCard(
+                        child: AppFallback.section(
+                          icon: Icons.inventory_2_outlined,
+                          title: l10n.clientDetailNoItemSpend,
+                        ),
+                      );
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        for (var i = 0; i < rows.length; i++) ...[
+                          if (i > 0) AppSize.spaceMD.gap,
+                          ClientDetailItemRow(
+                            itemName: rows[i].name,
+                            colorKey: rows[i].colorKey,
+                            iconName: rows[i].iconName,
+                            breakdown: rows[i].breakdown,
+                            localeCode: localeCode,
+                          ),
+                        ],
+                      ],
+                    );
+                  },
                 ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
-
-  Future<List<_ItemRow>> _load(BnoodRepository repo) async {
-    final project = await repo.primaryActiveProject(clientId);
-    if (project == null) return [];
-    final tx = await repo.transactionsForProject(project.id);
-    final spend = tx.where((t) => t.kind == 'spend').toList();
-    final breakdown = LedgerMath.itemBreakdown(spend);
-    final items = await repo.watchActiveItems().first;
-    final names = {for (final i in items) i.id: i.name};
-    return breakdown.entries
-        .map(
-          (e) => _ItemRow(
-            name: names[e.key] ?? e.key,
-            materials: e.value.materialsPiastres,
-            labor: e.value.laborPiastres,
-            total: e.value.totalPiastres,
-          ),
-        )
-        .toList()
-      ..sort((a, b) => b.total.compareTo(a.total));
-  }
-}
-
-class _ItemRow {
-  _ItemRow({required this.name, required this.materials, required this.labor, required this.total});
-  final String name;
-  final int materials;
-  final int labor;
-  final int total;
 }

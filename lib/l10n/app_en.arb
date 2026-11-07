@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Bnood",
+  "appTitle": "بنود",
   "navHome": "Home",
   "navClients": "Clients",
   "navDirectory": "Directory",
@@ -46,9 +46,42 @@
   "cancel": "Cancel",
   "seeAll": "See all",
   "movements": "Movements",
-  "engineerFee": "Engineer fee (info)",
+  "whatsappLaunchFailed": "Couldn't open WhatsApp",
+  "whatsappInvalidPhone": "This phone number can't open in WhatsApp",
+  "engineerFee": "Profit percentage (info)",
   "paid": "Paid",
   "craftsmen": "Craftsmen",
+  "assignCraftsmen": "Assign craftsmen",
+  "clientDetailNoCraftsmen": "No craftsmen on this project yet",
+  "clientDetailNoItemSpend": "No item spend recorded yet",
+  "clientDetailNoMovements": "No movements yet",
+  "clientDetailCraftsmenEmptyDescription": "Choose craftsmen from your directory to link them to this project.",
+  "engineerEstimatedProfitTitle": "Estimated profit",
+  "engineerFeeNoRate": "No rate set",
+  "engineerFeePercentCaption": "{percent} of spend",
+  "@engineerFeePercentCaption": {
+    "placeholders": {
+      "percent": { "type": "String" }
+    }
+  },
+  "engineerFeeInternalOnly": "Internal only",
+  "engineerFeeUndefined": "Not set",
+  "engineerFeeSheetTitle": "Profit percentage",
+  "engineerFeePercentFieldLabel": "Profit percentage",
+  "engineerFeePercentPlaceholder": "Not set",
+  "engineerFeeSheetCaption": "Estimated internal profit only. It is not deducted from the fund, does not create client receivables, and does not appear on the client statement or PDF. Leave blank to clear.",
+  "engineerFeePercentInvalid": "Enter 0–100 or leave blank",
+  "clientReceiveMovementDetail": "Payment from client",
+  "clientDetailUnspecifiedItem": "Unspecified item",
+  "clientDetailNoDescription": "No description",
+  "archiveClientTitle": "Archive client?",
+  "archiveClientDescription": "This moves {name}'s project to the archive. You can restore it later.",
+  "@archiveClientDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "craftsmanAgreedAmount": "Agreed",
   "suppliers": "Suppliers",
   "statement": "Statement",
   "period": "Period",
@@ -57,6 +90,244 @@
   "sharePdf": "Share PDF",
   "createNew": "Create new",
   "archive": "Archive",
+  "unarchive": "Unarchive",
+  "clientsFilterAll": "All",
+  "clientsFilterActive": "Active",
+  "clientsFilterArchived": "Archived",
+  "clientsNoArchivedTitle": "No archived clients",
+  "clientsNoArchivedDescription": "Archived clients appear here after you archive a project.",
+  "clientsNoClientsTitle": "No clients yet",
   "edit": "Edit",
-  "delete": "Delete"
+  "delete": "Delete",
+  "voucherAmountRequired": "Enter an amount greater than zero",
+  "voucherSelectClient": "Select a client",
+  "voucherSelectItem": "Select an item",
+  "voucherSelectCraftsman": "Select a craftsman",
+  "voucherPickerSearchHint": "Search",
+  "voucherPickerNoResults": "No matches",
+  "voucherPickerEmptyTitle": "Nothing here yet",
+  "voucherReceiptPhoto": "Receipt photo",
+  "voucherAttachCamera": "Camera",
+  "voucherAttachGallery": "Gallery",
+  "voucherReceiptCameraDenied": "Camera access was denied. You can enable it in Settings to photograph receipts.",
+  "voucherReceiptCameraRestricted": "Camera access is restricted on this device.",
+  "voucherReceiptGalleryDenied": "Photo access was denied. You can enable it in Settings to attach gallery receipts.",
+  "voucherReceiptGalleryRestricted": "Photo access is restricted on this device.",
+  "voucherReceiptAttachFailed": "Could not attach the receipt. Try again.",
+  "voucherAssignCraftsmanFirst": "Assign craftsmen to the project first",
+  "amountHint": "0.00",
+  "voucherReceiveTitle": "Receive voucher",
+  "voucherSpendTitle": "Spend voucher",
+  "voucherSaveReceive": "Save receive",
+  "voucherSaveSpend": "Save spend",
+  "expenseCategory": "Expense category",
+  "voucherContextGeneric": "General voucher · choose client and movement type",
+  "voucherContextClient": "Voucher for {clientName} · you can change the client below",
+  "@voucherContextClient": {
+    "placeholders": {
+      "clientName": {
+        "type": "String"
+      }
+    }
+  },
+  "noteOptionalHint": "Optional…",
+  "paymentMethod": "Payment method",
+  "directorySuppliersHint": "Material suppliers · recorded payments only, no payables or credit balances.",
+  "directoryCraftsmenHint": "Your general craftsman roster · a craftsman can be linked to more than one client.",
+  "directorySupplierKindMeta": "Materials supplier",
+  "directoryEmptySuppliersTitle": "No suppliers yet",
+  "directoryEmptySuppliersDescription": "Add a supplier to your directory, then link them on material spend vouchers.",
+  "directoryEmptyCraftsmenTitle": "No craftsmen yet",
+  "directoryEmptyCraftsmenDescription": "Add a craftsman to your directory, then assign them from a client project.",
+  "directoryAddSupplier": "Add supplier",
+  "directoryAddCraftsman": "Add craftsman",
+  "directoryCraftsmanProjectsCount": "{count} projects",
+  "@directoryCraftsmanProjectsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "directoryViewDetails": "View details",
+  "archiveSupplierTitle": "Archive supplier?",
+  "archiveSupplierDescription": "{name} will be hidden from pickers. Payment history is kept.",
+  "@archiveSupplierDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "archiveCraftsmanTitle": "Archive craftsman?",
+  "archiveCraftsmanDescription": "{name} will be hidden from pickers. Labor history is kept.",
+  "@archiveCraftsmanDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "supplierNameRequired": "Enter supplier name",
+  "craftsmanNameRequired": "Enter craftsman name",
+  "craftsmanPhoneLabel": "Phone",
+  "craftsmanPhoneRequired": "Enter a phone number",
+  "directorySupplierNameHint": "e.g. Materials supplier",
+  "directoryCraftsmanNameHint": "e.g. Plumber",
+  "supplierTotalPaidLabel": "Total paid to supplier",
+  "supplierSpendRecordedCaption": "Recorded payment transactions only",
+  "supplierDetailTransactionsSection": "Transaction history",
+  "supplierDetailNoTransactions": "No transactions recorded",
+  "supplierDetailNotFoundTitle": "Supplier not found",
+  "supplierProfilePhoneLabel": "Phone",
+  "supplierProfileNotesLabel": "Notes",
+  "directoryCraftsmanKindMeta": "Craftsman",
+  "craftsmanTotalLaborPaidLabel": "Total labor paid",
+  "craftsmanLaborStatCaption": "Across {count} projects · labor payments only",
+  "@craftsmanLaborStatCaption": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "craftsmanDetailJobsSection": "Work by client",
+  "craftsmanDetailEditAgreement": "Edit agreement",
+  "craftsmanDetailNoAgreedAmount": "No agreed amount",
+  "craftsmanDetailNoJobs": "No linked client projects",
+  "craftsmanDetailLaborHistorySection": "Labor payment history",
+  "craftsmanDetailNoLaborHistory": "No labor payments recorded",
+  "craftsmanDetailNotFoundTitle": "Craftsman not found",
+  "craftsmanProfileTradeLabel": "Trade",
+  "craftsmanProfileNotesLabel": "Notes",
+  "crewAssignmentsIntro": "Pick from your directory. Agreed amount is optional for this project.",
+  "crewAssignmentsProjectContext": "Project {name}",
+  "@crewAssignmentsProjectContext": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "craftsmanSetAgreedAmount": "Set agreed amount",
+  "craftsmanEditAgreedAmount": "Edit agreed amount",
+  "craftsmanAgreedAmountSheetTitle": "Agreed amount",
+  "craftsmanAgreedForClientLabel": "Agreed for this client (optional)",
+  "craftsmanAgreementAmountPlaceholder": "Not set",
+  "craftsmanAgreementAmountCaption": "Leave empty if nothing was agreed. Enter 0 when the agreed amount is zero.",
+  "craftsmanAgreementAmountInvalid": "Enter a non-negative amount or leave blank",
+  "craftsmanAgreementHasPayments": "Has recorded payments",
+  "directoryAddCraftsmanToRoster": "Add craftsman to directory",
+  "crewAssignmentsSaved": "Craftsman choices saved for this client",
+  "itemsCatalogCaption": "Default items — you can add, edit, and archive",
+  "addItem": "Add item",
+  "itemCreateSheetTitle": "New item",
+  "itemEditSheetTitle": "Edit item",
+  "itemNameLabel": "Item name",
+  "itemNameRequired": "Enter item name",
+  "itemNameHint": "e.g. Insulation",
+  "itemsEmptyTitle": "No items yet",
+  "itemsEmptyDescription": "Add an item to categorize project spend.",
+  "archiveItemTitle": "Archive item?",
+  "archiveItemDescription": "{name} will be hidden from lists. Expense history is kept.",
+  "@archiveItemDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "statementClientHeading": "Fund / client statement",
+  "statementPeriodToday": "Today",
+  "statementPeriodMonth": "This month",
+  "statementPeriodAll": "All time",
+  "statementTotalReceived": "Total received",
+  "statementTotalSpent": "Total spent",
+  "statementClosingLabel": "Remaining",
+  "statementClosingEndOfPeriod": "Remaining at period end",
+  "statementMaterialsLaborSummary": "Materials total: {materials} | Labor total: {labor}",
+  "@statementMaterialsLaborSummary": {
+    "placeholders": {
+      "materials": { "type": "String" },
+      "labor": { "type": "String" }
+    }
+  },
+  "statementOpeningPeriodNet": "Opening balance: {opening} · Net movement: {net}",
+  "@statementOpeningPeriodNet": {
+    "placeholders": {
+      "opening": { "type": "String" },
+      "net": { "type": "String" }
+    }
+  },
+  "statementReceiptsSectionTitle": "Receipts from client",
+  "statementReceiptsSectionCaption": "Payments appear here only and are not repeated under expense items.",
+  "statementEmptyReceipts": "No receipts in the selected period.",
+  "statementItemSectionTitle": "Item: {name}",
+  "@statementItemSectionTitle": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "statementItemSectionTotal": "Total: {total}",
+  "@statementItemSectionTotal": {
+    "placeholders": {
+      "total": { "type": "String" }
+    }
+  },
+  "statementItemMaterialsLabor": "Materials: {materials} | Labor: {labor}",
+  "@statementItemMaterialsLabor": {
+    "placeholders": {
+      "materials": { "type": "String" },
+      "labor": { "type": "String" }
+    }
+  },
+  "statementReconcileSpend": "Expense check: {materials} materials + {labor} labor = {spent}",
+  "@statementReconcileSpend": {
+    "placeholders": {
+      "materials": { "type": "String" },
+      "labor": { "type": "String" },
+      "spent": { "type": "String" }
+    }
+  },
+  "statementReconcileBalance": "{openingPrefix}{received} received − {spent} spent = {closing} remaining",
+  "@statementReconcileBalance": {
+    "placeholders": {
+      "openingPrefix": { "type": "String" },
+      "received": { "type": "String" },
+      "spent": { "type": "String" },
+      "closing": { "type": "String" }
+    }
+  },
+  "statementIssuedOn": "Issued: {date}",
+  "@statementIssuedOn": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "statementPeriodDisplay": "Period: {label}",
+  "@statementPeriodDisplay": {
+    "placeholders": {
+      "label": { "type": "String" }
+    }
+  },
+  "statementCurrencyNote": "Currency: Egyptian pound (EGP)",
+  "statementTableSerial": "#",
+  "statementTableAmount": "Amount",
+  "statementTableDetail": "Detail",
+  "statementPdfExporting": "Preparing PDF…",
+  "statementSupplierHeading": "Supplier statement",
+  "statementPageFooter": "Page {page} of {pages}",
+  "@statementPageFooter": {
+    "placeholders": {
+      "page": { "type": "String" },
+      "pages": { "type": "String" }
+    }
+  },
+  "statementPeriodCustomize": "Custom range",
+  "statementPeriodSinceLastExport": "Since last export",
+  "statementSinceLastExportUnavailable": "No prior export yet — choose another range.",
+  "statementPeriodDatesHint": "Dates use inclusive local calendar days.",
+  "statementReconcileSectionTitle": "Balance review",
+  "statementLastExportAt": "Last successful PDF: {date}",
+  "@statementLastExportAt": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "statementExportFailed": "Could not prepare PDF",
+  "statementPeriodFrom": "From",
+  "statementPeriodTo": "To",
+  "statementSupplierPaymentsTitle": "Payments in period",
+  "statementSupplierPaymentsCaption": "Material spend rows linked to this supplier only.",
+  "statementEmptyPayments": "No payments in the selected period."
 }

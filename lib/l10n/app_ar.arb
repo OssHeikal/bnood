@@ -35,7 +35,7 @@
   "cash": "كاش",
   "transfer": "تحويل",
   "materials": "خامات",
-  "labor": "شغل يد",
+  "labor": "مصنعية",
   "amount": "المبلغ",
   "date": "التاريخ",
   "descriptionOptional": "وصف (اختياري)",
@@ -46,9 +46,42 @@
   "cancel": "إلغاء",
   "seeAll": "عرض الكل",
   "movements": "الحركات",
-  "engineerFee": "نسبة المهندس (معلومات)",
+  "whatsappLaunchFailed": "تعذّر فتح واتساب",
+  "whatsappInvalidPhone": "رقم الهاتف ده مش صالح لفتح واتساب",
+  "engineerFee": "نسبة الربح (معلومات)",
   "paid": "مدفوع",
   "craftsmen": "صنايعية",
+  "assignCraftsmen": "تحديد الصنايعية",
+  "clientDetailNoCraftsmen": "مفيش صنايعية على المشروع ده لسه",
+  "clientDetailNoItemSpend": "مفيش صرف بنود مسجّل لسه",
+  "clientDetailNoMovements": "مفيش حركات لسه",
+  "clientDetailCraftsmenEmptyDescription": "اختار الصنايعية من دليلك العام لربطهم بهذا المشروع.",
+  "engineerEstimatedProfitTitle": "ربح تقديري",
+  "engineerFeeNoRate": "بدون نسبة",
+  "engineerFeePercentCaption": "{percent} من المصروف",
+  "@engineerFeePercentCaption": {
+    "placeholders": {
+      "percent": { "type": "String" }
+    }
+  },
+  "engineerFeeInternalOnly": "داخلي فقط",
+  "engineerFeeUndefined": "غير محدد",
+  "engineerFeeSheetTitle": "نسبة الربح",
+  "engineerFeePercentFieldLabel": "نسبة الربح",
+  "engineerFeePercentPlaceholder": "غير محددة",
+  "engineerFeeSheetCaption": "ربح تقديري داخلي فقط؛ لا يُخصم من العهدة ولا ينشئ مستحقات على العميل، ولا يظهر في كشف حسابه أو ملف PDF. اترك النسبة فارغة لإلغاء الاحتساب.",
+  "engineerFeePercentInvalid": "أدخل نسبة من 0 إلى 100 أو اتركها فارغة",
+  "clientReceiveMovementDetail": "دفعة من العميل",
+  "clientDetailUnspecifiedItem": "بند غير محدد",
+  "clientDetailNoDescription": "بدون وصف",
+  "archiveClientTitle": "أرشفة العميل؟",
+  "archiveClientDescription": "هتنقل عهدة {name} للأرشيف. تقدر ترجعها بعدين.",
+  "@archiveClientDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "craftsmanAgreedAmount": "المتفق عليه",
   "suppliers": "موردين",
   "statement": "كشف حساب",
   "period": "الفترة",
@@ -57,6 +90,244 @@
   "sharePdf": "مشاركة PDF",
   "createNew": "إنشاء جديد",
   "archive": "أرشفة",
+  "unarchive": "إلغاء الأرشفة",
+  "clientsFilterAll": "الكل",
+  "clientsFilterActive": "نشط",
+  "clientsFilterArchived": "مؤرشف",
+  "clientsNoArchivedTitle": "لا يوجد عملاء مؤرشفون",
+  "clientsNoArchivedDescription": "العملاء المؤرشفون يظهرون هنا بعد أرشفة العهدة.",
+  "clientsNoClientsTitle": "لا يوجد عملاء بعد",
   "edit": "تعديل",
-  "delete": "حذف"
+  "delete": "حذف",
+  "voucherAmountRequired": "أدخل مبلغًا أكبر من صفر",
+  "voucherSelectClient": "اختر العميل",
+  "voucherSelectItem": "اختر البند",
+  "voucherSelectCraftsman": "اختر الصنايعي",
+  "voucherPickerSearchHint": "بحث",
+  "voucherPickerNoResults": "لا توجد نتائج",
+  "voucherPickerEmptyTitle": "لا يوجد شيء بعد",
+  "voucherReceiptPhoto": "صورة إيصال",
+  "voucherAttachCamera": "الكاميرا",
+  "voucherAttachGallery": "المعرض",
+  "voucherReceiptCameraDenied": "تم رفض الوصول إلى الكاميرا. يمكنك تفعيله من الإعدادات لتصوير الإيصالات.",
+  "voucherReceiptCameraRestricted": "الوصول إلى الكاميرا مقيّد على هذا الجهاز.",
+  "voucherReceiptGalleryDenied": "تم رفض الوصول إلى الصور. يمكنك تفعيله من الإعدادات لإرفاق إيصالات من المعرض.",
+  "voucherReceiptGalleryRestricted": "الوصول إلى الصور مقيّد على هذا الجهاز.",
+  "voucherReceiptAttachFailed": "تعذّر إرفاق الإيصال. حاول مرة أخرى.",
+  "voucherAssignCraftsmanFirst": "عيّن صنايعية للمشروع أولًا",
+  "amountHint": "0.00",
+  "voucherReceiveTitle": "سند قبض",
+  "voucherSpendTitle": "سند صرف",
+  "voucherSaveReceive": "حفظ القبض",
+  "voucherSaveSpend": "حفظ الصرف",
+  "expenseCategory": "تصنيف المصروف",
+  "voucherContextGeneric": "سند عام · اختار العميل ونوع الحركة",
+  "voucherContextClient": "سند للعميل: {clientName} · يمكنك تغيير العميل أدناه",
+  "@voucherContextClient": {
+    "placeholders": {
+      "clientName": {
+        "type": "String"
+      }
+    }
+  },
+  "noteOptionalHint": "اختياري…",
+  "paymentMethod": "طريقة الدفع",
+  "directorySuppliersHint": "موردو الخامات · بيانات وحركات مدفوعة فقط، دون مستحقات أو مديونيات.",
+  "directoryCraftsmenHint": "دليلك العام للصنايعية · يمكن ربط الصنايعي بأكثر من عميل.",
+  "directorySupplierKindMeta": "مورد خامات",
+  "directoryEmptySuppliersTitle": "لا يوجد موردون بعد",
+  "directoryEmptySuppliersDescription": "أضف موردًا للدليل، ثم اربطه عند تسجيل صرف خامات.",
+  "directoryEmptyCraftsmenTitle": "لا يوجد صنايعية بعد",
+  "directoryEmptyCraftsmenDescription": "أضف صنايعيًا للدليل، ثم عيّنه من صفحة العميل.",
+  "directoryAddSupplier": "إضافة مورد",
+  "directoryAddCraftsman": "إضافة صنايعي",
+  "directoryCraftsmanProjectsCount": "{count} مشروعات",
+  "@directoryCraftsmanProjectsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "directoryViewDetails": "عرض التفاصيل",
+  "archiveSupplierTitle": "أرشفة المورد؟",
+  "archiveSupplierDescription": "سيُخفى {name} من القوائم. سجل المدفوعات يبقى محفوظًا.",
+  "@archiveSupplierDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "archiveCraftsmanTitle": "أرشفة الصنايعي؟",
+  "archiveCraftsmanDescription": "سيُخفى {name} من القوائم. سجل المصنعية يبقى محفوظًا.",
+  "@archiveCraftsmanDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "supplierNameRequired": "أدخل اسم المورد",
+  "craftsmanNameRequired": "أدخل اسم الصنايعي",
+  "craftsmanPhoneLabel": "التليفون",
+  "craftsmanPhoneRequired": "أدخل رقم التليفون",
+  "directorySupplierNameHint": "مثال: مورد خامات",
+  "directoryCraftsmanNameHint": "مثال: سبّاك",
+  "supplierTotalPaidLabel": "إجمالي المدفوع للمورد",
+  "supplierSpendRecordedCaption": "حركات مدفوعة مسجلة فقط",
+  "supplierDetailTransactionsSection": "سجل التعاملات",
+  "supplierDetailNoTransactions": "لا توجد تعاملات مسجلة",
+  "supplierDetailNotFoundTitle": "المورد غير موجود",
+  "supplierProfilePhoneLabel": "التليفون",
+  "supplierProfileNotesLabel": "ملاحظات",
+  "directoryCraftsmanKindMeta": "صنايعي",
+  "craftsmanTotalLaborPaidLabel": "إجمالي المصنعية المدفوعة",
+  "craftsmanLaborStatCaption": "عبر {count} مشروعات · يُحسب من حركات المصنعية فقط",
+  "@craftsmanLaborStatCaption": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "craftsmanDetailJobsSection": "العمل حسب العميل",
+  "craftsmanDetailEditAgreement": "تعديل الاتفاق",
+  "craftsmanDetailNoAgreedAmount": "بدون مبلغ متفق عليه",
+  "craftsmanDetailNoJobs": "لا مشروعات عملاء مرتبطة",
+  "craftsmanDetailLaborHistorySection": "سجل مدفوعات المصنعية",
+  "craftsmanDetailNoLaborHistory": "لا مدفوعات مصنعية مسجلة",
+  "craftsmanDetailNotFoundTitle": "الصنايعي غير موجود",
+  "craftsmanProfileTradeLabel": "التخصص",
+  "craftsmanProfileNotesLabel": "ملاحظات",
+  "crewAssignmentsIntro": "اختَر من الدليل. المبلغ المتفق عليه اختياري لهذا المشروع.",
+  "crewAssignmentsProjectContext": "مشروع {name}",
+  "@crewAssignmentsProjectContext": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "craftsmanSetAgreedAmount": "تعيين المبلغ المتفق عليه",
+  "craftsmanEditAgreedAmount": "تعديل المبلغ المتفق عليه",
+  "craftsmanAgreedAmountSheetTitle": "المبلغ المتفق عليه",
+  "craftsmanAgreedForClientLabel": "المتفق عليه لهذا العميل (اختياري)",
+  "craftsmanAgreementAmountPlaceholder": "غير محدد",
+  "craftsmanAgreementAmountCaption": "اتركه فارغًا إن لم يكن هناك اتفاق. أدخل 0 إذا كان المتفق عليه صفرًا.",
+  "craftsmanAgreementAmountInvalid": "أدخل مبلغًا غير سالب أو اتركه فارغًا",
+  "craftsmanAgreementHasPayments": "له مدفوعات مسجلة",
+  "directoryAddCraftsmanToRoster": "إضافة صنايعي للدليل",
+  "crewAssignmentsSaved": "حُفظت اختيارات الصنايعية لهذا العميل",
+  "itemsCatalogCaption": "البنود الافتراضية — يمكنك الإضافة والتعديل والأرشفة",
+  "addItem": "إضافة بند",
+  "itemCreateSheetTitle": "بند جديد",
+  "itemEditSheetTitle": "تعديل البند",
+  "itemNameLabel": "اسم البند",
+  "itemNameRequired": "اكتب اسم البند",
+  "itemNameHint": "مثال: عزل",
+  "itemsEmptyTitle": "لا توجد بنود بعد",
+  "itemsEmptyDescription": "أضف بندًا لتصنيف مصروفات المشروع.",
+  "archiveItemTitle": "أرشفة البند؟",
+  "archiveItemDescription": "سيُخفى {name} من القوائم. سجل المصروفات يبقى محفوظًا.",
+  "@archiveItemDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "statementClientHeading": "عهدة / كشف حساب العميل",
+  "statementPeriodToday": "اليوم",
+  "statementPeriodMonth": "هذا الشهر",
+  "statementPeriodAll": "كل الفترة",
+  "statementTotalReceived": "إجمالي المقبوض",
+  "statementTotalSpent": "إجمالي المصروف",
+  "statementClosingLabel": "المتبقي",
+  "statementClosingEndOfPeriod": "المتبقي بنهاية الفترة",
+  "statementMaterialsLaborSummary": "إجمالي مونة (خامات): {materials} | إجمالي مصنعية: {labor}",
+  "@statementMaterialsLaborSummary": {
+    "placeholders": {
+      "materials": { "type": "String" },
+      "labor": { "type": "String" }
+    }
+  },
+  "statementOpeningPeriodNet": "رصيد أول الفترة: {opening} · صافي حركة الفترة: {net}",
+  "@statementOpeningPeriodNet": {
+    "placeholders": {
+      "opening": { "type": "String" },
+      "net": { "type": "String" }
+    }
+  },
+  "statementReceiptsSectionTitle": "المقبوضات من العميل",
+  "statementReceiptsSectionCaption": "تُعرض الدفعات هنا فقط، ولا تُكرر داخل بنود المصروفات.",
+  "statementEmptyReceipts": "لا توجد مقبوضات في الفترة المحددة.",
+  "statementItemSectionTitle": "بند: {name}",
+  "@statementItemSectionTitle": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "statementItemSectionTotal": "الإجمالي: {total}",
+  "@statementItemSectionTotal": {
+    "placeholders": {
+      "total": { "type": "String" }
+    }
+  },
+  "statementItemMaterialsLabor": "إجمالي مونة (خامات): {materials} | إجمالي مصنعية: {labor}",
+  "@statementItemMaterialsLabor": {
+    "placeholders": {
+      "materials": { "type": "String" },
+      "labor": { "type": "String" }
+    }
+  },
+  "statementReconcileSpend": "مراجعة المصروفات: {materials} خامات + {labor} مصنعية = {spent}",
+  "@statementReconcileSpend": {
+    "placeholders": {
+      "materials": { "type": "String" },
+      "labor": { "type": "String" },
+      "spent": { "type": "String" }
+    }
+  },
+  "statementReconcileBalance": "{openingPrefix}{received} مقبوض − {spent} مصروف = {closing} متبقي",
+  "@statementReconcileBalance": {
+    "placeholders": {
+      "openingPrefix": { "type": "String" },
+      "received": { "type": "String" },
+      "spent": { "type": "String" },
+      "closing": { "type": "String" }
+    }
+  },
+  "statementIssuedOn": "تاريخ الكشف: {date}",
+  "@statementIssuedOn": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "statementPeriodDisplay": "الفترة: {label}",
+  "@statementPeriodDisplay": {
+    "placeholders": {
+      "label": { "type": "String" }
+    }
+  },
+  "statementCurrencyNote": "العملة: الجنيه المصري (EGP)",
+  "statementTableSerial": "م",
+  "statementTableAmount": "مبلغ",
+  "statementTableDetail": "بيان",
+  "statementPdfExporting": "جاري إعداد الملف…",
+  "statementSupplierHeading": "كشف حساب مورد",
+  "statementPageFooter": "صفحة {page} من {pages}",
+  "@statementPageFooter": {
+    "placeholders": {
+      "page": { "type": "String" },
+      "pages": { "type": "String" }
+    }
+  },
+  "statementPeriodCustomize": "تخصيص الفترة",
+  "statementPeriodSinceLastExport": "من آخر تصدير",
+  "statementSinceLastExportUnavailable": "لا يوجد تصدير سابق بعد — اختر فترة أخرى.",
+  "statementPeriodDatesHint": "التواريخ باليوم المحلي، شاملة لأول وآخر يوم.",
+  "statementReconcileSectionTitle": "مراجعة الرصيد",
+  "statementLastExportAt": "آخر تصدير PDF ناجح: {date}",
+  "@statementLastExportAt": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "statementExportFailed": "تعذّر إعداد ملف PDF",
+  "statementPeriodFrom": "من",
+  "statementPeriodTo": "إلى",
+  "statementSupplierPaymentsTitle": "مدفوعات الفترة",
+  "statementSupplierPaymentsCaption": "حركات صرف خامات مرتبطة بالمورد فقط.",
+  "statementEmptyPayments": "لا توجد مدفوعات في الفترة المحددة."
 }

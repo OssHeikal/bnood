@@ -1,12 +1,22 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/money/ledger_math.dart';
-import '../../core/money/money_format.dart';
-import '../../core/providers/app_providers.dart';
-import '../../core/repositories/bnood_repository.dart';
+import '../../core/config/extensions/num_extensions.dart';
+import '../../core/config/theme/app_colors.dart';
+import '../../core/config/theme/app_size.dart';
+import '../../core/widgets/app_card.dart';
+import '../../core/widgets/app_fallback.dart';
+import '../../core/widgets/foundation_app_bar_title.dart';
+import '../../core/widgets/skeleton/async_value_body.dart';
+import '../home/home_foundation_scope.dart';
+import 'craftsman_detail_provider.dart';
+import 'craftsman_detail_snapshot.dart';
+import 'widgets/craftsman_detail_history_section.dart';
+import 'widgets/craftsman_detail_jobs_section.dart';
+import 'widgets/craftsman_detail_loading_skeleton.dart';
+import 'widgets/craftsman_detail_labor_stat.dart';
+import 'widgets/craftsman_detail_profile.dart';
 
 class CraftsmanDetailScreen extends ConsumerWidget {
   const CraftsmanDetailScreen({super.key, required this.craftsmanId});
@@ -16,62 +26,129 @@ class CraftsmanDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final repo = ref.watch(repositoryProvider);
-    return FutureBuilder(
-      future: _load(repo),
-      builder: (context, snap) {
-        if (!snap.hasData) {
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
-        }
-        final rows = snap.data!;
-        return Scaffold(
-          appBar: AppBar(title: Text(l10n.craftsman)),
-          body: ListView(
-            children: [
-              for (final r in rows)
-                ListTile(
-                  title: Text(r.projectName),
-                  subtitle: Text(
-                      '${l10n.paid}: ${MoneyFormat.formatPiastres(r.paid)}'),
-                  trailing: r.remaining != null
-                      ? Text(MoneyFormat.formatPiastres(r.remaining!))
-                      : null,
-                ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final detail = ref.watch(craftsmanDetailProvider(craftsmanId));
+    final craftsman = detail.valueOrNull?.craftsman;
+    final craftsmanName = craftsman?.name;
+    final phone = craftsman?.phone.trim();
+    final hasPhone = phone != null && phone.isNotEmpty;
 
-  Future<List<_Row>> _load(BnoodRepository repo) async {
-    final projects = await repo.allProjects();
-    final result = <_Row>[];
-    for (final p in projects) {
-      final tx = await repo.transactionsForProject(p.id);
-      final paid =
-          LedgerMath.craftsmanPaidPiastres(rows: tx, craftsmanId: craftsmanId);
-      if (paid == 0) continue;
-      final agreements = await repo.agreementsForProject(p.id);
-      final ag =
-          agreements.where((a) => a.craftsmanId == craftsmanId).firstOrNull;
-      result.add(_Row(
-        projectName: p.name,
-        paid: paid,
-        remaining: LedgerMath.craftsmanRemainingPiastres(
-          initialAmountPiastres: ag?.initialAmountPiastres,
-          paidPiastres: paid,
-        ),
-      ));
-    }
-    return result;
+    return HomeFoundationScope(
+      child: Builder(
+        builder: (context) {
+          final colors = context.colors;
+          return Scaffold(
+            backgroundColor: colors.canvas,
+            appBar: AppBar(
+              backgroundColor: colors.canvas,
+              surfaceTintColor: Colors.transparent,
+              scrolledUnderElevation: 0,
+              elevation: 0,
+              centerTitle: false,
+              title: FoundationAppBarTitle(
+                title: craftsmanName ?? l10n.craftsman,
+                subtitle: hasPhone ? phone : null,
+                subtitleLtr: true,
+              ),
+            ),
+            body: ListView(
+              padding: EdgeInsets.fromLTRB(
+                AppSize.screenPadding,
+                AppSize.spaceSM,
+                AppSize.screenPadding,
+                AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
+              ),
+              children: [
+                AsyncValueBody(
+                  value: detail,
+                  loadingPlaceholder: const CraftsmanDetailLoadingSkeleton(),
+                  error: (error, _) {
+                    if (error is CraftsmanDetailNotFound) {
+                      return AppCard(
+                        child: AppFallback.section(
+                          icon: Icons.person_off_outlined,
+                          title: l10n.craftsmanDetailNotFoundTitle,
+                        ),
+                      );
+                    }
+                    return AppCard(
+                      child: AppFallback.section(
+                        icon: Icons.error_outline,
+                        title: l10n.homeLoadErrorTitle,
+                        description: error.toString(),
+                        actions: [
+                          AppFallbackAction(
+                            label: l10n.retry,
+                            onPressed: () =>
+                                ref.read(craftsmanDetailProvider(craftsmanId).notifier).refreshSilently(),
+                            role: AppFallbackActionRole.tertiary,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  data: (data) => _CraftsmanDetailBody(
+                    craftsmanId: craftsmanId,
+                    data: data,
+                    localeCode: localeCode,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 
-class _Row {
-  _Row({required this.projectName, required this.paid, this.remaining});
-  final String projectName;
-  final int paid;
-  final int? remaining;
+class _CraftsmanDetailBody extends ConsumerWidget {
+  const _CraftsmanDetailBody({
+    required this.craftsmanId,
+    required this.data,
+    required this.localeCode,
+  });
+
+  final String craftsmanId;
+  final CraftsmanDetailSnapshot data;
+  final String localeCode;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = CraftsmanDetailProfile(craftsman: data.craftsman);
+    final hasProfile = data.craftsman.trade?.trim().isNotEmpty == true ||
+        data.craftsman.notes?.trim().isNotEmpty == true;
+
+    Future<void> afterAgreementSaved() async {
+      await ref.read(craftsmanDetailProvider(craftsmanId).notifier).refreshSilently();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (hasProfile) ...[
+          profile,
+          AppSize.spaceLG.gap,
+        ],
+        CraftsmanDetailLaborStat(
+          totalLaborPaidPiastres: data.totalLaborPaidPiastres,
+          linkedProjectCount: data.linkedProjectCount,
+          localeCode: localeCode,
+        ),
+        AppSize.spaceXL.gap,
+        CraftsmanDetailJobsSection(
+          jobs: data.jobs,
+          craftsmanId: data.craftsman.id,
+          craftsmanName: data.craftsman.name,
+          localeCode: localeCode,
+          onAgreementSaved: afterAgreementSaved,
+        ),
+        AppSize.spaceXL.gap,
+        CraftsmanDetailHistorySection(
+          history: data.history,
+          localeCode: localeCode,
+        ),
+      ],
+    );
+  }
 }

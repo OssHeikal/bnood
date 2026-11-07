@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/money/ledger_math.dart';
-import '../../core/money/money_format.dart';
-import '../../core/providers/app_providers.dart';
-import '../../core/repositories/bnood_repository.dart';
+import '../../core/config/extensions/num_extensions.dart';
+import '../../core/config/theme/app_colors.dart';
+import '../../core/config/theme/app_size.dart';
+import '../../core/widgets/app_card.dart';
+import '../../core/widgets/app_fallback.dart';
+import '../../core/widgets/foundation_app_bar_title.dart';
+import '../../core/widgets/skeleton/async_value_body.dart';
+import '../../core/widgets/skeleton/skeleton.dart';
+import '../home/home_foundation_scope.dart';
+import 'client_craftsmen_list_provider.dart';
+import 'craftsman_assignments_sheet.dart';
+import 'widgets/client_detail_craftsman_row.dart';
 
 class ClientCraftsmenListScreen extends ConsumerWidget {
   const ClientCraftsmenListScreen({super.key, required this.clientId});
@@ -15,59 +23,148 @@ class ClientCraftsmenListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final repo = ref.watch(repositoryProvider);
-    return FutureBuilder(
-      future: _load(repo),
-      builder: (context, snap) {
-        if (!snap.hasData) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
-        }
-        final rows = snap.data!;
-        return Scaffold(
-          appBar: AppBar(title: Text(l10n.craftsmen)),
-          body: ListView(
-            children: [
-              for (final r in rows)
-                ListTile(
-                  title: Text(r.name),
-                  subtitle: Text('${l10n.paid}: ${MoneyFormat.formatPiastres(r.paid)}'),
-                  trailing: r.remaining != null ? Text(MoneyFormat.formatPiastres(r.remaining!)) : null,
-                ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final list = ref.watch(clientCraftsmenListProvider(clientId));
 
-  Future<List<_Row>> _load(BnoodRepository repo) async {
-    final project = await repo.primaryActiveProject(clientId);
-    if (project == null) return [];
-    final agreements = await repo.agreementsForProject(project.id);
-    final tx = await repo.transactionsForProject(project.id);
-    final craftsmen = await repo.watchActiveCraftsmen().first;
-    return [
-      for (final a in agreements)
-        () {
-          final c = craftsmen.where((x) => x.id == a.craftsmanId).firstOrNull;
-          if (c == null) return null;
-          final paid = LedgerMath.craftsmanPaidPiastres(rows: tx, craftsmanId: a.craftsmanId);
-          return _Row(
-            name: c.name,
-            paid: paid,
-            remaining: LedgerMath.craftsmanRemainingPiastres(
-              initialAmountPiastres: a.initialAmountPiastres,
-              paidPiastres: paid,
+    return HomeFoundationScope(
+      child: Builder(
+        builder: (context) {
+          final colors = context.colors;
+          return Scaffold(
+            backgroundColor: colors.canvas,
+            appBar: AppBar(
+              backgroundColor: colors.canvas,
+              surfaceTintColor: Colors.transparent,
+              scrolledUnderElevation: 0,
+              elevation: 0,
+              centerTitle: false,
+              title: FoundationAppBarTitle(title: l10n.craftsmen),
+            ),
+            body: ListView(
+              padding: EdgeInsets.fromLTRB(
+                AppSize.screenPadding,
+                AppSize.spaceSM,
+                AppSize.screenPadding,
+                AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
+              ),
+              children: [
+                AsyncValueBody(
+                  value: list,
+                  loadingPlaceholder: const _ClientCraftsmenListSkeleton(),
+                  error: (e, _) => AppCard(
+                    child: AppFallback.section(
+                      icon: Icons.error_outline,
+                      title: l10n.homeLoadErrorTitle,
+                      description: e.toString(),
+                      actions: [
+                        AppFallbackAction(
+                          label: l10n.retry,
+                          onPressed: () =>
+                              ref.read(clientCraftsmenListProvider(clientId).notifier).refreshSilently(),
+                          role: AppFallbackActionRole.tertiary,
+                        ),
+                      ],
+                    ),
+                  ),
+                  data: (data) => _ClientCraftsmenListBody(
+                    clientId: clientId,
+                    data: data,
+                    localeCode: localeCode,
+                  ),
+                ),
+              ],
             ),
           );
-        }(),
-    ].whereType<_Row>().toList();
+        },
+      ),
+    );
   }
 }
 
-class _Row {
-  _Row({required this.name, required this.paid, this.remaining});
-  final String name;
-  final int paid;
-  final int? remaining;
+class _ClientCraftsmenListBody extends ConsumerWidget {
+  const _ClientCraftsmenListBody({
+    required this.clientId,
+    required this.data,
+    required this.localeCode,
+  });
+
+  final String clientId;
+  final ClientCraftsmenListSnapshot data;
+  final String localeCode;
+
+  Future<void> _openAssignments(BuildContext context, WidgetRef ref) async {
+    final projectId = data.projectId;
+    if (projectId == null) return;
+    await showCraftsmanAssignmentsSheet(
+      context: context,
+      projectId: projectId,
+      clientId: clientId,
+    );
+    if (context.mounted) {
+      await ref.read(clientCraftsmenListProvider(clientId).notifier).refreshSilently();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final text = context.text;
+    final colors = context.colors;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (data.projectId != null)
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: TextButton(
+              onPressed: () => _openAssignments(context, ref),
+              child: Text(
+                l10n.assignCraftsmen,
+                style: text.caption.copyWith(color: colors.primaryDark, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+        if (data.projectId != null) AppSize.spaceSM.gap,
+        if (data.rows.isEmpty)
+          AppCard(
+            child: AppFallback.section(
+              icon: Icons.handyman_outlined,
+              title: l10n.clientDetailNoCraftsmen,
+              description: l10n.clientDetailCraftsmenEmptyDescription,
+              actions: data.projectId == null
+                  ? const []
+                  : [
+                      AppFallbackAction(
+                        label: l10n.assignCraftsmen,
+                        onPressed: () => _openAssignments(context, ref),
+                        role: AppFallbackActionRole.tertiary,
+                      ),
+                    ],
+            ),
+          )
+        else
+          for (var i = 0; i < data.rows.length; i++) ...[
+            if (i > 0) AppSize.spaceMD.gap,
+            ClientDetailCraftsmanRow(preview: data.rows[i], localeCode: localeCode),
+          ],
+      ],
+    );
+  }
+}
+
+class _ClientCraftsmenListSkeleton extends StatelessWidget {
+  const _ClientCraftsmenListSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Skeleton(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(height: AppSize.spaceLG),
+        ],
+      ),
+    );
+  }
 }
