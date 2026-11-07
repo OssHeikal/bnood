@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/config/extensions/num_extensions.dart';
+import '../../core/config/theme/app_size.dart';
 import '../../core/providers/app_providers.dart';
-import '../../core/widgets/app_button.dart';
+import '../../core/widgets/app_toaster.dart';
+import '../../core/widgets/app_button.dart' as legacy;
+import '../../core/widgets/buttons/app_button.dart';
+import '../../core/widgets/custom_text_field.dart';
 
 class InlineCreateClientPage extends ConsumerStatefulWidget {
   const InlineCreateClientPage({super.key});
@@ -15,8 +20,11 @@ class InlineCreateClientPage extends ConsumerStatefulWidget {
 
 class _InlineCreateClientPageState
     extends ConsumerState<InlineCreateClientPage> {
+  final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _phone = TextEditingController();
+  var _attemptedSubmit = false;
+  var _saving = false;
 
   @override
   void dispose() {
@@ -25,34 +33,75 @@ class _InlineCreateClientPageState
     super.dispose();
   }
 
+  Future<void> _save() async {
+    setState(() => _attemptedSubmit = true);
+    if (_formKey.currentState?.validate() != true) return;
+    if (_saving) return;
+    setState(() => _saving = true);
+    try {
+      final client = await ref.read(repositoryProvider).createClient(
+            name: _name.text.trim(),
+            phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(),
+          );
+      if (!mounted) return;
+      Navigator.pop(context, client.id);
+    } catch (e) {
+      if (!mounted) return;
+      AppToaster.show(e.toString(), kind: ToastKind.failure);
+      setState(() => _saving = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.addClient)),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSize.screenPadding,
+        0,
+        AppSize.screenPadding,
+        AppSize.spaceMD,
+      ),
+      child: Form(
+        key: _formKey,
+        autovalidateMode:
+            _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-                controller: _name,
-                decoration: InputDecoration(labelText: l10n.clientName)),
-            TextField(
-                controller: _phone,
-                decoration: InputDecoration(labelText: l10n.phoneOptional)),
-            const Spacer(),
-            AppButton(
-              label: l10n.save,
-              onPressed: () async {
-                if (_name.text.trim().isEmpty) return;
-                final client = await ref.read(repositoryProvider).createClient(
-                      name: _name.text.trim(),
-                      phone: _phone.text.trim().isEmpty
-                          ? null
-                          : _phone.text.trim(),
-                    );
-                if (context.mounted) Navigator.pop(context, client.id);
+            CustomTextField(
+              controller: _name,
+              label: l10n.clientName,
+              placeholder: l10n.clientNameHint,
+              fieldHeight: AppSize.fieldHeightComfortable,
+              autofocus: true,
+              textCapitalization: TextCapitalization.words,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.name],
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return l10n.clientNameRequired;
+                }
+                return null;
               },
+            ),
+            AppSize.spaceMD.gap,
+            CustomTextField(
+              controller: _phone,
+              label: l10n.phoneOptional,
+              placeholder: l10n.clientPhoneHint,
+              fieldHeight: AppSize.fieldHeightComfortable,
+              type: AppInputType.phone,
+              ltrValue: true,
+              textInputAction: TextInputAction.done,
+              autofillHints: const [AutofillHints.telephoneNumber],
+            ),
+            AppSize.spaceLG.gap,
+            AppButton.primary(
+              text: l10n.save,
+              isLoading: _saving,
+              onPressed: _saving ? null : _save,
             ),
           ],
         ),
@@ -91,7 +140,7 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
                 controller: _name,
                 decoration: InputDecoration(labelText: l10n.item)),
             const Spacer(),
-            AppButton(
+            legacy.AppButton(
               label: l10n.save,
               onPressed: () async {
                 if (_name.text.trim().isEmpty) return;
@@ -146,7 +195,7 @@ class _InlineCreateSupplierPageState
                 controller: _phone,
                 decoration: InputDecoration(labelText: l10n.phoneOptional)),
             const Spacer(),
-            AppButton(
+            legacy.AppButton(
               label: l10n.save,
               onPressed: () async {
                 if (_name.text.trim().isEmpty) return;
@@ -202,7 +251,7 @@ class _InlineCreateCraftsmanPageState
                 controller: _phone,
                 decoration: InputDecoration(labelText: l10n.phoneOptional)),
             const Spacer(),
-            AppButton(
+            legacy.AppButton(
               label: l10n.save,
               onPressed: () async {
                 if (_name.text.trim().isEmpty || _phone.text.trim().isEmpty) {

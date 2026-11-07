@@ -11,6 +11,7 @@ import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/providers/dashboard_providers.dart';
 import '../vouchers/voucher_launcher.dart';
 import 'craftsman_assignments_sheet.dart';
 import 'engineer_edit_sheet.dart';
@@ -46,6 +47,7 @@ class ClientDetailScreen extends ConsumerWidget {
                 icon: const Icon(Icons.archive_outlined),
                 onPressed: () async {
                   await ref.read(repositoryProvider).archiveClient(clientId);
+                  refreshAfterClientMutation(ref);
                   if (context.mounted) context.pop();
                 },
               ),

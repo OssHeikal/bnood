@@ -1,0 +1,95 @@
+---
+description: Visual design, typography, spacing, themes — match index.html
+globs: lib/**/*
+alwaysApply: false
+---
+
+# UI design system
+
+Read first: [docs/visual-reference.md](../../docs/visual-reference.md) · [docs/design.md](../../docs/design.md) · [docs/ui-acceptance.md](../../docs/ui-acceptance.md)
+
+The shipped Flutter UI must converge to the owner **index.html** reference. Passing tests or analyzer does **not** mean design acceptance. Compare simulator screenshots to index on a **small phone width** (~390 logical px) before claiming parity.
+
+## Typography (hierarchy ≠ font size alone)
+
+Use **Cairo** for Arabic and Latin. Hierarchy = **weight + semantic color + size + line height + spacing**. Do not bold everything or use near-black for all roles.
+
+### Font files (current repo — do not over-claim)
+
+| File | Verified fact |
+|------|----------------|
+| `assets/fonts/Cairo-Regular.ttf` | Static name “Regular”; **variable `wght` axis 200–1000** (default 400); `pubspec` registers weight 400 only |
+| `assets/fonts/Cairo-Bold.ttf` | `usWeightClass` 700; **no `wght` axis** in file inspect; `pubspec` registers weight 700 |
+| Medium **500** / SemiBold **600** | **Not** separate files today; **not** registered in `pubspec.yaml` |
+
+Until implementation adds assets **or** wires `FontVariation` on the Regular variable font in theme/text styles, treat 500/600 roles as **implementation debt** — do not fake them with `FontWeight.w600` on Bold or synthesized faux-bold.
+
+### Semantic text roles
+
+Map index CSS to Flutter `TextTheme` extensions / role helpers. **Index-derived** sizes/weights; **proposed** line heights unless noted.
+
+| Role | Index ref | Size (sp) | Weight target | Color | Line height (proposed) |
+|------|-----------|-----------|---------------|-------|------------------------|
+| Main balance / hero money | `.money.big` | 28 | 700–800 | role-colored amount | 1.15 |
+| Page title (top bar) | `.topbar h1` | 22 | 700–800 | `onSurface` | 1.2 |
+| Section / card title | `.section-title`, `.client-section-head h3` | 15 | 700 | `onSurface` | 1.25 |
+| Card / stat label | `.stat-card .label` | 13 | **600** | `onSurfaceMuted` | 1.3 |
+| Body / row primary | `.craft-name`, `.tx-detail` | 14 | 700 | `onSurface` | 1.35 |
+| Secondary / subtitle | `.topbar .subtitle` | 13 | **500** | `onSurfaceMuted` | 1.35 |
+| Input label | `.field-label` pattern | 13 | **600** | `onSurface` | 1.3 |
+| Supporting / meta | `.caption`, `.tx-note` | 12 | **500** | `onSurfaceMuted` | 1.4 |
+| Caption / micro | `.tx-date`, fee captions | 11–12 | **500** | `onSurfaceMuted` | 1.35 |
+| Money md / sm | `.money.md` / `.money.sm` | 18 / 14 | 700 | semantic money | 1.2 |
+
+**Locale:** Arabic body uses comfortable line height (proposed **1.35–1.45** for 13–15sp). No letter-spacing that harms Arabic joins. Latin-only tracking, if any, stays minimal.
+
+**Money display:** tabular figures where available; currency suffix uses **muted token color**, not whole-widget opacity. Amount semantics: receive green, spend red, remaining teal (`AppAmount` — see `bnood-ui-components.mdc`).
+
+## Color & surfaces
+
+Index semantic palette (light — **confirmed in index**):
+
+- Primary `#0D9B8A`, primary-dark `#0A7A6C`, success `#1B9E5A`, danger `#D64545`
+- Background `#F4F7F6`, surface `#FFFFFF`, muted text `#5C6B68`, on-surface `#1A2422`, outline `#D5DEDC`
+- Tinted stat cards: receive / spend / remain gradients per index (token-driven, not ad-hoc per screen)
+
+Dark theme: keep **same roles** with existing `AppColors` dark tokens; gradients and shadows adapt — **proposal** where index is light-only.
+
+**Muted text:** use `onSurfaceMuted` (or dark equivalent). Do **not** lower entire widget opacity to fake secondary text. Errors/warnings use semantic error/warning colors, not opacity alone.
+
+## Spacing & radii (**confirmed** scale)
+
+| Token | dp |
+|-------|-----|
+| space-1 … space-6 | 4, 8, 12, 16, 24, 32 |
+| radius sm / md / lg | 8, 16, 24 |
+
+- **Screen gutter:** 16 (`space-4`) unless index shows `pad` exception.
+- **Inside card/stack:** `gap` 12 (`space-3`) default; tight rows 8 (`space-2`).
+- **Between sections:** 16–24 (`space-4`–`space-5`); don’t cram unrelated blocks.
+- **Touch targets:** min ~44×44 for icon buttons; comfortable chip/pill taps.
+- **Sheets:** content-height, drag handle, no duplicate title in sheet + route; keyboard via `viewInsets`.
+
+## Layout chrome (scroll + dock)
+
+Content scrolls **behind** the floating nav chrome. Bottom **white gradient** (dark: theme-adaptive surface fade) with **`IgnorePointer`** so it does not block taps; add **bottom scroll padding** so the last card clears the dock + satellite control. Details: [bnood-ux-navigation.mdc](bnood-ux-navigation.mdc).
+
+## Empty & sparse UI
+
+No unexplained blank regions. Use **`AppFallback`** (section or full-screen) with icon, title, optional description, optional primary action — never raw exception strings.
+
+## Anti-patterns
+
+| Avoid | Do |
+|-------|-----|
+| Per-screen magic padding/font sizes | Theme tokens + roles |
+| Oversized center FAB | Owner nav override (satellite + pill) |
+| MaterialIcons standing in for final SVG set | Placeholders until owner supplies assets |
+| Opacity 0.5 on whole row for “muted” | Muted color role |
+| Claiming index parity without screenshot compare | Visual acceptance checklist |
+
+## Visual work workflow
+
+1. Load Impeccable per [bnood-impeccable.mdc](bnood-impeccable.mdc) when shaping/critiquing UI.
+2. Run checklist in [docs/ui-acceptance.md](../../docs/ui-acceptance.md) before merge.
+3. Do not seed or wipe user DB for screenshots.

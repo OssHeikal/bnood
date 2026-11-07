@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navDirectory => 'Directory';
 
   @override
+  String get directoryTitle => 'Directory';
+
+  @override
   String get navItems => 'Items';
 
   @override
@@ -39,13 +42,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeClients => 'Active clients';
 
   @override
+  String get homeSubtitle => 'Finishing funds, simply';
+
+  @override
+  String get homeTotalsCaption =>
+      'Active clients only · Since each project started';
+
+  @override
+  String get homeSupplierSpendSection => 'Supplier material spend';
+
+  @override
+  String get homeSupplierSpendMeta => 'Active clients only';
+
+  @override
+  String get homeRemainingLabel => 'Remaining in active funds';
+
+  @override
+  String get homeNoActiveClientsTitle => 'No active clients';
+
+  @override
+  String get homeNoActiveClientsDescription =>
+      'Add a client from the Clients tab to start tracking.';
+
+  @override
+  String get homeLoadErrorTitle => 'Could not load home';
+
+  @override
+  String get homeNoSupplierSpendTitle => 'No material spend yet';
+
+  @override
+  String get homeNoSupplierSpendDescription =>
+      'Supplier purchases for active clients will show here after you record material expenses.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get statusLoading => 'Loading';
+
+  @override
   String get addClient => 'Add client';
 
   @override
   String get clientName => 'Client name';
 
   @override
+  String get clientNameRequired => 'Enter client name';
+
+  @override
+  String get clientNameHint => 'e.g. Tower North';
+
+  @override
   String get phoneOptional => 'Phone (optional)';
+
+  @override
+  String get clientPhoneHint => '01XXXXXXXXX';
 
   @override
   String get whatsapp => 'WhatsApp';

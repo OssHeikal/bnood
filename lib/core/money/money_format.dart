@@ -1,22 +1,29 @@
-import 'package:intl/intl.dart';
+import '../formatting/display_digits.dart';
 
 /// EGP stored as integer piastres (1 EGP = 100 piastres).
 class MoneyFormat {
   MoneyFormat._();
 
+  /// App-generated money always suffixes uppercase `EGP` (Arabic and English UI).
+  static const String currencyLabel = 'EGP';
+
   static String formatPiastres(int piastres, {String locale = 'ar_EG'}) {
-    final pounds = piastres ~/ 100;
-    final cents = piastres % 100;
-    final number = NumberFormat.decimalPattern(locale);
-    final whole = number.format(pounds);
+    final magnitude = piastres.abs();
+    final pounds = magnitude ~/ 100;
+    final cents = magnitude % 100;
+    final whole = DisplayDigits.formatInteger(pounds);
     if (cents == 0) {
-      return '$whole ج.م';
+      return '$whole $currencyLabel';
     }
-    return '$whole.${cents.toString().padLeft(2, '0')} ج.م';
+    final frac = cents.toString().padLeft(2, '0');
+    return '$whole.$frac $currencyLabel';
   }
 
+  static String withoutCurrencySuffix(String formatted) =>
+      formatted.replaceAll(RegExp(r'\s*EGP\s*$', caseSensitive: false), '').replaceAll(RegExp(r'\s*ج\.م\s*$'), '');
+
   static int? parseEgpInput(String input) {
-    final normalized = input.trim().replaceAll(',', '');
+    final normalized = DisplayDigits.toWesternDigits(input.trim().replaceAll(',', '').replaceAll(' ', ''));
     if (normalized.isEmpty) return null;
     final parts = normalized.split('.');
     final whole = int.tryParse(parts.first);

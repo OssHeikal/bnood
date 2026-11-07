@@ -1,0 +1,28 @@
+---
+description: Western digits and EGP for app-generated money (Arabic UI keeps RTL labels)
+globs: lib/**/*
+alwaysApply: true
+---
+
+# Western digits and EGP in UI
+
+User-visible **numbers the app generates** must use ASCII digits `0`–`9`, even when `Locale` is Arabic. Arabic **words** (labels, month names, etc.) and RTL layout stay localized; the app locale is not forced to English.
+
+**Money suffix:** always uppercase `EGP` in Arabic and English UI (`MoneyFormat.currencyLabel`). Do not show `ج.م` on app-formatted amounts.
+
+## Central API
+
+`lib/core/formatting/display_digits.dart`:
+
+- `DisplayDigits.decimalPattern()` / `formatInteger` — grouping with `en_US` digit shapes only
+- `DisplayDigits.toWesternDigits` — normalize Eastern Arabic numerals in **input** before parse
+
+**Money:** `MoneyFormat.formatPiastres` / `withoutCurrencySuffix` (via `AppAmount`). **Percents:** `BasisPoints.formatPercent` / `parsePercentInput`.
+
+Do not use `NumberFormat.decimalPattern('ar')` for on-screen amounts. Dates: when formatting for display, force Western digits in the numeric parts (see `DateFormat` call sites).
+
+Stored DB values and user free text are unchanged; parsing accepts Eastern digits where we already parse amounts.
+
+## Tests
+
+AR locale widget tests must assert `0`–`9` and `EGP` in money output, not `٠`–`٩` or `ج.م`.

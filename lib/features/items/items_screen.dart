@@ -21,6 +21,7 @@ class ItemsScreen extends ConsumerWidget {
           context: context,
           builder: (_) => const InlineCreateItemPage(),
           title: l10n.item,
+          nestedNavigator: false,
         ),
         child: const Icon(Icons.add),
       ),

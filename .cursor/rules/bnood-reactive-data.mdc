@@ -1,0 +1,31 @@
+---
+description: UI stays current after mutations without manual refresh
+globs: lib/**/*
+alwaysApply: true
+---
+
+# Reactive data after writes
+
+After any **successful** create, update, delete, receive, spend, or other ledger mutation, every **visible** list, detail, summary, or balance that depends on that data must update automatically. No pull-to-refresh or screen reopen required for correctness.
+
+## How
+
+- Prefer **Riverpod** `watch` on repository streams / derived providers.
+- After an awaited successful write, **invalidate or refresh** only the providers that own affected read models (precise blast radius).
+- Do not add global event buses or replace the repository architecture.
+
+## Refresh UX (silent)
+
+- **Silent refresh:** after first successful load, keep rendered data visible while refetching. Replace in place when new data arrives. No skeleton, spinner, layout blanking, scroll reset, or success toast **for refresh alone**.
+- Home dashboard: call `refreshHomeDashboard(ref)` (or per-notifier `refreshSilently()`), not `invalidate` on `homeTotalsProvider` / client / supplier providers.
+- `AsyncValueBody`: skeleton only when `valueOrNull == null` (initial load). If a value exists, always render it (including failed silent reload with retained previous).
+- Failed writes: do not emit success UI; roll back optimistic state if used.
+- Background refresh failure: keep last good content; optional nonblocking feedback only (no full-screen takeover).
+
+## Tests
+
+New mutation paths should include tests that affected provider/UI updates **without** simulating manual refresh.
+
+## Scope note
+
+This rule is **app-wide**. Implementation lands screen-by-screen; a rule alone does not mean every flow is wired yet.

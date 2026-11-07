@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/money/basis_points.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/providers/dashboard_providers.dart';
 import '../../core/widgets/app_button.dart';
 
 Future<void> showEngineerEditSheet({
@@ -124,6 +125,7 @@ class _EngineerEditSheetState extends ConsumerState<EngineerEditSheet> {
                 engineerBasisPoints: bp?.value,
                 clearEngineerRate: _percentCtrl.text.trim().isEmpty,
               );
+              refreshAfterClientMutation(ref);
               if (context.mounted) Navigator.pop(context);
             },
           ),

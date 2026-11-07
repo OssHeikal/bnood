@@ -1,0 +1,27 @@
+---
+description: Form fields — localized hints, accessible sizing (preserve CustomTextField label behavior)
+globs: lib/**/*
+alwaysApply: true
+---
+
+# Form fields (Bnood)
+
+## Labels and hints
+
+- **Label** stays on **`CustomTextField`** default in-border floating behavior (resting when empty, floated on focus/value). Do not change label position unless the owner requests it.
+- **Placeholder** (`placeholder:`): short **example or format** from `l10n` only — never English in AR UI, never duplicate the label as placeholder.
+- **Error**: field validator message; server failures → toast only.
+
+## Sizing
+
+- Default single-line height: `AppSize.fieldHeight` (48).
+- Opt-in taller fields: `fieldHeight: AppSize.fieldHeightComfortable` (52) — frame grows with token padding; avoid magic heights that clip text at large accessibility scale.
+
+## Phone and digits
+
+- Western digits in hints and display (`bnood-western-digits.mdc`).
+- Egypt mobile fields: `AppInputType.phone`, `ltrValue: true`, localized format hint, `AutofillHints.telephoneNumber`.
+
+## Keyboard
+
+- Set `textInputAction` (`next` / `done`) on multi-field sheets explicitly when order matters.
