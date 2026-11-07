@@ -161,6 +161,13 @@ class BnoodRepository {
         .watch();
   }
 
+  Future<List<Item>> activeItems() {
+    return (_db.select(_db.items)
+          ..where((i) => i.archivedAt.isNull())
+          ..orderBy([(i) => OrderingTerm.asc(i.name)]))
+        .get();
+  }
+
   Future<Item> createItem({
     required String name,
     required String colorKey,

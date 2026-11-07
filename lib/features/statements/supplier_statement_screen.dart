@@ -36,11 +36,16 @@ class _SupplierStatementScreenState extends ConsumerState<SupplierStatementScree
   bool _exporting = false;
   bool _prefsAvailable = true;
   List<Transaction> _allRows = const [];
+  Future<_Data>? _loadFuture;
 
   @override
   void initState() {
     super.initState();
     _loadExportCursor();
+  }
+
+  void _startLoad(BnoodRepository repo) {
+    _loadFuture = _load(repo);
   }
 
   Future<void> _loadExportCursor() async {
@@ -99,13 +104,13 @@ class _SupplierStatementScreenState extends ConsumerState<SupplierStatementScree
     final l10n = AppLocalizations.of(context);
     final repo = ref.watch(repositoryProvider);
     final localeCode = Localizations.localeOf(context).languageCode;
+    _loadFuture ??= _load(repo);
 
     return HomeFoundationScope(
       child: Scaffold(
         appBar: AppBar(title: Text(l10n.statement)),
         body: FutureBuilder<_Data>(
-          key: ValueKey('${_bounds.start}-${_bounds.end}-$_preset'),
-          future: _load(repo),
+          future: _loadFuture,
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.waiting && !snap.hasData) {
               return const Center(child: CircularProgressIndicator());
@@ -132,6 +137,7 @@ class _SupplierStatementScreenState extends ConsumerState<SupplierStatementScree
                     setState(() {
                       _preset = preset;
                       _bounds = preset == StatementPeriodPreset.custom ? b : _resolvePreset(preset);
+                      _startLoad(repo);
                     });
                   },
                 ),
