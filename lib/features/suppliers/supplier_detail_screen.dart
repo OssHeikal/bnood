@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
@@ -20,7 +21,16 @@ class SupplierDetailScreen extends ConsumerWidget {
         final tx = snap.data ?? [];
         final total = tx.fold<int>(0, (s, t) => s + t.amountPiastres);
         return Scaffold(
-          appBar: AppBar(title: Text(l10n.suppliers)),
+          appBar: AppBar(
+            title: Text(l10n.suppliers),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.description_outlined),
+                onPressed: () =>
+                    context.push('/suppliers/$supplierId/statement'),
+              ),
+            ],
+          ),
           body: ListView(
             children: [
               ListTile(
@@ -28,8 +38,10 @@ class SupplierDetailScreen extends ConsumerWidget {
                   trailing: Text(MoneyFormat.formatPiastres(total))),
               for (final t in tx)
                 ListTile(
+                  leading: const Icon(Icons.north_east, color: Colors.red),
                   title: Text(MoneyFormat.formatPiastres(t.amountPiastres)),
                   subtitle: Text(t.description ?? ''),
+                  trailing: Text('${t.date.day}/${t.date.month}'),
                 ),
             ],
           ),

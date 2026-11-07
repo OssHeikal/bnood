@@ -4,7 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../features/clients/client_detail_screen.dart';
 import '../features/clients/clients_list_screen.dart';
+import '../features/clients/client_craftsmen_list_screen.dart';
+import '../features/clients/client_items_stats_screen.dart';
 import '../features/clients/movements_list_screen.dart';
+import '../features/statements/supplier_statement_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/items/items_screen.dart';
 import '../features/statements/client_statement_screen.dart';
@@ -62,6 +65,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             MovementsListScreen(clientId: state.pathParameters['clientId']!),
       ),
       GoRoute(
+        path: '/clients/:clientId/craftsmen',
+        builder: (_, state) => ClientCraftsmenListScreen(
+            clientId: state.pathParameters['clientId']!),
+      ),
+      GoRoute(
+        path: '/clients/:clientId/items',
+        builder: (_, state) =>
+            ClientItemsStatsScreen(clientId: state.pathParameters['clientId']!),
+      ),
+      GoRoute(
         path: '/clients/:clientId/statement',
         builder: (_, state) =>
             ClientStatementScreen(clientId: state.pathParameters['clientId']!),
@@ -69,6 +82,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/suppliers/:supplierId',
         builder: (_, state) => SupplierDetailScreen(
+            supplierId: state.pathParameters['supplierId']!),
+      ),
+      GoRoute(
+        path: '/suppliers/:supplierId/statement',
+        builder: (_, state) => SupplierStatementScreen(
             supplierId: state.pathParameters['supplierId']!),
       ),
       GoRoute(

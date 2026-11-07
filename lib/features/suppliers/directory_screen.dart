@@ -4,12 +4,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/providers/app_providers.dart';
+import '../../core/widgets/custom_bottom_sheet.dart';
+import '../vouchers/inline_create_routes.dart';
 
-class DirectoryScreen extends ConsumerWidget {
+class DirectoryScreen extends ConsumerStatefulWidget {
   const DirectoryScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DirectoryScreen> createState() => _DirectoryScreenState();
+}
+
+class _DirectoryScreenState extends ConsumerState<DirectoryScreen> {
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return DefaultTabController(
       length: 2,
@@ -19,11 +26,27 @@ class DirectoryScreen extends ConsumerWidget {
           bottom: TabBar(
               tabs: [Tab(text: l10n.suppliers), Tab(text: l10n.craftsmen)]),
         ),
-        body: TabBarView(
-          children: [
-            _SupplierTab(),
-            _CraftsmanTab(),
-          ],
+        body: const TabBarView(
+          children: [_SupplierTab(), _CraftsmanTab()],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            final tab = DefaultTabController.of(context).index;
+            if (tab == 0) {
+              CustomBottomSheet.show(
+                context: context,
+                builder: (_) => const InlineCreateSupplierPage(),
+                title: l10n.supplier,
+              );
+            } else {
+              CustomBottomSheet.show(
+                context: context,
+                builder: (_) => const InlineCreateCraftsmanPage(),
+                title: l10n.craftsman,
+              );
+            }
+          },
+          child: const Icon(Icons.add),
         ),
       ),
     );
@@ -31,6 +54,8 @@ class DirectoryScreen extends ConsumerWidget {
 }
 
 class _SupplierTab extends ConsumerWidget {
+  const _SupplierTab();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder(
@@ -42,8 +67,14 @@ class _SupplierTab extends ConsumerWidget {
           itemBuilder: (_, i) {
             final s = list[i];
             return ListTile(
-                title: Text(s.name),
-                onTap: () => context.push('/suppliers/${s.id}'));
+              title: Text(s.name),
+              trailing: IconButton(
+                icon: const Icon(Icons.archive_outlined),
+                onPressed: () =>
+                    ref.read(repositoryProvider).archiveSupplier(s.id),
+              ),
+              onTap: () => context.push('/suppliers/${s.id}'),
+            );
           },
         );
       },
@@ -52,6 +83,8 @@ class _SupplierTab extends ConsumerWidget {
 }
 
 class _CraftsmanTab extends ConsumerWidget {
+  const _CraftsmanTab();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder(
@@ -63,9 +96,15 @@ class _CraftsmanTab extends ConsumerWidget {
           itemBuilder: (_, i) {
             final c = list[i];
             return ListTile(
-                title: Text(c.name),
-                subtitle: Text(c.trade ?? ''),
-                onTap: () => context.push('/craftsmen/${c.id}'));
+              title: Text(c.name),
+              subtitle: Text(c.trade ?? ''),
+              trailing: IconButton(
+                icon: const Icon(Icons.archive_outlined),
+                onPressed: () =>
+                    ref.read(repositoryProvider).archiveCraftsman(c.id),
+              ),
+              onTap: () => context.push('/craftsmen/${c.id}'),
+            );
           },
         );
       },

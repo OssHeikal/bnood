@@ -86,6 +86,25 @@ class BnoodRepository {
         .getSingle();
   }
 
+  Future<Client> updateClient({
+    required String clientId,
+    String? name,
+    String? phone,
+  }) async {
+    final now = DateTime.now().toUtc();
+    await (_db.update(_db.clients)..where((c) => c.id.equals(clientId))).write(
+      ClientsCompanion(
+        name: name != null ? Value(name) : const Value.absent(),
+        phone: phone != null
+            ? Value(phone.isEmpty ? null : phone)
+            : const Value.absent(),
+        updatedAt: Value(now),
+      ),
+    );
+    return (_db.select(_db.clients)..where((c) => c.id.equals(clientId)))
+        .getSingle();
+  }
+
   Future<void> archiveClient(String clientId) async {
     final now = DateTime.now().toUtc();
     await (_db.update(_db.clients)..where((c) => c.id.equals(clientId)))
@@ -124,6 +143,24 @@ class BnoodRepository {
     return (_db.select(_db.items)..where((i) => i.id.equals(id))).getSingle();
   }
 
+  Future<Item> updateItem({
+    required String id,
+    String? name,
+    String? colorKey,
+    String? iconName,
+  }) async {
+    final now = DateTime.now().toUtc();
+    await (_db.update(_db.items)..where((i) => i.id.equals(id))).write(
+      ItemsCompanion(
+        name: name != null ? Value(name) : const Value.absent(),
+        colorKey: colorKey != null ? Value(colorKey) : const Value.absent(),
+        iconName: iconName != null ? Value(iconName) : const Value.absent(),
+        updatedAt: Value(now),
+      ),
+    );
+    return (_db.select(_db.items)..where((i) => i.id.equals(id))).getSingle();
+  }
+
   Future<void> archiveItem(String id) async {
     final now = DateTime.now().toUtc();
     await (_db.update(_db.items)..where((i) => i.id.equals(id)))
@@ -155,6 +192,12 @@ class BnoodRepository {
         .getSingle();
   }
 
+  Future<void> archiveSupplier(String id) async {
+    final now = DateTime.now().toUtc();
+    await (_db.update(_db.suppliers)..where((s) => s.id.equals(id))).write(
+        SuppliersCompanion(archivedAt: Value(now), updatedAt: Value(now)));
+  }
+
   Stream<List<CraftsmenData>> watchActiveCraftsmen() {
     return (_db.select(_db.craftsmen)
           ..where((c) => c.archivedAt.isNull())
@@ -184,6 +227,15 @@ class BnoodRepository {
     return (_db.select(_db.craftsmen)..where((c) => c.id.equals(id)))
         .getSingle();
   }
+
+  Future<void> archiveCraftsman(String id) async {
+    final now = DateTime.now().toUtc();
+    await (_db.update(_db.craftsmen)..where((c) => c.id.equals(id))).write(
+        CraftsmenCompanion(archivedAt: Value(now), updatedAt: Value(now)));
+  }
+
+  Future<Item?> getItem(String id) =>
+      (_db.select(_db.items)..where((i) => i.id.equals(id))).getSingleOrNull();
 
   // --- Agreements ---
 
@@ -335,6 +387,29 @@ class BnoodRepository {
           ..where((t) => t.supplierId.equals(supplierId))
           ..orderBy([(t) => OrderingTerm.desc(t.date)]))
         .get();
+  }
+
+  Future<List<CraftsmenData>> craftsmenAssignedToProject(
+      String projectId) async {
+    final agreements = await agreementsForProject(projectId);
+    if (agreements.isEmpty) return [];
+    final ids = agreements.map((a) => a.craftsmanId).toSet();
+    final all = await watchActiveCraftsmen().first;
+    return all.where((c) => ids.contains(c.id)).toList();
+  }
+
+  Future<StatementPeriodTotals> supplierPeriodTotalsAsync({
+    required String supplierId,
+    required DateTime periodStart,
+    required DateTime periodEnd,
+  }) async {
+    final rows = await supplierTransactions(supplierId);
+    final spendOnly = rows.where((t) => t.kind == 'spend').toList();
+    return LedgerMath.periodTotals(
+      projectRows: spendOnly,
+      periodStart: periodStart,
+      periodEnd: periodEnd,
+    );
   }
 
   Future<List<Project>> allProjects() {

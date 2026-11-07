@@ -5,16 +5,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
-import '../../core/repositories/bnood_repository.dart';
+import '../../core/providers/dashboard_providers.dart';
+import '../settings/app_settings_sheet.dart';
 import '../vouchers/voucher_launcher.dart';
-
-final homeTotalsProvider = FutureProvider<HomeTotals>((ref) {
-  return ref.watch(repositoryProvider).homeTotals();
-});
-
-final activeClientsProvider = FutureProvider((ref) {
-  return ref.watch(repositoryProvider).watchActiveClients();
-});
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -25,7 +18,15 @@ class HomeScreen extends ConsumerWidget {
     final totals = ref.watch(homeTotalsProvider);
     final clients = ref.watch(activeClientsProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.appTitle)),
+      appBar: AppBar(
+        title: Text(l10n.appTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings_outlined),
+            onPressed: () => showAppSettingsSheet(context),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

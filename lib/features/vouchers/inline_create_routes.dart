@@ -109,3 +109,114 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
     );
   }
 }
+
+class InlineCreateSupplierPage extends ConsumerStatefulWidget {
+  const InlineCreateSupplierPage({super.key});
+
+  @override
+  ConsumerState<InlineCreateSupplierPage> createState() =>
+      _InlineCreateSupplierPageState();
+}
+
+class _InlineCreateSupplierPageState
+    extends ConsumerState<InlineCreateSupplierPage> {
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _phone.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.supplier)),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+                controller: _name,
+                decoration: InputDecoration(labelText: l10n.supplier)),
+            TextField(
+                controller: _phone,
+                decoration: InputDecoration(labelText: l10n.phoneOptional)),
+            const Spacer(),
+            AppButton(
+              label: l10n.save,
+              onPressed: () async {
+                if (_name.text.trim().isEmpty) return;
+                final s = await ref.read(repositoryProvider).createSupplier(
+                      name: _name.text.trim(),
+                      phone: _phone.text.trim().isEmpty
+                          ? null
+                          : _phone.text.trim(),
+                    );
+                if (context.mounted) Navigator.pop(context, s.id);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class InlineCreateCraftsmanPage extends ConsumerStatefulWidget {
+  const InlineCreateCraftsmanPage({super.key});
+
+  @override
+  ConsumerState<InlineCreateCraftsmanPage> createState() =>
+      _InlineCreateCraftsmanPageState();
+}
+
+class _InlineCreateCraftsmanPageState
+    extends ConsumerState<InlineCreateCraftsmanPage> {
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _phone.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.craftsman)),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+                controller: _name,
+                decoration: InputDecoration(labelText: l10n.craftsman)),
+            TextField(
+                controller: _phone,
+                decoration: InputDecoration(labelText: l10n.phoneOptional)),
+            const Spacer(),
+            AppButton(
+              label: l10n.save,
+              onPressed: () async {
+                if (_name.text.trim().isEmpty || _phone.text.trim().isEmpty)
+                  return;
+                final c = await ref.read(repositoryProvider).createCraftsman(
+                      name: _name.text.trim(),
+                      phone: _phone.text.trim(),
+                    );
+                if (context.mounted) Navigator.pop(context, c.id);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

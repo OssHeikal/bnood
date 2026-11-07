@@ -12,6 +12,8 @@ import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
 import '../vouchers/voucher_launcher.dart';
+import 'craftsman_assignments_sheet.dart';
+import 'engineer_edit_sheet.dart';
 
 class ClientDetailScreen extends ConsumerWidget {
   const ClientDetailScreen({super.key, required this.clientId});
@@ -42,6 +44,13 @@ class ClientDetailScreen extends ConsumerWidget {
                 icon: const Icon(Icons.description_outlined),
                 onPressed: () => context.push('/clients/$clientId/statement'),
               ),
+              IconButton(
+                icon: const Icon(Icons.archive_outlined),
+                onPressed: () async {
+                  await ref.read(repositoryProvider).archiveClient(clientId);
+                  if (context.mounted) context.pop();
+                },
+              ),
             ],
           ),
           body: ListView(
@@ -50,38 +59,86 @@ class ClientDetailScreen extends ConsumerWidget {
               _BalanceHeader(balance: data.balance),
               const SizedBox(height: 12),
               _EngineerCard(
-                  project: data.project, profit: data.estimatedProfit),
+                project: data.project,
+                profit: data.estimatedProfit,
+                client: data.client,
+                onEdit: () => showEngineerEditSheet(
+                  context: context,
+                  clientId: clientId,
+                  projectId: data.project.id,
+                  clientName: data.client.name,
+                  phone: data.client.phone,
+                  unitAddress: data.project.unitAddress,
+                  engineerBasisPoints: data.project.engineerBasisPoints,
+                ),
+              ),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(l10n.craftsmen,
                       style: Theme.of(context).textTheme.titleMedium),
-                  TextButton(onPressed: () {}, child: Text(l10n.seeAll)),
+                  TextButton(
+                    onPressed: () =>
+                        context.push('/clients/$clientId/craftsmen'),
+                    child: Text(l10n.seeAll),
+                  ),
                 ],
               ),
-              if (data.topItems.isNotEmpty) ...[
-                Text('Top items', style: Theme.of(context).textTheme.titleMedium),
-                ...data.topItems.map((e) {
-                  final total = e.value.totalPiastres;
-                  return ListTile(
-                    title: Text(e.key),
-                    subtitle: LinearProgressIndicator(
-                      value: total == 0 ? 0 : e.value.materialsPiastres / total,
-                      backgroundColor: Colors.red.withOpacity(0.15),
-                      color: Colors.green,
-                    ),
-                    trailing: Text(MoneyFormat.formatPiastres(total)),
-                  );
-                }),
-                const SizedBox(height: 8),
-              ],
+              OutlinedButton.icon(
+                onPressed: () => showCraftsmanAssignmentsSheet(
+                  context: context,
+                  projectId: data.project.id,
+                ),
+                icon: const Icon(Icons.handyman),
+                label: Text(l10n.createNew),
+              ),
               ...data.craftsmanPreviews.map((p) => ListTile(
                     title: Text(p.name),
                     subtitle: Text(
                         '${l10n.paid}: ${MoneyFormat.formatPiastres(p.paid)}'
                         '${p.remaining != null ? ' • ${l10n.remaining}: ${MoneyFormat.formatPiastres(p.remaining!)}' : ''}'),
                   )),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(l10n.navItems,
+                      style: Theme.of(context).textTheme.titleMedium),
+                  TextButton(
+                    onPressed: () => context.push('/clients/$clientId/items'),
+                    child: Text(l10n.seeAll),
+                  ),
+                ],
+              ),
+              ...data.topItems.map((e) {
+                final total = e.value.totalPiastres;
+                return ListTile(
+                  title: Text(e.key),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${l10n.materials}: ${MoneyFormat.formatPiastres(e.value.materialsPiastres)} • '
+                        '${l10n.labor}: ${MoneyFormat.formatPiastres(e.value.laborPiastres)}',
+                      ),
+                      const SizedBox(height: 4),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: total == 0
+                              ? 0
+                              : e.value.materialsPiastres / total,
+                          minHeight: 8,
+                          backgroundColor: Colors.red.withOpacity(0.15),
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
+                  trailing: Text(MoneyFormat.formatPiastres(total)),
+                );
+              }),
               const SizedBox(height: 8),
               Text(l10n.movements,
                   style: Theme.of(context).textTheme.titleMedium),
@@ -98,6 +155,7 @@ class ClientDetailScreen extends ConsumerWidget {
                         context,
                         clientId: clientId,
                         projectId: data.project.id,
+                        clientLabel: data.client.name,
                         kind: 'receive',
                       ),
                       child: Text(l10n.receive),
@@ -112,6 +170,7 @@ class ClientDetailScreen extends ConsumerWidget {
                         context,
                         clientId: clientId,
                         projectId: data.project.id,
+                        clientLabel: data.client.name,
                         kind: 'spend',
                       ),
                       child: Text(l10n.spend),
@@ -236,21 +295,37 @@ class _BalanceHeader extends StatelessWidget {
 }
 
 class _EngineerCard extends StatelessWidget {
-  const _EngineerCard({required this.project, required this.profit});
+  const _EngineerCard({
+    required this.project,
+    required this.profit,
+    required this.client,
+    required this.onEdit,
+  });
   final Project project;
   final int? profit;
+  final Client client;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    if (project.engineerBasisPoints == null) return const SizedBox.shrink();
     return Card(
       child: ListTile(
-        title: Text(l10n.engineerFee),
-        subtitle:
-            Text(profit == null ? '—' : MoneyFormat.formatPiastres(profit!)),
-        trailing:
-            Text('${(project.engineerBasisPoints! / 100).toStringAsFixed(2)}%'),
+        onTap: onEdit,
+        title: Text(client.name),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (client.phone != null) Text(client.phone!),
+            if (project.unitAddress != null && project.unitAddress!.isNotEmpty)
+              Text(project.unitAddress!),
+            if (project.engineerBasisPoints != null)
+              Text(
+                '${l10n.engineerFee}: ${profit == null ? '—' : MoneyFormat.formatPiastres(profit!)}',
+              ),
+          ],
+        ),
+        trailing: const Icon(Icons.edit),
       ),
     );
   }
