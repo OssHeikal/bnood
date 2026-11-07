@@ -45,31 +45,63 @@ class AppCard extends StatelessWidget {
   final VoidCallback? onTap;
   final AppCardPreset preset;
 
-  Gradient? _statGradient() {
+  @visibleForTesting
+  static Gradient? statCardGradient(
+    AppCardPreset preset,
+    AppColors colors,
+    Brightness brightness,
+  ) {
+    const begin = AlignmentDirectional(-0.9, -1);
+    const end = AlignmentDirectional(0.9, 1);
+    if (brightness == Brightness.light) {
+      return switch (preset) {
+        AppCardPreset.statReceive => const LinearGradient(
+            begin: begin,
+            end: end,
+            colors: [Color(0xFFE8F8EF), Color(0xFFF5FCF8)],
+          ),
+        AppCardPreset.statSpend => const LinearGradient(
+            begin: begin,
+            end: end,
+            colors: [Color(0xFFFCECEC), Color(0xFFFEF7F7)],
+          ),
+        AppCardPreset.statRemaining => const LinearGradient(
+            begin: begin,
+            end: end,
+            colors: [Color(0xFFE6F6F4), Color(0xFFF3FBFA)],
+          ),
+        AppCardPreset.plain => null,
+      };
+    }
+    Color blendTint(Color tint) => Color.lerp(tint, colors.surface, 0.5)!;
     return switch (preset) {
-      AppCardPreset.statReceive => const LinearGradient(
-          begin: AlignmentDirectional(-0.9, -1),
-          end: AlignmentDirectional(0.9, 1),
-          colors: [Color(0xFFE8F8EF), Color(0xFFF5FCF8)],
+      AppCardPreset.statReceive => LinearGradient(
+          begin: begin,
+          end: end,
+          colors: [colors.successBg, blendTint(colors.successBg)],
         ),
-      AppCardPreset.statSpend => const LinearGradient(
-          begin: AlignmentDirectional(-0.9, -1),
-          end: AlignmentDirectional(0.9, 1),
-          colors: [Color(0xFFFCECEC), Color(0xFFFEF7F7)],
+      AppCardPreset.statSpend => LinearGradient(
+          begin: begin,
+          end: end,
+          colors: [colors.errorBg, blendTint(colors.errorBg)],
         ),
-      AppCardPreset.statRemaining => const LinearGradient(
-          begin: AlignmentDirectional(-0.9, -1),
-          end: AlignmentDirectional(0.9, 1),
-          colors: [Color(0xFFE6F6F4), Color(0xFFF3FBFA)],
+      AppCardPreset.statRemaining => LinearGradient(
+          begin: begin,
+          end: end,
+          colors: [colors.infoBg, blendTint(colors.infoBg)],
         ),
       AppCardPreset.plain => null,
     };
   }
 
+  Gradient? _statGradient(BuildContext context) {
+    return statCardGradient(preset, context.colors, Theme.of(context).brightness);
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final resolvedGradient = gradient ?? _statGradient();
+    final resolvedGradient = gradient ?? _statGradient(context);
     final fill = background ?? colors.surface;
     final shape = AppShape.superellipse(
       radius: radius,

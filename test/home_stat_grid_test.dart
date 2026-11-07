@@ -11,13 +11,14 @@ void main() {
     WidgetTester tester, {
     Locale locale = const Locale('ar'),
     TextScaler textScaler = TextScaler.noScaling,
+    bool dark = false,
   }) async {
     await tester.binding.setSurfaceSize(const Size(390, 520));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(
       MaterialApp(
-        theme: AppFoundationTheme.light(),
+        theme: dark ? AppFoundationTheme.dark() : AppFoundationTheme.light(),
         locale: locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
@@ -27,7 +28,7 @@ void main() {
             child: Scaffold(
               body: HomeStatGrid(
                 localeCode: locale.languageCode,
-                totals: const HomeTotals(receivedPiastres: 100000, spentPiastres: 0),
+                totals: const HomeTotals(receivedPiastres: 100000, spentPiastres: 100000),
               ),
             ),
           ),
@@ -41,6 +42,13 @@ void main() {
     await pumpGrid(tester, locale: const Locale('ar'));
     expect(find.text('وارد'), findsOneWidget);
     expect(find.text('صادر'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('dark mode shows readable zero remaining with EGP', (tester) async {
+    await pumpGrid(tester, dark: true);
+    expect(find.textContaining('0'), findsWidgets);
+    expect(find.textContaining('EGP'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 

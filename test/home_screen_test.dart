@@ -69,6 +69,17 @@ void main() {
     expect(find.textContaining('Directory'), findsNothing);
   });
 
+  testWidgets('home header app name follows locale', (tester) async {
+    const totals = HomeTotals(receivedPiastres: 0, spentPiastres: 0);
+    await pumpHome(tester, locale: const Locale('en'), totals: totals, clients: const []);
+    expect(find.text('Bnood'), findsOneWidget);
+    expect(find.text('بنود'), findsNothing);
+
+    await pumpHome(tester, locale: const Locale('ar'), totals: totals, clients: const []);
+    expect(find.text('بنود'), findsOneWidget);
+    expect(find.text('Bnood'), findsNothing);
+  });
+
   testWidgets('Arabic home at 1.2 text scale', (tester) async {
     await pumpHome(
       tester,

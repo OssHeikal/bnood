@@ -42,36 +42,21 @@ void main() {
     addTearDown(db.close);
     final repo = BnoodRepository(db);
     final client = await repo.createClient(name: 'عميل طويل الاسم للاختبار على الشاشة الضيقة');
-    final project = (await repo.primaryActiveProject(client.id))!;
-    final item = (await repo.watchActiveItems().first).first;
-    await repo.insertTransaction(
-      projectId: project.id,
-      kind: 'receive',
-      amountPiastres: 300000,
-      date: DateTime(2025, 6, 1),
-      method: 'cash',
-    );
-    await repo.insertTransaction(
-      projectId: project.id,
-      kind: 'spend',
-      amountPiastres: 150000,
-      date: DateTime(2025, 6, 2),
-      method: 'cash',
-      itemId: item.id,
-      expenseType: 'materials',
-      description: 'وصف طويل للتأكد من التفاف النص دون كسر التخطيط',
-    );
 
     await pumpStatement(tester, repo: repo, child: ClientStatementScreen(clientId: client.id));
     await tester.pump();
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < 30; i++) {
       await tester.pump(const Duration(milliseconds: 50));
       if (find.textContaining('عميل طويل').evaluate().isNotEmpty) break;
     }
 
     expect(find.byType(AppBrandLockup), findsNothing);
     expect(find.text('كشف حساب'), findsOneWidget);
-    expect(find.text('من آخر تصدير'), findsOneWidget);
+    expect(find.byType(FilterChip), findsNWidgets(5));
+    await tester.tap(find.text('تخصيص الفترة'));
+    await tester.pumpAndSettle();
+    expect(find.text('من'), findsOneWidget);
+    expect(find.text('إلى'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

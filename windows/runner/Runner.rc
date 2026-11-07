@@ -89,11 +89,11 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.ossheikal.bnood" "\0"
+            VALUE "CompanyName", "com.bnood.app" "\0"
             VALUE "FileDescription", "bnood" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "bnood" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.ossheikal.bnood. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 com.bnood.app. All rights reserved." "\0"
             VALUE "OriginalFilename", "bnood.exe" "\0"
             VALUE "ProductName", "bnood" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"

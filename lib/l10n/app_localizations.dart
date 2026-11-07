@@ -140,6 +140,60 @@ abstract class AppLocalizations {
   /// **'New'**
   String get navAdd;
 
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsThemeSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get settingsThemeSection;
+
+  /// No description provided for @settingsLanguageSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguageSection;
+
+  /// No description provided for @settingsThemeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get settingsThemeSystem;
+
+  /// No description provided for @settingsThemeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get settingsThemeLight;
+
+  /// No description provided for @settingsThemeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get settingsThemeDark;
+
+  /// No description provided for @settingsLanguageArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'العربية'**
+  String get settingsLanguageArabic;
+
+  /// No description provided for @settingsLanguageEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get settingsLanguageEnglish;
+
+  /// No description provided for @settingsPersistenceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save settings on this device — choices reset after restart.'**
+  String get settingsPersistenceUnavailable;
+
   /// No description provided for @received.
   ///
   /// In en, this message translates to:
@@ -163,6 +217,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Active clients'**
   String get activeClients;
+
+  /// No description provided for @homeAppName.
+  ///
+  /// In en, this message translates to:
+  /// **'Bnood'**
+  String get homeAppName;
 
   /// No description provided for @homeSubtitle.
   ///

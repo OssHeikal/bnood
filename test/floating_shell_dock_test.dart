@@ -52,9 +52,17 @@ void main() {
     expect(find.text('Items'), findsOneWidget);
     expect(find.byType(FloatingShellDock), findsOneWidget);
 
-    final voucherSize = tester.getSize(find.bySemanticsLabel('New voucher'));
-    expect(voucherSize.width, AppSize.shellDockHeight);
-    expect(voucherSize.height, AppSize.shellDockHeight);
+    final voucherHit = tester.getSize(find.bySemanticsLabel('New voucher'));
+    expect(voucherHit.width, FloatingShellDock.pillTrackExtent);
+    expect(voucherHit.height, FloatingShellDock.pillTrackExtent);
+
+    final materials = tester.widgetList<Material>(
+      find.descendant(of: find.byType(FloatingShellDock), matching: find.byType(Material)),
+    );
+    final pill = materials.firstWhere((m) => m.shape is StadiumBorder);
+    final pillBox = tester.getSize(find.descendant(of: find.byWidget(pill), matching: find.byType(SizedBox)).first);
+    expect(pillBox.height, FloatingShellDock.pillTrackExtent);
+    expect(FloatingShellDock.voucherDiscDiameter, lessThan(FloatingShellDock.pillTrackExtent));
 
     await tester.tap(find.bySemanticsLabel('New voucher'));
     await tester.pump();

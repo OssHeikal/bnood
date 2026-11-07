@@ -51,7 +51,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               children: [
                 _HomeTopBar(
-                  title: l10n.appTitle,
+                  title: l10n.homeAppName,
                   subtitle: l10n.homeSubtitle,
                   onSettings: () => showAppSettingsSheet(context),
                 ),

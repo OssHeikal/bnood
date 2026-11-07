@@ -35,11 +35,16 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   bool _exporting = false;
   bool _prefsAvailable = true;
   List<Transaction> _allRows = const [];
+  Future<_StatementData>? _loadFuture;
 
   @override
   void initState() {
     super.initState();
     _loadExportCursor();
+  }
+
+  void _startLoad(BnoodRepository repo) {
+    _loadFuture = _load(repo);
   }
 
   Future<void> _loadExportCursor() async {
@@ -98,13 +103,13 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
     final l10n = AppLocalizations.of(context);
     final repo = ref.watch(repositoryProvider);
     final localeCode = Localizations.localeOf(context).languageCode;
+    _loadFuture ??= _load(repo);
 
     return HomeFoundationScope(
       child: Scaffold(
       appBar: AppBar(title: Text(l10n.statement)),
       body: FutureBuilder<_StatementData>(
-        key: ValueKey('${_bounds.start}-${_bounds.end}-$_preset'),
-        future: _load(repo),
+        future: _loadFuture,
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.waiting && !snap.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -131,6 +136,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
                     setState(() {
                       _preset = preset;
                       _bounds = preset == StatementPeriodPreset.custom ? b : _resolvePreset(preset);
+                      _startLoad(repo);
                     });
                   },
                 ),
@@ -177,7 +183,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
         rows.where((t) => t.kind == 'spend' && _bounds.containsLocalDate(t.date)).toList();
     final periodReceive =
         rows.where((t) => t.kind == 'receive' && _bounds.containsLocalDate(t.date)).toList();
-    final items = await repo.watchActiveItems().first;
+    final items = await repo.activeItems();
     final itemNames = {for (final i in items) i.id: i.name};
     final supplierNames = await _partyMap(repo, periodSpend.map((t) => t.supplierId));
     final craftsmanNames = await _partyMap(repo, periodSpend.map((t) => t.craftsmanId), craftsman: true);

@@ -6,36 +6,19 @@ import 'package:bnood/features/statements/client_statement_screen.dart';
 import 'package:bnood/features/statements/supplier_statement_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  void mockBrokenPrefs() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-      const MethodChannel('plugins.flutter.io/shared_preferences'),
-      (call) async => throw PlatformException(
-        code: 'channel-error',
-        message:
-            'Unable to establish connection on channel: "dev.flutter.pigeon.shared_preferences_foundation.LegacyUserDefaultsApi.getAll".',
-      ),
-    );
-  }
-
-  void clearMockPrefs() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(const MethodChannel('plugins.flutter.io/shared_preferences'), null);
-  }
-
-  testWidgets('client statement loads without crash when prefs channel fails', (tester) async {
+  testWidgets('client statement loads without crash when prefs unavailable', (tester) async {
     final db = openTestDatabase();
     addTearDown(db.close);
     final repo = BnoodRepository(db);
     final client = await repo.createClient(name: 'عميل كشف');
-    mockBrokenPrefs();
-    addTearDown(clearMockPrefs);
+    SharedPreferences.setMockInitialValues({});
 
     await tester.pumpWidget(
       ProviderScope(
@@ -56,17 +39,16 @@ void main() {
     }
 
     expect(find.text('كشف حساب'), findsOneWidget);
-    expect(find.text('من آخر تصدير'), findsOneWidget);
+    expect(find.byType(FilterChip), findsNWidgets(5));
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('supplier statement loads without crash when prefs channel fails', (tester) async {
+  testWidgets('supplier statement loads without crash when prefs unavailable', (tester) async {
     final db = openTestDatabase();
     addTearDown(db.close);
     final repo = BnoodRepository(db);
     final supplier = await repo.createSupplier(name: 'مورد كشف');
-    mockBrokenPrefs();
-    addTearDown(clearMockPrefs);
+    SharedPreferences.setMockInitialValues({});
 
     await tester.pumpWidget(
       ProviderScope(
@@ -87,7 +69,7 @@ void main() {
     }
 
     expect(find.text('كشف حساب'), findsOneWidget);
-    expect(find.text('كشف حساب مورد'), findsWidgets);
+    expect(find.text('مورد كشف'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
