@@ -15,12 +15,7 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         home: const Scaffold(
           body: HomeFoundationScope(
-            child: EngineerFeeSheet(
-            clientId: 'c1',
-            projectId: 'p1',
-            clientName: 'Tower',
-            engineerBasisPoints: null,
-            ),
+            child: EngineerFeeSheet(clientId: 'c1', projectId: 'p1', clientName: 'Tower', engineerBasisPoints: null),
           ),
         ),
       ),

@@ -27,7 +27,10 @@ class FloatingShellDock extends StatelessWidget {
   final String voucherSemanticsLabel;
 
   static const clearanceHeight = AppSize.shellDockClearance;
-  static const voucherSatelliteSize = AppSize.shellDockHeight;
+  /// Shared painted extent for pill track and voucher disc (see [AppSize.shellDockPillExtent]).
+  static const pillTrackExtent = AppSize.shellDockPillExtent;
+  static const voucherDiscDiameter = AppSize.shellDockVoucherDiameter;
+  static const voucherSatelliteSize = AppSize.shellDockPillExtent;
   /// Horizontal inset for dock row (pill + satellite). Tighter than screen padding to widen pill.
   static const horizontalInset = AppSize.spaceMD;
   /// Caps pill+satellite group on wide layouts; phone uses nearly full width minus [horizontalInset].
@@ -47,7 +50,7 @@ class FloatingShellDock extends StatelessWidget {
       shape: const StadiumBorder(),
       clipBehavior: Clip.antiAlias,
       child: SizedBox(
-        height: AppSize.shellDockHeight,
+        height: pillTrackExtent,
         width: double.infinity,
         child: Row(
           children: [
@@ -65,25 +68,31 @@ class FloatingShellDock extends StatelessWidget {
       ),
     );
 
-    final voucher = Material(
-      elevation: isDark ? 4 : 8,
-      shadowColor: Colors.black26,
-      color: AppColors.primary,
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: Semantics(
-        button: true,
-        label: voucherSemanticsLabel,
-        child: AppPressable(
-          onPressed: onVoucher,
-          child: SizedBox(
-            width: voucherSatelliteSize,
-            height: voucherSatelliteSize,
-            child: Center(
-              child: ShellNavIcon(
-                asset: ShellNavIcons.voucherAdd,
-                color: Colors.white,
-                size: AppSize.icon,
+    final voucherHit = Semantics(
+      button: true,
+      label: voucherSemanticsLabel,
+      child: AppPressable(
+        onPressed: onVoucher,
+        child: SizedBox(
+          width: pillTrackExtent,
+          height: pillTrackExtent,
+          child: Center(
+            child: Material(
+              elevation: isDark ? 4 : 8,
+              shadowColor: Colors.black26,
+              color: AppColors.primary,
+              shape: const CircleBorder(),
+              clipBehavior: Clip.antiAlias,
+              child: SizedBox(
+                width: voucherDiscDiameter,
+                height: voucherDiscDiameter,
+                child: Center(
+                  child: ShellNavIcon(
+                    asset: ShellNavIcons.voucherAdd,
+                    color: Colors.white,
+                    size: AppSize.icon,
+                  ),
+                ),
               ),
             ),
           ),
@@ -105,7 +114,7 @@ class FloatingShellDock extends StatelessWidget {
             children: [
               Expanded(child: pill),
               AppSize.spaceSM.gap,
-              voucher,
+              voucherHit,
             ],
           );
           final bar = SizedBox(width: groupWidth, child: dockRow);

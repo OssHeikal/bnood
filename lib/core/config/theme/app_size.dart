@@ -9,6 +9,10 @@ abstract final class AppSize {
   static const cardRadius = radiusMD;
   static const shellDockRadius = 22.0;
   static const shellDockHeight = 64.0;
+  /// Painted outer height of the floating shell navigation pill track.
+  static const shellDockPillExtent = shellDockHeight;
+  /// Voucher satellite painted disc; aligned to pill track (tap slot stays [shellDockPillExtent]).
+  static const shellDockVoucherDiameter = shellDockPillExtent - spaceXS;
   static const shellDockClearance = 112.0;
   static const shellBarHeight = 86.0;
   static const iconExtraLarge = 48.0;

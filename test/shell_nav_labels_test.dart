@@ -5,9 +5,10 @@ import 'package:bnood/l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('satellite diameter token equals pill height', () {
-    expect(FloatingShellDock.voucherSatelliteSize, AppSize.shellDockHeight);
-    expect(FloatingShellDock.voucherSatelliteSize, 64.0);
+  test('voucher disc is slightly smaller than pill track for alignment', () {
+    expect(FloatingShellDock.pillTrackExtent, AppSize.shellDockPillExtent);
+    expect(FloatingShellDock.voucherDiscDiameter, lessThan(FloatingShellDock.pillTrackExtent));
+    expect(FloatingShellDock.voucherSatelliteSize, FloatingShellDock.pillTrackExtent);
   });
 
   test('en nav tab labels are one word', () {

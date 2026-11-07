@@ -30,6 +30,34 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navAdd => 'جديد';
 
   @override
+  String get settingsTitle => 'الإعدادات';
+
+  @override
+  String get settingsThemeSection => 'المظهر';
+
+  @override
+  String get settingsLanguageSection => 'اللغة';
+
+  @override
+  String get settingsThemeSystem => 'النظام';
+
+  @override
+  String get settingsThemeLight => 'فاتح';
+
+  @override
+  String get settingsThemeDark => 'داكن';
+
+  @override
+  String get settingsLanguageArabic => 'العربية';
+
+  @override
+  String get settingsLanguageEnglish => 'English';
+
+  @override
+  String get settingsPersistenceUnavailable =>
+      'تعذر حفظ الإعدادات على الجهاز — ستعود القيم الافتراضية بعد إعادة التشغيل.';
+
+  @override
   String get received => 'وارد';
 
   @override
@@ -40,6 +68,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get activeClients => 'عملاء نشطون';
+
+  @override
+  String get homeAppName => 'بنود';
 
   @override
   String get homeSubtitle => 'حسابات التشطيب ببساطة';

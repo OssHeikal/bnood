@@ -30,6 +30,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navAdd => 'New';
 
   @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsThemeSection => 'Theme';
+
+  @override
+  String get settingsLanguageSection => 'Language';
+
+  @override
+  String get settingsThemeSystem => 'System';
+
+  @override
+  String get settingsThemeLight => 'Light';
+
+  @override
+  String get settingsThemeDark => 'Dark';
+
+  @override
+  String get settingsLanguageArabic => 'العربية';
+
+  @override
+  String get settingsLanguageEnglish => 'English';
+
+  @override
+  String get settingsPersistenceUnavailable =>
+      'Could not save settings on this device — choices reset after restart.';
+
+  @override
   String get received => 'Received';
 
   @override
@@ -40,6 +68,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activeClients => 'Active clients';
+
+  @override
+  String get homeAppName => 'Bnood';
 
   @override
   String get homeSubtitle => 'Finishing funds, simply';
