@@ -42,6 +42,44 @@ class AppLocalizationsAr extends AppLocalizations {
   String get activeClients => 'عملاء نشطون';
 
   @override
+  String get homeSubtitle => 'حسابات التشطيب ببساطة';
+
+  @override
+  String get homeTotalsCaption => 'للعملاء الناشطين فقط · منذ بداية كل مشروع';
+
+  @override
+  String get homeSupplierSpendSection => 'مصروفات الخامات للموردين';
+
+  @override
+  String get homeSupplierSpendMeta => 'للعملاء الناشطين فقط';
+
+  @override
+  String get homeRemainingLabel => 'المتبقي في العهد الناشطة';
+
+  @override
+  String get homeNoActiveClientsTitle => 'مفيش عملاء نشطين';
+
+  @override
+  String get homeNoActiveClientsDescription =>
+      'أضف عميل من تبويب العملاء عشان تبدأ المتابعة.';
+
+  @override
+  String get homeLoadErrorTitle => 'تعذر تحميل الرئيسية';
+
+  @override
+  String get homeNoSupplierSpendTitle => 'مفيش مصروف خامات لسه';
+
+  @override
+  String get homeNoSupplierSpendDescription =>
+      'مصروفات الخامات من الموردين للعملاء الناشطين هتظهر هنا بعد ما تسجّل صرف خامات.';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get statusLoading => 'جاري التحميل';
+
+  @override
   String get addClient => 'إضافة عميل';
 
   @override

@@ -164,6 +164,78 @@ abstract class AppLocalizations {
   /// **'Active clients'**
   String get activeClients;
 
+  /// No description provided for @homeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Finishing funds, simply'**
+  String get homeSubtitle;
+
+  /// No description provided for @homeTotalsCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Active clients only · Since each project started'**
+  String get homeTotalsCaption;
+
+  /// No description provided for @homeSupplierSpendSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplier material spend'**
+  String get homeSupplierSpendSection;
+
+  /// No description provided for @homeSupplierSpendMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Active clients only'**
+  String get homeSupplierSpendMeta;
+
+  /// No description provided for @homeRemainingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining in active funds'**
+  String get homeRemainingLabel;
+
+  /// No description provided for @homeNoActiveClientsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No active clients'**
+  String get homeNoActiveClientsTitle;
+
+  /// No description provided for @homeNoActiveClientsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a client from the Clients tab to start tracking.'**
+  String get homeNoActiveClientsDescription;
+
+  /// No description provided for @homeLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load home'**
+  String get homeLoadErrorTitle;
+
+  /// No description provided for @homeNoSupplierSpendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No material spend yet'**
+  String get homeNoSupplierSpendTitle;
+
+  /// No description provided for @homeNoSupplierSpendDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplier purchases for active clients will show here after you record material expenses.'**
+  String get homeNoSupplierSpendDescription;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @statusLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get statusLoading;
+
   /// No description provided for @addClient.
   ///
   /// In en, this message translates to:

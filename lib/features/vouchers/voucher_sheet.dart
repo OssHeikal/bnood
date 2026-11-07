@@ -205,7 +205,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           craftsmanId: draft.expenseType == 'labor' ? draft.craftsmanId : null,
         );
       }
-      ref.invalidate(homeTotalsProvider);
+      refreshHomeDashboard(ref);
       AppToaster.show(l10n.save, kind: ToastKind.success);
       if (mounted) Navigator.of(context, rootNavigator: true).pop();
     } catch (e) {

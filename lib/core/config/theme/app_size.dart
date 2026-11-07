@@ -15,6 +15,8 @@ abstract final class AppSize {
   static const icon = 24.0;
   static const iconCompact = 20.0;
   static const iconSmall = 16.0;
+  /// Stat card header glyph container (receive / spend / remaining).
+  static const statIconBox = 32.0;
   static const buttonHeight = 48.0;
   static const buttonHeightSmall = 40.0;
   static const buttonHeightLarge = 52.0;

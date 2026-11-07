@@ -33,7 +33,7 @@ Rules: one sheet at a time; push/pop inner routes; cancel restores parent draft;
 
 ### AppCard
 
-Reusable surface: child content, optional gradient/border/shadow, radius (8/16/24), padding, tap via **`AppPressable`** (no parallel `GestureDetector` + `InkWell` stacks). Prefer **semantic presets** (stat receive/spend/remain, list row, fee card) over a mega-constructor with dozens of parameters.
+Reusable surface: child content, optional gradient/border/shadow, padding, tap via **`AppPressable`**. Corners: **`AppShape.superellipse`** via `RoundedSuperellipseBorder` (see `bnood-superellipse.mdc`). Prefer **semantic presets** (stat receive/spend/remain, list row, fee card) over a mega-constructor with dozens of parameters.
 
 ### AppAmount
 
@@ -43,7 +43,7 @@ Reusable surface: child content, optional gradient/border/shadow, radius (8/16/2
 
 ### AppFallback
 
-Empty or error: icon, title, description, optional CTA (add / retry). Works full-screen or inside a section. No stack traces or HTTP codes in UI.
+Empty or error: icon, title, description, optional CTA (add / retry). **`AppFallback.section`** for grouped empties inside plain **`AppCard`** (compact type; optional `leading` widget). Full-screen default unchanged. No stack traces or HTTP codes in UI.
 
 ### Icons
 

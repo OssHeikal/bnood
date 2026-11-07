@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../config/theme/app_colors.dart';
+import '../config/theme/app_shape.dart';
 import '../config/theme/app_size.dart';
 import 'app_pressable.dart';
 
@@ -44,8 +45,8 @@ class AppCard extends StatelessWidget {
   final VoidCallback? onTap;
   final AppCardPreset preset;
 
-  BoxDecoration _decoration(AppColors colors) {
-    final statGradient = switch (preset) {
+  Gradient? _statGradient() {
+    return switch (preset) {
       AppCardPreset.statReceive => const LinearGradient(
           begin: AlignmentDirectional(-0.9, -1),
           end: AlignmentDirectional(0.9, 1),
@@ -63,24 +64,40 @@ class AppCard extends StatelessWidget {
         ),
       AppCardPreset.plain => null,
     };
-
-    return BoxDecoration(
-      color: gradient == null && statGradient == null ? (background ?? colors.surface) : null,
-      gradient: gradient ?? statGradient,
-      borderRadius: BorderRadius.circular(radius),
-      border: borderWidth > 0 ? Border.all(color: borderColor ?? colors.outline, width: borderWidth) : null,
-      boxShadow: shadow ?? [colors.buttonShadow],
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final surface = DecoratedBox(
-      decoration: _decoration(colors),
-      child: Padding(padding: padding, child: child),
+    final resolvedGradient = gradient ?? _statGradient();
+    final fill = background ?? colors.surface;
+    final shape = AppShape.superellipse(
+      radius: radius,
+      side: borderWidth > 0 ? BorderSide(color: borderColor ?? colors.outline, width: borderWidth) : BorderSide.none,
     );
-    if (onTap == null) return surface;
-    return AppPressable(onPressed: onTap, child: surface);
+
+    final surface = Material(
+      color: resolvedGradient == null ? fill : Colors.transparent,
+      elevation: 0,
+      shadowColor: Colors.black26,
+      clipBehavior: Clip.antiAlias,
+      shape: shape,
+      child: Ink(
+        decoration: resolvedGradient == null
+            ? null
+            : BoxDecoration(
+                gradient: resolvedGradient,
+              ),
+        child: Padding(padding: padding, child: child),
+      ),
+    );
+
+    final shadowed = DecoratedBox(
+      decoration: BoxDecoration(boxShadow: shadow ?? [colors.buttonShadow]),
+      child: surface,
+    );
+
+    if (onTap == null) return shadowed;
+    return AppPressable(onPressed: onTap, child: shadowed);
   }
 }

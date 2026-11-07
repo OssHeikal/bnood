@@ -1,0 +1,33 @@
+---
+description: Superellipse corners — shared AppShape; stadium/circle exceptions
+globs: lib/**/*
+alwaysApply: false
+---
+
+# Corner geometry
+
+Use [`lib/core/config/theme/app_shape.dart`](../../lib/core/config/theme/app_shape.dart) — **no ad-hoc `BorderRadius.circular` on product cards, fields, dialogs, or rounded buttons** unless migrating that widget in the same change.
+
+## Default — superellipse
+
+Flutter **3.41+** native API:
+
+```dart
+RoundedSuperellipseBorder(borderRadius: BorderRadius.circular(r))
+```
+
+via `AppShape.superellipse(radius: r)`.
+
+`AppCard` clips children to this shape (accent stripes, gradients, and shadows share one silhouette).
+
+## Owner-approved exceptions (not superellipse)
+
+| Surface | Shape |
+|---------|--------|
+| Shell nav pill | `StadiumBorder` / `AppShape.stadium` |
+| Selected nav tab overlay | Half-height stadium (`radius = height / 2`) |
+| Voucher `+` satellite, true avatars marked circular | `CircleBorder` / `AppShape.circle` |
+
+## Migration
+
+Unmigrated screens may still use `BorderRadius.circular` until touched. Do **not** mass-rewrite every screen in one pass.

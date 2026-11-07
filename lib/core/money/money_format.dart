@@ -5,14 +5,18 @@ class MoneyFormat {
   MoneyFormat._();
 
   static String formatPiastres(int piastres, {String locale = 'ar_EG'}) {
-    final pounds = piastres ~/ 100;
-    final cents = piastres % 100;
+    final magnitude = piastres.abs();
+    final pounds = magnitude ~/ 100;
+    final cents = magnitude % 100;
     final number = NumberFormat.decimalPattern(locale);
     final whole = number.format(pounds);
+    final isEn = locale.startsWith('en');
+    final currency = isEn ? 'EGP' : 'ج.م';
     if (cents == 0) {
-      return '$whole ج.م';
+      return '$whole $currency';
     }
-    return '$whole.${cents.toString().padLeft(2, '0')} ج.م';
+    final frac = cents.toString().padLeft(2, '0');
+    return isEn ? '$whole.$frac $currency' : '$whole.$frac $currency';
   }
 
   static int? parseEgpInput(String input) {

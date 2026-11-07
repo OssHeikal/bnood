@@ -368,6 +368,40 @@ class BnoodRepository {
     return LedgerMath.projectBalance(rows);
   }
 
+  Future<List<HomeSupplierSpendRow>> homeSupplierSpendsForActiveClients() async {
+    final activeClients = await watchActiveClients();
+    if (activeClients.isEmpty) return const [];
+    final clientIds = activeClients.map((c) => c.id).toList();
+    final projects = await (_db.select(_db.projects)
+          ..where((p) => p.status.equals('active') & p.clientId.isIn(clientIds)))
+        .get();
+    final projectIds = projects.map((p) => p.id).toList();
+    if (projectIds.isEmpty) return const [];
+
+    final spends = await (_db.select(_db.transactions)
+          ..where(
+            (t) => t.kind.equals('spend') & t.supplierId.isNotNull() & t.projectId.isIn(projectIds),
+          ))
+        .get();
+
+    final totalsBySupplier = <String, int>{};
+    for (final row in spends) {
+      final supplierId = row.supplierId;
+      if (supplierId == null) continue;
+      totalsBySupplier[supplierId] = (totalsBySupplier[supplierId] ?? 0) + row.amountPiastres;
+    }
+    if (totalsBySupplier.isEmpty) return const [];
+
+    final suppliers = await (_db.select(_db.suppliers)
+          ..where((s) => s.id.isIn(totalsBySupplier.keys.toList())))
+        .get();
+
+    return [
+      for (final s in suppliers)
+        HomeSupplierSpendRow(supplier: s, spentPiastres: totalsBySupplier[s.id] ?? 0),
+    ]..sort((a, b) => b.spentPiastres.compareTo(a.spentPiastres));
+  }
+
   Future<HomeTotals> homeTotals() async {
     final activeProjects = await (_db.select(_db.projects)
           ..where((p) => p.status.equals('active')))
@@ -440,4 +474,24 @@ class HomeTotals {
   final int receivedPiastres;
   final int spentPiastres;
   int get remainingPiastres => receivedPiastres - spentPiastres;
+}
+
+class HomeSupplierSpendRow {
+  const HomeSupplierSpendRow({required this.supplier, required this.spentPiastres});
+  final Supplier supplier;
+  final int spentPiastres;
+}
+
+class HomeClientBalanceRow {
+  const HomeClientBalanceRow({
+    required this.client,
+    required this.remainingPiastres,
+    required this.receivedPiastres,
+    required this.spentPiastres,
+  });
+
+  final Client client;
+  final int remainingPiastres;
+  final int receivedPiastres;
+  final int spentPiastres;
 }

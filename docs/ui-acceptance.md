@@ -56,7 +56,8 @@ Use before treating a UI milestone as done. Functional tests passing is **necess
 |----|------|--------|
 | UI-01b | Wire foundation theme into production shell when approved | Nav uses legacy `AppColors` static tokens; minimal additive |
 | UI-02b | Swap feature imports from legacy `app_button` → `buttons/app_button.dart` | After visual sign-off |
-| UI-07 | Owner **SVG** icon set in **feature screens** | Nav wired only; home/clients/etc. still Material where present |
+| UI-07 | Owner **SVG** icon set in **feature screens** | Nav wired; **home** stat/settings SVGs; clients/list still Material where present |
+| UI-HOME | **Home** screen index migration | **Done (2026-11)** — foundation scope, stat grid, person cards, supplier section; owner **runtime** sign-off pending |
 | UI-08 | Reconcile all screens to index visual hierarchy | See screenshot diff notes |
 | UI-09 | Fix `sample_pdf_artifact_test.dart` output path for local Mac | Separate from UI phase |
 | UI-10 | Update `README.md` status line | When owner approves doc pass |
@@ -66,7 +67,7 @@ Use before treating a UI milestone as done. Functional tests passing is **necess
 From supervised simulator capture vs index:
 
 - Legacy **5-slot** bottom nav with oversized center **+**
-- Flat white home cards vs index **gradient stat cards**
+- ~~Flat white home cards~~ → home uses **AppCard** stat gradients (verify on device)
 - Typography mostly Regular/Bold only — hierarchy flatter than index weights 500–800 mix
 - Placeholder icons vs index iconography
 

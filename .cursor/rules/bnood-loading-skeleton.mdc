@@ -1,0 +1,29 @@
+---
+description: Pulse skeleton kit and Home loading placeholders
+globs: lib/**/*
+alwaysApply: false
+---
+
+# Loading and skeleton
+
+Ported from SmartRx patient `lib/core/widgets/skeleton/` (Dog handoff). Bnood paths only.
+
+## Kit
+
+`lib/core/widgets/skeleton/`:
+
+- `Skeleton` — cosine pulse 0.55–1.0, `AppMotion.skeletonPulse` (1600ms), wall-clock sync, reduced motion → full opacity static
+- `SkeletonBox` / `SkeletonText` — `surfaceSunken` / `outlineSubtle`, superellipse corners (`AppShape`) except pills/circles
+- `AsyncValueBody` — skeleton **only** when no cached `valueOrNull`; silent reload always shows last data
+- Home data: `SilentAsyncNotifier.refreshSilently()` + `refreshHomeDashboard(ref)` (not `invalidate` after first load)
+
+Do **not** use SmartRx `AppSkeletonizer` / `AppBone` on new Bnood UI.
+
+## Wiring
+
+- Feature placeholder (e.g. `home_loading_skeleton.dart`) mirrors loaded **section structure** inside real `AppCard` chrome.
+- **Live chrome** outside pulse: app title, settings, section headers, “See all”, nav dock.
+- One scroll parent; bones are `Column` children, not nested `ListView`.
+- Do not skeleton primary actions or nav.
+
+See project skill `.cursor/skills/loading-skeleton/SKILL.md`.

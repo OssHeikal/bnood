@@ -38,17 +38,37 @@ class AppAmount extends StatelessWidget {
     final locale = localeCode == 'ar' ? 'ar_EG' : 'en_US';
     final text = MoneyFormat.formatPiastres(piastres, locale: locale);
     if (!showCurrency) {
-      return text.replaceAll(RegExp(r'\s*ج\.م\s*$'), '').replaceAll(RegExp(r'\s*EGP\s*$'), '');
+      return text.replaceAll(RegExp(r'\s*ج\.م\s*$'), '').replaceAll(RegExp(r'\s*EGP\s*$', caseSensitive: false), '');
     }
     return text;
   }
 
-  Color _color(AppColors colors) => switch (role) {
-        AppAmountRole.receive => colors.receive,
-        AppAmountRole.spend => colors.spend,
-        AppAmountRole.remaining => colors.remaining,
-        AppAmountRole.neutral => colors.onSurface,
-      };
+  Color _color(AppColors colors) {
+    if (role == AppAmountRole.remaining) {
+      if (piastres < 0) return colors.spend;
+      if (piastres > 0) return colors.remaining;
+      return colors.onSurface;
+    }
+    return switch (role) {
+      AppAmountRole.receive => colors.receive,
+      AppAmountRole.spend => colors.spend,
+      AppAmountRole.remaining => colors.remaining,
+      AppAmountRole.neutral => colors.onSurface,
+    };
+  }
+
+  String _displayText() {
+    if (role == AppAmountRole.remaining) {
+      if (piastres < 0) {
+        final body = format(piastres: piastres.abs(), localeCode: localeCode, showCurrency: showCurrency);
+        return '−$body';
+      }
+      return format(piastres: piastres, localeCode: localeCode, showCurrency: showCurrency);
+    }
+    final sign = showSign && piastres != 0 ? (piastres > 0 ? '+' : '−') : '';
+    final body = format(piastres: piastres.abs(), localeCode: localeCode, showCurrency: showCurrency);
+    return sign.isEmpty ? body : '$sign$body';
+  }
 
   TextStyle _base(AppText text) => switch (size) {
         AppAmountSize.balance => text.balance,
@@ -60,12 +80,7 @@ class AppAmount extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final text = context.text;
-    final sign = showSign && piastres != 0
-        ? (piastres > 0 ? '+' : '−')
-        : '';
-    final magnitude = piastres.abs();
-    final body = format(piastres: magnitude, localeCode: localeCode, showCurrency: showCurrency);
-    final display = sign.isEmpty ? body : '$sign$body';
+    final display = _displayText();
     final resolved = (style ?? _base(text)).copyWith(color: _color(colors));
     return Text(
       LtrIsolate.isolate(display),
