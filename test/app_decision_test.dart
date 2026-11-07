@@ -1,3 +1,4 @@
+import 'package:bnood/app/widgets/shell_nav_icon.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_decision.dart';
 import 'package:bnood/core/widgets/buttons/app_button.dart';
@@ -99,5 +100,91 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.textContaining('network'), findsOneWidget);
     expect(find.text('إعادة المحاولة'), findsOneWidget);
+  });
+
+  testWidgets('danger dialog without override still shows logout icon', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppFoundationTheme.light(),
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () => AppDecision.show(
+                  context,
+                  title: 'Delete',
+                  confirmLabel: 'Delete',
+                  cancelLabel: 'Cancel',
+                  tone: AppTone.danger,
+                ),
+                child: const Text('danger-default'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('danger-default'));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.logout), findsOneWidget);
+  });
+
+  testWidgets('archive danger iconWidget replaces logout glyph', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppFoundationTheme.light(),
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () => AppDecision.show(
+                  context,
+                  title: 'Archive client?',
+                  confirmLabel: 'Archive',
+                  cancelLabel: 'Cancel',
+                  tone: AppTone.danger,
+                  iconWidget: AppDecision.archiveDangerIcon(context),
+                ),
+                child: const Text('archive'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('archive'));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.logout), findsNothing);
+    expect(find.byType(ShellNavIcon), findsOneWidget);
+    expect(find.bySemanticsLabel('Archive'), findsWidgets);
+  });
+
+  testWidgets('IconData icon override still wins over danger default', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppFoundationTheme.light(),
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () => AppDecision.show(
+                  context,
+                  title: 'Confirm',
+                  confirmLabel: 'Delete',
+                  cancelLabel: 'Cancel',
+                  tone: AppTone.danger,
+                  icon: Icons.warning_amber_rounded,
+                ),
+                child: const Text('icon-data'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('icon-data'));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.warning_amber_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.logout), findsNothing);
   });
 }

@@ -44,9 +44,8 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
 
   Future<ClientDetailSnapshot> loadSnapshot(String clientId) async {
     final repo = ref.read(repositoryProvider);
-    final clients = await repo.watchActiveClients();
-    final client = clients.firstWhere((c) => c.id == clientId);
-    final project = await repo.primaryActiveProject(clientId);
+    final client = await repo.getClient(clientId);
+    final project = await repo.primaryProjectForClient(clientId);
     if (project == null) throw StateError('Project missing');
     final tx = await repo.transactionsForProject(project.id);
     final balance = LedgerMath.projectBalance(tx);

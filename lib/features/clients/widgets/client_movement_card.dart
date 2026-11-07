@@ -71,6 +71,7 @@ class ClientMovementCard extends StatelessWidget {
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
+            textDirection: Directionality.of(context),
             children: [
               Material(
                 color: tintBg,
@@ -108,12 +109,30 @@ class ClientMovementCard extends StatelessWidget {
                 ),
               ),
               AppSize.spaceSM.gap,
-              Flexible(
-                child: AppAmount(
-                  piastres: t.amountPiastres,
-                  role: isReceive ? AppAmountRole.receive : AppAmountRole.spend,
-                  size: AppAmountSize.small,
-                  localeCode: localeCode,
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 160),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: AppAmount(
+                        piastres: t.amountPiastres,
+                        role: isReceive ? AppAmountRole.receive : AppAmountRole.spend,
+                        size: AppAmountSize.medium,
+                        localeCode: localeCode,
+                      ),
+                    ),
+                    AppSize.spaceXS.gap,
+                    Text(
+                      dateLabel,
+                      style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                      textAlign: TextAlign.end,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -127,30 +146,21 @@ class ClientMovementCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ],
-          AppSize.spaceSM.gap,
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Wrap(
-                  spacing: AppSize.spaceXS,
-                  runSpacing: AppSize.spaceXS,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    for (final badge in badges)
-                      _MovementBadge(label: badge.label, color: badge.color, bg: badge.bg),
-                  ],
-                ),
+          if (badges.isNotEmpty) ...[
+            AppSize.spaceSM.gap,
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Wrap(
+                spacing: AppSize.spaceXS,
+                runSpacing: AppSize.spaceXS,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  for (final badge in badges)
+                    _MovementBadge(label: badge.label, color: badge.color, bg: badge.bg),
+                ],
               ),
-              AppSize.spaceSM.gap,
-              Text(
-                dateLabel,
-                style: text.caption.copyWith(color: colors.onSurfaceMuted),
-                textAlign: TextAlign.end,
-                maxLines: 2,
-              ),
-            ],
-          ),
+            ),
+          ],
         ],
       ),
     );

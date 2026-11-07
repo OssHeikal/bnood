@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 
 /// Content-sized inline create route inside voucher / entity pickers.
@@ -14,12 +13,14 @@ class InlineEntityCreateShell extends StatelessWidget {
     required this.body,
     required this.footer,
     this.padForSystemChrome = true,
+    this.preferContentHeight = false,
   });
 
   final String title;
   final Widget body;
   final Widget footer;
   final bool padForSystemChrome;
+  final bool preferContentHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +28,12 @@ class InlineEntityCreateShell extends StatelessWidget {
     final media = MediaQuery.of(context);
     final viewPadding = media.viewPadding;
 
-    Widget sheet = Material(
+    return Material(
       color: colors.surface,
       child: LayoutBuilder(
           builder: (context, constraints) {
-            final viewportCap = SheetContentBounds.maxHeight(constraints, media);
             final hasFiniteMax =
                 constraints.hasBoundedHeight && constraints.maxHeight.isFinite && constraints.maxHeight > 0;
-            final maxHeight = hasFiniteMax
-                ? (constraints.maxHeight < viewportCap ? constraints.maxHeight : viewportCap)
-                : viewportCap;
 
             final header = Padding(
               padding: const EdgeInsets.fromLTRB(
@@ -80,7 +77,7 @@ class InlineEntityCreateShell extends StatelessWidget {
               child: footer,
             );
 
-            if (!hasFiniteMax) {
+            if (!hasFiniteMax || preferContentHeight) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -105,9 +102,5 @@ class InlineEntityCreateShell extends StatelessWidget {
           },
         ),
     );
-    if (padForSystemChrome) {
-      return SafeArea(bottom: false, child: sheet);
-    }
-    return sheet;
   }
 }

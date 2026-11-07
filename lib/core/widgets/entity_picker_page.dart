@@ -92,9 +92,7 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
     final viewPadding = MediaQuery.viewPaddingOf(context);
     return Material(
       color: colors.surface,
-      child: SafeArea(
-        bottom: false,
-        child: Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
@@ -199,7 +197,6 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
               ),
           ],
         ),
-      ),
     );
   }
 }

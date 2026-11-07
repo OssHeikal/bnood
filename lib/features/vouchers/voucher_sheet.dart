@@ -495,11 +495,9 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
 
     return Material(
       color: context.colors.surface,
-      child: SafeArea(
-        bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(
                 AppSize.screenPadding,
@@ -741,7 +739,6 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             ),
           ],
         ),
-      ),
     );
   }
 }

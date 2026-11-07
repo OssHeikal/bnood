@@ -2,19 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:collection/collection.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../core/repositories/bnood_repository.dart';
-
-import '../../core/database/database.dart';
-import '../../core/money/ledger_math.dart';
-import '../../core/money/money_format.dart';
+import '../../core/config/extensions/num_extensions.dart';
+import '../../core/config/theme/app_colors.dart';
+import '../../core/config/theme/app_shape.dart';
+import '../../core/config/theme/app_size.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
+import '../../core/repositories/bnood_repository.dart' show HomeTotals;
+import '../../core/resources/gen/assets.gen.dart';
+import '../../core/widgets/app_card.dart';
+import '../../core/widgets/app_decision.dart';
+import '../../core/widgets/app_fallback.dart';
+import '../../core/utils/whatsapp_phone.dart';
+import '../../core/widgets/app_pressable.dart';
+import '../../core/widgets/app_toaster.dart';
+import '../../core/widgets/foundation_app_bar_title.dart';
+import '../../core/widgets/skeleton/async_value_body.dart';
+import '../../core/widgets/toast/app_tone.dart';
+import '../../app/widgets/shell_nav_icon.dart';
+import '../home/home_foundation_scope.dart';
+import '../home/widgets/home_section_header.dart';
 import '../vouchers/voucher_launcher.dart';
+import 'client_detail_provider.dart';
+import 'client_detail_snapshot.dart';
+import 'client_edit_sheet.dart';
 import 'craftsman_assignments_sheet.dart';
 import 'engineer_edit_sheet.dart';
+import 'widgets/client_detail_action_grid.dart';
+import 'widgets/client_detail_craftsman_row.dart';
+import 'widgets/client_detail_engineer_card.dart';
+import 'widgets/client_detail_item_row.dart';
+import 'widgets/client_detail_loading_skeleton.dart';
+import 'widgets/client_detail_movement_row.dart';
+import 'widgets/client_detail_stat_grid.dart';
 
 class ClientDetailScreen extends ConsumerWidget {
   const ClientDetailScreen({super.key, required this.clientId});
@@ -24,300 +46,414 @@ class ClientDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final repo = ref.watch(repositoryProvider);
-    return FutureBuilder(
-      future: _load(repo),
-      builder: (context, snap) {
-        if (!snap.hasData) return const Scaffold(body: Center(child: CircularProgressIndicator()));
-        final data = snap.data!;
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(data.client.name),
-            actions: [
-              if (data.client.phone != null)
-                IconButton(
-                  icon: const Icon(Icons.chat, color: Color(0xFF25D366)),
-                  onPressed: () => _openWhatsApp(data.client.phone!),
-                ),
-              IconButton(
-                icon: const Icon(Icons.description_outlined),
-                onPressed: () => context.push('/clients/$clientId/statement'),
-              ),
-              IconButton(
-                icon: const Icon(Icons.archive_outlined),
-                onPressed: () async {
-                  await ref.read(repositoryProvider).archiveClient(clientId);
-                  refreshAfterClientMutation(ref);
-                  if (context.mounted) context.pop();
-                },
-              ),
-            ],
-          ),
-          body: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              _BalanceHeader(balance: data.balance),
-              const SizedBox(height: 12),
-              _EngineerCard(
-                project: data.project,
-                profit: data.estimatedProfit,
-                client: data.client,
-                onEdit: () => showEngineerEditSheet(
-                  context: context,
-                  clientId: clientId,
-                  projectId: data.project.id,
-                  clientName: data.client.name,
-                  phone: data.client.phone,
-                  unitAddress: data.project.unitAddress,
-                  engineerBasisPoints: data.project.engineerBasisPoints,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(l10n.craftsmen, style: Theme.of(context).textTheme.titleMedium),
-                  TextButton(onPressed: () => context.push('/clients/$clientId/craftsmen'), child: Text(l10n.seeAll)),
-                ],
-              ),
-              OutlinedButton.icon(
-                onPressed: () => showCraftsmanAssignmentsSheet(context: context, projectId: data.project.id),
-                icon: const Icon(Icons.handyman),
-                label: const Text('تحديد الصنايعية'),
-              ),
-              ...data.craftsmanPreviews.map(
-                (p) => ListTile(
-                  title: Text(p.name),
-                  subtitle: Text(
-                    '${l10n.paid}: ${MoneyFormat.formatPiastres(p.paid)}'
-                    '${p.remaining != null ? ' • ${l10n.remaining}: ${MoneyFormat.formatPiastres(p.remaining!)}' : ''}',
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(l10n.navItems, style: Theme.of(context).textTheme.titleMedium),
-                  TextButton(onPressed: () => context.push('/clients/$clientId/items'), child: Text(l10n.seeAll)),
-                ],
-              ),
-              ...data.topItems.map((e) {
-                final total = e.value.totalPiastres;
-                return ListTile(
-                  title: Text(e.key),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${l10n.materials}: ${MoneyFormat.formatPiastres(e.value.materialsPiastres)} • '
-                        '${l10n.labor}: ${MoneyFormat.formatPiastres(e.value.laborPiastres)}',
-                      ),
-                      const SizedBox(height: 4),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: LinearProgressIndicator(
-                          value: total == 0 ? 0 : e.value.materialsPiastres / total,
-                          minHeight: 8,
-                          backgroundColor: Colors.red.withValues(alpha: 0.15),
-                          color: Colors.green,
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final detail = ref.watch(clientDetailProvider(clientId));
+    final snapshot = detail.valueOrNull;
+
+    return HomeFoundationScope(
+      child: Builder(
+        builder: (context) {
+          final colors = context.colors;
+          final client = snapshot?.client;
+          final isArchived = client?.archivedAt != null;
+          final mutationsEnabled = client != null && !isArchived;
+          final phone = client?.phone?.trim();
+          final hasPhone = phone != null && phone.isNotEmpty;
+          return Scaffold(
+            backgroundColor: colors.canvas,
+            appBar: AppBar(
+              backgroundColor: colors.canvas,
+              surfaceTintColor: Colors.transparent,
+              scrolledUnderElevation: 0,
+              elevation: 0,
+              centerTitle: false,
+              toolbarHeight: hasPhone ? 64 : kToolbarHeight,
+              title: client != null
+                  ? FoundationAppBarTitle(
+                      title: client.name,
+                      subtitle: hasPhone ? phone : null,
+                      subtitleLtr: true,
+                    )
+                  : FoundationAppBarTitle(title: l10n.navClients),
+              actions: client != null
+                  ? [
+                      _AppBarIconAction(
+                        key: const Key('client_detail_edit'),
+                        tooltip: l10n.edit,
+                        enabled: mutationsEnabled,
+                        onPressed: mutationsEnabled
+                            ? () => showClientEditSheet(
+                                  context: context,
+                                  clientId: clientId,
+                                  clientName: client.name,
+                                  phone: client.phone,
+                                )
+                            : null,
+                        child: ShellNavIcon(
+                          asset: Assets.icons.documentEditOutline,
+                          color: colors.onSurface,
+                          size: AppSize.icon,
+                          semanticsLabel: l10n.edit,
                         ),
                       ),
+                      if (hasPhone)
+                        Builder(
+                          builder: (context) {
+                            final waDigits = WhatsAppPhone.waMeDigits(phone);
+                            final waEnabled = mutationsEnabled && waDigits != null;
+                            return Padding(
+                              padding: const EdgeInsetsDirectional.only(end: AppSize.spaceMD),
+                              child: _AppBarIconAction(
+                                key: const Key('client_detail_whatsapp'),
+                                tooltip: l10n.whatsapp,
+                                enabled: waEnabled,
+                                onPressed: waEnabled
+                                    ? () => _openWhatsApp(context, l10n, waDigits)
+                                    : mutationsEnabled
+                                        ? () => AppToaster.show(l10n.whatsappInvalidPhone, kind: ToastKind.failure)
+                                        : null,
+                                child: Opacity(
+                                  opacity: waEnabled ? 1 : 0.38,
+                                  child: Assets.icons.whatsappColor.svg(
+                                    width: AppSize.icon,
+                                    height: AppSize.icon,
+                                    semanticsLabel: l10n.whatsapp,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      else
+                        const SizedBox(width: AppSize.spaceMD),
+                    ]
+                  : const [],
+            ),
+            body: ListView(
+              padding: EdgeInsets.fromLTRB(
+                AppSize.screenPadding,
+                AppSize.spaceSM,
+                AppSize.screenPadding,
+                AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
+              ),
+              children: [
+                AsyncValueBody(
+                  value: detail,
+                  loadingPlaceholder: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const ClientDetailStatSkeleton(),
+                      AppSize.spaceLG.gap,
+                      const ClientDetailLoadingSkeleton(),
                     ],
                   ),
-                  trailing: Text(MoneyFormat.formatPiastres(total)),
-                );
-              }),
-              const SizedBox(height: 8),
-              Text(l10n.movements, style: Theme.of(context).textTheme.titleMedium),
-              ...data.latestMovements.map((t) => _MovementTile(t: t)),
-              TextButton(onPressed: () => context.push('/clients/$clientId/movements'), child: Text(l10n.seeAll)),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () => VoucherLauncher.openForClient(
-                        context,
-                        clientId: clientId,
-                        projectId: data.project.id,
-                        clientLabel: data.client.name,
-                        kind: 'receive',
-                      ),
-                      child: Text(l10n.receive),
+                  error: (e, _) => AppCard(
+                    child: AppFallback.section(
+                      icon: Icons.error_outline,
+                      title: l10n.homeLoadErrorTitle,
+                      description: e.toString(),
+                      actions: [
+                        AppFallbackAction(
+                          label: l10n.retry,
+                          onPressed: () => ref.read(clientDetailProvider(clientId).notifier).refreshSilently(),
+                          role: AppFallbackActionRole.tertiary,
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: FilledButton(
-                      style: FilledButton.styleFrom(backgroundColor: Colors.red),
-                      onPressed: () => VoucherLauncher.openForClient(
-                        context,
-                        clientId: clientId,
-                        projectId: data.project.id,
-                        clientLabel: data.client.name,
-                        kind: 'spend',
-                      ),
-                      child: Text(l10n.spend),
-                    ),
+                  data: (data) => _ClientDetailBody(
+                    clientId: clientId,
+                    data: data,
+                    localeCode: localeCode,
                   ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _openWhatsApp(String phone) async {
-    final normalized = phone.replaceAll(RegExp(r'\D'), '');
-    final uri = Uri.parse('https://wa.me/$normalized');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
-  }
-
-  Future<_DetailData> _load(BnoodRepository repo) async {
-    final clients = await repo.watchActiveClients();
-    final client = clients.firstWhere((c) => c.id == clientId);
-    final project = await repo.primaryActiveProject(clientId);
-    if (project == null) throw StateError('Project missing');
-    final tx = await repo.transactionsForProject(project.id);
-    final balance = LedgerMath.projectBalance(tx).balancePiastres;
-    final profit = project.engineerBasisPoints == null
-        ? null
-        : MoneyFormat.estimatedProfitPiastres(
-            totalSpendPiastres: LedgerMath.projectBalance(tx).spentPiastres,
-            engineerBasisPoints: project.engineerBasisPoints!,
+                ),
+              ],
+            ),
           );
-    final agreements = await repo.agreementsForProject(project.id);
-    final craftsmen = await repo.watchActiveCraftsmen().first;
-    final previews = <_CraftsmanPreview>[];
-    for (final a in agreements.take(3)) {
-      final c = craftsmen.where((x) => x.id == a.craftsmanId).firstOrNull;
-      if (c == null) continue;
-      final paid = LedgerMath.craftsmanPaidPiastres(rows: tx, craftsmanId: a.craftsmanId);
-      previews.add(
-        _CraftsmanPreview(
-          name: c.name,
-          paid: paid,
-          remaining: LedgerMath.craftsmanRemainingPiastres(
-            initialAmountPiastres: a.initialAmountPiastres,
-            paidPiastres: paid,
-          ),
-        ),
-      );
-    }
-    final spend = tx.where((t) => t.kind == 'spend').toList();
-    final breakdown = LedgerMath.itemBreakdown(spend);
-    final items = await repo.watchActiveItems().first;
-    final itemNames = {for (final i in items) i.id: i.name};
-    final topItems = breakdown.entries.toList()..sort((a, b) => b.value.totalPiastres.compareTo(a.value.totalPiastres));
-    final topItemsNamed = topItems.take(3).map((e) => MapEntry(itemNames[e.key] ?? e.key, e.value)).toList();
-    final latest = [...tx]..sort((a, b) => b.date.compareTo(a.date));
-    return _DetailData(
-      client: client,
-      project: project,
-      balance: balance,
-      estimatedProfit: profit,
-      craftsmanPreviews: previews,
-      topItems: topItemsNamed,
-      latestMovements: latest.take(5).toList(),
+        },
+      ),
     );
+  }
+
+  static Future<void> _openWhatsApp(BuildContext context, AppLocalizations l10n, String waDigits) async {
+    final uri = Uri.parse('https://wa.me/$waDigits');
+    try {
+      final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!opened && context.mounted) {
+        AppToaster.show(l10n.whatsappLaunchFailed, kind: ToastKind.failure);
+      }
+    } catch (_) {
+      if (context.mounted) {
+        AppToaster.show(l10n.whatsappLaunchFailed, kind: ToastKind.failure);
+      }
+    }
   }
 }
 
-class _DetailData {
-  _DetailData({
-    required this.client,
-    required this.project,
-    required this.balance,
-    required this.estimatedProfit,
-    required this.craftsmanPreviews,
-    required this.topItems,
-    required this.latestMovements,
+class _AppBarIconAction extends StatelessWidget {
+  const _AppBarIconAction({
+    super.key,
+    required this.tooltip,
+    required this.onPressed,
+    required this.child,
+    this.enabled = true,
   });
 
-  final Client client;
-  final Project project;
-  final int balance;
-  final int? estimatedProfit;
-  final List<_CraftsmanPreview> craftsmanPreviews;
-  final List<MapEntry<String, ItemExpenseBreakdown>> topItems;
-  final List<Transaction> latestMovements;
-}
-
-class _CraftsmanPreview {
-  _CraftsmanPreview({required this.name, required this.paid, this.remaining});
-  final String name;
-  final int paid;
-  final int? remaining;
-}
-
-class _BalanceHeader extends StatelessWidget {
-  const _BalanceHeader({required this.balance});
-  final int balance;
+  final String tooltip;
+  final VoidCallback? onPressed;
+  final Widget child;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l10n.remaining, style: Theme.of(context).textTheme.labelLarge),
-            Text(MoneyFormat.formatPiastres(balance), style: Theme.of(context).textTheme.headlineSmall),
-          ],
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: AppSize.spaceXS),
+      child: Tooltip(
+        message: tooltip,
+        child: AppPressable(
+          enabled: enabled,
+          onPressed: onPressed,
+          child: Material(
+            color: context.colors.surface,
+            shape: AppShape.superellipse(radius: AppSize.radiusSM),
+            clipBehavior: Clip.antiAlias,
+            child: SizedBox(
+              width: AppSize.buttonHeight,
+              height: AppSize.buttonHeight,
+              child: Center(child: child),
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-class _EngineerCard extends StatelessWidget {
-  const _EngineerCard({required this.project, required this.profit, required this.client, required this.onEdit});
-  final Project project;
-  final int? profit;
-  final Client client;
-  final VoidCallback onEdit;
+class _ClientDetailBody extends ConsumerWidget {
+  const _ClientDetailBody({
+    required this.clientId,
+    required this.data,
+    required this.localeCode,
+  });
+
+  final String clientId;
+  final ClientDetailSnapshot data;
+  final String localeCode;
+
+  Future<void> _confirmArchive(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final answer = await AppDecision.show(
+      context,
+      title: l10n.archiveClientTitle,
+      description: l10n.archiveClientDescription(data.client.name),
+      confirmLabel: l10n.archive,
+      cancelLabel: l10n.cancel,
+      tone: AppTone.danger,
+      iconWidget: AppDecision.archiveDangerIcon(context),
+    );
+    if (answer != OverlayAnswer.confirmed || !context.mounted) return;
+    await ref.read(repositoryProvider).archiveClient(clientId);
+    refreshAfterClientMutation(ref, clientId: clientId);
+    if (context.mounted) context.pop();
+  }
+
+  Future<void> _unarchive(BuildContext context, WidgetRef ref) async {
+    await ref.read(repositoryProvider).unarchiveClient(clientId);
+    refreshAfterClientMutation(ref, clientId: clientId);
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    return Card(
-      child: ListTile(
-        onTap: onEdit,
-        title: Text(client.name),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    final colors = context.colors;
+    final text = context.text;
+    final isArchived = data.client.archivedAt != null;
+    final mutationsEnabled = !isArchived;
+
+    Future<void> openAssignments() async {
+      if (!mutationsEnabled) return;
+      await showCraftsmanAssignmentsSheet(
+        context: context,
+        projectId: data.project.id,
+        clientId: clientId,
+      );
+      if (context.mounted) {
+        ref.read(clientDetailProvider(clientId).notifier).refreshSilently();
+      }
+    }
+
+    void openVoucher(String kind) {
+      if (!mutationsEnabled) return;
+      VoucherLauncher.openForClient(
+        context,
+        clientId: clientId,
+        projectId: data.project.id,
+        clientLabel: data.client.name,
+        kind: kind,
+      ).then((_) {
+        if (context.mounted) {
+          ref.read(clientDetailProvider(clientId).notifier).refreshSilently();
+        }
+      });
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ClientDetailStatGrid(
+          totals: HomeTotals(
+            receivedPiastres: data.receivedPiastres,
+            spentPiastres: data.spentPiastres,
+          ),
+          localeCode: localeCode,
+        ),
+        AppSize.spaceLG.gap,
+        ClientDetailActionGrid(
+          isArchived: isArchived,
+          mutationsEnabled: mutationsEnabled,
+          onReceive: () => openVoucher('receive'),
+          onSpend: () => openVoucher('spend'),
+          onStatement: () {
+            if (!mutationsEnabled) return;
+            context.push('/clients/$clientId/statement');
+          },
+          onArchive: () {
+            if (isArchived) {
+              _unarchive(context, ref);
+            } else {
+              _confirmArchive(context, ref);
+            }
+          },
+        ),
+        AppSize.spaceXL.gap,
+        ClientDetailEngineerCard(
+          engineerBasisPoints: data.project.engineerBasisPoints,
+          estimatedProfitPiastres: data.estimatedProfitPiastres,
+          localeCode: localeCode,
+          mutationsEnabled: mutationsEnabled,
+          onEdit: () {
+            if (!mutationsEnabled) return;
+            showEngineerFeeSheet(
+              context: context,
+              clientId: clientId,
+              projectId: data.project.id,
+              clientName: data.client.name,
+              engineerBasisPoints: data.project.engineerBasisPoints,
+            );
+          },
+        ),
+        AppSize.spaceXL.gap,
+        Row(
           children: [
-            if (client.phone != null) Text(client.phone!),
-            if (project.unitAddress != null && project.unitAddress!.isNotEmpty) Text(project.unitAddress!),
-            if (project.engineerBasisPoints != null)
-              Text('${l10n.engineerFee}: ${profit == null ? '—' : MoneyFormat.formatPiastres(profit!)}'),
+            Expanded(child: Text(l10n.craftsmen, style: text.sectionTitle)),
+            AppPressable(
+              enabled: mutationsEnabled,
+              onPressed: openAssignments,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+                child: Text(
+                  l10n.assignCraftsmen,
+                  style: text.caption.copyWith(
+                    color: mutationsEnabled ? colors.primaryDark : colors.onSurfaceMuted,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+            AppSize.spaceSM.gap,
+            AppPressable(
+              enabled: mutationsEnabled,
+              onPressed: mutationsEnabled ? () => context.push('/clients/$clientId/craftsmen') : null,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+                child: Text(
+                  l10n.seeAll,
+                  style: text.caption.copyWith(
+                    color: mutationsEnabled ? colors.primaryDark : colors.onSurfaceMuted,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
-        trailing: const Icon(Icons.edit),
-      ),
-    );
-  }
-}
-
-class _MovementTile extends StatelessWidget {
-  const _MovementTile({required this.t});
-  final Transaction t;
-
-  @override
-  Widget build(BuildContext context) {
-    final isReceive = t.kind == 'receive';
-    return ListTile(
-      leading: Icon(isReceive ? Icons.south_west : Icons.north_east, color: isReceive ? Colors.green : Colors.red),
-      title: Text(MoneyFormat.formatPiastres(t.amountPiastres)),
-      subtitle: Text(t.description ?? ''),
-      trailing: Text('${t.date.day}/${t.date.month}'),
+        AppSize.spaceSM.gap,
+        if (data.craftsmanPreviews.isEmpty)
+          AppCard(
+            child: AppFallback.section(
+              icon: Icons.handyman_outlined,
+              title: l10n.clientDetailNoCraftsmen,
+              description: l10n.clientDetailCraftsmenEmptyDescription,
+              actions: [
+                if (mutationsEnabled)
+                  AppFallbackAction(
+                    label: l10n.assignCraftsmen,
+                    onPressed: openAssignments,
+                    role: AppFallbackActionRole.tertiary,
+                  ),
+              ],
+            ),
+          )
+        else
+          for (var i = 0; i < data.craftsmanPreviews.length; i++) ...[
+            if (i > 0) AppSize.spaceMD.gap,
+            ClientDetailCraftsmanRow(preview: data.craftsmanPreviews[i], localeCode: localeCode),
+          ],
+        AppSize.spaceXL.gap,
+        HomeSectionHeader(
+          title: l10n.navItems,
+          seeAllLabel: l10n.seeAll,
+          seeAllEnabled: mutationsEnabled,
+          onSeeAll: () => context.push('/clients/$clientId/items'),
+        ),
+        AppSize.spaceSM.gap,
+        if (data.topItems.isEmpty)
+          AppCard(
+            child: AppFallback.section(
+              icon: Icons.inventory_2_outlined,
+              title: l10n.clientDetailNoItemSpend,
+            ),
+          )
+        else
+          for (var i = 0; i < data.topItems.length; i++) ...[
+            if (i > 0) AppSize.spaceMD.gap,
+            ClientDetailItemRow(
+              itemName: data.topItems[i].name,
+              colorKey: data.topItems[i].colorKey,
+              iconName: data.topItems[i].iconName,
+              breakdown: data.topItems[i].breakdown,
+              localeCode: localeCode,
+            ),
+          ],
+        AppSize.spaceXL.gap,
+        HomeSectionHeader(
+          title: l10n.movements,
+          seeAllLabel: l10n.seeAll,
+          seeAllEnabled: mutationsEnabled,
+          onSeeAll: () => context.push('/clients/$clientId/movements'),
+        ),
+        AppSize.spaceSM.gap,
+        if (data.latestMovements.isEmpty)
+          AppCard(
+            child: AppFallback.section(
+              icon: Icons.receipt_long_outlined,
+              title: l10n.clientDetailNoMovements,
+            ),
+          )
+        else
+          AppCard(
+            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceXS),
+            child: Column(
+              children: [
+                for (var i = 0; i < data.latestMovements.length; i++) ...[
+                  if (i > 0)
+                    Divider(height: 1, color: colors.outlineSubtle),
+                  ClientDetailMovementRow(line: data.latestMovements[i], localeCode: localeCode),
+                ],
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

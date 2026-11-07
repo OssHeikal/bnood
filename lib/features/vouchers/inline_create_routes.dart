@@ -6,12 +6,14 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/app_button.dart' as legacy;
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
+import 'inline_entity_create_shell.dart';
 
 class InlineCreateClientPage extends ConsumerStatefulWidget {
-  const InlineCreateClientPage({super.key});
+  const InlineCreateClientPage({super.key, this.padForSystemChrome = true});
+
+  final bool padForSystemChrome;
 
   @override
   ConsumerState<InlineCreateClientPage> createState() =>
@@ -55,19 +57,14 @@ class _InlineCreateClientPageState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSize.screenPadding,
-        0,
-        AppSize.screenPadding,
-        AppSize.spaceMD,
-      ),
-      child: Form(
+    return InlineEntityCreateShell(
+      title: l10n.addClient,
+      padForSystemChrome: widget.padForSystemChrome,
+      body: Form(
         key: _formKey,
         autovalidateMode:
             _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             CustomTextField(
@@ -97,14 +94,13 @@ class _InlineCreateClientPageState
               textInputAction: TextInputAction.done,
               autofillHints: const [AutofillHints.telephoneNumber],
             ),
-            AppSize.spaceLG.gap,
-            AppButton.primary(
-              text: l10n.save,
-              isLoading: _saving,
-              onPressed: _saving ? null : _save,
-            ),
           ],
         ),
+      ),
+      footer: AppButton.primary(
+        text: l10n.save,
+        isLoading: _saving,
+        onPressed: _saving ? null : _save,
       ),
     );
   }
@@ -120,6 +116,7 @@ class InlineCreateItemPage extends ConsumerStatefulWidget {
 
 class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
   final _name = TextEditingController();
+  var _saving = false;
 
   @override
   void dispose() {
@@ -127,40 +124,48 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
     super.dispose();
   }
 
+  Future<void> _save() async {
+    if (_name.text.trim().isEmpty || _saving) return;
+    setState(() => _saving = true);
+    try {
+      final item = await ref.read(repositoryProvider).createItem(
+            name: _name.text.trim(),
+            colorKey: 'teal',
+            iconName: 'category',
+          );
+      if (!mounted) return;
+      Navigator.pop(context, item.id);
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.item)),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-                controller: _name,
-                decoration: InputDecoration(labelText: l10n.item)),
-            const Spacer(),
-            legacy.AppButton(
-              label: l10n.save,
-              onPressed: () async {
-                if (_name.text.trim().isEmpty) return;
-                final item = await ref.read(repositoryProvider).createItem(
-                      name: _name.text.trim(),
-                      colorKey: 'teal',
-                      iconName: 'category',
-                    );
-                if (context.mounted) Navigator.pop(context, item.id);
-              },
-            ),
-          ],
-        ),
+    return InlineEntityCreateShell(
+      title: l10n.item,
+      body: CustomTextField(
+        controller: _name,
+        label: l10n.item,
+        placeholder: l10n.item,
+        fieldHeight: AppSize.fieldHeightComfortable,
+        autofocus: true,
+        textInputAction: TextInputAction.done,
+      ),
+      footer: AppButton.primary(
+        text: l10n.save,
+        isLoading: _saving,
+        onPressed: _saving ? null : _save,
       ),
     );
   }
 }
 
 class InlineCreateSupplierPage extends ConsumerStatefulWidget {
-  const InlineCreateSupplierPage({super.key});
+  const InlineCreateSupplierPage({super.key, this.padForSystemChrome = true});
+
+  final bool padForSystemChrome;
 
   @override
   ConsumerState<InlineCreateSupplierPage> createState() =>
@@ -169,8 +174,11 @@ class InlineCreateSupplierPage extends ConsumerStatefulWidget {
 
 class _InlineCreateSupplierPageState
     extends ConsumerState<InlineCreateSupplierPage> {
+  final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _phone = TextEditingController();
+  var _attemptedSubmit = false;
+  var _saving = false;
 
   @override
   void dispose() {
@@ -179,44 +187,85 @@ class _InlineCreateSupplierPageState
     super.dispose();
   }
 
+  Future<void> _save() async {
+    setState(() => _attemptedSubmit = true);
+    if (_formKey.currentState?.validate() != true) return;
+    if (_saving) return;
+    setState(() => _saving = true);
+    try {
+      final s = await ref.read(repositoryProvider).createSupplier(
+            name: _name.text.trim(),
+            phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(),
+          );
+      if (!mounted) return;
+      Navigator.pop(context, s.id);
+    } catch (e) {
+      if (!mounted) return;
+      AppToaster.show(e.toString(), kind: ToastKind.failure);
+      setState(() => _saving = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.supplier)),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+    return InlineEntityCreateShell(
+      title: l10n.directoryAddSupplier,
+      padForSystemChrome: widget.padForSystemChrome,
+      body: Form(
+        key: _formKey,
+        autovalidateMode:
+            _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-                controller: _name,
-                decoration: InputDecoration(labelText: l10n.supplier)),
-            TextField(
-                controller: _phone,
-                decoration: InputDecoration(labelText: l10n.phoneOptional)),
-            const Spacer(),
-            legacy.AppButton(
-              label: l10n.save,
-              onPressed: () async {
-                if (_name.text.trim().isEmpty) return;
-                final s = await ref.read(repositoryProvider).createSupplier(
-                      name: _name.text.trim(),
-                      phone: _phone.text.trim().isEmpty
-                          ? null
-                          : _phone.text.trim(),
-                    );
-                if (context.mounted) Navigator.pop(context, s.id);
+            CustomTextField(
+              controller: _name,
+              label: l10n.supplier,
+              placeholder: l10n.directorySupplierNameHint,
+              fieldHeight: AppSize.fieldHeightComfortable,
+              autofocus: true,
+              textCapitalization: TextCapitalization.words,
+              textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return l10n.supplierNameRequired;
+                }
+                return null;
               },
+            ),
+            AppSize.spaceMD.gap,
+            CustomTextField(
+              controller: _phone,
+              label: l10n.phoneOptional,
+              placeholder: l10n.clientPhoneHint,
+              fieldHeight: AppSize.fieldHeightComfortable,
+              type: AppInputType.phone,
+              ltrValue: true,
+              textInputAction: TextInputAction.done,
+              autofillHints: const [AutofillHints.telephoneNumber],
             ),
           ],
         ),
+      ),
+      footer: AppButton.primary(
+        text: l10n.save,
+        isLoading: _saving,
+        onPressed: _saving ? null : _save,
       ),
     );
   }
 }
 
 class InlineCreateCraftsmanPage extends ConsumerStatefulWidget {
-  const InlineCreateCraftsmanPage({super.key});
+  const InlineCreateCraftsmanPage({
+    super.key,
+    this.padForSystemChrome = true,
+    this.preferContentHeight = false,
+  });
+
+  final bool padForSystemChrome;
+  final bool preferContentHeight;
 
   @override
   ConsumerState<InlineCreateCraftsmanPage> createState() =>
@@ -225,8 +274,11 @@ class InlineCreateCraftsmanPage extends ConsumerStatefulWidget {
 
 class _InlineCreateCraftsmanPageState
     extends ConsumerState<InlineCreateCraftsmanPage> {
+  final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _phone = TextEditingController();
+  var _attemptedSubmit = false;
+  var _saving = false;
 
   @override
   void dispose() {
@@ -235,37 +287,73 @@ class _InlineCreateCraftsmanPageState
     super.dispose();
   }
 
+  Future<void> _save() async {
+    setState(() => _attemptedSubmit = true);
+    if (_formKey.currentState?.validate() != true) return;
+    if (_saving) return;
+    setState(() => _saving = true);
+    try {
+      final phoneText = _phone.text.trim();
+      final c = await ref.read(repositoryProvider).createCraftsman(
+            name: _name.text.trim(),
+            phone: phoneText.isEmpty ? null : phoneText,
+          );
+      if (!mounted) return;
+      Navigator.pop(context, c.id);
+    } catch (e) {
+      if (!mounted) return;
+      AppToaster.show(e.toString(), kind: ToastKind.failure);
+      setState(() => _saving = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.craftsman)),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+    return InlineEntityCreateShell(
+      title: l10n.directoryAddCraftsman,
+      padForSystemChrome: widget.padForSystemChrome,
+      preferContentHeight: widget.preferContentHeight,
+      body: Form(
+        key: _formKey,
+        autovalidateMode:
+            _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-                controller: _name,
-                decoration: InputDecoration(labelText: l10n.craftsman)),
-            TextField(
-                controller: _phone,
-                decoration: InputDecoration(labelText: l10n.phoneOptional)),
-            const Spacer(),
-            legacy.AppButton(
-              label: l10n.save,
-              onPressed: () async {
-                if (_name.text.trim().isEmpty || _phone.text.trim().isEmpty) {
-                  return;
+            CustomTextField(
+              controller: _name,
+              label: l10n.craftsman,
+              placeholder: l10n.directoryCraftsmanNameHint,
+              fieldHeight: AppSize.fieldHeightComfortable,
+              autofocus: true,
+              textCapitalization: TextCapitalization.words,
+              textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return l10n.craftsmanNameRequired;
                 }
-                final c = await ref.read(repositoryProvider).createCraftsman(
-                      name: _name.text.trim(),
-                      phone: _phone.text.trim(),
-                    );
-                if (context.mounted) Navigator.pop(context, c.id);
+                return null;
               },
+            ),
+            AppSize.spaceMD.gap,
+            CustomTextField(
+              controller: _phone,
+              label: l10n.phoneOptional,
+              placeholder: l10n.clientPhoneHint,
+              fieldHeight: AppSize.fieldHeightComfortable,
+              type: AppInputType.phone,
+              ltrValue: true,
+              textInputAction: TextInputAction.done,
+              autofillHints: const [AutofillHints.telephoneNumber],
             ),
           ],
         ),
+      ),
+      footer: AppButton.primary(
+        text: l10n.save,
+        isLoading: _saving,
+        onPressed: _saving ? null : _save,
       ),
     );
   }

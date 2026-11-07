@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../database/database.dart';
 import '../money/ledger_math.dart';
+
+/// Clients tab list filter (archive flag on [Client], not balance).
+enum ClientListArchiveFilter { all, active, archived }
 
 class BnoodRepository {
   BnoodRepository(this._db);
@@ -15,10 +20,24 @@ class BnoodRepository {
   // --- Clients & projects ---
 
   Future<List<Client>> watchActiveClients() {
-    return (_db.select(_db.clients)
-          ..where((c) => c.archivedAt.isNull())
-          ..orderBy([(c) => OrderingTerm.asc(c.name)]))
-        .get();
+    return listClients(ClientListArchiveFilter.active);
+  }
+
+  Future<List<Client>> listClients(ClientListArchiveFilter filter) {
+    final query = _db.select(_db.clients)..orderBy([(c) => OrderingTerm.asc(c.name)]);
+    switch (filter) {
+      case ClientListArchiveFilter.active:
+        query.where((c) => c.archivedAt.isNull());
+      case ClientListArchiveFilter.archived:
+        query.where((c) => c.archivedAt.isNotNull());
+      case ClientListArchiveFilter.all:
+        break;
+    }
+    return query.get();
+  }
+
+  Future<Client> getClient(String clientId) {
+    return (_db.select(_db.clients)..where((c) => c.id.equals(clientId))).getSingle();
   }
 
   Future<Client> createClient({required String name, String? phone}) async {
@@ -55,6 +74,15 @@ class BnoodRepository {
     return (_db.select(_db.projects)
           ..where(
               (p) => p.clientId.equals(clientId) & p.status.equals('active'))
+          ..orderBy([(p) => OrderingTerm.asc(p.createdAt)])
+          ..limit(1))
+        .getSingleOrNull();
+  }
+
+  /// Primary project for detail/list regardless of archive status.
+  Future<Project?> primaryProjectForClient(String clientId) async {
+    return (_db.select(_db.projects)
+          ..where((p) => p.clientId.equals(clientId))
           ..orderBy([(p) => OrderingTerm.asc(p.createdAt)])
           ..limit(1))
         .getSingleOrNull();
@@ -112,6 +140,16 @@ class BnoodRepository {
     await (_db.update(_db.projects)..where((p) => p.clientId.equals(clientId)))
         .write(ProjectsCompanion(
             status: const Value('archived'), updatedAt: Value(now)));
+  }
+
+  Future<void> unarchiveClient(String clientId) async {
+    final now = DateTime.now().toUtc();
+    await (_db.update(_db.clients)..where((c) => c.id.equals(clientId))).write(
+      ClientsCompanion(archivedAt: const Value(null), updatedAt: Value(now)),
+    );
+    await (_db.update(_db.projects)
+          ..where((p) => p.clientId.equals(clientId) & p.status.equals('archived')))
+        .write(ProjectsCompanion(status: const Value('active'), updatedAt: Value(now)));
   }
 
   // --- Catalogs ---
@@ -205,12 +243,20 @@ class BnoodRepository {
         .watch();
   }
 
+  Future<List<CraftsmenData>> listActiveCraftsmen() {
+    return (_db.select(_db.craftsmen)
+          ..where((c) => c.archivedAt.isNull())
+          ..orderBy([(c) => OrderingTerm.asc(c.name)]))
+        .get();
+  }
+
   Future<CraftsmenData> createCraftsman({
     required String name,
-    required String phone,
+    String? phone,
     String? trade,
     String? notes,
   }) async {
+    final storedPhone = phone?.trim() ?? '';
     final ws = await workspaceId();
     final now = DateTime.now().toUtc();
     final id = _uuid.v4();
@@ -218,7 +264,7 @@ class BnoodRepository {
           id: id,
           workspaceId: ws,
           name: name,
-          phone: phone,
+          phone: storedPhone,
           trade: Value(trade),
           notes: Value(notes),
           createdAt: now,
@@ -244,6 +290,101 @@ class BnoodRepository {
     return (_db.select(_db.projectCraftsmanAgreements)
           ..where((a) => a.projectId.equals(projectId)))
         .get();
+  }
+
+  Stream<void> watchProjectCraftsmenSignals(String projectId) {
+    StreamSubscription<List<Transaction>>? txSub;
+    StreamSubscription<List<ProjectCraftsmanAgreement>>? agSub;
+    var closed = false;
+
+    void emit(StreamController<void> controller) {
+      if (!closed && !controller.isClosed) controller.add(null);
+    }
+
+    void stop() {
+      closed = true;
+      txSub?.cancel();
+      agSub?.cancel();
+      txSub = null;
+      agSub = null;
+    }
+
+    return Stream.multi((controller) {
+      closed = false;
+      txSub = watchProjectTransactions(projectId).listen((_) => emit(controller));
+      agSub = (_db.select(_db.projectCraftsmanAgreements)
+            ..where((a) => a.projectId.equals(projectId)))
+          .watch()
+          .listen((_) => emit(controller));
+      emit(controller);
+      controller.onCancel = stop;
+    });
+  }
+
+  Future<List<ProjectCraftsmanAgreement>> agreementsForCraftsman(String craftsmanId) {
+    return (_db.select(_db.projectCraftsmanAgreements)
+          ..where((a) => a.craftsmanId.equals(craftsmanId)))
+        .get();
+  }
+
+  Future<List<Transaction>> craftsmanLaborTransactions(String craftsmanId) async {
+    return (_db.select(_db.transactions)
+          ..where((t) =>
+              t.craftsmanId.equals(craftsmanId) &
+              t.kind.equals('spend') &
+              t.expenseType.equals('labor'))
+          ..orderBy([
+            (t) => OrderingTerm.desc(t.date),
+            (t) => OrderingTerm.desc(t.createdAt),
+          ]))
+        .get();
+  }
+
+  Stream<void> watchCraftsmanDetailSignals(String craftsmanId) {
+    StreamSubscription<List<Transaction>>? txSub;
+    StreamSubscription<List<ProjectCraftsmanAgreement>>? agSub;
+    var closed = false;
+
+    void emit(StreamController<void> controller) {
+      if (!closed && !controller.isClosed) controller.add(null);
+    }
+
+    void stop() {
+      closed = true;
+      txSub?.cancel();
+      agSub?.cancel();
+      txSub = null;
+      agSub = null;
+    }
+
+    return Stream.multi((controller) {
+      closed = false;
+      txSub = (_db.select(_db.transactions)
+            ..where((t) => t.craftsmanId.equals(craftsmanId)))
+          .watch()
+          .listen((_) => emit(controller));
+      agSub = (_db.select(_db.projectCraftsmanAgreements)
+            ..where((a) => a.craftsmanId.equals(craftsmanId)))
+          .watch()
+          .listen((_) => emit(controller));
+      emit(controller);
+      controller.onCancel = stop;
+    });
+  }
+
+  Future<void> removeCraftsmanFromProject({
+    required String projectId,
+    required String craftsmanId,
+  }) async {
+    await (_db.delete(_db.projectCraftsmanAgreements)
+          ..where((a) =>
+              a.projectId.equals(projectId) & a.craftsmanId.equals(craftsmanId)))
+        .go();
+  }
+
+  Future<Project?> projectById(String projectId) async {
+    return (_db.select(_db.projects)..where((p) => p.id.equals(projectId)))
+        .getSingleOrNull();
   }
 
   Future<ProjectCraftsmanAgreement> upsertAgreement({
@@ -418,9 +559,62 @@ class BnoodRepository {
 
   Future<List<Transaction>> supplierTransactions(String supplierId) async {
     return (_db.select(_db.transactions)
-          ..where((t) => t.supplierId.equals(supplierId))
-          ..orderBy([(t) => OrderingTerm.desc(t.date)]))
+          ..where((t) => t.supplierId.equals(supplierId) & t.kind.equals('spend'))
+          ..orderBy([
+            (t) => OrderingTerm.desc(t.date),
+            (t) => OrderingTerm.desc(t.createdAt),
+          ]))
         .get();
+  }
+
+  Stream<List<Transaction>> watchSupplierSpendTransactions(String supplierId) {
+    StreamSubscription<List<Transaction>>? txSub;
+    var closed = false;
+
+    Future<void> publish(StreamController<List<Transaction>> controller) async {
+      if (closed) return;
+      try {
+        final rows = await supplierTransactions(supplierId);
+        if (!closed && !controller.isClosed) controller.add(rows);
+      } catch (e, st) {
+        if (!closed && !controller.isClosed) controller.addError(e, st);
+      }
+    }
+
+    void stop() {
+      closed = true;
+      txSub?.cancel();
+      txSub = null;
+    }
+
+    return Stream.multi((controller) {
+      closed = false;
+      txSub = (_db.select(_db.transactions)
+            ..where((t) => t.supplierId.equals(supplierId)))
+          .watch()
+          .listen((_) => publish(controller));
+      publish(controller);
+      controller.onCancel = stop;
+    });
+  }
+
+  Future<Map<String, ({String clientId, String clientName})>> clientInfoForProjectIds(
+    Iterable<String> projectIds,
+  ) async {
+    final ids = projectIds.toSet();
+    if (ids.isEmpty) return const {};
+    final projects = await (_db.select(_db.projects)..where((p) => p.id.isIn(ids.toList()))).get();
+    final clientIds = projects.map((p) => p.clientId).toSet();
+    if (clientIds.isEmpty) return const {};
+    final clients = await (_db.select(_db.clients)..where((c) => c.id.isIn(clientIds.toList()))).get();
+    final clientById = {for (final c in clients) c.id: c.name};
+    return {
+      for (final p in projects)
+        p.id: (
+          clientId: p.clientId,
+          clientName: clientById[p.clientId] ?? '—',
+        ),
+    };
   }
 
   Future<List<CraftsmenData>> craftsmenAssignedToProject(
@@ -452,11 +646,6 @@ class BnoodRepository {
         .get();
   }
 
-  Future<Client?> getClient(String id) async {
-    return (_db.select(_db.clients)..where((c) => c.id.equals(id)))
-        .getSingleOrNull();
-  }
-
   Future<Supplier?> getSupplier(String id) async {
     return (_db.select(_db.suppliers)..where((s) => s.id.equals(id)))
         .getSingleOrNull();
@@ -465,6 +654,158 @@ class BnoodRepository {
   Future<CraftsmenData?> getCraftsman(String id) async {
     return (_db.select(_db.craftsmen)..where((c) => c.id.equals(id)))
         .getSingleOrNull();
+  }
+
+  Future<Map<String, int>> supplierPaidTotalsAllProjects() async {
+    final t = _db.transactions;
+    final query = _db.selectOnly(t)
+      ..addColumns([t.supplierId, t.amountPiastres.sum()])
+      ..where(t.supplierId.isNotNull() & t.kind.equals('spend'))
+      ..groupBy([t.supplierId]);
+    final rows = await query.get();
+    final out = <String, int>{};
+    for (final row in rows) {
+      final id = row.read(t.supplierId);
+      if (id == null) continue;
+      out[id] = row.read(t.amountPiastres.sum()) ?? 0;
+    }
+    return out;
+  }
+
+  Future<Map<String, int>> craftsmanLaborPaidTotals() async {
+    final t = _db.transactions;
+    final query = _db.selectOnly(t)
+      ..addColumns([t.craftsmanId, t.amountPiastres.sum()])
+      ..where(
+        t.craftsmanId.isNotNull() &
+            t.kind.equals('spend') &
+            t.expenseType.equals('labor'),
+      )
+      ..groupBy([t.craftsmanId]);
+    final rows = await query.get();
+    final out = <String, int>{};
+    for (final row in rows) {
+      final id = row.read(t.craftsmanId);
+      if (id == null) continue;
+      out[id] = row.read(t.amountPiastres.sum()) ?? 0;
+    }
+    return out;
+  }
+
+  Future<Map<String, int>> craftsmanAgreementCounts() async {
+    final a = _db.projectCraftsmanAgreements;
+    final query = _db.selectOnly(a)
+      ..addColumns([a.craftsmanId, a.id.count()])
+      ..groupBy([a.craftsmanId]);
+    final rows = await query.get();
+    final out = <String, int>{};
+    for (final row in rows) {
+      final id = row.read(a.craftsmanId);
+      if (id == null) continue;
+      out[id] = row.read(a.id.count()) ?? 0;
+    }
+    return out;
+  }
+
+  Stream<List<DirectorySupplierRow>> watchDirectorySupplierRows() {
+    StreamSubscription<List<Supplier>>? suppliersSub;
+    StreamSubscription<List<Transaction>>? txSub;
+    var closed = false;
+
+    Future<void> publish(StreamController<List<DirectorySupplierRow>> controller) async {
+      if (closed) return;
+      try {
+        final suppliers = await (_db.select(_db.suppliers)
+              ..where((s) => s.archivedAt.isNull())
+              ..orderBy([(s) => OrderingTerm.asc(s.name)]))
+            .get();
+        final totals = await supplierPaidTotalsAllProjects();
+        final rows = suppliers
+            .map(
+              (s) => DirectorySupplierRow(
+                supplier: s,
+                paidPiastres: totals[s.id] ?? 0,
+              ),
+            )
+            .toList();
+        if (!closed && !controller.isClosed) controller.add(rows);
+      } catch (e, st) {
+        if (!closed && !controller.isClosed) controller.addError(e, st);
+      }
+    }
+
+    void stop() {
+      closed = true;
+      suppliersSub?.cancel();
+      txSub?.cancel();
+      suppliersSub = null;
+      txSub = null;
+    }
+
+    return Stream.multi((controller) {
+      closed = false;
+      suppliersSub = watchActiveSuppliers().listen((_) => publish(controller));
+      txSub = (_db.select(_db.transactions)
+            ..where((t) => t.supplierId.isNotNull()))
+          .watch()
+          .listen((_) => publish(controller));
+      publish(controller);
+      controller.onCancel = stop;
+    });
+  }
+
+  Stream<List<DirectoryCraftsmanRow>> watchDirectoryCraftsmanRows() {
+    StreamSubscription<List<CraftsmenData>>? rosterSub;
+    StreamSubscription<List<Transaction>>? txSub;
+    StreamSubscription<List<ProjectCraftsmanAgreement>>? agreementSub;
+    var closed = false;
+
+    Future<void> publish(StreamController<List<DirectoryCraftsmanRow>> controller) async {
+      if (closed) return;
+      try {
+        final craftsmen = await (_db.select(_db.craftsmen)
+              ..where((c) => c.archivedAt.isNull())
+              ..orderBy([(c) => OrderingTerm.asc(c.name)]))
+            .get();
+        final paid = await craftsmanLaborPaidTotals();
+        final counts = await craftsmanAgreementCounts();
+        final rows = craftsmen
+            .map(
+              (c) => DirectoryCraftsmanRow(
+                craftsman: c,
+                paidPiastres: paid[c.id] ?? 0,
+                projectCount: counts[c.id] ?? 0,
+              ),
+            )
+            .toList();
+        if (!closed && !controller.isClosed) controller.add(rows);
+      } catch (e, st) {
+        if (!closed && !controller.isClosed) controller.addError(e, st);
+      }
+    }
+
+    void stop() {
+      closed = true;
+      rosterSub?.cancel();
+      txSub?.cancel();
+      agreementSub?.cancel();
+      rosterSub = null;
+      txSub = null;
+      agreementSub = null;
+    }
+
+    return Stream.multi((controller) {
+      closed = false;
+      rosterSub = watchActiveCraftsmen().listen((_) => publish(controller));
+      txSub = (_db.select(_db.transactions)
+            ..where((t) => t.craftsmanId.isNotNull()))
+          .watch()
+          .listen((_) => publish(controller));
+      agreementSub =
+          (_db.select(_db.projectCraftsmanAgreements)).watch().listen((_) => publish(controller));
+      publish(controller);
+      controller.onCancel = stop;
+    });
   }
 }
 
@@ -494,4 +835,26 @@ class HomeClientBalanceRow {
   final int remainingPiastres;
   final int receivedPiastres;
   final int spentPiastres;
+}
+
+class DirectorySupplierRow {
+  const DirectorySupplierRow({
+    required this.supplier,
+    required this.paidPiastres,
+  });
+
+  final Supplier supplier;
+  final int paidPiastres;
+}
+
+class DirectoryCraftsmanRow {
+  const DirectoryCraftsmanRow({
+    required this.craftsman,
+    required this.paidPiastres,
+    required this.projectCount,
+  });
+
+  final CraftsmenData craftsman;
+  final int paidPiastres;
+  final int projectCount;
 }

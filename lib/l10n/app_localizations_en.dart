@@ -259,6 +259,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get archive => 'Archive';
 
   @override
+  String get unarchive => 'Unarchive';
+
+  @override
+  String get clientsFilterAll => 'All';
+
+  @override
+  String get clientsFilterActive => 'Active';
+
+  @override
+  String get clientsFilterArchived => 'Archived';
+
+  @override
+  String get clientsNoArchivedTitle => 'No archived clients';
+
+  @override
+  String get clientsNoArchivedDescription =>
+      'Archived clients appear here after you archive a project.';
+
+  @override
+  String get clientsNoClientsTitle => 'No clients yet';
+
+  @override
   String get edit => 'Edit';
 
   @override
@@ -350,4 +372,216 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paymentMethod => 'Payment method';
+
+  @override
+  String get directorySuppliersHint =>
+      'Material suppliers · recorded payments only, no payables or credit balances.';
+
+  @override
+  String get directoryCraftsmenHint =>
+      'Your general craftsman roster · a craftsman can be linked to more than one client.';
+
+  @override
+  String get directorySupplierKindMeta => 'Materials supplier';
+
+  @override
+  String get directoryEmptySuppliersTitle => 'No suppliers yet';
+
+  @override
+  String get directoryEmptySuppliersDescription =>
+      'Add a supplier to your directory, then link them on material spend vouchers.';
+
+  @override
+  String get directoryEmptyCraftsmenTitle => 'No craftsmen yet';
+
+  @override
+  String get directoryEmptyCraftsmenDescription =>
+      'Add a craftsman to your directory, then assign them from a client project.';
+
+  @override
+  String get directoryAddSupplier => 'Add supplier';
+
+  @override
+  String get directoryAddCraftsman => 'Add craftsman';
+
+  @override
+  String directoryCraftsmanProjectsCount(int count) {
+    return '$count projects';
+  }
+
+  @override
+  String get directoryViewDetails => 'View details';
+
+  @override
+  String get archiveSupplierTitle => 'Archive supplier?';
+
+  @override
+  String archiveSupplierDescription(String name) {
+    return '$name will be hidden from pickers. Payment history is kept.';
+  }
+
+  @override
+  String get archiveCraftsmanTitle => 'Archive craftsman?';
+
+  @override
+  String archiveCraftsmanDescription(String name) {
+    return '$name will be hidden from pickers. Labor history is kept.';
+  }
+
+  @override
+  String get supplierNameRequired => 'Enter supplier name';
+
+  @override
+  String get craftsmanNameRequired => 'Enter craftsman name';
+
+  @override
+  String get craftsmanPhoneLabel => 'Phone';
+
+  @override
+  String get craftsmanPhoneRequired => 'Enter a phone number';
+
+  @override
+  String get directorySupplierNameHint => 'e.g. Materials supplier';
+
+  @override
+  String get directoryCraftsmanNameHint => 'e.g. Plumber';
+
+  @override
+  String get supplierTotalPaidLabel => 'Total paid to supplier';
+
+  @override
+  String get supplierSpendRecordedCaption =>
+      'Recorded payment transactions only';
+
+  @override
+  String get supplierDetailTransactionsSection => 'Transaction history';
+
+  @override
+  String get supplierDetailNoTransactions => 'No transactions recorded';
+
+  @override
+  String get supplierDetailNotFoundTitle => 'Supplier not found';
+
+  @override
+  String get supplierProfilePhoneLabel => 'Phone';
+
+  @override
+  String get supplierProfileNotesLabel => 'Notes';
+
+  @override
+  String get directoryCraftsmanKindMeta => 'Craftsman';
+
+  @override
+  String get craftsmanTotalLaborPaidLabel => 'Total labor paid';
+
+  @override
+  String craftsmanLaborStatCaption(int count) {
+    return 'Across $count projects · labor payments only';
+  }
+
+  @override
+  String get craftsmanDetailJobsSection => 'Work by client';
+
+  @override
+  String get craftsmanDetailEditAgreement => 'Edit agreement';
+
+  @override
+  String get craftsmanDetailNoAgreedAmount => 'No agreed amount';
+
+  @override
+  String get craftsmanDetailNoJobs => 'No linked client projects';
+
+  @override
+  String get craftsmanDetailLaborHistorySection => 'Labor payment history';
+
+  @override
+  String get craftsmanDetailNoLaborHistory => 'No labor payments recorded';
+
+  @override
+  String get craftsmanDetailNotFoundTitle => 'Craftsman not found';
+
+  @override
+  String get craftsmanProfileTradeLabel => 'Trade';
+
+  @override
+  String get craftsmanProfileNotesLabel => 'Notes';
+
+  @override
+  String get crewAssignmentsIntro =>
+      'Pick from your directory. Agreed amount is optional for this project.';
+
+  @override
+  String crewAssignmentsProjectContext(String name) {
+    return 'Project $name';
+  }
+
+  @override
+  String get craftsmanSetAgreedAmount => 'Set agreed amount';
+
+  @override
+  String get craftsmanEditAgreedAmount => 'Edit agreed amount';
+
+  @override
+  String get craftsmanAgreedAmountSheetTitle => 'Agreed amount';
+
+  @override
+  String get craftsmanAgreedForClientLabel =>
+      'Agreed for this client (optional)';
+
+  @override
+  String get craftsmanAgreementAmountPlaceholder => 'Not set';
+
+  @override
+  String get craftsmanAgreementAmountCaption =>
+      'Leave empty if nothing was agreed. Enter 0 when the agreed amount is zero.';
+
+  @override
+  String get craftsmanAgreementAmountInvalid =>
+      'Enter a non-negative amount or leave blank';
+
+  @override
+  String get craftsmanAgreementHasPayments => 'Has recorded payments';
+
+  @override
+  String get directoryAddCraftsmanToRoster => 'Add craftsman to directory';
+
+  @override
+  String get crewAssignmentsSaved => 'Craftsman choices saved for this client';
+
+  @override
+  String get itemsCatalogCaption =>
+      'Default items — you can add, edit, and archive';
+
+  @override
+  String get addItem => 'Add item';
+
+  @override
+  String get itemCreateSheetTitle => 'New item';
+
+  @override
+  String get itemEditSheetTitle => 'Edit item';
+
+  @override
+  String get itemNameLabel => 'Item name';
+
+  @override
+  String get itemNameRequired => 'Enter item name';
+
+  @override
+  String get itemNameHint => 'e.g. Insulation';
+
+  @override
+  String get itemsEmptyTitle => 'No items yet';
+
+  @override
+  String get itemsEmptyDescription =>
+      'Add an item to categorize project spend.';
+
+  @override
+  String get archiveItemTitle => 'Archive item?';
+
+  @override
+  String archiveItemDescription(String name) {
+    return '$name will be hidden from lists. Expense history is kept.';
+  }
 }

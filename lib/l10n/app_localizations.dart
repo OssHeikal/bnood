@@ -578,6 +578,48 @@ abstract class AppLocalizations {
   /// **'Archive'**
   String get archive;
 
+  /// No description provided for @unarchive.
+  ///
+  /// In en, this message translates to:
+  /// **'Unarchive'**
+  String get unarchive;
+
+  /// No description provided for @clientsFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get clientsFilterAll;
+
+  /// No description provided for @clientsFilterActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get clientsFilterActive;
+
+  /// No description provided for @clientsFilterArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get clientsFilterArchived;
+
+  /// No description provided for @clientsNoArchivedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No archived clients'**
+  String get clientsNoArchivedTitle;
+
+  /// No description provided for @clientsNoArchivedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived clients appear here after you archive a project.'**
+  String get clientsNoArchivedDescription;
+
+  /// No description provided for @clientsNoClientsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No clients yet'**
+  String get clientsNoClientsTitle;
+
   /// No description provided for @edit.
   ///
   /// In en, this message translates to:
@@ -745,6 +787,384 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Payment method'**
   String get paymentMethod;
+
+  /// No description provided for @directorySuppliersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Material suppliers · recorded payments only, no payables or credit balances.'**
+  String get directorySuppliersHint;
+
+  /// No description provided for @directoryCraftsmenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your general craftsman roster · a craftsman can be linked to more than one client.'**
+  String get directoryCraftsmenHint;
+
+  /// No description provided for @directorySupplierKindMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Materials supplier'**
+  String get directorySupplierKindMeta;
+
+  /// No description provided for @directoryEmptySuppliersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No suppliers yet'**
+  String get directoryEmptySuppliersTitle;
+
+  /// No description provided for @directoryEmptySuppliersDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a supplier to your directory, then link them on material spend vouchers.'**
+  String get directoryEmptySuppliersDescription;
+
+  /// No description provided for @directoryEmptyCraftsmenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No craftsmen yet'**
+  String get directoryEmptyCraftsmenTitle;
+
+  /// No description provided for @directoryEmptyCraftsmenDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a craftsman to your directory, then assign them from a client project.'**
+  String get directoryEmptyCraftsmenDescription;
+
+  /// No description provided for @directoryAddSupplier.
+  ///
+  /// In en, this message translates to:
+  /// **'Add supplier'**
+  String get directoryAddSupplier;
+
+  /// No description provided for @directoryAddCraftsman.
+  ///
+  /// In en, this message translates to:
+  /// **'Add craftsman'**
+  String get directoryAddCraftsman;
+
+  /// No description provided for @directoryCraftsmanProjectsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} projects'**
+  String directoryCraftsmanProjectsCount(int count);
+
+  /// No description provided for @directoryViewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View details'**
+  String get directoryViewDetails;
+
+  /// No description provided for @archiveSupplierTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive supplier?'**
+  String get archiveSupplierTitle;
+
+  /// No description provided for @archiveSupplierDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be hidden from pickers. Payment history is kept.'**
+  String archiveSupplierDescription(String name);
+
+  /// No description provided for @archiveCraftsmanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive craftsman?'**
+  String get archiveCraftsmanTitle;
+
+  /// No description provided for @archiveCraftsmanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be hidden from pickers. Labor history is kept.'**
+  String archiveCraftsmanDescription(String name);
+
+  /// No description provided for @supplierNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter supplier name'**
+  String get supplierNameRequired;
+
+  /// No description provided for @craftsmanNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter craftsman name'**
+  String get craftsmanNameRequired;
+
+  /// No description provided for @craftsmanPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get craftsmanPhoneLabel;
+
+  /// No description provided for @craftsmanPhoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a phone number'**
+  String get craftsmanPhoneRequired;
+
+  /// No description provided for @directorySupplierNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Materials supplier'**
+  String get directorySupplierNameHint;
+
+  /// No description provided for @directoryCraftsmanNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Plumber'**
+  String get directoryCraftsmanNameHint;
+
+  /// No description provided for @supplierTotalPaidLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total paid to supplier'**
+  String get supplierTotalPaidLabel;
+
+  /// No description provided for @supplierSpendRecordedCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded payment transactions only'**
+  String get supplierSpendRecordedCaption;
+
+  /// No description provided for @supplierDetailTransactionsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction history'**
+  String get supplierDetailTransactionsSection;
+
+  /// No description provided for @supplierDetailNoTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions recorded'**
+  String get supplierDetailNoTransactions;
+
+  /// No description provided for @supplierDetailNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplier not found'**
+  String get supplierDetailNotFoundTitle;
+
+  /// No description provided for @supplierProfilePhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get supplierProfilePhoneLabel;
+
+  /// No description provided for @supplierProfileNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get supplierProfileNotesLabel;
+
+  /// No description provided for @directoryCraftsmanKindMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Craftsman'**
+  String get directoryCraftsmanKindMeta;
+
+  /// No description provided for @craftsmanTotalLaborPaidLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total labor paid'**
+  String get craftsmanTotalLaborPaidLabel;
+
+  /// No description provided for @craftsmanLaborStatCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Across {count} projects · labor payments only'**
+  String craftsmanLaborStatCaption(int count);
+
+  /// No description provided for @craftsmanDetailJobsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Work by client'**
+  String get craftsmanDetailJobsSection;
+
+  /// No description provided for @craftsmanDetailEditAgreement.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit agreement'**
+  String get craftsmanDetailEditAgreement;
+
+  /// No description provided for @craftsmanDetailNoAgreedAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'No agreed amount'**
+  String get craftsmanDetailNoAgreedAmount;
+
+  /// No description provided for @craftsmanDetailNoJobs.
+  ///
+  /// In en, this message translates to:
+  /// **'No linked client projects'**
+  String get craftsmanDetailNoJobs;
+
+  /// No description provided for @craftsmanDetailLaborHistorySection.
+  ///
+  /// In en, this message translates to:
+  /// **'Labor payment history'**
+  String get craftsmanDetailLaborHistorySection;
+
+  /// No description provided for @craftsmanDetailNoLaborHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'No labor payments recorded'**
+  String get craftsmanDetailNoLaborHistory;
+
+  /// No description provided for @craftsmanDetailNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Craftsman not found'**
+  String get craftsmanDetailNotFoundTitle;
+
+  /// No description provided for @craftsmanProfileTradeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade'**
+  String get craftsmanProfileTradeLabel;
+
+  /// No description provided for @craftsmanProfileNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get craftsmanProfileNotesLabel;
+
+  /// No description provided for @crewAssignmentsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick from your directory. Agreed amount is optional for this project.'**
+  String get crewAssignmentsIntro;
+
+  /// No description provided for @crewAssignmentsProjectContext.
+  ///
+  /// In en, this message translates to:
+  /// **'Project {name}'**
+  String crewAssignmentsProjectContext(String name);
+
+  /// No description provided for @craftsmanSetAgreedAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Set agreed amount'**
+  String get craftsmanSetAgreedAmount;
+
+  /// No description provided for @craftsmanEditAgreedAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit agreed amount'**
+  String get craftsmanEditAgreedAmount;
+
+  /// No description provided for @craftsmanAgreedAmountSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreed amount'**
+  String get craftsmanAgreedAmountSheetTitle;
+
+  /// No description provided for @craftsmanAgreedForClientLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreed for this client (optional)'**
+  String get craftsmanAgreedForClientLabel;
+
+  /// No description provided for @craftsmanAgreementAmountPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get craftsmanAgreementAmountPlaceholder;
+
+  /// No description provided for @craftsmanAgreementAmountCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave empty if nothing was agreed. Enter 0 when the agreed amount is zero.'**
+  String get craftsmanAgreementAmountCaption;
+
+  /// No description provided for @craftsmanAgreementAmountInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a non-negative amount or leave blank'**
+  String get craftsmanAgreementAmountInvalid;
+
+  /// No description provided for @craftsmanAgreementHasPayments.
+  ///
+  /// In en, this message translates to:
+  /// **'Has recorded payments'**
+  String get craftsmanAgreementHasPayments;
+
+  /// No description provided for @directoryAddCraftsmanToRoster.
+  ///
+  /// In en, this message translates to:
+  /// **'Add craftsman to directory'**
+  String get directoryAddCraftsmanToRoster;
+
+  /// No description provided for @crewAssignmentsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Craftsman choices saved for this client'**
+  String get crewAssignmentsSaved;
+
+  /// No description provided for @itemsCatalogCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Default items — you can add, edit, and archive'**
+  String get itemsCatalogCaption;
+
+  /// No description provided for @addItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Add item'**
+  String get addItem;
+
+  /// No description provided for @itemCreateSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New item'**
+  String get itemCreateSheetTitle;
+
+  /// No description provided for @itemEditSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit item'**
+  String get itemEditSheetTitle;
+
+  /// No description provided for @itemNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Item name'**
+  String get itemNameLabel;
+
+  /// No description provided for @itemNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter item name'**
+  String get itemNameRequired;
+
+  /// No description provided for @itemNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Insulation'**
+  String get itemNameHint;
+
+  /// No description provided for @itemsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No items yet'**
+  String get itemsEmptyTitle;
+
+  /// No description provided for @itemsEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an item to categorize project spend.'**
+  String get itemsEmptyDescription;
+
+  /// No description provided for @archiveItemTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive item?'**
+  String get archiveItemTitle;
+
+  /// No description provided for @archiveItemDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be hidden from lists. Expense history is kept.'**
+  String archiveItemDescription(String name);
 }
 
 class _AppLocalizationsDelegate

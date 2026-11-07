@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../config/theme/app_colors.dart';
-import '../config/theme/app_shape.dart';
 import '../config/theme/app_size.dart';
 import '../../features/home/home_foundation_scope.dart';
+import 'bnood_modal_sheet.dart';
 import 'bounded_sheet_navigator.dart';
 
 /// Root bottom sheet with nested [Navigator] for inline-create flows.
@@ -25,28 +25,15 @@ class CustomBottomSheet extends StatelessWidget {
     bool nestedNavigator = true,
     bool showDragHandle = true,
   }) {
-    final brightness = Theme.of(context).brightness;
-    final colors = brightness == Brightness.dark ? AppColors.dark : AppColors.light;
-    return showModalBottomSheet<T>(
+    return BnoodModalSheet.show<T>(
       context: context,
       useRootNavigator: useRootNavigator,
-      isScrollControlled: true,
-      showDragHandle: showDragHandle,
-      backgroundColor: colors.surface,
-      shape: AppShape.superellipse(radius: AppSize.radiusLG),
-      builder: (ctx) {
-        final insets = MediaQuery.viewInsetsOf(ctx);
-        final keyboardGap = insets.bottom > 0 ? AppSize.spaceMD : 0.0;
-        return Padding(
-          padding: EdgeInsets.only(bottom: insets.bottom > 0 ? insets.bottom + keyboardGap : 0),
-          child: CustomBottomSheet(
-            title: title,
-            child: nestedNavigator
-                ? BoundedSheetNavigator(builder: builder)
-                : _BoundedStandaloneChild(builder: builder),
-          ),
-        );
-      },
+      builder: (ctx) => CustomBottomSheet(
+        title: title,
+        child: nestedNavigator
+            ? BoundedSheetNavigator(builder: builder)
+            : _BoundedStandaloneChild(builder: builder),
+      ),
     );
   }
 
@@ -55,33 +42,35 @@ class CustomBottomSheet extends StatelessWidget {
     return HomeFoundationScope(
       child: Builder(
         builder: (context) {
-          return SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final maxHeight =
-                    SheetContentBounds.maxHeight(constraints, MediaQuery.of(context));
-                return SizedBox(
-                  height: maxHeight,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (title != null) ...[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            AppSize.screenPadding,
-                            0,
-                            AppSize.screenPadding,
-                            AppSize.spaceSM,
-                          ),
-                          child: Text(title!, style: context.text.titleLarge),
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final maxHeight =
+                  SheetContentBounds.maxHeight(constraints, MediaQuery.of(context));
+              return ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: maxHeight),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (title != null) ...[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSize.screenPadding,
+                          0,
+                          AppSize.screenPadding,
+                          AppSize.spaceSM,
                         ),
-                      ],
-                      Expanded(child: child),
+                        child: Text(title!, style: context.text.titleLarge),
+                      ),
                     ],
-                  ),
-                );
-              },
-            ),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: child,
+                    ),
+                  ],
+                ),
+              );
+            },
           );
         },
       ),
@@ -99,10 +88,15 @@ class _BoundedStandaloneChild extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final maxHeight = SheetContentBounds.maxHeight(constraints, MediaQuery.of(context));
-        return SizedBox(
-          height: maxHeight,
-          width: constraints.maxWidth,
-          child: Builder(builder: builder),
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: maxHeight,
+            maxWidth: constraints.maxWidth,
+          ),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Builder(builder: builder),
+          ),
         );
       },
     );

@@ -90,6 +90,13 @@
   "sharePdf": "Share PDF",
   "createNew": "Create new",
   "archive": "Archive",
+  "unarchive": "Unarchive",
+  "clientsFilterAll": "All",
+  "clientsFilterActive": "Active",
+  "clientsFilterArchived": "Archived",
+  "clientsNoArchivedTitle": "No archived clients",
+  "clientsNoArchivedDescription": "Archived clients appear here after you archive a project.",
+  "clientsNoClientsTitle": "No clients yet",
   "edit": "Edit",
   "delete": "Delete",
   "voucherAmountRequired": "Enter an amount greater than zero",
@@ -124,5 +131,100 @@
     }
   },
   "noteOptionalHint": "Optional…",
-  "paymentMethod": "Payment method"
+  "paymentMethod": "Payment method",
+  "directorySuppliersHint": "Material suppliers · recorded payments only, no payables or credit balances.",
+  "directoryCraftsmenHint": "Your general craftsman roster · a craftsman can be linked to more than one client.",
+  "directorySupplierKindMeta": "Materials supplier",
+  "directoryEmptySuppliersTitle": "No suppliers yet",
+  "directoryEmptySuppliersDescription": "Add a supplier to your directory, then link them on material spend vouchers.",
+  "directoryEmptyCraftsmenTitle": "No craftsmen yet",
+  "directoryEmptyCraftsmenDescription": "Add a craftsman to your directory, then assign them from a client project.",
+  "directoryAddSupplier": "Add supplier",
+  "directoryAddCraftsman": "Add craftsman",
+  "directoryCraftsmanProjectsCount": "{count} projects",
+  "@directoryCraftsmanProjectsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "directoryViewDetails": "View details",
+  "archiveSupplierTitle": "Archive supplier?",
+  "archiveSupplierDescription": "{name} will be hidden from pickers. Payment history is kept.",
+  "@archiveSupplierDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "archiveCraftsmanTitle": "Archive craftsman?",
+  "archiveCraftsmanDescription": "{name} will be hidden from pickers. Labor history is kept.",
+  "@archiveCraftsmanDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "supplierNameRequired": "Enter supplier name",
+  "craftsmanNameRequired": "Enter craftsman name",
+  "craftsmanPhoneLabel": "Phone",
+  "craftsmanPhoneRequired": "Enter a phone number",
+  "directorySupplierNameHint": "e.g. Materials supplier",
+  "directoryCraftsmanNameHint": "e.g. Plumber",
+  "supplierTotalPaidLabel": "Total paid to supplier",
+  "supplierSpendRecordedCaption": "Recorded payment transactions only",
+  "supplierDetailTransactionsSection": "Transaction history",
+  "supplierDetailNoTransactions": "No transactions recorded",
+  "supplierDetailNotFoundTitle": "Supplier not found",
+  "supplierProfilePhoneLabel": "Phone",
+  "supplierProfileNotesLabel": "Notes",
+  "directoryCraftsmanKindMeta": "Craftsman",
+  "craftsmanTotalLaborPaidLabel": "Total labor paid",
+  "craftsmanLaborStatCaption": "Across {count} projects · labor payments only",
+  "@craftsmanLaborStatCaption": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "craftsmanDetailJobsSection": "Work by client",
+  "craftsmanDetailEditAgreement": "Edit agreement",
+  "craftsmanDetailNoAgreedAmount": "No agreed amount",
+  "craftsmanDetailNoJobs": "No linked client projects",
+  "craftsmanDetailLaborHistorySection": "Labor payment history",
+  "craftsmanDetailNoLaborHistory": "No labor payments recorded",
+  "craftsmanDetailNotFoundTitle": "Craftsman not found",
+  "craftsmanProfileTradeLabel": "Trade",
+  "craftsmanProfileNotesLabel": "Notes",
+  "crewAssignmentsIntro": "Pick from your directory. Agreed amount is optional for this project.",
+  "crewAssignmentsProjectContext": "Project {name}",
+  "@crewAssignmentsProjectContext": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "craftsmanSetAgreedAmount": "Set agreed amount",
+  "craftsmanEditAgreedAmount": "Edit agreed amount",
+  "craftsmanAgreedAmountSheetTitle": "Agreed amount",
+  "craftsmanAgreedForClientLabel": "Agreed for this client (optional)",
+  "craftsmanAgreementAmountPlaceholder": "Not set",
+  "craftsmanAgreementAmountCaption": "Leave empty if nothing was agreed. Enter 0 when the agreed amount is zero.",
+  "craftsmanAgreementAmountInvalid": "Enter a non-negative amount or leave blank",
+  "craftsmanAgreementHasPayments": "Has recorded payments",
+  "directoryAddCraftsmanToRoster": "Add craftsman to directory",
+  "crewAssignmentsSaved": "Craftsman choices saved for this client",
+  "itemsCatalogCaption": "Default items — you can add, edit, and archive",
+  "addItem": "Add item",
+  "itemCreateSheetTitle": "New item",
+  "itemEditSheetTitle": "Edit item",
+  "itemNameLabel": "Item name",
+  "itemNameRequired": "Enter item name",
+  "itemNameHint": "e.g. Insulation",
+  "itemsEmptyTitle": "No items yet",
+  "itemsEmptyDescription": "Add an item to categorize project spend.",
+  "archiveItemTitle": "Archive item?",
+  "archiveItemDescription": "{name} will be hidden from lists. Expense history is kept.",
+  "@archiveItemDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  }
 }

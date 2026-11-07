@@ -90,6 +90,13 @@
   "sharePdf": "مشاركة PDF",
   "createNew": "إنشاء جديد",
   "archive": "أرشفة",
+  "unarchive": "إلغاء الأرشفة",
+  "clientsFilterAll": "الكل",
+  "clientsFilterActive": "نشط",
+  "clientsFilterArchived": "مؤرشف",
+  "clientsNoArchivedTitle": "لا يوجد عملاء مؤرشفون",
+  "clientsNoArchivedDescription": "العملاء المؤرشفون يظهرون هنا بعد أرشفة العهدة.",
+  "clientsNoClientsTitle": "لا يوجد عملاء بعد",
   "edit": "تعديل",
   "delete": "حذف",
   "voucherAmountRequired": "أدخل مبلغًا أكبر من صفر",
@@ -124,5 +131,100 @@
     }
   },
   "noteOptionalHint": "اختياري…",
-  "paymentMethod": "طريقة الدفع"
+  "paymentMethod": "طريقة الدفع",
+  "directorySuppliersHint": "موردو الخامات · بيانات وحركات مدفوعة فقط، دون مستحقات أو مديونيات.",
+  "directoryCraftsmenHint": "دليلك العام للصنايعية · يمكن ربط الصنايعي بأكثر من عميل.",
+  "directorySupplierKindMeta": "مورد خامات",
+  "directoryEmptySuppliersTitle": "لا يوجد موردون بعد",
+  "directoryEmptySuppliersDescription": "أضف موردًا للدليل، ثم اربطه عند تسجيل صرف خامات.",
+  "directoryEmptyCraftsmenTitle": "لا يوجد صنايعية بعد",
+  "directoryEmptyCraftsmenDescription": "أضف صنايعيًا للدليل، ثم عيّنه من صفحة العميل.",
+  "directoryAddSupplier": "إضافة مورد",
+  "directoryAddCraftsman": "إضافة صنايعي",
+  "directoryCraftsmanProjectsCount": "{count} مشروعات",
+  "@directoryCraftsmanProjectsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "directoryViewDetails": "عرض التفاصيل",
+  "archiveSupplierTitle": "أرشفة المورد؟",
+  "archiveSupplierDescription": "سيُخفى {name} من القوائم. سجل المدفوعات يبقى محفوظًا.",
+  "@archiveSupplierDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "archiveCraftsmanTitle": "أرشفة الصنايعي؟",
+  "archiveCraftsmanDescription": "سيُخفى {name} من القوائم. سجل المصنعية يبقى محفوظًا.",
+  "@archiveCraftsmanDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "supplierNameRequired": "أدخل اسم المورد",
+  "craftsmanNameRequired": "أدخل اسم الصنايعي",
+  "craftsmanPhoneLabel": "التليفون",
+  "craftsmanPhoneRequired": "أدخل رقم التليفون",
+  "directorySupplierNameHint": "مثال: مورد خامات",
+  "directoryCraftsmanNameHint": "مثال: سبّاك",
+  "supplierTotalPaidLabel": "إجمالي المدفوع للمورد",
+  "supplierSpendRecordedCaption": "حركات مدفوعة مسجلة فقط",
+  "supplierDetailTransactionsSection": "سجل التعاملات",
+  "supplierDetailNoTransactions": "لا توجد تعاملات مسجلة",
+  "supplierDetailNotFoundTitle": "المورد غير موجود",
+  "supplierProfilePhoneLabel": "التليفون",
+  "supplierProfileNotesLabel": "ملاحظات",
+  "directoryCraftsmanKindMeta": "صنايعي",
+  "craftsmanTotalLaborPaidLabel": "إجمالي المصنعية المدفوعة",
+  "craftsmanLaborStatCaption": "عبر {count} مشروعات · يُحسب من حركات المصنعية فقط",
+  "@craftsmanLaborStatCaption": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "craftsmanDetailJobsSection": "العمل حسب العميل",
+  "craftsmanDetailEditAgreement": "تعديل الاتفاق",
+  "craftsmanDetailNoAgreedAmount": "بدون مبلغ متفق عليه",
+  "craftsmanDetailNoJobs": "لا مشروعات عملاء مرتبطة",
+  "craftsmanDetailLaborHistorySection": "سجل مدفوعات المصنعية",
+  "craftsmanDetailNoLaborHistory": "لا مدفوعات مصنعية مسجلة",
+  "craftsmanDetailNotFoundTitle": "الصنايعي غير موجود",
+  "craftsmanProfileTradeLabel": "التخصص",
+  "craftsmanProfileNotesLabel": "ملاحظات",
+  "crewAssignmentsIntro": "اختَر من الدليل. المبلغ المتفق عليه اختياري لهذا المشروع.",
+  "crewAssignmentsProjectContext": "مشروع {name}",
+  "@crewAssignmentsProjectContext": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "craftsmanSetAgreedAmount": "تعيين المبلغ المتفق عليه",
+  "craftsmanEditAgreedAmount": "تعديل المبلغ المتفق عليه",
+  "craftsmanAgreedAmountSheetTitle": "المبلغ المتفق عليه",
+  "craftsmanAgreedForClientLabel": "المتفق عليه لهذا العميل (اختياري)",
+  "craftsmanAgreementAmountPlaceholder": "غير محدد",
+  "craftsmanAgreementAmountCaption": "اتركه فارغًا إن لم يكن هناك اتفاق. أدخل 0 إذا كان المتفق عليه صفرًا.",
+  "craftsmanAgreementAmountInvalid": "أدخل مبلغًا غير سالب أو اتركه فارغًا",
+  "craftsmanAgreementHasPayments": "له مدفوعات مسجلة",
+  "directoryAddCraftsmanToRoster": "إضافة صنايعي للدليل",
+  "crewAssignmentsSaved": "حُفظت اختيارات الصنايعية لهذا العميل",
+  "itemsCatalogCaption": "البنود الافتراضية — يمكنك الإضافة والتعديل والأرشفة",
+  "addItem": "إضافة بند",
+  "itemCreateSheetTitle": "بند جديد",
+  "itemEditSheetTitle": "تعديل البند",
+  "itemNameLabel": "اسم البند",
+  "itemNameRequired": "اكتب اسم البند",
+  "itemNameHint": "مثال: عزل",
+  "itemsEmptyTitle": "لا توجد بنود بعد",
+  "itemsEmptyDescription": "أضف بندًا لتصنيف مصروفات المشروع.",
+  "archiveItemTitle": "أرشفة البند؟",
+  "archiveItemDescription": "سيُخفى {name} من القوائم. سجل المصروفات يبقى محفوظًا.",
+  "@archiveItemDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  }
 }

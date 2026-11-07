@@ -22,7 +22,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          homeClientBalancesProvider.overrideWith(
+          clientsListBalancesProvider.overrideWith(
             () => _PendingClientsNotifier(gate.future),
           ),
         ],
@@ -43,7 +43,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          homeClientBalancesOverride([
+          clientsListBalancesOverride([
             HomeClientBalanceRow(
               client: Client(
                 id: 'c1',
@@ -76,7 +76,7 @@ void main() {
 
   testWidgets('silent refresh retains list content', (tester) async {
     final now = DateTime.utc(2026, 11, 1);
-    final notifier = SequencedHomeClientBalancesNotifier([
+    final notifier = SequencedClientsListBalancesNotifier([
       HomeClientBalanceRow(
         client: Client(
           id: 'c1',
@@ -94,7 +94,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          homeClientBalancesProvider.overrideWith(() => notifier),
+          clientsListBalancesProvider.overrideWith(() => notifier),
         ],
         child: const MaterialApp(
           locale: Locale('en'),
@@ -118,7 +118,7 @@ void main() {
   testWidgets('app bar add uses teal tint superellipse and opens sheet', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [homeClientBalancesOverride([])],
+        overrides: [clientsListBalancesOverride([])],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -141,7 +141,7 @@ void main() {
   });
 }
 
-class _PendingClientsNotifier extends HomeClientBalancesNotifier {
+class _PendingClientsNotifier extends ClientsListBalancesNotifier {
   _PendingClientsNotifier(this._future);
 
   final Future<List<HomeClientBalanceRow>> _future;
@@ -150,8 +150,8 @@ class _PendingClientsNotifier extends HomeClientBalancesNotifier {
   Future<List<HomeClientBalanceRow>> fetch() => _future;
 }
 
-class SequencedHomeClientBalancesNotifier extends HomeClientBalancesNotifier {
-  SequencedHomeClientBalancesNotifier(this._rows);
+class SequencedClientsListBalancesNotifier extends ClientsListBalancesNotifier {
+  SequencedClientsListBalancesNotifier(this._rows);
 
   final List<HomeClientBalanceRow> _rows;
 

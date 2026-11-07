@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/config/theme/app_size.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/widgets/bnood_modal_sheet.dart';
 import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../home/home_foundation_scope.dart';
 import 'voucher_draft.dart';
@@ -56,23 +56,11 @@ class VoucherLauncher {
   }
 
   static Future<void> _show(BuildContext context) {
-    return showModalBottomSheet<void>(
+    return BnoodModalSheet.show<void>(
       context: context,
-      useRootNavigator: true,
-      isScrollControlled: true,
-      showDragHandle: false,
-      builder: (ctx) {
-        final bottomInset = MediaQuery.viewInsetsOf(ctx).bottom;
-        final keyboardGap = bottomInset > 0 ? AppSize.spaceMD : 0.0;
-        return Padding(
-          padding: EdgeInsets.only(bottom: bottomInset > 0 ? bottomInset + keyboardGap : 0),
-          child: HomeFoundationScope(
-            child: BoundedSheetNavigator(
-              builder: (_) => const VoucherSheet(),
-            ),
-          ),
-        );
-      },
+      builder: (_) => HomeFoundationScope(
+        child: BoundedSheetNavigator(builder: (_) => const VoucherSheet()),
+      ),
     );
   }
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../config/theme/app_size.dart';
-
-/// Nested [Navigator] with a finite max height for content-sized modal sheets.
+/// Nested [Navigator] for in-sheet flows (inline create, roster amount, etc.).
 class BoundedSheetNavigator extends StatelessWidget {
   const BoundedSheetNavigator({
     super.key,
@@ -15,36 +13,34 @@ class BoundedSheetNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final media = MediaQuery.of(context);
-        final maxHeight = SheetContentBounds.maxHeight(constraints, media);
-        return ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: constraints.maxWidth,
-            maxHeight: maxHeight,
-          ),
-          child: Navigator(
-            key: navigatorKey,
-            onGenerateRoute: (settings) => MaterialPageRoute(builder: builder, settings: settings),
-          ),
-        );
-      },
+    return Navigator(
+      key: navigatorKey,
+      onGenerateRoute: (settings) => PageRouteBuilder<void>(
+        settings: settings,
+        transitionDuration: const Duration(milliseconds: 250),
+        reverseTransitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (ctx, animation, secondaryAnimation) => builder(ctx),
+      ),
     );
   }
-
 }
 
-/// Shared max-height policy for modal sheet bodies (nested navigator + inline create).
+/// Viewport cap (80% of screen) and content max-height helpers for modal sheets.
 abstract final class SheetContentBounds {
+  static const viewportFraction = 0.8;
+
+  /// Maximum sheet body height for the current viewport (keyboard subtracted).
+  static double viewportCap(MediaQueryData media) {
+    final available = media.size.height - media.viewInsets.bottom;
+    return (available * viewportFraction).clamp(0, double.infinity);
+  }
+
   static double maxHeight(BoxConstraints constraints, MediaQueryData media) {
-    final bottomInset = media.viewInsets.bottom;
+    final cap = viewportCap(media);
     final parent = constraints.maxHeight;
     if (parent.isFinite && parent > 0) {
-      return parent;
+      return parent < cap ? parent : cap;
     }
-    final reservedTop = media.viewPadding.top + AppSize.space2XL;
-    final viewportCap = media.size.height - reservedTop - bottomInset;
-    return viewportCap.clamp(0, double.infinity);
+    return cap;
   }
 }

@@ -258,6 +258,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get archive => 'أرشفة';
 
   @override
+  String get unarchive => 'إلغاء الأرشفة';
+
+  @override
+  String get clientsFilterAll => 'الكل';
+
+  @override
+  String get clientsFilterActive => 'نشط';
+
+  @override
+  String get clientsFilterArchived => 'مؤرشف';
+
+  @override
+  String get clientsNoArchivedTitle => 'لا يوجد عملاء مؤرشفون';
+
+  @override
+  String get clientsNoArchivedDescription =>
+      'العملاء المؤرشفون يظهرون هنا بعد أرشفة العهدة.';
+
+  @override
+  String get clientsNoClientsTitle => 'لا يوجد عملاء بعد';
+
+  @override
   String get edit => 'تعديل';
 
   @override
@@ -347,4 +369,214 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get paymentMethod => 'طريقة الدفع';
+
+  @override
+  String get directorySuppliersHint =>
+      'موردو الخامات · بيانات وحركات مدفوعة فقط، دون مستحقات أو مديونيات.';
+
+  @override
+  String get directoryCraftsmenHint =>
+      'دليلك العام للصنايعية · يمكن ربط الصنايعي بأكثر من عميل.';
+
+  @override
+  String get directorySupplierKindMeta => 'مورد خامات';
+
+  @override
+  String get directoryEmptySuppliersTitle => 'لا يوجد موردون بعد';
+
+  @override
+  String get directoryEmptySuppliersDescription =>
+      'أضف موردًا للدليل، ثم اربطه عند تسجيل صرف خامات.';
+
+  @override
+  String get directoryEmptyCraftsmenTitle => 'لا يوجد صنايعية بعد';
+
+  @override
+  String get directoryEmptyCraftsmenDescription =>
+      'أضف صنايعيًا للدليل، ثم عيّنه من صفحة العميل.';
+
+  @override
+  String get directoryAddSupplier => 'إضافة مورد';
+
+  @override
+  String get directoryAddCraftsman => 'إضافة صنايعي';
+
+  @override
+  String directoryCraftsmanProjectsCount(int count) {
+    return '$count مشروعات';
+  }
+
+  @override
+  String get directoryViewDetails => 'عرض التفاصيل';
+
+  @override
+  String get archiveSupplierTitle => 'أرشفة المورد؟';
+
+  @override
+  String archiveSupplierDescription(String name) {
+    return 'سيُخفى $name من القوائم. سجل المدفوعات يبقى محفوظًا.';
+  }
+
+  @override
+  String get archiveCraftsmanTitle => 'أرشفة الصنايعي؟';
+
+  @override
+  String archiveCraftsmanDescription(String name) {
+    return 'سيُخفى $name من القوائم. سجل المصنعية يبقى محفوظًا.';
+  }
+
+  @override
+  String get supplierNameRequired => 'أدخل اسم المورد';
+
+  @override
+  String get craftsmanNameRequired => 'أدخل اسم الصنايعي';
+
+  @override
+  String get craftsmanPhoneLabel => 'التليفون';
+
+  @override
+  String get craftsmanPhoneRequired => 'أدخل رقم التليفون';
+
+  @override
+  String get directorySupplierNameHint => 'مثال: مورد خامات';
+
+  @override
+  String get directoryCraftsmanNameHint => 'مثال: سبّاك';
+
+  @override
+  String get supplierTotalPaidLabel => 'إجمالي المدفوع للمورد';
+
+  @override
+  String get supplierSpendRecordedCaption => 'حركات مدفوعة مسجلة فقط';
+
+  @override
+  String get supplierDetailTransactionsSection => 'سجل التعاملات';
+
+  @override
+  String get supplierDetailNoTransactions => 'لا توجد تعاملات مسجلة';
+
+  @override
+  String get supplierDetailNotFoundTitle => 'المورد غير موجود';
+
+  @override
+  String get supplierProfilePhoneLabel => 'التليفون';
+
+  @override
+  String get supplierProfileNotesLabel => 'ملاحظات';
+
+  @override
+  String get directoryCraftsmanKindMeta => 'صنايعي';
+
+  @override
+  String get craftsmanTotalLaborPaidLabel => 'إجمالي المصنعية المدفوعة';
+
+  @override
+  String craftsmanLaborStatCaption(int count) {
+    return 'عبر $count مشروعات · يُحسب من حركات المصنعية فقط';
+  }
+
+  @override
+  String get craftsmanDetailJobsSection => 'العمل حسب العميل';
+
+  @override
+  String get craftsmanDetailEditAgreement => 'تعديل الاتفاق';
+
+  @override
+  String get craftsmanDetailNoAgreedAmount => 'بدون مبلغ متفق عليه';
+
+  @override
+  String get craftsmanDetailNoJobs => 'لا مشروعات عملاء مرتبطة';
+
+  @override
+  String get craftsmanDetailLaborHistorySection => 'سجل مدفوعات المصنعية';
+
+  @override
+  String get craftsmanDetailNoLaborHistory => 'لا مدفوعات مصنعية مسجلة';
+
+  @override
+  String get craftsmanDetailNotFoundTitle => 'الصنايعي غير موجود';
+
+  @override
+  String get craftsmanProfileTradeLabel => 'التخصص';
+
+  @override
+  String get craftsmanProfileNotesLabel => 'ملاحظات';
+
+  @override
+  String get crewAssignmentsIntro =>
+      'اختَر من الدليل. المبلغ المتفق عليه اختياري لهذا المشروع.';
+
+  @override
+  String crewAssignmentsProjectContext(String name) {
+    return 'مشروع $name';
+  }
+
+  @override
+  String get craftsmanSetAgreedAmount => 'تعيين المبلغ المتفق عليه';
+
+  @override
+  String get craftsmanEditAgreedAmount => 'تعديل المبلغ المتفق عليه';
+
+  @override
+  String get craftsmanAgreedAmountSheetTitle => 'المبلغ المتفق عليه';
+
+  @override
+  String get craftsmanAgreedForClientLabel =>
+      'المتفق عليه لهذا العميل (اختياري)';
+
+  @override
+  String get craftsmanAgreementAmountPlaceholder => 'غير محدد';
+
+  @override
+  String get craftsmanAgreementAmountCaption =>
+      'اتركه فارغًا إن لم يكن هناك اتفاق. أدخل 0 إذا كان المتفق عليه صفرًا.';
+
+  @override
+  String get craftsmanAgreementAmountInvalid =>
+      'أدخل مبلغًا غير سالب أو اتركه فارغًا';
+
+  @override
+  String get craftsmanAgreementHasPayments => 'له مدفوعات مسجلة';
+
+  @override
+  String get directoryAddCraftsmanToRoster => 'إضافة صنايعي للدليل';
+
+  @override
+  String get crewAssignmentsSaved => 'حُفظت اختيارات الصنايعية لهذا العميل';
+
+  @override
+  String get itemsCatalogCaption =>
+      'البنود الافتراضية — يمكنك الإضافة والتعديل والأرشفة';
+
+  @override
+  String get addItem => 'إضافة بند';
+
+  @override
+  String get itemCreateSheetTitle => 'بند جديد';
+
+  @override
+  String get itemEditSheetTitle => 'تعديل البند';
+
+  @override
+  String get itemNameLabel => 'اسم البند';
+
+  @override
+  String get itemNameRequired => 'اكتب اسم البند';
+
+  @override
+  String get itemNameHint => 'مثال: عزل';
+
+  @override
+  String get itemsEmptyTitle => 'لا توجد بنود بعد';
+
+  @override
+  String get itemsEmptyDescription => 'أضف بندًا لتصنيف مصروفات المشروع.';
+
+  @override
+  String get archiveItemTitle => 'أرشفة البند؟';
+
+  @override
+  String archiveItemDescription(String name) {
+    return 'سيُخفى $name من القوائم. سجل المصروفات يبقى محفوظًا.';
+  }
 }

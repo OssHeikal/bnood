@@ -8,6 +8,8 @@ import '../buttons/app_button.dart';
 import '../custom_list_tile.dart';
 import '../grouped_list_divider.dart';
 import '../sheet_drag_handle.dart';
+import '../bnood_modal_sheet.dart';
+import '../bounded_sheet_navigator.dart';
 import '../toast/app_tone.dart';
 
 class SheetChoice<T> {
@@ -41,9 +43,8 @@ class SheetAction {
 
 abstract final class AppSheet {
   static Future<void> actions(BuildContext context, {required String title, required List<SheetAction> actions}) {
-    return showModalBottomSheet<void>(
+    return BnoodModalSheet.show<void>(
       context: context,
-      isScrollControlled: true,
       backgroundColor: context.colors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.cardRadius)),
@@ -53,10 +54,8 @@ abstract final class AppSheet {
   }
 
   static Future<T?> choices<T>(BuildContext context, {required String title, required List<SheetChoice<T>> choices}) {
-    return showModalBottomSheet<T>(
+    return BnoodModalSheet.show<T>(
       context: context,
-      useRootNavigator: true,
-      isScrollControlled: true,
       backgroundColor: context.colors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.cardRadius)),
@@ -75,7 +74,7 @@ class _ChoiceSheetBody<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.viewPaddingOf(context).bottom;
-    final maxListHeight = MediaQuery.sizeOf(context).height * 0.55;
+    final maxListHeight = SheetContentBounds.viewportCap(MediaQuery.of(context)) * 0.7;
     final colors = context.colors;
 
     return SafeArea(

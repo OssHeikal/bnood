@@ -1,0 +1,27 @@
+---
+description: Modal bottom sheet height, keyboard, and safe-area policy
+alwaysApply: true
+---
+
+# Modal bottom sheets (Bnood)
+
+## Height
+
+- Use `BnoodModalSheet.show` or `CustomBottomSheet.show` for form/flow sheets (never raw full-height `SizedBox` shells).
+- Maximum body height: **80%** of viewport after keyboard inset (`SheetContentBounds.viewportCap`).
+- Short content **hugs** height below that cap; do not force 80% on sparse sheets.
+
+## Safe area and keyboard
+
+- Route `useSafeArea: true` on shared openers; do not stack redundant outer `SafeArea` when the opener already applies top safe area.
+- Keyboard: opener adds bottom `viewInsets` padding plus `AppSize.spaceMD` gap; pinned footers stay visible; scroll body when content exceeds cap.
+- Nested create / amount routes: `BoundedSheetNavigator` with top-aligned `PageRouteBuilder` pages.
+
+## Footers
+
+- Primary Save on selection flows stays **outside** the scrollable roster body (pinned footer), not inside a long `SingleChildScrollView` only.
+- Dismiss committed flows with `Navigator.of(context, rootNavigator: true).pop()` after successful save (not nested `maybePop` only).
+
+## Tests
+
+- Assert modal surface height near content on tall phones; drag handle near top; representative openers through production `show*` entrypoints.

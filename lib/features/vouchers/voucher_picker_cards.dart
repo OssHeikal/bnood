@@ -1,0 +1,220 @@
+import 'package:flutter/material.dart';
+
+import '../../core/config/theme/app_colors.dart';
+import '../../core/config/theme/app_shape.dart';
+import '../../core/config/theme/app_size.dart';
+import '../../core/theme/app_colors.dart' as legacy;
+import '../../core/utils/extensions/bidi_isolate.dart';
+import '../../core/widgets/app_amount.dart';
+import '../../core/widgets/entity_picker_row.dart';
+import '../../features/clients/widgets/client_balance_card.dart';
+import '../../features/items/item_semantic_icon.dart';
+import '../../l10n/app_localizations.dart';
+
+class VoucherPickerClientCard extends StatelessWidget {
+  const VoucherPickerClientCard({
+    super.key,
+    required this.name,
+    required this.clientId,
+    required this.remainingPiastres,
+    required this.localeCode,
+    required this.selected,
+    required this.onTap,
+    this.showDivider = true,
+  });
+
+  final String name;
+  final String clientId;
+  final int remainingPiastres;
+  final String localeCode;
+  final bool selected;
+  final VoidCallback onTap;
+  final bool showDivider;
+
+  static const _leadingWidth = AppSize.hitMin;
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = legacy.AppColors.accent(clientAccentKeyFor(clientId));
+    final l10n = AppLocalizations.of(context);
+    return EntityPickerOptionRow(
+      selected: selected,
+      onSelect: onTap,
+      leadingWidth: _leadingWidth,
+      showDivider: showDivider,
+      semanticLabel: name,
+      leading: _InitialAvatar(initial: name.isNotEmpty ? name.characters.first : '?', accent: accent),
+      title: name,
+      subtitle: Row(
+        children: [
+          Text(l10n.remaining),
+          const SizedBox(width: AppSize.spaceXS),
+          AppAmount(
+            piastres: remainingPiastres,
+            role: AppAmountRole.remaining,
+            size: AppAmountSize.small,
+            localeCode: localeCode,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class VoucherPickerItemCard extends StatelessWidget {
+  const VoucherPickerItemCard({
+    super.key,
+    required this.name,
+    required this.colorKey,
+    required this.iconName,
+    required this.selected,
+    required this.onTap,
+    this.showDivider = true,
+  });
+
+  final String name;
+  final String colorKey;
+  final String iconName;
+  final bool selected;
+  final VoidCallback onTap;
+  final bool showDivider;
+
+  static const _leadingWidth = AppSize.statIconBox;
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = itemSemanticAccentColor(colorKey);
+    final icon = itemSemanticIconAsset(iconName);
+    return EntityPickerOptionRow(
+      selected: selected,
+      onSelect: onTap,
+      leadingWidth: _leadingWidth,
+      showDivider: showDivider,
+      semanticLabel: name,
+      leading: Material(
+        color: accent.withValues(alpha: 0.15),
+        shape: AppShape.superellipse(radius: AppSize.radiusSM),
+        clipBehavior: Clip.antiAlias,
+        child: Center(
+          child: icon.svg(
+            width: AppSize.iconSmall,
+            height: AppSize.iconSmall,
+            colorFilter: ColorFilter.mode(accent, BlendMode.srcIn),
+          ),
+        ),
+      ),
+      title: name,
+    );
+  }
+}
+
+class VoucherPickerCraftsmanCard extends StatelessWidget {
+  const VoucherPickerCraftsmanCard({
+    super.key,
+    required this.name,
+    required this.trade,
+    required this.selected,
+    required this.onTap,
+    this.showDivider = true,
+  });
+
+  final String name;
+  final String? trade;
+  final bool selected;
+  final VoidCallback onTap;
+  final bool showDivider;
+
+  static const _leadingWidth = AppSize.hitMin;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final subtitleText = trade?.trim();
+    return EntityPickerOptionRow(
+      selected: selected,
+      onSelect: onTap,
+      leadingWidth: _leadingWidth,
+      showDivider: showDivider,
+      semanticLabel: name,
+      leading: _InitialAvatar(initial: name.isNotEmpty ? name.characters.first : '?', accent: colors.primary),
+      title: name,
+      subtitle: subtitleText != null && subtitleText.isNotEmpty
+          ? Text(subtitleText, maxLines: 1, overflow: TextOverflow.ellipsis)
+          : null,
+    );
+  }
+}
+
+class VoucherPickerSupplierCard extends StatelessWidget {
+  const VoucherPickerSupplierCard({
+    super.key,
+    required this.name,
+    required this.phone,
+    required this.selected,
+    required this.onTap,
+    this.showDivider = true,
+  });
+
+  final String name;
+  final String? phone;
+  final bool selected;
+  final VoidCallback onTap;
+  final bool showDivider;
+
+  static const _leadingWidth = AppSize.hitMin;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final rawPhone = phone?.trim();
+    return EntityPickerOptionRow(
+      selected: selected,
+      onSelect: onTap,
+      leadingWidth: _leadingWidth,
+      showDivider: showDivider,
+      semanticLabel: name,
+      leading: _InitialAvatar(initial: name.isNotEmpty ? name.characters.first : '?', accent: colors.primaryDark),
+      title: name,
+      subtitle: rawPhone != null && rawPhone.isNotEmpty
+          ? Text(
+              LtrIsolate.isolate(rawPhone),
+              textDirection: TextDirection.ltr,
+              textAlign: TextAlign.start,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
+    );
+  }
+}
+
+class _InitialAvatar extends StatelessWidget {
+  const _InitialAvatar({required this.initial, required this.accent});
+
+  final String initial;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      shape: AppShape.superellipse(radius: 14),
+      clipBehavior: Clip.antiAlias,
+      child: Ink(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [accent, Color.lerp(accent, Colors.black, 0.25)!],
+          ),
+        ),
+        child: Center(
+          child: Text(
+            initial,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,24 @@
+---
+description: Separate LTR content direction from locale layout alignment (phones, money, IDs)
+alwaysApply: true
+---
+
+# Bidi layout (bnood)
+
+Arabic UI is RTL. Some **content** is intrinsically LTR (phones, email, URLs, Western amounts, opaque IDs). Do not confuse **glyph reading order** with **where the widget sits in the layout**.
+
+## Rules
+
+1. **Layout** follows locale logical **start/end** (`AlignmentDirectional`, `TextAlign.start`, `CrossAxisAlignment.start`, `MainAxisAlignment.start`). In AR, “start” is the physical right edge unless a widget explicitly opts out.
+
+2. **LTR content** uses `LtrIsolate.isolate(...)` and/or `DisplayDigits` so digits and `+` prefixes read correctly inside an RTL paragraph. Do **not** set `Text.textDirection: TextDirection.ltr` on a full line **only** to fix digit order — that pins the line to the physical left in RTL and breaks subtitle/title alignment under app bars and list rows.
+
+3. **Money and dates** keep existing patterns: `AppAmount` (`textDirection: ltr` on the amount widget only), movement trailing column, isolated amounts. Do not reverse stored strings or strip bidi marks unless fixing a concrete display bug.
+
+4. **Mixed punctuation** (e.g. `+20`, `EGP`): isolate the numeric/Latin run; keep the label/value row aligned to the same logical start as sibling text.
+
+## Verify
+
+- AR: name and phone subtitle share the same **physical right** start under the app bar.
+- EN: both share the **physical left** start.
+- Phone string still reads `010…` / `+20…` left-to-right; no overflow at narrow width.

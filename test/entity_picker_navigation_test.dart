@@ -1,3 +1,4 @@
+import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/entity_picker_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
@@ -9,6 +10,7 @@ void main() {
     final rootField = TextEditingController(text: 'draft-amount');
     await tester.pumpWidget(
       MaterialApp(
+        theme: AppFoundationTheme.light(),
         locale: const Locale('ar'),
         localizationsDelegates: const [
           AppLocalizations.delegate,

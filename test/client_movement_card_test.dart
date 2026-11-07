@@ -1,3 +1,4 @@
+import 'package:bnood/core/config/theme/app_colors.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/database/database.dart';
 import 'package:bnood/features/clients/client_detail_snapshot.dart';
@@ -76,9 +77,19 @@ void main() {
     expect(find.text('Spend'), findsNothing);
     expect(find.text('Receive'), findsNothing);
     expect(find.textContaining('10,000 EGP'), findsOneWidget);
-    expect(find.textContaining('2026'), findsOneWidget);
+    final dateLabel = ClientMovementCard.formatMovementDate(date, 'en');
+    expect(find.text(dateLabel), findsOneWidget);
 
-    final amountDx = tester.getTopLeft(find.textContaining('10,000 EGP')).dx;
+    final amountFinder = find.textContaining('10,000 EGP');
+    final amountStyle = tester.widget<Text>(amountFinder).style;
+    final moneyMd = tester.element(amountFinder).text.moneyMd.fontSize;
+    expect(amountStyle?.fontSize, moneyMd);
+
+    final amountTrailing = tester.getTopRight(amountFinder).dx;
+    final dateTrailing = tester.getTopRight(find.text(dateLabel)).dx;
+    expect(dateTrailing, closeTo(amountTrailing, 1));
+
+    final amountDx = tester.getTopLeft(amountFinder).dx;
     final titleDx = tester.getTopLeft(find.text('Flooring')).dx;
     expect(amountDx, greaterThan(titleDx));
   });
@@ -138,6 +149,39 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.textContaining('EGP'), findsOneWidget);
+  });
+
+  testWidgets('movement card AR places amount at trailing edge', (tester) async {
+    final line = _line(
+      transaction: _tx(amount: 1000000, date: DateTime(2026, 11, 7)),
+      itemName: 'أرضيات',
+      payeeName: 'مورد',
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppFoundationTheme.light(),
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: SizedBox(
+            width: 320,
+            child: ClientMovementCard(line: line, localeCode: 'ar'),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final dateLabel = ClientMovementCard.formatMovementDate(DateTime(2026, 11, 7), 'ar');
+    final amountFinder = find.textContaining('10,000 EGP');
+    final cardWidth = tester.getSize(find.byType(ClientMovementCard)).width;
+    final amountDx = tester.getTopLeft(amountFinder).dx;
+    final titleDx = tester.getTopLeft(find.text('أرضيات')).dx;
+    expect(titleDx, greaterThan(amountDx));
+    expect(amountDx, lessThan(cardWidth * 0.35));
+    expect(tester.getTopRight(amountFinder).dx, closeTo(tester.getTopRight(find.text(dateLabel)).dx, 1));
   });
 
   test('formatMovementDate uses Western digits', () {
