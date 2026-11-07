@@ -2,7 +2,7 @@
 
 Foundation documentation for **Bnood** (formerly عهدة): a local-first mobile app for finishing/site engineers and contractors who manage client funds, work items, material suppliers, and labor craftsmen.
 
-**Status:** Documentation and Cursor rules only. No application code in this repository yet.
+**Status:** V1 Flutter app (local-only) on branch `cursor/v1-implementation-edb5`. Foundation docs in PR #1.
 
 ## Documentation index
 

@@ -17,7 +17,7 @@ Unresolved items — **do not implement** a single chosen behavior until product
 | ID | Topic | Notes |
 |----|--------|--------|
 | OQ-06 | Negative project balance | Allow with warning vs block — undecided |
-| OQ-07 | Engineer % precision | Rounding for `estimatedProfit` display |
+| OQ-07 | Engineer % precision | Rounding/display for `estimatedProfit` — **open**; code uses floor via basis points (see [technical-choices.md](technical-choices.md)) |
 | OQ-08 | Statement period opening | Opening balance / carry-forward vs period-only activity |
 | OQ-09 | Shared funding vs custody | V2: author ≠ payer; ledger model deferred |
 

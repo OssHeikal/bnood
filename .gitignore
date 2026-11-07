@@ -1,0 +1,29 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+**/doc/api/
+
+# FVM
+.fvm/flutter_sdk
+.fvm/versions
+.fvm/release
+.fvm/version
+
+# IDE
+.idea/
+*.iml
+
+# Platform
+**/GeneratedPluginRegistrant.*
+
+# Coverage
+coverage/
+
+# Secrets
+*.jks
+*.keystore
