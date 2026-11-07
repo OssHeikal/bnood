@@ -1,5 +1,8 @@
 import 'package:bnood/l10n/app_localizations.dart';
 
+import '../../core/money/period_bounds.dart';
+import 'statement_movement_text.dart';
+
 /// Localized strings for statement PDF layout (AR/EN).
 class StatementPdfCopy {
   const StatementPdfCopy(this.l10n);
@@ -8,7 +11,20 @@ class StatementPdfCopy {
 
   String get clientHeading => l10n.statementClientHeading;
   String get supplierHeading => l10n.statementSupplierHeading;
+  String get periodFromLabel => l10n.statementPeriodFrom;
+  String get periodToLabel => l10n.statementPeriodTo;
+  String get reconcileSectionTitle => l10n.statementReconcileSectionTitle;
   String periodLabel(String label) => l10n.statementPeriodDisplay(label);
+
+  /// Explicit من / إلى (or From / To) with Western-digit dates for PDF.
+  String periodRangeFromTo(PeriodBounds bounds) {
+    final from = StatementMovementText.formatMovementDate(bounds.start);
+    final to = StatementMovementText.formatMovementDate(bounds.end);
+    if (from == to) {
+      return '${l10n.statementPeriodFrom} $from';
+    }
+    return '${l10n.statementPeriodFrom} $from   ${l10n.statementPeriodTo} $to';
+  }
   String issuedLabel(String date) => l10n.statementIssuedOn(date);
   String get currencyNote => l10n.statementCurrencyNote;
   String get totalReceived => l10n.statementTotalReceived;

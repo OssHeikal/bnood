@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -13,11 +14,17 @@ import '../../core/pdf/pdf_fonts.dart';
 import 'statement_grouping.dart';
 import 'statement_movement_text.dart';
 import 'statement_pdf_copy.dart';
-import 'statement_period_logic.dart';
-
 class PdfStatementService {
   static const _primary = PdfColor.fromInt(0xFF0D9B8A);
   static const _muted = PdfColor.fromInt(0xFF5C6B68);
+  static const _surface = PdfColor.fromInt(0xFFF4F7F6);
+  static const _ink = PdfColor.fromInt(0xFF1A2422);
+
+  @visibleForTesting
+  static const dateColumnWidth = 78.0;
+
+  @visibleForTesting
+  static const amountColumnWidth = 102.0;
 
   static pw.ImageProvider? _logo;
   static Future<pw.ImageProvider> _loadLogo() async {
@@ -44,7 +51,6 @@ class PdfStatementService {
     final fonts = await PdfFonts.load();
     final logo = await _loadLogo();
     final doc = pw.Document();
-    final periodLabel = StatementPeriodLogic.formatPeriodRangeLabel(bounds);
     final issued = issuedAt ?? DateTime.now();
     final issueLabel = StatementMovementText.formatMovementDate(issued);
     final groups = groupSpendByItem(
@@ -78,34 +84,12 @@ class PdfStatementService {
               'عينة — SAMPLE',
               style: pw.TextStyle(color: _primary, fontWeight: pw.FontWeight.bold),
             ),
-          pw.SizedBox(height: 6),
-          pw.Text(client.name, style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
-          if (unitAddress != null && unitAddress.trim().isNotEmpty)
-            pw.Text(unitAddress, style: const pw.TextStyle(fontSize: 10, color: _muted)),
-          pw.Text(copy.periodLabel(periodLabel), style: const pw.TextStyle(fontSize: 10)),
-          pw.Text(copy.issuedLabel(issueLabel), style: const pw.TextStyle(fontSize: 10)),
-          pw.Text(copy.currencyNote, style: const pw.TextStyle(fontSize: 9, color: _muted)),
-          pw.SizedBox(height: 12),
-          _clientSummaryStrip(copy, totals),
+          pw.SizedBox(height: 4),
+          _partyTitle(client.name, unitAddress: unitAddress),
           pw.SizedBox(height: 8),
-          pw.Text(
-            copy.itemMaterialsLabor(
-              MoneyFormat.formatPiastres(totals.materialsPiastres),
-              MoneyFormat.formatPiastres(totals.laborPiastres),
-            ),
-            style: const pw.TextStyle(fontSize: 9),
-          ),
-          if (totals.openingBalancePiastres != 0 ||
-              totals.closingBalancePiastres != totals.openingBalancePiastres + totals.periodReceivedPiastres - totals.periodSpentPiastres)
-            pw.Text(
-              copy.l10n.statementOpeningPeriodNet(
-                MoneyFormat.formatPiastres(totals.openingBalancePiastres),
-                MoneyFormat.formatPiastres(
-                  totals.periodReceivedPiastres - totals.periodSpentPiastres,
-                ),
-              ),
-              style: const pw.TextStyle(fontSize: 9, color: _muted),
-            ),
+          _periodMeta(copy, bounds: bounds, issuedLabel: copy.issuedLabel(issueLabel)),
+          pw.SizedBox(height: 14),
+          _clientSummaryStrip(copy, totals),
           pw.SizedBox(height: 14),
           pw.Text(copy.receiptsTitle, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, color: _primary)),
           pw.Text(copy.receiptsCaption, style: const pw.TextStyle(fontSize: 9, color: _muted)),
@@ -137,26 +121,8 @@ class PdfStatementService {
               lineFor: (t) => _spendLine(t, copy, supplierNames, craftsmanNames),
             ),
           ],
-          pw.SizedBox(height: 16),
-          pw.Text(
-            copy.reconcileSpend(
-              MoneyFormat.formatPiastres(totals.materialsPiastres),
-              MoneyFormat.formatPiastres(totals.laborPiastres),
-              MoneyFormat.formatPiastres(totals.periodSpentPiastres),
-            ),
-            style: const pw.TextStyle(fontSize: 9),
-          ),
-          pw.Text(
-            copy.reconcileBalance(
-              openingPrefix: totals.openingBalancePiastres != 0
-                  ? '${copy.openingBalance} ${MoneyFormat.formatPiastres(totals.openingBalancePiastres)} + '
-                  : '',
-              received: MoneyFormat.formatPiastres(totals.periodReceivedPiastres),
-              spent: MoneyFormat.formatPiastres(totals.periodSpentPiastres),
-              closing: MoneyFormat.formatPiastres(totals.closingBalancePiastres),
-            ),
-            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10),
-          ),
+          pw.SizedBox(height: 18),
+          _clientReconcileSection(copy, totals),
         ],
       ),
     );
@@ -175,7 +141,6 @@ class PdfStatementService {
     final fonts = await PdfFonts.load();
     final logo = await _loadLogo();
     final doc = pw.Document();
-    final periodLabel = StatementPeriodLogic.formatPeriodRangeLabel(bounds);
     final issued = issuedAt ?? DateTime.now();
     final issueLabel = StatementMovementText.formatMovementDate(issued);
     final sorted = List<Transaction>.from(periodRows)..sort((a, b) => a.date.compareTo(b.date));
@@ -199,16 +164,17 @@ class PdfStatementService {
           pages: ctx.pagesCount,
         ),
         build: (context) => [
-          pw.Text(supplier.name, style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
-          pw.Text(copy.periodLabel(periodLabel), style: const pw.TextStyle(fontSize: 10)),
-          pw.Text(copy.issuedLabel(issueLabel), style: const pw.TextStyle(fontSize: 10)),
-          pw.Text(copy.currencyNote, style: const pw.TextStyle(fontSize: 9, color: _muted)),
-          pw.SizedBox(height: 12),
+          _partyTitle(supplier.name),
+          pw.SizedBox(height: 8),
+          _periodMeta(copy, bounds: bounds, issuedLabel: copy.issuedLabel(issueLabel)),
+          pw.SizedBox(height: 14),
+          pw.Text(copy.reconcileSectionTitle, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, color: _primary, fontSize: 11)),
+          pw.SizedBox(height: 6),
           _summaryTable(copy, [
             (copy.openingBalance, totals.openingPaidPiastres),
             (copy.spentWord, totals.periodPaidPiastres),
             (copy.closingBalance, totals.closingPaidPiastres),
-          ]),
+          ], emphasizeLast: true),
           pw.SizedBox(height: 14),
           pw.Text(copy.paymentsTitle, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, color: _primary)),
           pw.Text(copy.paymentsCaption, style: const pw.TextStyle(fontSize: 9, color: _muted)),
@@ -245,13 +211,13 @@ class PdfStatementService {
         pw.Row(
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           children: [
-            pw.Image(logo, height: 28),
+            pw.Image(logo, height: 36),
             if (isContinuation)
               pw.Text('تابع', style: const pw.TextStyle(fontSize: 9, color: _muted)),
           ],
         ),
         pw.SizedBox(height: 6),
-        pw.Text(title, style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold, color: _primary)),
+        pw.Text(title, style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: _primary)),
         if (isContinuation)
           pw.Text(name, style: const pw.TextStyle(fontSize: 10, color: _muted)),
         pw.Divider(color: _primary, thickness: 0.5),
@@ -319,18 +285,115 @@ class PdfStatementService {
     );
   }
 
-  pw.Widget _summaryTable(StatementPdfCopy copy, List<(String, int)> rows) {
+  pw.Widget _partyTitle(String name, {String? unitAddress}) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(name, style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold, color: _ink)),
+        if (unitAddress != null && unitAddress.trim().isNotEmpty)
+          pw.Padding(
+            padding: const pw.EdgeInsets.only(top: 2),
+            child: pw.Text(unitAddress.trim(), style: const pw.TextStyle(fontSize: 10, color: _muted)),
+          ),
+      ],
+    );
+  }
+
+  pw.Widget _periodMeta(
+    StatementPdfCopy copy, {
+    required PeriodBounds bounds,
+    required String issuedLabel,
+  }) {
+    return pw.Container(
+      padding: const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: pw.BoxDecoration(
+        color: _surface,
+        borderRadius: pw.BorderRadius.circular(6),
+        border: pw.Border.all(color: PdfColors.grey300),
+      ),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Directionality(
+            textDirection: pw.TextDirection.rtl,
+            child: pw.RichText(
+              text: pw.TextSpan(
+                children: _periodRangeSpans(copy, bounds),
+                style: const pw.TextStyle(fontSize: 10, color: _ink),
+              ),
+            ),
+          ),
+          pw.SizedBox(height: 4),
+          pw.Text(issuedLabel, style: const pw.TextStyle(fontSize: 9, color: _muted)),
+          pw.Text(copy.currencyNote, style: const pw.TextStyle(fontSize: 8, color: _muted)),
+        ],
+      ),
+    );
+  }
+
+  List<pw.InlineSpan> _periodRangeSpans(StatementPdfCopy copy, PeriodBounds bounds) {
+    final from = StatementMovementText.formatMovementDate(bounds.start);
+    final to = StatementMovementText.formatMovementDate(bounds.end);
+    final labelStyle = pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10, color: _primary);
+    final dateStyle = const pw.TextStyle(fontSize: 10, color: _ink);
+    if (from == to) {
+      return [
+        pw.TextSpan(text: '${copy.periodFromLabel} ', style: labelStyle),
+        pw.TextSpan(text: from, style: dateStyle),
+      ];
+    }
+    return [
+      pw.TextSpan(text: '${copy.periodFromLabel} ', style: labelStyle),
+      pw.TextSpan(text: from, style: dateStyle),
+      pw.TextSpan(text: '   ${copy.periodToLabel} ', style: labelStyle),
+      pw.TextSpan(text: to, style: dateStyle),
+    ];
+  }
+
+  pw.Widget _clientReconcileSection(StatementPdfCopy copy, StatementPeriodTotals totals) {
+    final rows = <(String, int, bool)>[
+      (copy.materials, totals.materialsPiastres, false),
+      (copy.labor, totals.laborPiastres, false),
+      (copy.spentWord, totals.periodSpentPiastres, false),
+      if (totals.openingBalancePiastres != 0) (copy.openingBalance, totals.openingBalancePiastres, false),
+      (copy.receivedWord, totals.periodReceivedPiastres, false),
+      (copy.closingBalance, totals.closingBalancePiastres, true),
+    ];
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(copy.reconcileSectionTitle, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, color: _primary, fontSize: 11)),
+        pw.SizedBox(height: 6),
+        _summaryTable(copy, rows.map((r) => (r.$1, r.$2)).toList(), emphasizeLast: rows.last.$3),
+      ],
+    );
+  }
+
+  pw.Widget _summaryTable(StatementPdfCopy copy, List<(String, int)> rows, {bool emphasizeLast = false}) {
     return pw.Table(
       border: pw.TableBorder.all(color: PdfColors.grey300),
+      columnWidths: {
+        0: const pw.FlexColumnWidth(2),
+        1: const pw.FixedColumnWidth(amountColumnWidth),
+      },
       children: [
-        for (final r in rows)
-          pw.TableRow(children: [
-            pw.Padding(padding: const pw.EdgeInsets.all(6), child: pw.Text(r.$1)),
-            pw.Padding(
-              padding: const pw.EdgeInsets.all(6),
-              child: pw.Text(MoneyFormat.formatPiastres(r.$2), textAlign: pw.TextAlign.left),
-            ),
-          ]),
+        for (var i = 0; i < rows.length; i++)
+          pw.TableRow(
+            decoration: i.isEven ? null : const pw.BoxDecoration(color: PdfColor.fromInt(0xFFFAFCFB)),
+            children: [
+              pw.Padding(
+                padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                child: pw.Text(
+                  rows[i].$1,
+                  style: pw.TextStyle(
+                    fontSize: 10,
+                    fontWeight: emphasizeLast && i == rows.length - 1 ? pw.FontWeight.bold : pw.FontWeight.normal,
+                  ),
+                ),
+              ),
+              _amountCell(MoneyFormat.formatPiastres(rows[i].$2), emphasized: emphasizeLast && i == rows.length - 1),
+            ],
+          ),
       ],
     );
   }
@@ -364,10 +427,10 @@ class PdfStatementService {
     return pw.Table(
       border: pw.TableBorder.all(color: PdfColors.grey300),
       columnWidths: {
-        0: const pw.FixedColumnWidth(48),
-        1: const pw.FlexColumnWidth(2.5),
-        2: const pw.FixedColumnWidth(88),
-        3: const pw.FixedColumnWidth(24),
+        0: const pw.FixedColumnWidth(dateColumnWidth),
+        1: const pw.FlexColumnWidth(4),
+        2: const pw.FixedColumnWidth(amountColumnWidth),
+        3: const pw.FixedColumnWidth(30),
       },
       children: [
         pw.TableRow(
@@ -381,29 +444,73 @@ class PdfStatementService {
         ),
         for (final t in rows)
           pw.TableRow(children: [
-            _cell(StatementMovementText.formatMovementDate(t.date), align: pw.TextAlign.center),
+            _dateCell(StatementMovementText.formatMovementDate(t.date)),
             _detailCell(lineFor(t)),
-            _cell(MoneyFormat.formatPiastres(t.amountPiastres), align: pw.TextAlign.center),
-            _cell(DisplayDigits.formatInteger(no++), align: pw.TextAlign.center),
+            _amountCell(MoneyFormat.formatPiastres(t.amountPiastres)),
+            _serialCell(DisplayDigits.formatInteger(no++)),
           ]),
       ],
     );
   }
 
   pw.Widget _detailCell((String main, String sub) lines) => pw.Padding(
-        padding: const pw.EdgeInsets.all(4),
+        padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         child: pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            pw.Text(lines.$1, style: const pw.TextStyle(fontSize: 10)),
+            pw.Text(lines.$1, style: const pw.TextStyle(fontSize: 10, color: _ink)),
+            pw.SizedBox(height: 2),
             pw.Text(lines.$2, style: const pw.TextStyle(fontSize: 8, color: _muted)),
           ],
         ),
       );
 
+  pw.Widget _dateCell(String text) => pw.Padding(
+        padding: const pw.EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+        child: pw.Directionality(
+          textDirection: pw.TextDirection.ltr,
+          child: pw.Text(
+            text,
+            maxLines: 1,
+            style: const pw.TextStyle(fontSize: 10, color: _ink),
+            textAlign: pw.TextAlign.center,
+          ),
+        ),
+      );
+
+  pw.Widget _amountCell(String text, {bool emphasized = false}) => pw.Padding(
+        padding: const pw.EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+        child: pw.Directionality(
+          textDirection: pw.TextDirection.ltr,
+          child: pw.Text(
+            text,
+            maxLines: 1,
+            style: pw.TextStyle(
+              fontSize: emphasized ? 11 : 10,
+              fontWeight: emphasized ? pw.FontWeight.bold : pw.FontWeight.normal,
+              color: _ink,
+            ),
+            textAlign: pw.TextAlign.right,
+          ),
+        ),
+      );
+
+  pw.Widget _serialCell(String text) => pw.Padding(
+        padding: const pw.EdgeInsets.symmetric(horizontal: 2, vertical: 6),
+        child: pw.Directionality(
+          textDirection: pw.TextDirection.ltr,
+          child: pw.Text(
+            text,
+            maxLines: 1,
+            style: const pw.TextStyle(fontSize: 9, color: _muted),
+            textAlign: pw.TextAlign.center,
+          ),
+        ),
+      );
+
   pw.Widget _cell(String text, {pw.TextAlign align = pw.TextAlign.right, bool bold = false}) =>
       pw.Padding(
-        padding: const pw.EdgeInsets.all(4),
+        padding: const pw.EdgeInsets.symmetric(horizontal: 6, vertical: 6),
         child: pw.Text(
           text,
           style: pw.TextStyle(

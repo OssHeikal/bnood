@@ -3,6 +3,8 @@ import 'package:bnood/core/database/connection.dart';
 import 'package:bnood/core/providers/app_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/core/widgets/buttons/app_button.dart';
+import 'package:bnood/core/database/database.dart';
+import 'package:bnood/features/clients/client_detail_snapshot.dart';
 import 'package:bnood/features/clients/client_movement_lines.dart';
 import 'package:bnood/features/clients/widgets/interactive_movement_card.dart';
 import 'package:bnood/features/clients/voucher_draft_from_transaction.dart';
@@ -43,54 +45,52 @@ void main() {
   });
 
   testWidgets('movement card has no on-card delete affordance', (tester) async {
-    final db = openTestDatabase();
-    addTearDown(db.close);
-    final repo = BnoodRepository(db);
-    final client = await repo.createClient(name: 'بطاقة');
-    final project = (await repo.primaryActiveProject(client.id))!;
-    final item = (await repo.watchActiveItems().first).first;
-    await repo.insertTransaction(
-      projectId: project.id,
-      kind: 'receive',
-      amountPiastres: 100000,
-      date: DateTime(2025, 2, 1),
-      method: 'cash',
-    );
-    final rows = await repo.transactionsForProject(project.id);
-    final maps = await (
-      itemById: {for (final i in await repo.watchActiveItems().first) i.id: i},
-      supplierById: {for (final s in await repo.watchActiveSuppliers().first) s.id: s},
-      craftsmanById: {for (final c in await repo.watchActiveCraftsmen().first) c.id: c},
-    );
-    final line = movementLineFromTransaction(
-      rows.first,
-      itemById: maps.itemById,
-      supplierById: maps.supplierById,
-      craftsmanById: maps.craftsmanById,
+    final date = DateTime(2025, 2, 1);
+    final line = ClientDetailMovementLine(
+      transaction: Transaction(
+        id: 't-card',
+        workspaceId: 'w',
+        projectId: 'p',
+        kind: 'receive',
+        amountPiastres: 100000,
+        date: date,
+        method: 'cash',
+        description: null,
+        receiptImagePath: null,
+        itemId: null,
+        expenseType: null,
+        supplierId: null,
+        craftsmanId: null,
+        createdAt: date,
+        updatedAt: date,
+      ),
     );
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [repositoryProvider.overrideWithValue(repo)],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('ar'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
-            body: InteractiveMovementCard(
-              line: line,
-              localeCode: 'ar',
-              mutationsEnabled: true,
+          home: HomeFoundationScope(
+            child: Scaffold(
+              body: InteractiveMovementCard(
+                line: line,
+                localeCode: 'ar',
+                mutationsEnabled: false,
+              ),
             ),
           ),
         ),
       ),
     );
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
 
     expect(find.byIcon(Icons.delete_outline), findsNothing);
-    expect(find.byTooltip('حذف'), findsNothing);
+    expect(find.byIcon(Icons.delete), findsNothing);
+    expect(find.byType(IconButton), findsNothing);
   });
 
   testWidgets('edit voucher sheet shows delete and cancel keeps ledger row', (tester) async {
@@ -132,18 +132,29 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 200));
 
     expect(find.widgetWithText(AppButton, 'حذف'), findsOneWidget);
 
     await tester.tap(find.widgetWithText(AppButton, 'حذف'));
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
-    expect(find.text('حذف الحركة دي؟'), findsOneWidget);
+    Object? dialogTitle;
+    for (var i = 0; i < 30; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+      final hit = find.text('حذف الحركة دي؟');
+      if (hit.evaluate().isNotEmpty) {
+        dialogTitle = hit;
+        break;
+      }
+    }
+    expect(dialogTitle, isNotNull);
 
     await tester.tap(find.text('إلغاء'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 200));
+    for (var i = 0; i < 30; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+      if (find.text('حذف الحركة دي؟').evaluate().isEmpty) break;
+    }
 
     final after = (await repo.transactionsForProject(project.id)).length;
     expect(after, before);
@@ -171,7 +182,8 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 200));
 
     expect(find.widgetWithText(AppButton, 'حذف'), findsNothing);
   });

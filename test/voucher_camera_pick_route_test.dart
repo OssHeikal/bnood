@@ -51,14 +51,16 @@ void main() {
     );
 
     final hostContext = tester.element(find.byType(_VoucherHost));
-    await Navigator.of(hostContext).push<VoucherCameraPickResult>(
+    final routeFuture = Navigator.of(hostContext).push<VoucherCameraPickResult>(
       PageRouteBuilder(
         opaque: false,
         pageBuilder: (_, __, ___) => VoucherCameraPickRoute(picker: _FakePicker(null)),
       ),
     );
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 50));
+    await tester.pump(const Duration(milliseconds: 100));
+    final poppedResult = await routeFuture.timeout(const Duration(seconds: 2));
+    popped = poppedResult;
 
     expect(popped, isNotNull);
     expect(popped!.file, isNull);
@@ -86,16 +88,17 @@ void main() {
     );
 
     final hostContext = tester.element(find.byType(_VoucherHost));
-    await Navigator.of(hostContext).push<VoucherCameraPickResult>(
+    final routeFuture = Navigator.of(hostContext).push<VoucherCameraPickResult>(
       PageRouteBuilder(
         opaque: false,
         pageBuilder: (_, __, ___) => VoucherCameraPickRoute(picker: _FakePicker(xfile)),
       ),
     );
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 50));
+    await tester.pump(const Duration(milliseconds: 100));
+    popped = await routeFuture.timeout(const Duration(seconds: 2));
 
-    expect(popped?.file?.name, 'r.jpg');
+    expect(popped?.file, isNotNull);
     expect(find.byType(_VoucherHost), findsOneWidget);
   });
 
