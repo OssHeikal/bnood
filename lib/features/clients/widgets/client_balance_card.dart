@@ -12,7 +12,7 @@ import '../../../app/widgets/shell_nav_icon.dart';
 import '../../../l10n/app_localizations.dart';
 
 /// Client row: stripe inside card, remaining under name, in/out in trailing column.
-/// Supplier mode (`meta` only): meta under name, amount in trailing column (unchanged).
+/// Amount-only trailing (`showAmountCaption: false`): name and amount, no subtitle.
 class ClientBalanceCard extends StatelessWidget {
   const ClientBalanceCard({
     super.key,
@@ -24,6 +24,7 @@ class ClientBalanceCard extends StatelessWidget {
     required this.onTap,
     this.amountRole = AppAmountRole.remaining,
     this.amountCaption,
+    this.showAmountCaption = true,
     this.receivedPiastres,
     this.spentPiastres,
   });
@@ -38,6 +39,7 @@ class ClientBalanceCard extends StatelessWidget {
   final VoidCallback onTap;
   final AppAmountRole amountRole;
   final String? amountCaption;
+  final bool showAmountCaption;
 
   static const _stripeWidth = 4.0;
 
@@ -46,7 +48,9 @@ class ClientBalanceCard extends StatelessWidget {
     final colors = context.colors;
     final text = context.text;
     final accent = legacy.AppColors.accent(accentKey);
-    final caption = amountCaption ?? AppLocalizations.of(context).remaining;
+    final caption = showAmountCaption
+        ? (amountCaption ?? AppLocalizations.of(context).remaining)
+        : null;
     final showClientFlows = receivedPiastres != null && spentPiastres != null;
 
     return AppCard(
@@ -115,7 +119,8 @@ class ClientBalanceCard extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(caption, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
+                                  if (caption != null)
+                                    Text(caption, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
                                   AppAmount(
                                     piastres: amountPiastres,
                                     role: amountRole,

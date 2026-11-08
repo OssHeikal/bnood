@@ -19,6 +19,7 @@ void main() {
           homeTotalsOverride(const HomeTotals(receivedPiastres: 2500000, spentPiastres: 1800000)),
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
+          emptyHomeCraftsmenOverride(),
         ],
         child: const MaterialApp(
           locale: Locale('en'),

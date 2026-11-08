@@ -1,8 +1,10 @@
 import 'package:bnood/core/database/database.dart';
+import 'package:bnood/core/widgets/app_amount.dart';
 import 'package:bnood/core/providers/app_providers.dart';
 import 'package:bnood/core/providers/dashboard_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/features/home/home_screen.dart';
+import 'package:bnood/features/home/widgets/home_person_card.dart';
 import 'support/home_notifier_stubs.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +16,12 @@ void main() {
     WidgetTester tester, {
     HomeTotals? totals,
     List<HomeClientBalanceRow>? clients,
+    List<HomeSupplierSpendRow>? suppliers,
     Locale locale = const Locale('en'),
     TextScaler textScaler = TextScaler.noScaling,
+    Size surface = const Size(390, 844),
   }) async {
-    await tester.binding.setSurfaceSize(const Size(390, 844));
+    await tester.binding.setSurfaceSize(surface);
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(
@@ -25,7 +29,10 @@ void main() {
         overrides: [
           if (totals != null) homeTotalsOverride(totals),
           if (clients != null) homeClientBalancesOverride(clients),
-          emptyHomeSupplierSpendsOverride(),
+          suppliers != null
+              ? homeSupplierSpendsOverride(suppliers)
+              : emptyHomeSupplierSpendsOverride(),
+          emptyHomeCraftsmenOverride(),
         ],
         child: MaterialApp(
           locale: locale,
@@ -129,5 +136,37 @@ void main() {
     );
 
     expect(find.text('See all'), findsWidgets);
+  });
+
+  testWidgets('supplier spend is last and shows the amount without a label', (tester) async {
+    final now = DateTime.utc(2026, 11, 1);
+    await pumpHome(
+      tester,
+      totals: const HomeTotals(receivedPiastres: 0, spentPiastres: 0),
+      clients: const [],
+      surface: const Size(390, 1400),
+      suppliers: [
+        HomeSupplierSpendRow(
+          supplier: Supplier(
+            id: 's1',
+            workspaceId: 'w',
+            name: 'Steel Co',
+            createdAt: now,
+            updatedAt: now,
+          ),
+          spentPiastres: 1800000,
+        ),
+      ],
+    );
+
+    final craftsmenTitle = tester.getTopLeft(find.text('Craftsmen with recent labor'));
+    final supplierTitle = tester.getTopLeft(find.text('Supplier material spend'));
+    expect(craftsmenTitle.dy, lessThan(supplierTitle.dy));
+
+    final card = find.widgetWithText(HomePersonCard, 'Steel Co');
+    expect(find.descendant(of: card, matching: find.text('Paid')), findsNothing);
+    expect(find.descendant(of: card, matching: find.text('Remaining')), findsNothing);
+    expect(find.descendant(of: card, matching: find.text('Active clients only')), findsNothing);
+    expect(find.descendant(of: card, matching: find.byType(AppAmount)), findsOneWidget);
   });
 }

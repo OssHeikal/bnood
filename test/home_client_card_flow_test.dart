@@ -58,12 +58,11 @@ void main() {
     expect(spendIcon.center.dy - receiveIcon.center.dy, greaterThan(AppSize.spaceXS));
 
     final nameRect = tester.getRect(find.text(name));
-    final remainingLabel = find.text(locale.languageCode == 'ar' ? 'المتبقي' : 'Remaining');
-    expect(remainingLabel, findsOneWidget);
-    final remainingRect = tester.getRect(remainingLabel);
+    final amounts = find.descendant(of: find.byType(HomePersonCard), matching: find.byType(AppAmount));
+    expect(amounts, findsNWidgets(3));
+    final remainingRect = tester.getRect(amounts.at(0));
     expect(remainingRect.top, greaterThan(nameRect.bottom - 2));
 
-    final card = tester.getRect(find.byType(AppCard));
     if (locale.languageCode == 'en') {
       expect(receiveIcon.center.dx, greaterThan(nameRect.center.dx));
       expect(receiveIcon.right, greaterThan(nameRect.right - 8));
@@ -71,9 +70,6 @@ void main() {
       expect(receiveIcon.center.dx, lessThan(nameRect.center.dx));
       expect(receiveIcon.left, lessThan(nameRect.left + 8));
     }
-
-    final amounts = find.descendant(of: find.byType(HomePersonCard), matching: find.byType(AppAmount));
-    expect(amounts, findsNWidgets(3));
   }
 
   testWidgets('client card: remaining under name, in/out in trailing column EN', (tester) async {
@@ -125,7 +121,7 @@ void main() {
     expect(amounts, findsNWidgets(3));
   });
 
-  testWidgets('supplier meta mode keeps amount in trailing not in/out column', (tester) async {
+  testWidgets('supplier amount stays trailing without subtitle or label', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 200));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -139,9 +135,9 @@ void main() {
           child: Scaffold(
             body: HomePersonCard(
               name: 'Supplier X',
-              meta: 'Total spend',
               amountPiastres: 120000,
               amountRole: AppAmountRole.spend,
+              showAmountCaption: false,
               accentKey: 'blue',
               localeCode: 'en',
               onTap: () {},
@@ -153,8 +149,11 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(ShellNavIcon), findsNothing);
-    expect(find.text('Total spend'), findsOneWidget);
-    expect(find.text('Remaining'), findsOneWidget);
+    expect(find.text('Remaining'), findsNothing);
+    expect(find.text('Paid'), findsNothing);
     expect(find.byType(AppAmount), findsOneWidget);
+    final name = tester.getTopLeft(find.text('Supplier X'));
+    final amount = tester.getTopLeft(find.byType(AppAmount));
+    expect(amount.dx, greaterThan(name.dx));
   });
 }

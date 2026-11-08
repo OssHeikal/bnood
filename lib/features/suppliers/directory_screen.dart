@@ -415,6 +415,7 @@ class _DirectoryCraftsmenTab extends ConsumerWidget {
                   DirectoryPersonCard(
                     name: list[i].craftsman.name,
                     paidPiastres: list[i].paidPiastres,
+                    paidInTrailing: true,
                     accentKey: directoryAccentKeyFor(list[i].craftsman.id),
                     localeCode: localeCode,
                     onOpenDetail: () => context.push('/craftsmen/${list[i].craftsman.id}'),

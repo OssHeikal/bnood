@@ -14,6 +14,7 @@ import '../../../l10n/app_localizations.dart';
 enum _DirectoryPersonMenuAction { details, archive }
 
 /// Directory list row: stripe, avatar, name, paid subtitle, overflow menu.
+/// Craftsman rows set [paidInTrailing]: paid amount at the end, remaining amount under the name.
 class DirectoryPersonCard extends StatelessWidget {
   const DirectoryPersonCard({
     super.key,
@@ -24,11 +25,15 @@ class DirectoryPersonCard extends StatelessWidget {
     required this.onOpenDetail,
     this.onArchive,
     this.trade,
+    this.remainingPiastres,
+    this.paidInTrailing = false,
     this.showOverflowMenu = true,
   });
 
   final String name;
   final int paidPiastres;
+  final int? remainingPiastres;
+  final bool paidInTrailing;
   final String accentKey;
   final String localeCode;
   final VoidCallback onOpenDetail;
@@ -60,11 +65,11 @@ class DirectoryPersonCard extends StatelessWidget {
               child: AppPressable(
                 onPressed: onOpenDetail,
                 child: Padding(
-                  padding: const EdgeInsetsDirectional.only(
+                  padding: EdgeInsetsDirectional.only(
                     start: AppSize.spaceLG,
                     top: AppSize.spaceMD,
                     bottom: AppSize.spaceMD,
-                    end: AppSize.spaceSM,
+                    end: paidInTrailing && !showOverflowMenu ? AppSize.spaceLG : AppSize.spaceSM,
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,28 +96,54 @@ class DirectoryPersonCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ],
-                            const SizedBox(height: 2),
-                            Row(
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    '${l10n.paid}: ',
-                                    style: text.caption.copyWith(color: colors.onSurfaceMuted),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                AppAmount(
-                                  piastres: paidPiastres,
-                                  role: AppAmountRole.spend,
+                            if (paidInTrailing && remainingPiastres != null) ...[
+                              const SizedBox(height: 2),
+                              Align(
+                                alignment: AlignmentDirectional.centerStart,
+                                child: AppAmount(
+                                  piastres: remainingPiastres!,
+                                  role: AppAmountRole.remaining,
                                   size: AppAmountSize.small,
                                   localeCode: localeCode,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
+                            if (!paidInTrailing) ...[
+                              const SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      '${l10n.paid}: ',
+                                      style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  AppAmount(
+                                    piastres: paidPiastres,
+                                    role: AppAmountRole.spend,
+                                    size: AppAmountSize.small,
+                                    localeCode: localeCode,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ],
                         ),
                       ),
+                      if (paidInTrailing) ...[
+                        AppSize.spaceSM.gap,
+                        Align(
+                          alignment: AlignmentDirectional.centerEnd,
+                          child: AppAmount(
+                            piastres: paidPiastres,
+                            role: AppAmountRole.spend,
+                            size: AppAmountSize.small,
+                            localeCode: localeCode,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

@@ -94,3 +94,15 @@ Override homeSupplierSpendsOverride(List<HomeSupplierSpendRow> rows) =>
     homeSupplierSpendsProvider.overrideWith(() => StubHomeSupplierSpendsNotifier(rows));
 
 Override emptyHomeSupplierSpendsOverride() => homeSupplierSpendsOverride(const []);
+
+class StubHomeCraftsmenNotifier extends HomeCraftsmenNotifier {
+  StubHomeCraftsmenNotifier(this.rows);
+
+  final List<HomeCraftsmanActivityRow> rows;
+
+  @override
+  Future<List<HomeCraftsmanActivityRow>> fetch() async => rows;
+}
+
+Override emptyHomeCraftsmenOverride() =>
+    homeCraftsmenProvider.overrideWith(() => StubHomeCraftsmenNotifier(const []));

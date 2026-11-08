@@ -591,9 +591,12 @@ class BnoodRepository {
 
     final paidTotals = await craftsmanLaborPaidTotals();
     final lastByCraftsman = <String, ({DateTime date, DateTime createdAt, String txId})>{};
+    final paidOnProject = <String, int>{};
     for (final row in labor) {
       final id = row.craftsmanId;
       if (id == null) continue;
+      final projectKey = '$id|${row.projectId}';
+      paidOnProject[projectKey] = (paidOnProject[projectKey] ?? 0) + row.amountPiastres;
       final candidate = (date: row.date, createdAt: row.createdAt, txId: row.id);
       final prev = lastByCraftsman[id];
       if (prev == null ||
@@ -606,8 +609,33 @@ class BnoodRepository {
       }
     }
 
+    final craftsmanIds = lastByCraftsman.keys.toList();
+    final agreements = craftsmanIds.isEmpty
+        ? const <ProjectCraftsmanAgreement>[]
+        : await (_db.select(_db.projectCraftsmanAgreements)
+              ..where(
+                (a) => a.craftsmanId.isIn(craftsmanIds) & a.projectId.isIn(projectIds.toList()),
+              ))
+            .get();
+
+    int? remainingFor(String craftsmanId) {
+      var sum = 0;
+      var anySet = false;
+      for (final agreement in agreements) {
+        if (agreement.craftsmanId != craftsmanId) continue;
+        final remaining = LedgerMath.craftsmanRemainingPiastres(
+          initialAmountPiastres: agreement.initialAmountPiastres,
+          paidPiastres: paidOnProject['$craftsmanId|${agreement.projectId}'] ?? 0,
+        );
+        if (remaining == null) continue;
+        anySet = true;
+        sum += remaining;
+      }
+      return anySet ? sum : null;
+    }
+
     final craftsmen = await (_db.select(_db.craftsmen)
-          ..where((c) => c.id.isIn(lastByCraftsman.keys.toList()) & c.archivedAt.isNull()))
+          ..where((c) => c.id.isIn(craftsmanIds) & c.archivedAt.isNull()))
         .get();
 
     final rows = [
@@ -616,6 +644,7 @@ class BnoodRepository {
           craftsman: c,
           paidPiastres: paidTotals[c.id] ?? 0,
           lastLaborAt: lastByCraftsman[c.id]!.date,
+          remainingPiastres: remainingFor(c.id),
         ),
     ]..sort((a, b) {
         final aStamp = lastByCraftsman[a.craftsman.id]!;
@@ -917,11 +946,13 @@ class HomeCraftsmanActivityRow {
     required this.craftsman,
     required this.paidPiastres,
     required this.lastLaborAt,
+    required this.remainingPiastres,
   });
 
   final CraftsmenData craftsman;
   final int paidPiastres;
   final DateTime lastLaborAt;
+  final int? remainingPiastres;
 }
 
 class HomeClientBalanceRow {

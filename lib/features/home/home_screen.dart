@@ -128,56 +128,6 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 AppSize.spaceXL.gap,
                 HomeSectionHeader(
-                  title: l10n.homeSupplierSpendSection,
-                  seeAllLabel: l10n.seeAll,
-                  onSeeAll: () => context.go('/directory'),
-                ),
-                AppSize.spaceSM.gap,
-                AsyncValueBody(
-                  value: suppliers,
-                  loadingPlaceholder: const HomePersonListSkeleton(count: 1),
-                  error: (e, _) => AppFallback(
-                    isError: true,
-                    icon: Icons.error_outline,
-                    title: l10n.homeLoadErrorTitle,
-                    actionLabel: l10n.retry,
-                    onAction: () => ref.read(homeSupplierSpendsProvider.notifier).refreshSilently(),
-                  ),
-                  data: (rows) {
-                    if (rows.isEmpty) {
-                      final colors = context.colors;
-                      return AppCard(
-                        child: AppFallback.section(
-                          leading: ShellNavIcon(
-                            asset: Assets.icons.materialsPackageOutline,
-                            color: colors.muted,
-                            size: AppSize.icon,
-                          ),
-                          title: l10n.homeNoSupplierSpendTitle,
-                          description: l10n.homeNoSupplierSpendDescription,
-                        ),
-                      );
-                    }
-                    return Column(
-                      children: [
-                        for (var i = 0; i < rows.length; i++) ...[
-                          if (i > 0) AppSize.spaceMD.gap,
-                          HomePersonCard(
-                            name: rows[i].supplier.name,
-                            meta: l10n.homeSupplierSpendMeta,
-                            amountPiastres: rows[i].spentPiastres,
-                            amountRole: AppAmountRole.spend,
-                            accentKey: homeAccentKeyFor(rows[i].supplier.id),
-                            localeCode: localeCode,
-                            onTap: () => context.push('/suppliers/${rows[i].supplier.id}'),
-                          ),
-                        ],
-                      ],
-                    );
-                  },
-                ),
-                AppSize.spaceXL.gap,
-                HomeSectionHeader(
                   title: l10n.homeCraftsmenSection,
                   seeAllLabel: l10n.seeAll,
                   onSeeAll: () => context.go('/directory?tab=craftsmen'),
@@ -223,10 +173,62 @@ class HomeScreen extends ConsumerWidget {
                             name: rows[i].craftsman.name,
                             trade: rows[i].craftsman.trade,
                             paidPiastres: rows[i].paidPiastres,
+                            remainingPiastres: rows[i].remainingPiastres,
+                            paidInTrailing: true,
                             accentKey: homeAccentKeyFor(rows[i].craftsman.id),
                             localeCode: localeCode,
                             showOverflowMenu: false,
                             onOpenDetail: () => context.push('/craftsmen/${rows[i].craftsman.id}'),
+                          ),
+                        ],
+                      ],
+                    );
+                  },
+                ),
+                AppSize.spaceXL.gap,
+                HomeSectionHeader(
+                  title: l10n.homeSupplierSpendSection,
+                  seeAllLabel: l10n.seeAll,
+                  onSeeAll: () => context.go('/directory'),
+                ),
+                AppSize.spaceSM.gap,
+                AsyncValueBody(
+                  value: suppliers,
+                  loadingPlaceholder: const HomePersonListSkeleton(count: 1),
+                  error: (e, _) => AppFallback(
+                    isError: true,
+                    icon: Icons.error_outline,
+                    title: l10n.homeLoadErrorTitle,
+                    actionLabel: l10n.retry,
+                    onAction: () => ref.read(homeSupplierSpendsProvider.notifier).refreshSilently(),
+                  ),
+                  data: (rows) {
+                    if (rows.isEmpty) {
+                      final colors = context.colors;
+                      return AppCard(
+                        child: AppFallback.section(
+                          leading: ShellNavIcon(
+                            asset: Assets.icons.materialsPackageOutline,
+                            color: colors.muted,
+                            size: AppSize.icon,
+                          ),
+                          title: l10n.homeNoSupplierSpendTitle,
+                          description: l10n.homeNoSupplierSpendDescription,
+                        ),
+                      );
+                    }
+                    return Column(
+                      children: [
+                        for (var i = 0; i < rows.length; i++) ...[
+                          if (i > 0) AppSize.spaceMD.gap,
+                          HomePersonCard(
+                            name: rows[i].supplier.name,
+                            amountPiastres: rows[i].spentPiastres,
+                            amountRole: AppAmountRole.spend,
+                            showAmountCaption: false,
+                            accentKey: homeAccentKeyFor(rows[i].supplier.id),
+                            localeCode: localeCode,
+                            onTap: () => context.push('/suppliers/${rows[i].supplier.id}'),
                           ),
                         ],
                       ],
