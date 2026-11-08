@@ -442,6 +442,20 @@ class BnoodRepository {
         .getSingle();
   }
 
+  /// Create project↔craftsman agreement when missing only (never changes amount).
+  Future<void> ensureProjectCraftsmanLink({
+    required String projectId,
+    required String craftsmanId,
+  }) async {
+    final existing = await (_db.select(_db.projectCraftsmanAgreements)
+          ..where((a) =>
+              a.projectId.equals(projectId) &
+              a.craftsmanId.equals(craftsmanId)))
+        .getSingleOrNull();
+    if (existing != null) return;
+    await upsertAgreement(projectId: projectId, craftsmanId: craftsmanId);
+  }
+
   // --- Transactions ---
 
   Stream<List<Transaction>> watchProjectTransactions(String projectId) {

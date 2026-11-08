@@ -350,6 +350,24 @@ abstract class AppLocalizations {
   /// **'e.g. Tower North'**
   String get clientNameHint;
 
+  /// No description provided for @pickFromContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from contacts'**
+  String get pickFromContacts;
+
+  /// No description provided for @contactPickFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open contacts. You can still enter details manually.'**
+  String get contactPickFailed;
+
+  /// No description provided for @contactPickChoosePhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a phone number'**
+  String get contactPickChoosePhone;
+
   /// No description provided for @phoneOptional.
   ///
   /// In en, this message translates to:

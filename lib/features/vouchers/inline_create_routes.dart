@@ -7,6 +7,7 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
+import '../../core/contacts/contact_import_action.dart';
 import '../../core/widgets/custom_text_field.dart';
 import 'inline_entity_create_shell.dart';
 
@@ -67,6 +68,12 @@ class _InlineCreateClientPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            ContactImportAction(
+              nameController: _name,
+              phoneController: _phone,
+              enabled: !_saving,
+            ),
+            AppSize.spaceMD.gap,
             CustomTextField(
               controller: _name,
               label: l10n.clientName,
@@ -321,6 +328,12 @@ class _InlineCreateCraftsmanPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            ContactImportAction(
+              nameController: _name,
+              phoneController: _phone,
+              enabled: !_saving,
+            ),
+            AppSize.spaceMD.gap,
             CustomTextField(
               controller: _name,
               label: l10n.craftsman,

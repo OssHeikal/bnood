@@ -238,15 +238,16 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
 
   Future<void> _pickCraftsman() async {
     final draft = ref.read(voucherDraftProvider);
-    final projectId = draft.projectId;
-    if (projectId == null) return;
-    final craftsmen = await ref
-        .read(repositoryProvider)
-        .craftsmenAssignedToProject(projectId);
+    if (draft.projectId == null) {
+      setState(() => _craftsmanPickerError = AppLocalizations.of(context).voucherSelectClient);
+      return;
+    }
+    final craftsmen =
+        await ref.read(repositoryProvider).watchActiveCraftsmen().first;
     if (!mounted) return;
     final l10n = AppLocalizations.of(context);
     if (craftsmen.isEmpty) {
-      AppToaster.show(l10n.voucherAssignCraftsmanFirst, kind: ToastKind.warning);
+      AppToaster.show(l10n.voucherSelectCraftsman, kind: ToastKind.warning);
       return;
     }
     final picked = await Navigator.of(context).push<String>(
@@ -271,11 +272,8 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ),
     );
     if (picked == null) return;
-    await ref
-        .read(repositoryProvider)
-        .upsertAgreement(projectId: projectId, craftsmanId: picked);
-    final c = await ref.read(repositoryProvider).getCraftsman(picked);
-    final label = c?.name ?? picked;
+    final c = craftsmen.firstWhere((e) => e.id == picked);
+    final label = c.name;
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
         .copyWith(craftsmanId: picked, craftsmanLabel: label);
@@ -392,6 +390,15 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           supplierId:
               draft.expenseType == 'materials' ? draft.supplierId : null,
           craftsmanId: draft.expenseType == 'labor' ? draft.craftsmanId : null,
+        );
+      }
+      if (draft.kind == 'spend' &&
+          draft.expenseType == 'labor' &&
+          draft.craftsmanId != null &&
+          draft.projectId != null) {
+        await repo.ensureProjectCraftsmanLink(
+          projectId: draft.projectId!,
+          craftsmanId: draft.craftsmanId!,
         );
       }
       refreshAfterTransactionMutation(

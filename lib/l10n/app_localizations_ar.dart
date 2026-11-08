@@ -139,6 +139,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientNameHint => 'مثال: برج الشمال';
 
   @override
+  String get pickFromContacts => 'اختيار من جهات الاتصال';
+
+  @override
+  String get contactPickFailed =>
+      'تعذّر فتح جهات الاتصال. يمكنك الإدخال يدوياً.';
+
+  @override
+  String get contactPickChoosePhone => 'اختر رقم التليفون';
+
+  @override
   String get phoneOptional => 'التليفون (اختياري)';
 
   @override

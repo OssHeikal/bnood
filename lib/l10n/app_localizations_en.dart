@@ -141,6 +141,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientNameHint => 'e.g. Tower North';
 
   @override
+  String get pickFromContacts => 'Choose from contacts';
+
+  @override
+  String get contactPickFailed =>
+      'Could not open contacts. You can still enter details manually.';
+
+  @override
+  String get contactPickChoosePhone => 'Choose a phone number';
+
+  @override
   String get phoneOptional => 'Phone (optional)';
 
   @override

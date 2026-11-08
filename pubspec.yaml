@@ -1,7 +1,7 @@
 name: bnood
 description: Bnood بنود — local client fund tracking for site engineers.
 publish_to: "none"
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.11.0
@@ -29,6 +29,7 @@ dependencies:
   flutter_svg: ^2.0.17
   vector_graphics: ^1.2.6
   shared_preferences: ^2.5.3
+  flutter_native_contact_picker: ^0.0.12
 
 dev_dependencies:
   flutter_test:
