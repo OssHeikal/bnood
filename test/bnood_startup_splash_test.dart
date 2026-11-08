@@ -26,6 +26,7 @@ Future<void> _pumpRoot(WidgetTester tester) async {
     ProviderScope(
       overrides: [
         appSettingsBootstrapProvider.overrideWithValue(_testBootstrap()),
+        sessionStoreProvider.overrideWithValue(FakeSessionStore()),
       ],
       child: const BnoodApp(),
     ),
@@ -62,8 +63,9 @@ void main() {
     expect(find.byType(ShellScaffold), findsNothing);
     await _elapseSplash(tester);
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 200));
-    await tester.pumpAndSettle();
+    for (var i = 0; i < 8; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
     expect(find.byType(BnoodStartupSplash), findsNothing);
     expect(BnoodSplashSession.completed, isTrue);
     expect(find.byType(HomeScreen), findsOneWidget);
@@ -85,8 +87,9 @@ void main() {
       ),
     );
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 200));
-    await tester.pumpAndSettle();
+    for (var i = 0; i < 8; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
     expect(find.byType(BnoodStartupSplash), findsNothing);
     expect(find.byType(HomeScreen), findsOneWidget);
   });
