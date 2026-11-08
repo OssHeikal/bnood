@@ -5,11 +5,11 @@ import 'package:http/http.dart' as http;
 
 import '../config/api_config.dart';
 import 'api_response_parser.dart';
-import 'subscriber_api_exception.dart';
-import '../../features/auth/models/subscriber_user.dart';
+import 'auth_api_exception.dart';
+import '../../features/auth/models/user.dart';
 
-class SubscriberAuthApi {
-  SubscriberAuthApi({http.Client? client}) : _client = client ?? http.Client();
+class AuthApi {
+  AuthApi({http.Client? client}) : _client = client ?? http.Client();
 
   final http.Client _client;
 
@@ -53,7 +53,7 @@ class SubscriberAuthApi {
         ApiResponseParser.decodeJson(response),
       );
     } catch (e) {
-      if (e is SubscriberApiException) rethrow;
+      if (e is AuthApiException) rethrow;
       throw ApiResponseParser.transport(e);
     }
   }
@@ -73,7 +73,7 @@ class SubscriberAuthApi {
         ApiResponseParser.decodeJson(response),
       );
     } catch (e) {
-      if (e is SubscriberApiException) rethrow;
+      if (e is AuthApiException) rethrow;
       throw ApiResponseParser.transport(e);
     }
   }
@@ -100,7 +100,7 @@ class SubscriberAuthApi {
         ApiResponseParser.decodeJson(response),
       );
     } catch (e) {
-      if (e is SubscriberApiException) rethrow;
+      if (e is AuthApiException) rethrow;
       throw ApiResponseParser.transport(e);
     }
   }
@@ -121,12 +121,12 @@ class SubscriberAuthApi {
       );
       return ApiResponseParser.expectData(response, AuthSessionPayload.fromJson);
     } catch (e) {
-      if (e is SubscriberApiException) rethrow;
+      if (e is AuthApiException) rethrow;
       throw ApiResponseParser.transport(e);
     }
   }
 
-  Future<SubscriberUser> me(String bearer) async {
+  Future<User> me(String bearer) async {
     try {
       final response = await _client.get(
         _uri('${ApiConfig.subscriberAuthPrefix}/me'),
@@ -134,13 +134,13 @@ class SubscriberAuthApi {
       );
       final user = ApiResponseParser.expectData(
         response,
-        (data) => SubscriberUser.fromJson(
+        (data) => User.fromJson(
           (data?['user'] as Map<String, dynamic>?) ?? data!,
         ),
       );
       return user;
     } catch (e) {
-      if (e is SubscriberApiException) rethrow;
+      if (e is AuthApiException) rethrow;
       throw ApiResponseParser.transport(e);
     }
   }
@@ -153,7 +153,7 @@ class SubscriberAuthApi {
       );
       ApiResponseParser.expectSuccess(response);
     } catch (e) {
-      if (e is SubscriberApiException) rethrow;
+      if (e is AuthApiException) rethrow;
       throw ApiResponseParser.transport(e);
     }
   }
@@ -173,7 +173,7 @@ class SubscriberAuthApi {
         ApiResponseParser.decodeJson(response),
       );
     } catch (e) {
-      if (e is SubscriberApiException) rethrow;
+      if (e is AuthApiException) rethrow;
       throw ApiResponseParser.transport(e);
     }
   }
@@ -193,7 +193,7 @@ class SubscriberAuthApi {
       );
       return ApiResponseParser.expectData(response, ResetAuthorization.fromJson);
     } catch (e) {
-      if (e is SubscriberApiException) rethrow;
+      if (e is AuthApiException) rethrow;
       throw ApiResponseParser.transport(e);
     }
   }
@@ -215,7 +215,7 @@ class SubscriberAuthApi {
       );
       ApiResponseParser.expectSuccess(response);
     } catch (e) {
-      if (e is SubscriberApiException) rethrow;
+      if (e is AuthApiException) rethrow;
       throw ApiResponseParser.transport(e);
     }
   }
@@ -238,7 +238,7 @@ class SubscriberAuthApi {
       );
       ApiResponseParser.expectSuccess(response);
     } catch (e) {
-      if (e is SubscriberApiException) rethrow;
+      if (e is AuthApiException) rethrow;
       throw ApiResponseParser.transport(e);
     }
   }
@@ -310,12 +310,12 @@ class AuthSessionPayload {
   });
 
   final String token;
-  final SubscriberUser user;
+  final User user;
 
   factory AuthSessionPayload.fromJson(Map<String, dynamic>? json) {
     return AuthSessionPayload(
       token: json!['token'] as String,
-      user: SubscriberUser.fromJson(json['user'] as Map<String, dynamic>),
+      user: User.fromJson(json['user'] as Map<String, dynamic>),
     );
   }
 }

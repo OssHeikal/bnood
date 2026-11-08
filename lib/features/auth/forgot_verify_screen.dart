@@ -57,7 +57,7 @@ class _ForgotVerifyScreenState extends ConsumerState<ForgotVerifyScreen> {
       _codeError = fieldErrorFor(error, 'code');
     });
     if (_codeError == null) {
-      AppToaster.show(subscriberAuthMessage(l10n, error), kind: ToastKind.failure);
+      AppToaster.show(authApiMessage(l10n, error), kind: ToastKind.failure);
     }
   }
 
@@ -79,26 +79,34 @@ class _ForgotVerifyScreenState extends ConsumerState<ForgotVerifyScreen> {
     return AuthFlowScaffold(
       title: l10n.authVerificationTitle,
       subtitle: l10n.authRecoveryVerifySubtitle,
-      body: Form(
-        key: _formKey,
-        autovalidateMode:
-            _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(LtrIsolate.isolate(pending.phone), style: context.text.body),
-            AppSize.spaceLG.gap,
-            CustomTextField(
-              controller: _code,
-              label: l10n.authVerificationCode,
-              ltrValue: true,
-              fieldHeight: AppSize.fieldHeightComfortable,
-              errorMessage: _codeError,
-              textInputAction: TextInputAction.done,
-              validator: (v) => validateVerificationCode(l10n, v),
+      body: Builder(
+        builder: (context) {
+          return Form(
+            key: _formKey,
+            autovalidateMode: _attemptedSubmit
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  LtrIsolate.isolate(pending.phone),
+                  style: context.text.body,
+                ),
+                AppSize.spaceLG.gap,
+                CustomTextField(
+                  controller: _code,
+                  label: l10n.authVerificationCode,
+                  ltrValue: true,
+                  fieldHeight: AppSize.fieldHeightComfortable,
+                  errorMessage: _codeError,
+                  textInputAction: TextInputAction.done,
+                  validator: (v) => validateVerificationCode(l10n, v),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
       footer: AppButton.primary(
         text: l10n.authContinue,

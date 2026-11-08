@@ -1,8 +1,8 @@
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../core/api/subscriber_api_exception.dart';
+import '../../core/api/auth_api_exception.dart';
 
-String subscriberAuthMessage(AppLocalizations l10n, SubscriberApiException error) {
+String authApiMessage(AppLocalizations l10n, AuthApiException error) {
   if (error.isNetwork) return l10n.authNetworkError;
   if (error.isThrottled) return l10n.authThrottled;
   if (error.isInvalidCredentials) return l10n.authInvalidCredentials;
@@ -17,7 +17,7 @@ String subscriberAuthMessage(AppLocalizations l10n, SubscriberApiException error
   return error.message;
 }
 
-String? fieldErrorFor(SubscriberApiException error, String field) {
+String? fieldErrorFor(AuthApiException error, String field) {
   final list = error.fieldErrors?[field];
   if (list == null || list.isEmpty) return null;
   return list.first;

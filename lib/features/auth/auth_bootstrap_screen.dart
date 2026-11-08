@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
-import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/buttons/app_button.dart';
@@ -35,32 +34,37 @@ class _AuthBootstrapScreenState extends ConsumerState<AuthBootstrapScreen> {
     final showRetry = status == AuthBootstrapStatus.bootstrapNetworkError;
 
     return HomeFoundationScope(
-      child: Scaffold(
-      appBar: FoundationAppBar(title: l10n.appTitle),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSize.screenPadding),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (showRetry) ...[
-                Text(
-                  l10n.authNetworkError,
-                  style: context.text.body,
-                  textAlign: TextAlign.center,
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: FoundationAppBar(title: l10n.appTitle),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSize.screenPadding),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (showRetry) ...[
+                      Text(
+                        l10n.authNetworkError,
+                        style: context.text.body,
+                        textAlign: TextAlign.center,
+                      ),
+                      AppSize.spaceLG.gap,
+                      AppButton.primary(
+                        text: l10n.authBootstrapRetry,
+                        onPressed: () => ref
+                            .read(authControllerProvider.notifier)
+                            .retryBootstrap(),
+                      ),
+                    ] else
+                      const CircularProgressIndicator.adaptive(),
+                  ],
                 ),
-                AppSize.spaceLG.gap,
-                AppButton.primary(
-                  text: l10n.authBootstrapRetry,
-                  onPressed: () =>
-                      ref.read(authControllerProvider.notifier).retryBootstrap(),
-                ),
-              ] else
-                const CircularProgressIndicator.adaptive(),
-            ],
-          ),
-        ),
-      ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

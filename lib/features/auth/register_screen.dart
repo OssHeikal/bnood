@@ -65,7 +65,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       _passwordError = fieldErrorFor(error, 'password');
     });
     if (_phoneError == null && _passwordError == null) {
-      AppToaster.show(subscriberAuthMessage(l10n, error), kind: ToastKind.failure);
+      AppToaster.show(authApiMessage(l10n, error), kind: ToastKind.failure);
     }
   }
 

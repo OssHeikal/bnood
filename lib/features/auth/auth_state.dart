@@ -1,4 +1,4 @@
-import 'models/subscriber_user.dart';
+import 'models/user.dart';
 
 enum AuthBootstrapStatus {
   idle,
@@ -44,7 +44,7 @@ class AuthState {
   });
 
   final AuthBootstrapStatus bootstrapStatus;
-  final SubscriberUser? user;
+  final User? user;
   final PendingRegistration? pendingRegistration;
   final PendingRecovery? pendingRecovery;
   final String? resetToken;
@@ -60,7 +60,7 @@ class AuthState {
 
   AuthState copyWith({
     AuthBootstrapStatus? bootstrapStatus,
-    SubscriberUser? user,
+    User? user,
     bool clearUser = false,
     PendingRegistration? pendingRegistration,
     bool clearPendingRegistration = false,

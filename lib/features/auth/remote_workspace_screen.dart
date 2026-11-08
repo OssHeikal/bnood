@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
-import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/utils/extensions/bidi_isolate.dart';
@@ -25,53 +24,58 @@ class RemoteWorkspaceScreen extends ConsumerWidget {
     final user = ref.watch(authControllerProvider).user;
 
     return HomeFoundationScope(
-      child: Scaffold(
-      appBar: FoundationAppBar(title: l10n.authRemoteWorkspaceTitle),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSize.screenPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                l10n.authRemoteWorkspaceBody,
-                style: context.text.body,
-                textAlign: TextAlign.start,
-              ),
-              if (user != null) ...[
-                AppSize.spaceXL.gap,
-                Text(l10n.authSignedInAs, style: context.text.label),
-                AppSize.spaceXS.gap,
-                Text(
-                  LtrIsolate.isolate(user.phone),
-                  style: context.text.bodyEmphasis,
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: FoundationAppBar(title: l10n.authRemoteWorkspaceTitle),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSize.screenPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      l10n.authRemoteWorkspaceBody,
+                      style: context.text.body,
+                      textAlign: TextAlign.start,
+                    ),
+                    if (user != null) ...[
+                      AppSize.spaceXL.gap,
+                      Text(l10n.authSignedInAs, style: context.text.label),
+                      AppSize.spaceXS.gap,
+                      Text(
+                        LtrIsolate.isolate(user.phone),
+                        style: context.text.bodyEmphasis,
+                      ),
+                    ],
+                    const Spacer(),
+                    AppButton.primary(
+                      text: l10n.authChangePassword,
+                      onPressed: () => context.push(AuthPaths.changePassword),
+                    ),
+                    AppSize.spaceMD.gap,
+                    AppButton.outlined(
+                      text: l10n.authSignOut,
+                      onPressed: () async {
+                        final failure = await ref
+                            .read(authControllerProvider.notifier)
+                            .logout();
+                        if (!context.mounted) return;
+                        if (failure != null) {
+                          AppToaster.show(
+                            authApiMessage(l10n, failure),
+                            kind: ToastKind.warning,
+                          );
+                        }
+                        context.go(AuthPaths.login);
+                      },
+                    ),
+                  ],
                 ),
-              ],
-              const Spacer(),
-              AppButton.primary(
-                text: l10n.authChangePassword,
-                onPressed: () => context.push(AuthPaths.changePassword),
               ),
-              AppSize.spaceMD.gap,
-              AppButton.outlined(
-                text: l10n.authSignOut,
-                onPressed: () async {
-                  final failure =
-                      await ref.read(authControllerProvider.notifier).logout();
-                  if (!context.mounted) return;
-                  if (failure != null) {
-                    AppToaster.show(
-                      subscriberAuthMessage(l10n, failure),
-                      kind: ToastKind.warning,
-                    );
-                  }
-                  context.go(AuthPaths.login);
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        },
       ),
     );
   }

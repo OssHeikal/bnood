@@ -1,5 +1,5 @@
-class SubscriberApiException implements Exception {
-  SubscriberApiException({
+class AuthApiException implements Exception {
+  AuthApiException({
     required this.statusCode,
     required this.message,
     this.code,

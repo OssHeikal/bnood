@@ -1,11 +1,11 @@
-import 'package:bnood/core/api/subscriber_auth_api.dart';
-import 'package:bnood/core/api/subscriber_api_exception.dart';
+import 'package:bnood/core/api/auth_api.dart';
+import 'package:bnood/core/api/auth_api_exception.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 void main() {
-  group('SubscriberAuthApi', () {
+  group('AuthApi', () {
     test('login maps invalid_credentials', () async {
       final client = MockClient((request) async {
         expect(request.url.path, endsWith('/v1/auth/login'));
@@ -14,10 +14,10 @@ void main() {
           401,
         );
       });
-      final api = SubscriberAuthApi(client: client);
+      final api = AuthApi(client: client);
       expect(
         () => api.login(phone: '01012345678', password: 'wrongpass1'),
-        throwsA(isA<SubscriberApiException>().having((e) => e.isInvalidCredentials, 'invalid', isTrue)),
+        throwsA(isA<AuthApiException>().having((e) => e.isInvalidCredentials, 'invalid', isTrue)),
       );
       api.close();
     });
@@ -33,7 +33,7 @@ void main() {
           201,
         );
       });
-      final api = SubscriberAuthApi(client: client);
+      final api = AuthApi(client: client);
       final session = await api.verifyRegistration(
         registrationId: 'reg_1',
         code: '1111',
@@ -50,7 +50,7 @@ void main() {
           200,
         );
       });
-      final api = SubscriberAuthApi(client: client);
+      final api = AuthApi(client: client);
       final auth = await api.verifyForgotPassword(recoveryId: 'rec_1', code: '1111');
       expect(auth.resetToken, 'rst_1');
       api.close();

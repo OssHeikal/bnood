@@ -87,7 +87,7 @@ class _RegisterVerifyScreenState extends ConsumerState<RegisterVerifyScreen> {
       _codeError = fieldErrorFor(error, 'code');
     });
     if (_codeError == null) {
-      AppToaster.show(subscriberAuthMessage(l10n, error), kind: ToastKind.failure);
+      AppToaster.show(authApiMessage(l10n, error), kind: ToastKind.failure);
     }
   }
 
@@ -99,7 +99,7 @@ class _RegisterVerifyScreenState extends ConsumerState<RegisterVerifyScreen> {
     final l10n = AppLocalizations.of(context);
     setState(() => _resendLoading = false);
     if (error != null) {
-      AppToaster.show(subscriberAuthMessage(l10n, error), kind: ToastKind.failure);
+      AppToaster.show(authApiMessage(l10n, error), kind: ToastKind.failure);
       return;
     }
     final pending = ref.read(authControllerProvider).pendingRegistration;
@@ -125,35 +125,40 @@ class _RegisterVerifyScreenState extends ConsumerState<RegisterVerifyScreen> {
     return AuthFlowScaffold(
       title: l10n.authVerificationTitle,
       subtitle: l10n.authVerificationSubtitle,
-      body: Form(
-        key: _formKey,
-        autovalidateMode:
-            _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              l10n.authPhone,
-              style: context.text.label,
-              textAlign: TextAlign.start,
+      body: Builder(
+        builder: (context) {
+          return Form(
+            key: _formKey,
+            autovalidateMode: _attemptedSubmit
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  l10n.authPhone,
+                  style: context.text.label,
+                  textAlign: TextAlign.start,
+                ),
+                AppSize.spaceXS.gap,
+                Text(
+                  LtrIsolate.isolate(pending.phone),
+                  style: context.text.body,
+                ),
+                AppSize.spaceLG.gap,
+                CustomTextField(
+                  controller: _code,
+                  label: l10n.authVerificationCode,
+                  fieldHeight: AppSize.fieldHeightComfortable,
+                  ltrValue: true,
+                  errorMessage: _codeError,
+                  textInputAction: TextInputAction.done,
+                  validator: (v) => validateVerificationCode(l10n, v),
+                ),
+              ],
             ),
-            AppSize.spaceXS.gap,
-            Text(
-              LtrIsolate.isolate(pending.phone),
-              style: context.text.body,
-            ),
-            AppSize.spaceLG.gap,
-            CustomTextField(
-              controller: _code,
-              label: l10n.authVerificationCode,
-              fieldHeight: AppSize.fieldHeightComfortable,
-              ltrValue: true,
-              errorMessage: _codeError,
-              textInputAction: TextInputAction.done,
-              validator: (v) => validateVerificationCode(l10n, v),
-            ),
-          ],
-        ),
+          );
+        },
       ),
       footer: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

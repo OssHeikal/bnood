@@ -23,38 +23,42 @@ class AuthFlowScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HomeFoundationScope(
-      child: Scaffold(
-      appBar: FoundationAppBar(title: title),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSize.screenPadding,
-            AppSize.spaceMD,
-            AppSize.screenPadding,
-            AppSize.spaceLG,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (subtitle != null) ...[
-                Text(
-                  subtitle!,
-                  style: context.text.supporting,
-                  textAlign: TextAlign.start,
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: FoundationAppBar(title: title),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSize.screenPadding,
+                  AppSize.spaceMD,
+                  AppSize.screenPadding,
+                  AppSize.spaceLG,
                 ),
-                AppSize.spaceLG.gap,
-              ],
-              Expanded(
-                child: SingleChildScrollView(
-                  child: body,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (subtitle != null) ...[
+                      Text(
+                        subtitle!,
+                        style: context.text.supporting,
+                        textAlign: TextAlign.start,
+                      ),
+                      AppSize.spaceLG.gap,
+                    ],
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: body,
+                      ),
+                    ),
+                    AppSize.spaceMD.gap,
+                    footer,
+                  ],
                 ),
               ),
-              AppSize.spaceMD.gap,
-              footer,
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -1,6 +1,6 @@
 # Remote auth (phase 1)
 
-Flutter client talks to Laravel `POST/GET /api/v1/auth/*` (no `/mobile`).
+Flutter client talks to Laravel `POST/GET /api/v1/auth/*` (no `/mobile`). Domain models: `User` (phone app identity), `Staff` (admin backend); admin CRUD API paths remain `/api/admin/users`.
 
 ## API base URL
 

@@ -5,7 +5,7 @@ import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/providers/settings_provider.dart';
 import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
-import 'package:bnood/features/auth/models/subscriber_user.dart';
+import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/auth/remote_workspace_screen.dart';
 import 'package:bnood/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +37,7 @@ void main() {
     final element = tester.element(find.byType(BnoodApp));
     container = ProviderScope.containerOf(element);
     container.read(authControllerProvider.notifier).adoptSessionForTest(
-          const SubscriberUser(id: 'usr', phone: '+201012345678'),
+          const User(id: 'usr', phone: '+201012345678'),
         );
     await tester.pump();
     container.read(goRouterProvider).go('/home');

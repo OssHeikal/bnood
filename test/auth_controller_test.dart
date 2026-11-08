@@ -1,9 +1,9 @@
-import 'package:bnood/core/api/subscriber_auth_api.dart';
-import 'package:bnood/core/api/subscriber_auth_providers.dart';
+import 'package:bnood/core/api/auth_api.dart';
+import 'package:bnood/core/api/auth_api_providers.dart';
 import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
-import 'package:bnood/features/auth/models/subscriber_user.dart';
+import 'package:bnood/features/auth/models/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -22,7 +22,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           sessionStoreProvider.overrideWithValue(store),
-          subscriberAuthApiProvider.overrideWithValue(SubscriberAuthApi(client: client)),
+          authApiProvider.overrideWithValue(AuthApi(client: client)),
         ],
       );
       addTearDown(container.dispose);
@@ -45,7 +45,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           sessionStoreProvider.overrideWithValue(store),
-          subscriberAuthApiProvider.overrideWithValue(SubscriberAuthApi(client: client)),
+          authApiProvider.overrideWithValue(AuthApi(client: client)),
         ],
       );
       addTearDown(container.dispose);
@@ -64,7 +64,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           sessionStoreProvider.overrideWithValue(store),
-          subscriberAuthApiProvider.overrideWithValue(SubscriberAuthApi(client: client)),
+          authApiProvider.overrideWithValue(AuthApi(client: client)),
         ],
       );
       addTearDown(container.dispose);
@@ -99,7 +99,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           sessionStoreProvider.overrideWithValue(store),
-          subscriberAuthApiProvider.overrideWithValue(SubscriberAuthApi(client: client)),
+          authApiProvider.overrideWithValue(AuthApi(client: client)),
         ],
       );
       addTearDown(container.dispose);
@@ -120,7 +120,7 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
       container.read(authControllerProvider.notifier).adoptSessionForTest(
-            const SubscriberUser(id: 'u1', phone: '+201012345678'),
+            const User(id: 'u1', phone: '+201012345678'),
           );
       expect(container.read(authControllerProvider).user?.phone, '+201012345678');
     });

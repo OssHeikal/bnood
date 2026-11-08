@@ -1,5 +1,5 @@
 import 'package:bnood/core/api/api_response_parser.dart';
-import 'package:bnood/core/api/subscriber_api_exception.dart';
+import 'package:bnood/core/api/auth_api_exception.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 

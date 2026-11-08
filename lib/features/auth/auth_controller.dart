@@ -1,18 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/api/subscriber_api_exception.dart';
-import '../../core/api/subscriber_auth_api.dart';
-import '../../core/api/subscriber_auth_providers.dart';
+import '../../core/api/auth_api_exception.dart';
+import '../../core/api/auth_api.dart';
+import '../../core/api/auth_api_providers.dart';
 import '../../core/storage/session_store.dart';
 import 'auth_state.dart';
-import 'models/subscriber_user.dart';
+import 'models/user.dart';
 
 final authControllerProvider =
     NotifierProvider<AuthController, AuthState>(AuthController.new);
 
 class AuthController extends Notifier<AuthState> {
   SessionStore get _store => ref.read(sessionStoreProvider);
-  SubscriberAuthApi get _api => ref.read(subscriberAuthApiProvider);
+  AuthApi get _api => ref.read(authApiProvider);
 
   @override
   AuthState build() => const AuthState();
@@ -39,7 +39,7 @@ class AuthController extends Notifier<AuthState> {
         bootstrapStatus: AuthBootstrapStatus.authenticated,
         user: user,
       );
-    } on SubscriberApiException catch (e) {
+    } on AuthApiException catch (e) {
       if (e.isUnauthorized || e.isSessionExpired) {
         await _store.clearToken();
         state = state.copyWith(
@@ -67,7 +67,7 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> retryBootstrap() => bootstrapFromStoredSession();
 
-  Future<SubscriberApiException?> register({
+  Future<AuthApiException?> register({
     required String phone,
     required String password,
     required String passwordConfirmation,
@@ -88,12 +88,12 @@ class AuthController extends Notifier<AuthState> {
         clearResetToken: true,
       );
       return null;
-    } on SubscriberApiException catch (e) {
+    } on AuthApiException catch (e) {
       return e;
     }
   }
 
-  Future<SubscriberApiException?> resendRegistration() async {
+  Future<AuthApiException?> resendRegistration() async {
     final pending = state.pendingRegistration;
     if (pending == null) return null;
     try {
@@ -106,12 +106,12 @@ class AuthController extends Notifier<AuthState> {
         ),
       );
       return null;
-    } on SubscriberApiException catch (e) {
+    } on AuthApiException catch (e) {
       return e;
     }
   }
 
-  Future<SubscriberApiException?> verifyRegistration(String code) async {
+  Future<AuthApiException?> verifyRegistration(String code) async {
     final pending = state.pendingRegistration;
     if (pending == null) return null;
     try {
@@ -126,12 +126,12 @@ class AuthController extends Notifier<AuthState> {
         clearPendingRegistration: true,
       );
       return null;
-    } on SubscriberApiException catch (e) {
+    } on AuthApiException catch (e) {
       return e;
     }
   }
 
-  Future<SubscriberApiException?> login({
+  Future<AuthApiException?> login({
     required String phone,
     required String password,
   }) async {
@@ -143,12 +143,12 @@ class AuthController extends Notifier<AuthState> {
         user: session.user,
       );
       return null;
-    } on SubscriberApiException catch (e) {
+    } on AuthApiException catch (e) {
       return e;
     }
   }
 
-  Future<SubscriberApiException?> forgotPassword(String phone) async {
+  Future<AuthApiException?> forgotPassword(String phone) async {
     try {
       final accepted = await _api.forgotPassword(phone);
       state = state.copyWith(
@@ -161,12 +161,12 @@ class AuthController extends Notifier<AuthState> {
         clearResetToken: true,
       );
       return null;
-    } on SubscriberApiException catch (e) {
+    } on AuthApiException catch (e) {
       return e;
     }
   }
 
-  Future<SubscriberApiException?> verifyForgotPassword(String code) async {
+  Future<AuthApiException?> verifyForgotPassword(String code) async {
     final pending = state.pendingRecovery;
     if (pending == null) return null;
     try {
@@ -179,12 +179,12 @@ class AuthController extends Notifier<AuthState> {
         resetTokenExpiresIn: auth.expiresIn,
       );
       return null;
-    } on SubscriberApiException catch (e) {
+    } on AuthApiException catch (e) {
       return e;
     }
   }
 
-  Future<SubscriberApiException?> resetPassword({
+  Future<AuthApiException?> resetPassword({
     required String password,
     required String passwordConfirmation,
   }) async {
@@ -202,19 +202,19 @@ class AuthController extends Notifier<AuthState> {
         clearResetExpires: true,
       );
       return null;
-    } on SubscriberApiException catch (e) {
+    } on AuthApiException catch (e) {
       return e;
     }
   }
 
-  Future<SubscriberApiException?> changePassword({
+  Future<AuthApiException?> changePassword({
     required String currentPassword,
     required String password,
     required String passwordConfirmation,
   }) async {
     final token = await _store.readToken();
     if (token == null || token.isEmpty) {
-      return SubscriberApiException(
+      return AuthApiException(
         statusCode: 401,
         message: 'No session',
         code: 'unauthorized',
@@ -228,18 +228,18 @@ class AuthController extends Notifier<AuthState> {
         passwordConfirmation: passwordConfirmation,
       );
       return null;
-    } on SubscriberApiException catch (e) {
+    } on AuthApiException catch (e) {
       return e;
     }
   }
 
-  Future<SubscriberApiException?> logout() async {
+  Future<AuthApiException?> logout() async {
     final token = await _store.readToken();
-    SubscriberApiException? failure;
+    AuthApiException? failure;
     if (token != null && token.isNotEmpty) {
       try {
         await _api.logout(token);
-      } on SubscriberApiException catch (e) {
+      } on AuthApiException catch (e) {
         failure = e;
       }
     }
@@ -267,7 +267,7 @@ class AuthController extends Notifier<AuthState> {
   }
 
   /// Test override: mark session without hitting secure storage.
-  void adoptSessionForTest(SubscriberUser user) {
+  void adoptSessionForTest(User user) {
     state = state.copyWith(
       bootstrapStatus: AuthBootstrapStatus.authenticated,
       user: user,

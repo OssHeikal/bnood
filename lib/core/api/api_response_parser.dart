@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'subscriber_api_exception.dart';
+import 'auth_api_exception.dart';
 
 abstract final class ApiResponseParser {
   static Map<String, dynamic> decodeJson(http.Response response) {
@@ -27,7 +27,7 @@ abstract final class ApiResponseParser {
       if (data is Map<String, dynamic>) {
         return map(data);
       }
-      throw SubscriberApiException(
+      throw AuthApiException(
         statusCode: response.statusCode,
         message: 'Unexpected response shape',
       );
@@ -45,7 +45,7 @@ abstract final class ApiResponseParser {
     throw fromFailure(response, json);
   }
 
-  static SubscriberApiException fromFailure(
+  static AuthApiException fromFailure(
     http.Response response,
     Map<String, dynamic> json,
   ) {
@@ -63,7 +63,7 @@ abstract final class ApiResponseParser {
         ),
       );
     }
-    return SubscriberApiException(
+    return AuthApiException(
       statusCode: response.statusCode,
       message: message,
       code: code,
@@ -71,8 +71,8 @@ abstract final class ApiResponseParser {
     );
   }
 
-  static SubscriberApiException transport(Object error) {
-    return SubscriberApiException(
+  static AuthApiException transport(Object error) {
+    return AuthApiException(
       statusCode: 0,
       message: 'Network request failed',
       code: 'network',

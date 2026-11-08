@@ -66,7 +66,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       _passwordError = fieldErrorFor(error, 'password');
     });
     if (_currentError == null && _passwordError == null) {
-      AppToaster.show(subscriberAuthMessage(l10n, error), kind: ToastKind.failure);
+      AppToaster.show(authApiMessage(l10n, error), kind: ToastKind.failure);
     }
   }
 
