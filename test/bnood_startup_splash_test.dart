@@ -7,6 +7,8 @@ import 'package:bnood/app/bnood_startup_splash.dart';
 import 'package:bnood/app/shell_scaffold.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/providers/settings_provider.dart';
+import 'package:bnood/core/storage/session_store.dart';
+import 'support/fake_session_store.dart';
 import 'package:bnood/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -59,6 +61,9 @@ void main() {
     expect(find.byType(BnoodStartupSplash), findsOneWidget);
     expect(find.byType(ShellScaffold), findsNothing);
     await _elapseSplash(tester);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 200));
+    await tester.pumpAndSettle();
     expect(find.byType(BnoodStartupSplash), findsNothing);
     expect(BnoodSplashSession.completed, isTrue);
     expect(find.byType(HomeScreen), findsOneWidget);
@@ -80,6 +85,8 @@ void main() {
       ),
     );
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 200));
+    await tester.pumpAndSettle();
     expect(find.byType(BnoodStartupSplash), findsNothing);
     expect(find.byType(HomeScreen), findsOneWidget);
   });

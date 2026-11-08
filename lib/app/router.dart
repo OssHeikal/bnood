@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/auth/auth_bootstrap_screen.dart';
+import '../features/auth/auth_controller.dart';
+import '../features/auth/auth_paths.dart';
+import '../features/auth/auth_state.dart';
+import '../features/auth/change_password_screen.dart';
+import '../features/auth/forgot_password_screen.dart';
+import '../features/auth/forgot_verify_screen.dart';
+import '../features/auth/login_screen.dart';
+import '../features/auth/register_screen.dart';
+import '../features/auth/register_verify_screen.dart';
+import '../features/auth/remote_workspace_screen.dart';
+import '../features/auth/reset_password_screen.dart';
 import '../features/clients/client_detail_screen.dart';
 import '../features/clients/clients_list_screen.dart';
 import '../features/clients/client_craftsmen_list_screen.dart';
@@ -14,11 +26,14 @@ import '../features/statements/client_statement_screen.dart';
 import '../features/suppliers/craftsman_detail_screen.dart';
 import '../features/suppliers/directory_screen.dart';
 import '../features/suppliers/supplier_detail_screen.dart';
+import 'auth_router_refresh.dart';
 import 'bnood_splash_session.dart';
 import 'bnood_startup_splash.dart';
 import 'shell_scaffold.dart';
 
 final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+
+const _localHome = '/home';
 
 String? _splashRedirect(GoRouterState state) {
   final onSplash = state.matchedLocation == BnoodStartupSplashPage.path;
@@ -28,13 +43,46 @@ String? _splashRedirect(GoRouterState state) {
   return onSplash ? null : BnoodStartupSplashPage.path;
 }
 
+String? _authRedirect(Ref ref, GoRouterState state) {
+  final splash = _splashRedirect(state);
+  if (splash != null) return splash;
+
+  final auth = ref.read(authControllerProvider);
+  final loc = state.matchedLocation;
+
+  if (loc == AuthPaths.bootstrap) {
+    if (auth.isAuthenticated) return AuthPaths.remote;
+    if (auth.bootstrapStatus == AuthBootstrapStatus.unauthenticated) {
+      return _localHome;
+    }
+    return null;
+  }
+
+  if (auth.isAuthenticated) {
+    if (isLocalLedgerLocation(loc) || loc == AuthPaths.login) {
+      return AuthPaths.remote;
+    }
+    if (isAuthFlowLocation(loc) && loc != AuthPaths.changePassword) {
+      return AuthPaths.remote;
+    }
+  } else {
+    if (loc == AuthPaths.remote || loc == AuthPaths.changePassword) {
+      return AuthPaths.login;
+    }
+  }
+
+  return null;
+}
+
 final goRouterProvider = Provider<GoRouter>((ref) {
+  final refresh = ref.watch(authRouterRefreshProvider);
   return GoRouter(
     navigatorKey: _rootKey,
+    refreshListenable: refresh,
     initialLocation: BnoodSplashSession.completed
         ? BnoodStartupSplashPage.handoffLocation
         : BnoodStartupSplashPage.path,
-    redirect: (_, state) => _splashRedirect(state),
+    redirect: (_, state) => _authRedirect(ref, state),
     routes: [
       GoRoute(
         path: BnoodStartupSplashPage.path,
@@ -42,6 +90,42 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           child: const BnoodStartupSplashPage(),
         ),
+      ),
+      GoRoute(
+        path: AuthPaths.bootstrap,
+        builder: (_, _) => const AuthBootstrapScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.login,
+        builder: (_, _) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.register,
+        builder: (_, _) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.registerVerify,
+        builder: (_, _) => const RegisterVerifyScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.forgotPassword,
+        builder: (_, _) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.forgotVerify,
+        builder: (_, _) => const ForgotVerifyScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.resetPassword,
+        builder: (_, _) => const ResetPasswordScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.changePassword,
+        builder: (_, _) => const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.remote,
+        builder: (_, _) => const RemoteWorkspaceScreen(),
       ),
       StatefulShellRoute.indexedStack(
         pageBuilder: (context, state, navigationShell) {
@@ -54,7 +138,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: BnoodStartupSplashPage.handoffLocation,
+                path: _localHome,
                 builder: (_, _) => const HomeScreen(),
               ),
             ],

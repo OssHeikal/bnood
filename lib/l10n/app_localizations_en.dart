@@ -794,4 +794,151 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statementEmptyPayments => 'No payments in the selected period.';
+
+  @override
+  String get authLoginTitle => 'Sign in';
+
+  @override
+  String get authRegisterTitle => 'Create account';
+
+  @override
+  String get authRegisterSubtitle =>
+      'Egypt mobile number only. Your number cannot be changed later.';
+
+  @override
+  String get authPhone => 'Mobile number';
+
+  @override
+  String get authPhoneInvalid => 'Enter a valid Egypt mobile (01XXXXXXXXX)';
+
+  @override
+  String get authPassword => 'Password';
+
+  @override
+  String get authPasswordConfirm => 'Confirm password';
+
+  @override
+  String get authCurrentPassword => 'Current password';
+
+  @override
+  String get authNewPassword => 'New password';
+
+  @override
+  String get authForgotPassword => 'Forgot password?';
+
+  @override
+  String get authForgotPasswordTitle => 'Password recovery';
+
+  @override
+  String get authForgotPasswordSubtitle =>
+      'Enter your registered mobile number.';
+
+  @override
+  String get authVerificationTitle => 'Verification code';
+
+  @override
+  String get authVerificationSubtitle =>
+      'Enter the verification code you received.';
+
+  @override
+  String get authRecoveryVerifySubtitle =>
+      'Enter the recovery code you received.';
+
+  @override
+  String get authVerificationCode => 'Code';
+
+  @override
+  String get authResendCode => 'Resend code';
+
+  @override
+  String authResendWait(int seconds) {
+    return 'Resend in ${seconds}s';
+  }
+
+  @override
+  String get authCreateAccount => 'Create account';
+
+  @override
+  String get authLoginAction => 'Sign in';
+
+  @override
+  String get authVerifyAction => 'Verify';
+
+  @override
+  String get authContinue => 'Continue';
+
+  @override
+  String get authRegisterLink => 'New here? Create an account';
+
+  @override
+  String get authLoginLink => 'Already have an account? Sign in';
+
+  @override
+  String get authResetPasswordTitle => 'New password';
+
+  @override
+  String get authResetPasswordAction => 'Update password';
+
+  @override
+  String get authChangePassword => 'Change password';
+
+  @override
+  String get authSignOut => 'Sign out';
+
+  @override
+  String get authSignIn => 'Sign in to cloud account';
+
+  @override
+  String get authAccountSection => 'Account';
+
+  @override
+  String get authRemoteWorkspaceTitle => 'Account';
+
+  @override
+  String get authRemoteWorkspaceBody =>
+      'You are signed in. Cloud project data is not available in this phase yet.';
+
+  @override
+  String get authSignedInAs => 'Signed in as';
+
+  @override
+  String get authBootstrapRetry => 'Retry';
+
+  @override
+  String get authNetworkError =>
+      'Connection failed. Check the network and try again.';
+
+  @override
+  String get authInvalidCredentials => 'Phone or password is incorrect.';
+
+  @override
+  String get authChallengeInvalid => 'Code is invalid or expired.';
+
+  @override
+  String get authThrottled => 'Too many attempts. Try again later.';
+
+  @override
+  String get authSessionExpired => 'Your session expired. Sign in again.';
+
+  @override
+  String get authFieldRequired => 'This field is required';
+
+  @override
+  String get authPasswordMinLength => 'Use at least 8 characters';
+
+  @override
+  String get authPasswordMismatch => 'Passwords do not match';
+
+  @override
+  String get authCodeLengthHint => 'Enter 4–8 characters';
+
+  @override
+  String get authFlowExpired => 'This step expired. Start again.';
+
+  @override
+  String get authPasswordResetSuccess =>
+      'Password updated. Sign in with your new password.';
+
+  @override
+  String get authPasswordChangedSuccess => 'Password changed.';
 }

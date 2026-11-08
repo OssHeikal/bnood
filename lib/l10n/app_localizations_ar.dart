@@ -788,4 +788,146 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get statementEmptyPayments => 'لا توجد مدفوعات في الفترة المحددة.';
+
+  @override
+  String get authLoginTitle => 'تسجيل الدخول';
+
+  @override
+  String get authRegisterTitle => 'إنشاء حساب';
+
+  @override
+  String get authRegisterSubtitle => 'رقم مصر فقط. لا يمكن تغيير الرقم لاحقاً.';
+
+  @override
+  String get authPhone => 'رقم الموبايل';
+
+  @override
+  String get authPhoneInvalid => 'أدخل رقم مصر صحيح (01XXXXXXXXX)';
+
+  @override
+  String get authPassword => 'كلمة المرور';
+
+  @override
+  String get authPasswordConfirm => 'تأكيد كلمة المرور';
+
+  @override
+  String get authCurrentPassword => 'كلمة المرور الحالية';
+
+  @override
+  String get authNewPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get authForgotPassword => 'نسيت كلمة المرور؟';
+
+  @override
+  String get authForgotPasswordTitle => 'استرداد كلمة المرور';
+
+  @override
+  String get authForgotPasswordSubtitle => 'أدخل رقم الموبايل المسجّل.';
+
+  @override
+  String get authVerificationTitle => 'رمز التحقق';
+
+  @override
+  String get authVerificationSubtitle => 'أدخل رمز التحقق الذي استلمته.';
+
+  @override
+  String get authRecoveryVerifySubtitle => 'أدخل رمز الاسترداد الذي استلمته.';
+
+  @override
+  String get authVerificationCode => 'الرمز';
+
+  @override
+  String get authResendCode => 'إعادة إرسال الرمز';
+
+  @override
+  String authResendWait(int seconds) {
+    return 'إعادة الإرسال خلال $seconds ث';
+  }
+
+  @override
+  String get authCreateAccount => 'إنشاء حساب';
+
+  @override
+  String get authLoginAction => 'تسجيل الدخول';
+
+  @override
+  String get authVerifyAction => 'تحقق';
+
+  @override
+  String get authContinue => 'متابعة';
+
+  @override
+  String get authRegisterLink => 'مستخدم جديد؟ أنشئ حساباً';
+
+  @override
+  String get authLoginLink => 'لديك حساب؟ سجّل الدخول';
+
+  @override
+  String get authResetPasswordTitle => 'كلمة مرور جديدة';
+
+  @override
+  String get authResetPasswordAction => 'تحديث كلمة المرور';
+
+  @override
+  String get authChangePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get authSignOut => 'تسجيل الخروج';
+
+  @override
+  String get authSignIn => 'تسجيل الدخول للحساب السحابي';
+
+  @override
+  String get authAccountSection => 'الحساب';
+
+  @override
+  String get authRemoteWorkspaceTitle => 'الحساب';
+
+  @override
+  String get authRemoteWorkspaceBody =>
+      'أنت مسجّل الدخول. بيانات المشروع السحابية غير متاحة في هذه المرحلة.';
+
+  @override
+  String get authSignedInAs => 'مسجّل الدخول كـ';
+
+  @override
+  String get authBootstrapRetry => 'إعادة المحاولة';
+
+  @override
+  String get authNetworkError => 'تعذّر الاتصال. تحقق من الشبكة وأعد المحاولة.';
+
+  @override
+  String get authInvalidCredentials => 'رقم الموبايل أو كلمة المرور غير صحيحة.';
+
+  @override
+  String get authChallengeInvalid => 'الرمز غير صالح أو منتهي.';
+
+  @override
+  String get authThrottled => 'محاولات كثيرة. أعد المحاولة لاحقاً.';
+
+  @override
+  String get authSessionExpired => 'انتهت الجلسة. سجّل الدخول مرة أخرى.';
+
+  @override
+  String get authFieldRequired => 'هذا الحقل مطلوب';
+
+  @override
+  String get authPasswordMinLength => 'استخدم 8 أحرف على الأقل';
+
+  @override
+  String get authPasswordMismatch => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get authCodeLengthHint => 'أدخل من 4 إلى 8 أحرف';
+
+  @override
+  String get authFlowExpired => 'انتهت صلاحية هذه الخطوة. ابدأ من جديد.';
+
+  @override
+  String get authPasswordResetSuccess =>
+      'تم تحديث كلمة المرور. سجّل الدخول بكلمة المرور الجديدة.';
+
+  @override
+  String get authPasswordChangedSuccess => 'تم تغيير كلمة المرور.';
 }

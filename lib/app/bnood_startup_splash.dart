@@ -76,7 +76,7 @@ class BnoodStartupSplashPage extends StatefulWidget {
   const BnoodStartupSplashPage({super.key});
 
   static const path = '/splash';
-  static const handoffLocation = '/home';
+  static const handoffLocation = '/auth/bootstrap';
 
   @override
   State<BnoodStartupSplashPage> createState() => _BnoodStartupSplashPageState();

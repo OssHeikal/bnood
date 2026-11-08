@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
@@ -13,6 +14,8 @@ import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../../core/widgets/grouped_list_divider.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../../app/widgets/shell_nav_icon.dart';
+import '../auth/auth_controller.dart';
+import '../auth/auth_paths.dart';
 
 Future<void> showAppSettingsSheet(BuildContext context) {
   return BnoodModalSheet.show<void>(
@@ -30,6 +33,7 @@ class AppSettingsSheet extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
     final persistenceOk = ref.watch(settingsPersistenceAvailableProvider);
+    final isAuthenticated = ref.watch(authControllerProvider).isAuthenticated;
     final brightness = Theme.of(context).brightness;
     final colors = brightness == Brightness.dark ? AppColors.dark : AppColors.light;
     final text = AppText.fromColors(colors);
@@ -113,6 +117,21 @@ class AppSettingsSheet extends ConsumerWidget {
                         label: l10n.settingsLanguageEnglish,
                         selected: locale.languageCode == 'en',
                         onTap: () => ref.read(localeProvider.notifier).setLocale(const Locale('en')),
+                      ),
+                    ],
+                  ),
+                  AppSize.spaceXL.gap,
+                  _SettingsSection(
+                    title: l10n.authAccountSection,
+                    dividerKind: GroupedListDividerKind.insetStart,
+                    children: [
+                      _SettingsOptionRow(
+                        label: isAuthenticated ? l10n.authRemoteWorkspaceTitle : l10n.authSignIn,
+                        selected: false,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          context.push(isAuthenticated ? AuthPaths.remote : AuthPaths.login);
+                        },
                       ),
                     ],
                   ),

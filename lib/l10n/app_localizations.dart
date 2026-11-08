@@ -1518,6 +1518,282 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No payments in the selected period.'**
   String get statementEmptyPayments;
+
+  /// No description provided for @authLoginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authLoginTitle;
+
+  /// No description provided for @authRegisterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get authRegisterTitle;
+
+  /// No description provided for @authRegisterSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Egypt mobile number only. Your number cannot be changed later.'**
+  String get authRegisterSubtitle;
+
+  /// No description provided for @authPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number'**
+  String get authPhone;
+
+  /// No description provided for @authPhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid Egypt mobile (01XXXXXXXXX)'**
+  String get authPhoneInvalid;
+
+  /// No description provided for @authPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPassword;
+
+  /// No description provided for @authPasswordConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get authPasswordConfirm;
+
+  /// No description provided for @authCurrentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get authCurrentPassword;
+
+  /// No description provided for @authNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get authNewPassword;
+
+  /// No description provided for @authForgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get authForgotPassword;
+
+  /// No description provided for @authForgotPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Password recovery'**
+  String get authForgotPasswordTitle;
+
+  /// No description provided for @authForgotPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your registered mobile number.'**
+  String get authForgotPasswordSubtitle;
+
+  /// No description provided for @authVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code'**
+  String get authVerificationTitle;
+
+  /// No description provided for @authVerificationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the verification code you received.'**
+  String get authVerificationSubtitle;
+
+  /// No description provided for @authRecoveryVerifySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the recovery code you received.'**
+  String get authRecoveryVerifySubtitle;
+
+  /// No description provided for @authVerificationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get authVerificationCode;
+
+  /// No description provided for @authResendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get authResendCode;
+
+  /// No description provided for @authResendWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {seconds}s'**
+  String authResendWait(int seconds);
+
+  /// No description provided for @authCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get authCreateAccount;
+
+  /// No description provided for @authLoginAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authLoginAction;
+
+  /// No description provided for @authVerifyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get authVerifyAction;
+
+  /// No description provided for @authContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get authContinue;
+
+  /// No description provided for @authRegisterLink.
+  ///
+  /// In en, this message translates to:
+  /// **'New here? Create an account'**
+  String get authRegisterLink;
+
+  /// No description provided for @authLoginLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Sign in'**
+  String get authLoginLink;
+
+  /// No description provided for @authResetPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get authResetPasswordTitle;
+
+  /// No description provided for @authResetPasswordAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Update password'**
+  String get authResetPasswordAction;
+
+  /// No description provided for @authChangePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get authChangePassword;
+
+  /// No description provided for @authSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get authSignOut;
+
+  /// No description provided for @authSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to cloud account'**
+  String get authSignIn;
+
+  /// No description provided for @authAccountSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get authAccountSection;
+
+  /// No description provided for @authRemoteWorkspaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get authRemoteWorkspaceTitle;
+
+  /// No description provided for @authRemoteWorkspaceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You are signed in. Cloud project data is not available in this phase yet.'**
+  String get authRemoteWorkspaceBody;
+
+  /// No description provided for @authSignedInAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as'**
+  String get authSignedInAs;
+
+  /// No description provided for @authBootstrapRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get authBootstrapRetry;
+
+  /// No description provided for @authNetworkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection failed. Check the network and try again.'**
+  String get authNetworkError;
+
+  /// No description provided for @authInvalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone or password is incorrect.'**
+  String get authInvalidCredentials;
+
+  /// No description provided for @authChallengeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Code is invalid or expired.'**
+  String get authChallengeInvalid;
+
+  /// No description provided for @authThrottled.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Try again later.'**
+  String get authThrottled;
+
+  /// No description provided for @authSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session expired. Sign in again.'**
+  String get authSessionExpired;
+
+  /// No description provided for @authFieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get authFieldRequired;
+
+  /// No description provided for @authPasswordMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 8 characters'**
+  String get authPasswordMinLength;
+
+  /// No description provided for @authPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get authPasswordMismatch;
+
+  /// No description provided for @authCodeLengthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 4–8 characters'**
+  String get authCodeLengthHint;
+
+  /// No description provided for @authFlowExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This step expired. Start again.'**
+  String get authFlowExpired;
+
+  /// No description provided for @authPasswordResetSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated. Sign in with your new password.'**
+  String get authPasswordResetSuccess;
+
+  /// No description provided for @authPasswordChangedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed.'**
+  String get authPasswordChangedSuccess;
 }
 
 class _AppLocalizationsDelegate
