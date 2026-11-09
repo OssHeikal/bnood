@@ -690,6 +690,62 @@ class AppLocalizationsAr extends AppLocalizations {
   String get itemDuplicateNameError => 'يوجد بند بنفس الاسم.';
 
   @override
+  String get providersSearchHint => 'بحث بالاسم أو الهاتف';
+
+  @override
+  String get providersFilterAll => 'الكل';
+
+  @override
+  String get providersOnlineCaption =>
+      'الموردون والصنايعية في دليلك — المدفوعات والاتفاقيات تبقى في المعاملات.';
+
+  @override
+  String get providersEmptyAllTitle => 'لا موردين أو صنايعية بعد';
+
+  @override
+  String get providersEmptySuppliersTitle => 'لا موردين بعد';
+
+  @override
+  String get providersEmptyCraftsmenTitle => 'لا صنايعية بعد';
+
+  @override
+  String get providersEmptyDescription =>
+      'أضف مورّدًا أو صنايعيًا لربطه ببنود الصرف ومشاريع العملاء.';
+
+  @override
+  String get directoryAddProvider => 'إضافة للدليل';
+
+  @override
+  String get providerCreateSheetTitle => 'إضافة للدليل';
+
+  @override
+  String get providerTypeLabel => 'النوع';
+
+  @override
+  String get providerNameLabel => 'الاسم';
+
+  @override
+  String get providerNameHint => 'مثال: مورد مواد';
+
+  @override
+  String get providerNameRequired => 'أدخل الاسم';
+
+  @override
+  String get providerDuplicateNameError => 'هذا الاسم موجود في دليلك.';
+
+  @override
+  String get providerDuplicatePhoneError =>
+      'رقم الهاتف مستخدم لجهة أخرى في الدليل.';
+
+  @override
+  String get deleteProviderTitle => 'حذف من الدليل؟';
+
+  @override
+  String deleteProviderDescription(String name) {
+    return 'سيُزال $name من قائمة الدليل.';
+  }
+
+  @override
   String get itemDefaultBadge => 'افتراضي';
 
   @override

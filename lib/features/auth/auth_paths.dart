@@ -37,9 +37,14 @@ bool isRemoteItemsLocation(String location) {
   return location == '/items';
 }
 
+bool isRemoteDirectoryLocation(String location) {
+  return location == '/directory';
+}
+
 bool isLocalLedgerLocation(String location) {
   if (isRemoteClientsLocation(location)) return false;
   if (isRemoteItemsLocation(location)) return false;
+  if (isRemoteDirectoryLocation(location)) return false;
   if (_localLedgerRoots.contains(location)) return true;
   if (location.startsWith('/suppliers/')) return true;
   if (location.startsWith('/craftsmen/')) return true;

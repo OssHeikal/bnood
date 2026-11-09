@@ -1370,6 +1370,108 @@ abstract class AppLocalizations {
   /// **'An item with this name already exists.'**
   String get itemDuplicateNameError;
 
+  /// No description provided for @providersSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or phone'**
+  String get providersSearchHint;
+
+  /// No description provided for @providersFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get providersFilterAll;
+
+  /// No description provided for @providersOnlineCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Suppliers and craftsmen in your directory — payments and agreements stay on transactions.'**
+  String get providersOnlineCaption;
+
+  /// No description provided for @providersEmptyAllTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No suppliers or craftsmen yet'**
+  String get providersEmptyAllTitle;
+
+  /// No description provided for @providersEmptySuppliersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No suppliers yet'**
+  String get providersEmptySuppliersTitle;
+
+  /// No description provided for @providersEmptyCraftsmenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No craftsmen yet'**
+  String get providersEmptyCraftsmenTitle;
+
+  /// No description provided for @providersEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a supplier or craftsman to link them on spend vouchers and client projects.'**
+  String get providersEmptyDescription;
+
+  /// No description provided for @directoryAddProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to directory'**
+  String get directoryAddProvider;
+
+  /// No description provided for @providerCreateSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New directory entry'**
+  String get providerCreateSheetTitle;
+
+  /// No description provided for @providerTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get providerTypeLabel;
+
+  /// No description provided for @providerNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get providerNameLabel;
+
+  /// No description provided for @providerNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Materials supplier'**
+  String get providerNameHint;
+
+  /// No description provided for @providerNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name'**
+  String get providerNameRequired;
+
+  /// No description provided for @providerDuplicateNameError.
+  ///
+  /// In en, this message translates to:
+  /// **'This name is already in your directory.'**
+  String get providerDuplicateNameError;
+
+  /// No description provided for @providerDuplicatePhoneError.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone number is already used for another directory entry.'**
+  String get providerDuplicatePhoneError;
+
+  /// No description provided for @deleteProviderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from directory?'**
+  String get deleteProviderTitle;
+
+  /// No description provided for @deleteProviderDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be removed from your directory list.'**
+  String deleteProviderDescription(String name);
+
   /// No description provided for @itemDefaultBadge.
   ///
   /// In en, this message translates to:

@@ -81,17 +81,11 @@ void main() {
       api.close();
     });
 
-    test('delete maps item_in_use', () async {
+    test('delete succeeds for soft delete even when item is in use', () async {
       final api = _itemsApi(
-        (_) async => jsonResponse(
-          '{"success":false,"message":"busy","code":"item_in_use"}',
-          statusCode: 409,
-        ),
+        (_) async => jsonResponse('{"success":true,"message":"ok"}'),
       );
-      expect(
-        () => api.deleteItem('01J'),
-        throwsA(isA<AuthApiException>().having((e) => e.isItemInUse, 'in use', isTrue)),
-      );
+      await api.deleteItem('01J');
       api.close();
     });
   });

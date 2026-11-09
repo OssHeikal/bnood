@@ -5,6 +5,9 @@ import '../core/clients/clients_providers.dart';
 /// Flip to true when the online Items tab is ready (defined here to avoid editing `features/items`).
 final appRemoteItemsTabEnabledProvider = Provider<bool>((ref) => true);
 
+/// Flip to true when the online Directory (providers) tab is ready.
+final appRemoteProvidersTabEnabledProvider = Provider<bool>((ref) => true);
+
 /// Bottom-nav tabs in [ShellScaffold].
 enum AppShellTabId {
   home,
@@ -22,6 +25,7 @@ final appShellTabOnlineProvider = Provider.family<bool, AppShellTabId>((ref, tab
   return switch (tab) {
     AppShellTabId.clients => true,
     AppShellTabId.items => ref.watch(appRemoteItemsTabEnabledProvider),
-    AppShellTabId.home || AppShellTabId.directory => false,
+    AppShellTabId.directory => ref.watch(appRemoteProvidersTabEnabledProvider),
+    AppShellTabId.home => false,
   };
 });

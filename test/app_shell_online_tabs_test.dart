@@ -15,7 +15,7 @@ void main() {
 
     expect(container.read(appShellTabOnlineProvider(AppShellTabId.clients)), isTrue);
     expect(container.read(appShellTabOnlineProvider(AppShellTabId.home)), isFalse);
-    expect(container.read(appShellTabOnlineProvider(AppShellTabId.directory)), isFalse);
+    expect(container.read(appShellTabOnlineProvider(AppShellTabId.directory)), isTrue);
     expect(container.read(appShellTabOnlineProvider(AppShellTabId.items)), isTrue);
   });
 

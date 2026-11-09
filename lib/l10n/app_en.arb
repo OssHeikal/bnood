@@ -266,6 +266,28 @@
   },
   "itemInUseError": "This item is linked to transactions and cannot be deleted or changed.",
   "itemDuplicateNameError": "An item with this name already exists.",
+  "providersSearchHint": "Search by name or phone",
+  "providersFilterAll": "All",
+  "providersOnlineCaption": "Suppliers and craftsmen in your directory — payments and agreements stay on transactions.",
+  "providersEmptyAllTitle": "No suppliers or craftsmen yet",
+  "providersEmptySuppliersTitle": "No suppliers yet",
+  "providersEmptyCraftsmenTitle": "No craftsmen yet",
+  "providersEmptyDescription": "Add a supplier or craftsman to link them on spend vouchers and client projects.",
+  "directoryAddProvider": "Add to directory",
+  "providerCreateSheetTitle": "New directory entry",
+  "providerTypeLabel": "Type",
+  "providerNameLabel": "Name",
+  "providerNameHint": "e.g. Materials supplier",
+  "providerNameRequired": "Enter a name",
+  "providerDuplicateNameError": "This name is already in your directory.",
+  "providerDuplicatePhoneError": "This phone number is already used for another directory entry.",
+  "deleteProviderTitle": "Delete from directory?",
+  "deleteProviderDescription": "{name} will be removed from your directory list.",
+  "@deleteProviderDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
   "itemDefaultBadge": "Default",
   "itemPickIconLabel": "Icon",
   "itemPickColorLabel": "Color",

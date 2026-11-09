@@ -19,6 +19,7 @@ void bumpPagingListRefreshFromContainer(ProviderContainer container, PagingListI
 abstract final class PagingListIds {
   static const clients = 'clients';
   static const items = 'items';
+  static const providers = 'providers';
 }
 
 void bindPagingListRefreshEpoch(WidgetRef ref, PagingListId id, VoidCallback refresh) {

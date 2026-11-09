@@ -24,7 +24,7 @@ import '../features/statements/supplier_statement_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/statements/client_statement_screen.dart';
 import '../features/suppliers/craftsman_detail_screen.dart';
-import '../features/suppliers/directory_screen.dart';
+import 'app_shell_directory_body.dart';
 import '../features/suppliers/supplier_detail_screen.dart';
 import 'auth_router_refresh.dart';
 import 'app_splash_session.dart';
@@ -199,7 +199,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                   final tab = state.uri.queryParameters['tab'];
                   return AppShellTabGate(
                     tab: AppShellTabId.directory,
-                    child: DirectoryScreen(
+                    child: AppShellDirectoryBody(
                       initialTabIndex: tab == 'craftsmen' ? 1 : 0,
                     ),
                   );

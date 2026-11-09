@@ -699,6 +699,63 @@ class AppLocalizationsEn extends AppLocalizations {
   String get itemDuplicateNameError => 'An item with this name already exists.';
 
   @override
+  String get providersSearchHint => 'Search by name or phone';
+
+  @override
+  String get providersFilterAll => 'All';
+
+  @override
+  String get providersOnlineCaption =>
+      'Suppliers and craftsmen in your directory — payments and agreements stay on transactions.';
+
+  @override
+  String get providersEmptyAllTitle => 'No suppliers or craftsmen yet';
+
+  @override
+  String get providersEmptySuppliersTitle => 'No suppliers yet';
+
+  @override
+  String get providersEmptyCraftsmenTitle => 'No craftsmen yet';
+
+  @override
+  String get providersEmptyDescription =>
+      'Add a supplier or craftsman to link them on spend vouchers and client projects.';
+
+  @override
+  String get directoryAddProvider => 'Add to directory';
+
+  @override
+  String get providerCreateSheetTitle => 'New directory entry';
+
+  @override
+  String get providerTypeLabel => 'Type';
+
+  @override
+  String get providerNameLabel => 'Name';
+
+  @override
+  String get providerNameHint => 'e.g. Materials supplier';
+
+  @override
+  String get providerNameRequired => 'Enter a name';
+
+  @override
+  String get providerDuplicateNameError =>
+      'This name is already in your directory.';
+
+  @override
+  String get providerDuplicatePhoneError =>
+      'This phone number is already used for another directory entry.';
+
+  @override
+  String get deleteProviderTitle => 'Delete from directory?';
+
+  @override
+  String deleteProviderDescription(String name) {
+    return '$name will be removed from your directory list.';
+  }
+
+  @override
   String get itemDefaultBadge => 'Default';
 
   @override

@@ -94,10 +94,6 @@ Future<bool> confirmDeleteItem(
     if (await handleItemsApiAuthError(context: context, ref: ref, error: e)) {
       return false;
     }
-    if (e.isItemInUse) {
-      AppToaster.show(l10n.itemInUseError, kind: ToastKind.failure);
-      return false;
-    }
     AppToaster.show(e.message, kind: ToastKind.failure);
     return false;
   }
