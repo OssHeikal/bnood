@@ -22,6 +22,7 @@ class CraftsmanRosterChoiceRow extends StatelessWidget {
     this.showAmountSummary = false,
     this.agreedPiastres,
     this.localeCode,
+    this.minorPerMajor = 100,
   });
 
   final CraftsmenData craftsman;
@@ -33,6 +34,7 @@ class CraftsmanRosterChoiceRow extends StatelessWidget {
   final bool showAmountSummary;
   final int? agreedPiastres;
   final String? localeCode;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,7 @@ class CraftsmanRosterChoiceRow extends StatelessWidget {
                   showAmountSummary: showAmountSummary,
                   agreedPiastres: agreedPiastres,
                   localeCode: locale,
+                  minorPerMajor: minorPerMajor,
                   onManageAmount: onManageAmount!,
                 )
               : null,
@@ -102,12 +105,14 @@ class _AgreedAmountTrailing extends StatelessWidget {
     required this.agreedPiastres,
     required this.localeCode,
     required this.onManageAmount,
+    this.minorPerMajor = 100,
   });
 
   final bool showAmountSummary;
   final int? agreedPiastres;
   final String localeCode;
   final VoidCallback onManageAmount;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +135,7 @@ class _AgreedAmountTrailing extends StatelessWidget {
                   role: AppAmountRole.neutral,
                   size: AppAmountSize.small,
                   localeCode: localeCode,
+                  minorPerMajor: minorPerMajor,
                 )
               else
                 Text(

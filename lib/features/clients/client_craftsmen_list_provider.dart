@@ -113,12 +113,13 @@ class ClientCraftsmenListNotifier extends FamilyAsyncNotifier<ClientCraftsmenLis
           (a) => ClientCraftsmanPreviewRow(
             craftsmanId: a.providerId,
             name: a.providerName ?? '—',
-            paidPiastres: 0,
-            agreedPiastres: a.amountPiastres,
-            remainingPiastres: null,
+            paidPiastres: a.paidMinorForDisplay,
+            agreedPiastres: a.amountMinorForDisplay,
+            remainingPiastres: a.remainingMinorForDisplay,
             accentKey: clientAccentKeyFor(a.providerId),
             agreementId: a.id,
             onlineAgreementsOnly: true,
+            usesRemoteMoney: true,
           ),
         )
         .toList()

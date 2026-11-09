@@ -6,7 +6,9 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/money/money_format.dart';
+import '../../core/money/remote_money_format.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/widgets/buttons/app_button.dart';
@@ -126,13 +128,24 @@ class CraftsmanAgreementAmountPage extends ConsumerStatefulWidget {
 
 class _CraftsmanAgreementAmountPageState extends ConsumerState<CraftsmanAgreementAmountPage> {
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _amount = TextEditingController(
-    text: widget.initialAmountPiastres == null
-        ? ''
-        : (widget.initialAmountPiastres! / 100).toString(),
-  );
+  late final TextEditingController _amount = TextEditingController();
+  var _amountFieldInitialized = false;
   var _attemptedSubmit = false;
   var _saving = false;
+
+  bool get _useRemoteMoneyScale => ref.read(remoteAgreementsEnabledProvider);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_amountFieldInitialized) return;
+    _amountFieldInitialized = true;
+    final initial = widget.initialAmountPiastres;
+    if (initial == null) return;
+    _amount.text = _useRemoteMoneyScale
+        ? RemoteMoneyFormat.majorInputTextFromMinor(initial)
+        : (initial / 100).toString();
+  }
 
   @override
   void dispose() {
@@ -150,8 +163,10 @@ class _CraftsmanAgreementAmountPageState extends ConsumerState<CraftsmanAgreemen
   String? _validate(String? value) {
     final raw = value?.trim() ?? '';
     if (raw.isEmpty) return null;
-    final piastres = MoneyFormat.parseEgpInput(raw);
-    if (piastres == null || piastres < 0) {
+    final minor = _useRemoteMoneyScale
+        ? RemoteMoneyFormat.parseMajorInput(raw)
+        : MoneyFormat.parseEgpInput(raw);
+    if (minor == null || minor < 0) {
       return AppLocalizations.of(context).craftsmanAgreementAmountInvalid;
     }
     return null;
@@ -160,7 +175,9 @@ class _CraftsmanAgreementAmountPageState extends ConsumerState<CraftsmanAgreemen
   int? _parseAmount() {
     final text = _amount.text.trim();
     if (text.isEmpty) return null;
-    return MoneyFormat.parseEgpInput(text);
+    return _useRemoteMoneyScale
+        ? RemoteMoneyFormat.parseMajorInput(text)
+        : MoneyFormat.parseEgpInput(text);
   }
 
   void _closeHostModal() {

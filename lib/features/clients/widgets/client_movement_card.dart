@@ -9,6 +9,7 @@ import '../../../core/config/theme/app_shape.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/formatting/display_digits.dart';
 import '../../../core/resources/gen/assets.gen.dart';
+import '../../../core/money/remote_money_units.dart';
 import '../../../core/widgets/app_amount.dart';
 import '../../../app/widgets/shell_nav_icon.dart';
 import '../../../l10n/app_localizations.dart';
@@ -155,6 +156,9 @@ class ClientMovementCard extends StatelessWidget {
                         role: isReceive ? AppAmountRole.receive : AppAmountRole.spend,
                         size: AppAmountSize.medium,
                         localeCode: localeCode,
+                        minorPerMajor: line.usesRemoteMinorUnits
+                            ? RemoteMoneyUnits.minorPerMajor
+                            : 100,
                       ),
                     ),
                     AppSize.spaceXS.gap,

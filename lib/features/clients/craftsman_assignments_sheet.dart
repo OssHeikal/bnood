@@ -6,8 +6,10 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/agreements/agreement_amount_api.dart';
 import '../../core/agreements/agreements_error_handler.dart';
 import '../../core/agreements/agreements_riverpod.dart';
+import '../../core/money/remote_money_units.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/client_api_record.dart';
 import '../../core/clients/clients_providers.dart';
@@ -195,7 +197,7 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       final baseline = <String, int?>{};
       for (final a in agreements) {
         selected.add(a.providerId);
-        baseline[a.providerId] = a.amountPiastres;
+        baseline[a.providerId] = a.amountMinorForDisplay;
       }
 
       if (mounted) {
@@ -373,22 +375,24 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       }
 
       for (final providerId in _selected) {
-        final amount = _amountForPersist(providerId);
+        final amountMinor = _amountForPersist(providerId);
+        final amountMajor = agreementAmountMajorFromMinor(amountMinor);
         final existingAg = existingByProvider[providerId];
         if (existingAg == null) {
           await agreementsRepo.createAgreement(
             clientId: clientId,
             providerId: providerId,
-            amountPiastres: amount,
-            omitAmount: amount == null && !_draftAmountPiastres.containsKey(providerId),
+            amountMajor: amountMajor,
+            omitAmount:
+                amountMinor == null && !_draftAmountPiastres.containsKey(providerId),
           );
         } else {
           final changed = _draftAmountPiastres.containsKey(providerId) ||
-              amount != existingAg.amountPiastres;
+              amountMinor != existingAg.amountMinorForDisplay;
           if (changed) {
             await agreementsRepo.patchAgreement(
               id: existingAg.id,
-              amountPiastres: amount,
+              amountMajor: amountMajor,
             );
           }
         }
@@ -440,6 +444,9 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
   }
 
   Widget _buildRosterBody(AppLocalizations l10n, AppColors colors, String localeCode) {
+    final remoteAmountScale =
+        ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null;
+
     if (_loading) {
       return const _RosterSkeleton();
     }
@@ -498,6 +505,8 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
               onToggle: () => _toggleSelection(_roster[i].id),
               showDivider: i < _roster.length - 1,
               localeCode: localeCode,
+              minorPerMajor:
+                  remoteAmountScale ? RemoteMoneyUnits.minorPerMajor : 100,
               showAmountSummary: _selected.contains(_roster[i].id) &&
                   _showAmountSummary(_roster[i].id),
               agreedPiastres: _resolvedAmountPiastres(_roster[i].id),

@@ -914,6 +914,36 @@ abstract class AppLocalizations {
   /// **'Could not attach the receipt. Try again.'**
   String get voucherReceiptAttachFailed;
 
+  /// No description provided for @voucherReceiptUploadRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher saved. Tap Save again to retry uploading receipt photos.'**
+  String get voucherReceiptUploadRetry;
+
+  /// No description provided for @voucherReceiptDeleteRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher saved but a receipt could not be removed. Tap Save to try again.'**
+  String get voucherReceiptDeleteRetry;
+
+  /// No description provided for @voucherReceiptTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'This receipt image is too large. Try a smaller photo or save again after compression.'**
+  String get voucherReceiptTooLarge;
+
+  /// No description provided for @voucherReceiptCompressFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not prepare the receipt image for upload. Try another photo or save again.'**
+  String get voucherReceiptCompressFailed;
+
+  /// No description provided for @voucherReceiptInvalidMime.
+  ///
+  /// In en, this message translates to:
+  /// **'This file type is not accepted. Use JPEG, PNG, or WebP.'**
+  String get voucherReceiptInvalidMime;
+
   /// No description provided for @voucherAssignCraftsmanFirst.
   ///
   /// In en, this message translates to:

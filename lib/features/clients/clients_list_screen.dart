@@ -76,20 +76,20 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
     final l10n = AppLocalizations.of(context);
     final empty = switch (filter) {
       ClientListArchiveFilter.archived => (
-          title: l10n.clientsNoArchivedTitle,
-          description: l10n.clientsNoArchivedDescription,
-          showAdd: false,
-        ),
+        title: l10n.clientsNoArchivedTitle,
+        description: l10n.clientsNoArchivedDescription,
+        showAdd: false,
+      ),
       ClientListArchiveFilter.all => (
-          title: l10n.clientsNoClientsTitle,
-          description: l10n.homeNoActiveClientsDescription,
-          showAdd: true,
-        ),
+        title: l10n.clientsNoClientsTitle,
+        description: l10n.homeNoActiveClientsDescription,
+        showAdd: true,
+      ),
       ClientListArchiveFilter.active => (
-          title: l10n.homeNoActiveClientsTitle,
-          description: l10n.homeNoActiveClientsDescription,
-          showAdd: true,
-        ),
+        title: l10n.homeNoActiveClientsTitle,
+        description: l10n.homeNoActiveClientsDescription,
+        showAdd: true,
+      ),
     };
     return AppFallback.section(
       icon: Icons.people_outline,
@@ -172,37 +172,34 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          AppSize.screenPadding,
-                          0,
-                          AppSize.screenPadding,
-                          AppSize.spaceSM,
-                        ),
+                        padding: EdgeInsets.fromLTRB(AppSize.screenPadding, 0, AppSize.screenPadding, AppSize.spaceSM),
                         child: ClientsListFilterChips(),
                       ),
                     ],
                   ),
                 ),
               ],
-              builders: AppPagedBuilders(
-                empty: (ctx) => _emptyFallback(ctx, filter),
-              ),
+              builders: AppPagedBuilders(empty: (ctx) => _emptyFallback(ctx, filter)),
               itemPadding: (index) => EdgeInsets.fromLTRB(
                 AppSize.screenPadding,
                 index == 0 ? AppSize.spaceSM : 0,
                 AppSize.screenPadding,
                 0,
               ),
-              itemBuilder: (context, row, index) => ClientBalanceCard(
-                name: row.client.name,
-                meta: row.client.phone,
-                receivedPiastres: row.receivedPiastres,
-                spentPiastres: row.spentPiastres,
-                amountPiastres: row.remainingPiastres,
-                accentKey: clientAccentKeyFor(row.client.id),
-                localeCode: localeCode,
-                onTap: () => context.push('/clients/${row.client.id}'),
-              ),
+              itemBuilder: (context, row, index) {
+                final remoteMoney = ref.watch(remoteClientsEnabledProvider);
+                return ClientBalanceCard(
+                  name: row.client.name,
+                  meta: row.client.phone,
+                  receivedPiastres: row.receivedPiastres,
+                  spentPiastres: row.spentPiastres,
+                  amountPiastres: row.remainingPiastres,
+                  accentKey: clientAccentKeyFor(row.client.id),
+                  localeCode: localeCode,
+                  minorPerMajor: remoteMoney ? 1000 : 100,
+                  onTap: () => context.push('/clients/${row.client.id}'),
+                );
+              },
               sliverFooters: [
                 const SliverPadding(padding: EdgeInsets.only(bottom: AppSize.spaceMD)),
                 _ScrollUnderClearance(reserve: _collapsingHeaderHeight),

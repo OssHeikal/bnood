@@ -4,6 +4,7 @@ import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/providers_api/providers_riverpod.dart';
+import '../../core/vouchers/vouchers_riverpod.dart';
 import 'provider_detail_snapshot.dart';
 
 final providerDetailProvider =
@@ -74,9 +75,26 @@ class ProviderDetailNotifier extends FamilyAsyncNotifier<ProviderDetailSnapshot,
       }
     }
 
+    var voucherHistory = <ProviderDetailVoucherRow>[];
+    var totalVoucherMinor = 0;
+    if (ref.read(remoteVouchersEnabledProvider)) {
+      final vouchers = await ref.read(vouchersRepositoryProvider).listAllProviderVouchers(providerId);
+      voucherHistory = vouchers
+          .map(
+            (v) => ProviderDetailVoucherRow(
+              voucher: v,
+              clientName: v.clientName ?? '—',
+            ),
+          )
+          .toList();
+      totalVoucherMinor = vouchers.fold<int>(0, (sum, v) => sum + v.amountMinor);
+    }
+
     return ProviderDetailSnapshot(
       provider: provider,
       clientAgreements: clientAgreements,
+      voucherHistory: voucherHistory,
+      totalVoucherMinor: totalVoucherMinor,
     );
   }
 }

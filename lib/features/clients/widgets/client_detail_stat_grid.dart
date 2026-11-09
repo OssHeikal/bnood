@@ -18,12 +18,14 @@ class ClientDetailStatGrid extends StatelessWidget {
     required this.spentPiastres,
     required this.remainingPiastres,
     required this.localeCode,
+    this.minorPerMajor = 100,
   });
 
   final int? receivedPiastres;
   final int? spentPiastres;
   final int? remainingPiastres;
   final String localeCode;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class ClientDetailStatGrid extends StatelessWidget {
                 tint: context.colors.success,
                 tintBg: context.colors.successBg,
                 localeCode: localeCode,
+                minorPerMajor: minorPerMajor,
               ),
             ),
             AppSize.spaceMD.gap,
@@ -59,6 +62,7 @@ class ClientDetailStatGrid extends StatelessWidget {
                 tint: context.colors.spend,
                 tintBg: context.colors.errorBg,
                 localeCode: localeCode,
+                minorPerMajor: minorPerMajor,
               ),
             ),
           ],
@@ -75,6 +79,7 @@ class ClientDetailStatGrid extends StatelessWidget {
           tint: context.colors.remaining,
           tintBg: context.colors.infoBg,
           localeCode: localeCode,
+          minorPerMajor: minorPerMajor,
         ),
       ],
     );
@@ -93,6 +98,7 @@ class _StatTile extends StatelessWidget {
     required this.tintBg,
     required this.localeCode,
     this.amountEmphasis = AppAmountSize.medium,
+    this.minorPerMajor = 100,
   });
 
   final AppCardPreset preset;
@@ -105,6 +111,7 @@ class _StatTile extends StatelessWidget {
   final Color tint;
   final Color tintBg;
   final String localeCode;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +147,7 @@ class _StatTile extends StatelessWidget {
                       role: role,
                       size: amountEmphasis,
                       localeCode: localeCode,
+                      minorPerMajor: minorPerMajor,
                     ),
             ),
           ),

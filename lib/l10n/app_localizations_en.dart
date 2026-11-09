@@ -443,6 +443,26 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not attach the receipt. Try again.';
 
   @override
+  String get voucherReceiptUploadRetry =>
+      'Voucher saved. Tap Save again to retry uploading receipt photos.';
+
+  @override
+  String get voucherReceiptDeleteRetry =>
+      'Voucher saved but a receipt could not be removed. Tap Save to try again.';
+
+  @override
+  String get voucherReceiptTooLarge =>
+      'This receipt image is too large. Try a smaller photo or save again after compression.';
+
+  @override
+  String get voucherReceiptCompressFailed =>
+      'Could not prepare the receipt image for upload. Try another photo or save again.';
+
+  @override
+  String get voucherReceiptInvalidMime =>
+      'This file type is not accepted. Use JPEG, PNG, or WebP.';
+
+  @override
   String get voucherAssignCraftsmanFirst =>
       'Assign craftsmen to the project first';
 

@@ -51,4 +51,30 @@ class AuthApiException implements Exception {
   bool get isClientNotFound => statusCode == 404 && code == 'client_not_found';
 
   bool get isProviderNotFound => statusCode == 404 && code == 'provider_not_found';
+
+  bool get isItemNotFound => statusCode == 404 && code == 'item_not_found';
+
+  bool get isVoucherNotFound => statusCode == 404 && code == 'not_found';
+
+  bool get isClientArchivedVoucher => statusCode == 422 && code == 'client_archived';
+
+  bool get isInvalidReceiveFields => statusCode == 422 && code == 'invalid_receive_fields';
+
+  bool get isSpendRequiresItem => statusCode == 422 && code == 'spend_requires_item';
+
+  bool get isSpendRequiresExpenseClassification =>
+      statusCode == 422 && code == 'spend_requires_expense_classification';
+
+  bool get isLaborRequiresCraftsman => statusCode == 422 && code == 'labor_requires_craftsman';
+
+  bool get isProviderTypeMismatch => statusCode == 422 && code == 'provider_type_mismatch';
+
+  bool get isInvalidAmount => statusCode == 422 && code == 'invalid_amount';
+
+  bool get isInvalidMime => statusCode == 422 && code == 'invalid_mime';
+
+  bool get isInvalidSize =>
+      statusCode == 413 || (statusCode == 422 && code == 'invalid_size');
+
+  bool get isStorageFailed => statusCode == 500 && code == 'storage_failed';
 }

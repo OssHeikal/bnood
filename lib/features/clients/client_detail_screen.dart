@@ -300,6 +300,7 @@ class _ClientDetailBody extends ConsumerWidget {
             spentPiastres: data.spentPiastres,
             remainingPiastres: data.remainingPiastres,
             localeCode: localeCode,
+            minorPerMajor: data.usesRemoteMoney ? 1000 : 100,
           ),
           AppSize.spaceLG.gap,
           ClientDetailActionGrid(
@@ -394,6 +395,7 @@ class _ClientDetailBody extends ConsumerWidget {
           spentPiastres: data.spentPiastres,
           remainingPiastres: data.remainingPiastres,
           localeCode: localeCode,
+          minorPerMajor: data.usesRemoteMoney ? 1000 : 100,
         ),
         AppSize.spaceLG.gap,
         ClientDetailActionGrid(
@@ -531,6 +533,7 @@ class _ClientDetailBody extends ConsumerWidget {
                   line: data.latestMovements[i],
                   localeCode: localeCode,
                   mutationsEnabled: mutationsEnabled,
+                  ledgerClientId: clientId,
                 ),
               ],
             ],

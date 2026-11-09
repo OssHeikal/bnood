@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../config/theme/app_colors.dart';
 import '../config/theme/app_font.dart';
 import '../money/money_format.dart';
+import '../money/remote_money_format.dart';
+import '../money/remote_money_units.dart';
 import '../utils/extensions/bidi_isolate.dart';
 
 enum AppAmountRole { receive, spend, remaining, neutral }
@@ -20,6 +22,7 @@ class AppAmount extends StatelessWidget {
     this.showCurrency = true,
     this.showSign = false,
     this.style,
+    this.minorPerMajor = 100,
   });
 
   final int piastres;
@@ -30,15 +33,23 @@ class AppAmount extends StatelessWidget {
   final bool showSign;
   final TextStyle? style;
 
+  /// Local ledger uses 100 (piastres). Online API amounts use [RemoteMoneyUnits.minorPerMajor].
+  final int minorPerMajor;
+
   static String format({
     required int piastres,
     String localeCode = 'ar',
     bool showCurrency = true,
+    int minorPerMajor = 100,
   }) {
     final locale = localeCode == 'ar' ? 'ar_EG' : 'en_US';
-    final text = MoneyFormat.formatPiastres(piastres, locale: locale);
+    final text = minorPerMajor == RemoteMoneyUnits.minorPerMajor
+        ? RemoteMoneyFormat.formatMinor(piastres, locale: locale)
+        : MoneyFormat.formatPiastres(piastres, locale: locale);
     if (!showCurrency) {
-      return MoneyFormat.withoutCurrencySuffix(text);
+      return minorPerMajor == RemoteMoneyUnits.minorPerMajor
+          ? RemoteMoneyFormat.withoutCurrencySuffix(text)
+          : MoneyFormat.withoutCurrencySuffix(text);
     }
     return text;
   }
@@ -60,13 +71,28 @@ class AppAmount extends StatelessWidget {
   String _displayText() {
     if (role == AppAmountRole.remaining) {
       if (piastres < 0) {
-        final body = format(piastres: piastres.abs(), localeCode: localeCode, showCurrency: showCurrency);
+        final body = format(
+          piastres: piastres.abs(),
+          localeCode: localeCode,
+          showCurrency: showCurrency,
+          minorPerMajor: minorPerMajor,
+        );
         return '−$body';
       }
-      return format(piastres: piastres, localeCode: localeCode, showCurrency: showCurrency);
+      return format(
+        piastres: piastres,
+        localeCode: localeCode,
+        showCurrency: showCurrency,
+        minorPerMajor: minorPerMajor,
+      );
     }
     final sign = showSign && piastres != 0 ? (piastres > 0 ? '+' : '−') : '';
-    final body = format(piastres: piastres.abs(), localeCode: localeCode, showCurrency: showCurrency);
+    final body = format(
+      piastres: piastres.abs(),
+      localeCode: localeCode,
+      showCurrency: showCurrency,
+      minorPerMajor: minorPerMajor,
+    );
     return sign.isEmpty ? body : '$sign$body';
   }
 

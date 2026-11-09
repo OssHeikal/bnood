@@ -52,6 +52,44 @@ void main() {
     expect(find.byType(CustomTextField), findsNothing);
   });
 
+  testWidgets('remote scale shows one million EGP not ten million', (tester) async {
+    final craftsman = CraftsmenData(
+      id: 'c-remote',
+      workspaceId: 'w',
+      name: 'Samir',
+      phone: '01000000002',
+      createdAt: DateTime.utc(2026, 1, 1),
+      updatedAt: DateTime.utc(2026, 1, 1),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppFoundationTheme.light(),
+        locale: const Locale('en'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: CraftsmanRosterChoiceRow(
+            craftsman: craftsman,
+            selected: true,
+            selectionLocked: false,
+            onToggle: () {},
+            showDivider: false,
+            showAmountSummary: true,
+            agreedPiastres: 1000000 * 1000,
+            localeCode: 'en',
+            minorPerMajor: 1000,
+            onManageAmount: () {},
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.textContaining('1,000,000 EGP'), findsOneWidget);
+    expect(find.textContaining('10,000,000 EGP'), findsNothing);
+  });
+
   testWidgets('selected row shows summary and edit CTA', (tester) async {
     final craftsman = CraftsmenData(
       id: 'c2',

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/app_providers.dart';
+import '../../core/vouchers/vouchers_riverpod.dart';
 import '../../core/widgets/bnood_modal_sheet.dart';
 import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../home/home_foundation_scope.dart';
 import 'voucher_draft.dart';
 import 'voucher_draft_enrich.dart';
+import 'voucher_draft_enrich_remote.dart';
 import 'voucher_sheet.dart';
 
 final voucherDraftProvider =
@@ -48,8 +50,13 @@ class VoucherLauncher {
 
   static Future<void> openEdit(BuildContext context, VoucherDraft draft) async {
     final container = ProviderScope.containerOf(context);
-    final repo = container.read(repositoryProvider);
-    final enriched = await enrichVoucherDraft(repo, draft);
+    final VoucherDraft enriched;
+    if (container.read(remoteVouchersEnabledProvider)) {
+      enriched = await enrichVoucherDraftRemote(ProviderScope.containerOf(context), draft);
+    } else {
+      final repo = container.read(repositoryProvider);
+      enriched = await enrichVoucherDraft(repo, draft);
+    }
     if (!context.mounted) return;
     container.read(voucherDraftProvider.notifier).state = enriched;
     await _show(context);

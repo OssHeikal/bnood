@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
+import '../../../core/money/remote_money_units.dart';
 import '../../../core/widgets/app_amount.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_pressable.dart';
@@ -68,7 +69,7 @@ class ProviderDetailClientAgreementCard extends ConsumerWidget {
                     providerId: providerId,
                     clientName: row.clientName,
                     craftsmanName: providerName,
-                    initialAmountPiastres: agreement.amountPiastres,
+                    initialAmountPiastres: agreement.amountMinorForDisplay,
                   );
                   if (context.mounted) await onChanged();
                 },
@@ -108,13 +109,54 @@ class ProviderDetailClientAgreementCard extends ConsumerWidget {
                 ),
                 AppSize.spaceSM.gap,
                 AppAmount(
-                  piastres: agreement.amountPiastres!,
+                  piastres: agreement.amountMinorForDisplay ?? agreement.amountPiastres!,
                   role: AppAmountRole.neutral,
                   size: AppAmountSize.small,
                   localeCode: localeCode,
+                  minorPerMajor: agreement.amountMajor != null
+                      ? RemoteMoneyUnits.minorPerMajor
+                      : 100,
                 ),
               ],
             ),
+            if (agreement.paidMajor != null) ...[
+              AppSize.spaceSM.gap,
+              Row(
+                children: [
+                  Text(
+                    l10n.paid,
+                    style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                  ),
+                  AppSize.spaceSM.gap,
+                  AppAmount(
+                    piastres: agreement.paidMinorForDisplay,
+                    role: AppAmountRole.spend,
+                    size: AppAmountSize.small,
+                    localeCode: localeCode,
+                    minorPerMajor: RemoteMoneyUnits.minorPerMajor,
+                  ),
+                ],
+              ),
+            ],
+            if (agreement.remainingMinorForDisplay != null) ...[
+              AppSize.spaceSM.gap,
+              Row(
+                children: [
+                  Text(
+                    l10n.remaining,
+                    style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                  ),
+                  AppSize.spaceSM.gap,
+                  AppAmount(
+                    piastres: agreement.remainingMinorForDisplay!,
+                    role: AppAmountRole.remaining,
+                    size: AppAmountSize.small,
+                    localeCode: localeCode,
+                    minorPerMajor: RemoteMoneyUnits.minorPerMajor,
+                  ),
+                ],
+              ),
+            ],
           ],
           AppSize.spaceSM.gap,
           Align(

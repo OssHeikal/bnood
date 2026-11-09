@@ -6,6 +6,7 @@ import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_shape.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/theme/app_colors.dart' as legacy;
+import '../../../core/money/remote_money_units.dart';
 import '../../../core/widgets/app_amount.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_chevron.dart';
@@ -78,21 +79,65 @@ class ClientDetailCraftsmanRow extends StatelessWidget {
           AppSize.spaceMD.gap,
           if (onlineOnly) ...[
             if (hasAgreed)
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: _Metric(
-                  key: const Key('client_craftsman_metric_agreed'),
-                  label: l10n.craftsmanAgreedAmount,
-                  piastres: preview.agreedPiastres!,
-                  role: AppAmountRole.neutral,
-                  localeCode: localeCode,
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: _Metric(
+                        key: const Key('client_craftsman_metric_agreed'),
+                        label: l10n.craftsmanAgreedAmount,
+                        piastres: preview.agreedPiastres!,
+                        role: AppAmountRole.neutral,
+                        localeCode: localeCode,
+                        minorPerMajor: preview.usesRemoteMoney
+                            ? RemoteMoneyUnits.minorPerMajor
+                            : 100,
+                      ),
+                    ),
+                    Expanded(
+                      child: _Metric(
+                        key: const Key('client_craftsman_metric_paid'),
+                        label: l10n.paid,
+                        piastres: preview.paidPiastres,
+                        role: AppAmountRole.spend,
+                        localeCode: localeCode,
+                        minorPerMajor: preview.usesRemoteMoney
+                            ? RemoteMoneyUnits.minorPerMajor
+                            : 100,
+                      ),
+                    ),
+                    if (preview.remainingPiastres != null)
+                      Expanded(
+                        child: _Metric(
+                          key: const Key('client_craftsman_metric_remaining'),
+                          label: l10n.remaining,
+                          piastres: preview.remainingPiastres!,
+                          role: AppAmountRole.remaining,
+                          localeCode: localeCode,
+                          minorPerMajor: preview.usesRemoteMoney
+                              ? RemoteMoneyUnits.minorPerMajor
+                              : 100,
+                        ),
+                      ),
+                  ],
                 ),
               )
             else
-              Text(
-                l10n.craftsmanDetailNoAgreedAmount,
-                style: text.caption.copyWith(color: colors.onSurfaceMuted),
-                textAlign: TextAlign.start,
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: IntrinsicWidth(
+                  child: _Metric(
+                    key: const Key('client_craftsman_metric_paid'),
+                    label: l10n.paid,
+                    piastres: preview.paidPiastres,
+                    role: AppAmountRole.spend,
+                    localeCode: localeCode,
+                    minorPerMajor: preview.usesRemoteMoney
+                        ? RemoteMoneyUnits.minorPerMajor
+                        : 100,
+                  ),
+                ),
               ),
           ] else if (hasAgreed)
             IntrinsicHeight(
@@ -181,12 +226,14 @@ class _Metric extends StatelessWidget {
     required this.piastres,
     required this.role,
     required this.localeCode,
+    this.minorPerMajor = 100,
   });
 
   final String label;
   final int piastres;
   final AppAmountRole role;
   final String localeCode;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -211,6 +258,7 @@ class _Metric extends StatelessWidget {
             role: role,
             size: AppAmountSize.small,
             localeCode: localeCode,
+            minorPerMajor: minorPerMajor,
           ),
         ],
       ),

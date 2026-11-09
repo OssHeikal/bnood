@@ -16,10 +16,16 @@ import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/database/database.dart' show TransactionsCompanion;
+import '../../core/api/auth_api_exception.dart';
+import '../../core/clients/clients_providers.dart';
 import '../../core/money/money_format.dart';
+import '../../core/money/remote_money_format.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/items/items_repository.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/providers_api/providers_riverpod.dart';
+import '../../core/repositories/bnood_repository.dart';
+import '../../core/vouchers/vouchers_riverpod.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_list_tile.dart';
@@ -43,6 +49,10 @@ import 'voucher_camera_pick_route.dart';
 import 'voucher_receipt_picker.dart';
 import 'voucher_transaction_date_bounds.dart';
 import '../../core/providers/transaction_mutation_refresh.dart';
+import 'voucher_remote_mutation.dart';
+import 'voucher_remote_receipts.dart';
+import 'voucher_receipt_upload_errors.dart';
+import 'voucher_sheet_receipt.dart';
 
 class VoucherSheet extends ConsumerStatefulWidget {
   const VoucherSheet({super.key});
@@ -55,7 +65,8 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   final _formKey = GlobalKey<FormState>();
   final _amountCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
-  final _receiptPaths = <String>[];
+  final _receiptRows = <VoucherSheetReceipt>[];
+  final _pendingReceiptDeletes = <String>{};
   final _receiptPicker = VoucherReceiptPicker();
   var _recoveringLostPick = false;
   var _attemptedSubmit = false;
@@ -72,15 +83,51 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     super.initState();
     final draft = ref.read(voucherDraftProvider);
     if (draft.amountPiastres != null) {
-      final pounds = draft.amountPiastres! / 100;
-      final whole = pounds.truncateToDouble() == pounds ? pounds.toInt().toString() : pounds.toStringAsFixed(2);
-      _amountCtrl.text = whole;
+      final remote = ref.read(remoteVouchersEnabledProvider);
+      _amountCtrl.text = remote
+          ? RemoteMoneyFormat.majorInputTextFromMinor(draft.amountPiastres!)
+          : _localAmountFieldText(draft.amountPiastres!);
     }
     _descCtrl.text = draft.description ?? '';
-    _receiptPaths.addAll(ReceiptImageCodec.decode(draft.receiptImagePath));
+    _receiptRows.addAll(
+      ReceiptImageCodec.decode(draft.receiptImagePath).map(
+        (path) => VoucherSheetReceipt(localPath: path),
+      ),
+    );
+    final remote = ref.read(remoteVouchersEnabledProvider);
+    if (remote && draft.editingTransactionId != null) {
+      _hydrateRemoteReceipts(draft.editingTransactionId!);
+    }
     if (Platform.isAndroid) {
       _recoverAndroidLostPick();
     }
+  }
+
+  Future<void> _hydrateRemoteReceipts(String voucherId) async {
+    try {
+      final repo = ref.read(vouchersRepositoryProvider);
+      final voucher = await repo.getVoucher(voucherId);
+      if (!mounted) return;
+      final rows = voucher.receipts.isEmpty
+          ? <VoucherSheetReceipt>[]
+          : await downloadRemoteReceipts(repo: repo, metadata: voucher.receipts);
+      if (!mounted) return;
+      setState(() {
+        _receiptRows
+          ..clear()
+          ..addAll(rows);
+      });
+    } catch (_) {
+      // Keep sheet usable; receipts section may stay empty until retry.
+    }
+  }
+
+  Future<void> _refreshRemoteReceiptsKeepingPendingUploads(String voucherId) async {
+    final pendingUploads = _receiptRows.where((r) => r.isPendingUpload).toList();
+    await _hydrateRemoteReceipts(voucherId);
+    if (!mounted) return;
+    if (pendingUploads.isEmpty) return;
+    setState(() => _receiptRows.addAll(pendingUploads));
   }
 
   Future<void> _recoverAndroidLostPick() async {
@@ -117,8 +164,18 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     super.dispose();
   }
 
+  String _localAmountFieldText(int piastres) {
+    final pounds = piastres / 100;
+    final whole = pounds.truncateToDouble() == pounds ? pounds.toInt().toString() : pounds.toStringAsFixed(2);
+    return whole;
+  }
+
   Future<void> _pickClient() async {
     if (_isEditing) return;
+    if (ref.read(remoteVouchersEnabledProvider)) {
+      await _pickClientRemote();
+      return;
+    }
     final repo = ref.read(repositoryProvider);
     final clients = await repo.watchActiveClients();
     if (!mounted) return;
@@ -163,6 +220,50 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
         .copyWith(clientId: picked, clientLabel: client.name, projectId: project?.id, clearCraftsman: true);
+    setState(() => _clientPickerError = null);
+  }
+
+  Future<void> _pickClientRemote() async {
+    final clientsRepo = ref.read(clientsRepositoryProvider);
+    final clientsPage = await clientsRepo.listClients(status: ClientListArchiveFilter.active);
+    final clients = clientsPage.items;
+    if (!mounted) return;
+    final locale = Localizations.localeOf(context).languageCode;
+    final balances = <String, int>{};
+    for (final record in clients) {
+      balances[record.client.id] = record.balances?.remainingPiastres ?? 0;
+    }
+    final draft = ref.read(voucherDraftProvider);
+    final l10n = AppLocalizations.of(context);
+    final picked = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (_) => EntityPickerPage(
+          title: l10n.navClients,
+          entries: clients.map((c) => (c.client.id, c.client.name)).toList(),
+          selectedId: draft.clientId,
+          emptyTitle: l10n.homeNoActiveClientsTitle,
+          emptyDescription: l10n.homeNoActiveClientsDescription,
+          tileBuilder: (ctx, id, selected, onSelect, showDivider) => VoucherPickerClientCard(
+            name: clients.firstWhere((c) => c.client.id == id).client.name,
+            clientId: id,
+            remainingPiastres: balances[id] ?? 0,
+            localeCode: locale,
+            selected: selected,
+            onTap: onSelect,
+            showDivider: showDivider,
+          ),
+          onCreateRoute: () => const InlineCreateClientPage(),
+        ),
+      ),
+    );
+    if (picked == null) return;
+    final record = clients.firstWhere((c) => c.client.id == picked);
+    ref.read(voucherDraftProvider.notifier).state = ref.read(voucherDraftProvider).copyWith(
+          clientId: picked,
+          clientLabel: record.client.name,
+          projectId: record.project.id,
+          clearCraftsman: true,
+        );
     setState(() => _clientPickerError = null);
   }
 
@@ -212,6 +313,10 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   }
 
   Future<void> _pickSupplier() async {
+    if (ref.read(remoteVouchersEnabledProvider)) {
+      await _pickSupplierRemote();
+      return;
+    }
     final suppliers = await ref.read(repositoryProvider).watchActiveSuppliers().first;
     if (!mounted) return;
     final draft = ref.read(voucherDraftProvider);
@@ -245,7 +350,45 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     setState(() {});
   }
 
+  Future<void> _pickSupplierRemote() async {
+    final suppliers = await ref.read(appProvidersRepositoryProvider).listAllSuppliers();
+    if (!mounted) return;
+    final draft = ref.read(voucherDraftProvider);
+    final l10n = AppLocalizations.of(context);
+    final picked = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (_) => EntityPickerPage(
+          title: l10n.supplier,
+          entries: suppliers.map((s) => (s.id, s.name)).toList(),
+          selectedId: draft.supplierId,
+          searchKeys: suppliers.map((s) => s.phone ?? '').toList(),
+          tileBuilder: (ctx, id, selected, onSelect, showDivider) {
+            final s = suppliers.firstWhere((e) => e.id == id);
+            return VoucherPickerSupplierCard(
+              name: s.name,
+              phone: s.phone,
+              selected: selected,
+              onTap: onSelect,
+              showDivider: showDivider,
+            );
+          },
+          onCreateRoute: () => const InlineCreateSupplierPage(),
+        ),
+      ),
+    );
+    if (picked == null) return;
+    final label = suppliers.firstWhere((s) => s.id == picked).name;
+    ref.read(voucherDraftProvider.notifier).state = ref
+        .read(voucherDraftProvider)
+        .copyWith(supplierId: picked, supplierLabel: label);
+    setState(() {});
+  }
+
   Future<void> _pickCraftsman() async {
+    if (ref.read(remoteVouchersEnabledProvider)) {
+      await _pickCraftsmanRemote();
+      return;
+    }
     final draft = ref.read(voucherDraftProvider);
     if (draft.projectId == null) {
       setState(() => _craftsmanPickerError = AppLocalizations.of(context).voucherSelectClient);
@@ -288,6 +431,48 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     setState(() => _craftsmanPickerError = null);
   }
 
+  Future<void> _pickCraftsmanRemote() async {
+    final draft = ref.read(voucherDraftProvider);
+    if (draft.clientId == null) {
+      setState(() => _craftsmanPickerError = AppLocalizations.of(context).voucherSelectClient);
+      return;
+    }
+    final craftsmen = await ref.read(appProvidersRepositoryProvider).listAllCraftsmen();
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context);
+    if (craftsmen.isEmpty) {
+      AppToaster.show(l10n.voucherSelectCraftsman, kind: ToastKind.warning);
+      return;
+    }
+    final picked = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (_) => EntityPickerPage(
+          title: l10n.craftsman,
+          entries: craftsmen.map((c) => (c.id, c.name)).toList(),
+          selectedId: draft.craftsmanId,
+          searchKeys: craftsmen.map((c) => '').toList(),
+          tileBuilder: (ctx, id, selected, onSelect, showDivider) {
+            final c = craftsmen.firstWhere((e) => e.id == id);
+            return VoucherPickerCraftsmanCard(
+              name: c.name,
+              trade: null,
+              selected: selected,
+              onTap: onSelect,
+              showDivider: showDivider,
+            );
+          },
+          onCreateRoute: () => const InlineCreateCraftsmanPage(),
+        ),
+      ),
+    );
+    if (picked == null) return;
+    final label = craftsmen.firstWhere((e) => e.id == picked).name;
+    ref.read(voucherDraftProvider.notifier).state = ref
+        .read(voucherDraftProvider)
+        .copyWith(craftsmanId: picked, craftsmanLabel: label);
+    setState(() => _craftsmanPickerError = null);
+  }
+
   bool _validatePickers(VoucherDraft draft, AppLocalizations l10n) {
     var valid = true;
     if (draft.projectId == null || draft.clientId == null) {
@@ -310,6 +495,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final draft = ref.read(voucherDraftProvider);
     final txId = draft.editingTransactionId;
     if (txId == null) return;
+    final remote = ref.read(remoteVouchersEnabledProvider);
 
     final l10n = AppLocalizations.of(context);
     final answer = await AppDecision.show(
@@ -324,20 +510,27 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     if (answer != OverlayAnswer.confirmed || !mounted) return;
 
     setState(() => _deleting = true);
-    final repo = ref.read(repositoryProvider);
     try {
-      final tx = await repo.getTransaction(txId);
-      if (tx == null) return;
-      await repo.deleteTransaction(txId);
-      final project = await repo.projectById(tx.projectId);
-      refreshAfterTransactionMutation(
-        ref,
-        clientId: draft.clientId ?? project?.clientId,
-        supplierId: tx.supplierId,
-        craftsmanId: tx.craftsmanId,
-      );
+      if (remote) {
+        final ok = await deleteRemoteVoucher(context: context, ref: ref, draft: draft);
+        if (!ok) return;
+      } else {
+        final repo = ref.read(repositoryProvider);
+        final tx = await repo.getTransaction(txId);
+        if (tx == null) return;
+        await repo.deleteTransaction(txId);
+        final project = await repo.projectById(tx.projectId);
+        refreshAfterTransactionMutation(
+          ref,
+          clientId: draft.clientId ?? project?.clientId,
+          supplierId: tx.supplierId,
+          craftsmanId: tx.craftsmanId,
+        );
+      }
       AppToaster.show(l10n.delete, kind: ToastKind.success);
       if (mounted) Navigator.of(context, rootNavigator: true).pop();
+    } on AuthApiException catch (e) {
+      if (mounted) AppToaster.show(e.message, kind: ToastKind.failure);
     } catch (e) {
       if (mounted) AppToaster.show('$e', kind: ToastKind.failure);
     } finally {
@@ -356,13 +549,64 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       setState(() {});
       return;
     }
-    final amount = MoneyFormat.parseEgpInput(_amountCtrl.text);
+    final remote = ref.read(remoteVouchersEnabledProvider);
+    final amount = remote
+        ? RemoteMoneyFormat.parseMajorInput(_amountCtrl.text)
+        : MoneyFormat.parseEgpInput(_amountCtrl.text);
     if (amount == null || amount <= 0) return;
 
     setState(() => _saving = true);
     final repo = ref.read(repositoryProvider);
     final date = draft.date ?? DateTime.now();
     try {
+      if (remote) {
+        final result = await saveRemoteVoucher(
+          context: context,
+          ref: ref,
+          draft: draft,
+          amountMinor: amount,
+          description: _descCtrl.text,
+          receipts: _receiptRows,
+          pendingReceiptDeletes: _pendingReceiptDeletes.toList(),
+        );
+        if (!result.voucherSaved) {
+          if (mounted) setState(() => _saving = false);
+          return;
+        }
+        if (result.voucher != null) {
+          ref.read(voucherDraftProvider.notifier).state = draft.copyWith(
+                editingTransactionId: result.voucher!.id,
+              );
+        }
+        if (mounted) {
+          _pendingReceiptDeletes.removeWhere((id) => result.deletedReceiptIds.contains(id));
+          _pendingReceiptDeletes.addAll(result.failedDeleteReceiptIds);
+          setState(() => _receiptRows
+            ..clear()
+            ..addAll(result.receipts));
+        }
+        if (result.failedReceiptDeletes > 0) {
+          if (mounted && result.voucher != null) {
+            await _refreshRemoteReceiptsKeepingPendingUploads(result.voucher!.id);
+            AppToaster.show(l10n.voucherReceiptDeleteRetry, kind: ToastKind.warning);
+            setState(() => _saving = false);
+          }
+          return;
+        }
+        if (result.failedReceiptUploads > 0) {
+          if (mounted) {
+            AppToaster.show(
+              voucherReceiptUploadErrorMessage(l10n, result.lastReceiptError),
+              kind: ToastKind.warning,
+            );
+            setState(() => _saving = false);
+          }
+          return;
+        }
+        AppToaster.show(l10n.save, kind: ToastKind.success);
+        if (mounted) Navigator.of(context, rootNavigator: true).pop();
+        return;
+      }
       if (draft.editingTransactionId != null) {
         await repo.updateTransaction(
           draft.editingTransactionId!,
@@ -372,7 +616,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             date: Value(date),
             method: Value(draft.method),
             description: Value(_descCtrl.text.isEmpty ? null : _descCtrl.text),
-            receiptImagePath: Value(ReceiptImageCodec.encode(_receiptPaths)),
+            receiptImagePath: Value(ReceiptImageCodec.encode(_receiptRows.map((e) => e.localPath).toList())),
             itemId: Value(draft.kind == 'spend' ? draft.itemId : null),
             expenseType: Value(draft.kind == 'spend' ? draft.expenseType : null),
             supplierId: Value(draft.expenseType == 'materials' ? draft.supplierId : null),
@@ -387,7 +631,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           date: date,
           method: draft.method,
           description: _descCtrl.text.isEmpty ? null : _descCtrl.text,
-          receiptImagePath: ReceiptImageCodec.encode(_receiptPaths),
+          receiptImagePath: ReceiptImageCodec.encode(_receiptRows.map((e) => e.localPath).toList()),
           itemId: draft.kind == 'spend' ? draft.itemId : null,
           expenseType: draft.kind == 'spend' ? draft.expenseType : null,
           supplierId: draft.expenseType == 'materials' ? draft.supplierId : null,
@@ -449,7 +693,12 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
 
   Future<void> _appendPaths(List<String> paths) async {
     if (paths.isEmpty) return;
-    setState(() => _receiptPaths.addAll(paths));
+    final remote = ref.read(remoteVouchersEnabledProvider);
+    setState(() {
+      _receiptRows.addAll(
+        paths.map((path) => VoucherSheetReceipt(localPath: path, needsUpload: remote)),
+      );
+    });
   }
 
   Future<void> _attachFromCamera() async {
@@ -459,7 +708,8 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
         PageRouteBuilder(
           opaque: false,
           barrierColor: Colors.transparent,
-          pageBuilder: (_, _, _) => VoucherCameraPickRoute(picker: _receiptPicker),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              VoucherCameraPickRoute(picker: _receiptPicker),
         ),
       );
       if (result == null || !mounted) {
@@ -513,8 +763,18 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     }
   }
 
-  void _removeReceiptAt(int index) {
-    setState(() => _receiptPaths.removeAt(index));
+  Future<void> _removeReceiptAt(int index) async {
+    final row = _receiptRows[index];
+    final remote = ref.read(remoteVouchersEnabledProvider);
+    if (remote && _isEditing && row.serverId != null) {
+      setState(() {
+        _pendingReceiptDeletes.add(row.serverId!);
+        _receiptRows.removeAt(index);
+      });
+      return;
+    }
+    if (!mounted) return;
+    setState(() => _receiptRows.removeAt(index));
   }
 
   @override
@@ -698,17 +958,20 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
                           textInputAction: TextInputAction.done,
                         ),
                         Text(l10n.voucherReceiptPhoto, style: context.text.body.semiBold),
-                        for (var i = 0; i < _receiptPaths.length; i++)
+                        for (var i = 0; i < _receiptRows.length; i++)
                           CustomListTile(
                             leading: const Icon(Icons.photo_outlined),
                             title: l10n.voucherReceiptPhoto,
-                            subtitle: p.basename(_receiptPaths[i]),
-                            trailing: IconButton(icon: const Icon(Icons.close), onPressed: () => _removeReceiptAt(i)),
+                            subtitle: p.basename(_receiptRows[i].localPath),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () => _removeReceiptAt(i),
+                            ),
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => Scaffold(
                                   appBar: const CustomAppBar(),
-                                  body: Center(child: Image.file(File(_receiptPaths[i]))),
+                                  body: Center(child: Image.file(File(_receiptRows[i].localPath))),
                                 ),
                               ),
                             ),

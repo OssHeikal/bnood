@@ -112,7 +112,7 @@ class AgreementsApi {
   Future<AppAgreement> createAgreement({
     required String clientId,
     required String providerId,
-    int? amountPiastres,
+    double? amountMajor,
     bool omitAmount = false,
   }) {
     return _guard(() async {
@@ -121,7 +121,7 @@ class AgreementsApi {
         'provider_id': providerId,
       };
       if (!omitAmount) {
-        body['amount'] = amountPiastres;
+        body['amount'] = amountMajor;
       }
       final response = await _dio.post<Map<String, dynamic>>(
         _prefix,
@@ -137,12 +137,12 @@ class AgreementsApi {
 
   Future<AppAgreement> patchAgreement({
     required String id,
-    required int? amountPiastres,
+    required double? amountMajor,
   }) {
     return _guard(() async {
       final response = await _dio.patch<Map<String, dynamic>>(
         '$_prefix/$id',
-        data: {'amount': amountPiastres},
+        data: {'amount': amountMajor},
         options: Options(extra: _authenticatedExtra),
       );
       return ApiResponseParser.expectData(

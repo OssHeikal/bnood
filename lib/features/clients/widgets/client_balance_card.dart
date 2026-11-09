@@ -27,6 +27,7 @@ class ClientBalanceCard extends StatelessWidget {
     this.showAmountCaption = true,
     this.receivedPiastres,
     this.spentPiastres,
+    this.minorPerMajor = 100,
   });
 
   final String name;
@@ -40,6 +41,7 @@ class ClientBalanceCard extends StatelessWidget {
   final AppAmountRole amountRole;
   final String? amountCaption;
   final bool showAmountCaption;
+  final int minorPerMajor;
 
   static const _stripeWidth = 4.0;
 
@@ -91,6 +93,7 @@ class ClientBalanceCard extends StatelessWidget {
                                       role: amountRole,
                                       size: AppAmountSize.small,
                                       localeCode: localeCode,
+                                      minorPerMajor: minorPerMajor,
                                     )
                                   : Text(
                                       AppLocalizations.of(context).amountUnavailable,
@@ -120,6 +123,7 @@ class ClientBalanceCard extends StatelessWidget {
                                 receivedPiastres: receivedPiastres!,
                                 spentPiastres: spentPiastres!,
                                 localeCode: localeCode,
+                                minorPerMajor: minorPerMajor,
                               )
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -134,6 +138,7 @@ class ClientBalanceCard extends StatelessWidget {
                                       role: amountRole,
                                       size: AppAmountSize.small,
                                       localeCode: localeCode,
+                                      minorPerMajor: minorPerMajor,
                                     )
                                   else
                                     Text(
@@ -162,11 +167,13 @@ class ClientInOutTrailing extends StatelessWidget {
     required this.receivedPiastres,
     required this.spentPiastres,
     required this.localeCode,
+    this.minorPerMajor = 100,
   });
 
   final int receivedPiastres;
   final int spentPiastres;
   final String localeCode;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +193,7 @@ class ClientInOutTrailing extends StatelessWidget {
               piastres: receivedPiastres,
               role: AppAmountRole.receive,
               localeCode: localeCode,
+              minorPerMajor: minorPerMajor,
             ),
             AppSize.spaceXS.gap,
             _FlowAmount(
@@ -194,6 +202,7 @@ class ClientInOutTrailing extends StatelessWidget {
               piastres: spentPiastres,
               role: AppAmountRole.spend,
               localeCode: localeCode,
+              minorPerMajor: minorPerMajor,
             ),
           ],
         ),
@@ -209,6 +218,7 @@ class _FlowAmount extends StatelessWidget {
     required this.piastres,
     required this.role,
     required this.localeCode,
+    this.minorPerMajor = 100,
   });
 
   final SvgGenImage icon;
@@ -216,6 +226,7 @@ class _FlowAmount extends StatelessWidget {
   final int piastres;
   final AppAmountRole role;
   final String localeCode;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +235,13 @@ class _FlowAmount extends StatelessWidget {
       children: [
         ShellNavIcon(asset: icon, color: tint, size: AppSize.iconSmall),
         const SizedBox(width: AppSize.spaceXS),
-        AppAmount(piastres: piastres, role: role, size: AppAmountSize.small, localeCode: localeCode),
+        AppAmount(
+          piastres: piastres,
+          role: role,
+          size: AppAmountSize.small,
+          localeCode: localeCode,
+          minorPerMajor: minorPerMajor,
+        ),
       ],
     );
   }

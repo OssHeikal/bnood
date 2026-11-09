@@ -88,11 +88,22 @@ abstract final class ApiResponseParser {
   static AuthApiException fromDio(DioException err) {
     final response = err.response;
     if (response != null) {
+      final status = response.statusCode ?? 0;
+      if (status == 413) {
+        return AuthApiException(
+          statusCode: 413,
+          code: 'invalid_size',
+          message: 'Request entity too large',
+        );
+      }
       try {
         final json = decodeJson(response);
         return fromFailure(response, json);
       } catch (_) {
-        return transport(err);
+        return AuthApiException(
+          statusCode: status,
+          message: 'Request failed',
+        );
       }
     }
     return transport(err);

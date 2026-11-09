@@ -33,6 +33,23 @@ class ProvidersRepository {
 
   Future<void> deleteProvider(String id) => _api.deleteProvider(id);
 
+  Future<List<AppProvider>> listAllSuppliers({String? q}) async {
+    final all = <AppProvider>[];
+    var page = 1;
+    while (true) {
+      final result = await listProviders(
+        q: q,
+        type: AppProviderType.supplier,
+        page: page,
+        perPage: 50,
+      );
+      all.addAll(result.items);
+      if (!result.hasMore) break;
+      page++;
+    }
+    return all;
+  }
+
   Future<List<AppProvider>> listAllCraftsmen({String? q}) async {
     final all = <AppProvider>[];
     var page = 1;

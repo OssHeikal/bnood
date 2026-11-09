@@ -5,8 +5,10 @@ import '../../core/clients/clients_providers.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/vouchers/vouchers_riverpod.dart';
 import 'client_detail_snapshot.dart';
 import 'client_movement_lines.dart';
+import 'client_voucher_movement_lines.dart';
 import 'widgets/client_balance_card.dart';
 
 final clientDetailProvider =
@@ -63,17 +65,33 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
               craftsmanId: a.providerId,
               name: a.providerName ?? '—',
               trade: null,
-              paidPiastres: 0,
-              agreedPiastres: a.amountPiastres,
-              remainingPiastres: null,
+              paidPiastres: a.paidMinorForDisplay,
+              agreedPiastres: a.amountMinorForDisplay,
+              remainingPiastres: a.remainingMinorForDisplay,
               accentKey: clientAccentKeyFor(a.providerId),
               agreementId: a.id,
               onlineAgreementsOnly: true,
+              usesRemoteMoney: true,
             ),
           )
           .toList()
         ..sort((a, b) => a.name.compareTo(b.name));
     }
+
+    var latestMovements = <ClientDetailMovementLine>[];
+    final vouchersOnline = ref.read(remoteVouchersEnabledProvider);
+    if (vouchersOnline) {
+      final vouchers = await ref.read(vouchersRepositoryProvider).listClientVouchers(
+            clientId: clientId,
+            page: 1,
+            perPage: 5,
+          );
+      latestMovements = movementLinesFromVouchers(
+        vouchers.items,
+        projectId: record.project.id,
+      );
+    }
+
     return ClientDetailSnapshot(
       client: record.client,
       project: record.project,
@@ -82,8 +100,10 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
       estimatedProfitPiastres: null,
       craftsmanPreviews: previews,
       topItems: const [],
-      latestMovements: const [],
-      onlineIdentityOnly: true,
+      latestMovements: latestMovements,
+      onlineIdentityOnly: !vouchersOnline,
+      usesRemoteMoney: true,
+      remainingFromServer: balances?.remainingPiastres,
     );
   }
 

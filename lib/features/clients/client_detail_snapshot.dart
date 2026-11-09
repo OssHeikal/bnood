@@ -12,6 +12,7 @@ class ClientCraftsmanPreviewRow {
     required this.accentKey,
     this.agreementId,
     this.onlineAgreementsOnly = false,
+    this.usesRemoteMoney = false,
   });
 
   final String craftsmanId;
@@ -23,6 +24,7 @@ class ClientCraftsmanPreviewRow {
   final String accentKey;
   final String? agreementId;
   final bool onlineAgreementsOnly;
+  final bool usesRemoteMoney;
 }
 
 class ClientDetailItemRowData {
@@ -45,12 +47,14 @@ class ClientDetailMovementLine {
     this.itemName,
     this.payeeName,
     this.payeeIsSupplier,
+    this.usesRemoteMinorUnits = false,
   });
 
   final Transaction transaction;
   final String? itemName;
   final String? payeeName;
   final bool? payeeIsSupplier;
+  final bool usesRemoteMinorUnits;
 }
 
 class ClientDetailSnapshot {
@@ -64,6 +68,8 @@ class ClientDetailSnapshot {
     required this.topItems,
     required this.latestMovements,
     this.onlineIdentityOnly = false,
+    this.usesRemoteMoney = false,
+    this.remainingFromServer,
   });
 
   final Client client;
@@ -76,9 +82,15 @@ class ClientDetailSnapshot {
   final List<ClientDetailMovementLine> latestMovements;
   final bool onlineIdentityOnly;
 
+  /// Online voucher/client balances use minor units per EGP × 1000.
+  final bool usesRemoteMoney;
+
+  final int? remainingFromServer;
+
   bool get hasBalances => receivedPiastres != null && spentPiastres != null;
 
   int? get remainingPiastres {
+    if (remainingFromServer != null) return remainingFromServer;
     if (!hasBalances) return null;
     return receivedPiastres! - spentPiastres!;
   }

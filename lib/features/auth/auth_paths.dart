@@ -45,6 +45,8 @@ bool isRemoteProviderDetailLocation(String location) {
   return location.startsWith('/providers/');
 }
 
+bool isRemoteVouchersSessionEnabled({required bool remoteClientsEnabled}) => remoteClientsEnabled;
+
 bool isLocalLedgerLocation(String location) {
   if (isRemoteClientsLocation(location)) return false;
   if (isRemoteItemsLocation(location)) return false;

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
 import '../../core/agreements/agreements_error_handler.dart';
+import '../../core/agreements/agreement_amount_api.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/widgets/app_decision.dart';
@@ -59,7 +60,10 @@ Future<bool> saveRemoteAgreementAmount({
 }) async {
   final repo = ref.read(appAgreementsRepositoryProvider);
   try {
-    await repo.patchAgreement(id: agreementId, amountPiastres: amountPiastres);
+    await repo.patchAgreement(
+      id: agreementId,
+      amountMajor: agreementAmountMajorFromMinor(amountPiastres),
+    );
     if (clientId != null) {
       refreshAfterClientMutation(ref, clientId: clientId);
     }

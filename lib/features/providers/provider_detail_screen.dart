@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/money/remote_money_units.dart';
 import '../../core/providers_api/app_provider_record.dart';
+import '../../core/widgets/app_amount.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/utils/extensions/bidi_isolate.dart';
 import '../../core/widgets/app_card.dart';
@@ -196,6 +198,61 @@ class _ProviderDetailBody extends ConsumerWidget {
             ],
           ),
         ),
+        if (data.voucherHistory.isNotEmpty) ...[
+          AppSize.spaceXL.gap,
+          HomeSectionHeader(title: l10n.movements),
+          AppSize.spaceSM.gap,
+          AppCard(
+            child: Row(
+              children: [
+                Text(
+                  provider.type == AppProviderType.supplier
+                      ? l10n.supplierTotalPaidLabel
+                      : l10n.craftsmanTotalLaborPaidLabel,
+                  style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                ),
+                AppSize.spaceSM.gap,
+                AppAmount(
+                  piastres: data.totalVoucherMinor,
+                  role: AppAmountRole.spend,
+                  localeCode: localeCode,
+                  minorPerMajor: RemoteMoneyUnits.minorPerMajor,
+                ),
+              ],
+            ),
+          ),
+          AppSize.spaceMD.gap,
+          for (var i = 0; i < data.voucherHistory.length; i++) ...[
+            if (i > 0) AppSize.spaceMD.gap,
+            AppCard(
+              padding: const EdgeInsets.all(AppSize.spaceMD),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(data.voucherHistory[i].clientName, style: text.bodyEmphasis),
+                  AppSize.spaceXS.gap,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          data.voucherHistory[i].voucher.itemName ?? l10n.clientDetailUnspecifiedItem,
+                          style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                        ),
+                      ),
+                      AppAmount(
+                        piastres: data.voucherHistory[i].voucher.amountMinor,
+                        role: AppAmountRole.spend,
+                        size: AppAmountSize.small,
+                        localeCode: localeCode,
+                        minorPerMajor: RemoteMoneyUnits.minorPerMajor,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
         if (provider.type == AppProviderType.craftsman) ...[
           AppSize.spaceXL.gap,
           HomeSectionHeader(title: l10n.providerDetailLinkedClientsTitle),

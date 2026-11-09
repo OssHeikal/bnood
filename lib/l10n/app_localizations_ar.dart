@@ -439,6 +439,26 @@ class AppLocalizationsAr extends AppLocalizations {
       'تعذّر إرفاق الإيصال. حاول مرة أخرى.';
 
   @override
+  String get voucherReceiptUploadRetry =>
+      'تم حفظ السند. اضغط حفظ مرة أخرى لإعادة رفع صور الإيصال.';
+
+  @override
+  String get voucherReceiptDeleteRetry =>
+      'تم حفظ السند لكن تعذّر حذف إيصال. اضغط حفظ للمحاولة مرة أخرى.';
+
+  @override
+  String get voucherReceiptTooLarge =>
+      'صورة الإيصال كبيرة جدًا. جرّب صورة أصغر أو احفظ مرة أخرى بعد الضغط.';
+
+  @override
+  String get voucherReceiptCompressFailed =>
+      'تعذّر تجهيز صورة الإيصال للرفع. جرّب صورة أخرى أو احفظ مجددًا.';
+
+  @override
+  String get voucherReceiptInvalidMime =>
+      'نوع الملف غير مقبول. استخدم JPEG أو PNG أو WebP.';
+
+  @override
   String get voucherAssignCraftsmanFirst => 'عيّن صنايعية للمشروع أولًا';
 
   @override

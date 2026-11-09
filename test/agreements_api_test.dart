@@ -62,8 +62,27 @@ void main() {
           '{"success":true,"data":{"id":"01JA","client_id":"c1","provider_id":"p1","amount":null}}',
         );
       });
-      await api.patchAgreement(id: '01JA', amountPiastres: null);
+      await api.patchAgreement(id: '01JA', amountMajor: null);
       expect((body! as Map)['amount'], isNull);
+      api.close();
+    });
+
+    test('create and patch send major EGP amount not minor integer', () async {
+      final bodies = <Object?>[];
+      final api = _agreementsApi((options) async {
+        bodies.add(options.data);
+        return jsonResponse(
+          '{"success":true,"data":{"id":"01JA","client_id":"c1","provider_id":"p1","amount":1000000}}',
+        );
+      });
+      await api.createAgreement(
+        clientId: 'c1',
+        providerId: 'p1',
+        amountMajor: 1000000,
+      );
+      await api.patchAgreement(id: '01JA', amountMajor: 800000);
+      expect((bodies[0]! as Map)['amount'], 1000000);
+      expect((bodies[1]! as Map)['amount'], 800000);
       api.close();
     });
 

@@ -31,21 +31,21 @@ class AgreementsRepository {
   Future<AppAgreement> createAgreement({
     required String clientId,
     required String providerId,
-    int? amountPiastres,
+    double? amountMajor,
     bool omitAmount = false,
   }) =>
       _api.createAgreement(
         clientId: clientId,
         providerId: providerId,
-        amountPiastres: amountPiastres,
+        amountMajor: amountMajor,
         omitAmount: omitAmount,
       );
 
   Future<AppAgreement> patchAgreement({
     required String id,
-    required int? amountPiastres,
+    required double? amountMajor,
   }) =>
-      _api.patchAgreement(id: id, amountPiastres: amountPiastres);
+      _api.patchAgreement(id: id, amountMajor: amountMajor);
 
   Future<void> deleteAgreement(String id) => _api.deleteAgreement(id);
 

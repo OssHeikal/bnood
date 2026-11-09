@@ -1,0 +1,1036 @@
+[ApiClient] ┌─ API ► PATCH ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/vouchers/01m6zyqc8ttw50n8782cjtwmjr
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   {
+            │     "amount": 2000000,
+            │     "date": "2026-11-09",
+            │     "payment_method": "transfer",
+            │     "description": null,
+            │     "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │     "expense_classification": "labor",
+            │     "provider_id": "01m6ztt4x4a2f16r1e894rj363"
+            │   }
+            └─────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ PATCH · 200 OK · 90ms ─────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/vouchers/01m6zyqc8ttw50n8782cjtwmjr
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Voucher updated successfully.",
+            │     "data": {
+            │       "id": "01m6zyqc8ttw50n8782cjtwmjr",
+            │       "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │       "type": "spend",
+            │       "payment_method": "transfer",
+            │       "date": "2026-11-09",
+            │       "amount": 2000000,
+            │       "description": null,
+            │       "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │       "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │       "expense_classification": "labor",
+            │       "client": {
+            │         "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "name": "احمد"
+            │       },
+            │       "item": {
+            │         "id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │         "name": "سباكة"
+            │       },
+            │       "provider": {
+            │         "id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "name": "أحمد السباك",
+            │         "type": "craftsman"
+            │       },
+            │       "receipts": [],
+            │       "created_at": "2026-11-09T10:47:36+00:00",
+            │       "updated_at": "2026-11-09T10:47:36+00:00"
+            │     }
+            │   }
+            └─────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► POST ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/vouchers/01m6zyqc8ttw50n8782cjtwmjr/receipts
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: multipart/form-data
+            │ Body:
+            │   Instance of 'FormData'
+            └──────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients?status=active&page=1&per_page=50
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 96ms ────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Providers retrieved successfully.",
+            │     "data": {
+            │       "id": "01m6ztt4x4a2f16r1e894rj363",
+            │       "name": "أحمد السباك",
+            │       "phone": null,
+            │       "type": "craftsman",
+            │       "created_at": "2026-11-09T09:39:13+00:00",
+            │       "updated_at": "2026-11-09T09:39:13+00:00"
+            │     }
+            │   }
+            └──────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 99ms ──────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Client retrieved.",
+            │     "data": {
+            │       "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │       "name": "احمد",
+            │       "phone": null,
+            │       "archived_at": null,
+            │       "created_at": "2026-11-09T09:53:57+00:00",
+            │       "updated_at": "2026-11-09T09:53:57+00:00",
+            │       "project": {
+            │         "id": "01m6zvn4gpjbpx4gn1pt793e4r",
+            │         "name": "احمد",
+            │         "status": "active"
+            │       },
+            │       "balances": {
+            │         "received": 0,
+            │         "spent": 12000000,
+            │         "remaining": -12000000
+            │       }
+            │     }
+            │   }
+            └────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 97ms ────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients?status=active&page=1&per_page=50
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Client retrieved.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zqqvrgwztxx4vamz7pe8xk",
+            │         "name": "Osama",
+            │         "phone": null,
+            │         "archived_at": null,
+            │         "created_at": "2026-11-09T08:45:32+00:00",
+            │         "updated_at": "2026-11-09T08:45:32+00:00",
+            │         "project": {
+            │           "id": "01m6zqqvrjhtrxbseve3c3rh68",
+            │           "name": "Osama",
+            │           "status": "active"
+            │         },
+            │         "balances": {
+            │           "received": 0,
+            │           "spent": 0,
+            │           "remaining": 0
+            │         }
+            │       },
+            │       {
+            │         "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "name": "احمد",
+            │         "phone": null,
+            │         "archived_at": null,
+            │         "created_at": "2026-11-09T09:53:57+00:00",
+            │         "updated_at": "2026-11-09T09:53:57+00:00",
+            │         "project": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4r",
+            │           "name": "احمد",
+            │           "status": "active"
+            │         },
+            │         "balances": {
+            │           "received": 0,
+            │           "spent": 12000000,
+            │           "remaining": -12000000
+            │         }
+            │       },
+            │       {
+            │         "id": "01m6zvnbq07kn6874wr20afpde",
+            │         "name": "محمود",
+            │         "phone": null,
+            │         "archived_at": null,
+            │         "created_at": "2026-11-09T09:54:05+00:00",
+            │         "updated_at": "2026-11-09T09:54:05+00:00",
+            │         "project": {
+            │           "id": "01m6zvnbq1d1fh2qb8mg4pe0dk",
+            │           "name": "محمود",
+            │           "status": "active"
+            │         },
+            │         "balances": {
+            │           "received": 0,
+            │           "spent": 0,
+            │           "remaining": 0
+            │         }
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 50,
+            │       "total": 3
+            │     }
+            │   }
+            └──────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✕ POST · 413 Client Error · 101ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/vouchers/01m6zyqc8ttw50n8782cjtwmjr/receipts
+            │ ↳ badResponse
+            │ ↳ mapped · 0 · code=network · Network request failed
+            │ Response body:
+            │   <html>
+            │   <head><script>(function(){if(window.__HERD_EARLY_ERRORS__)return;var b=window.__HERD_EARLY_ERRORS__=[];function p(e){if(b.length<50)b.push(e)}window.addEventListener("error",function(e){if(window.__HERD_FRAME_AGENT__)return;p({message:e.message,filename:e.filename,lineno:e.lineno,stack:e.error&&e.error.stack})});window.addEventListener("unhandledrejection",function(e){if(window.__HERD_FRAME_AGENT__)return;var r=e.reason;p({message:"Unhandled promise rejection: "+(r&&r.message?r.message:String(r)),stack:r&&r.stack})})})();</script><title>413 Request Entity Too Large</title><script>(function(){if(window.__HERD_EARLY_ERRORS__)return;var b=window.__HERD_EARLY_ERRORS__=[];function p(e){if(b.length<50)b.push(e)}window.addEventListener("error",function(e){if(window.__HERD_FRAME_AGENT__)return;p({message:e.message,filename:e.filename,lineno:e.lineno,stack:e.error&&e.error.stack})});window.addEventListener("unhandledrejection",function(e){if(window.__HERD_FRAME_AGENT__)return;var r=e.reason;p({message:"Unhandled promise rejection: "+(r&&r.message?r.message:String(r)),stack:r&&r.stack})})})();</script><script type="module" src="/herd-studio/loader.js"></script></head>
+            │   <body>
+            │   <center><h1>413 Request Entity Too Large</h1></center>
+            │   <hr><center>nginx/1.25.5</center>
+            │   </body>
+            │   </html>
+            │
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-length: 3967439
+            │   content-type: multipart/form-data; boundary=--dio-boundary-2846804731
+            │ Body:
+            │   Instance of 'FormData'
+            └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/agreements?page=1&per_page=50
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └────────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 168ms ───────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Providers retrieved successfully.",
+            │     "data": {
+            │       "id": "01m6ztt4x4a2f16r1e894rj363",
+            │       "name": "أحمد السباك",
+            │       "phone": null,
+            │       "type": "craftsman",
+            │       "created_at": "2026-11-09T09:39:13+00:00",
+            │       "updated_at": "2026-11-09T09:39:13+00:00"
+            │     }
+            │   }
+            └──────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q/agreements?page=1&per_page=50
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/agreements?page=1&per_page=50
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └────────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 23ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q/agreements?page=1&per_page=50
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Agreements retrieved successfully.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zx3whbd6449504z80f4hpm",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "amount": 10000,
+            │         "paid": 2000,
+            │         "remaining": 8000,
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "type": "craftsman"
+            │         },
+            │         "created_at": "2026-11-09T10:19:29+00:00",
+            │         "updated_at": "2026-11-09T10:50:04+00:00"
+            │       },
+            │       {
+            │         "id": "01m6zx3wg1z32vq57nscpzn72k",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "provider_id": "01m6zvxayp92jn0v5jw455qebz",
+            │         "amount": 8000,
+            │         "paid": 0,
+            │         "remaining": 8000,
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "provider": {
+            │           "id": "01m6zvxayp92jn0v5jw455qebz",
+            │           "name": "محمود النجار",
+            │           "type": "craftsman"
+            │         },
+            │         "created_at": "2026-11-09T10:19:29+00:00",
+            │         "updated_at": "2026-11-09T10:49:49+00:00"
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 50,
+            │       "total": 2
+            │     }
+            │   }
+            └──────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 28ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/agreements?page=1&per_page=50
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Agreements retrieved successfully.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zx3whbd6449504z80f4hpm",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "amount": 10000,
+            │         "paid": 2000,
+            │         "remaining": 8000,
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "type": "craftsman"
+            │         },
+            │         "created_at": "2026-11-09T10:19:29+00:00",
+            │         "updated_at": "2026-11-09T10:50:04+00:00"
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 50,
+            │       "total": 1
+            │     }
+            │   }
+            └────────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 38ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/agreements?page=1&per_page=50
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Agreements retrieved successfully.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zx3whbd6449504z80f4hpm",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "amount": 10000,
+            │         "paid": 2000,
+            │         "remaining": 8000,
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "type": "craftsman"
+            │         },
+            │         "created_at": "2026-11-09T10:19:29+00:00",
+            │         "updated_at": "2026-11-09T10:50:04+00:00"
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 50,
+            │       "total": 1
+            │     }
+            │   }
+            └────────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q/vouchers?page=1&per_page=5
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └───────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/vouchers?page=1&per_page=50
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/vouchers?page=1&per_page=50
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 102ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/vouchers?page=1&per_page=50
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Vouchers retrieved successfully.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zyqc8ttw50n8782cjtwmjr",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "type": "spend",
+            │         "payment_method": "transfer",
+            │         "date": "2026-11-09",
+            │         "amount": 2000000,
+            │         "description": null,
+            │         "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │         "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "expense_classification": "labor",
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "item": {
+            │           "id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │           "name": "سباكة"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "type": "craftsman"
+            │         },
+            │         "receipts": [],
+            │         "created_at": "2026-11-09T10:47:36+00:00",
+            │         "updated_at": "2026-11-09T10:47:36+00:00"
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 50,
+            │       "total": 1
+            │     }
+            │   }
+            └──────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 110ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q/vouchers?page=1&per_page=5
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Vouchers retrieved successfully.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zyqc8ttw50n8782cjtwmjr",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "type": "spend",
+            │         "payment_method": "transfer",
+            │         "date": "2026-11-09",
+            │         "amount": 2000000,
+            │         "description": null,
+            │         "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │         "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "expense_classification": "labor",
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "item": {
+            │           "id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │           "name": "سباكة"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "type": "craftsman"
+            │         },
+            │         "receipts": [],
+            │         "created_at": "2026-11-09T10:47:36+00:00",
+            │         "updated_at": "2026-11-09T10:47:36+00:00"
+            │       },
+            │       {
+            │         "id": "01m6zycq2cs9z133r3jxjq7yj6",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "type": "spend",
+            │         "payment_method": "cash",
+            │         "date": "2026-11-09",
+            │         "amount": 10000000,
+            │         "description": null,
+            │         "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │         "provider_id": "01m6ztqcdz9wrgyaz0sce2ae28",
+            │         "expense_classification": "materials",
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "item": {
+            │           "id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │           "name": "سباكة"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztqcdz9wrgyaz0sce2ae28",
+            │           "name": "عبد العزيز السلاب",
+            │           "type": "supplier"
+            │         },
+            │         "receipts": [],
+            │         "created_at": "2026-11-09T10:41:47+00:00",
+            │         "updated_at": "2026-11-09T10:41:47+00:00"
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 5,
+            │       "total": 2
+            │     }
+            │   }
+            └───────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 110ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/vouchers?page=1&per_page=50
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Vouchers retrieved successfully.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zyqc8ttw50n8782cjtwmjr",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "type": "spend",
+            │         "payment_method": "transfer",
+            │         "date": "2026-11-09",
+            │         "amount": 2000000,
+            │         "description": null,
+            │         "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │         "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "expense_classification": "labor",
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "item": {
+            │           "id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │           "name": "سباكة"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "type": "craftsman"
+            │         },
+            │         "receipts": [],
+            │         "created_at": "2026-11-09T10:47:36+00:00",
+            │         "updated_at": "2026-11-09T10:47:36+00:00"
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 50,
+            │       "total": 1
+            │     }
+            │   }
+            └──────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► PATCH ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/vouchers/01m6zyqc8ttw50n8782cjtwmjr
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   {
+            │     "amount": 2000000,
+            │     "date": "2026-11-09",
+            │     "payment_method": "transfer",
+            │     "description": null,
+            │     "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │     "expense_classification": "labor",
+            │     "provider_id": "01m6ztt4x4a2f16r1e894rj363"
+            │   }
+            └─────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ PATCH · 200 OK · 126ms ────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/vouchers/01m6zyqc8ttw50n8782cjtwmjr
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Voucher updated successfully.",
+            │     "data": {
+            │       "id": "01m6zyqc8ttw50n8782cjtwmjr",
+            │       "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │       "type": "spend",
+            │       "payment_method": "transfer",
+            │       "date": "2026-11-09",
+            │       "amount": 2000000,
+            │       "description": null,
+            │       "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │       "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │       "expense_classification": "labor",
+            │       "client": {
+            │         "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "name": "احمد"
+            │       },
+            │       "item": {
+            │         "id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │         "name": "سباكة"
+            │       },
+            │       "provider": {
+            │         "id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "name": "أحمد السباك",
+            │         "type": "craftsman"
+            │       },
+            │       "receipts": [],
+            │       "created_at": "2026-11-09T10:47:36+00:00",
+            │       "updated_at": "2026-11-09T10:47:36+00:00"
+            │     }
+            │   }
+            └─────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► POST ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/vouchers/01m6zyqc8ttw50n8782cjtwmjr/receipts
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: multipart/form-data
+            │ Body:
+            │   Instance of 'FormData'
+            └──────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients?status=active&page=1&per_page=50
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✕ POST · 413 Client Error · 16ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/vouchers/01m6zyqc8ttw50n8782cjtwmjr/receipts
+            │ ↳ badResponse
+            │ ↳ mapped · 0 · code=network · Network request failed
+            │ Response body:
+            │   <html>
+            │   <head><script>(function(){if(window.__HERD_EARLY_ERRORS__)return;var b=window.__HERD_EARLY_ERRORS__=[];function p(e){if(b.length<50)b.push(e)}window.addEventListener("error",function(e){if(window.__HERD_FRAME_AGENT__)return;p({message:e.message,filename:e.filename,lineno:e.lineno,stack:e.error&&e.error.stack})});window.addEventListener("unhandledrejection",function(e){if(window.__HERD_FRAME_AGENT__)return;var r=e.reason;p({message:"Unhandled promise rejection: "+(r&&r.message?r.message:String(r)),stack:r&&r.stack})})})();</script><title>413 Request Entity Too Large</title><script>(function(){if(window.__HERD_EARLY_ERRORS__)return;var b=window.__HERD_EARLY_ERRORS__=[];function p(e){if(b.length<50)b.push(e)}window.addEventListener("error",function(e){if(window.__HERD_FRAME_AGENT__)return;p({message:e.message,filename:e.filename,lineno:e.lineno,stack:e.error&&e.error.stack})});window.addEventListener("unhandledrejection",function(e){if(window.__HERD_FRAME_AGENT__)return;var r=e.reason;p({message:"Unhandled promise rejection: "+(r&&r.message?r.message:String(r)),stack:r&&r.stack})})})();</script><script type="module" src="/herd-studio/loader.js"></script></head>
+            │   <body>
+            │   <center><h1>413 Request Entity Too Large</h1></center>
+            │   <hr><center>nginx/1.25.5</center>
+            │   </body>
+            │   </html>
+            │
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-length: 3967439
+            │   content-type: multipart/form-data; boundary=--dio-boundary-3135484241
+            │ Body:
+            │   Instance of 'FormData'
+            └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 26ms ──────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Client retrieved.",
+            │     "data": {
+            │       "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │       "name": "احمد",
+            │       "phone": null,
+            │       "archived_at": null,
+            │       "created_at": "2026-11-09T09:53:57+00:00",
+            │       "updated_at": "2026-11-09T09:53:57+00:00",
+            │       "project": {
+            │         "id": "01m6zvn4gpjbpx4gn1pt793e4r",
+            │         "name": "احمد",
+            │         "status": "active"
+            │       },
+            │       "balances": {
+            │         "received": 0,
+            │         "spent": 12000000,
+            │         "remaining": -12000000
+            │       }
+            │     }
+            │   }
+            └────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 25ms ────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients?status=active&page=1&per_page=50
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Client retrieved.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zqqvrgwztxx4vamz7pe8xk",
+            │         "name": "Osama",
+            │         "phone": null,
+            │         "archived_at": null,
+            │         "created_at": "2026-11-09T08:45:32+00:00",
+            │         "updated_at": "2026-11-09T08:45:32+00:00",
+            │         "project": {
+            │           "id": "01m6zqqvrjhtrxbseve3c3rh68",
+            │           "name": "Osama",
+            │           "status": "active"
+            │         },
+            │         "balances": {
+            │           "received": 0,
+            │           "spent": 0,
+            │           "remaining": 0
+            │         }
+            │       },
+            │       {
+            │         "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "name": "احمد",
+            │         "phone": null,
+            │         "archived_at": null,
+            │         "created_at": "2026-11-09T09:53:57+00:00",
+            │         "updated_at": "2026-11-09T09:53:57+00:00",
+            │         "project": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4r",
+            │           "name": "احمد",
+            │           "status": "active"
+            │         },
+            │         "balances": {
+            │           "received": 0,
+            │           "spent": 12000000,
+            │           "remaining": -12000000
+            │         }
+            │       },
+            │       {
+            │         "id": "01m6zvnbq07kn6874wr20afpde",
+            │         "name": "محمود",
+            │         "phone": null,
+            │         "archived_at": null,
+            │         "created_at": "2026-11-09T09:54:05+00:00",
+            │         "updated_at": "2026-11-09T09:54:05+00:00",
+            │         "project": {
+            │           "id": "01m6zvnbq1d1fh2qb8mg4pe0dk",
+            │           "name": "محمود",
+            │           "status": "active"
+            │         },
+            │         "balances": {
+            │           "received": 0,
+            │           "spent": 0,
+            │           "remaining": 0
+            │         }
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 50,
+            │       "total": 3
+            │     }
+            │   }
+            └──────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 27ms ────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Providers retrieved successfully.",
+            │     "data": {
+            │       "id": "01m6ztt4x4a2f16r1e894rj363",
+            │       "name": "أحمد السباك",
+            │       "phone": null,
+            │       "type": "craftsman",
+            │       "created_at": "2026-11-09T09:39:13+00:00",
+            │       "updated_at": "2026-11-09T09:39:13+00:00"
+            │     }
+            │   }
+            └──────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q/agreements?page=1&per_page=50
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/agreements?page=1&per_page=50
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └────────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 60ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q/agreements?page=1&per_page=50
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Agreements retrieved successfully.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zx3whbd6449504z80f4hpm",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "amount": 10000,
+            │         "paid": 2000,
+            │         "remaining": 8000,
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "type": "craftsman"
+            │         },
+            │         "created_at": "2026-11-09T10:19:29+00:00",
+            │         "updated_at": "2026-11-09T10:50:04+00:00"
+            │       },
+            │       {
+            │         "id": "01m6zx3wg1z32vq57nscpzn72k",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "provider_id": "01m6zvxayp92jn0v5jw455qebz",
+            │         "amount": 8000,
+            │         "paid": 0,
+            │         "remaining": 8000,
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "provider": {
+            │           "id": "01m6zvxayp92jn0v5jw455qebz",
+            │           "name": "محمود النجار",
+            │           "type": "craftsman"
+            │         },
+            │         "created_at": "2026-11-09T10:19:29+00:00",
+            │         "updated_at": "2026-11-09T10:49:49+00:00"
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 50,
+            │       "total": 2
+            │     }
+            │   }
+            └──────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 59ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/agreements?page=1&per_page=50
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Agreements retrieved successfully.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zx3whbd6449504z80f4hpm",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "amount": 10000,
+            │         "paid": 2000,
+            │         "remaining": 8000,
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "type": "craftsman"
+            │         },
+            │         "created_at": "2026-11-09T10:19:29+00:00",
+            │         "updated_at": "2026-11-09T10:50:04+00:00"
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 50,
+            │       "total": 1
+            │     }
+            │   }
+            └────────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q/vouchers?page=1&per_page=5
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └───────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/vouchers?page=1&per_page=50
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 20ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/clients/01m6zvn4gpjbpx4gn1pt793e4q/vouchers?page=1&per_page=5
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Vouchers retrieved successfully.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zyqc8ttw50n8782cjtwmjr",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "type": "spend",
+            │         "payment_method": "transfer",
+            │         "date": "2026-11-09",
+            │         "amount": 2000000,
+            │         "description": null,
+            │         "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │         "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "expense_classification": "labor",
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "item": {
+            │           "id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │           "name": "سباكة"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "type": "craftsman"
+            │         },
+            │         "receipts": [],
+            │         "created_at": "2026-11-09T10:47:36+00:00",
+            │         "updated_at": "2026-11-09T10:47:36+00:00"
+            │       },
+            │       {
+            │         "id": "01m6zycq2cs9z133r3jxjq7yj6",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "type": "spend",
+            │         "payment_method": "cash",
+            │         "date": "2026-11-09",
+            │         "amount": 10000000,
+            │         "description": null,
+            │         "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │         "provider_id": "01m6ztqcdz9wrgyaz0sce2ae28",
+            │         "expense_classification": "materials",
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "item": {
+            │           "id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │           "name": "سباكة"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztqcdz9wrgyaz0sce2ae28",
+            │           "name": "عبد العزيز السلاب",
+            │           "type": "supplier"
+            │         },
+            │         "receipts": [],
+            │         "created_at": "2026-11-09T10:41:47+00:00",
+            │         "updated_at": "2026-11-09T10:41:47+00:00"
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 5,
+            │       "total": 2
+            │     }
+            │   }
+            └───────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 21ms ────────────────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/providers/01m6ztt4x4a2f16r1e894rj363/vouchers?page=1&per_page=50
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Vouchers retrieved successfully.",
+            │     "data": [
+            │       {
+            │         "id": "01m6zyqc8ttw50n8782cjtwmjr",
+            │         "client_id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │         "type": "spend",
+            │         "payment_method": "transfer",
+            │         "date": "2026-11-09",
+            │         "amount": 2000000,
+            │         "description": null,
+            │         "item_id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │         "provider_id": "01m6ztt4x4a2f16r1e894rj363",
+            │         "expense_classification": "labor",
+            │         "client": {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد"
+            │         },
+            │         "item": {
+            │           "id": "01m6zp1c80n8s1fyk01dz1jx6v",
+            │           "name": "سباكة"
+            │         },
+            │         "provider": {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "type": "craftsman"
+            │         },
+            │         "receipts": [],
+            │         "created_at": "2026-11-09T10:47:36+00:00",
+            │         "updated_at": "2026-11-09T10:47:36+00:00"
+            │       }
+            │     ],
+            │     "meta": {
+            │       "page": 1,
+            │       "per_page": 50,
+            │       "total": 1
+            │     }
+            │   }
+            └──────────────────────────────────────────────────────────────────────────────────────────────────
