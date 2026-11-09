@@ -10,6 +10,8 @@ class ClientCraftsmanPreviewRow {
     this.agreedPiastres,
     this.remainingPiastres,
     required this.accentKey,
+    this.agreementId,
+    this.onlineAgreementsOnly = false,
   });
 
   final String craftsmanId;
@@ -19,6 +21,8 @@ class ClientCraftsmanPreviewRow {
   final int? agreedPiastres;
   final int? remainingPiastres;
   final String accentKey;
+  final String? agreementId;
+  final bool onlineAgreementsOnly;
 }
 
 class ClientDetailItemRowData {

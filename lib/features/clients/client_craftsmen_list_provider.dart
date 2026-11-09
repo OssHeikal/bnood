@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/agreements/agreements_riverpod.dart';
+import '../../core/clients/clients_providers.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/providers/app_providers.dart';
 import 'client_detail_snapshot.dart';
@@ -66,6 +68,9 @@ class ClientCraftsmenListNotifier extends FamilyAsyncNotifier<ClientCraftsmenLis
   }
 
   Future<ClientCraftsmenListSnapshot> loadSnapshot(String clientId) async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      return _loadRemoteSnapshot(clientId);
+    }
     final repo = ref.read(repositoryProvider);
     final project = await repo.primaryActiveProject(clientId);
     if (project == null) {
@@ -98,5 +103,26 @@ class ClientCraftsmenListNotifier extends FamilyAsyncNotifier<ClientCraftsmenLis
     }
     rows.sort((a, b) => a.name.compareTo(b.name));
     return ClientCraftsmenListSnapshot(projectId: project.id, rows: rows);
+  }
+
+  Future<ClientCraftsmenListSnapshot> _loadRemoteSnapshot(String clientId) async {
+    final record = await ref.read(clientsRepositoryProvider).getClient(clientId);
+    final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
+    final rows = agreements
+        .map(
+          (a) => ClientCraftsmanPreviewRow(
+            craftsmanId: a.providerId,
+            name: a.providerName ?? '—',
+            paidPiastres: 0,
+            agreedPiastres: a.amountPiastres,
+            remainingPiastres: null,
+            accentKey: clientAccentKeyFor(a.providerId),
+            agreementId: a.id,
+            onlineAgreementsOnly: true,
+          ),
+        )
+        .toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
+    return ClientCraftsmenListSnapshot(projectId: record.project.id, rows: rows);
   }
 }

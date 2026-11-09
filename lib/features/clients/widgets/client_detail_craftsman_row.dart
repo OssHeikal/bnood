@@ -32,9 +32,13 @@ class ClientDetailCraftsmanRow extends StatelessWidget {
         ? preview.trade!
         : l10n.craftsman;
     final hasAgreed = preview.agreedPiastres != null;
+    final onlineOnly = preview.onlineAgreementsOnly;
+    final detailRoute = onlineOnly
+        ? '/providers/${preview.craftsmanId}'
+        : '/craftsmen/${preview.craftsmanId}';
 
     return AppCard(
-      onTap: () => context.push('/craftsmen/${preview.craftsmanId}'),
+      onTap: () => context.push(detailRoute),
       padding: const EdgeInsets.all(AppSize.spaceMD),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,7 +76,25 @@ class ClientDetailCraftsmanRow extends StatelessWidget {
             ],
           ),
           AppSize.spaceMD.gap,
-          if (hasAgreed)
+          if (onlineOnly) ...[
+            if (hasAgreed)
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: _Metric(
+                  key: const Key('client_craftsman_metric_agreed'),
+                  label: l10n.craftsmanAgreedAmount,
+                  piastres: preview.agreedPiastres!,
+                  role: AppAmountRole.neutral,
+                  localeCode: localeCode,
+                ),
+              )
+            else
+              Text(
+                l10n.craftsmanDetailNoAgreedAmount,
+                style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                textAlign: TextAlign.start,
+              ),
+          ] else if (hasAgreed)
             IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -9,6 +9,7 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_error_handler.dart';
+import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
@@ -311,6 +312,68 @@ class _ClientDetailBody extends ConsumerWidget {
             onArchive: () => _confirmArchive(context, ref),
             onDelete: () => _confirmDelete(context, ref),
           ),
+          if (ref.read(remoteAgreementsEnabledProvider)) ...[
+            AppSize.spaceXL.gap,
+            Row(
+              children: [
+                Expanded(child: Text(l10n.craftsmen, style: text.sectionTitle)),
+                AppPressable(
+                  enabled: mutationsEnabled,
+                  onPressed: openAssignments,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+                    child: Text(
+                      l10n.assignCraftsmen,
+                      style: text.caption.copyWith(
+                        color: mutationsEnabled ? colors.primaryDark : colors.onSurfaceMuted,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+                AppSize.spaceSM.gap,
+                AppPressable(
+                  enabled: mutationsEnabled,
+                  onPressed: mutationsEnabled ? () => context.push('/clients/$clientId/craftsmen') : null,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+                    child: Text(
+                      l10n.seeAll,
+                      style: text.caption.copyWith(
+                        color: mutationsEnabled ? colors.primaryDark : colors.onSurfaceMuted,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            AppSize.spaceSM.gap,
+            if (data.craftsmanPreviews.isEmpty)
+              AppCard(
+                child: AppFallback.section(
+                  icon: Icons.handyman_outlined,
+                  title: l10n.clientDetailNoCraftsmen,
+                  description: l10n.clientDetailCraftsmenEmptyDescription,
+                  actions: [
+                    if (mutationsEnabled)
+                      AppFallbackAction(
+                        label: l10n.assignCraftsmen,
+                        onPressed: openAssignments,
+                        role: AppFallbackActionRole.tertiary,
+                      ),
+                  ],
+                ),
+              )
+            else
+              for (var i = 0; i < data.craftsmanPreviews.length; i++) ...[
+                if (i > 0) AppSize.spaceMD.gap,
+                ClientDetailCraftsmanRow(
+                  preview: data.craftsmanPreviews[i],
+                  localeCode: localeCode,
+                ),
+              ],
+          ],
           AppSize.spaceXL.gap,
           AppCard(
             child: AppFallback.section(

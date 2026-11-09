@@ -7,7 +7,9 @@ import '../../../core/config/theme/app_size.dart';
 import '../../../core/utils/extensions/bidi_isolate.dart';
 import '../../../core/providers_api/app_provider_record.dart';
 import '../../../core/theme/app_colors.dart' as legacy;
+import '../../../core/resources/gen/assets.gen.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/app_overflow_menu.dart';
 import '../../../core/widgets/app_pressable.dart';
 import '../../../features/suppliers/widgets/directory_person_card.dart';
 import '../../../l10n/app_localizations.dart';
@@ -16,11 +18,13 @@ class ProvidersListTile extends StatelessWidget {
   const ProvidersListTile({
     super.key,
     required this.provider,
+    required this.onOpenDetail,
     required this.onEdit,
     required this.onDelete,
   });
 
   final AppProvider provider;
+  final VoidCallback onOpenDetail;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
@@ -50,7 +54,7 @@ class ProvidersListTile extends StatelessWidget {
             ),
             Expanded(
               child: AppPressable(
-                onPressed: onEdit,
+                onPressed: onOpenDetail,
                 child: Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(
                     AppSize.spaceLG,
@@ -87,28 +91,28 @@ class ProvidersListTile extends StatelessWidget {
                           ],
                         ),
                       ),
-                      PopupMenuButton<_ProviderMenuAction>(
-                        onSelected: (action) {
-                          switch (action) {
-                            case _ProviderMenuAction.edit:
-                              onEdit();
-                            case _ProviderMenuAction.delete:
-                              onDelete();
-                          }
-                        },
-                        itemBuilder: (_) => [
-                          PopupMenuItem(
-                            value: _ProviderMenuAction.edit,
-                            child: Text(l10n.edit),
-                          ),
-                          PopupMenuItem(
-                            value: _ProviderMenuAction.delete,
-                            child: Text(l10n.delete),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.only(end: AppSize.spaceSM),
+              child: Center(
+                child: AppOverflowMenu(
+                  actions: [
+                    AppOverflowMenuAction(
+                      label: l10n.edit,
+                      icon: Assets.icons.documentEditOutline,
+                      onSelected: onEdit,
+                    ),
+                    AppOverflowMenuAction(
+                      label: l10n.delete,
+                      icon: Assets.icons.deleteSquareOutline,
+                      onSelected: onDelete,
+                      destructive: true,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -118,8 +122,6 @@ class ProvidersListTile extends StatelessWidget {
     );
   }
 }
-
-enum _ProviderMenuAction { edit, delete }
 
 class _Avatar extends StatelessWidget {
   const _Avatar({required this.initial, required this.accent});

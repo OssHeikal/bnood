@@ -1460,6 +1460,42 @@ abstract class AppLocalizations {
   /// **'This phone number is already used for another directory entry.'**
   String get providerDuplicatePhoneError;
 
+  /// No description provided for @providerDetailNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Directory entry not found'**
+  String get providerDetailNotFoundTitle;
+
+  /// No description provided for @providerDetailLinkedClientsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked clients'**
+  String get providerDetailLinkedClientsTitle;
+
+  /// No description provided for @providerDetailNoLinkedClients.
+  ///
+  /// In en, this message translates to:
+  /// **'No linked clients yet'**
+  String get providerDetailNoLinkedClients;
+
+  /// No description provided for @agreementUnlinkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlink craftsman?'**
+  String get agreementUnlinkTitle;
+
+  /// No description provided for @agreementUnlinkDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes {name} from the client. You can link them again later.'**
+  String agreementUnlinkDescription(String name);
+
+  /// No description provided for @unlink.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlink'**
+  String get unlink;
+
   /// No description provided for @deleteProviderTitle.
   ///
   /// In en, this message translates to:

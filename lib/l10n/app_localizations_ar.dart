@@ -738,6 +738,26 @@ class AppLocalizationsAr extends AppLocalizations {
       'رقم الهاتف مستخدم لجهة أخرى في الدليل.';
 
   @override
+  String get providerDetailNotFoundTitle => 'الجهة غير موجودة في الدليل';
+
+  @override
+  String get providerDetailLinkedClientsTitle => 'العملاء المرتبطون';
+
+  @override
+  String get providerDetailNoLinkedClients => 'لا يوجد عملاء مرتبطون بعد';
+
+  @override
+  String get agreementUnlinkTitle => 'إلغاء ربط الصنايعي؟';
+
+  @override
+  String agreementUnlinkDescription(String name) {
+    return 'سيُزال $name من العميل. يمكنك ربطه مرة أخرى لاحقاً.';
+  }
+
+  @override
+  String get unlink => 'إلغاء الربط';
+
+  @override
   String get deleteProviderTitle => 'حذف من الدليل؟';
 
   @override

@@ -14,6 +14,7 @@ import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../home/home_foundation_scope.dart';
 import '../suppliers/craftsman_detail_provider.dart';
+import 'agreement_mutation_actions.dart';
 
 /// Draft save payload from the roster amount sub-sheet (`null` amount = no agreed amount).
 class CraftsmanAgreementAmountDraftResult {
@@ -23,6 +24,38 @@ class CraftsmanAgreementAmountDraftResult {
 }
 
 enum CraftsmanAgreementAmountEntry { rosterDraft, craftsmanDetailEdit }
+
+Future<void> showRemoteAgreementAmountEditSheet({
+  required BuildContext context,
+  required WidgetRef ref,
+  required String agreementId,
+  required String clientId,
+  required String providerId,
+  required String clientName,
+  required String craftsmanName,
+  int? initialAmountPiastres,
+}) {
+  return BnoodModalSheet.show<void>(
+    context: context,
+    builder: (_) => HomeFoundationScope(
+      child: CraftsmanAgreementAmountPage(
+        entry: CraftsmanAgreementAmountEntry.craftsmanDetailEdit,
+        projectId: clientId,
+        clientName: clientName,
+        craftsmanName: craftsmanName,
+        initialAmountPiastres: initialAmountPiastres,
+        onPersist: (amount) => saveRemoteAgreementAmount(
+          context: context,
+          ref: ref,
+          agreementId: agreementId,
+          amountPiastres: amount,
+          clientId: clientId,
+          providerId: providerId,
+        ),
+      ),
+    ),
+  );
+}
 
 Future<void> showCraftsmanProjectAgreementEditSheet({
   required BuildContext context,

@@ -39,4 +39,16 @@ class AuthApiException implements Exception {
   bool get isClientArchived => statusCode == 409 && code == 'client_archived';
 
   bool get isClientHasActivity => statusCode == 409 && code == 'client_has_activity';
+
+  bool get isClientArchivedAgreement =>
+      statusCode == 422 && code == 'client_archived';
+
+  bool get isProviderNotCraftsman =>
+      statusCode == 422 && code == 'provider_not_craftsman';
+
+  bool get isAlreadyLinked => statusCode == 422 && code == 'already_linked';
+
+  bool get isClientNotFound => statusCode == 404 && code == 'client_not_found';
+
+  bool get isProviderNotFound => statusCode == 404 && code == 'provider_not_found';
 }

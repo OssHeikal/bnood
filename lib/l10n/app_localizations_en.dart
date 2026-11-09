@@ -748,6 +748,26 @@ class AppLocalizationsEn extends AppLocalizations {
       'This phone number is already used for another directory entry.';
 
   @override
+  String get providerDetailNotFoundTitle => 'Directory entry not found';
+
+  @override
+  String get providerDetailLinkedClientsTitle => 'Linked clients';
+
+  @override
+  String get providerDetailNoLinkedClients => 'No linked clients yet';
+
+  @override
+  String get agreementUnlinkTitle => 'Unlink craftsman?';
+
+  @override
+  String agreementUnlinkDescription(String name) {
+    return 'This removes $name from the client. You can link them again later.';
+  }
+
+  @override
+  String get unlink => 'Unlink';
+
+  @override
   String get deleteProviderTitle => 'Delete from directory?';
 
   @override

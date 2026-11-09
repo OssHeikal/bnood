@@ -281,6 +281,17 @@
   "providerNameRequired": "Enter a name",
   "providerDuplicateNameError": "This name is already in your directory.",
   "providerDuplicatePhoneError": "This phone number is already used for another directory entry.",
+  "providerDetailNotFoundTitle": "Directory entry not found",
+  "providerDetailLinkedClientsTitle": "Linked clients",
+  "providerDetailNoLinkedClients": "No linked clients yet",
+  "agreementUnlinkTitle": "Unlink craftsman?",
+  "agreementUnlinkDescription": "This removes {name} from the client. You can link them again later.",
+  "@agreementUnlinkDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "unlink": "Unlink",
   "deleteProviderTitle": "Delete from directory?",
   "deleteProviderDescription": "{name} will be removed from your directory list.",
   "@deleteProviderDescription": {

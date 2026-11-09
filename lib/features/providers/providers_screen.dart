@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -198,6 +199,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                 return ProvidersListTile(
                   key: ValueKey(provider.id),
                   provider: provider,
+                  onOpenDetail: () => context.push('/providers/${provider.id}'),
                   onEdit: () => showProviderEditSheet(context, provider: provider),
                   onDelete: () => confirmDeleteProvider(
                     context,

@@ -10,6 +10,9 @@ import '../../core/providers/app_providers.dart';
 import '../items/item_mutation_actions.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../clients/client_mutation_actions.dart';
+import '../providers/provider_mutation_actions.dart';
+import '../../core/providers_api/app_provider_record.dart';
+import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/contacts/contact_import_action.dart';
 import '../../core/widgets/custom_text_field.dart';
@@ -336,6 +339,18 @@ class _InlineCreateCraftsmanPageState
     setState(() => _saving = true);
     try {
       final phoneText = _phone.text.trim();
+      if (ref.read(remoteProvidersEnabledProvider)) {
+        final provider = await saveProviderCreate(
+          ref: ref,
+          context: context,
+          name: _name.text.trim(),
+          type: AppProviderType.craftsman,
+          phone: phoneText.isEmpty ? null : phoneText,
+        );
+        if (!mounted || provider == null) return;
+        Navigator.pop(context, provider.id);
+        return;
+      }
       final c = await ref.read(repositoryProvider).createCraftsman(
             name: _name.text.trim(),
             phone: phoneText.isEmpty ? null : phoneText,

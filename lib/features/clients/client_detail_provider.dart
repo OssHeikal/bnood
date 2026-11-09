@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
@@ -53,13 +54,33 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
   Future<ClientDetailSnapshot> _loadRemoteSnapshot(String clientId) async {
     final record = await ref.read(clientsRepositoryProvider).getClient(clientId);
     final balances = record.balances;
+    var previews = <ClientCraftsmanPreviewRow>[];
+    if (ref.read(remoteAgreementsEnabledProvider)) {
+      final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
+      previews = agreements
+          .map(
+            (a) => ClientCraftsmanPreviewRow(
+              craftsmanId: a.providerId,
+              name: a.providerName ?? '—',
+              trade: null,
+              paidPiastres: 0,
+              agreedPiastres: a.amountPiastres,
+              remainingPiastres: null,
+              accentKey: clientAccentKeyFor(a.providerId),
+              agreementId: a.id,
+              onlineAgreementsOnly: true,
+            ),
+          )
+          .toList()
+        ..sort((a, b) => a.name.compareTo(b.name));
+    }
     return ClientDetailSnapshot(
       client: record.client,
       project: record.project,
       receivedPiastres: balances?.receivedPiastres,
       spentPiastres: balances?.spentPiastres,
       estimatedProfitPiastres: null,
-      craftsmanPreviews: const [],
+      craftsmanPreviews: previews,
       topItems: const [],
       latestMovements: const [],
       onlineIdentityOnly: true,

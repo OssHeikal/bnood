@@ -281,6 +281,17 @@
   "providerNameRequired": "أدخل الاسم",
   "providerDuplicateNameError": "هذا الاسم موجود في دليلك.",
   "providerDuplicatePhoneError": "رقم الهاتف مستخدم لجهة أخرى في الدليل.",
+  "providerDetailNotFoundTitle": "الجهة غير موجودة في الدليل",
+  "providerDetailLinkedClientsTitle": "العملاء المرتبطون",
+  "providerDetailNoLinkedClients": "لا يوجد عملاء مرتبطون بعد",
+  "agreementUnlinkTitle": "إلغاء ربط الصنايعي؟",
+  "agreementUnlinkDescription": "سيُزال {name} من العميل. يمكنك ربطه مرة أخرى لاحقاً.",
+  "@agreementUnlinkDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "unlink": "إلغاء الربط",
   "deleteProviderTitle": "حذف من الدليل؟",
   "deleteProviderDescription": "سيُزال {name} من قائمة الدليل.",
   "itemDefaultBadge": "افتراضي",

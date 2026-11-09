@@ -23,6 +23,7 @@ import '../features/clients/movements_list_screen.dart';
 import '../features/statements/supplier_statement_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/statements/client_statement_screen.dart';
+import '../features/providers/provider_detail_screen.dart';
 import '../features/suppliers/craftsman_detail_screen.dart';
 import 'app_shell_directory_body.dart';
 import '../features/suppliers/supplier_detail_screen.dart';
@@ -245,6 +246,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/clients/:clientId/statement',
         builder: (_, state) =>
             ClientStatementScreen(clientId: state.pathParameters['clientId']!),
+      ),
+      GoRoute(
+        path: '/providers/:providerId',
+        builder: (_, state) => ProviderDetailScreen(
+          providerId: state.pathParameters['providerId']!,
+        ),
       ),
       GoRoute(
         path: '/suppliers/:supplierId',

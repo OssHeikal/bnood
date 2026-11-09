@@ -6,10 +6,17 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/agreements/agreements_error_handler.dart';
+import '../../core/agreements/agreements_riverpod.dart';
+import '../../core/api/auth_api_exception.dart';
+import '../../core/clients/client_api_record.dart';
+import '../../core/clients/clients_providers.dart';
 import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
+import '../../core/providers_api/app_provider_record.dart';
+import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/app_toaster.dart';
@@ -95,11 +102,29 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
     _bootstrap();
   }
 
+  CraftsmenData _craftsmanFromProvider(AppProvider provider) {
+    return CraftsmenData(
+      id: provider.id,
+      workspaceId: remoteWorkspaceMarker,
+      name: provider.name,
+      phone: provider.phone ?? '',
+      trade: null,
+      notes: null,
+      archivedAt: null,
+      createdAt: provider.createdAt,
+      updatedAt: provider.updatedAt,
+    );
+  }
+
   Future<void> _bootstrap() async {
     setState(() {
       _loading = true;
       _error = null;
     });
+    if (ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null) {
+      await _bootstrapRemote();
+      return;
+    }
     try {
       final repo = ref.read(repositoryProvider);
       final roster = await repo.listActiveCraftsmen();
@@ -152,6 +177,57 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
           _loading = false;
         });
         debugPrintStack(stackTrace: st, label: 'craftsman roster load failed');
+      }
+    }
+  }
+
+  Future<void> _bootstrapRemote() async {
+    try {
+      final clientId = widget.clientId!;
+      final clientsRepo = ref.read(clientsRepositoryProvider);
+      final providersRepo = ref.read(appProvidersRepositoryProvider);
+      final agreementsRepo = ref.read(appAgreementsRepositoryProvider);
+      final clientRecord = await clientsRepo.getClient(clientId);
+      final craftsmen = await providersRepo.listAllCraftsmen();
+      final agreements = await agreementsRepo.listAllClientAgreements(clientId);
+
+      final selected = <String>{};
+      final baseline = <String, int?>{};
+      for (final a in agreements) {
+        selected.add(a.providerId);
+        baseline[a.providerId] = a.amountPiastres;
+      }
+
+      if (mounted) {
+        setState(() {
+          _roster = craftsmen.map(_craftsmanFromProvider).toList();
+          _clientName = clientRecord.client.name;
+          _selected
+            ..clear()
+            ..addAll(selected);
+          _selectionLocked.clear();
+          _baselineAmountPiastres
+            ..clear()
+            ..addAll(baseline);
+          _draftAmountPiastres.clear();
+          _loading = false;
+        });
+      }
+    } on AuthApiException catch (e, st) {
+      if (mounted) {
+        setState(() {
+          _error = e;
+          _loading = false;
+        });
+        debugPrintStack(stackTrace: st, label: 'remote craftsman roster load failed');
+      }
+    } catch (e, st) {
+      if (mounted) {
+        setState(() {
+          _error = e;
+          _loading = false;
+        });
+        debugPrintStack(stackTrace: st, label: 'remote craftsman roster load failed');
       }
     }
   }
@@ -234,6 +310,10 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
   Future<void> _save() async {
     if (_saving || _roster.isEmpty) return;
     setState(() => _saving = true);
+    if (ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null) {
+      await _saveRemote();
+      return;
+    }
     try {
       final repo = ref.read(repositoryProvider);
       final agreements = await repo.agreementsForProject(widget.projectId);
@@ -275,6 +355,60 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       if (mounted) {
         AppToaster.show(e.toString(), kind: ToastKind.failure);
       }
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  Future<void> _saveRemote() async {
+    final clientId = widget.clientId!;
+    final agreementsRepo = ref.read(appAgreementsRepositoryProvider);
+    try {
+      final existing = await agreementsRepo.listAllClientAgreements(clientId);
+      final existingByProvider = {for (final a in existing) a.providerId: a};
+
+      for (final ag in existing) {
+        if (_selected.contains(ag.providerId)) continue;
+        await agreementsRepo.deleteAgreement(ag.id);
+      }
+
+      for (final providerId in _selected) {
+        final amount = _amountForPersist(providerId);
+        final existingAg = existingByProvider[providerId];
+        if (existingAg == null) {
+          await agreementsRepo.createAgreement(
+            clientId: clientId,
+            providerId: providerId,
+            amountPiastres: amount,
+            omitAmount: amount == null && !_draftAmountPiastres.containsKey(providerId),
+          );
+        } else {
+          final changed = _draftAmountPiastres.containsKey(providerId) ||
+              amount != existingAg.amountPiastres;
+          if (changed) {
+            await agreementsRepo.patchAgreement(
+              id: existingAg.id,
+              amountPiastres: amount,
+            );
+          }
+        }
+      }
+
+      refreshAfterClientMutation(ref, clientId: clientId);
+      if (!mounted) return;
+      _closeHostModal();
+      AppToaster.show(
+        AppLocalizations.of(context).crewAssignmentsSaved,
+        kind: ToastKind.success,
+      );
+    } on AuthApiException catch (e) {
+      if (!mounted) return;
+      if (await handleAgreementsApiAuthError(context: context, ref: ref, error: e)) {
+        return;
+      }
+      AppToaster.show(e.message, kind: ToastKind.failure);
+    } catch (e) {
+      if (mounted) AppToaster.show(e.toString(), kind: ToastKind.failure);
     } finally {
       if (mounted) setState(() => _saving = false);
     }
