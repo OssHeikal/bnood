@@ -1,6 +1,7 @@
 import 'package:bnood/core/database/connection.dart';
 import 'package:bnood/core/providers/app_providers.dart';
 import 'package:bnood/core/providers/dashboard_providers.dart';
+import 'package:bnood/features/clients/clients_list_paging.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -61,15 +62,14 @@ void main() {
     addTearDown(container.dispose);
 
     expect(container.read(clientsListFilterProvider), ClientListArchiveFilter.active);
-    await container.read(clientsListBalancesProvider.future);
-    var rows = await container.read(clientsListBalancesProvider.future);
-    expect(rows.length, 1);
-    expect(rows.first.client.id, a.id);
+    final fetch = container.read(clientsListPageFetcherProvider);
+    var page = await fetch(page: 1, pageSize: 50);
+    expect(page.items.length, 1);
+    expect(page.items.first.client.id, a.id);
 
     container.read(clientsListFilterProvider.notifier).state = ClientListArchiveFilter.all;
-    await container.read(clientsListBalancesProvider.notifier).refreshSilently();
-    rows = await container.read(clientsListBalancesProvider.future);
-    expect(rows.length, 2);
+    page = await fetch(page: 1, pageSize: 50);
+    expect(page.items.length, 2);
 
     await repo.unarchiveClient(b.id);
     await container.read(homeClientBalancesProvider.notifier).refreshSilently();

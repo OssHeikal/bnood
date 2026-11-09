@@ -70,6 +70,9 @@ String? _authRedirect(Ref ref, GoRouterState state) {
     if (!needsProfile && loc == AuthPaths.completeProfile) {
       return AuthPaths.remote;
     }
+    if (loc == AuthPaths.remote) {
+      return home;
+    }
     if (isLocalLedgerLocation(loc) || loc == AuthPaths.login) {
       return home;
     }

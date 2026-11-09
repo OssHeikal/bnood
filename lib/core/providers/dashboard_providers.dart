@@ -1,9 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../clients/clients_providers.dart';
+import '../clients/clients_repository.dart';
 import '../database/database.dart';
 import '../repositories/bnood_repository.dart';
 import '../../features/clients/client_detail_provider.dart';
 import '../../features/clients/client_items_stats_provider.dart';
+import '../shared/pagination/paging_refresh.dart';
 import 'app_providers.dart';
 import 'silent_async_notifier.dart';
 
@@ -21,10 +24,26 @@ final homeClientBalancesProvider =
 final clientsListFilterProvider =
     StateProvider<ClientListArchiveFilter>((ref) => ClientListArchiveFilter.active);
 
-final clientsListBalancesProvider =
-    AsyncNotifierProvider<ClientsListBalancesNotifier, List<HomeClientBalanceRow>>(
-  ClientsListBalancesNotifier.new,
-);
+final clientsListSearchQueryProvider = StateProvider<String>((ref) => '');
+
+class ClientsListSnapshot {
+  const ClientsListSnapshot({
+    required this.rows,
+    required this.page,
+    required this.total,
+    required this.hasMore,
+  });
+
+  final List<HomeClientBalanceRow> rows;
+  final int page;
+  final int total;
+  final bool hasMore;
+}
+
+final clientsListProvider =
+    AsyncNotifierProvider<ClientsListNotifier, ClientsListSnapshot>(ClientsListNotifier.new);
+
+final clientsListBalancesProvider = clientsListProvider;
 
 final homeSupplierSpendsProvider =
     AsyncNotifierProvider<HomeSupplierSpendsNotifier, List<HomeSupplierSpendRow>>(
@@ -41,18 +60,25 @@ void refreshHomeDashboard(WidgetRef ref) {
   ref.read(homeClientBalancesProvider.notifier).refreshSilently();
   ref.read(homeSupplierSpendsProvider.notifier).refreshSilently();
   ref.read(homeCraftsmenProvider.notifier).refreshSilently();
-  ref.read(clientsListBalancesProvider.notifier).refreshSilently();
+  bumpPagingListRefresh(ref, PagingListIds.clients);
 }
 
 /// After client create/update/archive — keeps Home, Clients list, and optional detail in sync (silent).
 void refreshAfterClientMutation(WidgetRef ref, {String? clientId, String? priorClientId}) {
-  refreshHomeDashboard(ref);
+  final remoteClients = ref.read(remoteClientsEnabledProvider);
+  if (remoteClients) {
+    bumpPagingListRefresh(ref, PagingListIds.clients);
+  } else {
+    refreshHomeDashboard(ref);
+  }
   final ids = <String>{};
   if (clientId != null) ids.add(clientId);
   if (priorClientId != null) ids.add(priorClientId);
   for (final id in ids) {
     refreshClientDetail(ref, id);
-    ref.read(clientItemsStatsProvider(id).notifier).refreshSilently();
+    if (!remoteClients) {
+      ref.read(clientItemsStatsProvider(id).notifier).refreshSilently();
+    }
   }
 }
 
@@ -104,13 +130,69 @@ class HomeClientBalancesNotifier extends SilentAsyncNotifier<List<HomeClientBala
   }
 }
 
-class ClientsListBalancesNotifier extends SilentAsyncNotifier<List<HomeClientBalanceRow>> {
+class ClientsListNotifier extends SilentAsyncNotifier<ClientsListSnapshot> {
+  var _loadingMore = false;
+
+  bool get isLoadingMore => _loadingMore;
+
   @override
-  Future<List<HomeClientBalanceRow>> fetch() async {
+  Future<ClientsListSnapshot> build() async {
+    ref.watch(clientsListFilterProvider);
+    ref.watch(clientsListSearchQueryProvider);
+    return fetch();
+  }
+
+  @override
+  Future<ClientsListSnapshot> fetch() => _fetchPage(page: 1);
+
+  Future<void> loadMore() async {
+    final current = state.valueOrNull;
+    if (current == null || !current.hasMore || _loadingMore) return;
+    if (!ref.read(remoteClientsEnabledProvider)) return;
+    _loadingMore = true;
+    final previous = current;
+    state = AsyncValue<ClientsListSnapshot>.loading().copyWithPrevious(AsyncValue.data(previous));
+    try {
+      final next = await _fetchPage(page: current.page + 1, existing: current);
+      state = AsyncValue.data(next);
+    } catch (error, stackTrace) {
+      state = AsyncValue<ClientsListSnapshot>.error(error, stackTrace)
+          .copyWithPrevious(AsyncValue.data(previous));
+    } finally {
+      _loadingMore = false;
+    }
+  }
+
+  Future<ClientsListSnapshot> _fetchPage({
+    required int page,
+    ClientsListSnapshot? existing,
+  }) async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      final clientsRepo = ref.read(clientsRepositoryProvider);
+      final filter = ref.read(clientsListFilterProvider);
+      final q = ref.read(clientsListSearchQueryProvider);
+      final result = await clientsRepo.listClients(status: filter, q: q, page: page);
+      final rows = result.items.map(balanceRowFromRecord).toList();
+      if (existing != null && page > 1) {
+        return ClientsListSnapshot(
+          rows: [...existing.rows, ...rows],
+          page: result.page,
+          total: result.total,
+          hasMore: result.hasMore,
+        );
+      }
+      return ClientsListSnapshot(
+        rows: rows,
+        page: result.page,
+        total: result.total,
+        hasMore: result.hasMore,
+      );
+    }
     final repo = ref.read(repositoryProvider);
     final filter = ref.read(clientsListFilterProvider);
     final clients = await repo.listClients(filter);
-    return homeClientBalanceRows(repo, clients, activeProjectsOnly: false);
+    final rows = await homeClientBalanceRows(repo, clients, activeProjectsOnly: false);
+    return ClientsListSnapshot(rows: rows, page: 1, total: rows.length, hasMore: false);
   }
 }
 

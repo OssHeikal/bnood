@@ -284,8 +284,54 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String archiveClientDescription(String name) {
-    return 'هتنقل عهدة $name للأرشيف. تقدر ترجعها بعدين.';
+    return 'أرشفة $name؟ العملية نهائية — العميل المؤرشف للقراءة فقط.';
   }
+
+  @override
+  String get clientsSearchHint => 'ابحث بالاسم أو الهاتف';
+
+  @override
+  String get amountUnavailable => '—';
+
+  @override
+  String get clientDuplicateNameTitle => 'اسم عميل مكرر';
+
+  @override
+  String get clientDuplicateNameDescription => 'يوجد عميل بنفس الاسم. متابعة؟';
+
+  @override
+  String get clientDuplicateNameConfirm => 'متابعة';
+
+  @override
+  String get clientDuplicatePhoneError => 'رقم الهاتف مستخدم لعميل آخر.';
+
+  @override
+  String get clientDeleteTitle => 'حذف العميل؟';
+
+  @override
+  String clientDeleteDescription(String name) {
+    return 'حذف $name؟ سيُحذف العميل والمشروع.';
+  }
+
+  @override
+  String get clientDeleteHasActivityTitle => 'العميل عليه حركات';
+
+  @override
+  String get clientDeleteHasActivityDescription =>
+      'هذا العميل مرتبط بمعاملات أو روابط. أرشفه للاحتفاظ بالسجل.';
+
+  @override
+  String get clientDeleteArchiveInstead => 'أرشفة بدلًا من ذلك';
+
+  @override
+  String get clientArchivedBadge => 'مؤرشف';
+
+  @override
+  String get clientLedgerNotOnlineTitle => 'العهدة غير متصلة بعد';
+
+  @override
+  String get clientLedgerNotOnlineDescription =>
+      'الحركات والأرصدة ستظهر هنا عند تفعيل العهدة أونلاين.';
 
   @override
   String get craftsmanAgreedAmount => 'المتفق عليه';

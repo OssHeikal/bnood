@@ -2,6 +2,8 @@ import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/database/database.dart';
 import 'package:bnood/core/providers/dashboard_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
+import 'package:bnood/core/shared/pagination/pagination.dart';
+import 'package:bnood/features/clients/clients_list_paging.dart';
 import 'package:bnood/features/clients/clients_list_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -27,26 +29,26 @@ void main() {
   }
 
   List<HomeClientBalanceRow> twoClients(DateTime now) => [
-    HomeClientBalanceRow(
-      client: Client(id: 'c-active', workspaceId: 'w', name: 'Active Client', createdAt: now, updatedAt: now),
-      remainingPiastres: 100,
-      receivedPiastres: 100,
-      spentPiastres: 0,
-    ),
-    HomeClientBalanceRow(
-      client: Client(
-        id: 'c-arch',
-        workspaceId: 'w',
-        name: 'Archived Client',
-        archivedAt: now,
-        createdAt: now,
-        updatedAt: now,
-      ),
-      remainingPiastres: 50,
-      receivedPiastres: 50,
-      spentPiastres: 0,
-    ),
-  ];
+        HomeClientBalanceRow(
+          client: Client(id: 'c-active', workspaceId: 'w', name: 'Active Client', createdAt: now, updatedAt: now),
+          remainingPiastres: 100,
+          receivedPiastres: 100,
+          spentPiastres: 0,
+        ),
+        HomeClientBalanceRow(
+          client: Client(
+            id: 'c-arch',
+            workspaceId: 'w',
+            name: 'Archived Client',
+            archivedAt: now,
+            createdAt: now,
+            updatedAt: now,
+          ),
+          remainingPiastres: 50,
+          receivedPiastres: 50,
+          spentPiastres: 0,
+        ),
+      ];
 
   testWidgets('default Active filter chip selected EN', (tester) async {
     final now = DateTime.utc(2026, 11, 1);
@@ -74,12 +76,17 @@ void main() {
       wrap(
         locale: const Locale('en'),
         overrides: [
-          clientsListBalancesProvider.overrideWith(
-            () => _FilterAwareClientsListNotifier({
-              ClientListArchiveFilter.active: [rows.first],
-              ClientListArchiveFilter.archived: [rows.last],
-              ClientListArchiveFilter.all: rows,
-            }),
+          clientsListPageFetcherProvider.overrideWith(
+            (ref) => ({required int page, required int pageSize}) async {
+              if (page > 1) return const PagedFetchPage(items: [], hasMore: false);
+              final filter = ref.read(clientsListFilterProvider);
+              final list = switch (filter) {
+                ClientListArchiveFilter.active => [rows.first],
+                ClientListArchiveFilter.archived => [rows.last],
+                ClientListArchiveFilter.all => rows,
+              };
+              return PagedFetchPage(items: list, hasMore: false);
+            },
           ),
         ],
       ),
@@ -106,16 +113,4 @@ void main() {
     expect(find.text('مؤرشف'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
-}
-
-class _FilterAwareClientsListNotifier extends ClientsListBalancesNotifier {
-  _FilterAwareClientsListNotifier(this.byFilter);
-
-  final Map<ClientListArchiveFilter, List<HomeClientBalanceRow>> byFilter;
-
-  @override
-  Future<List<HomeClientBalanceRow>> fetch() async {
-    final filter = ref.read(clientsListFilterProvider);
-    return byFilter[filter] ?? const [];
-  }
 }

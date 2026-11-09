@@ -93,12 +93,31 @@
   "clientDetailUnspecifiedItem": "Unspecified item",
   "clientDetailNoDescription": "No description",
   "archiveClientTitle": "Archive client?",
-  "archiveClientDescription": "This moves {name}'s project to the archive. You can restore it later.",
+  "archiveClientDescription": "Archive {name}? This is one-way — archived clients stay read-only.",
   "@archiveClientDescription": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
+  "clientsSearchHint": "Search by name or phone",
+  "amountUnavailable": "—",
+  "clientDuplicateNameTitle": "Same client name",
+  "clientDuplicateNameDescription": "A client with this name already exists. Continue anyway?",
+  "clientDuplicateNameConfirm": "Continue",
+  "clientDuplicatePhoneError": "This phone number is already used for another client.",
+  "clientDeleteTitle": "Delete client?",
+  "clientDeleteDescription": "Delete {name}? This removes the client and project.",
+  "@clientDeleteDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "clientDeleteHasActivityTitle": "Client has activity",
+  "clientDeleteHasActivityDescription": "This client has transactions or links. Archive instead to keep history.",
+  "clientDeleteArchiveInstead": "Archive instead",
+  "clientArchivedBadge": "Archived",
+  "clientLedgerNotOnlineTitle": "Ledger not online yet",
+  "clientLedgerNotOnlineDescription": "Movements and balances will appear here after the online ledger ships.",
   "craftsmanAgreedAmount": "Agreed",
   "suppliers": "Suppliers",
   "statement": "Statement",

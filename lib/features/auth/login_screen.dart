@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
+import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
@@ -106,11 +107,16 @@ class LoginScreen extends ConsumerWidget {
               onPressed: loading ? null : () => _submitLogin(context, ref),
             ),
             AppSize.spaceSM.gap,
-            Center(
-              child: AppButton.text(
-                text: l10n.authRegisterLink,
-                onPressed: loading ? null : () => context.push(AuthPaths.register),
-              ),
+            Builder(
+              builder: (context) {
+                return Center(
+                  child: AppButton.text(
+                    foregroundColor: context.colors.primary,
+                    text: l10n.authRegisterLink,
+                    onPressed: loading ? null : () => context.push(AuthPaths.register),
+                  ),
+                );
+              },
             ),
           ],
         ),

@@ -286,8 +286,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String archiveClientDescription(String name) {
-    return 'This moves $name\'s project to the archive. You can restore it later.';
+    return 'Archive $name? This is one-way — archived clients stay read-only.';
   }
+
+  @override
+  String get clientsSearchHint => 'Search by name or phone';
+
+  @override
+  String get amountUnavailable => '—';
+
+  @override
+  String get clientDuplicateNameTitle => 'Same client name';
+
+  @override
+  String get clientDuplicateNameDescription =>
+      'A client with this name already exists. Continue anyway?';
+
+  @override
+  String get clientDuplicateNameConfirm => 'Continue';
+
+  @override
+  String get clientDuplicatePhoneError =>
+      'This phone number is already used for another client.';
+
+  @override
+  String get clientDeleteTitle => 'Delete client?';
+
+  @override
+  String clientDeleteDescription(String name) {
+    return 'Delete $name? This removes the client and project.';
+  }
+
+  @override
+  String get clientDeleteHasActivityTitle => 'Client has activity';
+
+  @override
+  String get clientDeleteHasActivityDescription =>
+      'This client has transactions or links. Archive instead to keep history.';
+
+  @override
+  String get clientDeleteArchiveInstead => 'Archive instead';
+
+  @override
+  String get clientArchivedBadge => 'Archived';
+
+  @override
+  String get clientLedgerNotOnlineTitle => 'Ledger not online yet';
+
+  @override
+  String get clientLedgerNotOnlineDescription =>
+      'Movements and balances will appear here after the online ledger ships.';
 
   @override
   String get craftsmanAgreedAmount => 'Agreed';

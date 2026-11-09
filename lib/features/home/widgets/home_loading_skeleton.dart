@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/skeleton/paged_list_skeleton.dart';
 import '../../../core/widgets/skeleton/skeleton_box.dart';
 import '../../../core/widgets/skeleton/skeleton_text.dart';
 
@@ -67,56 +68,5 @@ class HomePersonListSkeleton extends StatelessWidget {
   final int count;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (var i = 0; i < count; i++) ...[
-          if (i > 0) AppSize.spaceMD.gap,
-          const _PersonCardBone(),
-        ],
-      ],
-    );
-  }
-}
-
-class _PersonCardBone extends StatelessWidget {
-  const _PersonCardBone();
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      padding: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceMD),
-        child: Row(
-          children: [
-            const SkeletonBox.round(size: AppSize.hitMin),
-            AppSize.spaceMD.gap,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SkeletonText(role: SkeletonTextRole.body, width: 120),
-                  AppSize.spaceXS.gap,
-                  const SkeletonText(role: SkeletonTextRole.label, width: 56),
-                  AppSize.spaceXS.gap,
-                  const SkeletonText(role: SkeletonTextRole.label, width: 72),
-                ],
-              ),
-            ),
-            AppSize.spaceMD.gap,
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const SkeletonBox(width: 72, height: 14, radius: AppSize.radiusSM),
-                AppSize.spaceXS.gap,
-                const SkeletonBox(width: 72, height: 14, radius: AppSize.radiusSM),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => PagedListSkeleton(count: count);
 }

@@ -4,7 +4,6 @@ import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_shape.dart';
 import '../../../core/config/theme/app_size.dart';
-import '../../../core/repositories/bnood_repository.dart';
 import '../../../core/resources/gen/assets.gen.dart';
 import '../../../core/widgets/app_amount.dart';
 import '../../../core/widgets/app_card.dart';
@@ -15,11 +14,15 @@ import '../../../l10n/app_localizations.dart';
 class ClientDetailStatGrid extends StatelessWidget {
   const ClientDetailStatGrid({
     super.key,
-    required this.totals,
+    required this.receivedPiastres,
+    required this.spentPiastres,
+    required this.remainingPiastres,
     required this.localeCode,
   });
 
-  final HomeTotals totals;
+  final int? receivedPiastres;
+  final int? spentPiastres;
+  final int? remainingPiastres;
   final String localeCode;
 
   @override
@@ -36,7 +39,7 @@ class ClientDetailStatGrid extends StatelessWidget {
                 preset: AppCardPreset.statReceive,
                 label: l10n.received,
                 labelStyle: labelStyle,
-                amount: totals.receivedPiastres,
+                amount: receivedPiastres,
                 role: AppAmountRole.receive,
                 icon: Assets.icons.arrowDownLeftCircleOutline,
                 tint: context.colors.success,
@@ -50,7 +53,7 @@ class ClientDetailStatGrid extends StatelessWidget {
                 preset: AppCardPreset.statSpend,
                 label: l10n.spent,
                 labelStyle: labelStyle,
-                amount: totals.spentPiastres,
+                amount: spentPiastres,
                 role: AppAmountRole.spend,
                 icon: Assets.icons.arrowUpRightCircleOutline,
                 tint: context.colors.spend,
@@ -65,7 +68,7 @@ class ClientDetailStatGrid extends StatelessWidget {
           preset: AppCardPreset.statRemaining,
           label: l10n.remaining,
           labelStyle: labelStyle,
-          amount: totals.remainingPiastres,
+          amount: remainingPiastres,
           role: AppAmountRole.remaining,
           amountEmphasis: AppAmountSize.balance,
           icon: Assets.icons.balanceWalletOutline,
@@ -95,7 +98,7 @@ class _StatTile extends StatelessWidget {
   final AppCardPreset preset;
   final String label;
   final TextStyle labelStyle;
-  final int amount;
+  final int? amount;
   final AppAmountRole role;
   final AppAmountSize amountEmphasis;
   final SvgGenImage icon;
@@ -105,6 +108,7 @@ class _StatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppCard(
       preset: preset,
       padding: const EdgeInsets.all(AppSize.spaceLG),
@@ -125,7 +129,18 @@ class _StatTile extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               alignment: AlignmentDirectional.centerStart,
-              child: AppAmount(piastres: amount, role: role, size: amountEmphasis, localeCode: localeCode),
+              child: amount == null
+                  ? Text(
+                      l10n.amountUnavailable,
+                      style: context.text.moneyMd.copyWith(color: context.colors.onSurfaceMuted),
+                      textDirection: TextDirection.ltr,
+                    )
+                  : AppAmount(
+                      piastres: amount!,
+                      role: role,
+                      size: amountEmphasis,
+                      localeCode: localeCode,
+                    ),
             ),
           ),
         ],

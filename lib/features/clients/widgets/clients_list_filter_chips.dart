@@ -23,7 +23,6 @@ class ClientsListFilterChips extends ConsumerWidget {
     void select(ClientListArchiveFilter next) {
       if (filter == next) return;
       ref.read(clientsListFilterProvider.notifier).state = next;
-      ref.read(clientsListBalancesProvider.notifier).refreshSilently();
     }
 
     return Row(

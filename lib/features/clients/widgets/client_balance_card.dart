@@ -33,7 +33,7 @@ class ClientBalanceCard extends StatelessWidget {
   final String? meta;
   final int? receivedPiastres;
   final int? spentPiastres;
-  final int amountPiastres;
+  final int? amountPiastres;
   final String accentKey;
   final String localeCode;
   final VoidCallback onTap;
@@ -52,6 +52,7 @@ class ClientBalanceCard extends StatelessWidget {
         ? (amountCaption ?? AppLocalizations.of(context).remaining)
         : null;
     final showClientFlows = receivedPiastres != null && spentPiastres != null;
+    final hasAmount = amountPiastres != null;
 
     return AppCard(
       onTap: onTap,
@@ -84,12 +85,18 @@ class ClientBalanceCard extends StatelessWidget {
                             AppSize.spaceXS.gap,
                             Align(
                               alignment: AlignmentDirectional.centerStart,
-                              child: AppAmount(
-                                piastres: amountPiastres,
-                                role: amountRole,
-                                size: AppAmountSize.small,
-                                localeCode: localeCode,
-                              ),
+                              child: hasAmount
+                                  ? AppAmount(
+                                      piastres: amountPiastres!,
+                                      role: amountRole,
+                                      size: AppAmountSize.small,
+                                      localeCode: localeCode,
+                                    )
+                                  : Text(
+                                      AppLocalizations.of(context).amountUnavailable,
+                                      style: text.moneySm.copyWith(color: colors.onSurfaceMuted),
+                                      textDirection: TextDirection.ltr,
+                                    ),
                             ),
                           ] else if (meta != null && meta!.isNotEmpty) ...[
                             const SizedBox(height: 2),
@@ -121,12 +128,19 @@ class ClientBalanceCard extends StatelessWidget {
                                 children: [
                                   if (caption != null)
                                     Text(caption, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
-                                  AppAmount(
-                                    piastres: amountPiastres,
-                                    role: amountRole,
-                                    size: AppAmountSize.small,
-                                    localeCode: localeCode,
-                                  ),
+                                  if (hasAmount)
+                                    AppAmount(
+                                      piastres: amountPiastres!,
+                                      role: amountRole,
+                                      size: AppAmountSize.small,
+                                      localeCode: localeCode,
+                                    )
+                                  else
+                                    Text(
+                                      AppLocalizations.of(context).amountUnavailable,
+                                      style: text.moneySm.copyWith(color: colors.onSurfaceMuted),
+                                      textDirection: TextDirection.ltr,
+                                    ),
                                 ],
                               ),
                       ),

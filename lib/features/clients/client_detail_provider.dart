@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/clients/clients_providers.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
@@ -43,6 +44,29 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
   }
 
   Future<ClientDetailSnapshot> loadSnapshot(String clientId) async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      return _loadRemoteSnapshot(clientId);
+    }
+    return _loadLocalSnapshot(clientId);
+  }
+
+  Future<ClientDetailSnapshot> _loadRemoteSnapshot(String clientId) async {
+    final record = await ref.read(clientsRepositoryProvider).getClient(clientId);
+    final balances = record.balances;
+    return ClientDetailSnapshot(
+      client: record.client,
+      project: record.project,
+      receivedPiastres: balances?.receivedPiastres,
+      spentPiastres: balances?.spentPiastres,
+      estimatedProfitPiastres: null,
+      craftsmanPreviews: const [],
+      topItems: const [],
+      latestMovements: const [],
+      onlineIdentityOnly: true,
+    );
+  }
+
+  Future<ClientDetailSnapshot> _loadLocalSnapshot(String clientId) async {
     final repo = ref.read(repositoryProvider);
     final client = await repo.getClient(clientId);
     final project = await repo.primaryProjectForClient(clientId);
