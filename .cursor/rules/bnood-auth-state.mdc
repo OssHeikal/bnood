@@ -1,0 +1,29 @@
+---
+description: Auth feature UI state and copy voice
+globs: lib/features/auth/**/*
+alwaysApply: false
+---
+
+# Auth screens — state
+
+[`docs/architecture.md`](../../docs/architecture.md) — session lives in `AuthController`.
+
+## Widgets
+
+- Auth routes use **`ConsumerWidget`**. No `StatefulWidget`, no `setState` under `lib/features/auth/`.
+- Loading, submit attempt, field errors, and OTP resend countdown use **`autoDispose` Riverpod notifiers** (`auth_form_ui.dart` and screen-specific notifiers).
+- `GlobalKey<FormState>`, `TextEditingController`, and `PinInputController` live in **`autoDispose` providers** with `ref.onDispose`.
+- API calls, tokens, and session flags stay on **`AuthController`** only.
+
+## Navigation + loading
+
+- After a successful **`context.push`**, clear loading on the source screen **before** push so Back does not show a stuck spinner.
+- **`context.go`** replaces the stack; no extra clear needed beyond normal success/error handling.
+
+## Copy (auth l10n)
+
+- Arabic-first; short; second person.
+- **Login and register subtitles:** lead with **Bnood value** (client funds, vouchers, site projects, your account) — not step-by-step field instructions. Steps belong in labels, buttons, and field errors.
+- Other subtitles and errors: what this step is for; errors say what went wrong + what to do next.
+- **No** مصر / Egypt, server logs, WhatsApp, or dev-only hints in user strings.
+- Field **labels** and primary **buttons** stay short. **Placeholders** are examples only — see `bnood-form-fields.mdc`.

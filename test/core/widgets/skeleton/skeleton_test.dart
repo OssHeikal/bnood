@@ -4,7 +4,6 @@ import 'package:bnood/core/widgets/skeleton/skeleton_box.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton_text.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

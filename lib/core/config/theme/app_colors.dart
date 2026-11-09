@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import 'app_accent.dart';
@@ -74,11 +72,7 @@ class AppColors extends ThemeExtension<AppColors> {
     receive: Color(0xFF1B9E5A),
     spend: Color(0xFFD64545),
     buttonShadow: BoxShadow(color: Color(0x0F1A2422), blurRadius: 12, offset: Offset(0, 2)),
-    accentTeal: AppAccent(
-      tint: Color(0xFFE6F6F4),
-      border: Color(0xFFCFE6E1),
-      ink: Color(0xFF0D9B8A),
-    ),
+    accentTeal: AppAccent(tint: Color(0xFFE6F6F4), border: Color(0xFFCFE6E1), ink: Color(0xFF0D9B8A)),
     info: Color(0xFF0A7A6C),
     infoBg: Color(0xFFE6F6F4),
     infoOnTint: Color(0xFF0A7A6C),
@@ -117,11 +111,7 @@ class AppColors extends ThemeExtension<AppColors> {
     receive: Color(0xFF1B9E5A),
     spend: Color(0xFFD64545),
     buttonShadow: BoxShadow(color: Color(0x66000000), blurRadius: 12, offset: Offset(0, 2)),
-    accentTeal: AppAccent(
-      tint: Color(0xFF1A2E2B),
-      border: Color(0xFF264540),
-      ink: Color(0xFF14B8A6),
-    ),
+    accentTeal: AppAccent(tint: Color(0xFF1A2E2B), border: Color(0xFF264540), ink: Color(0xFF14B8A6)),
     info: Color(0xFF14B8A6),
     infoBg: Color(0xFF1A2E2B),
     infoOnTint: Color(0xFF14B8A6),
@@ -319,20 +309,10 @@ class AppText extends ThemeExtension<AppText> {
   });
 
   factory AppText.fromColors(AppColors colors) {
-    TextStyle role({
-      required double size,
-      required double height,
-      required double wght,
-      Color? color,
-    }) {
+    TextStyle role({required double size, required double height, required double wght, Color? color}) {
       return AppFont.cairo(
         wght: wght,
-        base: TextStyle(
-          fontSize: size,
-          height: height,
-          color: color ?? colors.onSurface,
-          letterSpacing: 0,
-        ),
+        base: TextStyle(fontSize: size, height: height, color: color ?? colors.onSurface, letterSpacing: 0),
       );
     }
 
@@ -348,12 +328,8 @@ class AppText extends ThemeExtension<AppText> {
       supporting: role(size: 13, height: 1.35, wght: 500, color: colors.muted),
       caption: role(size: 12, height: 1.4, wght: 500, color: colors.muted),
       button: role(size: 16, height: 1.3, wght: 600, color: colors.onPrimary),
-      moneyMd: role(size: 18, height: 1.2, wght: 700).copyWith(
-        fontFeatures: const [FontFeature.tabularFigures()],
-      ),
-      moneySm: role(size: 14, height: 1.2, wght: 700).copyWith(
-        fontFeatures: const [FontFeature.tabularFigures()],
-      ),
+      moneyMd: role(size: 18, height: 1.2, wght: 700).copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
+      moneySm: role(size: 14, height: 1.2, wght: 700).copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
       groupTitle: role(size: 14, height: 1.22, wght: 600, color: colors.muted),
     );
   }

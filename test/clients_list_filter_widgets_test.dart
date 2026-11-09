@@ -13,10 +13,7 @@ import 'support/home_notifier_stubs.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  Widget wrap({
-    required Locale locale,
-    required List<Override> overrides,
-  }) {
+  Widget wrap({required Locale locale, required List<Override> overrides}) {
     return ProviderScope(
       overrides: overrides,
       child: MaterialApp(
@@ -30,32 +27,26 @@ void main() {
   }
 
   List<HomeClientBalanceRow> twoClients(DateTime now) => [
-        HomeClientBalanceRow(
-          client: Client(
-            id: 'c-active',
-            workspaceId: 'w',
-            name: 'Active Client',
-            createdAt: now,
-            updatedAt: now,
-          ),
-          remainingPiastres: 100,
-          receivedPiastres: 100,
-          spentPiastres: 0,
-        ),
-        HomeClientBalanceRow(
-          client: Client(
-            id: 'c-arch',
-            workspaceId: 'w',
-            name: 'Archived Client',
-            archivedAt: now,
-            createdAt: now,
-            updatedAt: now,
-          ),
-          remainingPiastres: 50,
-          receivedPiastres: 50,
-          spentPiastres: 0,
-        ),
-      ];
+    HomeClientBalanceRow(
+      client: Client(id: 'c-active', workspaceId: 'w', name: 'Active Client', createdAt: now, updatedAt: now),
+      remainingPiastres: 100,
+      receivedPiastres: 100,
+      spentPiastres: 0,
+    ),
+    HomeClientBalanceRow(
+      client: Client(
+        id: 'c-arch',
+        workspaceId: 'w',
+        name: 'Archived Client',
+        archivedAt: now,
+        createdAt: now,
+        updatedAt: now,
+      ),
+      remainingPiastres: 50,
+      receivedPiastres: 50,
+      spentPiastres: 0,
+    ),
+  ];
 
   testWidgets('default Active filter chip selected EN', (tester) async {
     final now = DateTime.utc(2026, 11, 1);
@@ -103,17 +94,11 @@ void main() {
   });
 
   testWidgets('AR chip labels at narrow width', (tester) async {
-    final now = DateTime.utc(2026, 11, 1);
     tester.view.physicalSize = const Size(440, 900);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      wrap(
-        locale: const Locale('ar'),
-        overrides: [clientsListBalancesOverride([])],
-      ),
-    );
+    await tester.pumpWidget(wrap(locale: const Locale('ar'), overrides: [clientsListBalancesOverride([])]));
     await tester.pumpAndSettle();
 
     expect(find.text('الكل'), findsOneWidget);

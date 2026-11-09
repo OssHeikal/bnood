@@ -11,6 +11,8 @@ class AuthApiException implements Exception {
   final String? code;
   final Map<String, List<String>>? fieldErrors;
 
+  bool get isAccountExists => code == 'account_exists';
+
   bool get isInvalidCredentials => code == 'invalid_credentials';
   bool get isChallengeInvalid => code == 'challenge_invalid';
   bool get isThrottled => statusCode == 429 || code == 'throttled';

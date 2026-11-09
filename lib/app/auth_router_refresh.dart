@@ -9,7 +9,7 @@ class AuthRouterRefresh extends ChangeNotifier {
 
 final authRouterRefreshProvider = Provider<AuthRouterRefresh>((ref) {
   final refresh = AuthRouterRefresh();
-  ref.listen(authControllerProvider, (_, __) => refresh.notifyListeners());
+  ref.listen(authControllerProvider, (_, _) => refresh.notifyListeners());
   ref.onDispose(refresh.dispose);
   return refresh;
 });

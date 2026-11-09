@@ -1,15 +1,14 @@
 import 'package:bnood/core/database/database.dart';
-import 'package:bnood/core/widgets/app_amount.dart';
-import 'package:bnood/core/providers/app_providers.dart';
-import 'package:bnood/core/providers/dashboard_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
+import 'package:bnood/core/widgets/app_amount.dart';
 import 'package:bnood/features/home/home_screen.dart';
 import 'package:bnood/features/home/widgets/home_person_card.dart';
-import 'support/home_notifier_stubs.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'support/home_notifier_stubs.dart';
 
 void main() {
   Future<void> pumpHome(

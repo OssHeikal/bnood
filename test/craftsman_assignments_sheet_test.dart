@@ -38,8 +38,7 @@ Future<void> _pumpLoaded(WidgetTester tester, Widget child) async {
   await tester.pumpWidget(child);
   for (var i = 0; i < 20; i++) {
     await tester.pump(const Duration(milliseconds: 50));
-    if (find.byType(Skeleton).evaluate().isEmpty &&
-        find.text('Save').evaluate().isNotEmpty) {
+    if (find.byType(Skeleton).evaluate().isEmpty && find.text('Save').evaluate().isNotEmpty) {
       return;
     }
   }
@@ -60,11 +59,8 @@ Future<void> _openAssignmentsModal(
     _wrap(
       Center(
         child: ElevatedButton(
-          onPressed: () => showCraftsmanAssignmentsSheet(
-            context: _hostContext,
-            projectId: projectId,
-            clientId: clientId,
-          ),
+          onPressed: () =>
+              showCraftsmanAssignmentsSheet(context: _hostContext, projectId: projectId, clientId: clientId),
           child: const Text('Open'),
         ),
       ),
@@ -76,8 +72,7 @@ Future<void> _openAssignmentsModal(
   await tester.tap(find.text('Open'));
   for (var i = 0; i < 30; i++) {
     await tester.pump(const Duration(milliseconds: 50));
-    if (find.text('Save').evaluate().isNotEmpty &&
-        find.byType(Skeleton).evaluate().isEmpty) {
+    if (find.text('Save').evaluate().isNotEmpty && find.byType(Skeleton).evaluate().isEmpty) {
       break;
     }
   }
@@ -162,7 +157,6 @@ void main() {
     final repo = BnoodRepository(db);
     final client = await repo.createClient(name: 'Site');
     final project = (await repo.primaryActiveProject(client.id))!;
-    final craftsman = await repo.createCraftsman(name: 'Karim', phone: '01000000001');
 
     await _openAssignmentsModal(tester, repo: repo, projectId: project.id, clientId: client.id);
     await tester.tap(find.text('Karim'));
@@ -226,10 +220,7 @@ void main() {
     await tester.tap(find.text('Save').last);
     await tester.pumpAndSettle();
 
-    expect(
-      (await repo.agreementsForProject(project.id)).single.initialAmountPiastres,
-      0,
-    );
+    expect((await repo.agreementsForProject(project.id)).single.initialAmountPiastres, 0);
   });
 
   testWidgets('assignments sheet shows roster without inline amount fields', (tester) async {
@@ -287,11 +278,7 @@ void main() {
     final craftsman = await repo.createCraftsman(name: 'Zero', phone: '01000000004');
     await repo.upsertAgreement(projectId: project.id, craftsmanId: craftsman.id, clearInitial: true);
     expect((await repo.agreementsForProject(project.id)).single.initialAmountPiastres, isNull);
-    await repo.upsertAgreement(
-      projectId: project.id,
-      craftsmanId: craftsman.id,
-      initialAmountPiastres: 0,
-    );
+    await repo.upsertAgreement(projectId: project.id, craftsmanId: craftsman.id, initialAmountPiastres: 0);
     expect((await repo.agreementsForProject(project.id)).single.initialAmountPiastres, 0);
   });
 }

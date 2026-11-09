@@ -9,26 +9,15 @@ import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/foundation_app_bar.dart';
 import '../home/home_foundation_scope.dart';
 import 'auth_controller.dart';
+import 'auth_form_ui.dart';
 import 'auth_state.dart';
 
-class AuthBootstrapScreen extends ConsumerStatefulWidget {
+class AuthBootstrapScreen extends ConsumerWidget {
   const AuthBootstrapScreen({super.key});
 
   @override
-  ConsumerState<AuthBootstrapScreen> createState() => _AuthBootstrapScreenState();
-}
-
-class _AuthBootstrapScreenState extends ConsumerState<AuthBootstrapScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(authControllerProvider.notifier).ensureBootstrap();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(authBootstrapInitProvider);
     final l10n = AppLocalizations.of(context);
     final status = ref.watch(authControllerProvider).bootstrapStatus;
     final showRetry = status == AuthBootstrapStatus.bootstrapNetworkError;

@@ -1525,6 +1525,12 @@ abstract class AppLocalizations {
   /// **'Sign in'**
   String get authLoginTitle;
 
+  /// No description provided for @authLoginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track client funds, vouchers, and finishing projects from your account.'**
+  String get authLoginSubtitle;
+
   /// No description provided for @authRegisterTitle.
   ///
   /// In en, this message translates to:
@@ -1534,7 +1540,7 @@ abstract class AppLocalizations {
   /// No description provided for @authRegisterSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Egypt mobile number only. Your number cannot be changed later.'**
+  /// **'Create an account to keep your workspace and sign in on another phone.'**
   String get authRegisterSubtitle;
 
   /// No description provided for @authPhone.
@@ -1546,7 +1552,7 @@ abstract class AppLocalizations {
   /// No description provided for @authPhoneInvalid.
   ///
   /// In en, this message translates to:
-  /// **'Enter a valid Egypt mobile (01XXXXXXXXX)'**
+  /// **'Enter an 11-digit mobile number that starts with 01.'**
   String get authPhoneInvalid;
 
   /// No description provided for @authPassword.
@@ -1588,7 +1594,7 @@ abstract class AppLocalizations {
   /// No description provided for @authForgotPasswordSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Enter your registered mobile number.'**
+  /// **'Enter the mobile number on your account. We will send a confirmation code.'**
   String get authForgotPasswordSubtitle;
 
   /// No description provided for @authVerificationTitle.
@@ -1603,11 +1609,47 @@ abstract class AppLocalizations {
   /// **'Enter the verification code you received.'**
   String get authVerificationSubtitle;
 
+  /// No description provided for @authVerificationDeliverySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the code sent to {phone}.'**
+  String authVerificationDeliverySubtitle(String phone);
+
   /// No description provided for @authRecoveryVerifySubtitle.
   ///
   /// In en, this message translates to:
   /// **'Enter the recovery code you received.'**
   String get authRecoveryVerifySubtitle;
+
+  /// No description provided for @authRecoveryDeliverySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the password recovery code sent to {phone}.'**
+  String authRecoveryDeliverySubtitle(String phone);
+
+  /// No description provided for @authCompleteProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get authCompleteProfileTitle;
+
+  /// No description provided for @authCompleteProfileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the name you use at work, then tap Continue.'**
+  String get authCompleteProfileSubtitle;
+
+  /// No description provided for @authDisplayName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get authDisplayName;
+
+  /// No description provided for @authDisplayNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Ahmed Hassan'**
+  String get authDisplayNameHint;
 
   /// No description provided for @authVerificationCode.
   ///
@@ -1624,7 +1666,7 @@ abstract class AppLocalizations {
   /// No description provided for @authResendWait.
   ///
   /// In en, this message translates to:
-  /// **'Resend in {seconds}s'**
+  /// **'Wait {seconds}s, then send again.'**
   String authResendWait(int seconds);
 
   /// No description provided for @authCreateAccount.
@@ -1708,7 +1750,7 @@ abstract class AppLocalizations {
   /// No description provided for @authRemoteWorkspaceBody.
   ///
   /// In en, this message translates to:
-  /// **'You are signed in. Cloud project data is not available in this phase yet.'**
+  /// **'You are signed in. Cloud project data is not available yet.'**
   String get authRemoteWorkspaceBody;
 
   /// No description provided for @authSignedInAs.
@@ -1726,56 +1768,80 @@ abstract class AppLocalizations {
   /// No description provided for @authNetworkError.
   ///
   /// In en, this message translates to:
-  /// **'Connection failed. Check the network and try again.'**
+  /// **'Could not connect. Check the network, then try again.'**
   String get authNetworkError;
 
   /// No description provided for @authInvalidCredentials.
   ///
   /// In en, this message translates to:
-  /// **'Phone or password is incorrect.'**
+  /// **'Mobile number or password is wrong. Check them, then try again.'**
   String get authInvalidCredentials;
 
   /// No description provided for @authChallengeInvalid.
   ///
   /// In en, this message translates to:
-  /// **'Code is invalid or expired.'**
+  /// **'That code is wrong or expired. Request a new one, then enter it.'**
   String get authChallengeInvalid;
 
   /// No description provided for @authThrottled.
   ///
   /// In en, this message translates to:
-  /// **'Too many attempts. Try again later.'**
+  /// **'Too many attempts. Wait a moment, then try again.'**
   String get authThrottled;
 
   /// No description provided for @authSessionExpired.
   ///
   /// In en, this message translates to:
-  /// **'Your session expired. Sign in again.'**
+  /// **'Your session ended. Sign in again to continue.'**
   String get authSessionExpired;
 
   /// No description provided for @authFieldRequired.
   ///
   /// In en, this message translates to:
-  /// **'This field is required'**
+  /// **'Fill in this field to continue.'**
   String get authFieldRequired;
 
   /// No description provided for @authPasswordMinLength.
   ///
   /// In en, this message translates to:
-  /// **'Use at least 8 characters'**
+  /// **'Password is too short. Use at least 8 characters.'**
   String get authPasswordMinLength;
 
   /// No description provided for @authPasswordMismatch.
   ///
   /// In en, this message translates to:
-  /// **'Passwords do not match'**
+  /// **'Those passwords differ. Type the same password in both fields.'**
   String get authPasswordMismatch;
 
   /// No description provided for @authCodeLengthHint.
   ///
   /// In en, this message translates to:
-  /// **'Enter 4–8 characters'**
+  /// **'Enter the 6-digit code.'**
   String get authCodeLengthHint;
+
+  /// No description provided for @authAccountExistsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone already linked'**
+  String get authAccountExistsTitle;
+
+  /// No description provided for @authAccountExistsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone is already linked to an account. Sign in with that number or use a different phone.'**
+  String get authAccountExistsMessage;
+
+  /// No description provided for @authAccountExistsLoginAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authAccountExistsLoginAction;
+
+  /// No description provided for @authAccountExistsAnotherPhoneAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter another phone'**
+  String get authAccountExistsAnotherPhoneAction;
 
   /// No description provided for @authFlowExpired.
   ///
@@ -1786,13 +1852,13 @@ abstract class AppLocalizations {
   /// No description provided for @authPasswordResetSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Password updated. Sign in with your new password.'**
+  /// **'Password updated. Sign in with the new one.'**
   String get authPasswordResetSuccess;
 
   /// No description provided for @authPasswordChangedSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Password changed.'**
+  /// **'Password changed. Use the new one next time.'**
   String get authPasswordChangedSuccess;
 }
 

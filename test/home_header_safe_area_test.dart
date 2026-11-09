@@ -1,13 +1,12 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/providers/app_providers.dart';
-import 'package:bnood/core/providers/dashboard_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/features/home/home_screen.dart';
-import 'support/home_notifier_stubs.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'support/home_notifier_stubs.dart';
 
 void main() {
   testWidgets('home title sits below simulated status bar inset', (tester) async {

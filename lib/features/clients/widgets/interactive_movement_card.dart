@@ -35,7 +35,7 @@ class InteractiveMovementCard extends ConsumerStatefulWidget {
 }
 
 class _InteractiveMovementCardState extends ConsumerState<InteractiveMovementCard> {
-  var _busy = false;
+  final _busy = false;
 
   Future<void> _openEdit() async {
     if (_busy || !widget.mutationsEnabled) return;

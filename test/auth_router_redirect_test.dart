@@ -5,6 +5,9 @@ import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/providers/settings_provider.dart';
 import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/auth/complete_profile_screen.dart';
+import 'package:bnood/features/auth/login_screen.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/auth/remote_workspace_screen.dart';
 import 'package:bnood/features/home/home_screen.dart';
@@ -37,7 +40,7 @@ void main() {
     final element = tester.element(find.byType(BnoodApp));
     container = ProviderScope.containerOf(element);
     container.read(authControllerProvider.notifier).adoptSessionForTest(
-          const User(id: 'usr', phone: '+201012345678'),
+          const User(id: 'usr', phone: '+201012345678', name: 'Eng'),
         );
     await tester.pump();
     container.read(goRouterProvider).go('/home');
@@ -45,5 +48,52 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.byType(HomeScreen), findsNothing);
     expect(find.byType(RemoteWorkspaceScreen), findsOneWidget);
+  });
+
+  testWidgets('incomplete name redirects to complete profile', (tester) async {
+    BnoodSplashSession.completed = true;
+    late ProviderContainer container;
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appSettingsBootstrapProvider.overrideWithValue(_bootstrap()),
+          sessionStoreProvider.overrideWithValue(FakeSessionStore()),
+        ],
+        child: const BnoodApp(),
+      ),
+    );
+    final element = tester.element(find.byType(BnoodApp));
+    container = ProviderScope.containerOf(element);
+    container.read(authControllerProvider.notifier).adoptSessionForTest(
+          const User(id: 'usr', phone: '+201012345678'),
+        );
+    await tester.pump();
+    container.read(goRouterProvider).go(AuthPaths.remote);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.byType(CompleteProfileScreen), findsOneWidget);
+    expect(find.byType(RemoteWorkspaceScreen), findsNothing);
+  });
+
+  testWidgets('unauthenticated user cannot open local home', (tester) async {
+    BnoodSplashSession.completed = true;
+    late ProviderContainer container;
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appSettingsBootstrapProvider.overrideWithValue(_bootstrap()),
+          sessionStoreProvider.overrideWithValue(FakeSessionStore()),
+        ],
+        child: const BnoodApp(),
+      ),
+    );
+    final element = tester.element(find.byType(BnoodApp));
+    container = ProviderScope.containerOf(element);
+    await tester.pump();
+    container.read(goRouterProvider).go('/home');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.byType(HomeScreen), findsNothing);
+    expect(find.byType(LoginScreen), findsOneWidget);
   });
 }

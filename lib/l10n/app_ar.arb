@@ -350,23 +350,40 @@
   "statementSupplierPaymentsCaption": "حركات صرف خامات مرتبطة بالمورد فقط.",
   "statementEmptyPayments": "لا توجد مدفوعات في الفترة المحددة.",
   "authLoginTitle": "تسجيل الدخول",
+  "authLoginSubtitle": "تابع أموال العملاء والبنود ومشاريع التشطيب من حسابك.",
   "authRegisterTitle": "إنشاء حساب",
-  "authRegisterSubtitle": "رقم مصر فقط. لا يمكن تغيير الرقم لاحقاً.",
+  "authRegisterSubtitle": "أنشئ حساباً لحفظ مساحة عملك وفتحها من أي موبايل.",
   "authPhone": "رقم الموبايل",
-  "authPhoneInvalid": "أدخل رقم مصر صحيح (01XXXXXXXXX)",
+  "authPhoneInvalid": "أدخل رقم موبايل من 11 رقماً يبدأ بـ 01.",
   "authPassword": "كلمة المرور",
   "authPasswordConfirm": "تأكيد كلمة المرور",
   "authCurrentPassword": "كلمة المرور الحالية",
   "authNewPassword": "كلمة المرور الجديدة",
   "authForgotPassword": "نسيت كلمة المرور؟",
   "authForgotPasswordTitle": "استرداد كلمة المرور",
-  "authForgotPasswordSubtitle": "أدخل رقم الموبايل المسجّل.",
+  "authForgotPasswordSubtitle": "أدخل رقم الموبايل المسجّل. سنرسل رمز تأكيد.",
   "authVerificationTitle": "رمز التحقق",
   "authVerificationSubtitle": "أدخل رمز التحقق الذي استلمته.",
+  "authVerificationDeliverySubtitle": "أدخل الرمز الذي وصل إلى {phone}.",
+  "@authVerificationDeliverySubtitle": {
+    "placeholders": {
+      "phone": { "type": "String" }
+    }
+  },
   "authRecoveryVerifySubtitle": "أدخل رمز الاسترداد الذي استلمته.",
+  "authRecoveryDeliverySubtitle": "أدخل رمز استرجاع كلمة المرور الذي وصل إلى {phone}.",
+  "@authRecoveryDeliverySubtitle": {
+    "placeholders": {
+      "phone": { "type": "String" }
+    }
+  },
+  "authCompleteProfileTitle": "اسمك",
+  "authCompleteProfileSubtitle": "اكتب اسمك كما يظهر في العمل، ثم اضغط متابعة.",
+  "authDisplayName": "الاسم الكامل",
+  "authDisplayNameHint": "مثال: أحمد حسن",
   "authVerificationCode": "الرمز",
   "authResendCode": "إعادة إرسال الرمز",
-  "authResendWait": "إعادة الإرسال خلال {seconds} ث",
+  "authResendWait": "انتظر {seconds} ث ثم أعد الإرسال.",
   "@authResendWait": {
     "placeholders": {
       "seconds": { "type": "int" }
@@ -385,19 +402,23 @@
   "authSignIn": "تسجيل الدخول للحساب السحابي",
   "authAccountSection": "الحساب",
   "authRemoteWorkspaceTitle": "الحساب",
-  "authRemoteWorkspaceBody": "أنت مسجّل الدخول. بيانات المشروع السحابية غير متاحة في هذه المرحلة.",
+  "authRemoteWorkspaceBody": "تم تسجيل الدخول. بيانات المشاريع على السحابة غير متاحة الآن.",
   "authSignedInAs": "مسجّل الدخول كـ",
   "authBootstrapRetry": "إعادة المحاولة",
-  "authNetworkError": "تعذّر الاتصال. تحقق من الشبكة وأعد المحاولة.",
-  "authInvalidCredentials": "رقم الموبايل أو كلمة المرور غير صحيحة.",
-  "authChallengeInvalid": "الرمز غير صالح أو منتهي.",
-  "authThrottled": "محاولات كثيرة. أعد المحاولة لاحقاً.",
-  "authSessionExpired": "انتهت الجلسة. سجّل الدخول مرة أخرى.",
-  "authFieldRequired": "هذا الحقل مطلوب",
-  "authPasswordMinLength": "استخدم 8 أحرف على الأقل",
-  "authPasswordMismatch": "كلمتا المرور غير متطابقتين",
-  "authCodeLengthHint": "أدخل من 4 إلى 8 أحرف",
-  "authFlowExpired": "انتهت صلاحية هذه الخطوة. ابدأ من جديد.",
-  "authPasswordResetSuccess": "تم تحديث كلمة المرور. سجّل الدخول بكلمة المرور الجديدة.",
-  "authPasswordChangedSuccess": "تم تغيير كلمة المرور."
+  "authNetworkError": "تعذر الاتصال. تحقق من الشبكة، ثم أعد المحاولة.",
+  "authInvalidCredentials": "رقم الموبايل أو كلمة المرور غير صحيحة. راجعها ثم حاول مرة أخرى.",
+  "authChallengeInvalid": "الرمز غير صحيح أو انتهت صلاحيته. اطلب رمزاً جديداً ثم أدخله.",
+  "authThrottled": "محاولات كثيرة. انتظر قليلاً، ثم أعد المحاولة.",
+  "authSessionExpired": "انتهت الجلسة. سجّل الدخول من جديد للمتابعة.",
+  "authFieldRequired": "املأ هذا الحقل للمتابعة.",
+  "authPasswordMinLength": "كلمة المرور قصيرة. استخدم 8 أحرف على الأقل.",
+  "authPasswordMismatch": "كلمتا المرور مختلفتان. اكتبهما بالنص نفسه.",
+  "authCodeLengthHint": "أدخل الرمز المكوّن من 6 أرقام.",
+  "authAccountExistsTitle": "الرقم مربوط بحساب",
+  "authAccountExistsMessage": "هذا الرقم مربوط بحساب بالفعل. سجّل الدخول به أو استخدم رقمًا آخر.",
+  "authAccountExistsLoginAction": "تسجيل الدخول",
+  "authAccountExistsAnotherPhoneAction": "إدخال رقم آخر",
+  "authFlowExpired": "انتهت هذه الخطوة. ابدأ من جديد.",
+  "authPasswordResetSuccess": "تم تحديث كلمة المرور. سجّل الدخول بالكلمة الجديدة.",
+  "authPasswordChangedSuccess": "تم تغيير كلمة المرور. استخدم الكلمة الجديدة في المرة القادمة."
 }

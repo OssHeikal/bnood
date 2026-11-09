@@ -157,13 +157,9 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     if (picked == null) return;
     final client = clients.firstWhere((c) => c.id == picked);
     final project = await repo.primaryActiveProject(picked);
-    ref.read(voucherDraftProvider.notifier).state =
-        ref.read(voucherDraftProvider).copyWith(
-              clientId: picked,
-              clientLabel: client.name,
-              projectId: project?.id,
-              clearCraftsman: true,
-            );
+    ref.read(voucherDraftProvider.notifier).state = ref
+        .read(voucherDraftProvider)
+        .copyWith(clientId: picked, clientLabel: client.name, projectId: project?.id, clearCraftsman: true);
     setState(() => _clientPickerError = null);
   }
 
@@ -202,8 +198,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   }
 
   Future<void> _pickSupplier() async {
-    final suppliers =
-        await ref.read(repositoryProvider).watchActiveSuppliers().first;
+    final suppliers = await ref.read(repositoryProvider).watchActiveSuppliers().first;
     if (!mounted) return;
     final draft = ref.read(voucherDraftProvider);
     final l10n = AppLocalizations.of(context);
@@ -242,8 +237,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       setState(() => _craftsmanPickerError = AppLocalizations.of(context).voucherSelectClient);
       return;
     }
-    final craftsmen =
-        await ref.read(repositoryProvider).watchActiveCraftsmen().first;
+    final craftsmen = await ref.read(repositoryProvider).watchActiveCraftsmen().first;
     if (!mounted) return;
     final l10n = AppLocalizations.of(context);
     if (craftsmen.isEmpty) {
@@ -290,9 +284,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       _itemPickerError = l10n.voucherSelectItem;
       valid = false;
     }
-    if (draft.kind == 'spend' &&
-        draft.expenseType == 'labor' &&
-        draft.craftsmanId == null) {
+    if (draft.kind == 'spend' && draft.expenseType == 'labor' && draft.craftsmanId == null) {
       _craftsmanPickerError = l10n.voucherSelectCraftsman;
       valid = false;
     }
@@ -368,12 +360,9 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             description: Value(_descCtrl.text.isEmpty ? null : _descCtrl.text),
             receiptImagePath: Value(ReceiptImageCodec.encode(_receiptPaths)),
             itemId: Value(draft.kind == 'spend' ? draft.itemId : null),
-            expenseType:
-                Value(draft.kind == 'spend' ? draft.expenseType : null),
-            supplierId: Value(
-                draft.expenseType == 'materials' ? draft.supplierId : null),
-            craftsmanId:
-                Value(draft.expenseType == 'labor' ? draft.craftsmanId : null),
+            expenseType: Value(draft.kind == 'spend' ? draft.expenseType : null),
+            supplierId: Value(draft.expenseType == 'materials' ? draft.supplierId : null),
+            craftsmanId: Value(draft.expenseType == 'labor' ? draft.craftsmanId : null),
           ),
         );
       } else {
@@ -387,8 +376,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           receiptImagePath: ReceiptImageCodec.encode(_receiptPaths),
           itemId: draft.kind == 'spend' ? draft.itemId : null,
           expenseType: draft.kind == 'spend' ? draft.expenseType : null,
-          supplierId:
-              draft.expenseType == 'materials' ? draft.supplierId : null,
+          supplierId: draft.expenseType == 'materials' ? draft.supplierId : null,
           craftsmanId: draft.expenseType == 'labor' ? draft.craftsmanId : null,
         );
       }
@@ -396,10 +384,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           draft.expenseType == 'labor' &&
           draft.craftsmanId != null &&
           draft.projectId != null) {
-        await repo.ensureProjectCraftsmanLink(
-          projectId: draft.projectId!,
-          craftsmanId: draft.craftsmanId!,
-        );
+        await repo.ensureProjectCraftsmanLink(projectId: draft.projectId!, craftsmanId: draft.craftsmanId!);
       }
       refreshAfterTransactionMutation(
         ref,
@@ -460,17 +445,14 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
         PageRouteBuilder(
           opaque: false,
           barrierColor: Colors.transparent,
-          pageBuilder: (_, __, ___) => VoucherCameraPickRoute(picker: _receiptPicker),
+          pageBuilder: (_, _, _) => VoucherCameraPickRoute(picker: _receiptPicker),
         ),
       );
       if (result == null || !mounted) {
         return;
       }
       if (result.error != null) {
-        AppToaster.show(
-          voucherReceiptPickUserMessage(l10n, result.error!),
-          kind: ToastKind.warning,
-        );
+        AppToaster.show(voucherReceiptPickUserMessage(l10n, result.error!), kind: ToastKind.warning);
         return;
       }
       final file = result.file;
@@ -508,10 +490,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       if (!mounted) {
         return;
       }
-      AppToaster.show(
-        voucherReceiptPickUserMessage(l10n, e),
-        kind: ToastKind.warning,
-      );
+      AppToaster.show(voucherReceiptPickUserMessage(l10n, e), kind: ToastKind.warning);
     } catch (_) {
       if (!mounted) {
         return;
@@ -530,28 +509,16 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final draft = ref.watch(voucherDraftProvider);
     final isSpend = draft.kind == 'spend';
     final isEditing = draft.editingTransactionId != null;
-    final title = isEditing
-        ? l10n.edit
-        : (isSpend ? l10n.voucherSpendTitle : l10n.voucherReceiveTitle);
-    final saveLabel = isEditing
-        ? l10n.save
-        : (isSpend ? l10n.voucherSaveSpend : l10n.voucherSaveReceive);
+    final title = isEditing ? l10n.edit : (isSpend ? l10n.voucherSpendTitle : l10n.voucherReceiveTitle);
+    final saveLabel = isEditing ? l10n.save : (isSpend ? l10n.voucherSaveSpend : l10n.voucherSaveReceive);
     final txDate = draft.date ?? DateTime.now();
     final contextLine = draft.clientLabel != null
         ? l10n.voucherContextClient(draft.clientLabel!)
         : l10n.voucherContextGeneric;
 
     Widget saveButton = isSpend && !isEditing
-        ? AppButton.destructive(
-            text: saveLabel,
-            isLoading: _saving,
-            onPressed: (_saving || _deleting) ? null : _save,
-          )
-        : AppButton.primary(
-            text: saveLabel,
-            isLoading: _saving,
-            onPressed: (_saving || _deleting) ? null : _save,
-          );
+        ? AppButton.destructive(text: saveLabel, isLoading: _saving, onPressed: (_saving || _deleting) ? null : _save)
+        : AppButton.primary(text: saveLabel, isLoading: _saving, onPressed: (_saving || _deleting) ? null : _save);
 
     final footerActions = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -577,247 +544,223 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-            Padding(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SheetDragHandle(),
+                AppSize.spaceMD.gap,
+                Row(
+                  children: [
+                    Expanded(child: Text(title, style: context.text.title)),
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                      icon: const Icon(Icons.close),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(
                 AppSize.screenPadding,
                 AppSize.spaceSM,
                 AppSize.screenPadding,
-                0,
+                AppSize.spaceLG,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: AppSize.spaceLG,
                 children: [
-                  const SheetDragHandle(),
-                  AppSize.spaceMD.gap,
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(title, style: context.text.title),
-                      ),
-                      IconButton(
-                        visualDensity: VisualDensity.compact,
-                        onPressed: () =>
-                            Navigator.of(context, rootNavigator: true).pop(),
-                        icon: const Icon(Icons.close),
-                      ),
-                    ],
+                  Text(contextLine, style: context.text.caption.setColor(context.colors.onSurfaceMuted)),
+                  VoucherTogglePair(
+                    receiveLabel: l10n.receive,
+                    spendLabel: l10n.spend,
+                    selectedKind: draft.kind,
+                    enabled: !isEditing,
+                    onKindChanged: (kind) {
+                      ref.read(voucherDraftProvider.notifier).state = draft.copyWith(kind: kind);
+                    },
+                  ),
+                  Form(
+                    key: _formKey,
+                    autovalidateMode: _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: AppSize.spaceLG,
+                      children: [
+                        VoucherSelectorField(
+                          label: l10n.navClients,
+                          value: draft.clientLabel,
+                          placeholder: l10n.voucherSelectClient,
+                          enabled: !isEditing,
+                          onTap: isEditing ? null : _pickClient,
+                          errorMessage: _clientPickerError,
+                        ),
+                        if (isSpend) ...[
+                          Text(l10n.expenseCategory, style: context.text.body.semiBold),
+                          VoucherExpenseSegment(
+                            materialsLabel: l10n.materials,
+                            laborLabel: l10n.labor,
+                            selected: draft.expenseType,
+                            onChanged: (value) {
+                              ref.read(voucherDraftProvider.notifier).state = draft.copyWith(
+                                expenseType: value,
+                                clearCraftsman: true,
+                                clearSupplier: true,
+                              );
+                              setState(() {
+                                _craftsmanPickerError = null;
+                                _itemPickerError = null;
+                              });
+                            },
+                          ),
+                          VoucherSelectorField(
+                            label: l10n.item,
+                            value: draft.itemLabel,
+                            placeholder: l10n.voucherSelectItem,
+                            onTap: _pickItem,
+                            errorMessage: _itemPickerError,
+                          ),
+                          if (draft.expenseType == 'materials')
+                            VoucherSelectorField(
+                              label: l10n.supplier,
+                              value: draft.supplierLabel,
+                              placeholder: l10n.supplier,
+                              onTap: _pickSupplier,
+                            ),
+                          if (draft.expenseType == 'labor')
+                            VoucherSelectorField(
+                              label: l10n.craftsman,
+                              value: draft.craftsmanLabel,
+                              placeholder: l10n.voucherSelectCraftsman,
+                              onTap: _pickCraftsman,
+                              errorMessage: _craftsmanPickerError,
+                            ),
+                        ],
+                        CustomTextField(
+                          controller: _amountCtrl,
+                          label: l10n.amount,
+                          placeholder: l10n.amountHint,
+                          type: AppInputType.currency,
+                          ltrValue: true,
+                          suffix: Text(MoneyFormat.currencyLabel),
+                          fieldHeight: AppSize.fieldHeightComfortable,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            final amount = MoneyFormat.parseEgpInput(value ?? '');
+                            if (amount == null || amount <= 0) {
+                              return l10n.voucherAmountRequired;
+                            }
+                            return null;
+                          },
+                        ),
+                        VoucherSelectorField(
+                          key: ValueKey(txDate.toIso8601String()),
+                          label: l10n.date,
+                          value: _formattedDate(txDate),
+                          onTap: _pickDate,
+                        ),
+                        Text(l10n.paymentMethod, style: context.text.body.semiBold),
+                        VoucherPayChips(
+                          cashLabel: l10n.cash,
+                          transferLabel: l10n.transfer,
+                          selected: draft.method,
+                          onChanged: (method) {
+                            ref.read(voucherDraftProvider.notifier).state = draft.copyWith(method: method);
+                          },
+                        ),
+                        CustomTextField(
+                          controller: _descCtrl,
+                          label: l10n.descriptionOptional,
+                          placeholder: l10n.noteOptionalHint,
+                          type: AppInputType.multiline,
+                          multilineHeight: 96,
+                          fieldHeight: AppSize.fieldHeightComfortable,
+                          textInputAction: TextInputAction.done,
+                        ),
+                        Text(l10n.voucherReceiptPhoto, style: context.text.body.semiBold),
+                        for (var i = 0; i < _receiptPaths.length; i++)
+                          CustomListTile(
+                            leading: const Icon(Icons.photo_outlined),
+                            title: l10n.voucherReceiptPhoto,
+                            subtitle: p.basename(_receiptPaths[i]),
+                            trailing: IconButton(icon: const Icon(Icons.close), onPressed: () => _removeReceiptAt(i)),
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => Scaffold(
+                                  appBar: AppBar(),
+                                  body: Center(child: Image.file(File(_receiptPaths[i]))),
+                                ),
+                              ),
+                            ),
+                          ),
+                        Row(
+                          spacing: AppSize.spaceSM,
+                          children: [
+                            Expanded(
+                              child: AppPressable(
+                                onPressed: _attachFromCamera,
+                                child: AppCard(
+                                  padding: const EdgeInsets.all(AppSize.spaceMD),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    spacing: AppSize.spaceSM,
+                                    children: [
+                                      Icon(Icons.photo_camera_outlined, color: context.colors.primary),
+                                      Text(
+                                        l10n.voucherAttachCamera,
+                                        style: context.text.caption.semiBold.setColor(context.colors.primaryDark),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: AppPressable(
+                                onPressed: _attachFromGallery,
+                                child: AppCard(
+                                  padding: const EdgeInsets.all(AppSize.spaceMD),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    spacing: AppSize.spaceSM,
+                                    children: [
+                                      Icon(Icons.photo_library_outlined, color: context.colors.primary),
+                                      Text(
+                                        l10n.voucherAttachGallery,
+                                        style: context.text.caption.semiBold.setColor(context.colors.primaryDark),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSize.screenPadding,
-                  AppSize.spaceSM,
-                  AppSize.screenPadding,
-                  AppSize.spaceLG,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  spacing: AppSize.spaceLG,
-                  children: [
-                    Text(
-                      contextLine,
-                      style: context.text.caption.setColor(context.colors.onSurfaceMuted),
-                    ),
-                    VoucherTogglePair(
-                      receiveLabel: l10n.receive,
-                      spendLabel: l10n.spend,
-                      selectedKind: draft.kind,
-                      enabled: !isEditing,
-                      onKindChanged: (kind) {
-                        ref.read(voucherDraftProvider.notifier).state =
-                            draft.copyWith(kind: kind);
-                      },
-                    ),
-                    Form(
-                      key: _formKey,
-                      autovalidateMode: _attemptedSubmit
-                          ? AutovalidateMode.onUserInteraction
-                          : AutovalidateMode.disabled,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        spacing: AppSize.spaceLG,
-                        children: [
-                          VoucherSelectorField(
-                            label: l10n.navClients,
-                            value: draft.clientLabel,
-                            placeholder: l10n.voucherSelectClient,
-                            enabled: !isEditing,
-                            onTap: isEditing ? null : _pickClient,
-                            errorMessage: _clientPickerError,
-                          ),
-                          if (isSpend) ...[
-                            Text(l10n.expenseCategory, style: context.text.body.semiBold),
-                            VoucherExpenseSegment(
-                              materialsLabel: l10n.materials,
-                              laborLabel: l10n.labor,
-                              selected: draft.expenseType,
-                              onChanged: (value) {
-                                ref.read(voucherDraftProvider.notifier).state =
-                                    draft.copyWith(
-                                  expenseType: value,
-                                  clearCraftsman: true,
-                                  clearSupplier: true,
-                                );
-                                setState(() {
-                                  _craftsmanPickerError = null;
-                                  _itemPickerError = null;
-                                });
-                              },
-                            ),
-                            VoucherSelectorField(
-                              label: l10n.item,
-                              value: draft.itemLabel,
-                              placeholder: l10n.voucherSelectItem,
-                              onTap: _pickItem,
-                              errorMessage: _itemPickerError,
-                            ),
-                            if (draft.expenseType == 'materials')
-                              VoucherSelectorField(
-                                label: l10n.supplier,
-                                value: draft.supplierLabel,
-                                placeholder: l10n.supplier,
-                                onTap: _pickSupplier,
-                              ),
-                            if (draft.expenseType == 'labor')
-                              VoucherSelectorField(
-                                label: l10n.craftsman,
-                                value: draft.craftsmanLabel,
-                                placeholder: l10n.voucherSelectCraftsman,
-                                onTap: _pickCraftsman,
-                                errorMessage: _craftsmanPickerError,
-                              ),
-                          ],
-                          CustomTextField(
-                            controller: _amountCtrl,
-                            label: l10n.amount,
-                            placeholder: l10n.amountHint,
-                            type: AppInputType.currency,
-                            ltrValue: true,
-                            suffix: Text(MoneyFormat.currencyLabel),
-                            fieldHeight: AppSize.fieldHeightComfortable,
-                            textInputAction: TextInputAction.next,
-                            validator: (value) {
-                              final amount = MoneyFormat.parseEgpInput(value ?? '');
-                              if (amount == null || amount <= 0) {
-                                return l10n.voucherAmountRequired;
-                              }
-                              return null;
-                            },
-                          ),
-                          VoucherSelectorField(
-                            key: ValueKey(txDate.toIso8601String()),
-                            label: l10n.date,
-                            value: _formattedDate(txDate),
-                            onTap: _pickDate,
-                          ),
-                          Text(l10n.paymentMethod, style: context.text.body.semiBold),
-                          VoucherPayChips(
-                            cashLabel: l10n.cash,
-                            transferLabel: l10n.transfer,
-                            selected: draft.method,
-                            onChanged: (method) {
-                              ref.read(voucherDraftProvider.notifier).state =
-                                  draft.copyWith(method: method);
-                            },
-                          ),
-                          CustomTextField(
-                            controller: _descCtrl,
-                            label: l10n.descriptionOptional,
-                            placeholder: l10n.noteOptionalHint,
-                            type: AppInputType.multiline,
-                            multilineHeight: 96,
-                            fieldHeight: AppSize.fieldHeightComfortable,
-                            textInputAction: TextInputAction.done,
-                          ),
-                          Text(l10n.voucherReceiptPhoto, style: context.text.body.semiBold),
-                          for (var i = 0; i < _receiptPaths.length; i++)
-                            CustomListTile(
-                              leading: const Icon(Icons.photo_outlined),
-                              title: l10n.voucherReceiptPhoto,
-                              subtitle: p.basename(_receiptPaths[i]),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed: () => _removeReceiptAt(i),
-                              ),
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => Scaffold(
-                                    appBar: AppBar(),
-                                    body: Center(child: Image.file(File(_receiptPaths[i]))),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          Row(
-                            spacing: AppSize.spaceSM,
-                            children: [
-                              Expanded(
-                                child: AppPressable(
-                                  onPressed: _attachFromCamera,
-                                  child: AppCard(
-                                    padding: const EdgeInsets.all(AppSize.spaceMD),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      spacing: AppSize.spaceSM,
-                                      children: [
-                                        Icon(Icons.photo_camera_outlined, color: context.colors.primary),
-                                        Text(
-                                          l10n.voucherAttachCamera,
-                                          style: context.text.caption.semiBold.setColor(context.colors.primaryDark),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: AppPressable(
-                                  onPressed: _attachFromGallery,
-                                  child: AppCard(
-                                    padding: const EdgeInsets.all(AppSize.spaceMD),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      spacing: AppSize.spaceSM,
-                                      children: [
-                                        Icon(Icons.photo_library_outlined, color: context.colors.primary),
-                                        Text(
-                                          l10n.voucherAttachGallery,
-                                          style: context.text.caption.semiBold.setColor(context.colors.primaryDark),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: context.colors.outline)),
+              color: context.colors.surface,
             ),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: context.colors.outline)),
-                color: context.colors.surface,
-              ),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                  AppSize.screenPadding,
-                  AppSize.spaceMD,
-                  AppSize.screenPadding,
-                  footerBottom,
-                ),
-                child: footerActions,
-              ),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceMD, AppSize.screenPadding, footerBottom),
+              child: footerActions,
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 }

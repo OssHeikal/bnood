@@ -7,6 +7,7 @@ import '../features/auth/auth_controller.dart';
 import '../features/auth/auth_paths.dart';
 import '../features/auth/auth_state.dart';
 import '../features/auth/change_password_screen.dart';
+import '../features/auth/complete_profile_screen.dart';
 import '../features/auth/forgot_password_screen.dart';
 import '../features/auth/forgot_verify_screen.dart';
 import '../features/auth/login_screen.dart';
@@ -51,22 +52,37 @@ String? _authRedirect(Ref ref, GoRouterState state) {
   final loc = state.matchedLocation;
 
   if (loc == AuthPaths.bootstrap) {
-    if (auth.isAuthenticated) return AuthPaths.remote;
+    if (auth.isAuthenticated && auth.user != null) {
+      return authenticatedHomeFor(auth.user!);
+    }
     if (auth.bootstrapStatus == AuthBootstrapStatus.unauthenticated) {
-      return _localHome;
+      return AuthPaths.login;
     }
     return null;
   }
 
-  if (auth.isAuthenticated) {
-    if (isLocalLedgerLocation(loc) || loc == AuthPaths.login) {
+  if (auth.isAuthenticated && auth.user != null) {
+    final home = authenticatedHomeFor(auth.user!);
+    final needsProfile = userNeedsProfileCompletion(auth.user);
+    if (needsProfile && loc != AuthPaths.completeProfile && loc != AuthPaths.changePassword) {
+      return AuthPaths.completeProfile;
+    }
+    if (!needsProfile && loc == AuthPaths.completeProfile) {
       return AuthPaths.remote;
     }
-    if (isAuthFlowLocation(loc) && loc != AuthPaths.changePassword) {
-      return AuthPaths.remote;
+    if (isLocalLedgerLocation(loc) || loc == AuthPaths.login) {
+      return home;
+    }
+    if (isAuthFlowLocation(loc) &&
+        loc != AuthPaths.changePassword &&
+        loc != AuthPaths.completeProfile) {
+      return home;
     }
   } else {
-    if (loc == AuthPaths.remote || loc == AuthPaths.changePassword) {
+    if (loc == AuthPaths.remote ||
+        loc == AuthPaths.changePassword ||
+        loc == AuthPaths.completeProfile ||
+        isLocalLedgerLocation(loc)) {
       return AuthPaths.login;
     }
   }
@@ -106,6 +122,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AuthPaths.registerVerify,
         builder: (_, _) => const RegisterVerifyScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.completeProfile,
+        builder: (_, _) => const CompleteProfileScreen(),
       ),
       GoRoute(
         path: AuthPaths.forgotPassword,

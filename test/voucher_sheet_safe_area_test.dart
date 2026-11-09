@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/database/connection.dart';
@@ -30,10 +28,7 @@ void _applyDeviceInsets(WidgetTester tester) {
   addTearDown(tester.view.reset);
 }
 
-Future<void> _pumpHomeWithVoucherTrigger(
-  WidgetTester tester, {
-  required BnoodRepository repo,
-}) async {
+Future<void> _pumpHomeWithVoucherTrigger(WidgetTester tester, {required BnoodRepository repo}) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [repositoryProvider.overrideWithValue(repo)],
@@ -46,10 +41,7 @@ Future<void> _pumpHomeWithVoucherTrigger(
           child: Builder(
             builder: (context) => Scaffold(
               body: Center(
-                child: FilledButton(
-                  onPressed: () => VoucherLauncher.openFresh(context),
-                  child: const Text('trigger'),
-                ),
+                child: FilledButton(onPressed: () => VoucherLauncher.openFresh(context), child: const Text('trigger')),
               ),
             ),
           ),
@@ -103,10 +95,7 @@ void main() {
                       isScrollControlled: true,
                       useSafeArea: false,
                       showDragHandle: false,
-                      builder: (_) => const SafeArea(
-                        bottom: false,
-                        child: VoucherSheet(),
-                      ),
+                      builder: (_) => const SafeArea(bottom: false, child: VoucherSheet()),
                     );
                   },
                   child: const Text('bad'),
@@ -196,9 +185,7 @@ void main() {
                       showDragHandle: false,
                       useSafeArea: true,
                       builder: (_) => HomeFoundationScope(
-                        child: BoundedSheetNavigator(
-                          builder: (_) => const InlineCreateSupplierPage(),
-                        ),
+                        child: BoundedSheetNavigator(builder: (_) => const InlineCreateSupplierPage()),
                       ),
                     );
                   },

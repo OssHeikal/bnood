@@ -69,11 +69,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
       final repo = ref.read(repositoryProvider);
       final store = StatementExportStore(prefs);
       final ws = await repo.workspaceId();
-      final record = store.read(
-        workspaceId: ws,
-        kind: StatementEntityKind.client,
-        entityId: widget.clientId,
-      );
+      final record = store.read(workspaceId: ws, kind: StatementEntityKind.client, entityId: widget.clientId);
       if (mounted) {
         setState(() {
           _prefsAvailable = true;
@@ -96,8 +92,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
       StatementPeriodPreset.today => StatementPeriodLogic.todayBounds(),
       StatementPeriodPreset.month => StatementPeriodLogic.monthBounds(),
       StatementPeriodPreset.all => StatementPeriodLogic.allTimeBounds(_allRows),
-      StatementPeriodPreset.sinceLastExport =>
-        StatementPeriodLogic.sinceLastExportBounds(_lastExport) ?? _bounds,
+      StatementPeriodPreset.sinceLastExport => StatementPeriodLogic.sinceLastExportBounds(_lastExport) ?? _bounds,
       StatementPeriodPreset.custom => _bounds,
     };
   }
@@ -152,12 +147,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
     );
   }
 
-  Widget _buildBody(
-    BuildContext context,
-    AsyncSnapshot<_StatementData> snap,
-    BnoodRepository repo,
-    String localeCode,
-  ) {
+  Widget _buildBody(BuildContext context, AsyncSnapshot<_StatementData> snap, BnoodRepository repo, String localeCode) {
     if (snap.connectionState == ConnectionState.waiting && !snap.hasData) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -206,18 +196,12 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   Future<_StatementData> _load(BnoodRepository repo) async {
     final client = await repo.getClient(widget.clientId);
     final project = await repo.primaryActiveProject(widget.clientId);
-    if (client == null || project == null) throw StateError('missing');
+    if (project == null) throw StateError('missing');
     final rows = await repo.transactionsForProject(project.id);
     _allRows = rows;
-    final totals = LedgerMath.periodTotals(
-      projectRows: rows,
-      periodStart: _bounds.start,
-      periodEnd: _bounds.end,
-    );
-    final periodSpend =
-        rows.where((t) => t.kind == 'spend' && _bounds.containsLocalDate(t.date)).toList();
-    final periodReceive =
-        rows.where((t) => t.kind == 'receive' && _bounds.containsLocalDate(t.date)).toList();
+    final totals = LedgerMath.periodTotals(projectRows: rows, periodStart: _bounds.start, periodEnd: _bounds.end);
+    final periodSpend = rows.where((t) => t.kind == 'spend' && _bounds.containsLocalDate(t.date)).toList();
+    final periodReceive = rows.where((t) => t.kind == 'receive' && _bounds.containsLocalDate(t.date)).toList();
     final items = await repo.activeItems();
     final itemNames = {for (final i in items) i.id: i.name};
     final supplierNames = await _partyMap(repo, periodSpend.map((t) => t.supplierId));
@@ -234,11 +218,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
     );
   }
 
-  Future<Map<String, String>> _partyMap(
-    BnoodRepository repo,
-    Iterable<String?> ids, {
-    bool craftsman = false,
-  }) async {
+  Future<Map<String, String>> _partyMap(BnoodRepository repo, Iterable<String?> ids, {bool craftsman = false}) async {
     final map = <String, String>{};
     for (final id in ids.whereType<String>().toSet()) {
       if (craftsman) {
@@ -278,10 +258,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
           StatementScreenToast.failure(
             context,
             l10n.statementExportFailed,
-            action: ToastAction(
-              label: l10n.retry,
-              onPressed: () => _exportPdf(data, l10n),
-            ),
+            action: ToastAction(label: l10n.retry, onPressed: () => _exportPdf(data, l10n)),
           );
         }
         return;
@@ -302,36 +279,23 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
         if (mounted) {
           setState(() {
             _prefsAvailable = true;
-            _lastExport = store.read(
-              workspaceId: ws,
-              kind: StatementEntityKind.client,
-              entityId: widget.clientId,
-            );
+            _lastExport = store.read(workspaceId: ws, kind: StatementEntityKind.client, entityId: widget.clientId);
           });
         }
       }
 
       final path = await StatementPdfExport.persistTempPdf(bytes, fileName);
       if (!mounted) return;
-      final shareOrigin = StatementPdfExport.sharePositionOriginFor(
-        _sharePdfButtonKey.currentContext ?? context,
-      );
+      final shareOrigin = StatementPdfExport.sharePositionOriginFor(_sharePdfButtonKey.currentContext ?? context);
       try {
-        await StatementPdfExport.shareFromFile(
-          path,
-          fileName,
-          sharePositionOrigin: shareOrigin,
-        );
+        await StatementPdfExport.shareFromFile(path, fileName, sharePositionOrigin: shareOrigin);
       } catch (e, st) {
         FlutterError.reportError(FlutterErrorDetails(exception: e, stack: st, library: 'statement_share'));
         if (mounted) {
           StatementScreenToast.failure(
             context,
             l10n.statementExportShareFailed,
-            action: ToastAction(
-              label: l10n.retry,
-              onPressed: () => _shareExistingFile(path, fileName, l10n),
-            ),
+            action: ToastAction(label: l10n.retry, onPressed: () => _shareExistingFile(path, fileName, l10n)),
           );
         }
       }
@@ -344,14 +308,8 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
     if (_exporting) return;
     setState(() => _exporting = true);
     try {
-      final shareOrigin = StatementPdfExport.sharePositionOriginFor(
-        _sharePdfButtonKey.currentContext ?? context,
-      );
-      await StatementPdfExport.shareFromFile(
-        path,
-        fileName,
-        sharePositionOrigin: shareOrigin,
-      );
+      final shareOrigin = StatementPdfExport.sharePositionOriginFor(_sharePdfButtonKey.currentContext ?? context);
+      await StatementPdfExport.shareFromFile(path, fileName, sharePositionOrigin: shareOrigin);
     } catch (e, st) {
       FlutterError.reportError(FlutterErrorDetails(exception: e, stack: st, library: 'statement_share'));
       if (mounted) {

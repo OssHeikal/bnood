@@ -21,9 +21,7 @@ void main() {
         locale: const Locale('ar'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const HomeFoundationScope(
-          child: InlineCreateClientPage(),
-        ),
+        home: const HomeFoundationScope(child: InlineCreateClientPage()),
       ),
     );
     await tester.pump();
@@ -53,17 +51,14 @@ void main() {
     await tester.pump();
   }
 
-  Rect _buttonRect(WidgetTester tester) {
-    final button = find.ancestor(
-      of: find.byIcon(Icons.contacts_outlined),
-      matching: find.byType(PressableScale),
-    );
+  Rect buttonRect(WidgetTester tester) {
+    final button = find.ancestor(of: find.byIcon(Icons.contacts_outlined), matching: find.byType(PressableScale));
     return tester.getRect(button);
   }
 
   testWidgets('AR contact import icon leads at start (right), label before icon', (tester) async {
     await pumpContactAction(tester, const Locale('ar'));
-    final button = _buttonRect(tester);
+    final button = buttonRect(tester);
     final icon = tester.getRect(find.byIcon(Icons.contacts_outlined));
     final label = tester.getRect(find.text('اختيار من جهات الاتصال'));
     expect(icon.left, greaterThan(label.left));
@@ -74,7 +69,7 @@ void main() {
 
   testWidgets('EN contact import icon leads at start (left), label after icon', (tester) async {
     await pumpContactAction(tester, const Locale('en'));
-    final button = _buttonRect(tester);
+    final button = buttonRect(tester);
     final icon = tester.getRect(find.byIcon(Icons.contacts_outlined));
     final label = tester.getRect(find.text('Choose from contacts'));
     expect(icon.left, lessThan(label.left));
@@ -83,11 +78,8 @@ void main() {
   });
 
   testWidgets('contact import fills client form without save', (tester) async {
-    DeviceContactPicker.pickOverride = () async => Contact(
-          fullName: 'أسامة',
-          selectedPhoneNumber: '01012345678',
-          phoneNumbers: const ['01012345678'],
-        );
+    DeviceContactPicker.pickOverride = () async =>
+        Contact(fullName: 'أسامة', selectedPhoneNumber: '01012345678', phoneNumbers: const ['01012345678']);
 
     await tester.pumpWidget(
       MaterialApp(

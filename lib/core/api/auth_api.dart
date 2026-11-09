@@ -1,32 +1,42 @@
-import 'dart:convert';
-import 'dart:io' show Platform;
-
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 import '../config/api_config.dart';
+import '../storage/session_store.dart';
 import 'api_response_parser.dart';
+import 'app_dio.dart';
 import 'auth_api_exception.dart';
+import 'auth_interceptor.dart';
+import 'auth_login_result.dart';
 import '../../features/auth/models/user.dart';
 
 class AuthApi {
-  AuthApi({http.Client? client}) : _client = client ?? http.Client();
+  AuthApi({
+    Dio? dio,
+    SessionStore? sessionStore,
+  })  : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
+        _ownsDio = dio == null;
 
-  final http.Client _client;
+  final Dio _dio;
+  final bool _ownsDio;
 
-  Uri _uri(String path) => Uri.parse('${ApiConfig.baseUrl}$path');
+  static const _authPrefix = ApiConfig.subscriberAuthPrefix;
 
-  Map<String, String> _headers({String? bearer}) => {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        if (bearer != null && bearer.isNotEmpty)
-          'Authorization': 'Bearer $bearer',
+  Map<String, dynamic> get _authenticatedExtra => {
+        AuthInterceptor.authenticatedExtraKey: true,
       };
 
-  String get _deviceName {
+  Future<T> _guard<T>(Future<T> Function() run) async {
     try {
-      return 'Bnood ${Platform.operatingSystem}';
-    } catch (_) {
-      return 'Bnood';
+      return await run();
+    } on AuthApiException {
+      rethrow;
+    } on DioException catch (e) {
+      if (e.error is AuthApiException) {
+        throw e.error as AuthApiException;
+      }
+      throw ApiResponseParser.transport(e);
+    } catch (e) {
+      throw ApiResponseParser.transport(e);
     }
   }
 
@@ -34,16 +44,15 @@ class AuthApi {
     required String phone,
     required String password,
     required String passwordConfirmation,
-  }) async {
-    try {
-      final response = await _client.post(
-        _uri('${ApiConfig.subscriberAuthPrefix}/register'),
-        headers: _headers(),
-        body: jsonEncode({
+  }) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/register',
+        data: {
           'phone': phone,
           'password': password,
           'password_confirmation': passwordConfirmation,
-        }),
+        },
       );
       if (response.statusCode == 202) {
         return ApiResponseParser.expectData(response, RegistrationAccepted.fromJson);
@@ -52,18 +61,14 @@ class AuthApi {
         response,
         ApiResponseParser.decodeJson(response),
       );
-    } catch (e) {
-      if (e is AuthApiException) rethrow;
-      throw ApiResponseParser.transport(e);
-    }
+    });
   }
 
-  Future<RegistrationAccepted> resendRegistration(String registrationId) async {
-    try {
-      final response = await _client.post(
-        _uri('${ApiConfig.subscriberAuthPrefix}/register/resend'),
-        headers: _headers(),
-        body: jsonEncode({'registration_id': registrationId}),
+  Future<RegistrationAccepted> resendRegistration(String registrationId) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/register/resend',
+        data: {'registration_id': registrationId},
       );
       if (response.statusCode == 202) {
         return ApiResponseParser.expectData(response, RegistrationAccepted.fromJson);
@@ -72,25 +77,20 @@ class AuthApi {
         response,
         ApiResponseParser.decodeJson(response),
       );
-    } catch (e) {
-      if (e is AuthApiException) rethrow;
-      throw ApiResponseParser.transport(e);
-    }
+    });
   }
 
   Future<AuthSessionPayload> verifyRegistration({
     required String registrationId,
     required String code,
-  }) async {
-    try {
-      final response = await _client.post(
-        _uri('${ApiConfig.subscriberAuthPrefix}/register/verify'),
-        headers: _headers(),
-        body: jsonEncode({
+  }) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/register/verify',
+        data: {
           'registration_id': registrationId,
           'code': code,
-          'device_name': _deviceName,
-        }),
+        },
       );
       if (response.statusCode == 201) {
         return ApiResponseParser.expectData(response, AuthSessionPayload.fromJson);
@@ -99,71 +99,89 @@ class AuthApi {
         response,
         ApiResponseParser.decodeJson(response),
       );
-    } catch (e) {
-      if (e is AuthApiException) rethrow;
-      throw ApiResponseParser.transport(e);
-    }
+    });
   }
 
-  Future<AuthSessionPayload> login({
+  Future<LoginResult> login({
     required String phone,
     required String password,
-  }) async {
-    try {
-      final response = await _client.post(
-        _uri('${ApiConfig.subscriberAuthPrefix}/login'),
-        headers: _headers(),
-        body: jsonEncode({
+  }) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/login',
+        data: {
           'phone': phone,
           'password': password,
-          'device_name': _deviceName,
-        }),
+        },
       );
-      return ApiResponseParser.expectData(response, AuthSessionPayload.fromJson);
-    } catch (e) {
-      if (e is AuthApiException) rethrow;
-      throw ApiResponseParser.transport(e);
-    }
+      final json = ApiResponseParser.decodeJson(response);
+      final status = response.statusCode ?? 0;
+      if (json['success'] != true) {
+        throw ApiResponseParser.fromFailure(response, json);
+      }
+      final data = json['data'];
+      if (data is! Map<String, dynamic>) {
+        throw AuthApiException(
+          statusCode: status,
+          message: 'Unexpected response shape',
+        );
+      }
+      if (status == 200) {
+        return LoginResultSession(AuthSessionPayload.fromJson(data));
+      }
+      if (status == 202) {
+        return LoginRegistrationChallenge(RegistrationAccepted.fromJson(data));
+      }
+      throw ApiResponseParser.fromFailure(response, json);
+    });
   }
 
-  Future<User> me(String bearer) async {
-    try {
-      final response = await _client.get(
-        _uri('${ApiConfig.subscriberAuthPrefix}/me'),
-        headers: _headers(bearer: bearer),
+  Future<User> me() {
+    return _guard(() async {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '$_authPrefix/me',
+        options: Options(extra: _authenticatedExtra),
       );
-      final user = ApiResponseParser.expectData(
+      return ApiResponseParser.expectData(
         response,
         (data) => User.fromJson(
           (data?['user'] as Map<String, dynamic>?) ?? data!,
         ),
       );
-      return user;
-    } catch (e) {
-      if (e is AuthApiException) rethrow;
-      throw ApiResponseParser.transport(e);
-    }
+    });
   }
 
-  Future<void> logout(String bearer) async {
-    try {
-      final response = await _client.post(
-        _uri('${ApiConfig.subscriberAuthPrefix}/logout'),
-        headers: _headers(bearer: bearer),
+  Future<User> updateProfile({required String name}) {
+    return _guard(() async {
+      final response = await _dio.patch<Map<String, dynamic>>(
+        '$_authPrefix/profile',
+        data: {'name': name},
+        options: Options(extra: _authenticatedExtra),
+      );
+      return ApiResponseParser.expectData(
+        response,
+        (data) => User.fromJson(
+          (data?['user'] as Map<String, dynamic>?) ?? data!,
+        ),
+      );
+    });
+  }
+
+  Future<void> logout() {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/logout',
+        options: Options(extra: _authenticatedExtra),
       );
       ApiResponseParser.expectSuccess(response);
-    } catch (e) {
-      if (e is AuthApiException) rethrow;
-      throw ApiResponseParser.transport(e);
-    }
+    });
   }
 
-  Future<RecoveryAccepted> forgotPassword(String phone) async {
-    try {
-      final response = await _client.post(
-        _uri('${ApiConfig.subscriberAuthPrefix}/forgot-password'),
-        headers: _headers(),
-        body: jsonEncode({'phone': phone}),
+  Future<RecoveryAccepted> forgotPassword(String phone) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/forgot-password',
+        data: {'phone': phone},
       );
       if (response.statusCode == 202) {
         return ApiResponseParser.expectData(response, RecoveryAccepted.fromJson);
@@ -172,78 +190,67 @@ class AuthApi {
         response,
         ApiResponseParser.decodeJson(response),
       );
-    } catch (e) {
-      if (e is AuthApiException) rethrow;
-      throw ApiResponseParser.transport(e);
-    }
+    });
   }
 
   Future<ResetAuthorization> verifyForgotPassword({
     required String recoveryId,
     required String code,
-  }) async {
-    try {
-      final response = await _client.post(
-        _uri('${ApiConfig.subscriberAuthPrefix}/forgot-password/verify'),
-        headers: _headers(),
-        body: jsonEncode({
+  }) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/forgot-password/verify',
+        data: {
           'recovery_id': recoveryId,
           'code': code,
-        }),
+        },
       );
       return ApiResponseParser.expectData(response, ResetAuthorization.fromJson);
-    } catch (e) {
-      if (e is AuthApiException) rethrow;
-      throw ApiResponseParser.transport(e);
-    }
+    });
   }
 
   Future<void> resetPassword({
     required String resetToken,
     required String password,
     required String passwordConfirmation,
-  }) async {
-    try {
-      final response = await _client.post(
-        _uri('${ApiConfig.subscriberAuthPrefix}/reset-password'),
-        headers: _headers(),
-        body: jsonEncode({
+  }) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/reset-password',
+        data: {
           'reset_token': resetToken,
           'password': password,
           'password_confirmation': passwordConfirmation,
-        }),
+        },
       );
       ApiResponseParser.expectSuccess(response);
-    } catch (e) {
-      if (e is AuthApiException) rethrow;
-      throw ApiResponseParser.transport(e);
-    }
+    });
   }
 
   Future<void> changePassword({
-    required String bearer,
     required String currentPassword,
     required String password,
     required String passwordConfirmation,
-  }) async {
-    try {
-      final response = await _client.post(
-        _uri('${ApiConfig.subscriberAuthPrefix}/change-password'),
-        headers: _headers(bearer: bearer),
-        body: jsonEncode({
+  }) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/change-password',
+        data: {
           'current_password': currentPassword,
           'password': password,
           'password_confirmation': passwordConfirmation,
-        }),
+        },
+        options: Options(extra: _authenticatedExtra),
       );
       ApiResponseParser.expectSuccess(response);
-    } catch (e) {
-      if (e is AuthApiException) rethrow;
-      throw ApiResponseParser.transport(e);
-    }
+    });
   }
 
-  void close() => _client.close();
+  void close() {
+    if (_ownsDio) {
+      _dio.close();
+    }
+  }
 }
 
 class RegistrationAccepted {

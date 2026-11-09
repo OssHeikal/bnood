@@ -20,18 +20,21 @@ void main() {
                   builder: (context, state) => ListView(
                     children: [
                       const SizedBox(height: 400),
-                      ListTile(
-                        title: const Text('last-row'),
-                        onTap: () => tapped = true,
-                      ),
+                      ListTile(title: const Text('last-row'), onTap: () => tapped = true),
                     ],
                   ),
                 ),
               ],
             ),
-            StatefulShellBranch(routes: [GoRoute(path: '/clients', builder: (_, __) => const SizedBox())]),
-            StatefulShellBranch(routes: [GoRoute(path: '/directory', builder: (_, __) => const SizedBox())]),
-            StatefulShellBranch(routes: [GoRoute(path: '/items', builder: (_, __) => const SizedBox())]),
+            StatefulShellBranch(
+              routes: [GoRoute(path: '/clients', builder: (_, _) => const SizedBox())],
+            ),
+            StatefulShellBranch(
+              routes: [GoRoute(path: '/directory', builder: (_, _) => const SizedBox())],
+            ),
+            StatefulShellBranch(
+              routes: [GoRoute(path: '/items', builder: (_, _) => const SizedBox())],
+            ),
           ],
         ),
       ],
@@ -52,9 +55,7 @@ void main() {
 
     final fadeIgnores = find.descendant(
       of: find.byType(ShellScaffold),
-      matching: find.byWidgetPredicate(
-        (w) => w is IgnorePointer && w.ignoring,
-      ),
+      matching: find.byWidgetPredicate((w) => w is IgnorePointer && w.ignoring),
     );
     expect(fadeIgnores, findsWidgets);
   });

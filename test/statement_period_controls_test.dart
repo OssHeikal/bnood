@@ -10,10 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('statement period controls show presets and custom range', (tester) async {
-    final initial = PeriodBounds(
-      start: DateTime(2025, 6, 1),
-      end: DateTime(2025, 6, 30),
-    );
+    final initial = PeriodBounds(start: DateTime(2025, 6, 1), end: DateTime(2025, 6, 30));
 
     await tester.pumpWidget(
       MaterialApp(
@@ -23,15 +20,15 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         home: HomeFoundationScope(
           child: Scaffold(
-          backgroundColor: AppColors.light.canvas,
-          body: StatementPeriodControls(
-            bounds: initial,
-            preset: StatementPeriodPreset.custom,
-            sinceLastExportAvailable: false,
-            lastExport: null,
-            onChanged: (_, __) {},
+            backgroundColor: AppColors.light.canvas,
+            body: StatementPeriodControls(
+              bounds: initial,
+              preset: StatementPeriodPreset.custom,
+              sinceLastExportAvailable: false,
+              lastExport: null,
+              onChanged: (_, _) {},
+            ),
           ),
-        ),
         ),
       ),
     );

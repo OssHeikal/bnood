@@ -1,13 +1,12 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/database/connection.dart';
+import 'package:bnood/core/database/database.dart';
 import 'package:bnood/core/providers/app_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/core/widgets/buttons/app_button.dart';
-import 'package:bnood/core/database/database.dart';
 import 'package:bnood/features/clients/client_detail_snapshot.dart';
-import 'package:bnood/features/clients/client_movement_lines.dart';
-import 'package:bnood/features/clients/widgets/interactive_movement_card.dart';
 import 'package:bnood/features/clients/voucher_draft_from_transaction.dart';
+import 'package:bnood/features/clients/widgets/interactive_movement_card.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/vouchers/voucher_draft.dart';
 import 'package:bnood/features/vouchers/voucher_launcher.dart';

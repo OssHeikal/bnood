@@ -799,17 +799,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authLoginTitle => 'Sign in';
 
   @override
+  String get authLoginSubtitle =>
+      'Track client funds, vouchers, and finishing projects from your account.';
+
+  @override
   String get authRegisterTitle => 'Create account';
 
   @override
   String get authRegisterSubtitle =>
-      'Egypt mobile number only. Your number cannot be changed later.';
+      'Create an account to keep your workspace and sign in on another phone.';
 
   @override
   String get authPhone => 'Mobile number';
 
   @override
-  String get authPhoneInvalid => 'Enter a valid Egypt mobile (01XXXXXXXXX)';
+  String get authPhoneInvalid =>
+      'Enter an 11-digit mobile number that starts with 01.';
 
   @override
   String get authPassword => 'Password';
@@ -831,7 +836,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authForgotPasswordSubtitle =>
-      'Enter your registered mobile number.';
+      'Enter the mobile number on your account. We will send a confirmation code.';
 
   @override
   String get authVerificationTitle => 'Verification code';
@@ -841,8 +846,31 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter the verification code you received.';
 
   @override
+  String authVerificationDeliverySubtitle(String phone) {
+    return 'Enter the code sent to $phone.';
+  }
+
+  @override
   String get authRecoveryVerifySubtitle =>
       'Enter the recovery code you received.';
+
+  @override
+  String authRecoveryDeliverySubtitle(String phone) {
+    return 'Enter the password recovery code sent to $phone.';
+  }
+
+  @override
+  String get authCompleteProfileTitle => 'Your name';
+
+  @override
+  String get authCompleteProfileSubtitle =>
+      'Enter the name you use at work, then tap Continue.';
+
+  @override
+  String get authDisplayName => 'Full name';
+
+  @override
+  String get authDisplayNameHint => 'e.g. Ahmed Hassan';
 
   @override
   String get authVerificationCode => 'Code';
@@ -852,7 +880,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String authResendWait(int seconds) {
-    return 'Resend in ${seconds}s';
+    return 'Wait ${seconds}s, then send again.';
   }
 
   @override
@@ -896,7 +924,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authRemoteWorkspaceBody =>
-      'You are signed in. Cloud project data is not available in this phase yet.';
+      'You are signed in. Cloud project data is not available yet.';
 
   @override
   String get authSignedInAs => 'Signed in as';
@@ -906,39 +934,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authNetworkError =>
-      'Connection failed. Check the network and try again.';
+      'Could not connect. Check the network, then try again.';
 
   @override
-  String get authInvalidCredentials => 'Phone or password is incorrect.';
+  String get authInvalidCredentials =>
+      'Mobile number or password is wrong. Check them, then try again.';
 
   @override
-  String get authChallengeInvalid => 'Code is invalid or expired.';
+  String get authChallengeInvalid =>
+      'That code is wrong or expired. Request a new one, then enter it.';
 
   @override
-  String get authThrottled => 'Too many attempts. Try again later.';
+  String get authThrottled =>
+      'Too many attempts. Wait a moment, then try again.';
 
   @override
-  String get authSessionExpired => 'Your session expired. Sign in again.';
+  String get authSessionExpired =>
+      'Your session ended. Sign in again to continue.';
 
   @override
-  String get authFieldRequired => 'This field is required';
+  String get authFieldRequired => 'Fill in this field to continue.';
 
   @override
-  String get authPasswordMinLength => 'Use at least 8 characters';
+  String get authPasswordMinLength =>
+      'Password is too short. Use at least 8 characters.';
 
   @override
-  String get authPasswordMismatch => 'Passwords do not match';
+  String get authPasswordMismatch =>
+      'Those passwords differ. Type the same password in both fields.';
 
   @override
-  String get authCodeLengthHint => 'Enter 4–8 characters';
+  String get authCodeLengthHint => 'Enter the 6-digit code.';
+
+  @override
+  String get authAccountExistsTitle => 'Phone already linked';
+
+  @override
+  String get authAccountExistsMessage =>
+      'This phone is already linked to an account. Sign in with that number or use a different phone.';
+
+  @override
+  String get authAccountExistsLoginAction => 'Sign in';
+
+  @override
+  String get authAccountExistsAnotherPhoneAction => 'Enter another phone';
 
   @override
   String get authFlowExpired => 'This step expired. Start again.';
 
   @override
   String get authPasswordResetSuccess =>
-      'Password updated. Sign in with your new password.';
+      'Password updated. Sign in with the new one.';
 
   @override
-  String get authPasswordChangedSuccess => 'Password changed.';
+  String get authPasswordChangedSuccess =>
+      'Password changed. Use the new one next time.';
 }

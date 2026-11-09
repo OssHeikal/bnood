@@ -2,13 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/api/auth_api_exception.dart';
 import '../../core/api/auth_api.dart';
+import '../../core/api/auth_login_result.dart';
+import 'auth_login_outcome.dart';
 import '../../core/api/auth_api_providers.dart';
 import '../../core/storage/session_store.dart';
 import 'auth_state.dart';
 import 'models/user.dart';
 
-final authControllerProvider =
-    NotifierProvider<AuthController, AuthState>(AuthController.new);
+final authControllerProvider = NotifierProvider<AuthController, AuthState>(AuthController.new);
 
 class AuthController extends Notifier<AuthState> {
   SessionStore get _store => ref.read(sessionStoreProvider);
@@ -28,40 +29,24 @@ class AuthController extends Notifier<AuthState> {
     try {
       final token = await _store.readToken();
       if (token == null || token.isEmpty) {
-        state = state.copyWith(
-          bootstrapStatus: AuthBootstrapStatus.unauthenticated,
-          clearUser: true,
-        );
+        state = state.copyWith(bootstrapStatus: AuthBootstrapStatus.unauthenticated, clearUser: true);
         return;
       }
-      final user = await _api.me(token);
-      state = state.copyWith(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: user,
-      );
+      final user = await _api.me();
+      state = state.copyWith(bootstrapStatus: AuthBootstrapStatus.authenticated, user: user);
     } on AuthApiException catch (e) {
       if (e.isUnauthorized || e.isSessionExpired) {
         await _store.clearToken();
-        state = state.copyWith(
-          bootstrapStatus: AuthBootstrapStatus.unauthenticated,
-          clearUser: true,
-        );
+        state = state.copyWith(bootstrapStatus: AuthBootstrapStatus.unauthenticated, clearUser: true);
         return;
       }
       if (e.isNetwork) {
-        state = state.copyWith(
-          bootstrapStatus: AuthBootstrapStatus.bootstrapNetworkError,
-        );
+        state = state.copyWith(bootstrapStatus: AuthBootstrapStatus.bootstrapNetworkError);
         return;
       }
-      state = state.copyWith(
-        bootstrapStatus: AuthBootstrapStatus.unauthenticated,
-        clearUser: true,
-      );
+      state = state.copyWith(bootstrapStatus: AuthBootstrapStatus.unauthenticated, clearUser: true);
     } catch (_) {
-      state = state.copyWith(
-        bootstrapStatus: AuthBootstrapStatus.bootstrapNetworkError,
-      );
+      state = state.copyWith(bootstrapStatus: AuthBootstrapStatus.bootstrapNetworkError);
     }
   }
 
@@ -115,10 +100,7 @@ class AuthController extends Notifier<AuthState> {
     final pending = state.pendingRegistration;
     if (pending == null) return null;
     try {
-      final session = await _api.verifyRegistration(
-        registrationId: pending.registrationId,
-        code: code,
-      );
+      final session = await _api.verifyRegistration(registrationId: pending.registrationId, code: code);
       await _store.writeToken(session.token);
       state = state.copyWith(
         bootstrapStatus: AuthBootstrapStatus.authenticated,
@@ -131,20 +113,31 @@ class AuthController extends Notifier<AuthState> {
     }
   }
 
-  Future<AuthApiException?> login({
-    required String phone,
-    required String password,
-  }) async {
+  Future<LoginOutcome> login({required String phone, required String password}) async {
     try {
-      final session = await _api.login(phone: phone, password: password);
-      await _store.writeToken(session.token);
-      state = state.copyWith(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: session.user,
-      );
-      return null;
+      final result = await _api.login(phone: phone, password: password);
+      switch (result) {
+        case LoginResultSession(:final session):
+          await _store.writeToken(session.token);
+          state = state.copyWith(
+            bootstrapStatus: AuthBootstrapStatus.authenticated,
+            user: session.user,
+          );
+          return const LoginOutcomeAuthenticated();
+        case LoginRegistrationChallenge(:final challenge):
+          state = state.copyWith(
+            pendingRegistration: PendingRegistration(
+              registrationId: challenge.registrationId,
+              phone: phone,
+              resendAfterSeconds: challenge.resendAfter,
+            ),
+            clearPendingRecovery: true,
+            clearResetToken: true,
+          );
+          return const LoginOutcomeRegistrationChallenge();
+      }
     } on AuthApiException catch (e) {
-      return e;
+      return LoginOutcomeFailed(e);
     }
   }
 
@@ -170,37 +163,32 @@ class AuthController extends Notifier<AuthState> {
     final pending = state.pendingRecovery;
     if (pending == null) return null;
     try {
-      final auth = await _api.verifyForgotPassword(
-        recoveryId: pending.recoveryId,
-        code: code,
-      );
-      state = state.copyWith(
-        resetToken: auth.resetToken,
-        resetTokenExpiresIn: auth.expiresIn,
-      );
+      final auth = await _api.verifyForgotPassword(recoveryId: pending.recoveryId, code: code);
+      state = state.copyWith(resetToken: auth.resetToken, resetTokenExpiresIn: auth.expiresIn);
       return null;
     } on AuthApiException catch (e) {
       return e;
     }
   }
 
-  Future<AuthApiException?> resetPassword({
-    required String password,
-    required String passwordConfirmation,
-  }) async {
+  Future<AuthApiException?> resetPassword({required String password, required String passwordConfirmation}) async {
     final resetToken = state.resetToken;
     if (resetToken == null) return null;
     try {
-      await _api.resetPassword(
-        resetToken: resetToken,
-        password: password,
-        passwordConfirmation: passwordConfirmation,
-      );
-      state = state.copyWith(
-        clearResetToken: true,
-        clearPendingRecovery: true,
-        clearResetExpires: true,
-      );
+      await _api.resetPassword(resetToken: resetToken, password: password, passwordConfirmation: passwordConfirmation);
+      state = state.copyWith(clearResetToken: true, clearPendingRecovery: true, clearResetExpires: true);
+      return null;
+    } on AuthApiException catch (e) {
+      return e;
+    }
+  }
+
+  Future<AuthApiException?> saveProfileName(String name) async {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return null;
+    try {
+      final user = await _api.updateProfile(name: trimmed);
+      state = state.copyWith(user: user);
       return null;
     } on AuthApiException catch (e) {
       return e;
@@ -212,17 +200,8 @@ class AuthController extends Notifier<AuthState> {
     required String password,
     required String passwordConfirmation,
   }) async {
-    final token = await _store.readToken();
-    if (token == null || token.isEmpty) {
-      return AuthApiException(
-        statusCode: 401,
-        message: 'No session',
-        code: 'unauthorized',
-      );
-    }
     try {
       await _api.changePassword(
-        bearer: token,
         currentPassword: currentPassword,
         password: password,
         passwordConfirmation: passwordConfirmation,
@@ -238,7 +217,7 @@ class AuthController extends Notifier<AuthState> {
     AuthApiException? failure;
     if (token != null && token.isNotEmpty) {
       try {
-        await _api.logout(token);
+        await _api.logout();
       } on AuthApiException catch (e) {
         failure = e;
       }
@@ -255,11 +234,7 @@ class AuthController extends Notifier<AuthState> {
   }
 
   void clearRecoveryFlow() {
-    state = state.copyWith(
-      clearPendingRecovery: true,
-      clearResetToken: true,
-      clearResetExpires: true,
-    );
+    state = state.copyWith(clearPendingRecovery: true, clearResetToken: true, clearResetExpires: true);
   }
 
   void clearRegistrationFlow() {
@@ -268,10 +243,6 @@ class AuthController extends Notifier<AuthState> {
 
   /// Test override: mark session without hitting secure storage.
   void adoptSessionForTest(User user) {
-    state = state.copyWith(
-      bootstrapStatus: AuthBootstrapStatus.authenticated,
-      user: user,
-      bootstrapStarted: true,
-    );
+    state = state.copyWith(bootstrapStatus: AuthBootstrapStatus.authenticated, user: user, bootstrapStarted: true);
   }
 }

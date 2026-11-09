@@ -1,6 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_toaster.dart';
-import 'package:bnood/core/widgets/toast/app_toast.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/statements/statement_screen_toast.dart';
 import 'package:bnood/l10n/app_localizations.dart';

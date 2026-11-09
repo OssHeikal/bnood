@@ -14,10 +14,7 @@ class _VoucherHost extends StatelessWidget {
 
   static Future<void> openCamera(BuildContext context, VoucherReceiptPicker picker) {
     return Navigator.of(context).push<VoucherCameraPickResult>(
-      PageRouteBuilder(
-        opaque: false,
-        pageBuilder: (_, __, ___) => VoucherCameraPickRoute(picker: picker),
-      ),
+      PageRouteBuilder(opaque: false, pageBuilder: (_, _, _) => VoucherCameraPickRoute(picker: picker)),
     );
   }
 }
@@ -43,19 +40,14 @@ void main() {
             popped = result as VoucherCameraPickResult?;
             return true;
           },
-          pages: [
-            const MaterialPage(child: _VoucherHost()),
-          ],
+          pages: [const MaterialPage(child: _VoucherHost())],
         ),
       ),
     );
 
     final hostContext = tester.element(find.byType(_VoucherHost));
     final routeFuture = Navigator.of(hostContext).push<VoucherCameraPickResult>(
-      PageRouteBuilder(
-        opaque: false,
-        pageBuilder: (_, __, ___) => VoucherCameraPickRoute(picker: _FakePicker(null)),
-      ),
+      PageRouteBuilder(opaque: false, pageBuilder: (_, _, _) => VoucherCameraPickRoute(picker: _FakePicker(null))),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
@@ -80,19 +72,14 @@ void main() {
             popped = result as VoucherCameraPickResult?;
             return true;
           },
-          pages: [
-            const MaterialPage(child: _VoucherHost()),
-          ],
+          pages: [const MaterialPage(child: _VoucherHost())],
         ),
       ),
     );
 
     final hostContext = tester.element(find.byType(_VoucherHost));
     final routeFuture = Navigator.of(hostContext).push<VoucherCameraPickResult>(
-      PageRouteBuilder(
-        opaque: false,
-        pageBuilder: (_, __, ___) => VoucherCameraPickRoute(picker: _FakePicker(xfile)),
-      ),
+      PageRouteBuilder(opaque: false, pageBuilder: (_, _, _) => VoucherCameraPickRoute(picker: _FakePicker(xfile))),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
@@ -123,9 +110,7 @@ void main() {
                           await Navigator.of(context).push<VoucherCameraPickResult>(
                             PageRouteBuilder(
                               opaque: false,
-                              pageBuilder: (_, __, ___) => VoucherCameraPickRoute(
-                                picker: _FakePicker(null),
-                              ),
+                              pageBuilder: (_, _, _) => VoucherCameraPickRoute(picker: _FakePicker(null)),
                             ),
                           );
                         },

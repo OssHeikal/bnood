@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bnood/core/theme/app_theme.dart';
+import 'package:bnood/core/widgets/buttons/app_button.dart';
 
 Widget _wrap(Widget child, Locale locale) {
   return ProviderScope(
@@ -34,7 +35,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(_wrap(const LoginScreen(), const Locale('ar')));
     await tester.enterText(find.byType(EditableText).first, '01012345678');
-    await tester.tap(find.text('تسجيل الدخول'));
+    await tester.tap(find.widgetWithText(AppButton, 'تسجيل الدخول'));
     await tester.pump();
     expect(find.textContaining('01012345678'), findsWidgets);
   });
@@ -44,15 +45,17 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(_wrap(const LoginScreen(), const Locale('en')));
     await tester.enterText(find.byType(EditableText).first, '01012345678');
-    await tester.tap(find.text('Sign in'));
+    await tester.tap(find.widgetWithText(AppButton, 'Sign in'));
     await tester.pump();
     expect(find.textContaining('01012345678'), findsWidgets);
   });
 
-  test('verification code accepts four-digit development length', () {
+  test('verification code requires exactly six digits', () {
     final l10n = lookupAppLocalizations(const Locale('en'));
-    expect(validateVerificationCode(l10n, '1111'), isNull);
+    expect(validateVerificationCode(l10n, '111111'), isNull);
     expect(validateVerificationCode(l10n, '12'), isNotNull);
-    expect(validateVerificationCode(l10n, '123456789'), isNotNull);
+    expect(validateVerificationCode(l10n, '12345'), isNotNull);
+    expect(validateVerificationCode(l10n, '1234567'), isNotNull);
+    expect(validateVerificationCode(l10n, '12ab34'), isNotNull);
   });
 }

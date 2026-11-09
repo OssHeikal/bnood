@@ -350,23 +350,40 @@
   "statementSupplierPaymentsCaption": "Material spend rows linked to this supplier only.",
   "statementEmptyPayments": "No payments in the selected period.",
   "authLoginTitle": "Sign in",
+  "authLoginSubtitle": "Track client funds, vouchers, and finishing projects from your account.",
   "authRegisterTitle": "Create account",
-  "authRegisterSubtitle": "Egypt mobile number only. Your number cannot be changed later.",
+  "authRegisterSubtitle": "Create an account to keep your workspace and sign in on another phone.",
   "authPhone": "Mobile number",
-  "authPhoneInvalid": "Enter a valid Egypt mobile (01XXXXXXXXX)",
+  "authPhoneInvalid": "Enter an 11-digit mobile number that starts with 01.",
   "authPassword": "Password",
   "authPasswordConfirm": "Confirm password",
   "authCurrentPassword": "Current password",
   "authNewPassword": "New password",
   "authForgotPassword": "Forgot password?",
   "authForgotPasswordTitle": "Password recovery",
-  "authForgotPasswordSubtitle": "Enter your registered mobile number.",
+  "authForgotPasswordSubtitle": "Enter the mobile number on your account. We will send a confirmation code.",
   "authVerificationTitle": "Verification code",
   "authVerificationSubtitle": "Enter the verification code you received.",
+  "authVerificationDeliverySubtitle": "Enter the code sent to {phone}.",
+  "@authVerificationDeliverySubtitle": {
+    "placeholders": {
+      "phone": { "type": "String" }
+    }
+  },
   "authRecoveryVerifySubtitle": "Enter the recovery code you received.",
+  "authRecoveryDeliverySubtitle": "Enter the password recovery code sent to {phone}.",
+  "@authRecoveryDeliverySubtitle": {
+    "placeholders": {
+      "phone": { "type": "String" }
+    }
+  },
+  "authCompleteProfileTitle": "Your name",
+  "authCompleteProfileSubtitle": "Enter the name you use at work, then tap Continue.",
+  "authDisplayName": "Full name",
+  "authDisplayNameHint": "e.g. Ahmed Hassan",
   "authVerificationCode": "Code",
   "authResendCode": "Resend code",
-  "authResendWait": "Resend in {seconds}s",
+  "authResendWait": "Wait {seconds}s, then send again.",
   "@authResendWait": {
     "placeholders": {
       "seconds": { "type": "int" }
@@ -385,19 +402,23 @@
   "authSignIn": "Sign in to cloud account",
   "authAccountSection": "Account",
   "authRemoteWorkspaceTitle": "Account",
-  "authRemoteWorkspaceBody": "You are signed in. Cloud project data is not available in this phase yet.",
+  "authRemoteWorkspaceBody": "You are signed in. Cloud project data is not available yet.",
   "authSignedInAs": "Signed in as",
   "authBootstrapRetry": "Retry",
-  "authNetworkError": "Connection failed. Check the network and try again.",
-  "authInvalidCredentials": "Phone or password is incorrect.",
-  "authChallengeInvalid": "Code is invalid or expired.",
-  "authThrottled": "Too many attempts. Try again later.",
-  "authSessionExpired": "Your session expired. Sign in again.",
-  "authFieldRequired": "This field is required",
-  "authPasswordMinLength": "Use at least 8 characters",
-  "authPasswordMismatch": "Passwords do not match",
-  "authCodeLengthHint": "Enter 4–8 characters",
+  "authNetworkError": "Could not connect. Check the network, then try again.",
+  "authInvalidCredentials": "Mobile number or password is wrong. Check them, then try again.",
+  "authChallengeInvalid": "That code is wrong or expired. Request a new one, then enter it.",
+  "authThrottled": "Too many attempts. Wait a moment, then try again.",
+  "authSessionExpired": "Your session ended. Sign in again to continue.",
+  "authFieldRequired": "Fill in this field to continue.",
+  "authPasswordMinLength": "Password is too short. Use at least 8 characters.",
+  "authPasswordMismatch": "Those passwords differ. Type the same password in both fields.",
+  "authCodeLengthHint": "Enter the 6-digit code.",
+  "authAccountExistsTitle": "Phone already linked",
+  "authAccountExistsMessage": "This phone is already linked to an account. Sign in with that number or use a different phone.",
+  "authAccountExistsLoginAction": "Sign in",
+  "authAccountExistsAnotherPhoneAction": "Enter another phone",
   "authFlowExpired": "This step expired. Start again.",
-  "authPasswordResetSuccess": "Password updated. Sign in with your new password.",
-  "authPasswordChangedSuccess": "Password changed."
+  "authPasswordResetSuccess": "Password updated. Sign in with the new one.",
+  "authPasswordChangedSuccess": "Password changed. Use the new one next time."
 }

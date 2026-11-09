@@ -5,6 +5,7 @@ import '../config/theme/app_size.dart';
 import '../config/theme/app_colors.dart';
 import '../resources/gen/assets.gen.dart';
 import '../../app/widgets/shell_nav_icon.dart';
+import '../../features/home/home_foundation_scope.dart';
 import 'bnood_failure.dart';
 import 'foundation_icon.dart';
 import 'sheet_drag_handle.dart';
@@ -113,19 +114,6 @@ abstract final class AppDecision {
         onConfirm: onConfirm,
       ),
     ).then((value) => value ?? OverlayAnswer.dismissed);
-  }
-
-  static bool _barrierDismissible({required AppTone tone, required bool? dismissible, required bool locked}) {
-    if (locked) {
-      return false;
-    }
-    if (dismissible != null) {
-      return dismissible;
-    }
-    if (tone == AppTone.danger) {
-      return false;
-    }
-    return true;
   }
 }
 
@@ -256,25 +244,32 @@ class _AppDecisionDialogState extends State<_AppDecisionDialog> {
       onConfirm: _onConfirmPressed,
     );
 
-    return PopScope(
-      canPop: _canPopRoute,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) {
-          return;
-        }
-        if (_canPopRoute) {
-          _onDismissed();
-        }
-      },
-      child: Dialog(
-        backgroundColor: context.colors.surface,
-        insetPadding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceXL),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.cardRadius)),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 400, maxHeight: MediaQuery.sizeOf(context).height * 0.85),
-          child: SingleChildScrollView(
-            child: Padding(padding: const EdgeInsets.all(AppSize.screenPadding), child: body),
-          ),
+    return HomeFoundationScope(
+      child: PopScope(
+        canPop: _canPopRoute,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            return;
+          }
+          if (_canPopRoute) {
+            _onDismissed();
+          }
+        },
+        child: Builder(
+          builder: (ctx) {
+            final colors = ctx.colors;
+            return Dialog(
+              backgroundColor: colors.surface,
+              insetPadding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceXL),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.cardRadius)),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 400, maxHeight: MediaQuery.sizeOf(context).height * 0.85),
+                child: SingleChildScrollView(
+                  child: Padding(padding: const EdgeInsets.all(AppSize.screenPadding), child: body),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -411,38 +406,40 @@ class _AppDecisionSheetState extends State<_AppDecisionSheet> {
     final bottom = MediaQuery.viewPaddingOf(context).bottom;
     final keyboard = MediaQuery.viewInsetsOf(context).bottom;
 
-    return PopScope(
-      canPop: _canPopRoute,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(
-          AppSize.screenPadding,
-          AppSize.spaceMD,
-          AppSize.screenPadding,
-          AppSize.screenPadding + bottom + keyboard,
-        ),
-        child: _DecisionBody(
-          title: widget.title,
-          description: widget.description,
-          failureMessage: _failureMessage,
-          showHandle: true,
-          showCloseControl: false,
-          typedField: CustomTextField(
-            label: '',
-            placeholder: widget.typedConfirmation,
-            controller: _typedController,
-            disabled: _locked,
-            clearable: !_locked,
+    return HomeFoundationScope(
+      child: PopScope(
+        canPop: _canPopRoute,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            AppSize.screenPadding,
+            AppSize.spaceMD,
+            AppSize.screenPadding,
+            AppSize.screenPadding + bottom + keyboard,
           ),
-          cancelLabel: widget.cancelLabel,
-          confirmText: _confirmText(),
-          tone: widget.tone,
-          icon: widget.icon,
-          iconWidget: widget.iconWidget,
-          locked: _locked,
-          confirmEnabled: _typedMatches,
-          autofocusCancel: widget.tone == AppTone.danger && !_locked,
-          onCancel: widget.cancelLabel == null ? null : _onCancelPressed,
-          onConfirm: _onConfirmPressed,
+          child: _DecisionBody(
+            title: widget.title,
+            description: widget.description,
+            failureMessage: _failureMessage,
+            showHandle: true,
+            showCloseControl: false,
+            typedField: CustomTextField(
+              label: '',
+              placeholder: widget.typedConfirmation,
+              controller: _typedController,
+              disabled: _locked,
+              clearable: !_locked,
+            ),
+            cancelLabel: widget.cancelLabel,
+            confirmText: _confirmText(),
+            tone: widget.tone,
+            icon: widget.icon,
+            iconWidget: widget.iconWidget,
+            locked: _locked,
+            confirmEnabled: _typedMatches,
+            autofocusCancel: widget.tone == AppTone.danger && !_locked,
+            onCancel: widget.cancelLabel == null ? null : _onCancelPressed,
+            onConfirm: _onConfirmPressed,
+          ),
         ),
       ),
     );
@@ -518,12 +515,7 @@ class _DecisionBody extends StatelessWidget {
               ],
             )
           else if (!showHandle && cancelLabel != null) ...[
-            _DecisionDialogHeader(
-              tone: tone,
-              icon: icon,
-              iconWidget: iconWidget,
-              onDismiss: locked ? null : onCancel,
-            ),
+            _DecisionDialogHeader(tone: tone, icon: icon, iconWidget: iconWidget, onDismiss: locked ? null : onCancel),
             AppSize.gap.gap,
             Text(title, style: context.text.title),
           ] else ...[
@@ -561,12 +553,7 @@ class _DecisionBody extends StatelessWidget {
 }
 
 class _DecisionDialogHeader extends StatelessWidget {
-  const _DecisionDialogHeader({
-    required this.tone,
-    required this.icon,
-    this.iconWidget,
-    required this.onDismiss,
-  });
+  const _DecisionDialogHeader({required this.tone, required this.icon, this.iconWidget, required this.onDismiss});
 
   final AppTone tone;
   final IconData? icon;
@@ -620,10 +607,7 @@ class _DecisionToneIcon extends StatelessWidget {
     }
     return DecoratedBox(
       decoration: BoxDecoration(color: tone.tint(colors), borderRadius: BorderRadius.circular(AppSize.radius)),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSize.spaceSM),
-        child: child,
-      ),
+      child: Padding(padding: const EdgeInsets.all(AppSize.spaceSM), child: child),
     );
   }
 }

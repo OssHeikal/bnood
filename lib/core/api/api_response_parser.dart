@@ -1,25 +1,32 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 import 'auth_api_exception.dart';
 
 abstract final class ApiResponseParser {
-  static Map<String, dynamic> decodeJson(http.Response response) {
-    final body = response.body;
-    if (body.isEmpty) return const {};
-    return jsonDecode(body) as Map<String, dynamic>;
+  static Map<String, dynamic> decodeJson(Response<dynamic> response) {
+    final data = response.data;
+    if (data == null) return const {};
+    if (data is Map<String, dynamic>) return data;
+    if (data is String) {
+      if (data.isEmpty) return const {};
+      return jsonDecode(data) as Map<String, dynamic>;
+    }
+    throw AuthApiException(
+      statusCode: response.statusCode ?? 0,
+      message: 'Unexpected response shape',
+    );
   }
 
   static T expectData<T>(
-    http.Response response,
+    Response<dynamic> response,
     T Function(Map<String, dynamic>? data) map,
   ) {
     final json = decodeJson(response);
     final success = json['success'] == true;
-    if (response.statusCode >= 200 &&
-        response.statusCode < 300 &&
-        success) {
+    final status = response.statusCode ?? 0;
+    if (status >= 200 && status < 300 && success) {
       final data = json['data'];
       if (data == null) {
         return map(null);
@@ -28,25 +35,24 @@ abstract final class ApiResponseParser {
         return map(data);
       }
       throw AuthApiException(
-        statusCode: response.statusCode,
+        statusCode: status,
         message: 'Unexpected response shape',
       );
     }
     throw fromFailure(response, json);
   }
 
-  static void expectSuccess(http.Response response) {
+  static void expectSuccess(Response<dynamic> response) {
     final json = decodeJson(response);
-    if (response.statusCode >= 200 &&
-        response.statusCode < 300 &&
-        json['success'] == true) {
+    final status = response.statusCode ?? 0;
+    if (status >= 200 && status < 300 && json['success'] == true) {
       return;
     }
     throw fromFailure(response, json);
   }
 
   static AuthApiException fromFailure(
-    http.Response response,
+    Response<dynamic> response,
     Map<String, dynamic> json,
   ) {
     final message = (json['message'] as String?) ?? 'Request failed';
@@ -64,7 +70,7 @@ abstract final class ApiResponseParser {
       );
     }
     return AuthApiException(
-      statusCode: response.statusCode,
+      statusCode: response.statusCode ?? 0,
       message: message,
       code: code,
       fieldErrors: fieldErrors,
@@ -77,5 +83,18 @@ abstract final class ApiResponseParser {
       message: 'Network request failed',
       code: 'network',
     );
+  }
+
+  static AuthApiException fromDio(DioException err) {
+    final response = err.response;
+    if (response != null) {
+      try {
+        final json = decodeJson(response);
+        return fromFailure(response, json);
+      } catch (_) {
+        return transport(err);
+      }
+    }
+    return transport(err);
   }
 }

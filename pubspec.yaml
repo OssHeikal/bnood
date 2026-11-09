@@ -30,8 +30,10 @@ dependencies:
   vector_graphics: ^1.2.6
   shared_preferences: ^2.5.3
   flutter_native_contact_picker: ^0.0.12
-  http: ^1.2.2
   flutter_secure_storage: ^9.2.4
+  dio: ^5.11.1
+  pin_code_fields: ^9.4.0
+  image_picker_platform_interface: ^2.11.2
 
 dev_dependencies:
   flutter_test:

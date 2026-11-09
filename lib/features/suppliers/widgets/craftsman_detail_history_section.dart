@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/config/extensions/num_extensions.dart';
-import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_fallback.dart';
@@ -13,11 +12,7 @@ import '../../home/widgets/home_section_header.dart';
 import '../craftsman_detail_snapshot.dart';
 
 class CraftsmanDetailHistorySection extends StatelessWidget {
-  const CraftsmanDetailHistorySection({
-    super.key,
-    required this.history,
-    required this.localeCode,
-  });
+  const CraftsmanDetailHistorySection({super.key, required this.history, required this.localeCode});
 
   final List<CraftsmanDetailHistoryEntry> history;
   final String localeCode;
@@ -25,7 +20,6 @@ class CraftsmanDetailHistorySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -34,10 +28,7 @@ class CraftsmanDetailHistorySection extends StatelessWidget {
         AppSize.spaceSM.gap,
         if (history.isEmpty)
           AppCard(
-            child: AppFallback.section(
-              icon: Icons.receipt_long_outlined,
-              title: l10n.craftsmanDetailNoLaborHistory,
-            ),
+            child: AppFallback.section(icon: Icons.receipt_long_outlined, title: l10n.craftsmanDetailNoLaborHistory),
           )
         else
           Column(
@@ -54,10 +45,7 @@ class CraftsmanDetailHistorySection extends StatelessWidget {
 }
 
 class _HistoryBlock extends ConsumerWidget {
-  const _HistoryBlock({
-    required this.entry,
-    required this.localeCode,
-  });
+  const _HistoryBlock({required this.entry, required this.localeCode});
 
   final CraftsmanDetailHistoryEntry entry;
   final String localeCode;

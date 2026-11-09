@@ -36,6 +36,8 @@ String? validatePasswordConfirmation(
 String? validateVerificationCode(AppLocalizations l10n, String? value) {
   final code = value?.trim() ?? '';
   if (code.isEmpty) return l10n.authFieldRequired;
-  if (code.length < 4 || code.length > 8) return l10n.authCodeLengthHint;
+  if (code.length != 6 || !RegExp(r'^\d{6}$').hasMatch(code)) {
+    return l10n.authCodeLengthHint;
+  }
   return null;
 }

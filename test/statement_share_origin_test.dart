@@ -14,7 +14,7 @@ void main() {
 
   testWidgets('sharePositionOriginFor returns non-zero rect from export button', (tester) async {
     Rect? captured;
-    StatementPdfExport.shareFromFile = (_, __, {sharePositionOrigin}) async {
+    StatementPdfExport.shareFromFile = (_, _, {sharePositionOrigin}) async {
       captured = sharePositionOrigin;
     };
 
@@ -28,11 +28,7 @@ void main() {
             bottomNavigationBar: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: ElevatedButton(
-                  key: buttonKey,
-                  onPressed: () {},
-                  child: const Text('Share PDF'),
-                ),
+                child: ElevatedButton(key: buttonKey, onPressed: () {}, child: const Text('Share PDF')),
               ),
             ),
           ),
@@ -52,8 +48,7 @@ void main() {
     expect(captured!.top, greaterThanOrEqualTo(0));
   });
 
-  testWidgets('statement share failure toast does not throw without AppColors on root theme',
-      (tester) async {
+  testWidgets('statement share failure toast does not throw without AppColors on root theme', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         scaffoldMessengerKey: rootScaffoldMessengerKey,

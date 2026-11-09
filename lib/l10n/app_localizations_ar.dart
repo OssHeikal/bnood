@@ -793,16 +793,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authLoginTitle => 'تسجيل الدخول';
 
   @override
+  String get authLoginSubtitle =>
+      'تابع أموال العملاء والبنود ومشاريع التشطيب من حسابك.';
+
+  @override
   String get authRegisterTitle => 'إنشاء حساب';
 
   @override
-  String get authRegisterSubtitle => 'رقم مصر فقط. لا يمكن تغيير الرقم لاحقاً.';
+  String get authRegisterSubtitle =>
+      'أنشئ حساباً لحفظ مساحة عملك وفتحها من أي موبايل.';
 
   @override
   String get authPhone => 'رقم الموبايل';
 
   @override
-  String get authPhoneInvalid => 'أدخل رقم مصر صحيح (01XXXXXXXXX)';
+  String get authPhoneInvalid => 'أدخل رقم موبايل من 11 رقماً يبدأ بـ 01.';
 
   @override
   String get authPassword => 'كلمة المرور';
@@ -823,7 +828,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authForgotPasswordTitle => 'استرداد كلمة المرور';
 
   @override
-  String get authForgotPasswordSubtitle => 'أدخل رقم الموبايل المسجّل.';
+  String get authForgotPasswordSubtitle =>
+      'أدخل رقم الموبايل المسجّل. سنرسل رمز تأكيد.';
 
   @override
   String get authVerificationTitle => 'رمز التحقق';
@@ -832,7 +838,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authVerificationSubtitle => 'أدخل رمز التحقق الذي استلمته.';
 
   @override
+  String authVerificationDeliverySubtitle(String phone) {
+    return 'أدخل الرمز الذي وصل إلى $phone.';
+  }
+
+  @override
   String get authRecoveryVerifySubtitle => 'أدخل رمز الاسترداد الذي استلمته.';
+
+  @override
+  String authRecoveryDeliverySubtitle(String phone) {
+    return 'أدخل رمز استرجاع كلمة المرور الذي وصل إلى $phone.';
+  }
+
+  @override
+  String get authCompleteProfileTitle => 'اسمك';
+
+  @override
+  String get authCompleteProfileSubtitle =>
+      'اكتب اسمك كما يظهر في العمل، ثم اضغط متابعة.';
+
+  @override
+  String get authDisplayName => 'الاسم الكامل';
+
+  @override
+  String get authDisplayNameHint => 'مثال: أحمد حسن';
 
   @override
   String get authVerificationCode => 'الرمز';
@@ -842,7 +871,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String authResendWait(int seconds) {
-    return 'إعادة الإرسال خلال $seconds ث';
+    return 'انتظر $seconds ث ثم أعد الإرسال.';
   }
 
   @override
@@ -886,7 +915,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authRemoteWorkspaceBody =>
-      'أنت مسجّل الدخول. بيانات المشروع السحابية غير متاحة في هذه المرحلة.';
+      'تم تسجيل الدخول. بيانات المشاريع على السحابة غير متاحة الآن.';
 
   @override
   String get authSignedInAs => 'مسجّل الدخول كـ';
@@ -895,39 +924,59 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authBootstrapRetry => 'إعادة المحاولة';
 
   @override
-  String get authNetworkError => 'تعذّر الاتصال. تحقق من الشبكة وأعد المحاولة.';
+  String get authNetworkError =>
+      'تعذر الاتصال. تحقق من الشبكة، ثم أعد المحاولة.';
 
   @override
-  String get authInvalidCredentials => 'رقم الموبايل أو كلمة المرور غير صحيحة.';
+  String get authInvalidCredentials =>
+      'رقم الموبايل أو كلمة المرور غير صحيحة. راجعها ثم حاول مرة أخرى.';
 
   @override
-  String get authChallengeInvalid => 'الرمز غير صالح أو منتهي.';
+  String get authChallengeInvalid =>
+      'الرمز غير صحيح أو انتهت صلاحيته. اطلب رمزاً جديداً ثم أدخله.';
 
   @override
-  String get authThrottled => 'محاولات كثيرة. أعد المحاولة لاحقاً.';
+  String get authThrottled => 'محاولات كثيرة. انتظر قليلاً، ثم أعد المحاولة.';
 
   @override
-  String get authSessionExpired => 'انتهت الجلسة. سجّل الدخول مرة أخرى.';
+  String get authSessionExpired =>
+      'انتهت الجلسة. سجّل الدخول من جديد للمتابعة.';
 
   @override
-  String get authFieldRequired => 'هذا الحقل مطلوب';
+  String get authFieldRequired => 'املأ هذا الحقل للمتابعة.';
 
   @override
-  String get authPasswordMinLength => 'استخدم 8 أحرف على الأقل';
+  String get authPasswordMinLength =>
+      'كلمة المرور قصيرة. استخدم 8 أحرف على الأقل.';
 
   @override
-  String get authPasswordMismatch => 'كلمتا المرور غير متطابقتين';
+  String get authPasswordMismatch =>
+      'كلمتا المرور مختلفتان. اكتبهما بالنص نفسه.';
 
   @override
-  String get authCodeLengthHint => 'أدخل من 4 إلى 8 أحرف';
+  String get authCodeLengthHint => 'أدخل الرمز المكوّن من 6 أرقام.';
 
   @override
-  String get authFlowExpired => 'انتهت صلاحية هذه الخطوة. ابدأ من جديد.';
+  String get authAccountExistsTitle => 'الرقم مربوط بحساب';
+
+  @override
+  String get authAccountExistsMessage =>
+      'هذا الرقم مربوط بحساب بالفعل. سجّل الدخول به أو استخدم رقمًا آخر.';
+
+  @override
+  String get authAccountExistsLoginAction => 'تسجيل الدخول';
+
+  @override
+  String get authAccountExistsAnotherPhoneAction => 'إدخال رقم آخر';
+
+  @override
+  String get authFlowExpired => 'انتهت هذه الخطوة. ابدأ من جديد.';
 
   @override
   String get authPasswordResetSuccess =>
-      'تم تحديث كلمة المرور. سجّل الدخول بكلمة المرور الجديدة.';
+      'تم تحديث كلمة المرور. سجّل الدخول بالكلمة الجديدة.';
 
   @override
-  String get authPasswordChangedSuccess => 'تم تغيير كلمة المرور.';
+  String get authPasswordChangedSuccess =>
+      'تم تغيير كلمة المرور. استخدم الكلمة الجديدة في المرة القادمة.';
 }
