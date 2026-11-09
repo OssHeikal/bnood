@@ -18,7 +18,7 @@ import '../../core/widgets/toast/app_tone.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../home/home_foundation_scope.dart';
-import '../home/widgets/home_loading_skeleton.dart';
+import 'widgets/directory_list_loading_skeleton.dart';
 import '../vouchers/inline_create_routes.dart';
 import 'directory_providers.dart';
 import 'widgets/directory_person_card.dart';
@@ -32,18 +32,13 @@ class DirectoryScreen extends ConsumerStatefulWidget {
   ConsumerState<DirectoryScreen> createState() => _DirectoryScreenState();
 }
 
-class _DirectoryScreenState extends ConsumerState<DirectoryScreen>
-    with SingleTickerProviderStateMixin {
+class _DirectoryScreenState extends ConsumerState<DirectoryScreen> with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(
-      length: 2,
-      vsync: this,
-      initialIndex: widget.initialTabIndex.clamp(0, 1),
-    );
+    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialTabIndex.clamp(0, 1));
   }
 
   @override
@@ -94,8 +89,7 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen>
                       key: Key(suppliersTab ? 'directory_add_supplier' : 'directory_add_craftsman'),
                       tooltip: label,
                       tone: CustomAppBarActionTone.tint,
-                      onPressed: () =>
-                          suppliersTab ? _addSupplier(context) : _addCraftsman(context),
+                      onPressed: () => suppliersTab ? _addSupplier(context) : _addCraftsman(context),
                       child: ShellNavIcon(
                         asset: Assets.icons.addOutline,
                         color: colors.primaryOnTint,
@@ -133,10 +127,7 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen>
                             AppSize.screenPadding,
                             AppSize.spaceMD,
                           ),
-                          child: Text(
-                            hint,
-                            style: text.caption.copyWith(color: colors.onSurfaceMuted),
-                          ),
+                          child: Text(hint, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
                         );
                       },
                     ),
@@ -253,16 +244,11 @@ class _DirectorySupplierTab extends ConsumerWidget {
     final rows = ref.watch(directorySuppliersProvider);
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppSize.screenPadding,
-        0,
-        AppSize.screenPadding,
-        AppSize.spaceMD,
-      ),
+      padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, 0, AppSize.screenPadding, AppSize.spaceMD),
       children: [
         AsyncValueBody(
           value: rows,
-          loadingPlaceholder: const HomePersonListSkeleton(count: 3),
+          loadingPlaceholder: const DirectoryListLoadingSkeleton(count: 3),
           error: (e, _) => AppCard(
             child: AppFallback.section(
               icon: Icons.error_outline,
@@ -341,16 +327,11 @@ class _DirectoryCraftsmenTab extends ConsumerWidget {
     final rows = ref.watch(directoryCraftsmenProvider);
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppSize.screenPadding,
-        0,
-        AppSize.screenPadding,
-        AppSize.spaceMD,
-      ),
+      padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, 0, AppSize.screenPadding, AppSize.spaceMD),
       children: [
         AsyncValueBody(
           value: rows,
-          loadingPlaceholder: const HomePersonListSkeleton(count: 3),
+          loadingPlaceholder: const DirectoryListLoadingSkeleton(count: 3),
           error: (e, _) => AppCard(
             child: AppFallback.section(
               icon: Icons.error_outline,
@@ -417,7 +398,6 @@ class _DirectoryCraftsmenTab extends ConsumerWidget {
       ],
     );
   }
-
 }
 
 Future<void> _confirmArchiveSupplier(

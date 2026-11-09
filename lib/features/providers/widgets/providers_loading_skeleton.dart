@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/config/theme/app_size.dart';
-import '../../../features/home/widgets/home_loading_skeleton.dart';
+import '../../suppliers/widgets/directory_list_loading_skeleton.dart';
 
-/// Mirrors a short provider list inside real scroll padding.
+/// Mirrors provider/directory list rows inside [AppPagedView] content padding.
 class ProvidersLoadingSkeleton extends StatelessWidget {
   const ProvidersLoadingSkeleton({super.key, this.count = 4});
 
@@ -11,9 +10,6 @@ class ProvidersLoadingSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
-      child: HomePersonListSkeleton(count: count),
-    );
+    return DirectoryListLoadingSkeleton(count: count);
   }
 }

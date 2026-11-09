@@ -7,6 +7,7 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/vouchers/vouchers_riverpod.dart';
 import '../items/item_mutation_actions.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../clients/client_mutation_actions.dart';
@@ -238,12 +239,33 @@ class _InlineCreateSupplierPageState
     if (_saving) return;
     setState(() => _saving = true);
     try {
+      final phoneText = _phone.text.trim();
+      if (ref.read(remoteProvidersEnabledProvider) || ref.read(remoteVouchersEnabledProvider)) {
+        final provider = await saveProviderCreate(
+          ref: ref,
+          context: context,
+          name: _name.text.trim(),
+          type: AppProviderType.supplier,
+          phone: phoneText.isEmpty ? null : phoneText,
+        );
+        if (!mounted || provider == null) {
+          setState(() => _saving = false);
+          return;
+        }
+        Navigator.pop(context, provider.id);
+        return;
+      }
       final s = await ref.read(repositoryProvider).createSupplier(
             name: _name.text.trim(),
-            phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(),
+            phone: phoneText.isEmpty ? null : phoneText,
           );
       if (!mounted) return;
       Navigator.pop(context, s.id);
+    } on AuthApiException catch (e) {
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
+      AppToaster.show(duplicatePhoneFieldError(l10n, e) ?? e.message, kind: ToastKind.failure);
+      setState(() => _saving = false);
     } catch (e) {
       if (!mounted) return;
       AppToaster.show(e.toString(), kind: ToastKind.failure);

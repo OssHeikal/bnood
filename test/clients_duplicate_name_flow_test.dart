@@ -16,7 +16,12 @@ class _DuplicateClientsRepository extends ClientsRepository {
   var calls = 0;
 
   @override
-  Future<ClientApiRecord> createClient({required String name, String? phone, bool confirmDuplicateName = false}) async {
+  Future<ClientApiRecord> createClient({
+    required String name,
+    String? phone,
+    int? engineerBasisPoints,
+    bool confirmDuplicateName = false,
+  }) async {
     calls++;
     if (calls == 1) {
       throw AuthApiException(statusCode: 409, message: 'dup', code: 'duplicate_name');

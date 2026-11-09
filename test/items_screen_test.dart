@@ -9,7 +9,9 @@ import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/items/items_list_paging.dart';
+import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton_box.dart';
+import 'package:bnood/features/items/widgets/items_loading_skeleton.dart';
 import 'package:bnood/features/items/items_screen.dart';
 import 'package:bnood/features/items/widgets/item_catalog_tile.dart';
 import 'package:bnood/l10n/app_localizations.dart';
@@ -109,6 +111,8 @@ void main() {
       ),
     );
     await tester.pump();
+    expect(find.byType(Skeleton), findsOneWidget);
+    expect(find.byType(ItemsLoadingSkeleton), findsOneWidget);
     expect(find.byType(SkeletonBox), findsWidgets);
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pumpAndSettle();

@@ -47,6 +47,7 @@ import 'voucher_launcher.dart';
 import 'voucher_picker_cards.dart';
 import 'voucher_selector_field.dart';
 import 'voucher_camera_pick_route.dart';
+import 'voucher_picker_resolution.dart';
 import 'voucher_receipt_picker.dart';
 import 'voucher_transaction_date_bounds.dart';
 import '../../core/providers/transaction_mutation_refresh.dart';
@@ -216,7 +217,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ),
     );
     if (picked == null) return;
-    final client = clients.firstWhere((c) => c.id == picked);
+    final client = await resolveLocalClient(ref.read, picked, cached: clients);
     final project = await repo.primaryActiveProject(picked);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
@@ -258,7 +259,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ),
     );
     if (picked == null) return;
-    final record = clients.firstWhere((c) => c.client.id == picked);
+    final record = await resolveRemoteClient(ref.read, picked, cached: clients);
     ref.read(voucherDraftProvider.notifier).state = ref.read(voucherDraftProvider).copyWith(
           clientId: picked,
           clientLabel: record.client.name,
@@ -306,7 +307,9 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ),
     );
     if (picked == null) return;
-    final label = items.firstWhere((i) => i.id == picked).name;
+    final remoteItems = ref.read(remoteItemsEnabledProvider);
+    final cachedLabel = labelFromPickerEntries(items.map((i) => (i.id, i.name)).toList(), picked);
+    final label = await resolveItemLabel(ref.read, picked, remote: remoteItems, cachedLabel: cachedLabel);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
         .copyWith(itemId: picked, itemLabel: label);
@@ -344,7 +347,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ),
     );
     if (picked == null) return;
-    final label = suppliers.firstWhere((s) => s.id == picked).name;
+    final label = await resolveLocalSupplierLabel(ref.read, picked, cached: suppliers);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
         .copyWith(supplierId: picked, supplierLabel: label);
@@ -378,7 +381,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ),
     );
     if (picked == null) return;
-    final label = suppliers.firstWhere((s) => s.id == picked).name;
+    final label = await resolveRemoteProviderLabel(ref.read, picked, cached: suppliers);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
         .copyWith(supplierId: picked, supplierLabel: label);
@@ -424,8 +427,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ),
     );
     if (picked == null) return;
-    final c = craftsmen.firstWhere((e) => e.id == picked);
-    final label = c.name;
+    final label = await resolveLocalCraftsmanLabel(ref.read, picked, cached: craftsmen);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
         .copyWith(craftsmanId: picked, craftsmanLabel: label);
@@ -467,7 +469,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ),
     );
     if (picked == null) return;
-    final label = craftsmen.firstWhere((e) => e.id == picked).name;
+    final label = await resolveRemoteProviderLabel(ref.read, picked, cached: craftsmen);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
         .copyWith(craftsmanId: picked, craftsmanLabel: label);

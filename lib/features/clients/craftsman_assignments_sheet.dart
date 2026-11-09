@@ -267,6 +267,22 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       ),
     );
     if (id == null || !mounted) return;
+    if (ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null) {
+      try {
+        final provider = await ref.read(appProvidersRepositoryProvider).getProvider(id);
+        final craftsman = _craftsmanFromProvider(provider);
+        setState(() {
+          if (!_roster.any((c) => c.id == id)) {
+            _roster = [..._roster, craftsman];
+          }
+          _selected.add(id);
+        });
+      } catch (_) {
+        await _bootstrapRemote();
+        if (mounted) setState(() => _selected.add(id));
+      }
+      return;
+    }
     final roster = await ref.read(repositoryProvider).listActiveCraftsmen();
     setState(() {
       _roster = roster;
