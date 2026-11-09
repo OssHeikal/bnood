@@ -30,6 +30,24 @@
   "homeNoActiveClientsDescription": "Add a client from the Clients tab to start tracking.",
   "homeLoadErrorTitle": "Could not load home",
   "clientMovementsLoadErrorTitle": "Could not load movements",
+  "movementsSearchHint": "Search notes",
+  "movementsFilterSort": "Sort",
+  "movementsFilterItem": "Item",
+  "movementsFilterDate": "Date",
+  "movementsSortNewest": "Newest",
+  "movementsSortOldest": "Oldest",
+  "movementsFilterAllItems": "All items",
+  "movementsClearFilters": "Clear filters",
+  "movementsClearFilter": "Clear",
+  "movementsDateFrom": "From",
+  "movementsDateTo": "To",
+  "movementsDateRangeSummary": "{from} — {to}",
+  "@movementsDateRangeSummary": {
+    "placeholders": {
+      "from": {"type": "String"},
+      "to": {"type": "String"}
+    }
+  },
   "homeNoSupplierSpendTitle": "No material spend yet",
   "homeNoSupplierSpendDescription": "Supplier purchases for active clients will show here after you record material expenses.",
   "homeCraftsmenSection": "Craftsmen with recent labor",

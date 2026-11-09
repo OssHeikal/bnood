@@ -75,24 +75,32 @@ class ClientDetailItemRow extends StatelessWidget {
           ),
           ...[
             AppSize.spaceMD.gap,
-            Row(
-              children: [
-                _SplitLabel(
-                  label: l10n.materials,
-                  piastres: breakdown.materialsPiastres,
-                  dotColor: colors.receive,
-                  localeCode: localeCode,
-                  minorPerMajor: minorPerMajor,
-                ),
-                AppSize.spaceMD.gap,
-                _SplitLabel(
-                  label: l10n.labor,
-                  piastres: breakdown.laborPiastres,
-                  dotColor: colors.spend,
-                  localeCode: localeCode,
-                  minorPerMajor: minorPerMajor,
-                ),
-              ],
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _SplitMetric(
+                      label: l10n.materials,
+                      piastres: breakdown.materialsPiastres,
+                      dotColor: colors.receive,
+                      role: AppAmountRole.receive,
+                      localeCode: localeCode,
+                      minorPerMajor: minorPerMajor,
+                    ),
+                  ),
+                  Expanded(
+                    child: _SplitMetric(
+                      label: l10n.labor,
+                      piastres: breakdown.laborPiastres,
+                      dotColor: colors.spend,
+                      role: AppAmountRole.spend,
+                      localeCode: localeCode,
+                      minorPerMajor: minorPerMajor,
+                    ),
+                  ),
+                ],
+              ),
             ),
             AppSize.spaceSM.gap,
             ClipRRect(
@@ -124,11 +132,12 @@ class ClientDetailItemRow extends StatelessWidget {
   }
 }
 
-class _SplitLabel extends StatelessWidget {
-  const _SplitLabel({
+class _SplitMetric extends StatelessWidget {
+  const _SplitMetric({
     required this.label,
     required this.piastres,
     required this.dotColor,
+    required this.role,
     required this.localeCode,
     this.minorPerMajor = 100,
   });
@@ -136,28 +145,46 @@ class _SplitLabel extends StatelessWidget {
   final String label;
   final int piastres;
   final Color dotColor;
+  final AppAmountRole role;
   final String localeCode;
   final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
     final text = context.text;
-    return Expanded(
-      child: Row(
+    final colors = context.colors;
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: AppSize.spaceXS),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
+              ),
+              AppSize.spaceXS.gap,
+              Flexible(
+                child: Text(
+                  label,
+                  style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
           AppSize.spaceXS.gap,
-          Flexible(
-            child: Text(
-              '$label ${AppAmount.format(piastres: piastres, localeCode: localeCode, minorPerMajor: minorPerMajor)}',
-              style: text.caption.copyWith(color: context.colors.onSurfaceMuted),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+          AppAmount(
+            piastres: piastres,
+            role: role,
+            size: AppAmountSize.small,
+            localeCode: localeCode,
+            minorPerMajor: minorPerMajor,
           ),
         ],
       ),

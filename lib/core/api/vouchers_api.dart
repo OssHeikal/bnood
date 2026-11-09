@@ -56,6 +56,9 @@ class VouchersApi {
     required String clientId,
     String? q,
     String? itemId,
+    String? from,
+    String? to,
+    String sort = 'date_desc',
     int page = 1,
     int perPage = 50,
   }) =>
@@ -63,6 +66,9 @@ class VouchersApi {
         '/v1/clients/$clientId/vouchers',
         q: q,
         itemId: itemId,
+        from: from,
+        to: to,
+        sort: sort,
         page: page,
         perPage: perPage,
       );
@@ -79,6 +85,9 @@ class VouchersApi {
     String path, {
     String? q,
     String? itemId,
+    String? from,
+    String? to,
+    String? sort,
     required int page,
     required int perPage,
   }) {
@@ -88,6 +97,9 @@ class VouchersApi {
         queryParameters: {
           if (q != null && q.trim().isNotEmpty) 'q': q.trim(),
           if (itemId != null && itemId.isNotEmpty) 'item_id': itemId,
+          if (from != null && from.isNotEmpty) 'from': from,
+          if (to != null && to.isNotEmpty) 'to': to,
+          if (sort != null && sort.isNotEmpty) 'sort': sort,
           'page': page,
           'per_page': perPage,
         },

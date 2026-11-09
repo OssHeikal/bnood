@@ -76,6 +76,31 @@ void main() {
       api.close();
     });
 
+    test('listClientVouchers sends q sort and date filters', () async {
+      late Uri uri;
+      final api = _vouchersApi((options) async {
+        uri = options.uri;
+        return jsonResponse(
+          '{"success":true,"data":[],"meta":{"page":1,"per_page":20,"total":0}}',
+        );
+      });
+      await api.listClientVouchers(
+        clientId: 'c1',
+        q: 'invoice',
+        from: '2026-01-01',
+        to: '2026-01-31',
+        sort: 'date_asc',
+        page: 2,
+        perPage: 20,
+      );
+      expect(uri.queryParameters['q'], 'invoice');
+      expect(uri.queryParameters['from'], '2026-01-01');
+      expect(uri.queryParameters['to'], '2026-01-31');
+      expect(uri.queryParameters['sort'], 'date_asc');
+      expect(uri.queryParameters['page'], '2');
+      api.close();
+    });
+
     test('client_archived maps to exception', () async {
       final api = _vouchersApi(
         (_) async => jsonResponse(

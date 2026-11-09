@@ -102,6 +102,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientMovementsLoadErrorTitle => 'Could not load movements';
 
   @override
+  String get movementsSearchHint => 'Search notes';
+
+  @override
+  String get movementsFilterSort => 'Sort';
+
+  @override
+  String get movementsFilterItem => 'Item';
+
+  @override
+  String get movementsFilterDate => 'Date';
+
+  @override
+  String get movementsSortNewest => 'Newest';
+
+  @override
+  String get movementsSortOldest => 'Oldest';
+
+  @override
+  String get movementsFilterAllItems => 'All items';
+
+  @override
+  String get movementsClearFilters => 'Clear filters';
+
+  @override
+  String get movementsClearFilter => 'Clear';
+
+  @override
+  String get movementsDateFrom => 'From';
+
+  @override
+  String get movementsDateTo => 'To';
+
+  @override
+  String movementsDateRangeSummary(String from, String to) {
+    return '$from — $to';
+  }
+
+  @override
   String get homeNoSupplierSpendTitle => 'No material spend yet';
 
   @override

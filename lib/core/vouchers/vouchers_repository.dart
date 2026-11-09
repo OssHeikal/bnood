@@ -18,6 +18,9 @@ class VouchersRepository {
     required String clientId,
     String? q,
     String? itemId,
+    String? from,
+    String? to,
+    String sort = 'date_desc',
     int page = 1,
     int perPage = 50,
   }) =>
@@ -25,6 +28,9 @@ class VouchersRepository {
         clientId: clientId,
         q: q,
         itemId: itemId,
+        from: from,
+        to: to,
+        sort: sort,
         page: page,
         perPage: perPage,
       );

@@ -30,6 +30,24 @@
   "homeNoActiveClientsDescription": "أضف عميل من تبويب العملاء عشان تبدأ المتابعة.",
   "homeLoadErrorTitle": "تعذر تحميل الرئيسية",
   "clientMovementsLoadErrorTitle": "تعذر تحميل الحركات",
+  "movementsSearchHint": "بحث في الملاحظات",
+  "movementsFilterSort": "ترتيب",
+  "movementsFilterItem": "البند",
+  "movementsFilterDate": "التاريخ",
+  "movementsSortNewest": "الأحدث",
+  "movementsSortOldest": "الأقدم",
+  "movementsFilterAllItems": "كل البنود",
+  "movementsClearFilters": "مسح الفلاتر",
+  "movementsClearFilter": "مسح",
+  "movementsDateFrom": "من",
+  "movementsDateTo": "إلى",
+  "movementsDateRangeSummary": "{from} — {to}",
+  "@movementsDateRangeSummary": {
+    "placeholders": {
+      "from": {"type": "String"},
+      "to": {"type": "String"}
+    }
+  },
   "homeNoSupplierSpendTitle": "مفيش مصروف خامات لسه",
   "homeNoSupplierSpendDescription": "مصروفات الخامات من الموردين للعملاء الناشطين هتظهر هنا بعد ما تسجّل صرف خامات.",
   "homeCraftsmenSection": "صنايعية بآخر أعمال",

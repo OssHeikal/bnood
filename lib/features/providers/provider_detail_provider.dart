@@ -7,16 +7,30 @@ import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
 import 'provider_detail_snapshot.dart';
 
-final providerDetailProvider =
-    AsyncNotifierProvider.family<ProviderDetailNotifier, ProviderDetailSnapshot, String>(
+final providerDetailProvider = AsyncNotifierProvider.family
+    .autoDispose<ProviderDetailNotifier, ProviderDetailSnapshot, String>(
   ProviderDetailNotifier.new,
 );
 
-class ProviderDetailNotifier extends FamilyAsyncNotifier<ProviderDetailSnapshot, String> {
+class ProviderDetailNotifier extends AutoDisposeFamilyAsyncNotifier<ProviderDetailSnapshot, String> {
   int _reloadSeq = 0;
 
   @override
   Future<ProviderDetailSnapshot> build(String providerId) => loadSnapshot(providerId);
+
+  /// Full reload when the screen opens (shows loading, not stale cache).
+  Future<void> refetchOnOpen() async {
+    final seq = ++_reloadSeq;
+    state = const AsyncValue.loading();
+    try {
+      final next = await loadSnapshot(arg);
+      if (seq != _reloadSeq) return;
+      state = AsyncValue.data(next);
+    } catch (error, stackTrace) {
+      if (seq != _reloadSeq) return;
+      state = AsyncValue.error(error, stackTrace);
+    }
+  }
 
   Future<void> refreshSilently() async {
     final previous = state.valueOrNull;

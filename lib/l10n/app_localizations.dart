@@ -278,6 +278,78 @@ abstract class AppLocalizations {
   /// **'Could not load movements'**
   String get clientMovementsLoadErrorTitle;
 
+  /// No description provided for @movementsSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search notes'**
+  String get movementsSearchHint;
+
+  /// No description provided for @movementsFilterSort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get movementsFilterSort;
+
+  /// No description provided for @movementsFilterItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Item'**
+  String get movementsFilterItem;
+
+  /// No description provided for @movementsFilterDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get movementsFilterDate;
+
+  /// No description provided for @movementsSortNewest.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get movementsSortNewest;
+
+  /// No description provided for @movementsSortOldest.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest'**
+  String get movementsSortOldest;
+
+  /// No description provided for @movementsFilterAllItems.
+  ///
+  /// In en, this message translates to:
+  /// **'All items'**
+  String get movementsFilterAllItems;
+
+  /// No description provided for @movementsClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get movementsClearFilters;
+
+  /// No description provided for @movementsClearFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get movementsClearFilter;
+
+  /// No description provided for @movementsDateFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get movementsDateFrom;
+
+  /// No description provided for @movementsDateTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get movementsDateTo;
+
+  /// No description provided for @movementsDateRangeSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{from} — {to}'**
+  String movementsDateRangeSummary(String from, String to);
+
   /// No description provided for @homeNoSupplierSpendTitle.
   ///
   /// In en, this message translates to:

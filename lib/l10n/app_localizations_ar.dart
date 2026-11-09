@@ -101,6 +101,44 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientMovementsLoadErrorTitle => 'تعذر تحميل الحركات';
 
   @override
+  String get movementsSearchHint => 'بحث في الملاحظات';
+
+  @override
+  String get movementsFilterSort => 'ترتيب';
+
+  @override
+  String get movementsFilterItem => 'البند';
+
+  @override
+  String get movementsFilterDate => 'التاريخ';
+
+  @override
+  String get movementsSortNewest => 'الأحدث';
+
+  @override
+  String get movementsSortOldest => 'الأقدم';
+
+  @override
+  String get movementsFilterAllItems => 'كل البنود';
+
+  @override
+  String get movementsClearFilters => 'مسح الفلاتر';
+
+  @override
+  String get movementsClearFilter => 'مسح';
+
+  @override
+  String get movementsDateFrom => 'من';
+
+  @override
+  String get movementsDateTo => 'إلى';
+
+  @override
+  String movementsDateRangeSummary(String from, String to) {
+    return '$from — $to';
+  }
+
+  @override
   String get homeNoSupplierSpendTitle => 'مفيش مصروف خامات لسه';
 
   @override

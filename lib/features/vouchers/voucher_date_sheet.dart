@@ -14,12 +14,7 @@ import '../../core/widgets/sheet_drag_handle.dart';
 
 /// Staged voucher date picker: swipe months, header wheels, confirm commits.
 class VoucherDateSheetPage extends StatefulWidget {
-  const VoucherDateSheetPage({
-    super.key,
-    required this.initial,
-    required this.firstDate,
-    required this.lastDate,
-  });
+  const VoucherDateSheetPage({super.key, required this.initial, required this.firstDate, required this.lastDate});
 
   final DateTime initial;
   final DateTime firstDate;
@@ -102,11 +97,10 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
     final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context);
     final localeTag = locale.languageCode == 'ar' ? 'ar_EG' : 'en_US';
-    final colors = context.colors;
+    // final colors = context.colors;
     final today = _dateOnly(DateTime.now());
 
     return Material(
-      color: colors.surface,
       child: SafeArea(
         child: Stack(
           children: [
@@ -120,43 +114,43 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
                     AppSize.spaceMD,
                   ),
                   child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SheetDragHandle(),
-                        AppSize.spaceMD.gap,
-                        Row(
-                          children: [
-                            BackButton(onPressed: () => Navigator.maybePop(context)),
-                            Expanded(child: Text(l10n.date, style: context.text.title)),
-                          ],
-                        ),
-                        AppSize.spaceMD.gap,
-                        _CalendarHeader(
-                          visibleMonth: _visibleMonth,
-                          localeTag: localeTag,
-                          onPrev: () => _shiftMonth(-1),
-                          onNext: () => _shiftMonth(1),
-                          onTitleTap: _openWheels,
-                        ),
-                        AppSize.spaceMD.gap,
-                        _MonthGrid(
-                          month: _visibleMonth,
-                          localeTag: localeTag,
-                          selected: _staged,
-                          today: today,
-                          firstDate: widget.firstDate,
-                          lastDate: widget.lastDate,
-                          onSelect: _selectDay,
-                          onSwipe: _shiftMonth,
-                        ),
-                        AppSize.spaceLG.gap,
-                        AppButton.primary(
-                          key: const ValueKey('voucher-date-confirm'),
-                          text: l10n.save,
-                          onPressed: _confirm,
-                        ),
-                      ],
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SheetDragHandle(),
+                      AppSize.spaceMD.gap,
+                      Row(
+                        children: [
+                          BackButton(onPressed: () => Navigator.maybePop(context)),
+                          Expanded(child: Text(l10n.date, style: context.text.title)),
+                        ],
+                      ),
+                      AppSize.spaceMD.gap,
+                      _CalendarHeader(
+                        visibleMonth: _visibleMonth,
+                        localeTag: localeTag,
+                        onPrev: () => _shiftMonth(-1),
+                        onNext: () => _shiftMonth(1),
+                        onTitleTap: _openWheels,
+                      ),
+                      AppSize.spaceMD.gap,
+                      _MonthGrid(
+                        month: _visibleMonth,
+                        localeTag: localeTag,
+                        selected: _staged,
+                        today: today,
+                        firstDate: widget.firstDate,
+                        lastDate: widget.lastDate,
+                        onSelect: _selectDay,
+                        onSwipe: _shiftMonth,
+                      ),
+                      AppSize.spaceLG.gap,
+                      AppButton.primary(
+                        key: const ValueKey('voucher-date-confirm'),
+                        text: l10n.save,
+                        onPressed: _confirm,
+                      ),
+                    ],
                   ),
                 );
               },
@@ -245,10 +239,10 @@ class _MonthGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     final weekdayLabels = _weekdayLabels(context, localeTag);
     final cells = _buildCells(context, month, firstDate, lastDate);
 
+    final colors = context.colors;
     return GestureDetector(
       onHorizontalDragEnd: (details) {
         final v = details.primaryVelocity ?? 0;
@@ -265,12 +259,7 @@ class _MonthGrid extends StatelessWidget {
             children: [
               for (final label in weekdayLabels)
                 Expanded(
-                  child: Center(
-                    child: Text(
-                      label,
-                      style: context.text.caption.setColor(colors.onSurfaceMuted),
-                    ),
-                  ),
+                  child: Center(child: Text(label, style: context.text.caption.setColor(colors.onSurfaceMuted))),
                 ),
             ],
           ),
@@ -312,13 +301,8 @@ class _MonthGrid extends StatelessWidget {
                   onTap: enabled ? () => onSelect(cell) : null,
                   borderRadius: BorderRadius.circular(8),
                   child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: border,
-                    ),
-                    child: Center(
-                      child: Text(dayLabel, style: context.text.body.semiBold.setColor(fg)),
-                    ),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: border),
+                    child: Center(child: Text(dayLabel, style: context.text.body.semiBold.setColor(fg))),
                   ),
                 ),
               );
@@ -386,10 +370,7 @@ class _MonthYearWheelsOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final years = List<int>.generate(
-      lastDate.year - firstDate.year + 1,
-      (i) => firstDate.year + i,
-    );
+    final years = List<int>.generate(lastDate.year - firstDate.year + 1, (i) => firstDate.year + i);
     final months = List<int>.generate(12, (i) => i + 1);
     final monthLabels = months
         .map((m) => DisplayDigits.toWesternDigits(DateFormat.MMMM(localeTag).format(DateTime(2024, m))))
@@ -421,8 +402,7 @@ class _MonthYearWheelsOverlay extends StatelessWidget {
                                 itemExtent: 36,
                                 onSelectedItemChanged: (i) => onMonthChanged(months[i]),
                                 children: [
-                                  for (final label in monthLabels)
-                                    Center(child: Text(label, style: context.text.body)),
+                                  for (final label in monthLabels) Center(child: Text(label, style: context.text.body)),
                                 ],
                               ),
                             ),
@@ -435,12 +415,7 @@ class _MonthYearWheelsOverlay extends StatelessWidget {
                                 onSelectedItemChanged: (i) => onYearChanged(years[i]),
                                 children: [
                                   for (final y in years)
-                                    Center(
-                                      child: Text(
-                                        DisplayDigits.toWesternDigits('$y'),
-                                        style: context.text.body,
-                                      ),
-                                    ),
+                                    Center(child: Text(DisplayDigits.toWesternDigits('$y'), style: context.text.body)),
                                 ],
                               ),
                             ),

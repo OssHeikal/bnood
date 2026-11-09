@@ -38,8 +38,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Materials'), findsOneWidget);
-    expect(find.textContaining('Labor'), findsOneWidget);
+    expect(find.text('Materials'), findsOneWidget);
+    expect(find.text('Labor'), findsOneWidget);
     expect(find.textContaining('10,000'), findsWidgets);
     expect(find.textContaining('3,000'), findsWidgets);
     expect(find.textContaining('13,000'), findsOneWidget);
