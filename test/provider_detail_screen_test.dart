@@ -96,7 +96,7 @@ void main() {
         createdAt: DateTime.utc(2026, 11, 9),
         updatedAt: DateTime.utc(2026, 11, 9),
       ),
-      totalVoucherMinor: 10000000,
+      totalVoucherMinor: 1_000_000,
       voucherHistory: const [],
     );
 
@@ -145,7 +145,7 @@ void main() {
             id: 'v1',
             clientId: 'c99',
             type: 'spend',
-            amountMinor: 1000000,
+            amountMinor: 100_000,
             voucherDate: DateTime.utc(2026, 11, 9),
             method: 'cash',
             expenseClassification: 'labor',

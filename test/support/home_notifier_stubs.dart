@@ -117,3 +117,6 @@ class StubHomeCraftsmenNotifier extends HomeCraftsmenNotifier {
 
 Override emptyHomeCraftsmenOverride() =>
     homeCraftsmenProvider.overrideWith(() => StubHomeCraftsmenNotifier(const []));
+
+Override homeCraftsmenOverride(List<HomeCraftsmanActivityRow> rows) =>
+    homeCraftsmenProvider.overrideWith(() => StubHomeCraftsmenNotifier(rows));

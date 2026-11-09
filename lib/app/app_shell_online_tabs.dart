@@ -26,6 +26,6 @@ final appShellTabOnlineProvider = Provider.family<bool, AppShellTabId>((ref, tab
     AppShellTabId.clients => true,
     AppShellTabId.items => ref.watch(appRemoteItemsTabEnabledProvider),
     AppShellTabId.directory => ref.watch(appRemoteProvidersTabEnabledProvider),
-    AppShellTabId.home => false,
+    AppShellTabId.home => true,
   };
 });

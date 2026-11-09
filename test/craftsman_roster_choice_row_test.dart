@@ -1,4 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/money/remote_money_units.dart';
 import 'package:bnood/core/database/database.dart';
 import 'package:bnood/core/widgets/custom_text_field.dart';
 import 'package:bnood/core/widgets/entity_picker_row.dart';
@@ -76,9 +77,9 @@ void main() {
             onToggle: () {},
             showDivider: false,
             showAmountSummary: true,
-            agreedPiastres: 1000000 * 1000,
+            agreedPiastres: 1000000 * RemoteMoneyUnits.minorPerMajor,
             localeCode: 'en',
-            minorPerMajor: 1000,
+            minorPerMajor: RemoteMoneyUnits.minorPerMajor,
             onManageAmount: () {},
           ),
         ),

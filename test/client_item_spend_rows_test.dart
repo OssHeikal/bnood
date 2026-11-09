@@ -8,9 +8,9 @@ void main() {
       AppClientStatementItemSpend.fromDataJson({
         'id': '01ITEM',
         'name': 'سباكة',
-        'spent': 13_000_000,
-        'materials': 10_000_000,
-        'labor': 3_000_000,
+        'spent': 1_300_000,
+        'materials': 1_000_000,
+        'labor': 300_000,
         'icon_key': 'plumbing',
         'color_key': 'cyan',
       }),
@@ -19,8 +19,8 @@ void main() {
     expect(row.name, 'سباكة');
     expect(row.iconName, 'plumbing');
     expect(row.colorKey, 'cyan');
-    expect(row.breakdown.materialsPiastres, 10_000_000);
-    expect(row.breakdown.laborPiastres, 3_000_000);
-    expect(row.breakdown.totalPiastres, 13_000_000);
+    expect(row.breakdown.materialsPiastres, 1_000_000);
+    expect(row.breakdown.laborPiastres, 300_000);
+    expect(row.breakdown.totalPiastres, 1_300_000);
   });
 }

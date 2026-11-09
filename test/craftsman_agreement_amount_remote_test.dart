@@ -21,7 +21,7 @@ void main() {
   });
 
   testWidgets('remote amount sheet prefills major units not minor', (tester) async {
-    const minor = 1000000 * 1000;
+    const minor = 1000000 * RemoteMoneyUnits.minorPerMajor;
 
     await tester.pumpWidget(
       ProviderScope(

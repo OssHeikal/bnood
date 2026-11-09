@@ -14,6 +14,13 @@ class AuthApiException implements Exception {
   bool get isAccountExists => code == 'account_exists';
 
   bool get isInvalidCredentials => code == 'invalid_credentials';
+
+  bool get isAccountDeleted => code == 'account_deleted';
+
+  bool get isActiveProjectCapReached => statusCode == 403 && code == 'active_project_cap_reached';
+
+  bool get isSubscriptionFinancialReadOnly =>
+      statusCode == 403 && code == 'subscription_financial_read_only';
   bool get isChallengeInvalid => code == 'challenge_invalid';
   bool get isThrottled => statusCode == 429 || code == 'throttled';
   bool get isUnauthorized => statusCode == 401;

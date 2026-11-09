@@ -26,8 +26,8 @@ void main() {
             colorKey: 'cyan',
             iconName: 'category',
             breakdown: const ItemExpenseBreakdown(
-              materialsPiastres: 10_000_000,
-              laborPiastres: 3_000_000,
+              materialsPiastres: 1_000_000,
+              laborPiastres: 300_000,
             ),
             localeCode: 'en',
             minorPerMajor: RemoteMoneyUnits.minorPerMajor,

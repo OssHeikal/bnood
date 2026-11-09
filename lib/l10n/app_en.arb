@@ -21,6 +21,15 @@
   "remaining": "Remaining",
   "activeClients": "Active clients",
   "homeAppName": "Bnood",
+  "homeGreetingMorning": "Good morning",
+  "homeGreetingEvening": "Good evening",
+  "userProfileTitle": "Profile",
+  "craftsmanLinkedClientsMeta": "{count,plural, =0{No linked clients} =1{1 linked client} other{{count} linked clients}}",
+  "@craftsmanLinkedClientsMeta": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
   "homeSubtitle": "Finishing funds, simply",
   "homeTotalsCaption": "Active clients only · Since each project started",
   "homeSupplierSpendSection": "Supplier material spend",
@@ -484,6 +493,7 @@
   "authAccountSection": "Account",
   "authRemoteWorkspaceTitle": "Account",
   "authRemoteWorkspaceBody": "You are signed in. Cloud project data is not available yet.",
+  "authRemoteWorkspaceMovedBody": "Account management is now on Profile and Settings.",
   "shellTabNotOnlineTitle": "Not available online yet",
   "shellTabNotOnlineDescription": "This tab is not ready for online use yet. Use Clients for what is available today.",
   "authSignedInAs": "Signed in as",
@@ -503,5 +513,55 @@
   "authAccountExistsAnotherPhoneAction": "Enter another phone",
   "authFlowExpired": "This step expired. Start again.",
   "authPasswordResetSuccess": "Password updated. Sign in with the new one.",
-  "authPasswordChangedSuccess": "Password changed. Use the new one next time."
+  "authPasswordChangedSuccess": "Password changed. Use the new one next time.",
+  "authDisplayNameTooLong": "Name is too long. Use at most 120 characters.",
+  "profilePersonalSection": "Personal details",
+  "profileSecuritySection": "Security",
+  "profileDangerSection": "Account closure",
+  "profileEditNameTitle": "Edit name",
+  "profileChangePasswordHint": "Update your sign-in password.",
+  "profileDeleteAccountHint": "Permanently close your account and sign out on all devices.",
+  "authDeleteAccount": "Delete account",
+  "authDeleteAccountConfirmTitle": "Delete your account?",
+  "authDeleteAccountConfirmBody": "Enter your current password to confirm. This cannot be undone.",
+  "authDeleteAccountSuccess": "Your account was closed.",
+  "authAccountDeletedMessage": "This account is already closed.",
+  "authLogoutConfirmTitle": "Sign out?",
+  "authLogoutConfirmBody": "You will need to sign in again to continue using your cloud data.",
+  "authRemoteWorkspaceMovedBody": "Account management is in Profile and Settings.",
+  "paywallBenefitsHeading": "PREMIUM BENEFITS",
+  "paywallBilledYearly": "Billed yearly at {amount}",
+  "@paywallBilledYearly": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallBilledMonthly": "Billed monthly",
+  "paywallPerMonthSuffix": " / month",
+  "paywallPlanYearly": "Yearly",
+  "paywallPlanMonthly": "Monthly",
+  "paywallSubscribeCta": "Subscribe to Premium",
+  "paywallContinueFree": "Continue for free",
+  "subscriptionPaymentNotConnectedYet": "In-app payment is not connected yet.",
+  "profileSubscriptionSection": "Subscription",
+  "profileSubscriptionFreeBlurb": "Upgrade to Premium for unlimited active projects and more.",
+  "profileSubscriptionSubscribeCta": "Subscribe to Premium",
+  "profileSubscriptionRenewsOn": "Renews on {date}",
+  "@profileSubscriptionRenewsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSubscriptionDaysRemaining": "{count} days remaining",
+  "@profileSubscriptionDaysRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

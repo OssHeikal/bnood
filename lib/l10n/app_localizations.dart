@@ -224,6 +224,30 @@ abstract class AppLocalizations {
   /// **'Bnood'**
   String get homeAppName;
 
+  /// No description provided for @homeGreetingMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get homeGreetingMorning;
+
+  /// No description provided for @homeGreetingEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get homeGreetingEvening;
+
+  /// No description provided for @userProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get userProfileTitle;
+
+  /// No description provided for @craftsmanLinkedClientsMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'{count,plural, =0{No linked clients} =1{1 linked client} other{{count} linked clients}}'**
+  String craftsmanLinkedClientsMeta(int count);
+
   /// No description provided for @homeSubtitle.
   ///
   /// In en, this message translates to:
@@ -2113,6 +2137,12 @@ abstract class AppLocalizations {
   /// **'You are signed in. Cloud project data is not available yet.'**
   String get authRemoteWorkspaceBody;
 
+  /// No description provided for @authRemoteWorkspaceMovedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Account management is in Profile and Settings.'**
+  String get authRemoteWorkspaceMovedBody;
+
   /// No description provided for @shellTabNotOnlineTitle.
   ///
   /// In en, this message translates to:
@@ -2232,6 +2262,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password changed. Use the new one next time.'**
   String get authPasswordChangedSuccess;
+
+  /// No description provided for @authDisplayNameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is too long. Use at most 120 characters.'**
+  String get authDisplayNameTooLong;
+
+  /// No description provided for @profilePersonalSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal details'**
+  String get profilePersonalSection;
+
+  /// No description provided for @profileSecuritySection.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get profileSecuritySection;
+
+  /// No description provided for @profileDangerSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Account closure'**
+  String get profileDangerSection;
+
+  /// No description provided for @profileEditNameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit name'**
+  String get profileEditNameTitle;
+
+  /// No description provided for @profileChangePasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your sign-in password.'**
+  String get profileChangePasswordHint;
+
+  /// No description provided for @profileDeleteAccountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently close your account and sign out on all devices.'**
+  String get profileDeleteAccountHint;
+
+  /// No description provided for @authDeleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get authDeleteAccount;
+
+  /// No description provided for @authDeleteAccountConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get authDeleteAccountConfirmTitle;
+
+  /// No description provided for @authDeleteAccountConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password to confirm. This cannot be undone.'**
+  String get authDeleteAccountConfirmBody;
+
+  /// No description provided for @authDeleteAccountSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account was closed.'**
+  String get authDeleteAccountSuccess;
+
+  /// No description provided for @authAccountDeletedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This account is already closed.'**
+  String get authAccountDeletedMessage;
+
+  /// No description provided for @authLogoutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out?'**
+  String get authLogoutConfirmTitle;
+
+  /// No description provided for @authLogoutConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You will need to sign in again to continue using your cloud data.'**
+  String get authLogoutConfirmBody;
+
+  /// No description provided for @paywallBenefitsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'PREMIUM BENEFITS'**
+  String get paywallBenefitsHeading;
+
+  /// No description provided for @paywallBilledYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Billed yearly at {amount}'**
+  String paywallBilledYearly(String amount);
+
+  /// No description provided for @paywallBilledMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Billed monthly'**
+  String get paywallBilledMonthly;
+
+  /// No description provided for @paywallPerMonthSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' / month'**
+  String get paywallPerMonthSuffix;
+
+  /// No description provided for @paywallPlanYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get paywallPlanYearly;
+
+  /// No description provided for @paywallPlanMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get paywallPlanMonthly;
+
+  /// No description provided for @paywallSubscribeCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe to Premium'**
+  String get paywallSubscribeCta;
+
+  /// No description provided for @paywallContinueFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue for free'**
+  String get paywallContinueFree;
+
+  /// No description provided for @subscriptionPaymentNotConnectedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'In-app payment is not connected yet.'**
+  String get subscriptionPaymentNotConnectedYet;
+
+  /// No description provided for @profileSubscriptionSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get profileSubscriptionSection;
+
+  /// No description provided for @profileSubscriptionFreeBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium for unlimited active projects and more.'**
+  String get profileSubscriptionFreeBlurb;
+
+  /// No description provided for @profileSubscriptionSubscribeCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe to Premium'**
+  String get profileSubscriptionSubscribeCta;
+
+  /// No description provided for @profileSubscriptionRenewsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Renews on {date}'**
+  String profileSubscriptionRenewsOn(String date);
+
+  /// No description provided for @profileSubscriptionDaysRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days remaining'**
+  String profileSubscriptionDaysRemaining(int count);
 }
 
 class _AppLocalizationsDelegate

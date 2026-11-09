@@ -17,7 +17,7 @@ class AppAgreement {
   final String clientId;
   final String providerId;
 
-  /// Local Drift rows: integer piastres (÷100). Online API: minor units (÷1000) when [amountMajor] is set.
+  /// Local Drift rows: integer piastres (÷100). Online API: minor units (÷100) when [amountMajor] is set.
   final int? amountPiastres;
 
   /// Online agreement amount in EGP major units (`null` = unset).

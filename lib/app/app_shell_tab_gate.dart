@@ -1,6 +1,7 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../core/config/theme/app_colors.dart';
 import '../core/config/theme/app_size.dart';
@@ -8,7 +9,7 @@ import '../core/resources/gen/assets.gen.dart';
 import '../core/widgets/app_fallback.dart';
 import '../core/widgets/custom_app_bar.dart';
 import '../features/home/home_foundation_scope.dart';
-import '../features/settings/app_settings_sheet.dart';
+import '../features/auth/auth_paths.dart';
 import 'app_shell_online_tabs.dart';
 import 'widgets/shell_nav_icon.dart';
 
@@ -45,7 +46,7 @@ class AppShellTabGate extends ConsumerWidget {
               actions: [
                 CustomAppBarAction(
                   tooltip: l10n.settingsTitle,
-                  onPressed: () => showAppSettingsSheet(context),
+                  onPressed: () => context.push(AuthPaths.settings),
                   child: ShellNavIcon(
                     asset: Assets.icons.settingsOutline,
                     size: AppSize.icon,

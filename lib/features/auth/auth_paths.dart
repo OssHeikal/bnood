@@ -11,6 +11,8 @@ abstract final class AuthPaths {
   static const resetPassword = '/auth/reset-password';
   static const changePassword = '/auth/change-password';
   static const remote = '/remote';
+  static const profile = '/profile';
+  static const settings = '/settings';
 }
 
 bool userNeedsProfileCompletion(User? user) {

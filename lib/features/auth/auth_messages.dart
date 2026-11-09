@@ -10,6 +10,7 @@ String authApiMessage(AppLocalizations l10n, AuthApiException error) {
   if (error.isChallengeInvalid) return l10n.authChallengeInvalid;
   if (error.isSessionExpired) return l10n.authSessionExpired;
   if (error.isProfileIncomplete) return l10n.authCompleteProfileTitle;
+  if (error.isAccountDeleted) return l10n.authAccountDeletedMessage;
   final fieldErrors = error.fieldErrors;
   if (fieldErrors != null) {
     for (final list in fieldErrors.values) {

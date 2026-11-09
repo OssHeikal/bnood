@@ -10,6 +10,8 @@ import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_toaster.dart';
+import '../subscription/subscription_error_handler.dart';
+import '../subscription/subscription_gates.dart';
 
 Future<Client?> saveClientCreate({
   required WidgetRef ref,
@@ -56,6 +58,8 @@ Future<Client?> _saveRemoteCreate(
   required String name,
   String? phone,
 }) async {
+  if (!await guardCreateActiveProject(context, ref)) return null;
+
   final repo = ref.read(clientsRepositoryProvider);
   try {
     final record = await repo.createClient(name: name, phone: phone);
@@ -64,6 +68,9 @@ Future<Client?> _saveRemoteCreate(
   } on AuthApiException catch (e) {
     if (!context.mounted) return null;
     if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) {
+      return null;
+    }
+    if (await handleClientsApiSubscriptionError(context: context, ref: ref, error: e)) {
       return null;
     }
     if (e.isDuplicateName) {
@@ -86,6 +93,9 @@ Future<Client?> _saveRemoteCreate(
       } on AuthApiException catch (retry) {
         if (!context.mounted) return null;
         if (await handleClientsApiAuthError(context: context, ref: ref, error: retry)) {
+          return null;
+        }
+        if (await handleClientsApiSubscriptionError(context: context, ref: ref, error: retry)) {
           return null;
         }
         if (retry.isDuplicatePhone) {

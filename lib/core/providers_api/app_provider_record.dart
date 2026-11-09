@@ -24,6 +24,9 @@ class AppProvider {
     required this.type,
     required this.createdAt,
     required this.updatedAt,
+    this.paidMinor,
+    this.remainingMinor,
+    this.clientsCount,
   });
 
   final String id;
@@ -32,12 +35,32 @@ class AppProvider {
   final AppProviderType type;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final int? paidMinor;
+  final int? remainingMinor;
+  final int? clientsCount;
 
   static AppProvider fromDataJson(Map<String, dynamic> json) {
     final type = AppProviderTypeApi.fromApi(json['type'] as String?);
     if (type == null) {
       throw FormatException('Unknown provider type: ${json['type']}');
     }
+
+    int? readOptionalMinor(Object? value) {
+      if (value == null) return null;
+      if (value is int) return value;
+      if (value is num) return value.round();
+      return null;
+    }
+
+    final clientsRaw = json['clients_count'];
+    final clientsCount = clientsRaw == null
+        ? null
+        : clientsRaw is int
+            ? clientsRaw
+            : clientsRaw is num
+                ? clientsRaw.round()
+                : null;
+
     return AppProvider(
       id: json['id'] as String,
       name: json['name'] as String,
@@ -45,6 +68,9 @@ class AppProvider {
       type: type,
       createdAt: DateTime.parse(json['created_at'] as String).toUtc(),
       updatedAt: DateTime.parse(json['updated_at'] as String).toUtc(),
+      paidMinor: readOptionalMinor(json['paid']),
+      remainingMinor: readOptionalMinor(json['remaining']),
+      clientsCount: clientsCount,
     );
   }
 }

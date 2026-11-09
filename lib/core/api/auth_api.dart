@@ -227,6 +227,17 @@ class AuthApi {
     });
   }
 
+  Future<void> deleteAccount({required String currentPassword}) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/delete-account',
+        data: {'current_password': currentPassword},
+        options: Options(extra: _authenticatedExtra),
+      );
+      ApiResponseParser.expectSuccess(response);
+    });
+  }
+
   Future<void> changePassword({
     required String currentPassword,
     required String password,

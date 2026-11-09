@@ -1,816 +1,186 @@
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-The following _TypeError was thrown building Builder(dirty, dependencies: [InheritedCupertinoTheme, _InheritedTheme, _LocalizationsScope-[GlobalKey#a2da3]]):
-Null check operator used on a null value
-
-The relevant error-causing widget was:
-    Builder Builder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:251:12
-
-When the exception was thrown, this was the stack:
-#0      ThemeContext.colors (package:bnood/core/config/theme/app_colors.dart:287:64)
-#1      _MonthGrid.build.<anonymous closure> (package:bnood/features/vouchers/voucher_date_sheet.dart:253:32)
-#2      Builder.build (package:flutter/src/widgets/basic.dart:8396:48)
-#3      StatelessElement.build (package:flutter/src/widgets/framework.dart:5889:49)
-#4      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5817:15)
-#5      Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#6      StatelessElement.update (package:flutter/src/widgets/framework.dart:5895:5)
-#7      Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#8      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#9      Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#10     StatelessElement.update (package:flutter/src/widgets/framework.dart:5895:5)
-#11     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#12     Element.updateChildren (package:flutter/src/widgets/framework.dart:4191:32)
-#13     MultiChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7295:17)
-#14     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#15     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#16     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#17     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#18     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#19     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#20     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#21     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#22     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#23     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#24     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#25     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#26     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#27     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#28     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
-#29     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#30     StatefulElement.update (package:flutter/src/widgets/framework.dart:6007:5)
-#31     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#32     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#33     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#34     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#35     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#36     ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
-#37     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#38     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#39     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#40     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#41     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#42     ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
-#43     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#44     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#45     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
-#46     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#47     StatefulElement.update (package:flutter/src/widgets/framework.dart:6007:5)
-#48     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#49     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#50     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#51     ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
-#52     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#53     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#54     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#55     StatelessElement.update (package:flutter/src/widgets/framework.dart:5895:5)
-#56     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#57     _LayoutBuilderElement._rebuildWithConstraints.updateChildCallback (package:flutter/src/widgets/layout_builder.dart:247:18)
-#58     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3101:19)
-#59     _LayoutBuilderElement._rebuildWithConstraints (package:flutter/src/widgets/layout_builder.dart:270:12)
-#60     RenderAbstractLayoutBuilderMixin.layoutCallback (package:flutter/src/widgets/layout_builder.dart:333:38)
-#61     RenderObjectWithLayoutCallbackMixin.runLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:4054:33)
-#62     RenderObject.invokeLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:2819:17)
-#63     PipelineOwner._enableMutationsToDirtySubtrees (package:flutter/src/rendering/object.dart:1189:15)
-#64     RenderObject.invokeLayoutCallback (package:flutter/src/rendering/object.dart:2818:14)
-#65     RenderObjectWithLayoutCallbackMixin.runLayoutCallback (package:flutter/src/rendering/object.dart:4054:5)
-#66     _RenderLayoutBuilder.performLayout (package:flutter/src/widgets/layout_builder.dart:447:5)
-#67     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#68     ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
-#69     RenderStack._computeSize (package:flutter/src/rendering/stack.dart:645:43)
-#70     RenderStack.performLayout (package:flutter/src/rendering/stack.dart:680:12)
-#71     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#72     RenderPadding.performLayout (package:flutter/src/rendering/shifted_box.dart:262:12)
-#73     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#74     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#75     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#76     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#77     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1549:11)
-#78     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#79     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#80     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#81     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#82     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#83     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#84     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#85     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#86     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#87     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#88     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#89     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#90     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#91     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#92     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#93     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#94     RenderOffstage.performLayout (package:flutter/src/rendering/proxy_box.dart:3923:13)
-#95     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#96     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#97     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#98     _RenderTheaterMixin.layoutChild (package:flutter/src/widgets/overlay.dart:1084:13)
-#99     _RenderTheater.performLayout (package:flutter/src/widgets/overlay.dart:1429:9)
-#100    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#101    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#102    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#103    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#104    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#105    ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
-#106    RenderStack._computeSize (package:flutter/src/rendering/stack.dart:645:43)
-#107    RenderStack.performLayout (package:flutter/src/rendering/stack.dart:680:12)
-#108    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#109    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#110    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#111    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#112    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#113    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#114    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#115    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#116    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#117    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#118    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#119    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#120    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#121    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#122    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#123    RenderView.performLayout (package:flutter/src/rendering/view.dart:292:12)
-#124    RenderObject._layoutWithoutResize (package:flutter/src/rendering/object.dart:2551:7)
-#125    PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1143:18)
-#126    PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1156:15)
-#127    RendererBinding.drawFrame (package:flutter/src/rendering/binding.dart:629:23)
-#128    WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1304:13)
-#129    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
-#130    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
-#131    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
-#132    SchedulerBinding.scheduleWarmUpFrame.<anonymous closure> (package:flutter/src/scheduler/binding.dart:1055:9)
-#133    PlatformDispatcher.scheduleWarmUpFrame.<anonymous closure> (dart:ui/platform_dispatcher.dart:906:16)
-#137    _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:193:12)
-(elided 3 frames from class _Timer and dart:async-patch)
-
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    AppButton-[<'voucher-date-confirm'>] AppButton:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:154:33
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    SheetDragHandle SheetDragHandle:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:120:29
-════════════════════════════════════════════════════════════════════════════════
-Reloaded 1 of 2827 libraries in 424ms (compile: 38 ms, reload: 107 ms, reassemble: 222 ms).
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    Builder Builder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:251:12
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    AppButton-[<'voucher-date-confirm'>] AppButton:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:154:33
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    SheetDragHandle SheetDragHandle:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:120:29
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    Builder Builder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:251:12
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    AppButton-[<'voucher-date-confirm'>] AppButton:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:154:33
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    SheetDragHandle SheetDragHandle:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:120:29
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    Builder Builder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:251:12
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    AppButton-[<'voucher-date-confirm'>] AppButton:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:154:33
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    SheetDragHandle SheetDragHandle:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:120:29
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    Builder Builder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:251:12
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    AppButton-[<'voucher-date-confirm'>] AppButton:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:154:33
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    SheetDragHandle SheetDragHandle:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:120:29
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-The following _TypeError was thrown building _CalendarHeader(dirty, dependencies: [InheritedCupertinoTheme, _InheritedTheme, _LocalizationsScope-[GlobalKey#a2da3]]):
-Null check operator used on a null value
-
-The relevant error-causing widget was:
-    _CalendarHeader _CalendarHeader:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:135:23
-
-When the exception was thrown, this was the stack:
-#0      ThemeContext.text (package:bnood/core/config/theme/app_colors.dart:289:58)
-#1      _CalendarHeader.build (package:bnood/features/vouchers/voucher_date_sheet.dart:214:80)
-#2      StatelessElement.build (package:flutter/src/widgets/framework.dart:5889:49)
-#3      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5817:15)
-#4      Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#5      StatelessElement.update (package:flutter/src/widgets/framework.dart:5895:5)
-#6      Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#7      Element.updateChildren (package:flutter/src/widgets/framework.dart:4191:32)
-#8      MultiChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7295:17)
-#9      Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#10     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#11     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#12     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#13     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#14     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#15     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#16     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#17     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#18     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#19     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#20     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#21     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#22     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#23     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
-#24     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#25     StatefulElement.update (package:flutter/src/widgets/framework.dart:6007:5)
-#26     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#27     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#28     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#29     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#30     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#31     ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
-#32     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#33     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7122:14)
-#34     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#35     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#36     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#37     ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
-#38     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#39     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#40     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5982:11)
-#41     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#42     StatefulElement.update (package:flutter/src/widgets/framework.dart:6007:5)
-#43     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#44     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#45     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#46     ProxyElement.update (package:flutter/src/widgets/framework.dart:6149:5)
-#47     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#48     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5841:16)
-#49     Element.rebuild (package:flutter/src/widgets/framework.dart:5529:7)
-#50     StatelessElement.update (package:flutter/src/widgets/framework.dart:5895:5)
-#51     Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
-#52     _LayoutBuilderElement._rebuildWithConstraints.updateChildCallback (package:flutter/src/widgets/layout_builder.dart:247:18)
-#53     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3101:19)
-#54     _LayoutBuilderElement._rebuildWithConstraints (package:flutter/src/widgets/layout_builder.dart:270:12)
-#55     RenderAbstractLayoutBuilderMixin.layoutCallback (package:flutter/src/widgets/layout_builder.dart:333:38)
-#56     RenderObjectWithLayoutCallbackMixin.runLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:4054:33)
-#57     RenderObject.invokeLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:2819:17)
-#58     PipelineOwner._enableMutationsToDirtySubtrees (package:flutter/src/rendering/object.dart:1189:15)
-#59     RenderObject.invokeLayoutCallback (package:flutter/src/rendering/object.dart:2818:14)
-#60     RenderObjectWithLayoutCallbackMixin.runLayoutCallback (package:flutter/src/rendering/object.dart:4054:5)
-#61     _RenderLayoutBuilder.performLayout (package:flutter/src/widgets/layout_builder.dart:447:5)
-#62     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#63     ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
-#64     RenderStack._computeSize (package:flutter/src/rendering/stack.dart:645:43)
-#65     RenderStack.performLayout (package:flutter/src/rendering/stack.dart:680:12)
-#66     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#67     RenderPadding.performLayout (package:flutter/src/rendering/shifted_box.dart:262:12)
-#68     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#69     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#70     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#71     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#72     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1549:11)
-#73     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#74     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#75     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#76     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#77     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#78     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#79     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#80     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#81     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#82     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#83     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#84     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#85     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#86     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#87     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#88     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#89     RenderOffstage.performLayout (package:flutter/src/rendering/proxy_box.dart:3923:13)
-#90     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#91     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#92     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#93     _RenderTheaterMixin.layoutChild (package:flutter/src/widgets/overlay.dart:1084:13)
-#94     _RenderTheater.performLayout (package:flutter/src/widgets/overlay.dart:1429:9)
-#95     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#96     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#97     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#98     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#99     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#100    ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
-#101    RenderStack._computeSize (package:flutter/src/rendering/stack.dart:645:43)
-#102    RenderStack.performLayout (package:flutter/src/rendering/stack.dart:680:12)
-#103    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#104    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#105    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#106    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#107    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#108    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#109    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#110    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#111    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#112    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#113    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#114    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#115    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#116    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#117    RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#118    RenderView.performLayout (package:flutter/src/rendering/view.dart:292:12)
-#119    RenderObject._layoutWithoutResize (package:flutter/src/rendering/object.dart:2551:7)
-#120    PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1143:18)
-#121    PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1156:15)
-#122    RendererBinding.drawFrame (package:flutter/src/rendering/binding.dart:629:23)
-#123    WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1304:13)
-#124    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
-#125    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
-#126    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
-#127    SchedulerBinding.scheduleWarmUpFrame.<anonymous closure> (package:flutter/src/scheduler/binding.dart:1055:9)
-#128    PlatformDispatcher.scheduleWarmUpFrame.<anonymous closure> (dart:ui/platform_dispatcher.dart:906:16)
-#132    _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:193:12)
-(elided 3 frames from class _Timer and dart:async-patch)
-
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    Builder Builder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:251:12
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    AppButton-[<'voucher-date-confirm'>] AppButton:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:154:33
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    SheetDragHandle SheetDragHandle:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:120:29
-════════════════════════════════════════════════════════════════════════════════
-Reloaded 1 of 2827 libraries in 436ms (compile: 55 ms, reload: 140 ms, reassemble: 195 ms).
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    _CalendarHeader _CalendarHeader:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:135:23
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    Builder Builder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:251:12
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    AppButton-[<'voucher-date-confirm'>] AppButton:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:154:33
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    SheetDragHandle SheetDragHandle:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:120:29
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    _CalendarHeader _CalendarHeader:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:135:23
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    Builder Builder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:251:12
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    AppButton-[<'voucher-date-confirm'>] AppButton:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:154:33
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    SheetDragHandle SheetDragHandle:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:120:29
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    _CalendarHeader _CalendarHeader:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:135:23
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    Builder Builder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:251:12
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    AppButton-[<'voucher-date-confirm'>] AppButton:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:154:33
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    SheetDragHandle SheetDragHandle:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:120:29
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-The following _TypeError was thrown building LayoutBuilder:
-Null check operator used on a null value
-
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-
-When the exception was thrown, this was the stack:
-#0      ThemeContext.text (package:bnood/core/config/theme/app_colors.dart:289:58)
-#1      _VoucherDateSheetPageState.build.<anonymous closure> (package:bnood/features/vouchers/voucher_date_sheet.dart:125:74)
-#2      _LayoutBuilderElement._rebuildWithConstraints.updateChildCallback (package:flutter/src/widgets/layout_builder.dart:232:74)
-#3      BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3101:19)
-#4      _LayoutBuilderElement._rebuildWithConstraints (package:flutter/src/widgets/layout_builder.dart:270:12)
-#5      RenderAbstractLayoutBuilderMixin.layoutCallback (package:flutter/src/widgets/layout_builder.dart:333:38)
-#6      RenderObjectWithLayoutCallbackMixin.runLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:4054:33)
-#7      RenderObject.invokeLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:2819:17)
-#8      PipelineOwner._enableMutationsToDirtySubtrees (package:flutter/src/rendering/object.dart:1189:15)
-#9      RenderObject.invokeLayoutCallback (package:flutter/src/rendering/object.dart:2818:14)
-#10     RenderObjectWithLayoutCallbackMixin.runLayoutCallback (package:flutter/src/rendering/object.dart:4054:5)
-#11     _RenderLayoutBuilder.performLayout (package:flutter/src/widgets/layout_builder.dart:447:5)
-#12     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#13     ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
-#14     RenderStack._computeSize (package:flutter/src/rendering/stack.dart:645:43)
-#15     RenderStack.performLayout (package:flutter/src/rendering/stack.dart:680:12)
-#16     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#17     RenderPadding.performLayout (package:flutter/src/rendering/shifted_box.dart:262:12)
-#18     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#19     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#20     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#21     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#22     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1549:11)
-#23     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#24     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#25     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#26     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#27     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#28     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#29     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#30     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#31     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#32     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#33     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#34     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#35     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#36     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#37     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#38     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#39     RenderOffstage.performLayout (package:flutter/src/rendering/proxy_box.dart:3923:13)
-#40     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#41     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#42     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#43     _RenderTheaterMixin.layoutChild (package:flutter/src/widgets/overlay.dart:1084:13)
-#44     _RenderTheater.performLayout (package:flutter/src/widgets/overlay.dart:1429:9)
-#45     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#46     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#47     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#48     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#49     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#50     ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
-#51     RenderStack._computeSize (package:flutter/src/rendering/stack.dart:645:43)
-#52     RenderStack.performLayout (package:flutter/src/rendering/stack.dart:680:12)
-#53     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#54     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#55     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#56     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#57     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#58     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#59     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#60     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#61     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#62     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#63     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#64     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#65     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#66     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#67     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#68     RenderView.performLayout (package:flutter/src/rendering/view.dart:292:12)
-#69     RenderObject._layoutWithoutResize (package:flutter/src/rendering/object.dart:2551:7)
-#70     PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1143:18)
-#71     PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1156:15)
-#72     RendererBinding.drawFrame (package:flutter/src/rendering/binding.dart:629:23)
-#73     WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1304:13)
-#74     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
-#75     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
-#76     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
-#77     SchedulerBinding.scheduleWarmUpFrame.<anonymous closure> (package:flutter/src/scheduler/binding.dart:1055:9)
-#78     PlatformDispatcher.scheduleWarmUpFrame.<anonymous closure> (dart:ui/platform_dispatcher.dart:906:16)
-#82     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:193:12)
-(elided 3 frames from class _Timer and dart:async-patch)
-
-════════════════════════════════════════════════════════════════════════════════
-Reloaded 1 of 2827 libraries in 360ms (compile: 39 ms, reload: 125 ms, reassemble: 164 ms).
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-The following _TypeError was thrown building LayoutBuilder:
-Null check operator used on a null value
-
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-
-When the exception was thrown, this was the stack:
-#0      ThemeContext.text (package:bnood/core/config/theme/app_colors.dart:289:58)
-#1      _VoucherDateSheetPageState.build.<anonymous closure> (package:bnood/features/vouchers/voucher_date_sheet.dart:125:74)
-#2      _LayoutBuilderElement._rebuildWithConstraints.updateChildCallback (package:flutter/src/widgets/layout_builder.dart:232:74)
-#3      BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3101:19)
-#4      _LayoutBuilderElement._rebuildWithConstraints (package:flutter/src/widgets/layout_builder.dart:270:12)
-#5      RenderAbstractLayoutBuilderMixin.layoutCallback (package:flutter/src/widgets/layout_builder.dart:333:38)
-#6      RenderObjectWithLayoutCallbackMixin.runLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:4054:33)
-#7      RenderObject.invokeLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:2819:17)
-#8      PipelineOwner._enableMutationsToDirtySubtrees (package:flutter/src/rendering/object.dart:1189:15)
-#9      RenderObject.invokeLayoutCallback (package:flutter/src/rendering/object.dart:2818:14)
-#10     RenderObjectWithLayoutCallbackMixin.runLayoutCallback (package:flutter/src/rendering/object.dart:4054:5)
-#11     _RenderLayoutBuilder.performLayout (package:flutter/src/widgets/layout_builder.dart:447:5)
-#12     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#13     ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
-#14     RenderStack._computeSize (package:flutter/src/rendering/stack.dart:645:43)
-#15     RenderStack.performLayout (package:flutter/src/rendering/stack.dart:680:12)
-#16     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#17     RenderPadding.performLayout (package:flutter/src/rendering/shifted_box.dart:262:12)
-#18     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#19     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#20     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#21     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#22     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1549:11)
-#23     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#24     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#25     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#26     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#27     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#28     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#29     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#30     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#31     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#32     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#33     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#34     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#35     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#36     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#37     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#38     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#39     RenderOffstage.performLayout (package:flutter/src/rendering/proxy_box.dart:3923:13)
-#40     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#41     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#42     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#43     _RenderTheaterMixin.layoutChild (package:flutter/src/widgets/overlay.dart:1084:13)
-#44     _RenderTheater.performLayout (package:flutter/src/widgets/overlay.dart:1429:9)
-#45     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#46     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#47     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#48     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#49     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#50     ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
-#51     RenderStack._computeSize (package:flutter/src/rendering/stack.dart:645:43)
-#52     RenderStack.performLayout (package:flutter/src/rendering/stack.dart:680:12)
-#53     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#54     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#55     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#56     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#57     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#58     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#59     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#60     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#61     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#62     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#63     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#64     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#65     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#66     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#67     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#68     RenderView.performLayout (package:flutter/src/rendering/view.dart:292:12)
-#69     RenderObject._layoutWithoutResize (package:flutter/src/rendering/object.dart:2551:7)
-#70     PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1143:18)
-#71     PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1156:15)
-#72     RendererBinding.drawFrame (package:flutter/src/rendering/binding.dart:629:23)
-#73     WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1304:13)
-#74     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
-#75     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
-#76     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
-#77     SchedulerBinding.scheduleWarmUpFrame.<anonymous closure> (package:flutter/src/scheduler/binding.dart:1055:9)
-#78     PlatformDispatcher.scheduleWarmUpFrame.<anonymous closure> (dart:ui/platform_dispatcher.dart:906:16)
-#82     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:193:12)
-(elided 3 frames from class _Timer and dart:async-patch)
-
-════════════════════════════════════════════════════════════════════════════════
-Reloaded 1 of 2827 libraries in 414ms (compile: 38 ms, reload: 131 ms, reassemble: 198 ms).
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-The following _TypeError was thrown building LayoutBuilder:
-Null check operator used on a null value
-
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-
-When the exception was thrown, this was the stack:
-#0      ThemeContext.text (package:bnood/core/config/theme/app_colors.dart:289:58)
-#1      _VoucherDateSheetPageState.build.<anonymous closure> (package:bnood/features/vouchers/voucher_date_sheet.dart:125:74)
-#2      _LayoutBuilderElement._rebuildWithConstraints.updateChildCallback (package:flutter/src/widgets/layout_builder.dart:232:74)
-#3      BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3101:19)
-#4      _LayoutBuilderElement._rebuildWithConstraints (package:flutter/src/widgets/layout_builder.dart:270:12)
-#5      RenderAbstractLayoutBuilderMixin.layoutCallback (package:flutter/src/widgets/layout_builder.dart:333:38)
-#6      RenderObjectWithLayoutCallbackMixin.runLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:4054:33)
-#7      RenderObject.invokeLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:2819:17)
-#8      PipelineOwner._enableMutationsToDirtySubtrees (package:flutter/src/rendering/object.dart:1189:15)
-#9      RenderObject.invokeLayoutCallback (package:flutter/src/rendering/object.dart:2818:14)
-#10     RenderObjectWithLayoutCallbackMixin.runLayoutCallback (package:flutter/src/rendering/object.dart:4054:5)
-#11     _RenderLayoutBuilder.performLayout (package:flutter/src/widgets/layout_builder.dart:447:5)
-#12     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#13     ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
-#14     RenderStack._computeSize (package:flutter/src/rendering/stack.dart:645:43)
-#15     RenderStack.performLayout (package:flutter/src/rendering/stack.dart:680:12)
-#16     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#17     RenderPadding.performLayout (package:flutter/src/rendering/shifted_box.dart:262:12)
-#18     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#19     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#20     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#21     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#22     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1549:11)
-#23     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#24     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#25     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#26     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#27     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#28     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#29     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#30     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#31     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#32     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#33     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#34     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#35     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#36     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#37     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#38     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#39     RenderOffstage.performLayout (package:flutter/src/rendering/proxy_box.dart:3923:13)
-#40     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#41     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#42     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#43     _RenderTheaterMixin.layoutChild (package:flutter/src/widgets/overlay.dart:1084:13)
-#44     _RenderTheater.performLayout (package:flutter/src/widgets/overlay.dart:1429:9)
-#45     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#46     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#47     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#48     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#49     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#50     ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
-#51     RenderStack._computeSize (package:flutter/src/rendering/stack.dart:645:43)
-#52     RenderStack.performLayout (package:flutter/src/rendering/stack.dart:680:12)
-#53     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#54     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#55     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#56     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#57     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#58     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#59     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#60     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#61     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#62     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#63     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#64     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#65     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#66     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:118:18)
-#67     RenderObject.layout (package:flutter/src/rendering/object.dart:2700:7)
-#68     RenderView.performLayout (package:flutter/src/rendering/view.dart:292:12)
-#69     RenderObject._layoutWithoutResize (package:flutter/src/rendering/object.dart:2551:7)
-#70     PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1143:18)
-#71     PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1156:15)
-#72     RendererBinding.drawFrame (package:flutter/src/rendering/binding.dart:629:23)
-#73     WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1304:13)
-#74     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
-#75     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
-#76     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
-#77     SchedulerBinding.scheduleWarmUpFrame.<anonymous closure> (package:flutter/src/scheduler/binding.dart:1055:9)
-#78     PlatformDispatcher.scheduleWarmUpFrame.<anonymous closure> (dart:ui/platform_dispatcher.dart:906:16)
-#82     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:193:12)
-(elided 3 frames from class _Timer and dart:async-patch)
-
-════════════════════════════════════════════════════════════════════════════════
-Reloaded 1 of 2827 libraries in 424ms (compile: 42 ms, reload: 152 ms, reassemble: 193 ms).
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
-
-════════ Exception caught by widgets library ═══════════════════════════════════
-Null check operator used on a null value
-The relevant error-causing widget was:
-    LayoutBuilder LayoutBuilder:file:///Users/macbook/Developer/flutter%20projects/bnood/lib/features/vouchers/voucher_date_sheet.dart:107:13
-════════════════════════════════════════════════════════════════════════════════
+Restarted application in 734ms.
+[GoRouter] Full paths for routes:
+           ├─/splash
+           ├─/auth/bootstrap
+           ├─/auth/login
+           ├─/auth/register (RegisterScreen)
+           ├─/auth/register/verify (RegisterVerifyScreen)
+           ├─/auth/complete-profile
+           ├─/auth/forgot-password (ForgotPasswordScreen)
+           ├─/auth/forgot-password/verify (ForgotVerifyScreen)
+           ├─/auth/reset-password (ResetPasswordScreen)
+           ├─/auth/change-password (ChangePasswordScreen)
+           ├─/remote (RemoteWorkspaceScreen)
+           ├─/profile (UserProfileScreen)
+           ├─/settings (AppSettingsScreen)
+           ├─ (ShellRoute)
+           │ ├─/home (AppShellTabGate)
+           │ ├─/clients (AppShellTabGate)
+           │ ├─/directory (AppShellTabGate)
+           │ └─/items (AppShellTabGate)
+           ├─/clients/:clientId (ClientDetailScreen)
+           ├─/clients/:clientId/movements (MovementsListScreen)
+           ├─/clients/:clientId/craftsmen (ClientCraftsmenListScreen)
+           ├─/clients/:clientId/items (ClientItemsStatsScreen)
+           ├─/clients/:clientId/statement (ClientStatementScreen)
+           ├─/providers/:providerId (ProviderDetailScreen)
+           ├─/suppliers/:supplierId (SupplierDetailScreen)
+           ├─/suppliers/:supplierId/statement (SupplierStatementScreen)
+           └─/craftsmen/:craftsmanId (CraftsmanDetailScreen)
+[GoRouter] setting initial location /splash
+[ApiClient] ┌─ API ► GET ───────────────────────────
+            │ http://bnood-admin.test/api/v1/auth/me
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └─────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 148ms ────────────────────────────
+            │ http://bnood-admin.test/api/v1/auth/me
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "User retrieved successfully",
+            │     "data": {
+            │       "user": {
+            │         "id": "01m6yvx9vrx5k74an9kmctjvwy",
+            │         "phone": "+201014146448",
+            │         "name": "Osama heikal",
+            │         "phone_verified_at": "2026-11-09T00:39:10+00:00"
+            │       }
+            │     }
+            │   }
+            └───────────────────────────────────────────────────────────
+[GoRouter] going to /home
+[GoRouter] Using MaterialApp configuration
+[ApiClient] ┌─ API ► GET ────────────────────────────────
+            │ http://bnood-admin.test/api/v1/subscription
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────────────
+[ApiClient] ┌─ API ► GET ────────────────────────
+            │ http://bnood-admin.test/api/v1/home
+            │ Headers:
+            │   Authorization: ***
+            │   accept: application/json
+            │   content-type: application/json
+            │ Body:
+            │   (empty)
+            └──────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 42ms ───────────────────────────────
+            │ http://bnood-admin.test/api/v1/home
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Home summary retrieved successfully.",
+            │     "data": {
+            │       "received": 165000000,
+            │       "spent": 16000000,
+            │       "remaining": 149000000,
+            │       "clients": [
+            │         {
+            │           "id": "01m6zqqvrgwztxx4vamz7pe8xk",
+            │           "name": "Osama",
+            │           "received": 65000000,
+            │           "spent": 0,
+            │           "remaining": 65000000
+            │         },
+            │         {
+            │           "id": "01m6zvn4gpjbpx4gn1pt793e4q",
+            │           "name": "احمد",
+            │           "received": 100000000,
+            │           "spent": 16000000,
+            │           "remaining": 84000000
+            │         },
+            │         {
+            │           "id": "01m6zvnbq07kn6874wr20afpde",
+            │           "name": "محمود",
+            │           "received": 0,
+            │           "spent": 0,
+            │           "remaining": 0
+            │         }
+            │       ],
+            │       "craftsmen": [
+            │         {
+            │           "id": "01m6ztt4x4a2f16r1e894rj363",
+            │           "name": "أحمد السباك",
+            │           "last_activity_at": "2026-11-09T00:00:00+00:00",
+            │           "paid": 0,
+            │           "remaining": 5000000,
+            │           "clients_count": 1
+            │         },
+            │         {
+            │           "id": "01m6zvxayp92jn0v5jw455qebz",
+            │           "name": "محمود النجار",
+            │           "last_activity_at": "2026-11-09T00:00:00+00:00",
+            │           "paid": 3000000,
+            │           "remaining": 5000000,
+            │           "clients_count": 1
+            │         }
+            │       ]
+            │     }
+            │   }
+            └─────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 45ms ───────────────────────────────────────
+            │ http://bnood-admin.test/api/v1/subscription
+            │ Response body:
+            │   {
+            │     "success": true,
+            │     "message": "Subscription status retrieved.",
+            │     "data": {
+            │       "paywall_enabled": true,
+            │       "entitlements": {
+            │         "package_slug": "free",
+            │         "package_name": "Free",
+            │         "is_premium": false,
+            │         "premium_avatar": false,
+            │         "expires_at": null,
+            │         "days_remaining": null,
+            │         "subscription_status": null,
+            │         "active_projects_count": 3,
+            │         "active_project_cap": 1,
+            │         "can_create_active_project": false,
+            │         "can_mutate_financial_transactions": true,
+            │         "can_archive_client": true,
+            │         "show_paywall_surfaces": true,
+            │         "is_expired_premium": false
+            │       },
+            │       "paywall": {
+            │         "title": "Keep working without limits",
+            │         "subtitle": "Unlimited active projects with Premium",
+            │         "benefits": [
+            │           "Unlimited active projects",
+            │           "Vouchers, items, and statements for all your projects",
+            │           "Manage clients and craftsmen in one place"
+            │         ],
+            │         "cta_subscribe_label": "Subscribe to Premium",
+            │         "cta_continue_free_label": "Continue for free",
+            │         "plans": [
+            │           {
+            │             "slug": "premium",
+            │             "name": "Premium",
+            │             "price_monthly_minor": 29900,
+            │             "price_yearly_minor": 299900,
+            │             "price_monthly_discounted_minor": null,
+            │             "price_yearly_discounted_minor": null,
+            │             "yearly_monthly_equivalent_minor": 24992,
+            │             "yearly_billed_total_minor": 299900,
+            │             "badge_text": "Save 2 months"
+            │           }
+            │         ],
+            │         "offer": null
+            │       }
+            │     }
+            │   }
+            └─────────────────────────────────────────────────────────────────────
+[GoRouter] pushing /profile
+[GoRouter] Using MaterialApp configuration
+[GoRouter] pushing /settings
+[GoRouter] pushing /profile
+[GoRouter] pushing /settings

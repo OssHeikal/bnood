@@ -73,6 +73,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeAppName => 'بنود';
 
   @override
+  String get homeGreetingMorning => 'صباح الخير';
+
+  @override
+  String get homeGreetingEvening => 'مساء الخير';
+
+  @override
+  String get userProfileTitle => 'الملف الشخصي';
+
+  @override
+  String craftsmanLinkedClientsMeta(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عميل مرتبط',
+      many: '$count عميلًا مرتبطًا',
+      few: '$count عملاء مرتبطين',
+      two: 'عميلان مرتبطان',
+      one: 'عميل واحد مرتبط',
+      zero: 'لا عملاء مرتبطين',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get homeSubtitle => 'حسابات التشطيب ببساطة';
 
   @override
@@ -1116,6 +1140,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'تم تسجيل الدخول. بيانات المشاريع على السحابة غير متاحة الآن.';
 
   @override
+  String get authRemoteWorkspaceMovedBody =>
+      'إدارة الحساب انتقلت إلى الملف الشخصي والإعدادات.';
+
+  @override
   String get shellTabNotOnlineTitle => 'غير متاح على الإنترنت بعد';
 
   @override
@@ -1184,4 +1212,99 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get authPasswordChangedSuccess =>
       'تم تغيير كلمة المرور. استخدم الكلمة الجديدة في المرة القادمة.';
+
+  @override
+  String get authDisplayNameTooLong => 'الاسم طويل. الحد الأقصى 120 حرفًا.';
+
+  @override
+  String get profilePersonalSection => 'البيانات الشخصية';
+
+  @override
+  String get profileSecuritySection => 'الأمان';
+
+  @override
+  String get profileDangerSection => 'إغلاق الحساب';
+
+  @override
+  String get profileEditNameTitle => 'تعديل الاسم';
+
+  @override
+  String get profileChangePasswordHint => 'حدّث كلمة مرور تسجيل الدخول.';
+
+  @override
+  String get profileDeleteAccountHint =>
+      'إغلاق الحساب نهائيًا وتسجيل الخروج من كل الأجهزة.';
+
+  @override
+  String get authDeleteAccount => 'حذف الحساب';
+
+  @override
+  String get authDeleteAccountConfirmTitle => 'حذف حسابك؟';
+
+  @override
+  String get authDeleteAccountConfirmBody =>
+      'أدخل كلمة المرور الحالية للتأكيد. لا يمكن التراجع.';
+
+  @override
+  String get authDeleteAccountSuccess => 'تم إغلاق حسابك.';
+
+  @override
+  String get authAccountDeletedMessage => 'هذا الحساب مُغلق بالفعل.';
+
+  @override
+  String get authLogoutConfirmTitle => 'تسجيل الخروج؟';
+
+  @override
+  String get authLogoutConfirmBody =>
+      'ستحتاج لتسجيل الدخول مجددًا لمتابعة بياناتك السحابية.';
+
+  @override
+  String get paywallBenefitsHeading => 'مزايا PREMIUM';
+
+  @override
+  String paywallBilledYearly(String amount) {
+    return 'يتحسب سنوياً $amount';
+  }
+
+  @override
+  String get paywallBilledMonthly => 'يتحسب شهرياً';
+
+  @override
+  String get paywallPerMonthSuffix => ' / الشهر';
+
+  @override
+  String get paywallPlanYearly => 'سنوية';
+
+  @override
+  String get paywallPlanMonthly => 'شهرية';
+
+  @override
+  String get paywallSubscribeCta => 'اشترك في Premium';
+
+  @override
+  String get paywallContinueFree => 'الاستمرار مجاناً';
+
+  @override
+  String get subscriptionPaymentNotConnectedYet =>
+      'الدفع داخل التطبيق غير متصل بعد.';
+
+  @override
+  String get profileSubscriptionSection => 'الاشتراك';
+
+  @override
+  String get profileSubscriptionFreeBlurb =>
+      'ترقية Premium لفتح مشاريع نشطة بلا حد ومزايا إضافية.';
+
+  @override
+  String get profileSubscriptionSubscribeCta => 'اشترك في Premium';
+
+  @override
+  String profileSubscriptionRenewsOn(String date) {
+    return 'تتجدد في $date';
+  }
+
+  @override
+  String profileSubscriptionDaysRemaining(int count) {
+    return '$count يوم متبقٍ';
+  }
 }

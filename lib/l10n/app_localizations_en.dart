@@ -73,6 +73,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAppName => 'Bnood';
 
   @override
+  String get homeGreetingMorning => 'Good morning';
+
+  @override
+  String get homeGreetingEvening => 'Good evening';
+
+  @override
+  String get userProfileTitle => 'Profile';
+
+  @override
+  String craftsmanLinkedClientsMeta(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count linked clients',
+      one: '1 linked client',
+      zero: 'No linked clients',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get homeSubtitle => 'Finishing funds, simply';
 
   @override
@@ -1129,6 +1150,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'You are signed in. Cloud project data is not available yet.';
 
   @override
+  String get authRemoteWorkspaceMovedBody =>
+      'Account management is in Profile and Settings.';
+
+  @override
   String get shellTabNotOnlineTitle => 'Not available online yet';
 
   @override
@@ -1198,4 +1223,100 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authPasswordChangedSuccess =>
       'Password changed. Use the new one next time.';
+
+  @override
+  String get authDisplayNameTooLong =>
+      'Name is too long. Use at most 120 characters.';
+
+  @override
+  String get profilePersonalSection => 'Personal details';
+
+  @override
+  String get profileSecuritySection => 'Security';
+
+  @override
+  String get profileDangerSection => 'Account closure';
+
+  @override
+  String get profileEditNameTitle => 'Edit name';
+
+  @override
+  String get profileChangePasswordHint => 'Update your sign-in password.';
+
+  @override
+  String get profileDeleteAccountHint =>
+      'Permanently close your account and sign out on all devices.';
+
+  @override
+  String get authDeleteAccount => 'Delete account';
+
+  @override
+  String get authDeleteAccountConfirmTitle => 'Delete your account?';
+
+  @override
+  String get authDeleteAccountConfirmBody =>
+      'Enter your current password to confirm. This cannot be undone.';
+
+  @override
+  String get authDeleteAccountSuccess => 'Your account was closed.';
+
+  @override
+  String get authAccountDeletedMessage => 'This account is already closed.';
+
+  @override
+  String get authLogoutConfirmTitle => 'Sign out?';
+
+  @override
+  String get authLogoutConfirmBody =>
+      'You will need to sign in again to continue using your cloud data.';
+
+  @override
+  String get paywallBenefitsHeading => 'PREMIUM BENEFITS';
+
+  @override
+  String paywallBilledYearly(String amount) {
+    return 'Billed yearly at $amount';
+  }
+
+  @override
+  String get paywallBilledMonthly => 'Billed monthly';
+
+  @override
+  String get paywallPerMonthSuffix => ' / month';
+
+  @override
+  String get paywallPlanYearly => 'Yearly';
+
+  @override
+  String get paywallPlanMonthly => 'Monthly';
+
+  @override
+  String get paywallSubscribeCta => 'Subscribe to Premium';
+
+  @override
+  String get paywallContinueFree => 'Continue for free';
+
+  @override
+  String get subscriptionPaymentNotConnectedYet =>
+      'In-app payment is not connected yet.';
+
+  @override
+  String get profileSubscriptionSection => 'Subscription';
+
+  @override
+  String get profileSubscriptionFreeBlurb =>
+      'Upgrade to Premium for unlimited active projects and more.';
+
+  @override
+  String get profileSubscriptionSubscribeCta => 'Subscribe to Premium';
+
+  @override
+  String profileSubscriptionRenewsOn(String date) {
+    return 'Renews on $date';
+  }
+
+  @override
+  String profileSubscriptionDaysRemaining(int count) {
+    return '$count days remaining';
+  }
 }

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/clients/clients_providers.dart';
+import '../../core/money/remote_money_units.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/repositories/bnood_repository.dart';
 import '../../core/resources/gen/assets.gen.dart';
@@ -19,6 +20,7 @@ import '../home/home_foundation_scope.dart';
 import '../vouchers/inline_create_routes.dart';
 import 'clients_list_paging.dart';
 import 'widgets/client_balance_card.dart';
+import '../subscription/subscription_gates.dart';
 import 'widgets/clients_list_filter_chips.dart';
 
 class ClientsListScreen extends ConsumerStatefulWidget {
@@ -51,6 +53,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
   }
 
   Future<void> _addClient(BuildContext context, WidgetRef ref) async {
+    if (!await guardCreateActiveProject(context, ref)) return;
     final createdId = await CustomBottomSheet.show<String?>(
       context: context,
       builder: (_) => const InlineCreateClientPage(padForSystemChrome: false),
@@ -196,7 +199,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                   amountPiastres: row.remainingPiastres,
                   accentKey: clientAccentKeyFor(row.client.id),
                   localeCode: localeCode,
-                  minorPerMajor: remoteMoney ? 1000 : 100,
+                  minorPerMajor: remoteMoney ? RemoteMoneyUnits.minorPerMajor : 100,
                   onTap: () => context.push('/clients/${row.client.id}'),
                 );
               },

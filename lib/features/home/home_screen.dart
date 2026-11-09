@@ -7,14 +7,18 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/clients/clients_providers.dart';
+import '../../core/repositories/bnood_repository.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_amount.dart';
 import '../../core/widgets/app_fallback.dart';
-import '../../core/widgets/app_pressable.dart';
 import '../../app/widgets/shell_nav_icon.dart';
-import '../settings/app_settings_sheet.dart';
+import '../../core/widgets/custom_app_bar.dart';
+import '../auth/auth_controller.dart';
+import '../auth/auth_paths.dart';
+import '../providers/providers_list_paging.dart';
+import '../providers/widgets/remote_craftsman_summary_card.dart';
 import 'home_foundation_scope.dart';
 import '../../core/widgets/app_card.dart';
 import 'widgets/home_person_card.dart';
@@ -22,6 +26,7 @@ import '../../core/widgets/skeleton/async_value_body.dart';
 import 'widgets/home_loading_skeleton.dart';
 import 'widgets/home_section_header.dart';
 import 'widgets/home_stat_grid.dart';
+import 'widgets/home_identity_title.dart';
 import '../suppliers/widgets/directory_person_card.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -31,6 +36,12 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
+    final user = ref.watch(authControllerProvider).user;
+    final remoteMoney = ref.watch(remoteClientsEnabledProvider);
+    final moneyScale = remoteMoney ? RemoteMoneyUnits.minorPerMajor : 100;
+    final displayName = user?.name?.trim();
+    final showIdentityHeader = remoteMoney && displayName != null && displayName.isNotEmpty;
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
 
     return HomeFoundationScope(
       child: Builder(
@@ -41,27 +52,36 @@ class HomeScreen extends ConsumerWidget {
           final clients = ref.watch(homeClientBalancesProvider);
           final suppliers = ref.watch(homeSupplierSpendsProvider);
           final craftsmen = ref.watch(homeCraftsmenProvider);
-          final remoteMoney = ref.watch(remoteClientsEnabledProvider);
-          final moneyScale = remoteMoney ? RemoteMoneyUnits.minorPerMajor : 100;
-
-          final topInset = MediaQuery.paddingOf(context).top;
 
           return Scaffold(
             backgroundColor: colors.canvas,
+            appBar: CustomAppBar(
+              automaticallyImplyLeading: false,
+              titleWidget: showIdentityHeader
+                  ? HomeIdentityTitle(displayName: displayName)
+                  : null,
+              title: showIdentityHeader ? null : l10n.homeAppName,
+              actions: [
+                CustomAppBarAction(
+                  tooltip: l10n.settingsTitle,
+                  onPressed: () => context.push(AuthPaths.settings),
+                  child: ShellNavIcon(
+                    asset: Assets.icons.settingsOutline,
+                    size: AppSize.icon,
+                    color: colors.onSurface,
+                    semanticsLabel: l10n.settingsTitle,
+                  ),
+                ),
+              ],
+            ),
             body: ListView(
               padding: EdgeInsets.fromLTRB(
                 AppSize.screenPadding,
-                topInset + AppSize.spaceMD,
-                AppSize.screenPadding,
                 AppSize.spaceMD,
+                AppSize.screenPadding,
+                bottomInset + AppSize.spaceMD,
               ),
               children: [
-                _HomeTopBar(
-                  title: l10n.homeAppName,
-                  subtitle: l10n.homeSubtitle,
-                  onSettings: () => showAppSettingsSheet(context),
-                ),
-                AppSize.spaceMD.gap,
                 Text(l10n.homeTotalsCaption, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
                 AppSize.spaceMD.gap,
                 AsyncValueBody(
@@ -85,7 +105,12 @@ class HomeScreen extends ConsumerWidget {
                 HomeSectionHeader(
                   title: l10n.activeClients,
                   seeAllLabel: l10n.seeAll,
-                  onSeeAll: () => context.go('/clients'),
+                  onSeeAll: () {
+                    if (remoteMoney) {
+                      ref.read(clientsListFilterProvider.notifier).state = ClientListArchiveFilter.active;
+                    }
+                    context.go('/clients');
+                  },
                 ),
                 AppSize.spaceSM.gap,
                 AsyncValueBody(
@@ -127,6 +152,7 @@ class HomeScreen extends ConsumerWidget {
                             amountPiastres: rows[i].remainingPiastres,
                             accentKey: homeAccentKeyFor(rows[i].client.id),
                             localeCode: localeCode,
+                            minorPerMajor: moneyScale,
                             onTap: () => context.push('/clients/${rows[i].client.id}'),
                           ),
                         ],
@@ -138,7 +164,15 @@ class HomeScreen extends ConsumerWidget {
                 HomeSectionHeader(
                   title: l10n.homeCraftsmenSection,
                   seeAllLabel: l10n.seeAll,
-                  onSeeAll: () => context.go('/directory?tab=craftsmen'),
+                  onSeeAll: () {
+                    if (remoteMoney) {
+                      ref.read(providersListTypeFilterProvider.notifier).state =
+                          ProvidersListTypeFilter.craftsman;
+                      context.go('/directory');
+                    } else {
+                      context.go('/directory?tab=craftsmen');
+                    }
+                  },
                 ),
                 AppSize.spaceSM.gap,
                 AsyncValueBody(
@@ -166,7 +200,15 @@ class HomeScreen extends ConsumerWidget {
                           actions: [
                             AppFallbackAction(
                               label: l10n.seeAll,
-                              onPressed: () => context.go('/directory?tab=craftsmen'),
+                              onPressed: () {
+                                if (remoteMoney) {
+                                  ref.read(providersListTypeFilterProvider.notifier).state =
+                                      ProvidersListTypeFilter.craftsman;
+                                  context.go('/directory');
+                                } else {
+                                  context.go('/directory?tab=craftsmen');
+                                }
+                              },
                               role: AppFallbackActionRole.tertiary,
                             ),
                           ],
@@ -177,123 +219,90 @@ class HomeScreen extends ConsumerWidget {
                       children: [
                         for (var i = 0; i < rows.length; i++) ...[
                           if (i > 0) AppSize.spaceMD.gap,
-                          DirectoryPersonCard(
-                            name: rows[i].craftsman.name,
-                            trade: rows[i].craftsman.trade,
-                            paidPiastres: rows[i].paidPiastres,
-                            remainingPiastres: rows[i].remainingPiastres,
-                            paidInTrailing: true,
-                            accentKey: homeAccentKeyFor(rows[i].craftsman.id),
-                            localeCode: localeCode,
-                            showOverflowMenu: false,
-                            onOpenDetail: () => context.push('/craftsmen/${rows[i].craftsman.id}'),
-                          ),
+                          remoteMoney
+                              ? RemoteCraftsmanSummaryCard(
+                                  name: rows[i].craftsman.name,
+                                  accentKey: homeAccentKeyFor(rows[i].craftsman.id),
+                                  localeCode: localeCode,
+                                  clientsCount: rows[i].clientsCount ?? 0,
+                                  paidPiastres: rows[i].paidPiastres,
+                                  remainingPiastres: rows[i].remainingPiastres,
+                                  minorPerMajor: moneyScale,
+                                  onTap: () => context.push('/providers/${rows[i].craftsman.id}'),
+                                )
+                              : DirectoryPersonCard(
+                                  name: rows[i].craftsman.name,
+                                  trade: rows[i].craftsman.trade,
+                                  paidPiastres: rows[i].paidPiastres,
+                                  remainingPiastres: rows[i].remainingPiastres,
+                                  paidInTrailing: true,
+                                  accentKey: homeAccentKeyFor(rows[i].craftsman.id),
+                                  localeCode: localeCode,
+                                  showOverflowMenu: false,
+                                  onOpenDetail: () => context.push('/craftsmen/${rows[i].craftsman.id}'),
+                                ),
                         ],
                       ],
                     );
                   },
                 ),
-                AppSize.spaceXL.gap,
-                HomeSectionHeader(
-                  title: l10n.homeSupplierSpendSection,
-                  seeAllLabel: l10n.seeAll,
-                  onSeeAll: () => context.go('/directory'),
-                ),
-                AppSize.spaceSM.gap,
-                AsyncValueBody(
-                  value: suppliers,
-                  loadingPlaceholder: const HomePersonListSkeleton(count: 1),
-                  error: (e, _) => AppFallback(
-                    isError: true,
-                    icon: Icons.error_outline,
-                    title: l10n.homeLoadErrorTitle,
-                    actionLabel: l10n.retry,
-                    onAction: () => ref.read(homeSupplierSpendsProvider.notifier).refreshSilently(),
+                if (!remoteMoney) ...[
+                  AppSize.spaceXL.gap,
+                  HomeSectionHeader(
+                    title: l10n.homeSupplierSpendSection,
+                    seeAllLabel: l10n.seeAll,
+                    onSeeAll: () => context.go('/directory'),
                   ),
-                  data: (rows) {
-                    if (rows.isEmpty) {
-                      final colors = context.colors;
-                      return AppCard(
-                        child: AppFallback.section(
-                          leading: ShellNavIcon(
-                            asset: Assets.icons.materialsPackageOutline,
-                            color: colors.muted,
-                            size: AppSize.icon,
+                  AppSize.spaceSM.gap,
+                  AsyncValueBody(
+                    value: suppliers,
+                    loadingPlaceholder: const HomePersonListSkeleton(count: 1),
+                    error: (e, _) => AppFallback(
+                      isError: true,
+                      icon: Icons.error_outline,
+                      title: l10n.homeLoadErrorTitle,
+                      actionLabel: l10n.retry,
+                      onAction: () => ref.read(homeSupplierSpendsProvider.notifier).refreshSilently(),
+                    ),
+                    data: (rows) {
+                      if (rows.isEmpty) {
+                        final colors = context.colors;
+                        return AppCard(
+                          child: AppFallback.section(
+                            leading: ShellNavIcon(
+                              asset: Assets.icons.materialsPackageOutline,
+                              color: colors.muted,
+                              size: AppSize.icon,
+                            ),
+                            title: l10n.homeNoSupplierSpendTitle,
+                            description: l10n.homeNoSupplierSpendDescription,
                           ),
-                          title: l10n.homeNoSupplierSpendTitle,
-                          description: l10n.homeNoSupplierSpendDescription,
-                        ),
-                      );
-                    }
-                    return Column(
-                      children: [
-                        for (var i = 0; i < rows.length; i++) ...[
-                          if (i > 0) AppSize.spaceMD.gap,
-                          HomePersonCard(
-                            name: rows[i].supplier.name,
-                            amountPiastres: rows[i].spentPiastres,
-                            amountRole: AppAmountRole.spend,
-                            showAmountCaption: false,
-                            accentKey: homeAccentKeyFor(rows[i].supplier.id),
-                            localeCode: localeCode,
-                            onTap: () => context.push('/suppliers/${rows[i].supplier.id}'),
-                          ),
+                        );
+                      }
+                      return Column(
+                        children: [
+                          for (var i = 0; i < rows.length; i++) ...[
+                            if (i > 0) AppSize.spaceMD.gap,
+                            HomePersonCard(
+                              name: rows[i].supplier.name,
+                              amountPiastres: rows[i].spentPiastres,
+                              amountRole: AppAmountRole.spend,
+                              showAmountCaption: false,
+                              accentKey: homeAccentKeyFor(rows[i].supplier.id),
+                              localeCode: localeCode,
+                              onTap: () => context.push('/suppliers/${rows[i].supplier.id}'),
+                            ),
+                          ],
                         ],
-                      ],
-                    );
-                  },
-                ),
+                      );
+                    },
+                  ),
+                ],
               ],
             ),
           );
         },
       ),
-    );
-  }
-}
-
-class _HomeTopBar extends StatelessWidget {
-  const _HomeTopBar({required this.title, required this.subtitle, required this.onSettings});
-
-  final String title;
-  final String subtitle;
-  final VoidCallback onSettings;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final text = context.text;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(title, style: text.pageTitle),
-              const SizedBox(height: 2),
-              Text(subtitle, style: text.supporting.copyWith(color: colors.onSurfaceMuted)),
-            ],
-          ),
-        ),
-        AppPressable(
-          onPressed: onSettings,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: colors.surface,
-              borderRadius: BorderRadius.circular(AppSize.radiusSM),
-              boxShadow: [colors.buttonShadow],
-            ),
-            child: SizedBox(
-              width: AppSize.hitMin,
-              height: AppSize.hitMin,
-              child: Center(
-                child: ShellNavIcon(asset: Assets.icons.settingsOutline, color: colors.onSurface),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

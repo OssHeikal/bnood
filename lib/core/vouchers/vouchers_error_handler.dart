@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/auth_controller.dart';
 import '../../features/auth/auth_paths.dart';
+import '../../features/subscription/subscription_error_handler.dart';
 import '../api/auth_api_exception.dart';
 
 Future<bool> handleVouchersApiAuthError({
@@ -18,6 +19,9 @@ Future<bool> handleVouchersApiAuthError({
   if (error.isSessionExpired || (error.isUnauthorized && error.code != 'invalid_credentials')) {
     await ref.read(authControllerProvider.notifier).logout();
     if (context.mounted) context.go(AuthPaths.login);
+    return true;
+  }
+  if (await handleSubscriptionApiError(context: context, ref: ref, error: error)) {
     return true;
   }
   return false;

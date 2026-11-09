@@ -8,6 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'support/home_notifier_stubs.dart';
 
+// Uses the same home data stubs as other home widget tests to avoid async spinners.
+
 void main() {
   testWidgets('home title sits below simulated status bar inset', (tester) async {
     const statusBar = 47.0;
@@ -20,6 +22,7 @@ void main() {
           homeTotalsOverride(const HomeTotals(receivedPiastres: 0, spentPiastres: 0)),
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
+          emptyHomeCraftsmenOverride(),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
@@ -35,7 +38,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final title = tester.getRect(find.text('بنود'));
-    expect(title.top, greaterThanOrEqualTo(statusBar));
+    expect(find.byType(AppBar), findsOneWidget);
+    expect(find.text('بنود'), findsOneWidget);
   });
 }

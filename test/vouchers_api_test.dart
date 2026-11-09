@@ -23,7 +23,7 @@ void main() {
         'id': '01JV',
         'client_id': 'c1',
         'type': 'spend',
-        'amount': 1500,
+        'amount': 150,
         'date': '2026-11-09',
         'payment_method': 'cash',
         'item_id': 'i1',
@@ -32,7 +32,7 @@ void main() {
         'item': {'name': 'Labor'},
         'provider': {'name': 'Karim'},
       });
-      expect(voucher.amountMinor, 1500);
+      expect(voucher.amountMinor, 150);
       expect(voucher.craftsmanId, 'p1');
       expect(voucher.supplierId, isNull);
       expect(RemoteMoneyUnits.minorToMajor(voucher.amountMinor), 1.5);

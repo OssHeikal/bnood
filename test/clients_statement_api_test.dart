@@ -20,17 +20,17 @@ void main() {
       final statement = AppClientStatement.fromDataJson({
         'from': '2026-01-01',
         'to': '2026-11-09',
-        'received': 10_000_000,
-        'spent': 8_000_000,
-        'remaining': 2_000_000,
+        'received': 1_000_000,
+        'spent': 800_000,
+        'remaining': 200_000,
         'items': [
-          {'id': 'i1', 'name': 'Tiles', 'spent': 5_000_000},
-          {'id': 'i2', 'name': 'Paint', 'spent': 3_000_000},
+          {'id': 'i1', 'name': 'Tiles', 'spent': 500_000},
+          {'id': 'i2', 'name': 'Paint', 'spent': 300_000},
         ],
       });
       expect(statement.from, '2026-01-01');
       expect(statement.items.length, 2);
-      expect(statement.items.first.spentMinor, 5_000_000);
+      expect(statement.items.first.spentMinor, 500_000);
       expect(RemoteMoneyFormat.formatMinor(statement.items.first.spentMinor), '5,000 EGP');
     });
   });
@@ -40,15 +40,15 @@ void main() {
       final item = AppClientStatementItemSpend.fromDataJson({
         'id': '01JVITEM',
         'name': 'Plumbing',
-        'spent': 13_000_000,
-        'materials': 10_000_000,
-        'labor': 3_000_000,
+        'spent': 1_300_000,
+        'materials': 1_000_000,
+        'labor': 300_000,
         'icon_key': 'plumbing',
         'color_key': 'blue',
       });
-      expect(item.materialsMinor, 10_000_000);
-      expect(item.laborMinor, 3_000_000);
-      expect(item.spentMinor, 13_000_000);
+      expect(item.materialsMinor, 1_000_000);
+      expect(item.laborMinor, 300_000);
+      expect(item.spentMinor, 1_300_000);
       expect(item.iconKey, 'plumbing');
       expect(item.colorKey, 'blue');
     });
@@ -59,18 +59,18 @@ void main() {
           {
             'id': 'i1',
             'name': 'Labor',
-            'spent': 1500,
+            'spent': 150,
             'materials': 0,
-            'labor': 1500,
+            'labor': 150,
             'icon_key': 'category',
             'color_key': 'teal',
           },
         ],
       });
       expect(spend.items.single.name, 'Labor');
-      expect(spend.items.single.spentMinor, 1500);
-      expect(spend.items.single.laborMinor, 1500);
-      expect(RemoteMoneyFormat.formatMinor(1500), '1.5 EGP');
+      expect(spend.items.single.spentMinor, 150);
+      expect(spend.items.single.laborMinor, 150);
+      expect(RemoteMoneyFormat.formatMinor(150), '1.5 EGP');
     });
   });
 

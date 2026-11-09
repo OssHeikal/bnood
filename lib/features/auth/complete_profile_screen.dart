@@ -75,7 +75,7 @@ class CompleteProfileScreen extends ConsumerWidget {
               fieldHeight: AppSize.fieldHeightComfortable,
               errorMessage: ui.errorFor('name'),
               textInputAction: TextInputAction.done,
-              validator: (v) => validateRequired(l10n, v?.trim()),
+              validator: (v) => validateDisplayName(l10n, v),
             ),
             AppSize.spaceXL.gap,
             AppButton.primary(

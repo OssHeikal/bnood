@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_shape.dart';
 import '../../../core/config/theme/app_size.dart';
+import '../../../core/money/remote_money_units.dart';
 import '../../../core/utils/extensions/bidi_isolate.dart';
 import '../../../core/providers_api/app_provider_record.dart';
 import '../../../core/theme/app_colors.dart' as legacy;
@@ -13,8 +15,9 @@ import '../../../core/widgets/app_overflow_menu.dart';
 import '../../../core/widgets/app_pressable.dart';
 import '../../../features/suppliers/widgets/directory_person_card.dart';
 import '../../../l10n/app_localizations.dart';
+import 'remote_craftsman_summary_card.dart';
 
-class ProvidersListTile extends StatelessWidget {
+class ProvidersListTile extends ConsumerWidget {
   const ProvidersListTile({
     super.key,
     required this.provider,
@@ -31,10 +34,31 @@ class ProvidersListTile extends StatelessWidget {
   static const _stripeWidth = 4.0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final l10n = AppLocalizations.of(context);
+
+    if (provider.type == AppProviderType.craftsman && provider.paidMinor != null) {
+      return RemoteCraftsmanSummaryCard(
+        name: provider.name,
+        accentKey: directoryAccentKeyFor(provider.id),
+        localeCode: localeCode,
+        clientsCount: provider.clientsCount ?? 0,
+        paidPiastres: provider.paidMinor!,
+        remainingPiastres: provider.remainingMinor,
+        minorPerMajor: RemoteMoneyUnits.minorPerMajor,
+        onTap: onOpenDetail,
+        overflowActions: craftsmanProviderOverflowActions(
+          l10n: l10n,
+          onOpenDetail: onOpenDetail,
+          onEdit: onEdit,
+          onDelete: onDelete,
+        ),
+      );
+    }
+
     final colors = context.colors;
     final text = context.text;
-    final l10n = AppLocalizations.of(context);
     final accent = legacy.AppColors.accent(directoryAccentKeyFor(provider.id));
     final kindMeta = provider.type == AppProviderType.supplier
         ? l10n.directorySupplierKindMeta

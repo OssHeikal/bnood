@@ -28,6 +28,36 @@ void main() {
       expect(provider.type, AppProviderType.supplier);
       expect(provider.phone, '+201012345678');
     });
+
+    test('craftsman parses paid remaining clients_count', () {
+      final provider = AppProvider.fromDataJson({
+        'id': '01JCRAFT',
+        'name': 'Ali',
+        'phone': null,
+        'type': 'craftsman',
+        'paid': 500_000,
+        'remaining': 250_000,
+        'clients_count': 2,
+        'created_at': '2026-11-09T10:00:00Z',
+        'updated_at': '2026-11-09T10:00:00Z',
+      });
+      expect(provider.paidMinor, 500_000);
+      expect(provider.remainingMinor, 250_000);
+      expect(provider.clientsCount, 2);
+    });
+
+    test('supplier ignores craftsman-only fields', () {
+      final provider = AppProvider.fromDataJson({
+        'id': '01JSUP',
+        'name': 'Steel',
+        'phone': null,
+        'type': 'supplier',
+        'created_at': '2026-11-09T10:00:00Z',
+        'updated_at': '2026-11-09T10:00:00Z',
+      });
+      expect(provider.paidMinor, isNull);
+      expect(provider.clientsCount, isNull);
+    });
   });
 
   group('ProvidersApi', () {

@@ -26,6 +26,7 @@ import '../../core/providers/app_providers.dart';
 import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/repositories/bnood_repository.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
+import '../subscription/subscription_gates.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_list_tile.dart';
@@ -550,6 +551,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       return;
     }
     final remote = ref.read(remoteVouchersEnabledProvider);
+    if (remote && !await guardFinancialMutation(context, ref)) return;
     final amount = remote
         ? RemoteMoneyFormat.parseMajorInput(_amountCtrl.text)
         : MoneyFormat.parseEgpInput(_amountCtrl.text);

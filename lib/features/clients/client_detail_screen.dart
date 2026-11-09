@@ -10,6 +10,8 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_error_handler.dart';
+import '../subscription/subscription_error_handler.dart';
+import '../subscription/subscription_gates.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/providers/app_providers.dart';
@@ -207,6 +209,9 @@ class _ClientDetailBody extends ConsumerWidget {
       iconWidget: AppDecision.archiveDangerIcon(context),
     );
     if (answer != OverlayAnswer.confirmed || !context.mounted) return;
+    if (ref.read(remoteClientsEnabledProvider)) {
+      if (!await guardArchiveClient(context, ref)) return;
+    }
     try {
       if (ref.read(remoteClientsEnabledProvider)) {
         await ref.read(clientsRepositoryProvider).archiveClient(clientId);
@@ -218,6 +223,7 @@ class _ClientDetailBody extends ConsumerWidget {
     } on AuthApiException catch (e) {
       if (!context.mounted) return;
       if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) return;
+      if (await handleClientsApiSubscriptionError(context: context, ref: ref, error: e)) return;
       AppToaster.show(e.message, kind: ToastKind.failure);
     }
   }
@@ -302,7 +308,7 @@ class _ClientDetailBody extends ConsumerWidget {
             spentPiastres: data.spentPiastres,
             remainingPiastres: data.remainingPiastres,
             localeCode: localeCode,
-            minorPerMajor: data.usesRemoteMoney ? 1000 : 100,
+            minorPerMajor: data.usesRemoteMoney ? RemoteMoneyUnits.minorPerMajor : 100,
           ),
           AppSize.spaceLG.gap,
           ClientDetailActionGrid(
@@ -397,7 +403,7 @@ class _ClientDetailBody extends ConsumerWidget {
           spentPiastres: data.spentPiastres,
           remainingPiastres: data.remainingPiastres,
           localeCode: localeCode,
-          minorPerMajor: data.usesRemoteMoney ? 1000 : 100,
+          minorPerMajor: data.usesRemoteMoney ? RemoteMoneyUnits.minorPerMajor : 100,
         ),
         AppSize.spaceLG.gap,
         ClientDetailActionGrid(

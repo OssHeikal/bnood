@@ -21,6 +21,15 @@
   "remaining": "المتبقي",
   "activeClients": "عملاء نشطون",
   "homeAppName": "بنود",
+  "homeGreetingMorning": "صباح الخير",
+  "homeGreetingEvening": "مساء الخير",
+  "userProfileTitle": "الملف الشخصي",
+  "craftsmanLinkedClientsMeta": "{count,plural, =0{لا عملاء مرتبطين} =1{عميل واحد مرتبط} =2{عميلان مرتبطان} few{{count} عملاء مرتبطين} many{{count} عميلًا مرتبطًا} other{{count} عميل مرتبط}}",
+  "@craftsmanLinkedClientsMeta": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
   "homeSubtitle": "حسابات التشطيب ببساطة",
   "homeTotalsCaption": "للعملاء الناشطين فقط · منذ بداية كل مشروع",
   "homeSupplierSpendSection": "مصروفات الخامات للموردين",
@@ -498,5 +507,55 @@
   "authAccountExistsAnotherPhoneAction": "إدخال رقم آخر",
   "authFlowExpired": "انتهت هذه الخطوة. ابدأ من جديد.",
   "authPasswordResetSuccess": "تم تحديث كلمة المرور. سجّل الدخول بالكلمة الجديدة.",
-  "authPasswordChangedSuccess": "تم تغيير كلمة المرور. استخدم الكلمة الجديدة في المرة القادمة."
+  "authPasswordChangedSuccess": "تم تغيير كلمة المرور. استخدم الكلمة الجديدة في المرة القادمة.",
+  "authDisplayNameTooLong": "الاسم طويل. الحد الأقصى 120 حرفًا.",
+  "profilePersonalSection": "البيانات الشخصية",
+  "profileSecuritySection": "الأمان",
+  "profileDangerSection": "إغلاق الحساب",
+  "profileEditNameTitle": "تعديل الاسم",
+  "profileChangePasswordHint": "حدّث كلمة مرور تسجيل الدخول.",
+  "profileDeleteAccountHint": "إغلاق الحساب نهائيًا وتسجيل الخروج من كل الأجهزة.",
+  "authDeleteAccount": "حذف الحساب",
+  "authDeleteAccountConfirmTitle": "حذف حسابك؟",
+  "authDeleteAccountConfirmBody": "أدخل كلمة المرور الحالية للتأكيد. لا يمكن التراجع.",
+  "authDeleteAccountSuccess": "تم إغلاق حسابك.",
+  "authAccountDeletedMessage": "هذا الحساب مُغلق بالفعل.",
+  "authLogoutConfirmTitle": "تسجيل الخروج؟",
+  "authLogoutConfirmBody": "ستحتاج لتسجيل الدخول مجددًا لمتابعة بياناتك السحابية.",
+  "authRemoteWorkspaceMovedBody": "إدارة الحساب انتقلت إلى الملف الشخصي والإعدادات.",
+  "paywallBenefitsHeading": "مزايا PREMIUM",
+  "paywallBilledYearly": "يتحسب سنوياً {amount}",
+  "@paywallBilledYearly": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallBilledMonthly": "يتحسب شهرياً",
+  "paywallPerMonthSuffix": " / الشهر",
+  "paywallPlanYearly": "سنوية",
+  "paywallPlanMonthly": "شهرية",
+  "paywallSubscribeCta": "اشترك في Premium",
+  "paywallContinueFree": "الاستمرار مجاناً",
+  "subscriptionPaymentNotConnectedYet": "الدفع داخل التطبيق غير متصل بعد.",
+  "profileSubscriptionSection": "الاشتراك",
+  "profileSubscriptionFreeBlurb": "ترقية Premium لفتح مشاريع نشطة بلا حد ومزايا إضافية.",
+  "profileSubscriptionSubscribeCta": "اشترك في Premium",
+  "profileSubscriptionRenewsOn": "تتجدد في {date}",
+  "@profileSubscriptionRenewsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSubscriptionDaysRemaining": "{count} يوم متبقٍ",
+  "@profileSubscriptionDaysRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -84,7 +84,7 @@ class ClientDetailSnapshot {
   final List<ClientDetailMovementLine> latestMovements;
   final bool onlineIdentityOnly;
 
-  /// Online voucher/client balances use minor units per EGP × 1000.
+  /// Online voucher/client balances use minor units per EGP × 100.
   final bool usesRemoteMoney;
 
   final int? remainingFromServer;

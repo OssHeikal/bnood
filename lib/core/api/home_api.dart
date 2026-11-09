@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../home/app_home_dashboard.dart';
 import '../home/app_home_totals.dart';
 import 'api_response_parser.dart';
 import 'app_dio.dart';
@@ -42,7 +43,7 @@ class HomeApi {
     }
   }
 
-  Future<AppHomeTotals> getHomeTotals() {
+  Future<AppHomeDashboard> getHomeDashboard() {
     return _guard(() async {
       final response = await _dio.get<Map<String, dynamic>>(
         '/v1/home',
@@ -50,8 +51,10 @@ class HomeApi {
       );
       return ApiResponseParser.expectData(
         response,
-        (json) => AppHomeTotals.fromDataJson(json ?? const {}),
+        (json) => AppHomeDashboard.fromDataJson(json ?? const {}),
       );
     });
   }
+
+  Future<AppHomeTotals> getHomeTotals() async => (await getHomeDashboard()).totals;
 }

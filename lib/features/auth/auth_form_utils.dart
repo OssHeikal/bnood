@@ -15,6 +15,17 @@ String? validateRequired(AppLocalizations l10n, String? value) {
   return null;
 }
 
+const _displayNameMaxLength = 120;
+
+String? validateDisplayName(AppLocalizations l10n, String? value) {
+  final required = validateRequired(l10n, value);
+  if (required != null) return required;
+  if (value!.trim().length > _displayNameMaxLength) {
+    return l10n.authDisplayNameTooLong;
+  }
+  return null;
+}
+
 String? validatePassword(AppLocalizations l10n, String? value) {
   final v = value ?? '';
   if (v.isEmpty) return l10n.authFieldRequired;

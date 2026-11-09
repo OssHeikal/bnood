@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/vouchers/app_voucher_record.dart';
 import '../../core/vouchers/vouchers_error_handler.dart';
+import '../subscription/subscription_error_handler.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
 import '../../core/money/remote_money_format.dart';
 import '../../core/providers/dashboard_providers.dart';
@@ -97,6 +98,9 @@ Future<RemoteVoucherSaveResult> saveRemoteVoucher({
       return const RemoteVoucherSaveResult(voucherSaved: false);
     }
     if (await handleVouchersApiAuthError(context: context, ref: ref, error: e)) {
+      return const RemoteVoucherSaveResult(voucherSaved: false);
+    }
+    if (await handleSubscriptionApiError(context: context, ref: ref, error: e)) {
       return const RemoteVoucherSaveResult(voucherSaved: false);
     }
     AppToaster.show(e.message, kind: ToastKind.failure);

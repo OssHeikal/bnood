@@ -4,14 +4,17 @@ import 'package:bnood/core/money/remote_money_units.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('minor display uses three decimal major units', () {
-    expect(RemoteMoneyFormat.formatMinor(1500), '1.5 EGP');
-    expect(RemoteMoneyFormat.formatMinor(1000), '1 EGP');
+  test('minor display uses two decimal major units', () {
+    expect(RemoteMoneyFormat.formatMinor(150), '1.5 EGP');
+    expect(RemoteMoneyFormat.formatMinor(100), '1 EGP');
+    expect(RemoteMoneyFormat.formatMinor(29900), '299 EGP');
+    expect(RemoteMoneyFormat.formatMinor(299000), '2,990 EGP');
   });
 
   test('parse major input returns minor integers', () {
-    expect(RemoteMoneyFormat.parseMajorInput('1.25'), 1250);
-    expect(RemoteMoneyFormat.parseMajorInput('2'), 2000);
+    expect(RemoteMoneyFormat.parseMajorInput('1.25'), 125);
+    expect(RemoteMoneyFormat.parseMajorInput('2'), 200);
+    expect(RemoteMoneyFormat.parseMajorInput('299'), 29900);
   });
 
   test('agreement null remaining distinct from zero', () {
@@ -34,5 +37,10 @@ void main() {
     expect(unset.remainingMinorForDisplay, isNull);
     expect(zeroRemain.remainingMinorForDisplay, 0);
     expect(zeroRemain.paidMinorForDisplay, RemoteMoneyUnits.majorToMinor(10.5));
+  });
+
+  test('minorPerMajor is 100', () {
+    expect(RemoteMoneyUnits.minorPerMajor, 100);
+    expect(RemoteMoneyUnits.minorToMajor(29900), 299);
   });
 }

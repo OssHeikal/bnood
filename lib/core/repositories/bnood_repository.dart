@@ -953,12 +953,14 @@ class HomeCraftsmanActivityRow {
     required this.paidPiastres,
     required this.lastLaborAt,
     required this.remainingPiastres,
+    this.clientsCount,
   });
 
   final CraftsmenData craftsman;
   final int paidPiastres;
   final DateTime lastLaborAt;
   final int? remainingPiastres;
+  final int? clientsCount;
 }
 
 class HomeClientBalanceRow {

@@ -48,9 +48,9 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.byType(ShellScaffold), findsOneWidget);
-    expect(find.byType(HomeScreen), findsNothing);
+    expect(find.byType(HomeScreen), findsOneWidget);
     final l10n = AppLocalizations.of(tester.element(find.byType(ShellScaffold)));
-    expect(find.text(l10n.shellTabNotOnlineTitle), findsOneWidget);
+    expect(find.text(l10n.shellTabNotOnlineTitle), findsNothing);
   });
 
   testWidgets('incomplete name redirects to complete profile', (tester) async {

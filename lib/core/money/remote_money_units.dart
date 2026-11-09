@@ -1,8 +1,8 @@
-/// Online ledger amounts: integer minor units with 1000 minor per 1 EGP major.
+/// Online ledger amounts: integer minor units with 100 minor per 1 EGP major (piastres).
 abstract final class RemoteMoneyUnits {
   RemoteMoneyUnits._();
 
-  static const minorPerMajor = 1000;
+  static const minorPerMajor = 100;
 
   static int majorToMinor(double major) => (major * minorPerMajor).round();
 

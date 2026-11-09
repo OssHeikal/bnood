@@ -92,7 +92,7 @@ void main() {
         createdAt: DateTime.utc(2026, 11, 9),
         updatedAt: DateTime.utc(2026, 11, 9),
       ),
-      totalVoucherMinor: 10000000,
+      totalVoucherMinor: 1_000_000,
     );
 
     await tester.pumpWidget(

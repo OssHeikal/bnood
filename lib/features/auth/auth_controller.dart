@@ -210,6 +210,23 @@ class AuthController extends Notifier<AuthState> {
     }
   }
 
+  Future<AuthApiException?> deleteAccount({required String currentPassword}) async {
+    try {
+      await _api.deleteAccount(currentPassword: currentPassword);
+      await _store.clearToken();
+      state = state.copyWith(
+        bootstrapStatus: AuthBootstrapStatus.unauthenticated,
+        clearUser: true,
+        clearPendingRegistration: true,
+        clearPendingRecovery: true,
+        clearResetToken: true,
+      );
+      return null;
+    } on AuthApiException catch (e) {
+      return e;
+    }
+  }
+
   Future<AuthApiException?> changePassword({
     required String currentPassword,
     required String password,

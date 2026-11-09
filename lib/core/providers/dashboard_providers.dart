@@ -2,12 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../clients/clients_providers.dart';
 import '../clients/clients_repository.dart';
+import '../home/home_dashboard_mapping.dart';
 import '../home/home_riverpod.dart';
 import '../database/database.dart';
 import '../repositories/bnood_repository.dart';
 import '../../features/clients/client_detail_provider.dart';
 import '../../features/clients/client_items_stats_provider.dart';
 import '../shared/pagination/paging_refresh.dart';
+import '../subscription/subscription_riverpod.dart';
 import 'app_providers.dart';
 import 'silent_async_notifier.dart';
 
@@ -57,6 +59,9 @@ final homeCraftsmenProvider =
 );
 
 void refreshHomeDashboard(WidgetRef ref) {
+  if (ref.read(remoteClientsEnabledProvider)) {
+    ref.read(homeRepositoryProvider).invalidateDashboard();
+  }
   ref.read(homeTotalsProvider.notifier).refreshSilently();
   ref.read(homeClientBalancesProvider.notifier).refreshSilently();
   ref.read(homeSupplierSpendsProvider.notifier).refreshSilently();
@@ -68,8 +73,12 @@ void refreshHomeDashboard(WidgetRef ref) {
 void refreshAfterClientMutation(WidgetRef ref, {String? clientId, String? priorClientId}) {
   final remoteClients = ref.read(remoteClientsEnabledProvider);
   if (remoteClients) {
+    ref.read(homeRepositoryProvider).invalidateDashboard();
     bumpPagingListRefresh(ref, PagingListIds.clients);
     ref.read(homeTotalsProvider.notifier).refreshSilently();
+    ref.read(homeClientBalancesProvider.notifier).refreshSilently();
+    ref.read(homeCraftsmenProvider.notifier).refreshSilently();
+    ref.read(subscriptionProvider.notifier).refreshSilently();
   } else {
     refreshHomeDashboard(ref);
   }
@@ -134,6 +143,10 @@ Future<List<HomeClientBalanceRow>> homeClientBalanceRows(
 class HomeClientBalancesNotifier extends SilentAsyncNotifier<List<HomeClientBalanceRow>> {
   @override
   Future<List<HomeClientBalanceRow>> fetch() async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      final dashboard = await ref.read(homeRepositoryProvider).getHomeDashboard();
+      return dashboard.clients.map(homeClientBalanceRowFromPreview).toList();
+    }
     final repo = ref.read(repositoryProvider);
     final clients = await repo.watchActiveClients();
     return homeClientBalanceRows(repo, clients, activeProjectsOnly: true);
@@ -208,12 +221,21 @@ class ClientsListNotifier extends SilentAsyncNotifier<ClientsListSnapshot> {
 
 class HomeSupplierSpendsNotifier extends SilentAsyncNotifier<List<HomeSupplierSpendRow>> {
   @override
-  Future<List<HomeSupplierSpendRow>> fetch() =>
-      ref.read(repositoryProvider).homeSupplierSpendsForActiveClients();
+  Future<List<HomeSupplierSpendRow>> fetch() async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      return const [];
+    }
+    return ref.read(repositoryProvider).homeSupplierSpendsForActiveClients();
+  }
 }
 
 class HomeCraftsmenNotifier extends SilentAsyncNotifier<List<HomeCraftsmanActivityRow>> {
   @override
-  Future<List<HomeCraftsmanActivityRow>> fetch() =>
-      ref.read(repositoryProvider).homeCraftsmenByRecentLabor();
+  Future<List<HomeCraftsmanActivityRow>> fetch() async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      final dashboard = await ref.read(homeRepositoryProvider).getHomeDashboard();
+      return dashboard.craftsmen.map(homeCraftsmanRowFromPreview).toList();
+    }
+    return ref.read(repositoryProvider).homeCraftsmenByRecentLabor();
+  }
 }
