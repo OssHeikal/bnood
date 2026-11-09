@@ -649,7 +649,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get itemsCatalogCaption =>
-      'البنود الافتراضية — يمكنك الإضافة والتعديل والأرشفة';
+      'البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك';
 
   @override
   String get addItem => 'إضافة بند';
@@ -676,12 +676,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get itemsEmptyDescription => 'أضف بندًا لتصنيف مصروفات المشروع.';
 
   @override
-  String get archiveItemTitle => 'أرشفة البند؟';
+  String get deleteItemTitle => 'حذف البند؟';
 
   @override
-  String archiveItemDescription(String name) {
-    return 'سيُخفى $name من القوائم. سجل المصروفات يبقى محفوظًا.';
+  String deleteItemDescription(String name) {
+    return 'سيُحذف $name. المصروفات المرتبطة تبقى في السجل.';
   }
+
+  @override
+  String get itemInUseError => 'البند مرتبط بمعاملات ولا يمكن حذفه أو تعديله.';
+
+  @override
+  String get itemDuplicateNameError => 'يوجد بند بنفس الاسم.';
+
+  @override
+  String get itemDefaultBadge => 'افتراضي';
+
+  @override
+  String get itemPickIconLabel => 'الأيقونة';
+
+  @override
+  String get itemPickColorLabel => 'اللون';
 
   @override
   String get statementClientHeading => 'عهدة / كشف حساب العميل';
@@ -962,6 +977,13 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get authRemoteWorkspaceBody =>
       'تم تسجيل الدخول. بيانات المشاريع على السحابة غير متاحة الآن.';
+
+  @override
+  String get shellTabNotOnlineTitle => 'غير متاح على الإنترنت بعد';
+
+  @override
+  String get shellTabNotOnlineDescription =>
+      'هذا التبويب غير جاهز للاستخدام أونلاين بعد. استخدم «العملاء» لما هو متاح الآن.';
 
   @override
   String get authSignedInAs => 'مسجّل الدخول كـ';

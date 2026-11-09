@@ -248,7 +248,7 @@
   "craftsmanAgreementHasPayments": "له مدفوعات مسجلة",
   "directoryAddCraftsmanToRoster": "إضافة صنايعي للدليل",
   "crewAssignmentsSaved": "حُفظت اختيارات الصنايعية لهذا العميل",
-  "itemsCatalogCaption": "البنود الافتراضية — يمكنك الإضافة والتعديل والأرشفة",
+  "itemsCatalogCaption": "البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك",
   "addItem": "إضافة بند",
   "itemCreateSheetTitle": "بند جديد",
   "itemEditSheetTitle": "تعديل البند",
@@ -257,13 +257,18 @@
   "itemNameHint": "مثال: عزل",
   "itemsEmptyTitle": "لا توجد بنود بعد",
   "itemsEmptyDescription": "أضف بندًا لتصنيف مصروفات المشروع.",
-  "archiveItemTitle": "أرشفة البند؟",
-  "archiveItemDescription": "سيُخفى {name} من القوائم. سجل المصروفات يبقى محفوظًا.",
-  "@archiveItemDescription": {
+  "deleteItemTitle": "حذف البند؟",
+  "deleteItemDescription": "سيُحذف {name}. المصروفات المرتبطة تبقى في السجل.",
+  "@deleteItemDescription": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
+  "itemInUseError": "البند مرتبط بمعاملات ولا يمكن حذفه أو تعديله.",
+  "itemDuplicateNameError": "يوجد بند بنفس الاسم.",
+  "itemDefaultBadge": "افتراضي",
+  "itemPickIconLabel": "الأيقونة",
+  "itemPickColorLabel": "اللون",
   "statementClientHeading": "عهدة / كشف حساب العميل",
   "statementPeriodToday": "اليوم",
   "statementPeriodMonth": "هذا الشهر",
@@ -422,6 +427,8 @@
   "authAccountSection": "الحساب",
   "authRemoteWorkspaceTitle": "الحساب",
   "authRemoteWorkspaceBody": "تم تسجيل الدخول. بيانات المشاريع على السحابة غير متاحة الآن.",
+  "shellTabNotOnlineTitle": "غير متاح على الإنترنت بعد",
+  "shellTabNotOnlineDescription": "هذا التبويب غير جاهز للاستخدام أونلاين بعد. استخدم «العملاء» لما هو متاح الآن.",
   "authSignedInAs": "مسجّل الدخول كـ",
   "authBootstrapRetry": "إعادة المحاولة",
   "authNetworkError": "تعذر الاتصال. تحقق من الشبكة، ثم أعد المحاولة.",

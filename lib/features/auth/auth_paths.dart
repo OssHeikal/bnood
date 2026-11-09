@@ -20,13 +20,12 @@ bool userNeedsProfileCompletion(User? user) {
 
 String authenticatedHomeFor(User user) {
   if (userNeedsProfileCompletion(user)) return AuthPaths.completeProfile;
-  return '/clients';
+  return '/home';
 }
 
 const _localLedgerRoots = {
   '/home',
   '/directory',
-  '/items',
 };
 
 bool isRemoteClientsLocation(String location) {
@@ -34,8 +33,13 @@ bool isRemoteClientsLocation(String location) {
   return location.startsWith('/clients/');
 }
 
+bool isRemoteItemsLocation(String location) {
+  return location == '/items';
+}
+
 bool isLocalLedgerLocation(String location) {
   if (isRemoteClientsLocation(location)) return false;
+  if (isRemoteItemsLocation(location)) return false;
   if (_localLedgerRoots.contains(location)) return true;
   if (location.startsWith('/suppliers/')) return true;
   if (location.startsWith('/craftsmen/')) return true;

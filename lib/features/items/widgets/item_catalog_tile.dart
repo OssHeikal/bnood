@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bnood/l10n/app_localizations.dart';
 
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_shape.dart';
@@ -11,21 +12,23 @@ class ItemCatalogTile extends StatelessWidget {
     super.key,
     required this.name,
     required this.colorKey,
-    required this.iconName,
+    required this.iconKey,
+    this.isDefault = false,
     required this.onOpenEdit,
   });
 
   final String name;
   final String colorKey;
-  final String iconName;
-  final VoidCallback onOpenEdit;
+  final String iconKey;
+  final bool isDefault;
+  final VoidCallback? onOpenEdit;
 
   @override
   Widget build(BuildContext context) {
     final text = context.text;
     final colors = context.colors;
+    final l10n = AppLocalizations.of(context);
     final accent = itemSemanticAccentColor(colorKey);
-    final icon = itemSemanticIconAsset(iconName);
     final surface = colors.surface;
 
     return AppCard(
@@ -42,21 +45,32 @@ class ItemCatalogTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Material(
-            color: accent.withValues(alpha: 0.18),
-            shape: AppShape.superellipse(radius: AppSize.radiusSM),
-            clipBehavior: Clip.antiAlias,
-            child: SizedBox(
-              width: 40,
-              height: 40,
-              child: Center(
-                child: icon.svg(
-                  width: AppSize.iconSmall,
-                  height: AppSize.iconSmall,
-                  colorFilter: ColorFilter.mode(accent, BlendMode.srcIn),
+          Row(
+            children: [
+              Material(
+                color: accent.withValues(alpha: 0.18),
+                shape: AppShape.superellipse(radius: AppSize.radiusSM),
+                clipBehavior: Clip.antiAlias,
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: Center(
+                    child: itemSemanticIconWidget(
+                      iconKey: iconKey,
+                      color: accent,
+                      size: AppSize.icon,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              if (isDefault) ...[
+                const Spacer(),
+                Text(
+                  l10n.itemDefaultBadge,
+                  style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                ),
+              ],
+            ],
           ),
           const Spacer(),
           Text(

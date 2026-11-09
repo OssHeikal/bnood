@@ -13,12 +13,12 @@ void main() {
     expect(appSplashDestinationFor(auth), AuthPaths.login);
   });
 
-  test('appSplashDestinationFor routes authenticated user to clients', () {
+  test('appSplashDestinationFor routes authenticated user to shell home', () {
     const auth = AuthState(
       bootstrapStatus: AuthBootstrapStatus.authenticated,
       bootstrapStarted: true,
       user: User(id: 'u', phone: '+2010', name: 'Eng'),
     );
-    expect(appSplashDestinationFor(auth), '/clients');
+    expect(appSplashDestinationFor(auth), '/home');
   });
 }

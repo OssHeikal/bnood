@@ -27,7 +27,7 @@ Future<void> _submitCompleteProfile(BuildContext context, WidgetRef ref) async {
   final error = await ref.read(authControllerProvider.notifier).saveProfileName(fields.name.text);
   if (!context.mounted) return;
   if (error == null) {
-    context.go(AuthPaths.remote);
+    context.go(authenticatedHomeFor(ref.read(authControllerProvider).user!));
     return;
   }
   final l10n = AppLocalizations.of(context);

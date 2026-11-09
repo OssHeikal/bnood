@@ -4,27 +4,49 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/widgets/floating_shell_dock.dart';
 import '../../app/widgets/shell_nav_icon.dart';
-import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/database/database.dart';
+import '../../core/items/item_api_record.dart';
+import '../../core/items/items_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
+import '../../core/shared/pagination/pagination.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
 import '../../core/widgets/foundation_app_bar_title.dart';
-import '../../core/widgets/skeleton/async_value_body.dart';
 import '../home/home_foundation_scope.dart';
 import 'item_create_sheet.dart';
 import 'item_edit_sheet.dart';
-import 'items_catalog_provider.dart';
+import 'items_list_paging.dart';
 import 'widgets/item_catalog_tile.dart';
 import 'widgets/items_loading_skeleton.dart';
 
-class ItemsScreen extends ConsumerWidget {
+class ItemsScreen extends ConsumerStatefulWidget {
   const ItemsScreen({super.key});
+
+  @override
+  ConsumerState<ItemsScreen> createState() => _ItemsScreenState();
+}
+
+class _ItemsScreenState extends ConsumerState<ItemsScreen> {
+  late final AppPagingController<CatalogItem> _pagingController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pagingController = AppPagingController<CatalogItem>(
+      fetchPage: ref.read(itemsListPageFetcherProvider),
+      pageSize: itemsListPageSize,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
 
   Future<void> _addItem(BuildContext context) {
     return CustomBottomSheet.show<void>(
@@ -35,10 +57,16 @@ class ItemsScreen extends ConsumerWidget {
     );
   }
 
+  void _refreshPaging() => _pagingController.refresh();
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final catalog = ref.watch(itemsCatalogProvider);
+
+    ref.listen(remoteItemsEnabledProvider, (previous, next) {
+      if (previous != next) _refreshPaging();
+    });
+    bindPagingListRefreshEpoch(ref, PagingListIds.items, _refreshPaging);
 
     return HomeFoundationScope(
       child: Builder(
@@ -84,47 +112,69 @@ class ItemsScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            body: ListView(
-              padding: const EdgeInsets.fromLTRB(
-                AppSize.screenPadding,
-                AppSize.spaceSM,
-                AppSize.screenPadding,
-                AppSize.spaceMD,
-              ),
-              children: [
-                Text(
-                  l10n.itemsCatalogCaption,
-                  style: text.caption.copyWith(color: colors.onSurfaceMuted),
-                ),
-                AppSize.spaceMD.gap,
-                AsyncValueBody(
-                  value: catalog,
-                  loadingPlaceholder: const ItemsLoadingSkeleton(),
-                  error: (e, _) => AppCard(
+            body: MediaQuery.removePadding(
+              context: context,
+              removeBottom: true,
+              child: AppPagedView<CatalogItem>(
+                controller: _pagingController,
+                pullToRefresh: true,
+                layout: AppPagedLayout.sliverGrid,
+                gridPadding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
+                builders: AppPagedBuilders<CatalogItem>(
+                  firstPageProgress: (_, _) => const ItemsLoadingSkeleton(),
+                  empty: (ctx) => AppCard(
                     child: AppFallback.section(
-                      icon: Icons.error_outline,
-                      title: l10n.homeLoadErrorTitle,
-                      description: e.toString(),
+                      leading: ShellNavIcon(
+                        asset: Assets.icons.itemsLayersOutline,
+                        color: ctx.colors.muted,
+                        size: AppSize.icon,
+                      ),
+                      title: l10n.itemsEmptyTitle,
+                      description: l10n.itemsEmptyDescription,
                       actions: [
                         AppFallbackAction(
-                          label: l10n.retry,
-                          onPressed: () => ref.invalidate(itemsCatalogProvider),
-                          role: AppFallbackActionRole.tertiary,
+                          label: l10n.addItem,
+                          onPressed: () => _addItem(ctx),
+                          role: AppFallbackActionRole.primary,
                         ),
                       ],
                     ),
                   ),
-                  data: (items) => _ItemsCatalogGrid(
-                    items: items,
-                    onAdd: () => _addItem(context),
-                    onOpenEdit: (item) => showItemEditSheet(
-                      context,
-                      itemId: item.id,
-                      name: item.name,
+                ),
+                sliverHeaders: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSize.screenPadding,
+                        AppSize.spaceSM,
+                        AppSize.screenPadding,
+                        AppSize.spaceMD,
+                      ),
+                      child: Text(l10n.itemsCatalogCaption, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
                     ),
                   ),
-                ),
-              ],
+                ],
+                sliverFooters: [
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      bottom:
+                          FloatingShellDock.clearanceHeight +
+                          MediaQuery.viewPaddingOf(context).bottom +
+                          AppSize.spaceLG,
+                    ),
+                  ),
+                ],
+                itemBuilder: (context, item, index) {
+                  return ItemCatalogTile(
+                    key: ValueKey(item.id),
+                    name: item.name,
+                    colorKey: item.colorKey,
+                    iconKey: item.iconKey,
+                    isDefault: item.isDefault,
+                    onOpenEdit: item.isDefault ? null : () => showItemEditSheet(context, item: item),
+                  );
+                },
+              ),
             ),
           );
         },
@@ -133,70 +183,8 @@ class ItemsScreen extends ConsumerWidget {
   }
 }
 
-class _ItemsCatalogGrid extends StatelessWidget {
-  const _ItemsCatalogGrid({
-    required this.items,
-    required this.onAdd,
-    required this.onOpenEdit,
-  });
-
-  final List<Item> items;
-  final VoidCallback onAdd;
-  final void Function(Item item) onOpenEdit;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    if (items.isEmpty) {
-      return AppCard(
-        child: AppFallback.section(
-          leading: ShellNavIcon(
-            asset: Assets.icons.itemsLayersOutline,
-            color: context.colors.muted,
-            size: AppSize.icon,
-          ),
-          title: l10n.itemsEmptyTitle,
-          description: l10n.itemsEmptyDescription,
-          actions: [
-            AppFallbackAction(
-              label: l10n.addItem,
-              onPressed: onAdd,
-              role: AppFallbackActionRole.primary,
-            ),
-          ],
-        ),
-      );
-    }
-
-    return GridView.builder(
-      key: const Key('items_catalog_grid'),
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: AppSize.spaceMD,
-        mainAxisSpacing: AppSize.spaceMD,
-        mainAxisExtent: 116,
-      ),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return ItemCatalogTile(
-          key: ValueKey(item.id),
-          name: item.name,
-          colorKey: item.colorKey,
-          iconName: item.iconName,
-          onOpenEdit: () => onOpenEdit(item),
-        );
-      },
-    );
-  }
-}
-
 /// Scroll clearance matching [ShellScaffold] dock fade for tests without the shell.
 EdgeInsets itemsScreenMediaQueryForTests(BuildContext context) {
   final base = MediaQuery.paddingOf(context);
-  return base.copyWith(
-    bottom: base.bottom + FloatingShellDock.clearanceHeight,
-  );
+  return base.copyWith(bottom: base.bottom + FloatingShellDock.clearanceHeight);
 }

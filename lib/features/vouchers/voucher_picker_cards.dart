@@ -84,7 +84,6 @@ class VoucherPickerItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = itemSemanticAccentColor(colorKey);
-    final icon = itemSemanticIconAsset(iconName);
     return EntityPickerOptionRow(
       selected: selected,
       onSelect: onTap,
@@ -96,10 +95,10 @@ class VoucherPickerItemCard extends StatelessWidget {
         shape: AppShape.superellipse(radius: AppSize.radiusSM),
         clipBehavior: Clip.antiAlias,
         child: Center(
-          child: icon.svg(
-            width: AppSize.iconSmall,
-            height: AppSize.iconSmall,
-            colorFilter: ColorFilter.mode(accent, BlendMode.srcIn),
+          child: itemSemanticIconWidget(
+            iconKey: iconName,
+            color: accent,
+            size: AppSize.iconSmall,
           ),
         ),
       ),

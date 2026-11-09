@@ -9,8 +9,9 @@ import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/complete_profile_screen.dart';
 import 'package:bnood/features/auth/login_screen.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/clients/clients_list_screen.dart';
+import 'package:bnood/app/shell_scaffold.dart';
 import 'package:bnood/features/home/home_screen.dart';
+import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,7 +26,7 @@ void main() {
 
   tearDown(AppSplashSession.resetForTest);
 
-  testWidgets('authenticated session redirects away from local home', (tester) async {
+  testWidgets('authenticated user stays on shell home tab', (tester) async {
     AppSplashSession.completed = true;
     late ProviderContainer container;
     await tester.pumpWidget(
@@ -46,8 +47,10 @@ void main() {
     container.read(goRouterProvider).go('/home');
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
+    expect(find.byType(ShellScaffold), findsOneWidget);
     expect(find.byType(HomeScreen), findsNothing);
-    expect(find.byType(ClientsListScreen), findsOneWidget);
+    final l10n = AppLocalizations.of(tester.element(find.byType(ShellScaffold)));
+    expect(find.text(l10n.shellTabNotOnlineTitle), findsOneWidget);
   });
 
   testWidgets('incomplete name redirects to complete profile', (tester) async {
@@ -72,7 +75,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.byType(CompleteProfileScreen), findsOneWidget);
-    expect(find.byType(ClientsListScreen), findsNothing);
+    expect(find.byType(ShellScaffold), findsNothing);
   });
 
   testWidgets('unauthenticated user cannot open local home', (tester) async {

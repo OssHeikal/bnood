@@ -1295,7 +1295,7 @@ abstract class AppLocalizations {
   /// No description provided for @itemsCatalogCaption.
   ///
   /// In en, this message translates to:
-  /// **'Default items — you can add, edit, and archive'**
+  /// **'Default items are read-only — add your own items below'**
   String get itemsCatalogCaption;
 
   /// No description provided for @addItem.
@@ -1346,17 +1346,47 @@ abstract class AppLocalizations {
   /// **'Add an item to categorize project spend.'**
   String get itemsEmptyDescription;
 
-  /// No description provided for @archiveItemTitle.
+  /// No description provided for @deleteItemTitle.
   ///
   /// In en, this message translates to:
-  /// **'Archive item?'**
-  String get archiveItemTitle;
+  /// **'Delete item?'**
+  String get deleteItemTitle;
 
-  /// No description provided for @archiveItemDescription.
+  /// No description provided for @deleteItemDescription.
   ///
   /// In en, this message translates to:
-  /// **'{name} will be hidden from lists. Expense history is kept.'**
-  String archiveItemDescription(String name);
+  /// **'{name} will be removed. Linked expenses keep their history.'**
+  String deleteItemDescription(String name);
+
+  /// No description provided for @itemInUseError.
+  ///
+  /// In en, this message translates to:
+  /// **'This item is linked to transactions and cannot be deleted or changed.'**
+  String get itemInUseError;
+
+  /// No description provided for @itemDuplicateNameError.
+  ///
+  /// In en, this message translates to:
+  /// **'An item with this name already exists.'**
+  String get itemDuplicateNameError;
+
+  /// No description provided for @itemDefaultBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get itemDefaultBadge;
+
+  /// No description provided for @itemPickIconLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get itemPickIconLabel;
+
+  /// No description provided for @itemPickColorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get itemPickColorLabel;
 
   /// No description provided for @statementClientHeading.
   ///
@@ -1836,6 +1866,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You are signed in. Cloud project data is not available yet.'**
   String get authRemoteWorkspaceBody;
+
+  /// No description provided for @shellTabNotOnlineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available online yet'**
+  String get shellTabNotOnlineTitle;
+
+  /// No description provided for @shellTabNotOnlineDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This tab is not ready for online use yet. Use Clients for what is available today.'**
+  String get shellTabNotOnlineDescription;
 
   /// No description provided for @authSignedInAs.
   ///

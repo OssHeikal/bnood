@@ -17,6 +17,8 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/database/database.dart' show TransactionsCompanion;
 import '../../core/money/money_format.dart';
+import '../../core/items/items_providers.dart';
+import '../../core/items/items_repository.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
@@ -164,7 +166,18 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   }
 
   Future<void> _pickItem() async {
-    final items = await ref.read(repositoryProvider).watchActiveItems().first;
+    final List<({String id, String name, String colorKey, String iconKey})> items;
+    if (ref.read(remoteItemsEnabledProvider)) {
+      final catalogItems = await fetchAllCatalogItems(ref.read(itemsRepositoryProvider));
+      items = catalogItems
+          .map((i) => (id: i.id, name: i.name, colorKey: i.colorKey, iconKey: i.iconKey))
+          .toList();
+    } else {
+      final local = await ref.read(repositoryProvider).watchActiveItems().first;
+      items = local
+          .map((i) => (id: i.id, name: i.name, colorKey: i.colorKey, iconKey: i.iconName))
+          .toList();
+    }
     if (!mounted) return;
     final draft = ref.read(voucherDraftProvider);
     final l10n = AppLocalizations.of(context);
@@ -179,7 +192,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             return VoucherPickerItemCard(
               name: item.name,
               colorKey: item.colorKey,
-              iconName: item.iconName,
+              iconName: item.iconKey,
               selected: selected,
               onTap: onSelect,
               showDivider: showDivider,

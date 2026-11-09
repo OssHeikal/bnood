@@ -27,7 +27,12 @@ class AuthApiException implements Exception {
 
   bool get isNotFound => statusCode == 404 && code == 'not_found';
 
-  bool get isDuplicateName => statusCode == 409 && code == 'duplicate_name';
+  bool get isDuplicateName =>
+      code == 'duplicate_name' && (statusCode == 409 || statusCode == 422);
+
+  bool get isDefaultItemReadonly => statusCode == 403 && code == 'default_item_readonly';
+
+  bool get isItemInUse => statusCode == 409 && code == 'item_in_use';
 
   bool get isDuplicatePhone => statusCode == 422 && code == 'duplicate_phone';
 

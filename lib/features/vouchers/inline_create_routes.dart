@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/api/auth_api_exception.dart';
+import '../../core/items/items_providers.dart';
 import '../../core/providers/app_providers.dart';
+import '../items/item_mutation_actions.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../clients/client_mutation_actions.dart';
 import '../../core/widgets/buttons/app_button.dart';
@@ -154,6 +156,18 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
     if (_name.text.trim().isEmpty || _saving) return;
     setState(() => _saving = true);
     try {
+      if (ref.read(remoteItemsEnabledProvider)) {
+        final item = await saveItemCreate(
+          ref: ref,
+          context: context,
+          name: _name.text.trim(),
+          iconKey: 'category',
+          colorKey: 'teal',
+        );
+        if (!mounted || item == null) return;
+        Navigator.pop(context, item.id);
+        return;
+      }
       final item = await ref.read(repositoryProvider).createItem(
             name: _name.text.trim(),
             colorKey: 'teal',
@@ -161,6 +175,8 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
           );
       if (!mounted) return;
       Navigator.pop(context, item.id);
+    } on AuthApiException {
+      if (mounted) setState(() => _saving = false);
     } finally {
       if (mounted) setState(() => _saving = false);
     }

@@ -22,7 +22,6 @@ import '../features/clients/client_items_stats_screen.dart';
 import '../features/clients/movements_list_screen.dart';
 import '../features/statements/supplier_statement_screen.dart';
 import '../features/home/home_screen.dart';
-import '../features/items/items_screen.dart';
 import '../features/statements/client_statement_screen.dart';
 import '../features/suppliers/craftsman_detail_screen.dart';
 import '../features/suppliers/directory_screen.dart';
@@ -30,6 +29,9 @@ import '../features/suppliers/supplier_detail_screen.dart';
 import 'auth_router_refresh.dart';
 import 'app_splash_session.dart';
 import 'app_startup_splash.dart';
+import 'app_shell_items_body.dart';
+import 'app_shell_online_tabs.dart';
+import 'app_shell_tab_gate.dart';
 import 'shell_scaffold.dart';
 
 final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -68,7 +70,7 @@ String? _authRedirect(Ref ref, GoRouterState state) {
       return AuthPaths.completeProfile;
     }
     if (!needsProfile && loc == AuthPaths.completeProfile) {
-      return AuthPaths.remote;
+      return home;
     }
     if (loc == AuthPaths.remote) {
       return home;
@@ -171,7 +173,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: _localHome,
-                builder: (_, _) => const HomeScreen(),
+                builder: (_, _) => const AppShellTabGate(
+                  tab: AppShellTabId.home,
+                  child: HomeScreen(),
+                ),
               ),
             ],
           ),
@@ -179,7 +184,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/clients',
-                builder: (_, _) => const ClientsListScreen(),
+                builder: (_, _) => const AppShellTabGate(
+                  tab: AppShellTabId.clients,
+                  child: ClientsListScreen(),
+                ),
               ),
             ],
           ),
@@ -189,8 +197,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 path: '/directory',
                 builder: (_, state) {
                   final tab = state.uri.queryParameters['tab'];
-                  return DirectoryScreen(
-                    initialTabIndex: tab == 'craftsmen' ? 1 : 0,
+                  return AppShellTabGate(
+                    tab: AppShellTabId.directory,
+                    child: DirectoryScreen(
+                      initialTabIndex: tab == 'craftsmen' ? 1 : 0,
+                    ),
                   );
                 },
               ),
@@ -198,7 +209,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           ),
           StatefulShellBranch(
             routes: [
-              GoRoute(path: '/items', builder: (_, _) => const ItemsScreen()),
+              GoRoute(
+                path: '/items',
+                builder: (_, _) => const AppShellTabGate(
+                  tab: AppShellTabId.items,
+                  child: AppShellItemsBody(),
+                ),
+              ),
             ],
           ),
         ],

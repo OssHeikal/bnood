@@ -248,7 +248,7 @@
   "craftsmanAgreementHasPayments": "Has recorded payments",
   "directoryAddCraftsmanToRoster": "Add craftsman to directory",
   "crewAssignmentsSaved": "Craftsman choices saved for this client",
-  "itemsCatalogCaption": "Default items — you can add, edit, and archive",
+  "itemsCatalogCaption": "Default items are read-only — add your own items below",
   "addItem": "Add item",
   "itemCreateSheetTitle": "New item",
   "itemEditSheetTitle": "Edit item",
@@ -257,13 +257,18 @@
   "itemNameHint": "e.g. Insulation",
   "itemsEmptyTitle": "No items yet",
   "itemsEmptyDescription": "Add an item to categorize project spend.",
-  "archiveItemTitle": "Archive item?",
-  "archiveItemDescription": "{name} will be hidden from lists. Expense history is kept.",
-  "@archiveItemDescription": {
+  "deleteItemTitle": "Delete item?",
+  "deleteItemDescription": "{name} will be removed. Linked expenses keep their history.",
+  "@deleteItemDescription": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
+  "itemInUseError": "This item is linked to transactions and cannot be deleted or changed.",
+  "itemDuplicateNameError": "An item with this name already exists.",
+  "itemDefaultBadge": "Default",
+  "itemPickIconLabel": "Icon",
+  "itemPickColorLabel": "Color",
   "statementClientHeading": "Fund / client statement",
   "statementPeriodToday": "Today",
   "statementPeriodMonth": "This month",
@@ -422,6 +427,8 @@
   "authAccountSection": "Account",
   "authRemoteWorkspaceTitle": "Account",
   "authRemoteWorkspaceBody": "You are signed in. Cloud project data is not available yet.",
+  "shellTabNotOnlineTitle": "Not available online yet",
+  "shellTabNotOnlineDescription": "This tab is not ready for online use yet. Use Clients for what is available today.",
   "authSignedInAs": "Signed in as",
   "authBootstrapRetry": "Retry",
   "authNetworkError": "Could not connect. Check the network, then try again.",

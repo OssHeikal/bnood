@@ -18,6 +18,7 @@ void bumpPagingListRefreshFromContainer(ProviderContainer container, PagingListI
 /// Well-known list ids — extend as new screens adopt shared pagination.
 abstract final class PagingListIds {
   static const clients = 'clients';
+  static const items = 'items';
 }
 
 void bindPagingListRefreshEpoch(WidgetRef ref, PagingListId id, VoidCallback refresh) {

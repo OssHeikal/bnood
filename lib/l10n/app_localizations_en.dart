@@ -656,7 +656,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get itemsCatalogCaption =>
-      'Default items — you can add, edit, and archive';
+      'Default items are read-only — add your own items below';
 
   @override
   String get addItem => 'Add item';
@@ -684,12 +684,28 @@ class AppLocalizationsEn extends AppLocalizations {
       'Add an item to categorize project spend.';
 
   @override
-  String get archiveItemTitle => 'Archive item?';
+  String get deleteItemTitle => 'Delete item?';
 
   @override
-  String archiveItemDescription(String name) {
-    return '$name will be hidden from lists. Expense history is kept.';
+  String deleteItemDescription(String name) {
+    return '$name will be removed. Linked expenses keep their history.';
   }
+
+  @override
+  String get itemInUseError =>
+      'This item is linked to transactions and cannot be deleted or changed.';
+
+  @override
+  String get itemDuplicateNameError => 'An item with this name already exists.';
+
+  @override
+  String get itemDefaultBadge => 'Default';
+
+  @override
+  String get itemPickIconLabel => 'Icon';
+
+  @override
+  String get itemPickColorLabel => 'Color';
 
   @override
   String get statementClientHeading => 'Fund / client statement';
@@ -973,6 +989,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authRemoteWorkspaceBody =>
       'You are signed in. Cloud project data is not available yet.';
+
+  @override
+  String get shellTabNotOnlineTitle => 'Not available online yet';
+
+  @override
+  String get shellTabNotOnlineDescription =>
+      'This tab is not ready for online use yet. Use Clients for what is available today.';
 
   @override
   String get authSignedInAs => 'Signed in as';

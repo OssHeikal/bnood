@@ -34,8 +34,6 @@ class ClientDetailItemRow extends StatelessWidget {
     final total = breakdown.totalPiastres;
     final materialsShare = total == 0 ? 0.0 : breakdown.materialsPiastres / total;
     final accent = itemSemanticAccentColor(colorKey);
-    final icon = itemSemanticIconAsset(iconName);
-
     return AppCard(
       padding: const EdgeInsets.all(AppSize.spaceLG),
       child: Column(
@@ -51,7 +49,11 @@ class ClientDetailItemRow extends StatelessWidget {
                   width: AppSize.statIconBox,
                   height: AppSize.statIconBox,
                   child: Center(
-                    child: icon.svg(width: AppSize.iconSmall, height: AppSize.iconSmall, colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
+                    child: itemSemanticIconWidget(
+                      iconKey: iconName,
+                      color: accent,
+                      size: AppSize.iconSmall,
+                    ),
                   ),
                 ),
               ),
