@@ -146,7 +146,12 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final material = tester.widget<Material>(find.byKey(const Key('clients_app_bar_add')));
+    final material = tester.widget<Material>(
+      find.descendant(
+        of: find.byKey(const Key('clients_app_bar_add')),
+        matching: find.byType(Material),
+      ),
+    );
     expect(material.color, AppColors.light.accentTeal.tint);
     expect(material.shape, AppShape.superellipse(radius: 8));
     expect(tester.getSize(find.byKey(const Key('clients_app_bar_add'))), const Size(48, 48));
@@ -154,5 +159,50 @@ void main() {
     await tester.tap(find.byKey(const Key('clients_app_bar_add')));
     await tester.pumpAndSettle();
     expect(find.text('Add client'), findsWidgets);
+  });
+
+  testWidgets('search and filters collapse under the pinned title', (tester) async {
+    final now = DateTime.utc(2026, 11, 1);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          clientsListBalancesOverride([
+            HomeClientBalanceRow(
+              client: Client(
+                id: 'c1',
+                workspaceId: 'w',
+                name: 'Tower A',
+                createdAt: now,
+                updatedAt: now,
+              ),
+              remainingPiastres: 120000,
+              receivedPiastres: 200000,
+              spentPiastres: 80000,
+            ),
+          ]),
+        ],
+        child: const MaterialApp(
+          locale: Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: ClientsListScreen(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Search by name or phone'), findsOneWidget);
+    expect(find.byType(SliverAppBar), findsOneWidget);
+
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, -400));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Clients'), findsOneWidget);
+    final hint = find.text('Search by name or phone');
+    expect(hint, findsOneWidget);
+    expect(
+      tester.getRect(hint).bottom,
+      lessThanOrEqualTo(tester.getRect(find.text('Clients')).bottom),
+    );
   });
 }

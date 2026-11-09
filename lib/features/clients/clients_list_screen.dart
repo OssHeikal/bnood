@@ -31,6 +31,8 @@ class ClientsListScreen extends ConsumerStatefulWidget {
 class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
   late final AppPagingController<HomeClientBalanceRow> _pagingController;
   final _searchController = TextEditingController();
+  final _collapsingHeaderKey = GlobalKey();
+  var _collapsingHeaderHeight = 0.0;
 
   @override
   void initState() {
@@ -61,6 +63,14 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
   }
 
   void _refreshPaging() => _pagingController.refresh();
+
+  void _cacheCollapsingHeaderHeight() {
+    final box = _collapsingHeaderKey.currentContext?.findRenderObject() as RenderBox?;
+    if (!mounted || box == null || !box.hasSize) return;
+    final height = box.size.height;
+    if (height == _collapsingHeaderHeight) return;
+    setState(() => _collapsingHeaderHeight = height);
+  }
 
   Widget _emptyFallback(BuildContext context, ClientListArchiveFilter filter) {
     final l10n = AppLocalizations.of(context);
@@ -101,6 +111,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
     final filter = ref.watch(clientsListFilterProvider);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _cacheCollapsingHeaderHeight());
 
     ref.listen(clientsListFilterProvider, (previous, next) {
       if (previous != next) _refreshPaging();
@@ -119,57 +130,60 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
           final colors = context.colors;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: CustomAppBar(
-              title: l10n.navClients,
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(100),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSize.screenPadding,
-                        0,
-                        AppSize.screenPadding,
-                        AppSize.spaceSM,
-                      ),
-                      child: CustomTextField.search(
-                        controller: _searchController,
-                        placeholder: l10n.clientsSearchHint,
-                        onChanged: (value) {
-                          ref.read(clientsListSearchQueryProvider.notifier).state = value;
-                        },
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        AppSize.screenPadding,
-                        0,
-                        AppSize.screenPadding,
-                        AppSize.spaceSM,
-                      ),
-                      child: ClientsListFilterChips(),
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                CustomAppBarAction(
-                  key: const Key('clients_app_bar_add'),
-                  tooltip: l10n.addClient,
-                  tone: CustomAppBarActionTone.tint,
-                  onPressed: () => _addClient(context, ref),
-                  child: ShellNavIcon(
-                    asset: Assets.icons.clientsAddOutline,
-                    color: colors.primaryOnTint,
-                    size: AppSize.icon,
-                    semanticsLabel: l10n.addClient,
-                  ),
-                ),
-              ],
-            ),
             body: AppPagedView<HomeClientBalanceRow>(
               controller: _pagingController,
               pullToRefresh: true,
+              refreshEdgeOffset: MediaQuery.paddingOf(context).top + kToolbarHeight,
+              sliverHeaders: [
+                CustomSliverAppBar(
+                  title: l10n.navClients,
+                  actions: [
+                    CustomAppBarAction(
+                      key: const Key('clients_app_bar_add'),
+                      tooltip: l10n.addClient,
+                      tone: CustomAppBarActionTone.tint,
+                      onPressed: () => _addClient(context, ref),
+                      child: ShellNavIcon(
+                        asset: Assets.icons.clientsAddOutline,
+                        color: colors.primaryOnTint,
+                        size: AppSize.icon,
+                        semanticsLabel: l10n.addClient,
+                      ),
+                    ),
+                  ],
+                ),
+                SliverToBoxAdapter(
+                  child: Column(
+                    key: _collapsingHeaderKey,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSize.screenPadding,
+                          0,
+                          AppSize.screenPadding,
+                          AppSize.spaceSM,
+                        ),
+                        child: CustomTextField.search(
+                          controller: _searchController,
+                          placeholder: l10n.clientsSearchHint,
+                          onChanged: (value) {
+                            ref.read(clientsListSearchQueryProvider.notifier).state = value;
+                          },
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          AppSize.screenPadding,
+                          0,
+                          AppSize.screenPadding,
+                          AppSize.spaceSM,
+                        ),
+                        child: ClientsListFilterChips(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
               builders: AppPagedBuilders(
                 empty: (ctx) => _emptyFallback(ctx, filter),
               ),
@@ -189,13 +203,34 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                 localeCode: localeCode,
                 onTap: () => context.push('/clients/${row.client.id}'),
               ),
-              sliverFooters: const [
-                SliverPadding(padding: EdgeInsets.only(bottom: AppSize.spaceMD)),
+              sliverFooters: [
+                const SliverPadding(padding: EdgeInsets.only(bottom: AppSize.spaceMD)),
+                _ScrollUnderClearance(reserve: _collapsingHeaderHeight),
               ],
             ),
           );
         },
       ),
+    );
+  }
+}
+
+/// Extra scroll range so the header under [CustomSliverAppBar] can leave the
+/// viewport when the list itself is shorter than the screen.
+class _ScrollUnderClearance extends StatelessWidget {
+  const _ScrollUnderClearance({required this.reserve});
+
+  final double reserve;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverLayoutBuilder(
+      builder: (context, constraints) {
+        final raw = constraints.viewportMainAxisExtent + reserve - constraints.precedingScrollExtent;
+        final height = raw > 0 ? raw : 0.0;
+        if (height == 0) return const SliverToBoxAdapter(child: SizedBox.shrink());
+        return SliverToBoxAdapter(child: SizedBox(height: height));
+      },
     );
   }
 }

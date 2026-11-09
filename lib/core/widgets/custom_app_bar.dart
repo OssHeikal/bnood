@@ -49,8 +49,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final overlay = isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark;
 
     return AppBar(
       backgroundColor: colors.canvas,
@@ -60,14 +58,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: false,
       toolbarHeight: _toolbarHeight,
-      systemOverlayStyle: overlay.copyWith(statusBarColor: Colors.transparent),
+      systemOverlayStyle: _appBarOverlayStyle(context),
       iconTheme: IconThemeData(color: colors.onSurface),
       actionsIconTheme: IconThemeData(color: colors.onSurface),
       leading: leading,
       automaticallyImplyLeading: automaticallyImplyLeading,
       title: titleWidget ?? _buildTitle(context),
       bottom: bottom,
-      actions: _wrapActions(actions),
+      actions: _wrapAppBarActions(actions),
     );
   }
 
@@ -100,19 +98,71 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ],
     );
   }
+}
 
-  List<Widget>? _wrapActions(List<Widget>? actions) {
-    if (actions == null || actions.isEmpty) return actions;
-    final last = actions.length - 1;
-    return [
-      for (var i = 0; i < actions.length; i++)
-        Padding(
-          padding: EdgeInsetsDirectional.only(
-            end: i == last ? AppSize.spaceMD : AppSize.spaceXS,
-          ),
-          child: actions[i],
+SystemUiOverlayStyle _appBarOverlayStyle(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  final overlay = isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark;
+  return overlay.copyWith(statusBarColor: Colors.transparent);
+}
+
+List<Widget>? _wrapAppBarActions(List<Widget>? actions) {
+  if (actions == null || actions.isEmpty) return actions;
+  final last = actions.length - 1;
+  return [
+    for (var i = 0; i < actions.length; i++)
+      Padding(
+        padding: EdgeInsetsDirectional.only(
+          end: i == last ? AppSize.spaceMD : AppSize.spaceXS,
         ),
-    ];
+        child: actions[i],
+      ),
+  ];
+}
+
+/// Pinned product bar for a [CustomScrollView]. Content under it scrolls away.
+class CustomSliverAppBar extends StatelessWidget {
+  const CustomSliverAppBar({
+    super.key,
+    this.title,
+    this.actions,
+    this.automaticallyImplyLeading = true,
+  });
+
+  final String? title;
+  final List<Widget>? actions;
+  final bool automaticallyImplyLeading;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final text = context.text;
+    final titleText = title?.trim();
+
+    return SliverAppBar(
+      pinned: true,
+      primary: true,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      backgroundColor: colors.canvas,
+      surfaceTintColor: Colors.transparent,
+      foregroundColor: colors.onSurface,
+      centerTitle: false,
+      toolbarHeight: kToolbarHeight,
+      automaticallyImplyLeading: automaticallyImplyLeading,
+      systemOverlayStyle: _appBarOverlayStyle(context),
+      iconTheme: IconThemeData(color: colors.onSurface),
+      actionsIconTheme: IconThemeData(color: colors.onSurface),
+      title: titleText == null || titleText.isEmpty
+          ? null
+          : Text(
+              titleText,
+              style: text.pageTitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+      actions: _wrapAppBarActions(actions),
+    );
   }
 }
 

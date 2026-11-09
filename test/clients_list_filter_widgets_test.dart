@@ -5,6 +5,7 @@ import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/core/shared/pagination/pagination.dart';
 import 'package:bnood/features/clients/clients_list_paging.dart';
 import 'package:bnood/features/clients/clients_list_screen.dart';
+import 'package:bnood/features/clients/widgets/clients_list_filter_chips.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -112,5 +113,28 @@ void main() {
     expect(find.text('نشط'), findsOneWidget);
     expect(find.text('مؤرشف'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('filter chips hug their labels', (tester) async {
+    tester.view.physicalSize = const Size(390, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final now = DateTime.utc(2026, 11, 1);
+    await tester.pumpWidget(
+      wrap(
+        locale: const Locale('en'),
+        overrides: [clientsListBalancesOverride([twoClients(now).first])],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final all = tester.getSize(find.byKey(const Key('clients_filter_all')));
+    final active = tester.getSize(find.byKey(const Key('clients_filter_active')));
+    final archived = tester.getSize(find.byKey(const Key('clients_filter_archived')));
+    final row = tester.getSize(find.byType(ClientsListFilterChips));
+
+    expect(all.width, lessThan(archived.width));
+    expect(all.width + active.width + archived.width, lessThan(row.width));
   });
 }

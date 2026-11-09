@@ -17,6 +17,7 @@ class AppPagedView<T> extends StatelessWidget {
     this.separatorBuilder,
     this.itemPadding,
     this.pullToRefresh = false,
+    this.refreshEdgeOffset = 0,
     this.scrollPhysics,
     this.sliverHeaders = const [],
     this.sliverFooters = const [],
@@ -38,6 +39,7 @@ class AppPagedView<T> extends StatelessWidget {
   final IndexedWidgetBuilder? separatorBuilder;
   final EdgeInsets Function(int index)? itemPadding;
   final bool pullToRefresh;
+  final double refreshEdgeOffset;
   final ScrollPhysics? scrollPhysics;
   final List<Widget> sliverHeaders;
   final List<Widget> sliverFooters;
@@ -70,80 +72,77 @@ class AppPagedView<T> extends StatelessWidget {
 
         return switch (layout) {
           AppPagedLayout.list => PagedListView<int, T>(
-              state: state,
-              fetchNextPage: fetchNextPage,
-              physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
-              builderDelegate: delegate,
-            ),
+            state: state,
+            fetchNextPage: fetchNextPage,
+            physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            builderDelegate: delegate,
+          ),
           AppPagedLayout.listSeparated => PagedListView<int, T>.separated(
-              state: state,
-              fetchNextPage: fetchNextPage,
-              physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
-              builderDelegate: delegate,
-              separatorBuilder: separatorBuilder ?? (_, __) => const SizedBox(height: AppSize.spaceMD),
-            ),
+            state: state,
+            fetchNextPage: fetchNextPage,
+            physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            builderDelegate: delegate,
+            separatorBuilder: separatorBuilder ?? (_, _) => const SizedBox(height: AppSize.spaceMD),
+          ),
           AppPagedLayout.sliverList => CustomScrollView(
-              physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                ...sliverHeaders,
-                PagedSliverList<int, T>(
-                  state: state,
-                  fetchNextPage: fetchNextPage,
-                  shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
-                  builderDelegate: delegate,
-                ),
-                ...sliverFooters,
-              ],
-            ),
+            physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              ...sliverHeaders,
+              PagedSliverList<int, T>(
+                state: state,
+                fetchNextPage: fetchNextPage,
+                shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
+                builderDelegate: delegate,
+              ),
+              ...sliverFooters,
+            ],
+          ),
           AppPagedLayout.sliverListSeparated => CustomScrollView(
-              physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                ...sliverHeaders,
-                PagedSliverList<int, T>.separated(
-                  state: state,
-                  fetchNextPage: fetchNextPage,
-                  shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
-                  builderDelegate: delegate,
-                  separatorBuilder: separatorBuilder ?? (_, __) => const SizedBox(height: AppSize.spaceMD),
-                ),
-                ...sliverFooters,
-              ],
-            ),
+            physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              ...sliverHeaders,
+              PagedSliverList<int, T>.separated(
+                state: state,
+                fetchNextPage: fetchNextPage,
+                shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
+                builderDelegate: delegate,
+                separatorBuilder: separatorBuilder ?? (_, _) => const SizedBox(height: AppSize.spaceMD),
+              ),
+              ...sliverFooters,
+            ],
+          ),
           AppPagedLayout.sliverGrid => CustomScrollView(
-              physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                ...sliverHeaders,
-                if (gridPadding != null)
-                  SliverPadding(
-                    padding: gridPadding!,
-                    sliver: PagedSliverGrid<int, T>(
-                      state: state,
-                      fetchNextPage: fetchNextPage,
-                      shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
-                      gridDelegate: gridDelegate,
-                      builderDelegate: delegate,
-                    ),
-                  )
-                else
-                  PagedSliverGrid<int, T>(
+            physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              ...sliverHeaders,
+              if (gridPadding != null)
+                SliverPadding(
+                  padding: gridPadding!,
+                  sliver: PagedSliverGrid<int, T>(
                     state: state,
                     fetchNextPage: fetchNextPage,
                     shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
                     gridDelegate: gridDelegate,
                     builderDelegate: delegate,
                   ),
-                ...sliverFooters,
-              ],
-            ),
+                )
+              else
+                PagedSliverGrid<int, T>(
+                  state: state,
+                  fetchNextPage: fetchNextPage,
+                  shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
+                  gridDelegate: gridDelegate,
+                  builderDelegate: delegate,
+                ),
+              ...sliverFooters,
+            ],
+          ),
         };
       },
     );
 
     if (!pullToRefresh) return content;
 
-    return RefreshIndicator(
-      onRefresh: _onRefresh,
-      child: content,
-    );
+    return RefreshIndicator.adaptive(edgeOffset: refreshEdgeOffset, onRefresh: _onRefresh, child: content);
   }
 }
