@@ -9,6 +9,8 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart' show LedgerMath, StatementPeriodTotals;
 import '../../core/money/period_bounds.dart';
+import '../../core/clients/client_statement_record.dart';
+import '../../core/clients/clients_providers.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/repositories/bnood_repository.dart';
 import '../../core/resources/gen/assets.gen.dart';
@@ -18,6 +20,7 @@ import '../../core/widgets/toast/app_toast.dart';
 import 'pdf_statement_service.dart';
 import 'statement_pdf_export.dart';
 import 'statement_screen_toast.dart';
+import 'statement_api_client_document.dart';
 import 'statement_client_document.dart';
 import 'statement_export_store.dart';
 import 'statement_pdf_copy.dart';
@@ -43,6 +46,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   bool _prefsAvailable = true;
   List<Transaction> _allRows = const [];
   Future<_StatementData>? _loadFuture;
+  Future<_RemoteStatementData>? _remoteLoadFuture;
 
   @override
   void initState() {
@@ -52,6 +56,10 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
 
   void _startLoad(BnoodRepository repo) {
     _loadFuture = _load(repo);
+  }
+
+  void _startRemoteLoad() {
+    _remoteLoadFuture = _loadRemote();
   }
 
   Future<void> _loadExportCursor() async {
@@ -88,13 +96,23 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   }
 
   PeriodBounds _resolvePreset(StatementPeriodPreset preset) {
+    final remote = ref.read(remoteClientsEnabledProvider);
     return switch (preset) {
       StatementPeriodPreset.today => StatementPeriodLogic.todayBounds(),
       StatementPeriodPreset.month => StatementPeriodLogic.monthBounds(),
-      StatementPeriodPreset.all => StatementPeriodLogic.allTimeBounds(_allRows),
+      StatementPeriodPreset.all => remote
+          ? StatementPeriodLogic.remoteAllTimeBounds()
+          : StatementPeriodLogic.allTimeBounds(_allRows),
       StatementPeriodPreset.sinceLastExport => StatementPeriodLogic.sinceLastExportBounds(_lastExport) ?? _bounds,
       StatementPeriodPreset.custom => _bounds,
     };
+  }
+
+  static String _formatStatementDate(DateTime date) {
+    final y = date.year.toString().padLeft(4, '0');
+    final m = date.month.toString().padLeft(2, '0');
+    final d = date.day.toString().padLeft(2, '0');
+    return '$y-$m-$d';
   }
 
   bool get _sinceLastExportAvailable =>
@@ -104,50 +122,118 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final repo = ref.watch(repositoryProvider);
+    final remote = ref.watch(remoteClientsEnabledProvider);
     final localeCode = Localizations.localeOf(context).languageCode;
-    _loadFuture ??= _load(repo);
+    if (remote) {
+      _remoteLoadFuture ??= _loadRemote();
+    } else {
+      _loadFuture ??= _load(repo);
+    }
 
     return HomeFoundationScope(
-      child: FutureBuilder<_StatementData>(
-        future: _loadFuture,
-        builder: (context, snap) {
-          final colors = context.colors;
-          return Scaffold(
-            backgroundColor: colors.canvas,
-            appBar: CustomAppBar(title: l10n.statement),
-            body: _buildBody(context, snap, repo, localeCode),
-            bottomNavigationBar: snap.hasData
-                ? Material(
-                    color: colors.canvas,
-                    elevation: 0,
-                    child: SafeArea(
-                      top: false,
-                      minimum: const EdgeInsets.fromLTRB(
-                        AppSize.screenPadding,
-                        AppSize.spaceSM,
-                        AppSize.screenPadding,
-                        AppSize.spaceMD,
-                      ),
-                      child: AppButton(
-                        key: _sharePdfButtonKey,
-                        text: l10n.sharePdf,
-                        iconWidget: Assets.icons.shareOutline.svg(
-                          width: AppSize.iconCompact,
-                          height: AppSize.iconCompact,
-                        ),
-                        isLoading: _exporting,
-                        onPressed: _exporting ? null : () => _exportPdf(snap.data!, l10n),
-                      ),
-                    ),
-                  )
-                : null,
-          );
-        },
-      ),
+      child: remote
+          ? FutureBuilder<_RemoteStatementData>(
+              future: _remoteLoadFuture,
+              builder: (context, snap) => _scaffoldForBody(
+                context,
+                l10n,
+                showPdfFooter: false,
+                body: _buildRemoteBody(context, snap, localeCode),
+              ),
+            )
+          : FutureBuilder<_StatementData>(
+              future: _loadFuture,
+              builder: (context, snap) => _scaffoldForBody(
+                context,
+                l10n,
+                showPdfFooter: snap.hasData,
+                body: _buildLocalBody(context, snap, repo, localeCode),
+                onSharePdf: snap.hasData ? () => _exportPdf(snap.data!, l10n) : null,
+              ),
+            ),
     );
   }
 
-  Widget _buildBody(BuildContext context, AsyncSnapshot<_StatementData> snap, BnoodRepository repo, String localeCode) {
+  Widget _scaffoldForBody(
+    BuildContext context,
+    AppLocalizations l10n, {
+    required Widget body,
+    required bool showPdfFooter,
+    VoidCallback? onSharePdf,
+  }) {
+    final colors = context.colors;
+    return Scaffold(
+      backgroundColor: colors.canvas,
+      appBar: CustomAppBar(title: l10n.statement),
+      body: body,
+      bottomNavigationBar: showPdfFooter
+          ? Material(
+              color: colors.canvas,
+              elevation: 0,
+              child: SafeArea(
+                top: false,
+                minimum: const EdgeInsets.fromLTRB(
+                  AppSize.screenPadding,
+                  AppSize.spaceSM,
+                  AppSize.screenPadding,
+                  AppSize.spaceMD,
+                ),
+                child: AppButton(
+                  key: _sharePdfButtonKey,
+                  text: l10n.sharePdf,
+                  iconWidget: Assets.icons.shareOutline.svg(
+                    width: AppSize.iconCompact,
+                    height: AppSize.iconCompact,
+                  ),
+                  isLoading: _exporting,
+                  onPressed: _exporting || onSharePdf == null ? null : onSharePdf,
+                ),
+              ),
+            )
+          : null,
+    );
+  }
+
+  Widget _buildRemoteBody(BuildContext context, AsyncSnapshot<_RemoteStatementData> snap, String localeCode) {
+    if (snap.connectionState == ConnectionState.waiting && !snap.hasData) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (snap.hasError) {
+      return Center(child: Text(snap.error.toString()));
+    }
+    final data = snap.data!;
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        AppSize.screenPadding,
+        AppSize.spaceMD,
+        AppSize.screenPadding,
+        AppSize.spaceMD,
+      ),
+      children: [
+        StatementPeriodControls(
+          bounds: _bounds,
+          preset: _preset,
+          lastExport: null,
+          sinceLastExportAvailable: false,
+          onChanged: (b, preset) {
+            setState(() {
+              _preset = preset;
+              _bounds = preset == StatementPeriodPreset.custom ? b : _resolvePreset(preset);
+              _startRemoteLoad();
+            });
+          },
+        ),
+        const SizedBox(height: AppSize.spaceMD),
+        StatementApiClientDocument(
+          clientName: data.clientName,
+          statement: data.statement,
+          localeCode: localeCode,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLocalBody(BuildContext context, AsyncSnapshot<_StatementData> snap, BnoodRepository repo, String localeCode) {
     if (snap.connectionState == ConnectionState.waiting && !snap.hasData) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -172,7 +258,11 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
             setState(() {
               _preset = preset;
               _bounds = preset == StatementPeriodPreset.custom ? b : _resolvePreset(preset);
-              _startLoad(repo);
+              if (ref.read(remoteClientsEnabledProvider)) {
+                _startRemoteLoad();
+              } else {
+                _startLoad(repo);
+              }
             });
           },
         ),
@@ -191,6 +281,19 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
         ),
       ],
     );
+  }
+
+  Future<_RemoteStatementData> _loadRemote() async {
+    final clientsRepo = ref.read(clientsRepositoryProvider);
+    final record = await clientsRepo.getClient(widget.clientId);
+    final from = _formatStatementDate(_bounds.start);
+    final to = _formatStatementDate(_bounds.end);
+    final statement = await clientsRepo.getClientStatement(
+      clientId: widget.clientId,
+      from: from,
+      to: to,
+    );
+    return _RemoteStatementData(clientName: record.client.name, statement: statement);
   }
 
   Future<_StatementData> _load(BnoodRepository repo) async {
@@ -319,6 +422,13 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
       if (mounted) setState(() => _exporting = false);
     }
   }
+}
+
+class _RemoteStatementData {
+  const _RemoteStatementData({required this.clientName, required this.statement});
+
+  final String clientName;
+  final AppClientStatement statement;
 }
 
 class _StatementData {

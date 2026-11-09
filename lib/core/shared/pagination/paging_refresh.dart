@@ -20,6 +20,8 @@ abstract final class PagingListIds {
   static const clients = 'clients';
   static const items = 'items';
   static const providers = 'providers';
+
+  static String clientMovements(String clientId) => 'client-movements:$clientId';
 }
 
 void bindPagingListRefreshEpoch(WidgetRef ref, PagingListId id, VoidCallback refresh) {

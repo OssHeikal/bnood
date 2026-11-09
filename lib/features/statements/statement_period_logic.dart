@@ -19,6 +19,12 @@ abstract final class StatementPeriodLogic {
     );
   }
 
+  /// Online statements: server accepts `from` not before 2000-01-01.
+  static PeriodBounds remoteAllTimeBounds() => PeriodBounds.normalize(
+        start: DateTime(2000, 1, 1),
+        end: DateTime.now(),
+      );
+
   static PeriodBounds allTimeBounds(Iterable<Transaction> rows) {
     final now = DateTime.now();
     if (rows.isEmpty) {

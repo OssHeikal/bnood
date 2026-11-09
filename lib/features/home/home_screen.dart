@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/clients/clients_providers.dart';
+import '../../core/money/remote_money_units.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_amount.dart';
@@ -39,6 +41,8 @@ class HomeScreen extends ConsumerWidget {
           final clients = ref.watch(homeClientBalancesProvider);
           final suppliers = ref.watch(homeSupplierSpendsProvider);
           final craftsmen = ref.watch(homeCraftsmenProvider);
+          final remoteMoney = ref.watch(remoteClientsEnabledProvider);
+          final moneyScale = remoteMoney ? RemoteMoneyUnits.minorPerMajor : 100;
 
           final topInset = MediaQuery.paddingOf(context).top;
 
@@ -71,7 +75,11 @@ class HomeScreen extends ConsumerWidget {
                     actionLabel: l10n.retry,
                     onAction: () => ref.read(homeTotalsProvider.notifier).refreshSilently(),
                   ),
-                  data: (t) => HomeStatGrid(totals: t, localeCode: localeCode),
+                  data: (t) => HomeStatGrid(
+                    totals: t,
+                    localeCode: localeCode,
+                    minorPerMajor: moneyScale,
+                  ),
                 ),
                 AppSize.spaceXL.gap,
                 HomeSectionHeader(

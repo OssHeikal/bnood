@@ -230,8 +230,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/clients/:clientId/movements',
-        builder: (_, state) =>
-            MovementsListScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) => MovementsListScreen(
+          clientId: state.pathParameters['clientId']!,
+          itemId: state.uri.queryParameters['item_id'],
+        ),
       ),
       GoRoute(
         path: '/clients/:clientId/craftsmen',

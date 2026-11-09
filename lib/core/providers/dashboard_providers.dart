@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../clients/clients_providers.dart';
 import '../clients/clients_repository.dart';
+import '../home/home_riverpod.dart';
 import '../database/database.dart';
 import '../repositories/bnood_repository.dart';
 import '../../features/clients/client_detail_provider.dart';
@@ -68,6 +69,7 @@ void refreshAfterClientMutation(WidgetRef ref, {String? clientId, String? priorC
   final remoteClients = ref.read(remoteClientsEnabledProvider);
   if (remoteClients) {
     bumpPagingListRefresh(ref, PagingListIds.clients);
+    ref.read(homeTotalsProvider.notifier).refreshSilently();
   } else {
     refreshHomeDashboard(ref);
   }
@@ -76,15 +78,23 @@ void refreshAfterClientMutation(WidgetRef ref, {String? clientId, String? priorC
   if (priorClientId != null) ids.add(priorClientId);
   for (final id in ids) {
     refreshClientDetail(ref, id);
-    if (!remoteClients) {
-      ref.read(clientItemsStatsProvider(id).notifier).refreshSilently();
-    }
+    ref.read(clientItemsStatsProvider(id).notifier).refreshSilently();
   }
 }
 
 class HomeTotalsNotifier extends SilentAsyncNotifier<HomeTotals> {
   @override
-  Future<HomeTotals> fetch() => ref.read(repositoryProvider).homeTotals();
+  Future<HomeTotals> fetch() async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      final remote = await ref.read(homeRepositoryProvider).getHomeTotals();
+      return HomeTotals(
+        receivedPiastres: remote.receivedMinor,
+        spentPiastres: remote.spentMinor,
+        remainingPiastresOverride: remote.remainingMinor,
+      );
+    }
+    return ref.read(repositoryProvider).homeTotals();
+  }
 }
 
 Future<List<HomeClientBalanceRow>> homeClientBalanceRows(

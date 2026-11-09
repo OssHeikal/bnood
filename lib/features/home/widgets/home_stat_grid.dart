@@ -12,10 +12,16 @@ import '../../../app/widgets/shell_nav_icon.dart';
 import '../../../l10n/app_localizations.dart';
 
 class HomeStatGrid extends StatelessWidget {
-  const HomeStatGrid({super.key, required this.totals, required this.localeCode});
+  const HomeStatGrid({
+    super.key,
+    required this.totals,
+    required this.localeCode,
+    this.minorPerMajor = 100,
+  });
 
   final HomeTotals totals;
   final String localeCode;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +43,7 @@ class HomeStatGrid extends StatelessWidget {
                 tint: context.colors.success,
                 tintBg: context.colors.successBg,
                 localeCode: localeCode,
+                minorPerMajor: minorPerMajor,
               ),
             ),
             AppSize.spaceMD.gap,
@@ -51,6 +58,7 @@ class HomeStatGrid extends StatelessWidget {
                 tint: context.colors.spend,
                 tintBg: context.colors.errorBg,
                 localeCode: localeCode,
+                minorPerMajor: minorPerMajor,
               ),
             ),
           ],
@@ -67,6 +75,7 @@ class HomeStatGrid extends StatelessWidget {
           tint: context.colors.remaining,
           tintBg: context.colors.infoBg,
           localeCode: localeCode,
+          minorPerMajor: minorPerMajor,
           labelMaxLines: 3,
         ),
       ],
@@ -85,6 +94,7 @@ class _StatTile extends StatelessWidget {
     required this.tint,
     required this.tintBg,
     required this.localeCode,
+    this.minorPerMajor = 100,
     this.amountEmphasis = AppAmountSize.medium,
     this.labelMaxLines = 2,
   });
@@ -99,6 +109,7 @@ class _StatTile extends StatelessWidget {
   final Color tint;
   final Color tintBg;
   final String localeCode;
+  final int minorPerMajor;
   final int labelMaxLines;
 
   @override
@@ -125,7 +136,13 @@ class _StatTile extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               alignment: AlignmentDirectional.centerStart,
-              child: AppAmount(piastres: amount, role: role, size: amountEmphasis, localeCode: localeCode),
+              child: AppAmount(
+                piastres: amount,
+                role: role,
+                size: amountEmphasis,
+                localeCode: localeCode,
+                minorPerMajor: minorPerMajor,
+              ),
             ),
           ),
         ],

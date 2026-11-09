@@ -928,11 +928,17 @@ class BnoodRepository {
 }
 
 class HomeTotals {
-  const HomeTotals(
-      {required this.receivedPiastres, required this.spentPiastres});
+  const HomeTotals({
+    required this.receivedPiastres,
+    required this.spentPiastres,
+    this.remainingPiastresOverride,
+  });
+
   final int receivedPiastres;
   final int spentPiastres;
-  int get remainingPiastres => receivedPiastres - spentPiastres;
+  final int? remainingPiastresOverride;
+
+  int get remainingPiastres => remainingPiastresOverride ?? receivedPiastres - spentPiastres;
 }
 
 class HomeSupplierSpendRow {

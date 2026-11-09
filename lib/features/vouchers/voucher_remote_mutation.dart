@@ -8,6 +8,7 @@ import '../../core/vouchers/vouchers_error_handler.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
 import '../../core/money/remote_money_format.dart';
 import '../../core/providers/dashboard_providers.dart';
+import '../../core/shared/pagination/paging_refresh.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../providers/provider_detail_provider.dart';
 import 'voucher_draft.dart';
@@ -140,6 +141,9 @@ void refreshAfterRemoteVoucherMutation(
   String? providerId,
 }) {
   refreshAfterClientMutation(ref, clientId: clientId);
+  if (clientId != null) {
+    bumpPagingListRefresh(ref, PagingListIds.clientMovements(clientId));
+  }
   if (providerId != null) {
     ref.read(providerDetailProvider(providerId).notifier).refreshSilently();
   }

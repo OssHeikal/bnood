@@ -55,10 +55,17 @@ class VouchersApi {
   Future<VouchersListPage> listClientVouchers({
     required String clientId,
     String? q,
+    String? itemId,
     int page = 1,
     int perPage = 50,
   }) =>
-      _list('/v1/clients/$clientId/vouchers', q: q, page: page, perPage: perPage);
+      _list(
+        '/v1/clients/$clientId/vouchers',
+        q: q,
+        itemId: itemId,
+        page: page,
+        perPage: perPage,
+      );
 
   Future<VouchersListPage> listProviderVouchers({
     required String providerId,
@@ -71,6 +78,7 @@ class VouchersApi {
   Future<VouchersListPage> _list(
     String path, {
     String? q,
+    String? itemId,
     required int page,
     required int perPage,
   }) {
@@ -79,6 +87,7 @@ class VouchersApi {
         path,
         queryParameters: {
           if (q != null && q.trim().isNotEmpty) 'q': q.trim(),
+          if (itemId != null && itemId.isNotEmpty) 'item_id': itemId,
           'page': page,
           'per_page': perPage,
         },

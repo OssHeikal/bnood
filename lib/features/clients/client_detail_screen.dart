@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
+import '../../core/money/remote_money_units.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/api/auth_api_exception.dart';
@@ -27,6 +28,7 @@ import '../../app/widgets/shell_nav_icon.dart';
 import '../home/home_foundation_scope.dart';
 import '../home/widgets/home_section_header.dart';
 import '../vouchers/voucher_launcher.dart';
+import 'client_movements_navigation.dart';
 import 'client_detail_provider.dart';
 import 'client_detail_snapshot.dart';
 import 'client_edit_sheet.dart';
@@ -507,6 +509,14 @@ class _ClientDetailBody extends ConsumerWidget {
               iconName: data.topItems[i].iconName,
               breakdown: data.topItems[i].breakdown,
               localeCode: localeCode,
+              minorPerMajor: data.usesRemoteMoney ? RemoteMoneyUnits.minorPerMajor : 100,
+              onTap: data.topItems[i].itemId == null
+                  ? null
+                  : () => pushClientMovements(
+                        context,
+                        clientId: clientId,
+                        itemId: data.topItems[i].itemId,
+                      ),
             ),
           ],
         AppSize.spaceXL.gap,

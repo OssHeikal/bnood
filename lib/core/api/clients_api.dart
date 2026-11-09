@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../clients/client_api_record.dart';
+import '../clients/client_statement_record.dart';
 import '../repositories/bnood_repository.dart';
 import 'api_response_parser.dart';
 import 'app_dio.dart';
@@ -39,7 +40,7 @@ class ClientsApi {
       if (e.error is AuthApiException) {
         throw e.error as AuthApiException;
       }
-      throw ApiResponseParser.transport(e);
+      throw ApiResponseParser.fromDio(e);
     } catch (e) {
       throw ApiResponseParser.transport(e);
     }
@@ -174,6 +175,37 @@ class ClientsApi {
         options: Options(extra: _authenticatedExtra),
       );
       ApiResponseParser.expectSuccess(response);
+    });
+  }
+
+  Future<AppClientStatement> getClientStatement({
+    required String clientId,
+    required String from,
+    required String to,
+  }) {
+    return _guard(() async {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '$_prefix/$clientId/statement',
+        queryParameters: {'from': from, 'to': to},
+        options: Options(extra: _authenticatedExtra),
+      );
+      return ApiResponseParser.expectData(
+        response,
+        (json) => AppClientStatement.fromDataJson(json ?? const {}),
+      );
+    });
+  }
+
+  Future<AppClientItemSpend> getClientItemSpend(String clientId) {
+    return _guard(() async {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '$_prefix/$clientId/item-spend',
+        options: Options(extra: _authenticatedExtra),
+      );
+      return ApiResponseParser.expectData(
+        response,
+        (json) => AppClientItemSpend.fromDataJson(json ?? const {}),
+      );
     });
   }
 }

@@ -62,6 +62,20 @@ void main() {
       api.close();
     });
 
+    test('listClientVouchers sends item_id query param', () async {
+      late Uri uri;
+      final api = _vouchersApi((options) async {
+        uri = options.uri;
+        return jsonResponse(
+          '{"success":true,"data":[],"meta":{"page":1,"per_page":20,"total":0}}',
+        );
+      });
+      await api.listClientVouchers(clientId: 'c1', itemId: '01JVITEM', page: 1, perPage: 20);
+      expect(uri.queryParameters['item_id'], '01JVITEM');
+      expect(uri.path, endsWith('/clients/c1/vouchers'));
+      api.close();
+    });
+
     test('client_archived maps to exception', () async {
       final api = _vouchersApi(
         (_) async => jsonResponse(

@@ -17,10 +17,17 @@ class VouchersRepository {
   Future<VouchersListPage> listClientVouchers({
     required String clientId,
     String? q,
+    String? itemId,
     int page = 1,
     int perPage = 50,
   }) =>
-      _api.listClientVouchers(clientId: clientId, q: q, page: page, perPage: perPage);
+      _api.listClientVouchers(
+        clientId: clientId,
+        q: q,
+        itemId: itemId,
+        page: page,
+        perPage: perPage,
+      );
 
   Future<VouchersListPage> listProviderVouchers({
     required String providerId,

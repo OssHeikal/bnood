@@ -7,6 +7,7 @@ import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
 import 'client_detail_snapshot.dart';
+import 'client_item_spend_rows.dart';
 import 'client_movement_lines.dart';
 import 'client_voucher_movement_lines.dart';
 import 'widgets/client_balance_card.dart';
@@ -78,6 +79,9 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
         ..sort((a, b) => a.name.compareTo(b.name));
     }
 
+    final itemSpend = await ref.read(clientsRepositoryProvider).getClientItemSpend(clientId);
+    final topItems = clientItemRowsFromItemSpend(itemSpend.items.take(3));
+
     var latestMovements = <ClientDetailMovementLine>[];
     final vouchersOnline = ref.read(remoteVouchersEnabledProvider);
     if (vouchersOnline) {
@@ -99,7 +103,7 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
       spentPiastres: balances?.spentPiastres,
       estimatedProfitPiastres: null,
       craftsmanPreviews: previews,
-      topItems: const [],
+      topItems: topItems,
       latestMovements: latestMovements,
       onlineIdentityOnly: !vouchersOnline,
       usesRemoteMoney: true,
@@ -155,6 +159,7 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
     final topItemsNamed = topItems.take(3).map((e) {
       final item = itemById[e.key];
       return ClientDetailItemRowData(
+        itemId: e.key,
         name: item?.name ?? e.key,
         colorKey: item?.colorKey ?? 'teal',
         iconName: item?.iconName ?? 'category',

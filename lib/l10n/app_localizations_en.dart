@@ -99,6 +99,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeLoadErrorTitle => 'Could not load home';
 
   @override
+  String get clientMovementsLoadErrorTitle => 'Could not load movements';
+
+  @override
   String get homeNoSupplierSpendTitle => 'No material spend yet';
 
   @override

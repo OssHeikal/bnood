@@ -272,6 +272,12 @@ abstract class AppLocalizations {
   /// **'Could not load home'**
   String get homeLoadErrorTitle;
 
+  /// No description provided for @clientMovementsLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load movements'**
+  String get clientMovementsLoadErrorTitle;
+
   /// No description provided for @homeNoSupplierSpendTitle.
   ///
   /// In en, this message translates to:

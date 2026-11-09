@@ -1,6 +1,7 @@
 import '../api/clients_api.dart';
 import '../repositories/bnood_repository.dart';
 import 'client_api_record.dart';
+import 'client_statement_record.dart';
 
 class ClientsRepository {
   ClientsRepository(this._api);
@@ -46,6 +47,16 @@ class ClientsRepository {
   Future<ClientApiRecord> archiveClient(String id) => _api.archiveClient(id);
 
   Future<void> deleteClient(String id) => _api.deleteClient(id);
+
+  Future<AppClientStatement> getClientStatement({
+    required String clientId,
+    required String from,
+    required String to,
+  }) =>
+      _api.getClientStatement(clientId: clientId, from: from, to: to);
+
+  Future<AppClientItemSpend> getClientItemSpend(String clientId) =>
+      _api.getClientItemSpend(clientId);
 }
 
 HomeClientBalanceRow balanceRowFromRecord(ClientApiRecord record) {

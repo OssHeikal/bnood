@@ -1,0 +1,105 @@
+import 'package:bnood/core/api/app_dio.dart';
+import 'package:bnood/core/api/clients_api.dart';
+import 'package:bnood/core/clients/client_statement_record.dart';
+import 'package:bnood/core/money/remote_money_format.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'support/fake_session_store.dart';
+import 'support/scripted_dio_adapter.dart';
+
+ClientsApi _clientsApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+  final dio = createAppDio(FakeSessionStore(token: 'tok'));
+  dio.httpClientAdapter = ScriptedDioAdapter(handler);
+  return ClientsApi(dio: dio);
+}
+
+void main() {
+  group('AppClientStatement', () {
+    test('parses period totals and item spend rows', () {
+      final statement = AppClientStatement.fromDataJson({
+        'from': '2026-01-01',
+        'to': '2026-11-09',
+        'received': 10_000_000,
+        'spent': 8_000_000,
+        'remaining': 2_000_000,
+        'items': [
+          {'id': 'i1', 'name': 'Tiles', 'spent': 5_000_000},
+          {'id': 'i2', 'name': 'Paint', 'spent': 3_000_000},
+        ],
+      });
+      expect(statement.from, '2026-01-01');
+      expect(statement.items.length, 2);
+      expect(statement.items.first.spentMinor, 5_000_000);
+      expect(RemoteMoneyFormat.formatMinor(statement.items.first.spentMinor), '5,000 EGP');
+    });
+  });
+
+  group('AppClientItemSpend', () {
+    test('parses materials labor icon and color fields', () {
+      final item = AppClientStatementItemSpend.fromDataJson({
+        'id': '01JVITEM',
+        'name': 'Plumbing',
+        'spent': 13_000_000,
+        'materials': 10_000_000,
+        'labor': 3_000_000,
+        'icon_key': 'plumbing',
+        'color_key': 'blue',
+      });
+      expect(item.materialsMinor, 10_000_000);
+      expect(item.laborMinor, 3_000_000);
+      expect(item.spentMinor, 13_000_000);
+      expect(item.iconKey, 'plumbing');
+      expect(item.colorKey, 'blue');
+    });
+
+    test('parses all-time item list', () {
+      final spend = AppClientItemSpend.fromDataJson({
+        'items': [
+          {
+            'id': 'i1',
+            'name': 'Labor',
+            'spent': 1500,
+            'materials': 0,
+            'labor': 1500,
+            'icon_key': 'category',
+            'color_key': 'teal',
+          },
+        ],
+      });
+      expect(spend.items.single.name, 'Labor');
+      expect(spend.items.single.spentMinor, 1500);
+      expect(spend.items.single.laborMinor, 1500);
+      expect(RemoteMoneyFormat.formatMinor(1500), '1.5 EGP');
+    });
+  });
+
+  group('ClientsApi statements', () {
+    test('getClientStatement sends from and to query params', () async {
+      late Uri uri;
+      final api = _clientsApi((options) async {
+        uri = options.uri;
+        return jsonResponse(
+          '{"success":true,"data":{"from":"2026-01-01","to":"2026-01-31","received":0,"spent":0,"remaining":0,"items":[]}}',
+        );
+      });
+      await api.getClientStatement(clientId: 'c1', from: '2026-01-01', to: '2026-01-31');
+      expect(uri.queryParameters['from'], '2026-01-01');
+      expect(uri.queryParameters['to'], '2026-01-31');
+      expect(uri.path, endsWith('/clients/c1/statement'));
+      api.close();
+    });
+
+    test('getClientItemSpend hits item-spend path', () async {
+      late String path;
+      final api = _clientsApi((options) async {
+        path = options.path;
+        return jsonResponse('{"success":true,"data":{"items":[]}}');
+      });
+      final spend = await api.getClientItemSpend('c9');
+      expect(path, endsWith('/clients/c9/item-spend'));
+      expect(spend.items, isEmpty);
+      api.close();
+    });
+  });
+}

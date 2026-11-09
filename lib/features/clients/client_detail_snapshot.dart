@@ -29,12 +29,14 @@ class ClientCraftsmanPreviewRow {
 
 class ClientDetailItemRowData {
   const ClientDetailItemRowData({
+    this.itemId,
     required this.name,
     required this.colorKey,
     required this.iconName,
     required this.breakdown,
   });
 
+  final String? itemId;
   final String name;
   final String colorKey;
   final String iconName;

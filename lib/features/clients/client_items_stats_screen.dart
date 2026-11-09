@@ -3,6 +3,8 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
+import '../../core/clients/clients_providers.dart';
+import '../../core/money/remote_money_units.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_card.dart';
@@ -11,6 +13,7 @@ import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
 import '../home/home_foundation_scope.dart';
 import 'client_items_stats_provider.dart';
+import 'client_movements_navigation.dart';
 import 'widgets/client_detail_item_row.dart';
 import 'widgets/client_items_stats_skeleton.dart';
 
@@ -24,6 +27,7 @@ class ClientItemsStatsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
     final items = ref.watch(clientItemsStatsProvider(clientId));
+    final remoteMoney = ref.watch(remoteClientsEnabledProvider);
 
     return HomeFoundationScope(
       child: Builder(
@@ -77,6 +81,14 @@ class ClientItemsStatsScreen extends ConsumerWidget {
                             iconName: rows[i].iconName,
                             breakdown: rows[i].breakdown,
                             localeCode: localeCode,
+                            minorPerMajor: remoteMoney ? RemoteMoneyUnits.minorPerMajor : 100,
+                            onTap: rows[i].itemId == null
+                                ? null
+                                : () => pushClientMovements(
+                                      context,
+                                      clientId: clientId,
+                                      itemId: rows[i].itemId,
+                                    ),
                           ),
                         ],
                       ],

@@ -98,6 +98,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeLoadErrorTitle => 'تعذر تحميل الرئيسية';
 
   @override
+  String get clientMovementsLoadErrorTitle => 'تعذر تحميل الحركات';
+
+  @override
   String get homeNoSupplierSpendTitle => 'مفيش مصروف خامات لسه';
 
   @override

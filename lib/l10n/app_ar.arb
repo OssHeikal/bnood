@@ -29,6 +29,7 @@
   "homeNoActiveClientsTitle": "مفيش عملاء نشطين",
   "homeNoActiveClientsDescription": "أضف عميل من تبويب العملاء عشان تبدأ المتابعة.",
   "homeLoadErrorTitle": "تعذر تحميل الرئيسية",
+  "clientMovementsLoadErrorTitle": "تعذر تحميل الحركات",
   "homeNoSupplierSpendTitle": "مفيش مصروف خامات لسه",
   "homeNoSupplierSpendDescription": "مصروفات الخامات من الموردين للعملاء الناشطين هتظهر هنا بعد ما تسجّل صرف خامات.",
   "homeCraftsmenSection": "صنايعية بآخر أعمال",

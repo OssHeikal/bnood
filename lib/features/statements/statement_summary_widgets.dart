@@ -23,6 +23,7 @@ class StatementSummaryStatCard extends StatelessWidget {
     required this.role,
     required this.localeCode,
     this.cardKey,
+    this.minorPerMajor = 100,
   });
 
   final String label;
@@ -31,6 +32,7 @@ class StatementSummaryStatCard extends StatelessWidget {
   final AppAmountRole role;
   final String localeCode;
   final Key? cardKey;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,13 @@ class StatementSummaryStatCard extends StatelessWidget {
             const SizedBox(height: statementSummaryLabelAmountGap),
             Align(
               alignment: AlignmentDirectional.centerStart,
-              child: AppAmount(piastres: piastres, localeCode: localeCode, size: AppAmountSize.small, role: role),
+              child: AppAmount(
+                piastres: piastres,
+                localeCode: localeCode,
+                size: AppAmountSize.small,
+                role: role,
+                minorPerMajor: minorPerMajor,
+              ),
             ),
           ],
         ),

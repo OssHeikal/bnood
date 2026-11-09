@@ -29,6 +29,7 @@
   "homeNoActiveClientsTitle": "No active clients",
   "homeNoActiveClientsDescription": "Add a client from the Clients tab to start tracking.",
   "homeLoadErrorTitle": "Could not load home",
+  "clientMovementsLoadErrorTitle": "Could not load movements",
   "homeNoSupplierSpendTitle": "No material spend yet",
   "homeNoSupplierSpendDescription": "Supplier purchases for active clients will show here after you record material expenses.",
   "homeCraftsmenSection": "Craftsmen with recent labor",
