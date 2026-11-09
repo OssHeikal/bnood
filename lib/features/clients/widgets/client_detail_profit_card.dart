@@ -4,6 +4,7 @@ import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/money/basis_points.dart';
+import '../../../core/money/remote_money_units.dart';
 import '../../../core/widgets/app_amount.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_chevron.dart';
@@ -18,6 +19,7 @@ class ClientDetailProfitCard extends StatelessWidget {
     required this.localeCode,
     required this.onEdit,
     this.mutationsEnabled = true,
+    this.minorPerMajor = 100,
   });
 
   final int? engineerBasisPoints;
@@ -25,6 +27,7 @@ class ClientDetailProfitCard extends StatelessWidget {
   final String localeCode;
   final VoidCallback onEdit;
   final bool mutationsEnabled;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +68,7 @@ class ClientDetailProfitCard extends StatelessWidget {
                   role: AppAmountRole.neutral,
                   size: AppAmountSize.medium,
                   localeCode: localeCode,
+                  minorPerMajor: minorPerMajor,
                 ),
               AppSize.spaceSM.gap,
               if (mutationsEnabled) const AppChevron.forward(size: AppSize.iconSmall),

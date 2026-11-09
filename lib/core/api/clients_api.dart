@@ -13,20 +13,16 @@ import 'auth_interceptor.dart';
 import '../storage/session_store.dart';
 
 class ClientsApi {
-  ClientsApi({
-    Dio? dio,
-    SessionStore? sessionStore,
-  })  : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
-        _ownsDio = dio == null;
+  ClientsApi({Dio? dio, SessionStore? sessionStore})
+    : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
+      _ownsDio = dio == null;
 
   final Dio _dio;
   final bool _ownsDio;
 
   static const _prefix = '/v1/clients';
 
-  Map<String, dynamic> get _authenticatedExtra => {
-        AuthInterceptor.authenticatedExtraKey: true,
-      };
+  Map<String, dynamic> get _authenticatedExtra => {AuthInterceptor.authenticatedExtraKey: true};
 
   void close({bool force = false}) {
     if (_ownsDio) {
@@ -50,10 +46,10 @@ class ClientsApi {
   }
 
   String _statusParam(ClientListArchiveFilter filter) => switch (filter) {
-        ClientListArchiveFilter.all => 'all',
-        ClientListArchiveFilter.active => 'active',
-        ClientListArchiveFilter.archived => 'archived',
-      };
+    ClientListArchiveFilter.all => 'all',
+    ClientListArchiveFilter.active => 'active',
+    ClientListArchiveFilter.archived => 'archived',
+  };
 
   Future<ClientsListPage> listClients({
     required ClientListArchiveFilter status,
@@ -82,9 +78,7 @@ class ClientsApi {
         throw AuthApiException(statusCode: statusCode, message: 'Unexpected response shape');
       }
       final meta = json['meta'] as Map<String, dynamic>? ?? const {};
-      final items = data
-          .map((e) => ClientApiRecord.fromDataJson(e as Map<String, dynamic>))
-          .toList();
+      final items = data.map((e) => ClientApiRecord.fromDataJson(e as Map<String, dynamic>)).toList();
       return ClientsListPage(
         items: items,
         page: (meta['page'] as num?)?.toInt() ?? page,
@@ -100,16 +94,14 @@ class ClientsApi {
         '$_prefix/$id',
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (json) => ClientApiRecord.fromDataJson(json ?? const {}),
-      );
+      return ApiResponseParser.expectData(response, (json) => ClientApiRecord.fromDataJson(json ?? const {}));
     });
   }
 
   Future<ClientApiRecord> createClient({
     required String name,
     String? phone,
+    int? engineerBasisPoints,
     bool confirmDuplicateName = false,
   }) {
     return _guard(() async {
@@ -118,14 +110,12 @@ class ClientsApi {
         data: {
           'name': name,
           if (phone != null && phone.isNotEmpty) 'phone': phone,
+          'engineer_basis_points': ?engineerBasisPoints,
           if (confirmDuplicateName) 'confirm_duplicate_name': true,
         },
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (json) => ClientApiRecord.fromDataJson(json ?? const {}),
-      );
+      return ApiResponseParser.expectData(response, (json) => ClientApiRecord.fromDataJson(json ?? const {}));
     });
   }
 
@@ -133,28 +123,29 @@ class ClientsApi {
     required String id,
     String? name,
     String? phone,
+    int? engineerBasisPoints,
     bool confirmDuplicateName = false,
     bool clearPhone = false,
+    bool clearEngineerBasisPoints = false,
   }) {
     return _guard(() async {
-      final body = <String, dynamic>{
-        if (name != null) 'name': name,
-        if (confirmDuplicateName) 'confirm_duplicate_name': true,
-      };
+      final body = <String, dynamic>{'name': ?name, if (confirmDuplicateName) 'confirm_duplicate_name': true};
       if (clearPhone) {
         body['phone'] = '';
       } else if (phone != null) {
         body['phone'] = phone;
+      }
+      if (clearEngineerBasisPoints) {
+        body['engineer_basis_points'] = null;
+      } else if (engineerBasisPoints != null) {
+        body['engineer_basis_points'] = engineerBasisPoints;
       }
       final response = await _dio.patch<Map<String, dynamic>>(
         '$_prefix/$id',
         data: body,
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (json) => ClientApiRecord.fromDataJson(json ?? const {}),
-      );
+      return ApiResponseParser.expectData(response, (json) => ClientApiRecord.fromDataJson(json ?? const {}));
     });
   }
 
@@ -164,10 +155,7 @@ class ClientsApi {
         '$_prefix/$id/archive',
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (json) => ClientApiRecord.fromDataJson(json ?? const {}),
-      );
+      return ApiResponseParser.expectData(response, (json) => ClientApiRecord.fromDataJson(json ?? const {}));
     });
   }
 
@@ -181,21 +169,14 @@ class ClientsApi {
     });
   }
 
-  Future<AppClientStatement> getClientStatement({
-    required String clientId,
-    required String from,
-    required String to,
-  }) {
+  Future<AppClientStatement> getClientStatement({required String clientId, required String from, required String to}) {
     return _guard(() async {
       final response = await _dio.get<Map<String, dynamic>>(
         '$_prefix/$clientId/statement',
         queryParameters: {'from': from, 'to': to},
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (json) => AppClientStatement.fromDataJson(json ?? const {}),
-      );
+      return ApiResponseParser.expectData(response, (json) => AppClientStatement.fromDataJson(json ?? const {}));
     });
   }
 
@@ -205,10 +186,7 @@ class ClientsApi {
         '$_prefix/$clientId/item-spend',
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (json) => AppClientItemSpend.fromDataJson(json ?? const {}),
-      );
+      return ApiResponseParser.expectData(response, (json) => AppClientItemSpend.fromDataJson(json ?? const {}));
     });
   }
 
@@ -229,14 +207,10 @@ class ClientsApi {
       );
       final statusCode = response.statusCode ?? 0;
       final contentType = response.headers.value(Headers.contentTypeHeader) ?? '';
-      if (statusCode >= 200 &&
-          statusCode < 300 &&
-          contentType.toLowerCase().contains('application/pdf')) {
+      if (statusCode >= 200 && statusCode < 300 && contentType.toLowerCase().contains('application/pdf')) {
         final bytes = Uint8List.fromList(response.data ?? const []);
-        final fileName = clientStatementPdfFileNameFromHeader(
-              response.headers.value('content-disposition'),
-            ) ??
-            'statement.pdf';
+        final fileName =
+            clientStatementPdfFileNameFromHeader(response.headers.value('content-disposition')) ?? 'statement.pdf';
         return ClientStatementPdf(bytes: bytes, fileName: fileName);
       }
       try {
@@ -244,10 +218,7 @@ class ClientsApi {
         throw ApiResponseParser.fromFailure(response, json);
       } catch (e) {
         if (e is AuthApiException) rethrow;
-        throw AuthApiException(
-          statusCode: statusCode,
-          message: 'Statement PDF download failed',
-        );
+        throw AuthApiException(statusCode: statusCode, message: 'Statement PDF download failed');
       }
     });
   }

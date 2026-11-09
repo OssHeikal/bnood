@@ -36,6 +36,13 @@ class ClientApiRecord {
       throw const FormatException('Client response missing project');
     }
 
+    int? readOptionalInt(Object? raw) {
+      if (raw == null) return null;
+      if (raw is int) return raw;
+      if (raw is num) return raw.round();
+      return null;
+    }
+
     final project = Project(
       id: projectJson['id'] as String,
       workspaceId: remoteWorkspaceMarker,
@@ -43,7 +50,7 @@ class ClientApiRecord {
       name: projectJson['name'] as String,
       unitAddress: null,
       status: projectJson['status'] as String,
-      engineerBasisPoints: null,
+      engineerBasisPoints: readOptionalInt(projectJson['engineer_basis_points']),
       createdAt: createdAt,
       updatedAt: updatedAt,
     );

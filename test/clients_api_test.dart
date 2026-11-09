@@ -33,6 +33,38 @@ void main() {
       expect(record.client.name, 'Ahmed');
       expect(record.project.id, '01JPROJ');
     });
+
+    test('parses engineer_basis_points from project', () {
+      final record = ClientApiRecord.fromDataJson({
+        'id': '01JCLIENT',
+        'name': 'Ahmed',
+        'phone': null,
+        'archived_at': null,
+        'created_at': '2026-11-09T10:00:00Z',
+        'updated_at': '2026-11-09T10:00:00Z',
+        'project': {
+          'id': '01JPROJ',
+          'name': 'Ahmed',
+          'status': 'active',
+          'engineer_basis_points': 750,
+        },
+        'balances': {'received': 10000, 'spent': 50000, 'remaining': 5000},
+      });
+      expect(record.project.engineerBasisPoints, 750);
+    });
+
+    test('null engineer_basis_points when omitted from project', () {
+      final record = ClientApiRecord.fromDataJson({
+        'id': '01JCLIENT',
+        'name': 'Ahmed',
+        'phone': null,
+        'archived_at': null,
+        'created_at': '2026-11-09T10:00:00Z',
+        'updated_at': '2026-11-09T10:00:00Z',
+        'project': {'id': '01JPROJ', 'name': 'Ahmed', 'status': 'active'},
+      });
+      expect(record.project.engineerBasisPoints, isNull);
+    });
   });
 
   group('ClientsApi', () {
@@ -61,6 +93,28 @@ void main() {
         () => api.createClient(name: 'Ahmed'),
         throwsA(isA<AuthApiException>().having((e) => e.isDuplicateName, 'dup', isTrue)),
       );
+      api.close();
+    });
+
+    test('updateClient sends engineer_basis_points and clear null', () async {
+      final bodies = <Map<String, dynamic>>[];
+      final api = _clientsApi((options) async {
+        if (options.method == 'PATCH') {
+          bodies.add(Map<String, dynamic>.from(options.data as Map));
+        }
+        return jsonResponse('''
+{"success":true,"message":"ok","data":{
+  "id":"01JCLIENT","name":"Ahmed","phone":null,"archived_at":null,
+  "created_at":"2026-11-09T10:00:00Z","updated_at":"2026-11-09T10:00:00Z",
+  "project":{"id":"01JPROJ","name":"Ahmed","status":"active","engineer_basis_points":500}
+}}''');
+      });
+      await api.updateClient(id: '01JCLIENT', engineerBasisPoints: 500);
+      await api.updateClient(id: '01JCLIENT', clearEngineerBasisPoints: true);
+      expect(bodies.length, 2);
+      expect(bodies[0]['engineer_basis_points'], 500);
+      expect(bodies[1].containsKey('engineer_basis_points'), isTrue);
+      expect(bodies[1]['engineer_basis_points'], isNull);
       api.close();
     });
 

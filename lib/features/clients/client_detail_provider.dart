@@ -96,12 +96,20 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
       );
     }
 
+    final spentMinor = balances?.spentPiastres;
+    final profit = record.project.engineerBasisPoints == null || spentMinor == null
+        ? null
+        : MoneyFormat.estimatedProfitPiastres(
+            totalSpendPiastres: spentMinor,
+            engineerBasisPoints: record.project.engineerBasisPoints!,
+          );
+
     return ClientDetailSnapshot(
       client: record.client,
       project: record.project,
       receivedPiastres: balances?.receivedPiastres,
-      spentPiastres: balances?.spentPiastres,
-      estimatedProfitPiastres: null,
+      spentPiastres: spentMinor,
+      estimatedProfitPiastres: profit,
       craftsmanPreviews: previews,
       topItems: topItems,
       latestMovements: latestMovements,

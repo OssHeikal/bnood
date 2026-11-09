@@ -422,6 +422,7 @@ class _ClientDetailBody extends ConsumerWidget {
           engineerBasisPoints: data.project.engineerBasisPoints,
           estimatedProfitPiastres: data.estimatedProfitPiastres,
           localeCode: localeCode,
+          minorPerMajor: data.usesRemoteMoney ? RemoteMoneyUnits.minorPerMajor : 100,
           mutationsEnabled: mutationsEnabled,
           onEdit: () {
             if (!mutationsEnabled) return;

@@ -22,11 +22,13 @@ class ClientsRepository {
   Future<ClientApiRecord> createClient({
     required String name,
     String? phone,
+    int? engineerBasisPoints,
     bool confirmDuplicateName = false,
   }) =>
       _api.createClient(
         name: name,
         phone: phone,
+        engineerBasisPoints: engineerBasisPoints,
         confirmDuplicateName: confirmDuplicateName,
       );
 
@@ -34,15 +36,19 @@ class ClientsRepository {
     required String id,
     String? name,
     String? phone,
+    int? engineerBasisPoints,
     bool confirmDuplicateName = false,
     bool clearPhone = false,
+    bool clearEngineerBasisPoints = false,
   }) =>
       _api.updateClient(
         id: id,
         name: name,
         phone: phone,
+        engineerBasisPoints: engineerBasisPoints,
         confirmDuplicateName: confirmDuplicateName,
         clearPhone: clearPhone,
+        clearEngineerBasisPoints: clearEngineerBasisPoints,
       );
 
   Future<ClientApiRecord> archiveClient(String id) => _api.archiveClient(id);

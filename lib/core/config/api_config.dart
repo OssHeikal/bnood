@@ -1,5 +1,7 @@
-/// Compile-time API base (no secrets). Override when building for a device on LAN:
-/// `flutter run --dart-define=BNOOD_API_BASE_URL=http://192.168.x.x/api`
+/// Compile-time API base (no secrets).
+///
+/// Prefer env files: `--dart-define-from-file=.env.dev` or `.env.prod`.
+/// Single override: `--dart-define=BNOOD_API_BASE_URL=...` (wins over file keys).
 abstract final class ApiConfig {
   static const baseUrl = String.fromEnvironment(
     'BNOOD_API_BASE_URL',

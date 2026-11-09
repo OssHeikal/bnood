@@ -16,25 +16,14 @@ class _DuplicateClientsRepository extends ClientsRepository {
   var calls = 0;
 
   @override
-  Future<ClientApiRecord> createClient({
-    required String name,
-    String? phone,
-    bool confirmDuplicateName = false,
-  }) async {
+  Future<ClientApiRecord> createClient({required String name, String? phone, bool confirmDuplicateName = false}) async {
     calls++;
     if (calls == 1) {
       throw AuthApiException(statusCode: 409, message: 'dup', code: 'duplicate_name');
     }
     final now = DateTime.utc(2026, 11, 9);
     return ClientApiRecord(
-      client: Client(
-        id: 'c1',
-        workspaceId: 'remote',
-        name: name,
-        phone: phone,
-        createdAt: now,
-        updatedAt: now,
-      ),
+      client: Client(id: 'c1', workspaceId: 'remote', name: name, phone: phone, createdAt: now, updatedAt: now),
       project: Project(
         id: 'p1',
         workspaceId: 'remote',
@@ -64,11 +53,7 @@ class _HarnessState extends ConsumerState<_Harness> {
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            final created = await saveClientCreate(
-              ref: ref,
-              context: context,
-              name: 'Ahmed',
-            );
+            final created = await saveClientCreate(ref: ref, context: context, name: 'Ahmed');
             widget.onResult(created);
           },
           child: const Text('save'),

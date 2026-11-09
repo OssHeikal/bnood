@@ -32,6 +32,27 @@ Project rules live under [`.cursor/rules/`](.cursor/rules/). UI work: `bnood-imp
 - Planning: explicit Grok 4.7 / 4.6; implementation and doc edits: Composer 2.5 fast (`fast: false`); no Auto.
 - **No application implementation** until explicitly approved beyond this documentation pass.
 
+## Release builds
+
+API base URL is compile-time via `BNOOD_API_BASE_URL` (`lib/core/config/api_config.dart`). Committed `.env.dev` / `.env.prod` at the repo root hold public URLs only (not in `.gitignore`).
+
+**CLI (fvm):**
+
+```bash
+fvm flutter run --dart-define-from-file=.env.dev
+fvm flutter build ipa --release --dart-define-from-file=.env.prod
+fvm flutter build appbundle --release --dart-define-from-file=.env.prod
+fvm flutter build apk --release --dart-define-from-file=.env.prod
+```
+
+- IPA: `build/ios/ipa/`
+- App bundle (Play Store): `build/app/outputs/bundle/release/`
+- APK: `build/app/outputs/flutter-apk/`
+
+**IDE:** Run and Debug → **Bnood (dev)** or **Bnood (prod)** (`.vscode/launch.json` passes the same `--dart-define-from-file` paths).
+
+If you omit the flag, the app uses the dev default `http://bnood.test/api` (same as `.env.dev`).
+
 ## Quick links
 
 - V1: [local-only scope](docs/scope.md#v1-local-only)
