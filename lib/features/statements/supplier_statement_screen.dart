@@ -13,7 +13,7 @@ import '../../core/providers/app_providers.dart';
 import '../../core/repositories/bnood_repository.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/buttons/app_button.dart';
-import '../../core/widgets/foundation_app_bar.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/toast/app_toast.dart';
 import '../home/home_foundation_scope.dart';
 import 'pdf_statement_service.dart';
@@ -120,7 +120,7 @@ class _SupplierStatementScreenState extends ConsumerState<SupplierStatementScree
           final colors = context.colors;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: FoundationAppBar(title: l10n.statement),
+            appBar: CustomAppBar(title: l10n.statement),
             body: _buildBody(context, snap, repo, localeCode),
             bottomNavigationBar: snap.hasData
                 ? Material(

@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/config/theme/app_colors.dart';
-import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
@@ -12,7 +11,7 @@ import '../../core/repositories/bnood_repository.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/pagination.dart';
 import '../../core/widgets/app_fallback.dart';
-import '../../core/widgets/app_pressable.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../app/widgets/shell_nav_icon.dart';
@@ -118,13 +117,10 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
       child: Builder(
         builder: (context) {
           final colors = context.colors;
-          final text = context.text;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: AppBar(
-              backgroundColor: colors.canvas,
-              elevation: 0,
-              title: Text(l10n.navClients, style: text.pageTitle),
+            appBar: CustomAppBar(
+              title: l10n.navClients,
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(100),
                 child: Column(
@@ -157,31 +153,16 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                 ),
               ),
               actions: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(end: AppSize.spaceMD),
-                  child: Tooltip(
-                    message: l10n.addClient,
-                    child: AppPressable(
-                      onPressed: () => _addClient(context, ref),
-                      child: Material(
-                        key: const Key('clients_app_bar_add'),
-                        color: colors.accentTeal.tint,
-                        shape: AppShape.superellipse(radius: AppSize.radiusSM),
-                        clipBehavior: Clip.antiAlias,
-                        child: SizedBox(
-                          width: AppSize.buttonHeight,
-                          height: AppSize.buttonHeight,
-                          child: Center(
-                            child: ShellNavIcon(
-                              asset: Assets.icons.clientsAddOutline,
-                              color: colors.primaryOnTint,
-                              size: AppSize.icon,
-                              semanticsLabel: l10n.addClient,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                CustomAppBarAction(
+                  key: const Key('clients_app_bar_add'),
+                  tooltip: l10n.addClient,
+                  tone: CustomAppBarActionTone.tint,
+                  onPressed: () => _addClient(context, ref),
+                  child: ShellNavIcon(
+                    asset: Assets.icons.clientsAddOutline,
+                    color: colors.primaryOnTint,
+                    size: AppSize.icon,
+                    semanticsLabel: l10n.addClient,
                   ),
                 ),
               ],

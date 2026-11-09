@@ -6,8 +6,7 @@ import '../core/config/theme/app_colors.dart';
 import '../core/config/theme/app_size.dart';
 import '../core/resources/gen/assets.gen.dart';
 import '../core/widgets/app_fallback.dart';
-import '../core/widgets/app_pressable.dart';
-import '../core/widgets/foundation_app_bar.dart';
+import '../core/widgets/custom_app_bar.dart';
 import '../features/home/home_foundation_scope.dart';
 import '../features/settings/app_settings_sheet.dart';
 import 'app_shell_online_tabs.dart';
@@ -41,23 +40,18 @@ class AppShellTabGate extends ConsumerWidget {
         builder: (context) {
           return Scaffold(
             backgroundColor: context.colors.canvas,
-            appBar: FoundationAppBar(
+            appBar: CustomAppBar(
               title: _tabTitle(l10n),
               actions: [
-                Semantics(
-                  button: true,
-                  label: l10n.settingsTitle,
-                  child: AppPressable(
-                    onPressed: () => showAppSettingsSheet(context),
-                    child: Padding(
-                    padding: const EdgeInsetsDirectional.all(AppSize.spaceSM),
-                    child: ShellNavIcon(
-                      asset: Assets.icons.settingsOutline,
-                      size: AppSize.icon,
-                      color: context.colors.onSurface,
-                    ),
+                CustomAppBarAction(
+                  tooltip: l10n.settingsTitle,
+                  onPressed: () => showAppSettingsSheet(context),
+                  child: ShellNavIcon(
+                    asset: Assets.icons.settingsOutline,
+                    size: AppSize.icon,
+                    color: context.colors.onSurface,
+                    semanticsLabel: l10n.settingsTitle,
                   ),
-                ),
                 ),
               ],
             ),

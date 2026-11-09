@@ -4,6 +4,7 @@ import '../../../core/brand/app_brand_lockup.dart';
 import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
+import '../../../core/widgets/custom_app_bar.dart';
 import '../../home/home_foundation_scope.dart';
 
 /// Body-only auth shell: empty app bar, keyboard-safe scroll, no pinned footer chrome.
@@ -40,7 +41,7 @@ class AuthFlowScaffold extends StatelessWidget {
         builder: (context) {
           final colors = context.colors;
           return Scaffold(
-            appBar: AppBar(backgroundColor: colors.canvas),
+            appBar: const CustomAppBar(),
             body: SafeArea(
               child: SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(

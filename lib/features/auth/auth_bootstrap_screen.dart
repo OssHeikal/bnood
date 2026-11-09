@@ -6,7 +6,7 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/buttons/app_button.dart';
-import '../../core/widgets/foundation_app_bar.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../home/home_foundation_scope.dart';
 import 'auth_controller.dart';
 import 'auth_form_ui.dart';
@@ -26,7 +26,7 @@ class AuthBootstrapScreen extends ConsumerWidget {
       child: Builder(
         builder: (context) {
           return Scaffold(
-            appBar: FoundationAppBar(title: l10n.appTitle),
+            appBar: CustomAppBar(title: l10n.appTitle),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(AppSize.screenPadding),

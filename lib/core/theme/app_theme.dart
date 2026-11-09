@@ -26,12 +26,13 @@ abstract final class AppTheme {
     return base.copyWith(
       textTheme: base.textTheme.apply(fontFamily: 'Cairo'),
       appBarTheme: AppBarTheme(
-        centerTitle: true,
-        backgroundColor:
-            isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        centerTitle: false,
+        backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
         foregroundColor:
             isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
       ),
       navigationBarTheme: NavigationBarThemeData(
         indicatorColor: AppColors.primary.withValues(alpha: 0.15),

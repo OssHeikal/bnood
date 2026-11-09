@@ -9,7 +9,7 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/utils/extensions/bidi_isolate.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
-import '../../core/widgets/foundation_app_bar.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../home/home_foundation_scope.dart';
 import 'auth_controller.dart';
 import 'auth_messages.dart';
@@ -27,7 +27,7 @@ class RemoteWorkspaceScreen extends ConsumerWidget {
       child: Builder(
         builder: (context) {
           return Scaffold(
-            appBar: FoundationAppBar(title: l10n.authRemoteWorkspaceTitle),
+            appBar: CustomAppBar(title: l10n.authRemoteWorkspaceTitle),
             body: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(AppSize.screenPadding),

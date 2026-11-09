@@ -6,7 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
-import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_error_handler.dart';
@@ -20,7 +19,7 @@ import '../../core/widgets/app_fallback.dart';
 import '../../core/utils/whatsapp_phone.dart';
 import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/foundation_app_bar_title.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
 import '../../core/widgets/toast/app_tone.dart';
 import '../../app/widgets/shell_nav_icon.dart';
@@ -63,23 +62,13 @@ class ClientDetailScreen extends ConsumerWidget {
           final hasPhone = phone != null && phone.isNotEmpty;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: AppBar(
-              backgroundColor: colors.canvas,
-              surfaceTintColor: Colors.transparent,
-              scrolledUnderElevation: 0,
-              elevation: 0,
-              centerTitle: false,
-              toolbarHeight: hasPhone ? 64 : kToolbarHeight,
-              title: client != null
-                  ? FoundationAppBarTitle(
-                      title: client.name,
-                      subtitle: hasPhone ? phone : null,
-                      subtitleLtr: true,
-                    )
-                  : FoundationAppBarTitle(title: l10n.navClients),
+            appBar: CustomAppBar(
+              title: client?.name ?? l10n.navClients,
+              subtitle: hasPhone ? phone : null,
+              subtitleLtr: true,
               actions: client != null
                   ? [
-                      _AppBarIconAction(
+                      CustomAppBarAction(
                         key: const Key('client_detail_edit'),
                         tooltip: l10n.edit,
                         enabled: mutationsEnabled,
@@ -103,33 +92,28 @@ class ClientDetailScreen extends ConsumerWidget {
                           builder: (context) {
                             final waDigits = WhatsAppPhone.waMeDigits(phone);
                             final waEnabled = mutationsEnabled && waDigits != null;
-                            return Padding(
-                              padding: const EdgeInsetsDirectional.only(end: AppSize.spaceMD),
-                              child: _AppBarIconAction(
-                                key: const Key('client_detail_whatsapp'),
-                                tooltip: l10n.whatsapp,
-                                enabled: waEnabled,
-                                onPressed: waEnabled
-                                    ? () => _openWhatsApp(context, l10n, waDigits)
-                                    : mutationsEnabled
-                                        ? () => AppToaster.show(l10n.whatsappInvalidPhone, kind: ToastKind.failure)
-                                        : null,
-                                child: Opacity(
-                                  opacity: waEnabled ? 1 : 0.38,
-                                  child: Assets.icons.whatsappColor.svg(
-                                    width: AppSize.icon,
-                                    height: AppSize.icon,
-                                    semanticsLabel: l10n.whatsapp,
-                                  ),
+                            return CustomAppBarAction(
+                              key: const Key('client_detail_whatsapp'),
+                              tooltip: l10n.whatsapp,
+                              enabled: waEnabled,
+                              onPressed: waEnabled
+                                  ? () => _openWhatsApp(context, l10n, waDigits)
+                                  : mutationsEnabled
+                                      ? () => AppToaster.show(l10n.whatsappInvalidPhone, kind: ToastKind.failure)
+                                      : null,
+                              child: Opacity(
+                                opacity: waEnabled ? 1 : 0.38,
+                                child: Assets.icons.whatsappColor.svg(
+                                  width: AppSize.icon,
+                                  height: AppSize.icon,
+                                  semanticsLabel: l10n.whatsapp,
                                 ),
                               ),
                             );
                           },
-                        )
-                      else
-                        const SizedBox(width: AppSize.spaceMD),
+                        ),
                     ]
-                  : const [],
+                  : null,
             ),
             body: ListView(
               padding: EdgeInsets.fromLTRB(
@@ -194,45 +178,6 @@ class ClientDetailScreen extends ConsumerWidget {
         AppToaster.show(l10n.whatsappLaunchFailed, kind: ToastKind.failure);
       }
     }
-  }
-}
-
-class _AppBarIconAction extends StatelessWidget {
-  const _AppBarIconAction({
-    super.key,
-    required this.tooltip,
-    required this.onPressed,
-    required this.child,
-    this.enabled = true,
-  });
-
-  final String tooltip;
-  final VoidCallback? onPressed;
-  final Widget child;
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(end: AppSize.spaceXS),
-      child: Tooltip(
-        message: tooltip,
-        child: AppPressable(
-          enabled: enabled,
-          onPressed: onPressed,
-          child: Material(
-            color: context.colors.surface,
-            shape: AppShape.superellipse(radius: AppSize.radiusSM),
-            clipBehavior: Clip.antiAlias,
-            child: SizedBox(
-              width: AppSize.buttonHeight,
-              height: AppSize.buttonHeight,
-              child: Center(child: child),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
 

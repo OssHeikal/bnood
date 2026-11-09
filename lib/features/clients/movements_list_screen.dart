@@ -10,7 +10,7 @@ import '../../core/providers/app_providers.dart';
 import '../../core/repositories/bnood_repository.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
-import '../../core/widgets/foundation_app_bar_title.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../home/home_foundation_scope.dart';
 import 'client_movement_lines.dart';
 import 'widgets/interactive_movement_card.dart';
@@ -177,14 +177,7 @@ class _MovementsShell extends StatelessWidget {
     final colors = context.colors;
     return Scaffold(
       backgroundColor: colors.canvas,
-      appBar: AppBar(
-        backgroundColor: colors.canvas,
-        surfaceTintColor: Colors.transparent,
-        scrolledUnderElevation: 0,
-        elevation: 0,
-        centerTitle: false,
-        title: FoundationAppBarTitle(title: title),
-      ),
+      appBar: CustomAppBar(title: title),
       body: body,
     );
   }

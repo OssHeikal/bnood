@@ -13,6 +13,7 @@ import '../core/widgets/toast/app_tone.dart';
 import '../core/widgets/custom_text_field.dart';
 import '../core/widgets/foundation_toaster.dart';
 import '../core/widgets/buttons/app_button.dart';
+import '../core/widgets/custom_app_bar.dart';
 import '../core/widgets/sheet/app_sheet.dart';
 
 /// In-memory demo only — no database.
@@ -49,8 +50,8 @@ class _UiFoundationPreviewScreenState extends State<UiFoundationPreviewScreen> {
           data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(_textScale)),
           child: Builder(
             builder: (context) => Scaffold(
-              appBar: AppBar(
-                title: Text(_locale.languageCode == 'ar' ? 'معاينة واجهة' : 'UI foundation'),
+              appBar: CustomAppBar(
+                title: _locale.languageCode == 'ar' ? 'معاينة واجهة' : 'UI foundation',
               ),
               body: ListView(
                 padding: const EdgeInsets.all(AppSize.spaceLG),

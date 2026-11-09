@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/widgets/floating_shell_dock.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/config/theme/app_colors.dart';
-import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/items/item_api_record.dart';
 import '../../core/items/items_providers.dart';
@@ -13,9 +12,8 @@ import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/pagination.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
-import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
-import '../../core/widgets/foundation_app_bar_title.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../home/home_foundation_scope.dart';
 import 'item_create_sheet.dart';
 import 'item_edit_sheet.dart';
@@ -75,39 +73,19 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
           final text = context.text;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: AppBar(
-              backgroundColor: colors.canvas,
-              surfaceTintColor: Colors.transparent,
-              scrolledUnderElevation: 0,
-              elevation: 0,
-              centerTitle: false,
-              title: FoundationAppBarTitle(title: l10n.navItems),
+            appBar: CustomAppBar(
+              title: l10n.navItems,
               actions: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(end: AppSize.spaceMD),
-                  child: Tooltip(
-                    message: l10n.addItem,
-                    child: AppPressable(
-                      onPressed: () => _addItem(context),
-                      child: Material(
-                        key: const Key('items_app_bar_add'),
-                        color: colors.accentTeal.tint,
-                        shape: AppShape.superellipse(radius: AppSize.radiusSM),
-                        clipBehavior: Clip.antiAlias,
-                        child: SizedBox(
-                          width: AppSize.buttonHeight,
-                          height: AppSize.buttonHeight,
-                          child: Center(
-                            child: ShellNavIcon(
-                              asset: Assets.icons.itemsAddOutline,
-                              color: colors.primaryOnTint,
-                              size: AppSize.icon,
-                              semanticsLabel: l10n.addItem,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                CustomAppBarAction(
+                  key: const Key('items_app_bar_add'),
+                  tooltip: l10n.addItem,
+                  tone: CustomAppBarActionTone.tint,
+                  onPressed: () => _addItem(context),
+                  child: ShellNavIcon(
+                    asset: Assets.icons.itemsAddOutline,
+                    color: colors.primaryOnTint,
+                    size: AppSize.icon,
+                    semanticsLabel: l10n.addItem,
                   ),
                 ),
               ],

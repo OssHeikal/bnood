@@ -7,7 +7,7 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
-import '../../core/widgets/foundation_app_bar_title.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
 import '../home/home_foundation_scope.dart';
 import 'client_items_stats_provider.dart';
@@ -31,14 +31,7 @@ class ClientItemsStatsScreen extends ConsumerWidget {
           final colors = context.colors;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: AppBar(
-              backgroundColor: colors.canvas,
-              surfaceTintColor: Colors.transparent,
-              scrolledUnderElevation: 0,
-              elevation: 0,
-              centerTitle: false,
-              title: FoundationAppBarTitle(title: l10n.navItems),
-            ),
+            appBar: CustomAppBar(title: l10n.navItems),
             body: ListView(
               padding: EdgeInsets.fromLTRB(
                 AppSize.screenPadding,

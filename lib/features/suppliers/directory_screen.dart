@@ -11,7 +11,7 @@ import '../../core/providers/app_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
-import '../../core/widgets/app_pressable.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
 import '../../core/widgets/toast/app_tone.dart';
@@ -82,42 +82,25 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen>
           final text = context.text;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: AppBar(
-              backgroundColor: colors.canvas,
-              elevation: 0,
-              title: Text(l10n.directoryTitle, style: text.pageTitle),
+            appBar: CustomAppBar(
+              title: l10n.directoryTitle,
               actions: [
                 ListenableBuilder(
                   listenable: _tabController,
                   builder: (context, _) {
                     final suppliersTab = _tabController.index == 0;
                     final label = suppliersTab ? l10n.directoryAddSupplier : l10n.directoryAddCraftsman;
-                    return Padding(
-                      padding: const EdgeInsetsDirectional.only(end: AppSize.spaceMD),
-                      child: Tooltip(
-                        message: label,
-                        child: AppPressable(
-                          onPressed: () =>
-                              suppliersTab ? _addSupplier(context) : _addCraftsman(context),
-                          child: Material(
-                            key: Key(suppliersTab ? 'directory_add_supplier' : 'directory_add_craftsman'),
-                            color: colors.accentTeal.tint,
-                            shape: AppShape.superellipse(radius: AppSize.radiusSM),
-                            clipBehavior: Clip.antiAlias,
-                            child: SizedBox(
-                              width: AppSize.buttonHeight,
-                              height: AppSize.buttonHeight,
-                              child: Center(
-                                child: ShellNavIcon(
-                                  asset: Assets.icons.addOutline,
-                                  color: colors.primaryOnTint,
-                                  size: AppSize.icon,
-                                  semanticsLabel: label,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                    return CustomAppBarAction(
+                      key: Key(suppliersTab ? 'directory_add_supplier' : 'directory_add_craftsman'),
+                      tooltip: label,
+                      tone: CustomAppBarActionTone.tint,
+                      onPressed: () =>
+                          suppliersTab ? _addSupplier(context) : _addCraftsman(context),
+                      child: ShellNavIcon(
+                        asset: Assets.icons.addOutline,
+                        color: colors.primaryOnTint,
+                        size: AppSize.icon,
+                        semanticsLabel: label,
                       ),
                     );
                   },

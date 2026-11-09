@@ -27,6 +27,7 @@ import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/entity_picker_page.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../../core/widgets/app_card.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/toast/app_tone.dart';
@@ -706,7 +707,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => Scaffold(
-                                  appBar: AppBar(),
+                                  appBar: const CustomAppBar(),
                                   body: Center(child: Image.file(File(_receiptPaths[i]))),
                                 ),
                               ),
