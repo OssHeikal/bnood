@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_shape.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/database/database.dart';
 import '../../../core/theme/app_colors.dart' as legacy;
 import '../../../core/widgets/app_amount.dart';
-import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/entity_picker_row.dart';
 import '../../../l10n/app_localizations.dart';
 import 'client_balance_card.dart';
@@ -58,8 +56,17 @@ class CraftsmanRosterChoiceRow extends StatelessWidget {
           onSelect: selectionLocked ? () {} : onToggle,
           leadingWidth: 36,
           showDivider: false,
+          showSelectionMark: false,
           title: craftsman.name,
           subtitle: Text(subtitle),
+          trailing: selected && onManageAmount != null
+              ? _AgreedAmountTrailing(
+                  showAmountSummary: showAmountSummary,
+                  agreedPiastres: agreedPiastres,
+                  localeCode: locale,
+                  onManageAmount: onManageAmount!,
+                )
+              : null,
           leading: Material(
             color: accent,
             shape: AppShape.superellipse(radius: 11),
@@ -76,44 +83,6 @@ class CraftsmanRosterChoiceRow extends StatelessWidget {
             ),
           ),
         ),
-        if (selected && onManageAmount != null) ...[
-          Padding(
-            padding: const EdgeInsetsDirectional.only(
-              start: AppSize.screenPadding,
-              end: AppSize.screenPadding,
-              bottom: AppSize.spaceMD,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (showAmountSummary) ...[
-                  if (agreedPiastres != null)
-                    AppAmount(
-                      piastres: agreedPiastres!,
-                      role: AppAmountRole.neutral,
-                      size: AppAmountSize.small,
-                      localeCode: locale,
-                    )
-                  else
-                    Text(
-                      l10n.craftsmanDetailNoAgreedAmount,
-                      style: context.text.caption.copyWith(color: colors.onSurfaceMuted),
-                    ),
-                  AppSize.spaceXS.gap,
-                ],
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: AppButton.text(
-                    text: showAmountSummary
-                        ? l10n.craftsmanEditAgreedAmount
-                        : l10n.craftsmanSetAgreedAmount,
-                    onPressed: onManageAmount,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
         if (showDivider)
           Divider(
             height: 1,
@@ -123,6 +92,65 @@ class CraftsmanRosterChoiceRow extends StatelessWidget {
             color: colors.outline,
           ),
       ],
+    );
+  }
+}
+
+class _AgreedAmountTrailing extends StatelessWidget {
+  const _AgreedAmountTrailing({
+    required this.showAmountSummary,
+    required this.agreedPiastres,
+    required this.localeCode,
+    required this.onManageAmount,
+  });
+
+  final bool showAmountSummary;
+  final int? agreedPiastres;
+  final String localeCode;
+  final VoidCallback onManageAmount;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = context.colors;
+    final label = showAmountSummary ? l10n.craftsmanEditAgreedAmount : l10n.craftsmanSetAgreedAmount;
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.48),
+      child: InkWell(
+        onTap: onManageAmount,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (showAmountSummary) ...[
+              if (agreedPiastres != null)
+                AppAmount(
+                  piastres: agreedPiastres!,
+                  role: AppAmountRole.neutral,
+                  size: AppAmountSize.small,
+                  localeCode: localeCode,
+                )
+              else
+                Text(
+                  l10n.craftsmanDetailNoAgreedAmount,
+                  style: context.text.caption.copyWith(color: colors.onSurfaceMuted),
+                  textAlign: TextAlign.end,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              const SizedBox(height: AppSize.spaceXS),
+            ],
+            Text(
+              label,
+              textAlign: TextAlign.end,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: context.text.label.copyWith(color: colors.primary, height: 1.15),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

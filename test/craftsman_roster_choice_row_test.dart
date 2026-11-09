@@ -48,7 +48,7 @@ void main() {
     await tester.tapAt(box.centerLeft + const Offset(4, 0));
     await tester.pump();
     expect(selected, isTrue);
-    expect(find.text('Set agreed amount'), findsOneWidget);
+    expect(find.text('Set amount'), findsOneWidget);
     expect(find.byType(CustomTextField), findsNothing);
   });
 
@@ -62,6 +62,7 @@ void main() {
       updatedAt: DateTime.utc(2026, 1, 1),
     );
 
+    var opened = 0;
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -78,7 +79,7 @@ void main() {
             showAmountSummary: true,
             agreedPiastres: 1500_00,
             localeCode: 'en',
-            onManageAmount: () {},
+            onManageAmount: () => opened++,
           ),
         ),
       ),
@@ -86,7 +87,61 @@ void main() {
     await tester.pump();
 
     expect(find.textContaining('1,500 EGP'), findsOneWidget);
-    expect(find.text('Edit agreed amount'), findsOneWidget);
+    expect(find.text('Edit amount'), findsOneWidget);
+    expect(find.bySemanticsLabel('Selected'), findsNothing);
+
+    final amount = tester.getRect(find.textContaining('1,500 EGP'));
+    final link = tester.getRect(find.text('Edit amount'));
+    final name = tester.getRect(find.text('Karim'));
+    expect(link.top, greaterThan(amount.top));
+    expect((link.right - amount.right).abs(), lessThan(8));
+    expect(link.left, greaterThan(name.left));
+
+    await tester.tap(find.textContaining('1,500 EGP'));
+    await tester.tap(find.text('Edit amount'));
+    expect(opened, 2);
+  });
+
+  testWidgets('AR amount stack shares the trailing edge', (tester) async {
+    final craftsman = CraftsmenData(
+      id: 'c4',
+      workspaceId: 'w',
+      name: 'أحمد',
+      phone: '01000000001',
+      createdAt: DateTime.utc(2026, 1, 1),
+      updatedAt: DateTime.utc(2026, 1, 1),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppFoundationTheme.light(),
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: CraftsmanRosterChoiceRow(
+            craftsman: craftsman,
+            selected: true,
+            selectionLocked: false,
+            onToggle: () {},
+            showDivider: false,
+            showAmountSummary: true,
+            agreedPiastres: 5000_00,
+            localeCode: 'ar',
+            onManageAmount: () {},
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final amount = tester.getRect(find.textContaining('5,000 EGP'));
+    final link = tester.getRect(find.text('تعديل المبلغ'));
+    final name = tester.getRect(find.text('أحمد'));
+    expect(link.top, greaterThan(amount.top));
+    expect((link.left - amount.left).abs(), lessThan(8));
+    expect(link.right, lessThan(name.right));
+    expect(find.bySemanticsLabel('Selected'), findsNothing);
   });
 
   testWidgets('divider inset mirrors logical start in AR', (tester) async {

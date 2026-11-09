@@ -14,6 +14,8 @@ class EntityPickerOptionRow extends StatelessWidget {
     required this.leading,
     required this.title,
     this.subtitle,
+    this.trailing,
+    this.showSelectionMark = true,
     this.showDivider = true,
     this.semanticLabel,
   });
@@ -24,11 +26,16 @@ class EntityPickerOptionRow extends StatelessWidget {
   final Widget leading;
   final String title;
   final Widget? subtitle;
+
+  /// End of the tile. Outside the selection tap.
+  final Widget? trailing;
+
+  /// Check icon on a selected row. Off when a trailing control already marks it.
+  final bool showSelectionMark;
   final bool showDivider;
   final String? semanticLabel;
 
-  static double dividerStartInset(double leadingWidth) =>
-      AppSize.screenPadding + leadingWidth + AppSize.spaceMD;
+  static double dividerStartInset(double leadingWidth) => AppSize.screenPadding + leadingWidth + AppSize.spaceMD;
 
   @override
   Widget build(BuildContext context) {
@@ -46,55 +53,71 @@ class EntityPickerOptionRow extends StatelessWidget {
           label: semanticLabel ?? title,
           child: Material(
             color: selected ? colors.primaryTint : Colors.transparent,
-            child: InkWell(
-              onTap: onSelect,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  start: AppSize.screenPadding,
-                  end: AppSize.screenPadding,
-                  top: AppSize.spaceMD,
-                  bottom: AppSize.spaceMD,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(width: leadingWidth, height: leadingWidth, child: leading),
-                    const SizedBox(width: AppSize.spaceMD),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: onSelect,
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.only(
+                        start: AppSize.screenPadding,
+                        end: trailing == null ? AppSize.screenPadding : AppSize.spaceSM,
+                        top: AppSize.spaceMD,
+                        bottom: AppSize.spaceMD,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            title,
-                            style: text.bodyEmphasis,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          SizedBox(width: leadingWidth, height: leadingWidth, child: leading),
+                          const SizedBox(width: AppSize.spaceMD),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  title,
+                                  style: text.bodyEmphasis,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                if (subtitle != null) ...[
+                                  const SizedBox(height: AppSize.spaceXS),
+                                  DefaultTextStyle(
+                                    style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                                    child: subtitle!,
+                                  ),
+                                ],
+                              ],
+                            ),
                           ),
-                          if (subtitle != null) ...[
-                            const SizedBox(height: AppSize.spaceXS),
-                            DefaultTextStyle(
-                              style: text.caption.copyWith(color: colors.onSurfaceMuted),
-                              child: subtitle!,
+                          if (selected && showSelectionMark) ...[
+                            const SizedBox(width: AppSize.spaceSM),
+                            Semantics(
+                              selected: true,
+                              label: 'Selected',
+                              child: Assets.icons.checkOutline.svg(
+                                width: AppSize.iconSmall,
+                                height: AppSize.iconSmall,
+                                colorFilter: ColorFilter.mode(colors.primary, BlendMode.srcIn),
+                              ),
                             ),
                           ],
                         ],
                       ),
                     ),
-                    if (selected) ...[
-                      const SizedBox(width: AppSize.spaceSM),
-                      Semantics(
-                        selected: true,
-                        label: 'Selected',
-                        child: Assets.icons.checkOutline.svg(
-                          width: AppSize.iconSmall,
-                          height: AppSize.iconSmall,
-                          colorFilter: ColorFilter.mode(colors.primary, BlendMode.srcIn),
-                        ),
-                      ),
-                    ],
-                  ],
+                  ),
                 ),
-              ),
+                if (trailing != null)
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      end: AppSize.screenPadding,
+                      top: AppSize.spaceSM,
+                      bottom: AppSize.spaceSM,
+                    ),
+                    child: trailing,
+                  ),
+              ],
             ),
           ),
         ),

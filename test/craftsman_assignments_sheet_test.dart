@@ -114,9 +114,9 @@ void main() {
 
     await tester.tap(find.text('Karim'));
     await tester.pump();
-    expect(find.text('Set agreed amount'), findsOneWidget);
+    expect(find.text('Set amount'), findsOneWidget);
 
-    await tester.tap(find.text('Set agreed amount'));
+    await tester.tap(find.text('Set amount'));
     await tester.pumpAndSettle();
     expect(find.text('Agreed amount'), findsOneWidget);
     expect(find.text('Assign craftsmen'), findsNothing);
@@ -126,7 +126,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Assign craftsmen'), findsOneWidget);
-    expect(find.text('Edit agreed amount'), findsOneWidget);
+    expect(find.text('Edit amount'), findsOneWidget);
     expect(find.textContaining('1,000 EGP'), findsOneWidget);
     expect(await repo.agreementsForProject(project.id), isEmpty);
   });
@@ -142,13 +142,13 @@ void main() {
     await _openAssignmentsModal(tester, repo: repo, projectId: project.id, clientId: client.id);
     await tester.tap(find.text('Karim'));
     await tester.pump();
-    await tester.tap(find.text('Set agreed amount'));
+    await tester.tap(find.text('Set amount'));
     await tester.pumpAndSettle();
     await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
 
-    expect(find.text('Set agreed amount'), findsOneWidget);
-    expect(find.text('Edit agreed amount'), findsNothing);
+    expect(find.text('Set amount'), findsOneWidget);
+    expect(find.text('Edit amount'), findsNothing);
   });
 
   testWidgets('dismiss main roster without save leaves DB unchanged', (tester) async {
@@ -161,7 +161,7 @@ void main() {
     await _openAssignmentsModal(tester, repo: repo, projectId: project.id, clientId: client.id);
     await tester.tap(find.text('Karim'));
     await tester.pump();
-    await tester.tap(find.text('Set agreed amount'));
+    await tester.tap(find.text('Set amount'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(CustomTextField), '500');
     await tester.tap(find.text('Save'));
@@ -211,7 +211,7 @@ void main() {
     await _openAssignmentsModal(tester, repo: repo, projectId: project.id, clientId: client.id);
     await tester.tap(find.text('Zero'));
     await tester.pump();
-    await tester.tap(find.text('Set agreed amount'));
+    await tester.tap(find.text('Set amount'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(CustomTextField), '0');
     await tester.tap(find.text('Save'));

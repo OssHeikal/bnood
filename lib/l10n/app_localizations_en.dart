@@ -622,10 +622,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get craftsmanSetAgreedAmount => 'Set agreed amount';
+  String get craftsmanSetAgreedAmount => 'Set amount';
 
   @override
-  String get craftsmanEditAgreedAmount => 'Edit agreed amount';
+  String get craftsmanEditAgreedAmount => 'Edit amount';
 
   @override
   String get craftsmanAgreedAmountSheetTitle => 'Agreed amount';

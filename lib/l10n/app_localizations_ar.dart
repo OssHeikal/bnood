@@ -615,10 +615,10 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get craftsmanSetAgreedAmount => 'تعيين المبلغ المتفق عليه';
+  String get craftsmanSetAgreedAmount => 'تعيين المبلغ';
 
   @override
-  String get craftsmanEditAgreedAmount => 'تعديل المبلغ المتفق عليه';
+  String get craftsmanEditAgreedAmount => 'تعديل المبلغ';
 
   @override
   String get craftsmanAgreedAmountSheetTitle => 'المبلغ المتفق عليه';

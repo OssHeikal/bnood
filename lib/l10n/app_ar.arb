@@ -238,8 +238,8 @@
       "name": { "type": "String" }
     }
   },
-  "craftsmanSetAgreedAmount": "تعيين المبلغ المتفق عليه",
-  "craftsmanEditAgreedAmount": "تعديل المبلغ المتفق عليه",
+  "craftsmanSetAgreedAmount": "تعيين المبلغ",
+  "craftsmanEditAgreedAmount": "تعديل المبلغ",
   "craftsmanAgreedAmountSheetTitle": "المبلغ المتفق عليه",
   "craftsmanAgreedForClientLabel": "المتفق عليه لهذا العميل (اختياري)",
   "craftsmanAgreementAmountPlaceholder": "غير محدد",

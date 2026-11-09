@@ -1235,13 +1235,13 @@ abstract class AppLocalizations {
   /// No description provided for @craftsmanSetAgreedAmount.
   ///
   /// In en, this message translates to:
-  /// **'Set agreed amount'**
+  /// **'Set amount'**
   String get craftsmanSetAgreedAmount;
 
   /// No description provided for @craftsmanEditAgreedAmount.
   ///
   /// In en, this message translates to:
-  /// **'Edit agreed amount'**
+  /// **'Edit amount'**
   String get craftsmanEditAgreedAmount;
 
   /// No description provided for @craftsmanAgreedAmountSheetTitle.

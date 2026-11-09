@@ -238,8 +238,8 @@
       "name": { "type": "String" }
     }
   },
-  "craftsmanSetAgreedAmount": "Set agreed amount",
-  "craftsmanEditAgreedAmount": "Edit agreed amount",
+  "craftsmanSetAgreedAmount": "Set amount",
+  "craftsmanEditAgreedAmount": "Edit amount",
   "craftsmanAgreedAmountSheetTitle": "Agreed amount",
   "craftsmanAgreedForClientLabel": "Agreed for this client (optional)",
   "craftsmanAgreementAmountPlaceholder": "Not set",
