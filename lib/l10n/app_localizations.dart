@@ -629,8 +629,92 @@ abstract class AppLocalizations {
   /// No description provided for @archiveClientDescription.
   ///
   /// In en, this message translates to:
-  /// **'This moves {name}\'s project to the archive. You can restore it later.'**
+  /// **'Archive {name}? This is one-way — archived clients stay read-only.'**
   String archiveClientDescription(String name);
+
+  /// No description provided for @clientsSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or phone'**
+  String get clientsSearchHint;
+
+  /// No description provided for @amountUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get amountUnavailable;
+
+  /// No description provided for @clientDuplicateNameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Same client name'**
+  String get clientDuplicateNameTitle;
+
+  /// No description provided for @clientDuplicateNameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A client with this name already exists. Continue anyway?'**
+  String get clientDuplicateNameDescription;
+
+  /// No description provided for @clientDuplicateNameConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get clientDuplicateNameConfirm;
+
+  /// No description provided for @clientDuplicatePhoneError.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone number is already used for another client.'**
+  String get clientDuplicatePhoneError;
+
+  /// No description provided for @clientDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete client?'**
+  String get clientDeleteTitle;
+
+  /// No description provided for @clientDeleteDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {name}? This removes the client and project.'**
+  String clientDeleteDescription(String name);
+
+  /// No description provided for @clientDeleteHasActivityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Client has activity'**
+  String get clientDeleteHasActivityTitle;
+
+  /// No description provided for @clientDeleteHasActivityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This client has transactions or links. Archive instead to keep history.'**
+  String get clientDeleteHasActivityDescription;
+
+  /// No description provided for @clientDeleteArchiveInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive instead'**
+  String get clientDeleteArchiveInstead;
+
+  /// No description provided for @clientArchivedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get clientArchivedBadge;
+
+  /// No description provided for @clientLedgerNotOnlineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger not online yet'**
+  String get clientLedgerNotOnlineTitle;
+
+  /// No description provided for @clientLedgerNotOnlineDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Movements and balances will appear here after the online ledger ships.'**
+  String get clientLedgerNotOnlineDescription;
 
   /// No description provided for @craftsmanAgreedAmount.
   ///

@@ -1,14 +1,16 @@
-import 'dart:async';
-
 import 'package:bnood/core/config/theme/app_colors.dart';
 import 'package:bnood/core/config/theme/app_shape.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/database/database.dart';
-import 'package:bnood/core/providers/dashboard_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton.dart';
+import 'package:bnood/features/home/widgets/home_loading_skeleton.dart';
+import 'package:bnood/features/clients/clients_list_paging.dart';
 import 'package:bnood/features/clients/clients_list_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
+import 'dart:async';
+
+import 'package:bnood/core/shared/pagination/pagination.dart';
+import 'package:bnood/core/widgets/skeleton/paged_list_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,13 +19,17 @@ import 'support/home_notifier_stubs.dart';
 
 void main() {
   testWidgets('Clients list shows skeleton on first load', (tester) async {
-    final gate = Completer<List<HomeClientBalanceRow>>();
-
+    final gate = Completer<PagedFetchPage<HomeClientBalanceRow>>();
+    addTearDown(() {
+      if (!gate.isCompleted) {
+        gate.complete(const PagedFetchPage(items: [], hasMore: false));
+      }
+    });
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          clientsListBalancesProvider.overrideWith(
-            () => _PendingClientsNotifier(gate.future),
+          clientsListPageFetcherProvider.overrideWith(
+            (ref) => ({required int page, required int pageSize}) => gate.future,
           ),
         ],
         child: const MaterialApp(
@@ -35,7 +41,7 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.byType(Skeleton), findsWidgets);
+    expect(find.byType(PagedListSkeleton), findsOneWidget);
   });
 
   testWidgets('Clients list renders balance cards EN', (tester) async {
@@ -71,30 +77,39 @@ void main() {
 
     expect(find.text('Tower A'), findsOneWidget);
     expect(find.text('Clients'), findsOneWidget);
-    expect(find.byType(Skeleton), findsNothing);
+    expect(find.byType(PagedListSkeleton), findsNothing);
   });
 
-  testWidgets('silent refresh retains list content', (tester) async {
+  testWidgets('paging refresh retains list content', (tester) async {
     final now = DateTime.utc(2026, 11, 1);
-    final notifier = SequencedClientsListBalancesNotifier([
-      HomeClientBalanceRow(
-        client: Client(
-          id: 'c1',
-          workspaceId: 'w',
-          name: 'Alpha',
-          createdAt: now,
-          updatedAt: now,
-        ),
-        remainingPiastres: 100,
-        receivedPiastres: 100,
-        spentPiastres: 0,
-      ),
-    ]);
+    var version = 0;
 
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          clientsListBalancesProvider.overrideWith(() => notifier),
+          clientsListPageFetcherProvider.overrideWith(
+            (ref) => ({required int page, required int pageSize}) async {
+              version++;
+              if (page > 1) return const PagedFetchPage(items: [], hasMore: false);
+              return PagedFetchPage(
+                items: [
+                  HomeClientBalanceRow(
+                    client: Client(
+                      id: 'c1',
+                      workspaceId: 'w',
+                      name: version == 1 ? 'Alpha' : 'Alpha refreshed',
+                      createdAt: now,
+                      updatedAt: now,
+                    ),
+                    remainingPiastres: 100,
+                    receivedPiastres: 100,
+                    spentPiastres: 0,
+                  ),
+                ],
+                hasMore: false,
+              );
+            },
+          ),
         ],
         child: const MaterialApp(
           locale: Locale('en'),
@@ -107,12 +122,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Alpha'), findsOneWidget);
 
-    final refresh = notifier.refreshSilently();
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, 220));
     await tester.pump();
-    expect(find.text('Alpha'), findsOneWidget);
-    expect(find.byType(Skeleton), findsNothing);
-    await refresh;
+    await tester.pump(const Duration(milliseconds: 800));
     await tester.pumpAndSettle();
+
+    expect(find.text('Alpha refreshed'), findsOneWidget);
+    expect(find.byType(PagedListSkeleton), findsNothing);
   });
 
   testWidgets('app bar add uses teal tint superellipse and opens sheet', (tester) async {
@@ -139,22 +155,4 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Add client'), findsWidgets);
   });
-}
-
-class _PendingClientsNotifier extends ClientsListBalancesNotifier {
-  _PendingClientsNotifier(this._future);
-
-  final Future<List<HomeClientBalanceRow>> _future;
-
-  @override
-  Future<List<HomeClientBalanceRow>> fetch() => _future;
-}
-
-class SequencedClientsListBalancesNotifier extends ClientsListBalancesNotifier {
-  SequencedClientsListBalancesNotifier(this._rows);
-
-  final List<HomeClientBalanceRow> _rows;
-
-  @override
-  Future<List<HomeClientBalanceRow>> fetch() async => _rows;
 }

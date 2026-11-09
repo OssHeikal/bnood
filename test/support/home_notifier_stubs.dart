@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bnood/core/providers/dashboard_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
+import 'package:bnood/core/shared/pagination/pagination.dart';
+import 'package:bnood/features/clients/clients_list_paging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class StubHomeTotalsNotifier extends HomeTotalsNotifier {
@@ -78,17 +80,26 @@ Override homeTotalsOverride(HomeTotals totals) =>
 Override homeClientBalancesOverride(List<HomeClientBalanceRow> rows) =>
     homeClientBalancesProvider.overrideWith(() => StubHomeClientBalancesNotifier(rows));
 
-class StubClientsListBalancesNotifier extends ClientsListBalancesNotifier {
-  StubClientsListBalancesNotifier(this.rows);
+class StubClientsListNotifier extends ClientsListNotifier {
+  StubClientsListNotifier(this.rows);
 
   final List<HomeClientBalanceRow> rows;
 
   @override
-  Future<List<HomeClientBalanceRow>> fetch() async => rows;
+  Future<ClientsListSnapshot> fetch() async => ClientsListSnapshot(
+        rows: rows,
+        page: 1,
+        total: rows.length,
+        hasMore: false,
+      );
 }
 
-Override clientsListBalancesOverride(List<HomeClientBalanceRow> rows) =>
-    clientsListBalancesProvider.overrideWith(() => StubClientsListBalancesNotifier(rows));
+Override clientsListBalancesOverride(List<HomeClientBalanceRow> rows) => clientsListPageFetcherProvider.overrideWith(
+      (ref) => ({required int page, required int pageSize}) async {
+        if (page > 1) return const PagedFetchPage(items: [], hasMore: false);
+        return PagedFetchPage(items: rows, hasMore: false);
+      },
+    );
 
 Override homeSupplierSpendsOverride(List<HomeSupplierSpendRow> rows) =>
     homeSupplierSpendsProvider.overrideWith(() => StubHomeSupplierSpendsNotifier(rows));

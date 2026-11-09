@@ -22,4 +22,16 @@ class AuthApiException implements Exception {
 
   bool get isSessionExpired =>
       isUnauthorized && !isInvalidCredentials && code != 'invalid_credentials';
+
+  bool get isProfileIncomplete => statusCode == 403 && code == 'profile_incomplete';
+
+  bool get isNotFound => statusCode == 404 && code == 'not_found';
+
+  bool get isDuplicateName => statusCode == 409 && code == 'duplicate_name';
+
+  bool get isDuplicatePhone => statusCode == 422 && code == 'duplicate_phone';
+
+  bool get isClientArchived => statusCode == 409 && code == 'client_archived';
+
+  bool get isClientHasActivity => statusCode == 409 && code == 'client_has_activity';
 }

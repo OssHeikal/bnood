@@ -8,9 +8,11 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/api/auth_api_exception.dart';
+import '../../core/clients/clients_error_handler.dart';
+import '../../core/clients/clients_providers.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
-import '../../core/repositories/bnood_repository.dart' show HomeTotals;
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_decision.dart';
@@ -137,6 +139,11 @@ class ClientDetailScreen extends ConsumerWidget {
                 AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
               ),
               children: [
+                if (isArchived)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppSize.spaceMD),
+                    child: _ArchivedBadge(label: l10n.clientArchivedBadge),
+                  ),
                 AsyncValueBody(
                   value: detail,
                   loadingPlaceholder: Column(
@@ -252,14 +259,55 @@ class _ClientDetailBody extends ConsumerWidget {
       iconWidget: AppDecision.archiveDangerIcon(context),
     );
     if (answer != OverlayAnswer.confirmed || !context.mounted) return;
-    await ref.read(repositoryProvider).archiveClient(clientId);
-    refreshAfterClientMutation(ref, clientId: clientId);
-    if (context.mounted) context.pop();
+    try {
+      if (ref.read(remoteClientsEnabledProvider)) {
+        await ref.read(clientsRepositoryProvider).archiveClient(clientId);
+      } else {
+        await ref.read(repositoryProvider).archiveClient(clientId);
+      }
+      refreshAfterClientMutation(ref, clientId: clientId);
+      if (context.mounted) context.pop();
+    } on AuthApiException catch (e) {
+      if (!context.mounted) return;
+      if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) return;
+      AppToaster.show(e.message, kind: ToastKind.failure);
+    }
   }
 
-  Future<void> _unarchive(BuildContext context, WidgetRef ref) async {
-    await ref.read(repositoryProvider).unarchiveClient(clientId);
-    refreshAfterClientMutation(ref, clientId: clientId);
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final answer = await AppDecision.show(
+      context,
+      title: l10n.clientDeleteTitle,
+      description: l10n.clientDeleteDescription(data.client.name),
+      confirmLabel: l10n.delete,
+      cancelLabel: l10n.cancel,
+      tone: AppTone.danger,
+    );
+    if (answer != OverlayAnswer.confirmed || !context.mounted) return;
+    try {
+      await ref.read(clientsRepositoryProvider).deleteClient(clientId);
+      refreshAfterClientMutation(ref, clientId: clientId);
+      if (context.mounted) context.pop();
+    } on AuthApiException catch (e) {
+      if (!context.mounted) return;
+      if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) return;
+      if (e.isClientHasActivity) {
+        final archiveInstead = await AppDecision.show(
+          context,
+          title: l10n.clientDeleteHasActivityTitle,
+          description: l10n.clientDeleteHasActivityDescription,
+          confirmLabel: l10n.clientDeleteArchiveInstead,
+          cancelLabel: l10n.cancel,
+          tone: AppTone.danger,
+        );
+        if (archiveInstead == OverlayAnswer.confirmed && context.mounted) {
+          await _confirmArchive(context, ref);
+        }
+        return;
+      }
+      AppToaster.show(e.message, kind: ToastKind.failure);
+    }
   }
 
   @override
@@ -297,14 +345,46 @@ class _ClientDetailBody extends ConsumerWidget {
       });
     }
 
+    if (data.onlineIdentityOnly) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ClientDetailStatGrid(
+            receivedPiastres: data.receivedPiastres,
+            spentPiastres: data.spentPiastres,
+            remainingPiastres: data.remainingPiastres,
+            localeCode: localeCode,
+          ),
+          AppSize.spaceLG.gap,
+          ClientDetailActionGrid(
+            isArchived: isArchived,
+            mutationsEnabled: mutationsEnabled,
+            onlineIdentityOnly: true,
+            onReceive: () {},
+            onSpend: () {},
+            onStatement: () {},
+            onArchive: () => _confirmArchive(context, ref),
+            onDelete: () => _confirmDelete(context, ref),
+          ),
+          AppSize.spaceXL.gap,
+          AppCard(
+            child: AppFallback.section(
+              icon: Icons.cloud_off_outlined,
+              title: l10n.clientLedgerNotOnlineTitle,
+              description: l10n.clientLedgerNotOnlineDescription,
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ClientDetailStatGrid(
-          totals: HomeTotals(
-            receivedPiastres: data.receivedPiastres,
-            spentPiastres: data.spentPiastres,
-          ),
+          receivedPiastres: data.receivedPiastres,
+          spentPiastres: data.spentPiastres,
+          remainingPiastres: data.remainingPiastres,
           localeCode: localeCode,
         ),
         AppSize.spaceLG.gap,
@@ -317,13 +397,7 @@ class _ClientDetailBody extends ConsumerWidget {
             if (!mutationsEnabled) return;
             context.push('/clients/$clientId/statement');
           },
-          onArchive: () {
-            if (isArchived) {
-              _unarchive(context, ref);
-            } else {
-              _confirmArchive(context, ref);
-            }
-          },
+          onArchive: () => _confirmArchive(context, ref),
         ),
         AppSize.spaceXL.gap,
         ClientDetailEngineerCard(
@@ -454,6 +528,37 @@ class _ClientDetailBody extends ConsumerWidget {
             ],
           ),
       ],
+    );
+  }
+}
+
+class _ArchivedBadge extends StatelessWidget {
+  const _ArchivedBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: colors.surfaceSunken,
+          borderRadius: BorderRadius.circular(AppSize.radiusSM),
+          border: Border.all(color: colors.outlineSubtle),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceMD, vertical: AppSize.spaceXS),
+          child: Text(
+            label,
+            style: context.text.caption.copyWith(
+              color: colors.onSurfaceMuted,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

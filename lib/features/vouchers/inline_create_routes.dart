@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/api/auth_api_exception.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/widgets/app_toaster.dart';
+import '../clients/client_mutation_actions.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/contacts/contact_import_action.dart';
 import '../../core/widgets/custom_text_field.dart';
@@ -28,6 +30,7 @@ class _InlineCreateClientPageState
   final _phone = TextEditingController();
   var _attemptedSubmit = false;
   var _saving = false;
+  String? _phoneError;
 
   @override
   void dispose() {
@@ -42,12 +45,24 @@ class _InlineCreateClientPageState
     if (_saving) return;
     setState(() => _saving = true);
     try {
-      final client = await ref.read(repositoryProvider).createClient(
-            name: _name.text.trim(),
-            phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(),
-          );
-      if (!mounted) return;
+      final client = await saveClientCreate(
+        ref: ref,
+        context: context,
+        name: _name.text.trim(),
+        phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(),
+      );
+      if (!mounted || client == null) {
+        setState(() => _saving = false);
+        return;
+      }
       Navigator.pop(context, client.id);
+    } on AuthApiException catch (e) {
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
+      setState(() {
+        _phoneError = duplicatePhoneFieldError(l10n, e);
+        _saving = false;
+      });
     } catch (e) {
       if (!mounted) return;
       AppToaster.show(e.toString(), kind: ToastKind.failure);
@@ -100,6 +115,10 @@ class _InlineCreateClientPageState
               ltrValue: true,
               textInputAction: TextInputAction.done,
               autofillHints: const [AutofillHints.telephoneNumber],
+              errorMessage: _phoneError,
+              onChanged: (_) {
+                if (_phoneError != null) setState(() => _phoneError = null);
+              },
             ),
           ],
         ),

@@ -9,7 +9,7 @@ import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/complete_profile_screen.dart';
 import 'package:bnood/features/auth/login_screen.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/auth/remote_workspace_screen.dart';
+import 'package:bnood/features/clients/clients_list_screen.dart';
 import 'package:bnood/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,7 +47,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.byType(HomeScreen), findsNothing);
-    expect(find.byType(RemoteWorkspaceScreen), findsOneWidget);
+    expect(find.byType(ClientsListScreen), findsOneWidget);
   });
 
   testWidgets('incomplete name redirects to complete profile', (tester) async {
@@ -72,7 +72,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.byType(CompleteProfileScreen), findsOneWidget);
-    expect(find.byType(RemoteWorkspaceScreen), findsNothing);
+    expect(find.byType(ClientsListScreen), findsNothing);
   });
 
   testWidgets('unauthenticated user cannot open local home', (tester) async {

@@ -60,10 +60,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 50));
   }
 
-  testWidgets('archived detail disables mutations and shows unarchive', (tester) async {
+  testWidgets('archived detail disables mutations', (tester) async {
     await pumpDetail(tester, snap(archived: true));
 
-    expect(find.byKey(const Key('client_detail_action_unarchive')), findsOneWidget);
     expect(find.byKey(const Key('client_detail_action_archive')), findsNothing);
 
     await tester.tap(find.byKey(const Key('client_detail_action_receive')));

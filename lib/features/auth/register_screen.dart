@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
+import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_toaster.dart';
@@ -25,7 +26,9 @@ Future<void> _submitRegister(BuildContext context, WidgetRef ref) async {
   if (fields.formKey.currentState?.validate() != true) return;
   if (ref.read(authFormUiProvider(formId)).loading) return;
   ui.setLoading(true);
-  final error = await ref.read(authControllerProvider.notifier).register(
+  final error = await ref
+      .read(authControllerProvider.notifier)
+      .register(
         phone: fields.phone.text.trim(),
         password: fields.password.text,
         passwordConfirmation: fields.confirm.text,
@@ -119,9 +122,16 @@ class RegisterScreen extends ConsumerWidget {
               onPressed: loading ? null : () => _submitRegister(context, ref),
             ),
             AppSize.spaceSM.gap,
-            AppButton.text(
-              text: l10n.authLoginLink,
-              onPressed: loading ? null : () => context.push(AuthPaths.login),
+            Builder(
+              builder: (context) {
+                return Center(
+                  child: AppButton.text(
+                    foregroundColor: context.colors.primary,
+                    text: l10n.authLoginLink,
+                    onPressed: loading ? null : () => context.push(AuthPaths.login),
+                  ),
+                );
+              },
             ),
           ],
         ),

@@ -93,12 +93,31 @@
   "clientDetailUnspecifiedItem": "بند غير محدد",
   "clientDetailNoDescription": "بدون وصف",
   "archiveClientTitle": "أرشفة العميل؟",
-  "archiveClientDescription": "هتنقل عهدة {name} للأرشيف. تقدر ترجعها بعدين.",
+  "archiveClientDescription": "أرشفة {name}؟ العملية نهائية — العميل المؤرشف للقراءة فقط.",
   "@archiveClientDescription": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
+  "clientsSearchHint": "ابحث بالاسم أو الهاتف",
+  "amountUnavailable": "—",
+  "clientDuplicateNameTitle": "اسم عميل مكرر",
+  "clientDuplicateNameDescription": "يوجد عميل بنفس الاسم. متابعة؟",
+  "clientDuplicateNameConfirm": "متابعة",
+  "clientDuplicatePhoneError": "رقم الهاتف مستخدم لعميل آخر.",
+  "clientDeleteTitle": "حذف العميل؟",
+  "clientDeleteDescription": "حذف {name}؟ سيُحذف العميل والمشروع.",
+  "@clientDeleteDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "clientDeleteHasActivityTitle": "العميل عليه حركات",
+  "clientDeleteHasActivityDescription": "هذا العميل مرتبط بمعاملات أو روابط. أرشفه للاحتفاظ بالسجل.",
+  "clientDeleteArchiveInstead": "أرشفة بدلًا من ذلك",
+  "clientArchivedBadge": "مؤرشف",
+  "clientLedgerNotOnlineTitle": "العهدة غير متصلة بعد",
+  "clientLedgerNotOnlineDescription": "الحركات والأرصدة ستظهر هنا عند تفعيل العهدة أونلاين.",
   "craftsmanAgreedAmount": "المتفق عليه",
   "suppliers": "موردين",
   "statement": "كشف حساب",

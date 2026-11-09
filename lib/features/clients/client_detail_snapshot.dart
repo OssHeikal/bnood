@@ -59,16 +59,23 @@ class ClientDetailSnapshot {
     required this.craftsmanPreviews,
     required this.topItems,
     required this.latestMovements,
+    this.onlineIdentityOnly = false,
   });
 
   final Client client;
   final Project project;
-  final int receivedPiastres;
-  final int spentPiastres;
+  final int? receivedPiastres;
+  final int? spentPiastres;
   final int? estimatedProfitPiastres;
   final List<ClientCraftsmanPreviewRow> craftsmanPreviews;
   final List<ClientDetailItemRowData> topItems;
   final List<ClientDetailMovementLine> latestMovements;
+  final bool onlineIdentityOnly;
 
-  int get remainingPiastres => receivedPiastres - spentPiastres;
+  bool get hasBalances => receivedPiastres != null && spentPiastres != null;
+
+  int? get remainingPiastres {
+    if (!hasBalances) return null;
+    return receivedPiastres! - spentPiastres!;
+  }
 }

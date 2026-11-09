@@ -961,12 +961,17 @@ class HomeClientBalanceRow {
     required this.remainingPiastres,
     required this.receivedPiastres,
     required this.spentPiastres,
+    this.project,
   });
 
   final Client client;
-  final int remainingPiastres;
-  final int receivedPiastres;
-  final int spentPiastres;
+  final int? remainingPiastres;
+  final int? receivedPiastres;
+  final int? spentPiastres;
+  final Project? project;
+
+  bool get hasBalances =>
+      remainingPiastres != null && receivedPiastres != null && spentPiastres != null;
 }
 
 class DirectorySupplierRow {
