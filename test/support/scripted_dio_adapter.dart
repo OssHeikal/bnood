@@ -32,3 +32,18 @@ ResponseBody jsonResponse(
     },
   );
 }
+
+ResponseBody pdfResponse(
+  List<int> bytes, {
+  int statusCode = 200,
+  String? contentDisposition,
+}) {
+  return ResponseBody.fromBytes(
+    bytes,
+    statusCode,
+    headers: {
+      Headers.contentTypeHeader: ['application/pdf'],
+      if (contentDisposition != null) 'content-disposition': [contentDisposition],
+    },
+  );
+}

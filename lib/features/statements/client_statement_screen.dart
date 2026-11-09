@@ -10,6 +10,8 @@ import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart' show LedgerMath, StatementPeriodTotals;
 import '../../core/money/period_bounds.dart';
 import '../../core/clients/client_statement_record.dart';
+import '../../core/api/auth_api_exception.dart';
+import '../../core/clients/clients_error_handler.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/repositories/bnood_repository.dart';
@@ -137,8 +139,9 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
               builder: (context, snap) => _scaffoldForBody(
                 context,
                 l10n,
-                showPdfFooter: false,
+                showPdfFooter: snap.hasData,
                 body: _buildRemoteBody(context, snap, localeCode),
+                onSharePdf: snap.hasData ? () => _exportRemotePdf(l10n) : null,
               ),
             )
           : FutureBuilder<_StatementData>(
@@ -335,6 +338,69 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
     return map;
   }
 
+  String _statementPdfFailureMessage(AppLocalizations l10n, Object error) {
+    if (error is AuthApiException) {
+      if (error.message.isNotEmpty) return error.message;
+    }
+    return l10n.statementExportFailed;
+  }
+
+  Future<void> _exportRemotePdf(AppLocalizations l10n) async {
+    if (_exporting) return;
+    setState(() => _exporting = true);
+    try {
+      final from = _formatStatementDate(_bounds.start);
+      final to = _formatStatementDate(_bounds.end);
+      try {
+        final pdf = await ref.read(clientsRepositoryProvider).downloadClientStatementPdf(
+              clientId: widget.clientId,
+              from: from,
+              to: to,
+            );
+        await _shareDownloadedPdf(pdf.bytes, pdf.fileName, l10n);
+      } on AuthApiException catch (e, st) {
+        FlutterError.reportError(FlutterErrorDetails(exception: e, stack: st, library: 'statement_pdf_remote'));
+        if (!mounted) return;
+        if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) return;
+        if (!mounted) return;
+        StatementScreenToast.failure(
+          context,
+          _statementPdfFailureMessage(l10n, e),
+          action: ToastAction(label: l10n.retry, onPressed: () => _exportRemotePdf(l10n)),
+        );
+      } catch (e, st) {
+        FlutterError.reportError(FlutterErrorDetails(exception: e, stack: st, library: 'statement_pdf_remote'));
+        if (mounted) {
+          StatementScreenToast.failure(
+            context,
+            l10n.statementExportFailed,
+            action: ToastAction(label: l10n.retry, onPressed: () => _exportRemotePdf(l10n)),
+          );
+        }
+      }
+    } finally {
+      if (mounted) setState(() => _exporting = false);
+    }
+  }
+
+  Future<void> _shareDownloadedPdf(Uint8List bytes, String fileName, AppLocalizations l10n) async {
+    final path = await StatementPdfExport.persistTempPdf(bytes, fileName);
+    if (!mounted) return;
+    final shareOrigin = StatementPdfExport.sharePositionOriginFor(_sharePdfButtonKey.currentContext ?? context);
+    try {
+      await StatementPdfExport.shareFromFile(path, fileName, sharePositionOrigin: shareOrigin);
+    } catch (e, st) {
+      FlutterError.reportError(FlutterErrorDetails(exception: e, stack: st, library: 'statement_share'));
+      if (mounted) {
+        StatementScreenToast.failure(
+          context,
+          l10n.statementExportShareFailed,
+          action: ToastAction(label: l10n.retry, onPressed: () => _shareExistingFile(path, fileName, l10n)),
+        );
+      }
+    }
+  }
+
   Future<void> _exportPdf(_StatementData data, AppLocalizations l10n) async {
     if (_exporting) return;
     setState(() => _exporting = true);
@@ -387,21 +453,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
         }
       }
 
-      final path = await StatementPdfExport.persistTempPdf(bytes, fileName);
-      if (!mounted) return;
-      final shareOrigin = StatementPdfExport.sharePositionOriginFor(_sharePdfButtonKey.currentContext ?? context);
-      try {
-        await StatementPdfExport.shareFromFile(path, fileName, sharePositionOrigin: shareOrigin);
-      } catch (e, st) {
-        FlutterError.reportError(FlutterErrorDetails(exception: e, stack: st, library: 'statement_share'));
-        if (mounted) {
-          StatementScreenToast.failure(
-            context,
-            l10n.statementExportShareFailed,
-            action: ToastAction(label: l10n.retry, onPressed: () => _shareExistingFile(path, fileName, l10n)),
-          );
-        }
-      }
+      await _shareDownloadedPdf(bytes, fileName, l10n);
     } finally {
       if (mounted) setState(() => _exporting = false);
     }

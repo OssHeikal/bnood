@@ -1,6 +1,7 @@
 import '../api/clients_api.dart';
 import '../repositories/bnood_repository.dart';
 import 'client_api_record.dart';
+import 'client_statement_pdf.dart';
 import 'client_statement_record.dart';
 
 class ClientsRepository {
@@ -57,6 +58,13 @@ class ClientsRepository {
 
   Future<AppClientItemSpend> getClientItemSpend(String clientId) =>
       _api.getClientItemSpend(clientId);
+
+  Future<ClientStatementPdf> downloadClientStatementPdf({
+    required String clientId,
+    required String from,
+    required String to,
+  }) =>
+      _api.downloadClientStatementPdf(clientId: clientId, from: from, to: to);
 }
 
 HomeClientBalanceRow balanceRowFromRecord(ClientApiRecord record) {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 
@@ -12,6 +13,14 @@ abstract final class ApiResponseParser {
     if (data is String) {
       if (data.isEmpty) return const {};
       return jsonDecode(data) as Map<String, dynamic>;
+    }
+    if (data is List<int>) {
+      if (data.isEmpty) return const {};
+      return jsonDecode(utf8.decode(data)) as Map<String, dynamic>;
+    }
+    if (data is Uint8List) {
+      if (data.isEmpty) return const {};
+      return jsonDecode(utf8.decode(data)) as Map<String, dynamic>;
     }
     throw AuthApiException(
       statusCode: response.statusCode ?? 0,

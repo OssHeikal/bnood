@@ -91,7 +91,6 @@ class _RemoteMovementsListState extends ConsumerState<_RemoteMovementsList> {
 
     return HomeFoundationScope(
       child: Scaffold(
-        backgroundColor: context.colors.canvas,
         appBar: CustomAppBar(title: l10n.movements),
         body: AppPagedView<ClientDetailMovementLine>(
           controller: _pagingController,
@@ -105,11 +104,7 @@ class _RemoteMovementsListState extends ConsumerState<_RemoteMovementsList> {
                   title: l10n.clientMovementsLoadErrorTitle,
                   description: state.error?.toString() ?? l10n.clientMovementsLoadErrorTitle,
                   actions: [
-                    AppFallbackAction(
-                      label: l10n.retry,
-                      onPressed: retry,
-                      role: AppFallbackActionRole.tertiary,
-                    ),
+                    AppFallbackAction(label: l10n.retry, onPressed: retry, role: AppFallbackActionRole.tertiary),
                   ],
                 ),
               );
@@ -121,30 +116,18 @@ class _RemoteMovementsListState extends ConsumerState<_RemoteMovementsList> {
                   title: l10n.clientMovementsLoadErrorTitle,
                   description: state.error?.toString() ?? l10n.clientMovementsLoadErrorTitle,
                   actions: [
-                    AppFallbackAction(
-                      label: l10n.retry,
-                      onPressed: retry,
-                      role: AppFallbackActionRole.tertiary,
-                    ),
+                    AppFallbackAction(label: l10n.retry, onPressed: retry, role: AppFallbackActionRole.tertiary),
                   ],
                 ),
               );
             },
             empty: (ctx) {
               return AppCard(
-                child: AppFallback.section(
-                  icon: Icons.receipt_long_outlined,
-                  title: l10n.clientDetailNoMovements,
-                ),
+                child: AppFallback.section(icon: Icons.receipt_long_outlined, title: l10n.clientDetailNoMovements),
               );
             },
           ),
-          itemPadding: (_) => EdgeInsets.fromLTRB(
-            AppSize.screenPadding,
-            AppSize.spaceSM,
-            AppSize.screenPadding,
-            0,
-          ),
+          itemPadding: (_) => EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, 0),
           itemBuilder: (context, line, index) {
             return InteractiveMovementCard(
               line: line,
@@ -278,11 +261,7 @@ class _LocalMovementsList extends ConsumerWidget {
                           separatorBuilder: (_, _) => AppSize.spaceMD.gap,
                           itemBuilder: (context, index) {
                             final line = lines[index];
-                            return InteractiveMovementCard(
-                              line: line,
-                              localeCode: localeCode,
-                              mutationsEnabled: true,
-                            );
+                            return InteractiveMovementCard(line: line, localeCode: localeCode, mutationsEnabled: true);
                           },
                         );
                       },
@@ -317,9 +296,7 @@ class _MovementsShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     return Scaffold(
-      backgroundColor: colors.canvas,
       appBar: CustomAppBar(title: title),
       body: body,
     );

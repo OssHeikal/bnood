@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 
 import '../clients/client_api_record.dart';
+import '../clients/client_statement_pdf.dart';
 import '../clients/client_statement_record.dart';
 import '../repositories/bnood_repository.dart';
 import 'api_response_parser.dart';
@@ -206,6 +209,46 @@ class ClientsApi {
         response,
         (json) => AppClientItemSpend.fromDataJson(json ?? const {}),
       );
+    });
+  }
+
+  Future<ClientStatementPdf> downloadClientStatementPdf({
+    required String clientId,
+    required String from,
+    required String to,
+  }) {
+    return _guard(() async {
+      final response = await _dio.get<List<int>>(
+        '$_prefix/$clientId/statement.pdf',
+        queryParameters: {'from': from, 'to': to},
+        options: Options(
+          extra: _authenticatedExtra,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => status != null && status < 500,
+        ),
+      );
+      final statusCode = response.statusCode ?? 0;
+      final contentType = response.headers.value(Headers.contentTypeHeader) ?? '';
+      if (statusCode >= 200 &&
+          statusCode < 300 &&
+          contentType.toLowerCase().contains('application/pdf')) {
+        final bytes = Uint8List.fromList(response.data ?? const []);
+        final fileName = clientStatementPdfFileNameFromHeader(
+              response.headers.value('content-disposition'),
+            ) ??
+            'statement.pdf';
+        return ClientStatementPdf(bytes: bytes, fileName: fileName);
+      }
+      try {
+        final json = ApiResponseParser.decodeJson(response);
+        throw ApiResponseParser.fromFailure(response, json);
+      } catch (e) {
+        if (e is AuthApiException) rethrow;
+        throw AuthApiException(
+          statusCode: statusCode,
+          message: 'Statement PDF download failed',
+        );
+      }
     });
   }
 }
