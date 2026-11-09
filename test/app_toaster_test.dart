@@ -3,21 +3,31 @@ import 'package:bnood/core/widgets/app_toaster.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/statements/statement_screen_toast.dart';
 import 'package:bnood/l10n/app_localizations.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  final botToastBuilder = BotToastInit();
+
+  Widget toastTestApp(Widget home) {
+    return MaterialApp(
+      builder: botToastBuilder,
+      navigatorObservers: [BotToastNavigatorObserver()],
+      theme: ThemeData.light(),
+      locale: const Locale('ar'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: home,
+    );
+  }
+
   testWidgets('AppToaster shows themed toast without root AppColors extension', (tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        scaffoldMessengerKey: rootScaffoldMessengerKey,
-        theme: ThemeData.light(),
-        locale: const Locale('ar'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: HomeFoundationScope(
+      toastTestApp(
+        HomeFoundationScope(
           child: Scaffold(
             body: Center(
               child: ElevatedButton(
@@ -40,7 +50,8 @@ void main() {
   testWidgets('AppToaster success in EN dark theme', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        scaffoldMessengerKey: rootScaffoldMessengerKey,
+        builder: botToastBuilder,
+        navigatorObservers: [BotToastNavigatorObserver()],
         theme: AppFoundationTheme.dark(),
         locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -67,7 +78,8 @@ void main() {
   testWidgets('statement footer delegate keeps message above export bar', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        scaffoldMessengerKey: rootScaffoldMessengerKey,
+        builder: botToastBuilder,
+        navigatorObservers: [BotToastNavigatorObserver()],
         theme: AppFoundationTheme.light(),
         home: HomeFoundationScope(
           child: Scaffold(
@@ -89,15 +101,22 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 200));
 
-    final snackBar = tester.widget<SnackBar>(find.byType(SnackBar));
-    expect(snackBar.margin!.resolve(TextDirection.ltr).bottom, 80);
+    final toastScope = find.ancestor(
+      of: find.text('تعذّرت المشاركة'),
+      matching: find.byType(HomeFoundationScope),
+    );
+    final marginPadding = tester.widget<Padding>(
+      find.ancestor(of: toastScope, matching: find.byType(Padding)).first,
+    );
+    expect(marginPadding.padding.resolve(TextDirection.ltr).bottom, 80);
     expect(find.text('تعذّرت المشاركة'), findsOneWidget);
   });
 
   testWidgets('toast action does not change route', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        scaffoldMessengerKey: rootScaffoldMessengerKey,
+        builder: botToastBuilder,
+        navigatorObservers: [BotToastNavigatorObserver()],
         theme: AppFoundationTheme.light(),
         routes: {
           '/': (_) => HomeFoundationScope(

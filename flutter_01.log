@@ -1,0 +1,69 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter debug_adapter
+
+## exception
+
+FileSystemException: FileSystemException: writeFrom failed, path = '' (OS Error: Broken pipe, errno = 32)
+
+```
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _RandomAccessFile.writeFrom.<anonymous closure> (dart:io/file_impl.dart:976:7)
+#2      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#3      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#4      _FileStreamConsumer.addStream.<anonymous closure>.<anonymous closure>.<anonymous closure> (dart:io/file_impl.dart:237:27)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[!] Flutter (Channel stable, 3.41.1, on macOS 27.2 26B123 darwin-arm64, locale en-EG) [1,257ms]
+    • Flutter version 3.41.1 on channel stable at /Users/macbook/Developer/fvm/versions/3.41.1
+    ! Warning: `flutter` on your path resolves to /Users/macbook/Developer/fvm/versions/3.35.5/bin/flutter, which is not inside your current Flutter SDK checkout at /Users/macbook/Developer/fvm/versions/3.41.1. Consider adding /Users/macbook/Developer/fvm/versions/3.41.1/bin to the front of your path.
+    ! Warning: `dart` on your path resolves to /opt/homebrew/Cellar/dart/3.4.4/libexec/bin/dart, which is not inside your current Flutter SDK checkout at /Users/macbook/Developer/fvm/versions/3.41.1. Consider adding /Users/macbook/Developer/fvm/versions/3.41.1/bin to the front of your path.
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 582a0e7c55 (9 months ago), 2026-02-12 17:12:32 -0800
+    • Engine revision 3452d735bd
+    • Dart version 3.11.0
+    • DevTools version 2.54.1
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration
+    • If those were intentional, you can disregard the above warnings; however it is recommended to use "git" directly to perform update checks and upgrades.
+
+[!] Android toolchain - develop for Android devices (Android SDK version 36.0.0) [6.8s]
+    • Android SDK at /Users/macbook/Library/Android/sdk
+    • Emulator version 37.1.11.0 (build_id 15917651) (CL:N/A)
+    • Platform android-36, build-tools 36.0.0
+    • Java binary at: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java
+      This JDK is specified in your Flutter configuration.
+      To change the current JDK, run: `flutter config --jdk-dir="path/to/jdk"`.
+    • Java version OpenJDK Runtime Environment Temurin-21.0.3+9 (build 21.0.3+9-LTS)
+    ✗ Android license status unknown.
+      Run `flutter doctor --android-licenses` to accept the SDK licenses.
+      See https://flutter.dev/to/macos-android-setup for more details.
+
+[✓] Xcode - develop for iOS and macOS (Xcode 27.2) [8.3s]
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Build 27B52
+    • CocoaPods version 1.16.2
+
+[✓] Chrome - develop for the web [10ms]
+    • Chrome at /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+
+[✓] Connected device (4 available) [26.9s]
+    • SM G935F (mobile)          • ce04160470dda61104                   • android-arm64  • Android 8.0.0 (API 26)
+    • iPhone 18 Pro Max (mobile) • 5A7142A1-3628-411E-BD42-330450910A2C • ios            • com.apple.CoreSimulator.SimRuntime.iOS-27-2 (simulator)
+    • macOS (desktop)            • macos                                • darwin-arm64   • macOS 27.2 26B123 darwin-arm64
+    • Chrome (web)               • chrome                               • web-javascript • Google Chrome 156.0.8078.81
+    ! Error: Browsing on the local area network for Ossama’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+      The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+[✓] Network resources [2.6s]
+    • All expected network resources are available.
+
+! Doctor found issues in 2 categories.
+```

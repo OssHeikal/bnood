@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -100,6 +101,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   final refresh = ref.watch(authRouterRefreshProvider);
   return GoRouter(
     navigatorKey: _rootKey,
+    observers: [BotToastNavigatorObserver()],
     refreshListenable: refresh,
     initialLocation: AppSplashSession.completed
         ? AuthPaths.login
