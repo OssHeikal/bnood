@@ -52,6 +52,21 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> retryBootstrap() => bootstrapFromStoredSession();
 
+  /// Splash timeout: do not leave the user on an infinite loader.
+  void abandonBootstrapAsUnauthenticated() {
+    final status = state.bootstrapStatus;
+    if (state.bootstrapStarted &&
+        status != AuthBootstrapStatus.bootstrapping &&
+        status != AuthBootstrapStatus.idle) {
+      return;
+    }
+    state = state.copyWith(
+      bootstrapStatus: AuthBootstrapStatus.unauthenticated,
+      clearUser: true,
+      bootstrapStarted: true,
+    );
+  }
+
   Future<AuthApiException?> register({
     required String phone,
     required String password,

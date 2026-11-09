@@ -1,5 +1,5 @@
 import 'package:bnood/app/bnood_app.dart';
-import 'package:bnood/app/bnood_splash_session.dart';
+import 'package:bnood/app/app_splash_session.dart';
 import 'package:bnood/app/router.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/providers/settings_provider.dart';
@@ -23,10 +23,10 @@ AppSettingsSnapshot _bootstrap() =>
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  tearDown(BnoodSplashSession.resetForTest);
+  tearDown(AppSplashSession.resetForTest);
 
   testWidgets('authenticated session redirects away from local home', (tester) async {
-    BnoodSplashSession.completed = true;
+    AppSplashSession.completed = true;
     late ProviderContainer container;
     await tester.pumpWidget(
       ProviderScope(
@@ -51,7 +51,7 @@ void main() {
   });
 
   testWidgets('incomplete name redirects to complete profile', (tester) async {
-    BnoodSplashSession.completed = true;
+    AppSplashSession.completed = true;
     late ProviderContainer container;
     await tester.pumpWidget(
       ProviderScope(
@@ -76,7 +76,7 @@ void main() {
   });
 
   testWidgets('unauthenticated user cannot open local home', (tester) async {
-    BnoodSplashSession.completed = true;
+    AppSplashSession.completed = true;
     late ProviderContainer container;
     await tester.pumpWidget(
       ProviderScope(

@@ -28,8 +28,8 @@ import '../features/suppliers/craftsman_detail_screen.dart';
 import '../features/suppliers/directory_screen.dart';
 import '../features/suppliers/supplier_detail_screen.dart';
 import 'auth_router_refresh.dart';
-import 'bnood_splash_session.dart';
-import 'bnood_startup_splash.dart';
+import 'app_splash_session.dart';
+import 'app_startup_splash.dart';
 import 'shell_scaffold.dart';
 
 final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -37,11 +37,11 @@ final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 const _localHome = '/home';
 
 String? _splashRedirect(GoRouterState state) {
-  final onSplash = state.matchedLocation == BnoodStartupSplashPage.path;
-  if (BnoodSplashSession.completed) {
-    return onSplash ? BnoodStartupSplashPage.handoffLocation : null;
+  final onSplash = state.matchedLocation == AppStartupSplashPage.path;
+  if (AppSplashSession.completed) {
+    return onSplash ? AuthPaths.login : null;
   }
-  return onSplash ? null : BnoodStartupSplashPage.path;
+  return onSplash ? null : AppStartupSplashPage.path;
 }
 
 String? _authRedirect(Ref ref, GoRouterState state) {
@@ -98,25 +98,31 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: _rootKey,
     refreshListenable: refresh,
-    initialLocation: BnoodSplashSession.completed
-        ? BnoodStartupSplashPage.handoffLocation
-        : BnoodStartupSplashPage.path,
+    initialLocation: AppSplashSession.completed
+        ? AuthPaths.login
+        : AppStartupSplashPage.path,
     redirect: (_, state) => _authRedirect(ref, state),
     routes: [
       GoRoute(
-        path: BnoodStartupSplashPage.path,
+        path: AppStartupSplashPage.path,
         pageBuilder: (_, state) => NoTransitionPage<void>(
           key: state.pageKey,
-          child: const BnoodStartupSplashPage(),
+          child: const AppStartupSplashPage(),
         ),
       ),
       GoRoute(
         path: AuthPaths.bootstrap,
-        builder: (_, _) => const AuthBootstrapScreen(),
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const AuthBootstrapScreen(),
+        ),
       ),
       GoRoute(
         path: AuthPaths.login,
-        builder: (_, _) => const LoginScreen(),
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const LoginScreen(),
+        ),
       ),
       GoRoute(
         path: AuthPaths.register,
@@ -128,7 +134,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AuthPaths.completeProfile,
-        builder: (_, _) => const CompleteProfileScreen(),
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const CompleteProfileScreen(),
+        ),
       ),
       GoRoute(
         path: AuthPaths.forgotPassword,
