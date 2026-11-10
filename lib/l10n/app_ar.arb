@@ -336,7 +336,9 @@
   "statementPeriodMonth": "هذا الشهر",
   "statementPeriodAll": "كل الفترة",
   "statementTotalReceived": "إجمالي المقبوض",
+  "statementPeriodReceived": "المستلم في الفترة",
   "statementTotalSpent": "إجمالي المصروف",
+  "statementPeriodSpent": "المصروف في الفترة",
   "statementClosingLabel": "المتبقي",
   "statementClosingEndOfPeriod": "المتبقي بنهاية الفترة",
   "statementMaterialsLaborSummary": "إجمالي مونة (خامات): {materials} | إجمالي مصنعية: {labor}",
@@ -356,6 +358,8 @@
   "statementReceiptsSectionTitle": "المقبوضات من العميل",
   "statementReceiptsSectionCaption": "تُعرض الدفعات هنا فقط، ولا تُكرر داخل بنود المصروفات.",
   "statementEmptyReceipts": "لا توجد مقبوضات في الفترة المحددة.",
+  "statementEmptyItemsTitle": "مفيش مصروفات في الفترة دي",
+  "statementEmptyItemsDescription": "المصروفات اللي تسجلها للعميل ده هتظهر هنا متقسمة على البنود. غيّر الفترة أو سجّل صرف جديد.",
   "statementItemSectionTitle": "بند: {name}",
   "@statementItemSectionTitle": {
     "placeholders": {

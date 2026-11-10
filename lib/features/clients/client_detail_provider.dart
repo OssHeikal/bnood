@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/agreements/agreements_riverpod.dart';
+import '../../core/craftsmen/craftsman_snapshot_limit.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
@@ -77,6 +78,7 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
           )
           .toList()
         ..sort((a, b) => a.name.compareTo(b.name));
+      previews = craftsmanSnapshotRows(previews);
     }
 
     final itemSpend = await ref.read(clientsRepositoryProvider).getClientItemSpend(clientId);
@@ -141,7 +143,7 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
     final craftsmanById = {for (final c in craftsmen) c.id: c};
 
     final previews = <ClientCraftsmanPreviewRow>[];
-    for (final a in agreements.take(3)) {
+    for (final a in agreements.take(craftsmanSnapshotLimit)) {
       final c = craftsmanById[a.craftsmanId];
       if (c == null) continue;
       final paid = LedgerMath.craftsmanPaidPiastres(rows: tx, craftsmanId: a.craftsmanId);

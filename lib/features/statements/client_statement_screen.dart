@@ -13,6 +13,8 @@ import '../../core/clients/client_statement_record.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_error_handler.dart';
 import '../../core/clients/clients_providers.dart';
+import '../../core/items/item_api_record.dart';
+import '../../core/items/items_providers.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/repositories/bnood_repository.dart';
 import '../../core/resources/gen/assets.gen.dart';
@@ -41,8 +43,8 @@ class ClientStatementScreen extends ConsumerStatefulWidget {
 
 class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   final _sharePdfButtonKey = GlobalKey();
-  StatementPeriodPreset _preset = StatementPeriodPreset.month;
-  late PeriodBounds _bounds = StatementPeriodLogic.monthBounds();
+  StatementPeriodPreset _preset = StatementPeriodPreset.all;
+  late PeriodBounds _bounds = StatementPeriodLogic.remoteAllTimeBounds();
   StatementExportRecord? _lastExport;
   bool _exporting = false;
   bool _prefsAvailable = true;
@@ -231,6 +233,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
           clientName: data.clientName,
           statement: data.statement,
           localeCode: localeCode,
+          catalogById: data.catalogById,
         ),
       ],
     );
@@ -297,7 +300,17 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
       from: from,
       to: to,
     );
-    return _RemoteStatementData(clientName: record.client.name, statement: statement);
+    Map<String, CatalogItem> catalogById = const {};
+    try {
+      catalogById = await ref.read(itemsCatalogByIdProvider.future);
+    } catch (_) {
+      catalogById = const {};
+    }
+    return _RemoteStatementData(
+      clientName: record.client.name,
+      statement: statement,
+      catalogById: catalogById,
+    );
   }
 
   Future<_StatementData> _load(BnoodRepository repo) async {
@@ -479,10 +492,15 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
 }
 
 class _RemoteStatementData {
-  const _RemoteStatementData({required this.clientName, required this.statement});
+  const _RemoteStatementData({
+    required this.clientName,
+    required this.statement,
+    required this.catalogById,
+  });
 
   final String clientName;
   final AppClientStatement statement;
+  final Map<String, CatalogItem> catalogById;
 }
 
 class _StatementData {

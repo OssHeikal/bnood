@@ -1,192 +1,7 @@
-Launching lib/main.dart on iPhone 18 Pro Max in debug mode...
--[WFIsolatedShortcutRunner init] Taking sandbox extensions for execution
--[WFIsolatedShortcutRunner init]_block_invoke Sandbox extensions acquired
-Indexing for request: <WFToolKitIndexingRequest: 0x106454300>, changeset: .partial(updatedCount: 1 removedCount: 0 updated: ["com.apple.siri.SiriCrisisAppIntentsExtension"], removed: [], provenance: [VoiceShortcutClient.ToolKitIndexingReason.Changeset.Provenance.appIntentsChange(<LinkSnapshot> ["com.apple.VisualIntelligence", "com.apple.siri.-MarketplaceIntents-AppIntents", "com.apple.mobilesafari", "com.apple.omniSearch.SearchToolExtension", "com.apple.-Photos-AppIntents", "com.apple.AppKit", "com.apple.siri.SiriVideoAppIntents", "com.apple.TextInput.TextInputAppIntentsExtension", "com.apple.AppIntents", "com.apple.Contacts.AppIntents", "com.apple.siri.SiriCrisisAppIntentsExtension", "com.apple.PassbookStub", "com.apple.SharingUIService", "com.apple.intelligenceplatformd", "com.apple.-DeviceExpertIntents-AppIntents", "com.apple.siri.SiriNotebookAppIntentsExtension", "com.apple.intelligenceplatform.IntelligencePlatform.IntelligencePlatformDataActionsAppIntentsExtension", "com.apple.siri.SiriGeo.SiriGeoAppIntentExtension", "com.<…>, priority: <decode: missing data>
-Type indexing (params + content items) took 0.101038s
-Action indexing took 0.039946s
-Indexed: 1
-Errored: 0
-Skipped: [:]
-Bundle cache: 57 hits, 1 misses
-Finished in 1.320332s
--[WFIsolatedShortcutRunner unaliveProcess] Releasing sandbox extensions
-Xcode build done.                                           83.4s
-Connecting to VM Service at ws://127.0.0.1:52233/iV3K_W9kpIk=/ws
-Connected to the VM Service.
-[GoRouter] setting initial location /splash
-[GoRouter] Full paths for routes:
-           ├─/splash
-           ├─/auth/bootstrap
-           ├─/auth/login
-           ├─/auth/register (RegisterScreen)
-           ├─/auth/register/verify (RegisterVerifyScreen)
-           ├─/auth/complete-profile
-           ├─/auth/forgot-password (ForgotPasswordScreen)
-           ├─/auth/forgot-password/verify (ForgotVerifyScreen)
-           ├─/auth/reset-password (ResetPasswordScreen)
-           ├─/auth/change-password (ChangePasswordScreen)
-           ├─/remote (RemoteWorkspaceScreen)
-           ├─/profile (UserProfileScreen)
-           ├─/settings (AppSettingsScreen)
-           ├─ (ShellRoute)
-           │ ├─/home (AppShellTabGate)
-           │ ├─/clients (AppShellTabGate)
-           │ ├─/directory (AppShellTabGate)
-           │ └─/items (AppShellTabGate)
-           ├─/clients/:clientId (ClientDetailScreen)
-           ├─/clients/:clientId/movements (MovementsListScreen)
-           ├─/clients/:clientId/craftsmen (ClientCraftsmenListScreen)
-           ├─/clients/:clientId/items (ClientItemsStatsScreen)
-           ├─/clients/:clientId/statement (ClientStatementScreen)
-           ├─/providers/:providerId (ProviderDetailScreen)
-           ├─/suppliers/:supplierId (SupplierDetailScreen)
-           ├─/suppliers/:supplierId/statement (SupplierStatementScreen)
-           └─/craftsmen/:craftsmanId (CraftsmanDetailScreen)
-[ApiClient] ┌─ API ► GET ─────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/auth/me
-            │ Headers:
-            │   Authorization: ***
-            │   accept: application/json
-            │   content-type: application/json
-            │ Body:
-            │   (empty)
-            └───────────────────────────────────────────
-[ApiClient] ┌─ API ✓ GET · 200 OK · 871ms ────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/auth/me
-            │ Response body:
-            │   {
-            │     "success": true,
-            │     "message": "User retrieved successfully",
-            │     "data": {
-            │       "user": {
-            │         "id": "01m70rbs9nwx8hcvtccz0xz62a",
-            │         "phone": "+201014146448",
-            │         "name": "Osama Heikal",
-            │         "phone_verified_at": "2026-11-09T18:15:40+00:00"
-            │       }
-            │     }
-            │   }
-            └───────────────────────────────────────────────────────────
-[GoRouter] going to /home
-[GoRouter] Using MaterialApp configuration
-[ApiClient] ┌─ API ► GET ──────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/home
-            │ Headers:
-            │   Authorization: ***
-            │   accept: application/json
-            │   content-type: application/json
-            │ Body:
-            │   (empty)
-            └────────────────────────────────────────
-[ApiClient] ┌─ API ► GET ──────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/subscription
-            │ Headers:
-            │   Accept-Language: ar
-            │   Authorization: ***
-            │   accept: application/json
-            │   content-type: application/json
-            │ Body:
-            │   (empty)
-            └────────────────────────────────────────────────
-[ApiClient] ┌─ API ✓ GET · 200 OK · 215ms ──────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/subscription
-            │ Response body:
-            │   {
-            │     "success": true,
-            │     "message": "Subscription status retrieved.",
-            │     "data": {
-            │       "paywall_enabled": true,
-            │       "entitlements": {
-            │         "package_slug": "premium",
-            │         "package_name": "بريميوم",
-            │         "is_premium": true,
-            │         "premium_avatar": true,
-            │         "expires_at": "2026-11-09T23:59:59+00:00",
-            │         "days_remaining": 0,
-            │         "subscription_status": "active",
-            │         "active_projects_count": 1,
-            │         "active_project_cap": null,
-            │         "can_create_active_project": true,
-            │         "can_mutate_financial_transactions": true,
-            │         "can_archive_client": true,
-            │         "show_paywall_surfaces": true,
-            │         "is_expired_premium": false
-            │       },
-            │       "paywall": {
-            │         "title": "كمّل شغلك من غير حدود",
-            │         "subtitle": "مشاريع نشطة بلا حد مع Premium",
-            │         "benefits": [
-            │           "مشاريع نشطة بلا حد",
-            │           "عهده وبنود وكشوف لكل مشاريعك",
-            │           "إدارة العملاء والصنايعية في مكان واحد"
-            │         ],
-            │         "cta_subscribe_label": "اشترك في Premium",
-            │         "cta_continue_free_label": "الاستمرار مجانًا",
-            │         "plans": [
-            │           {
-            │             "slug": "premium",
-            │             "name": "بريميوم",
-            │             "price_monthly_minor": 29900,
-            │             "price_yearly_minor": 299000,
-            │             "price_monthly_discounted_minor": null,
-            │             "price_yearly_discounted_minor": null,
-            │             "yearly_monthly_equivalent_minor": 24917,
-            │             "yearly_billed_total_minor": 299000,
-            │             "badge_text": "وفّر 2 أشهر"
-            │           }
-            │         ],
-            │         "offer": null
-            │       }
-            │     }
-            │   }
-            └─────────────────────────────────────────────────────────
-[ApiClient] ┌─ API ✓ GET · 200 OK · 229ms ──────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/home
-            │ Response body:
-            │   {
-            │     "success": true,
-            │     "message": "Home summary retrieved successfully.",
-            │     "data": {
-            │       "received": 10000000,
-            │       "spent": 6200000,
-            │       "remaining": 3800000,
-            │       "clients": [
-            │         {
-            │           "id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │           "name": "Ahmed",
-            │           "received": 10000000,
-            │           "spent": 6200000,
-            │           "remaining": 3800000
-            │         }
-            │       ],
-            │       "craftsmen": [
-            │         {
-            │           "id": "01m715tcx0n74f755xj43xbxz5",
-            │           "name": "احمد السباك",
-            │           "last_activity_at": "2026-11-09T00:00:00+00:00",
-            │           "paid": 200000,
-            │           "remaining": 800000,
-            │           "clients_count": 1
-            │         }
-            │       ]
-            │     }
-            │   }
-            └─────────────────────────────────────────────────────────────
--[WFIsolatedShortcutRunner init] Taking sandbox extensions for execution
--[WFIsolatedShortcutRunner init]_block_invoke Sandbox extensions acquired
-Indexing for request: <WFToolKitIndexingRequest: 0x1064540c0>, changeset: .partial(updatedCount: 1 removedCount: 0 updated: ["com.bnood.app"], removed: [], provenance: [VoiceShortcutClient.ToolKitIndexingReason.Changeset.Provenance.launchServicesSnapshot(<LaunchServicesSnapshot uuid=D03D4D82-DE72-4B7B-9A2F-C116C79BAC66, v=852)> ["com.apple.Preferences.ControlCenterAppIntentsExtension", "com.apple.feedback.remote", "com.apple.FaceTimeLinkTrampoline", "com.apple.icloud.apps.messages.business", "com.apple.SensitiveContentAnalysis.SensitiveContentAnalysisConfigurationExtension", "com.apple.contacts.ContactsAppIntentsExtension", "com.apple.Home.HomeUIService", "com.apple.fullkeyboardaccess", "com.apple.Preferences.DisplayAndBrightnessSettingsExtension", "com.apple.UIKit.FontPickerUIService", "com.apple.HomeAppIntentsExtension", "com.apple.MTLReplayer", "com.apple.TextInput.TextInputAppIntentsExtension", "com.apple.BarcodeScanner", "com.apple.Health", "com.apple.AccountAuthenticationDialog", "com.apple.CarPlaySetupApp", "com.apple.Pr<…>, priority: <decode: missing data>
-Type indexing (params + content items) took 0.001381s
-Action indexing took 0.000067s
-Indexed: 0
-Errored: 0
-Skipped: [:]
-Bundle cache: 0 hits, 0 misses
-Finished in 0.747321s
--[WFIsolatedShortcutRunner unaliveProcess] Releasing sandbox extensions
-[GoRouter] pushing /clients/01m70rnwvrx0snb0ay8xq42tf1
-[GoRouter] Using MaterialApp configuration
+[GoRouter] pushing /clients/01m72r6bkf1wdfmzsqejqyxkys
+[GoRouter] pushing /clients/01m72r6bkf1wdfmzsqejqyxkys/statement
 [ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1
+            │ https://bnood.etbaaly.com/api/v1/clients/01m72r6bkf1wdfmzsqejqyxkys
             │ Headers:
             │   Authorization: ***
             │   accept: application/json
@@ -194,318 +9,108 @@ Finished in 0.747321s
             │ Body:
             │   (empty)
             └──────────────────────────────────────────────────────────────────────
-[ApiClient] ┌─ API ✓ GET · 200 OK · 413ms ───────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1
+[ApiClient] ┌─ API ✓ GET · 200 OK · 459ms ───────────────────────────────────────
+            │ https://bnood.etbaaly.com/api/v1/clients/01m72r6bkf1wdfmzsqejqyxkys
             │ Response body:
             │   {
             │     "success": true,
             │     "message": "Client retrieved.",
             │     "data": {
-            │       "id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │       "name": "Ahmed",
-            │       "phone": null,
+            │       "id": "01m72r6bkf1wdfmzsqejqyxkys",
+            │       "name": "د. منى الشريف — فيلا الشيخ زايد",
+            │       "phone": "+201055512302",
             │       "archived_at": null,
-            │       "created_at": "2026-11-09T18:21:11+00:00",
-            │       "updated_at": "2026-11-09T18:21:11+00:00",
+            │       "created_at": "2026-11-10T12:51:11+00:00",
+            │       "updated_at": "2026-11-10T12:51:11+00:00",
             │       "project": {
-            │         "id": "01m70rnwvs12q9k77m2v7z8tzj",
-            │         "name": "Ahmed",
+            │         "id": "01m72r6bkg250kq4w2fckbg5c8",
+            │         "name": "د. منى الشريف — فيلا الشيخ زايد",
             │         "status": "active",
-            │         "engineer_basis_points": null
+            │         "engineer_basis_points": 1200
             │       },
             │       "balances": {
-            │         "received": 10000000,
-            │         "spent": 6200000,
-            │         "remaining": 3800000
+            │         "received": 43000000,
+            │         "spent": 27920000,
+            │         "remaining": 15080000
             │       }
             │     }
             │   }
             └──────────────────────────────────────────────────────────────────────
 [ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1/agreements?page=1&per_page=50
+            │ https://bnood.etbaaly.com/api/v1/clients/01m72r6bkf1wdfmzsqejqyxkys/statement?from=2000-01-01&to=2026-11-10
             │ Headers:
             │   Authorization: ***
             │   accept: application/json
             │   content-type: application/json
             │ Body:
             │   (empty)
-            └────────────────────────────────────────────────────────────────────────────────────────────────────
-[ApiClient] ┌─ API ✓ GET · 200 OK · 289ms ────────────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1/agreements?page=1&per_page=50
+            └─────────────────────────────────────────────────────────────────────────────────────────────────────
+[ApiClient] ┌─ API ✓ GET · 200 OK · 145ms ────────────────────────────────────────────────
+            │ https://bnood.etbaaly.com/api/v1/clients/01m72r6bkf1wdfmzsqejqyxkys/statement?from=2000-01-01&to=2026-11-10
             │ Response body:
             │   {
             │     "success": true,
-            │     "message": "Agreements retrieved successfully.",
-            │     "data": [
-            │       {
-            │         "id": "01m715tjmgktkakhp07pn0j70z",
-            │         "client_id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │         "provider_id": "01m715tcx0n74f755xj43xbxz5",
-            │         "amount": 10000,
-            │         "paid": 2000,
-            │         "remaining": 8000,
-            │         "client": {
-            │           "id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │           "name": "Ahmed"
-            │         },
-            │         "provider": {
-            │           "id": "01m715tcx0n74f755xj43xbxz5",
-            │           "name": "احمد السباك",
-            │           "type": "craftsman"
-            │         },
-            │         "created_at": "2026-11-09T22:10:56+00:00",
-            │         "updated_at": "2026-11-09T22:10:56+00:00"
-            │       }
-            │     ],
-            │     "meta": {
-            │       "page": 1,
-            │       "per_page": 50,
-            │       "total": 1
-            │     }
-            │   }
-            └────────────────────────────────────────────────────────────────────────────────────────────────────
-[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1/item-spend
-            │ Headers:
-            │   Authorization: ***
-            │   accept: application/json
-            │   content-type: application/json
-            │ Body:
-            │   (empty)
-            └─────────────────────────────────────────────────────────────────────────────────
-[ApiClient] ┌─ API ✓ GET · 200 OK · 121ms ────────────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1/item-spend
-            │ Response body:
-            │   {
-            │     "success": true,
-            │     "message": "Client item spend retrieved successfully.",
+            │     "message": "Client statement retrieved successfully.",
             │     "data": {
+            │       "from": "2000-01-01",
+            │       "to": "2026-11-10",
+            │       "opening_balance": 0,
+            │       "received": 43000000,
+            │       "spent": 27920000,
+            │       "closing_balance": 15080000,
+            │       "remaining": 15080000,
             │       "items": [
             │         {
             │           "id": "01m70pxzy3g0htmtb9sszcypb5",
             │           "name": "سيراميك وحمامات",
-            │           "spent": 5200000,
-            │           "materials": 5000000,
-            │           "labor": 200000,
-            │           "icon_key": "bathtub",
-            │           "color_key": "blue"
+            │           "spent": 6200000
+            │         },
+            │         {
+            │           "id": "01m70pxzy1mnfx5rwne7qy255d",
+            │           "name": "محارة",
+            │           "spent": 3600000
             │         },
             │         {
             │           "id": "01m70pxzy3g0htmtb9sszcypb6",
             │           "name": "سباكة",
-            │           "spent": 1000000,
-            │           "materials": 1000000,
-            │           "labor": 0,
-            │           "icon_key": "plumbing",
-            │           "color_key": "turquoise"
+            │           "spent": 3300000
+            │         },
+            │         {
+            │           "id": "01m70pxzy9478tvc5t1dqyfqfc",
+            │           "name": "ألوميتال وشتر",
+            │           "spent": 3100000
+            │         },
+            │         {
+            │           "id": "01m70pxzy6541r5xy0k7h0vj15",
+            │           "name": "دهانات",
+            │           "spent": 2620000
+            │         },
+            │         {
+            │           "id": "01m70pxzy510zxewxm1z8v7xr7",
+            │           "name": "جبس بورد",
+            │           "spent": 2550000
+            │         },
+            │         {
+            │           "id": "01m70pxzy8f4ssswx0dhes68t5",
+            │           "name": "مطبخ",
+            │           "spent": 2400000
+            │         },
+            │         {
+            │           "id": "01m70pxzy8f4ssswx0dhes68t4",
+            │           "name": "نجارة وأبواب",
+            │           "spent": 1500000
+            │         },
+            │         {
+            │           "id": "01m70pxzy4vm4d9nbezp21vmya",
+            │           "name": "كهرباء",
+            │           "spent": 1400000
+            │         },
+            │         {
+            │           "id": "01m70pxzyakexqb1f4ewbnpdgh",
+            │           "name": "تكييف",
+            │           "spent": 1250000
             │         }
             │       ]
             │     }
             │   }
-            └─────────────────────────────────────────────────────────────────────────────────
-[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1/vouchers?sort=date_desc&page=1&per_page=5
-            │ Headers:
-            │   Authorization: ***
-            │   accept: application/json
-            │   content-type: application/json
-            │ Body:
-            │   (empty)
             └─────────────────────────────────────────────────────────────────────────────────────────────────────
-[ApiClient] ┌─ API ✓ GET · 200 OK · 197ms ────────────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1/vouchers?sort=date_desc&page=1&per_page=5
-            │ Response body:
-            │   {
-            │     "success": true,
-            │     "message": "Vouchers retrieved successfully.",
-            │     "data": [
-            │       {
-            │         "id": "01m715v65cd35e4qk0850rz5gy",
-            │         "client_id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │         "type": "spend",
-            │         "payment_method": "cash",
-            │         "date": "2026-11-09",
-            │         "amount": 200000,
-            │         "description": null,
-            │         "item_id": "01m70pxzy3g0htmtb9sszcypb5",
-            │         "provider_id": "01m715tcx0n74f755xj43xbxz5",
-            │         "expense_classification": "labor",
-            │         "client": {
-            │           "id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │           "name": "Ahmed"
-            │         },
-            │         "item": {
-            │           "id": "01m70pxzy3g0htmtb9sszcypb5",
-            │           "name": "سيراميك وحمامات"
-            │         },
-            │         "provider": {
-            │           "id": "01m715tcx0n74f755xj43xbxz5",
-            │           "name": "احمد السباك",
-            │           "type": "craftsman"
-            │         },
-            │         "receipts": [],
-            │         "created_at": "2026-11-09T22:11:16+00:00",
-            │         "updated_at": "2026-11-09T22:11:16+00:00"
-            │       },
-            │       {
-            │         "id": "01m715q54zqfmbfdc6yhmxnt4h",
-            │         "client_id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │         "type": "receive",
-            │         "payment_method": "transfer",
-            │         "date": "2026-11-09",
-            │         "amount": 10000000,
-            │         "description": null,
-            │         "item_id": null,
-            │         "provider_id": null,
-            │         "expense_classification": null,
-            │         "client": {
-            │           "id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │           "name": "Ahmed"
-            │         },
-            │         "item": null,
-            │         "provider": null,
-            │         "receipts": [],
-            │         "created_at": "2026-11-09T22:09:04+00:00",
-            │         "updated_at": "2026-11-09T22:09:04+00:00"
-            │       },
-            │       {
-            │         "id": "01m70s1fe9e75r4kqgqj2tafc5",
-            │         "client_id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │         "type": "spend",
-            │         "payment_method": "cash",
-            │         "date": "2026-11-09",
-            │         "amount": 1000000,
-            │         "description": null,
-            │         "item_id": "01m70pxzy3g0htmtb9sszcypb6",
-            │         "provider_id": "01m70s0jwvtsfyamfsg4n21yke",
-            │         "expense_classification": "materials",
-            │         "client": {
-            │           "id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │           "name": "Ahmed"
-            │         },
-            │         "item": {
-            │           "id": "01m70pxzy3g0htmtb9sszcypb6",
-            │           "name": "سباكة"
-            │         },
-            │         "provider": {
-            │           "id": "01m70s0jwvtsfyamfsg4n21yke",
-            │           "name": "عبد العزيز السلاب",
-            │           "type": "supplier"
-            │         },
-            │         "receipts": [
-            │           {
-            │             "id": "01m70s1kn7j3c4153pnbhmm45s",
-            │             "mime": "image/jpeg",
-            │             "size": 1237257,
-            │             "created_at": "2026-11-09T18:27:35+00:00"
-            │           }
-            │         ],
-            │         "created_at": "2026-11-09T18:27:30+00:00",
-            │         "updated_at": "2026-11-09T18:27:30+00:00"
-            │       },
-            │       {
-            │         "id": "01m715r5mrgf3edsd3jyvqvb70",
-            │         "client_id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │         "type": "spend",
-            │         "payment_method": "transfer",
-            │         "date": "2026-11-08",
-            │         "amount": 5000000,
-            │         "description": null,
-            │         "item_id": "01m70pxzy3g0htmtb9sszcypb5",
-            │         "provider_id": "01m70s0jwvtsfyamfsg4n21yke",
-            │         "expense_classification": "materials",
-            │         "client": {
-            │           "id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │           "name": "Ahmed"
-            │         },
-            │         "item": {
-            │           "id": "01m70pxzy3g0htmtb9sszcypb5",
-            │           "name": "سيراميك وحمامات"
-            │         },
-            │         "provider": {
-            │           "id": "01m70s0jwvtsfyamfsg4n21yke",
-            │           "name": "عبد العزيز السلاب",
-            │           "type": "supplier"
-            │         },
-            │         "receipts": [],
-            │         "created_at": "2026-11-09T22:09:37+00:00",
-            │         "updated_at": "2026-11-09T22:09:37+00:00"
-            │       }
-            │     ],
-            │     "meta": {
-            │       "page": 1,
-            │       "per_page": 5,
-            │       "total": 4
-            │     }
-            │   }
-            └─────────────────────────────────────────────────────────────────────────────────────────────────────
-[GoRouter] pushing /clients/01m70rnwvrx0snb0ay8xq42tf1/statement
-[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1
-            │ Headers:
-            │   Authorization: ***
-            │   accept: application/json
-            │   content-type: application/json
-            │ Body:
-            │   (empty)
-            └──────────────────────────────────────────────────────────────────────
-[ApiClient] ┌─ API ✓ GET · 200 OK · 77ms ────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1
-            │ Response body:
-            │   {
-            │     "success": true,
-            │     "message": "Client retrieved.",
-            │     "data": {
-            │       "id": "01m70rnwvrx0snb0ay8xq42tf1",
-            │       "name": "Ahmed",
-            │       "phone": null,
-            │       "archived_at": null,
-            │       "created_at": "2026-11-09T18:21:11+00:00",
-            │       "updated_at": "2026-11-09T18:21:11+00:00",
-            │       "project": {
-            │         "id": "01m70rnwvs12q9k77m2v7z8tzj",
-            │         "name": "Ahmed",
-            │         "status": "active",
-            │         "engineer_basis_points": null
-            │       },
-            │       "balances": {
-            │         "received": 10000000,
-            │         "spent": 6200000,
-            │         "remaining": 3800000
-            │       }
-            │     }
-            │   }
-            └──────────────────────────────────────────────────────────────────────
-[ApiClient] ┌─ API ► GET ────────────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1/statement?from=2026-11-01&to=2026-11-10
-            │ Headers:
-            │   Authorization: ***
-            │   accept: application/json
-            │   content-type: application/json
-            │ Body:
-            │   (empty)
-            └─────────────────────────────────────────────────────────────────────────────────────────────────────
-[ApiClient] ┌─ API ✕ GET · 422 Unprocessable · 110ms ────────────────────────────────────────────────
-            │ https://bnood.etbaaly.com/api/v1/clients/01m70rnwvrx0snb0ay8xq42tf1/statement?from=2026-11-01&to=2026-11-10
-            │ ↳ badResponse
-            │ ↳ success=false · message=The to field must be a date before or equal to today.
-            │ ↳ to: The to field must be a date before or equal to today.
-            │ ↳ mapped · 422 · code=— · The to field must be a date before or equal to today.
-            │ ↳ mapped fields: to: The to field must be a date before or equal to today.
-            │ Response body:
-            │   {
-            │     "success": false,
-            │     "message": "The to field must be a date before or equal to today.",
-            │     "errors": {
-            │       "to": [
-            │         "The to field must be a date before or equal to today."
-            │       ]
-            │     }
-            │   }
-            │ Headers:
-            │   Authorization: ***
-            │   accept: application/json
-            │   content-type: application/json
-            │ Body:
-            │   (empty)
-            └──────────────────────────────────────────────────────────────────────────────────────────────────────────────

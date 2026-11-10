@@ -99,6 +99,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                 layout: AppPagedLayout.sliverGrid,
                 gridPadding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
                 builders: AppPagedBuilders<CatalogItem>(
+                  contentPadding: EdgeInsets.zero,
                   firstPageProgress: (_, _) => const ItemsLoadingSkeleton(),
                   empty: (ctx) => AppCard(
                     child: AppFallback.section(

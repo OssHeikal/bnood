@@ -29,9 +29,30 @@ void main() {
         ],
       });
       expect(statement.from, '2026-01-01');
+      expect(statement.openingBalanceMinor, 0);
+      expect(statement.closingBalanceMinor, 200_000);
+      expect(statement.remainingMinor, 200_000);
       expect(statement.items.length, 2);
+      expect(statement.items.first.iconKey, isNull);
+      expect(statement.items.first.colorKey, isNull);
       expect(statement.items.first.spentMinor, 500_000);
       expect(RemoteMoneyFormat.formatMinor(statement.items.first.spentMinor), '5,000 EGP');
+    });
+
+    test('opening and closing balance fields optional with fallbacks', () {
+      final statement = AppClientStatement.fromDataJson({
+        'from': '2026-01-01',
+        'to': '2026-01-31',
+        'opening_balance': 100_000,
+        'received': 50_000,
+        'spent': 30_000,
+        'closing_balance': 120_000,
+        'remaining': 120_000,
+        'items': [],
+      });
+      expect(statement.openingBalanceMinor, 100_000);
+      expect(statement.closingBalanceMinor, 120_000);
+      expect(statement.remainingMinor, 120_000);
     });
   });
 

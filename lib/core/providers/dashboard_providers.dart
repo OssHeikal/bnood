@@ -58,15 +58,19 @@ final homeCraftsmenProvider =
   HomeCraftsmenNotifier.new,
 );
 
-void refreshHomeDashboard(WidgetRef ref) {
+/// Silent reload of home sections. The future completes when those sections finish.
+Future<void> refreshHomeDashboard(WidgetRef ref) {
   if (ref.read(remoteClientsEnabledProvider)) {
     ref.read(homeRepositoryProvider).invalidateDashboard();
   }
-  ref.read(homeTotalsProvider.notifier).refreshSilently();
-  ref.read(homeClientBalancesProvider.notifier).refreshSilently();
-  ref.read(homeSupplierSpendsProvider.notifier).refreshSilently();
-  ref.read(homeCraftsmenProvider.notifier).refreshSilently();
+  final pending = Future.wait([
+    ref.read(homeTotalsProvider.notifier).refreshSilently(),
+    ref.read(homeClientBalancesProvider.notifier).refreshSilently(),
+    ref.read(homeSupplierSpendsProvider.notifier).refreshSilently(),
+    ref.read(homeCraftsmenProvider.notifier).refreshSilently(),
+  ]);
   bumpPagingListRefresh(ref, PagingListIds.clients);
+  return pending;
 }
 
 /// After client create/update/archive — keeps Home, Clients list, and optional detail in sync (silent).

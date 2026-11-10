@@ -23,6 +23,8 @@ class ItemsLoadingSkeleton extends StatelessWidget {
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
+        // Null padding reapplies MediaQuery safe area and drops the grid by the status bar.
+        padding: EdgeInsets.zero,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: AppSize.spaceMD,

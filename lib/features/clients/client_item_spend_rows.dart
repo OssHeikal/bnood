@@ -1,13 +1,19 @@
 import '../../core/clients/client_statement_record.dart';
+import '../../core/clients/statement_item_visual.dart';
+import '../../core/items/item_api_record.dart';
 import '../../core/money/ledger_math.dart';
 import 'client_detail_snapshot.dart';
 
-ClientDetailItemRowData clientItemRowFromItemSpend(AppClientStatementItemSpend item) {
+ClientDetailItemRowData clientItemRowFromItemSpend(
+  AppClientStatementItemSpend item, {
+  Map<String, CatalogItem>? catalogById,
+}) {
+  final visual = resolveStatementItemVisual(item, catalogById: catalogById);
   return ClientDetailItemRowData(
     itemId: item.id,
     name: item.name,
-    colorKey: item.colorKey,
-    iconName: item.iconKey,
+    colorKey: visual.colorKey,
+    iconName: visual.iconKey,
     breakdown: ItemExpenseBreakdown(
       materialsPiastres: item.materialsMinor,
       laborPiastres: item.laborMinor,

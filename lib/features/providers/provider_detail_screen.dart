@@ -110,7 +110,7 @@ class _ProviderDetailScreenState extends ConsumerState<ProviderDetailScreen> {
                 ],
               ],
             ),
-            body: RefreshIndicator(
+            body: RefreshIndicator.adaptive(
               onRefresh: () =>
                   ref.read(providerDetailProvider(widget.providerId).notifier).refetchOnOpen(),
               child: ListView(

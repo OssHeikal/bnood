@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
+import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/clients/client_statement_record.dart';
+import '../../core/clients/statement_item_visual.dart';
+import '../../core/items/item_api_record.dart';
+import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
+import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/money/remote_money_units.dart';
+import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_amount.dart';
 import '../../core/widgets/app_card.dart';
+import '../../core/widgets/app_fallback.dart';
+import '../../features/items/item_semantic_icon.dart';
 import 'statement_summary_widgets.dart';
 
 class StatementApiClientDocument extends StatelessWidget {
@@ -15,18 +23,19 @@ class StatementApiClientDocument extends StatelessWidget {
     required this.clientName,
     required this.statement,
     required this.localeCode,
+    this.catalogById = const {},
   });
 
   final String clientName;
   final AppClientStatement statement;
   final String localeCode;
+  final Map<String, CatalogItem> catalogById;
 
   static const _minorPerMajor = RemoteMoneyUnits.minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
     final text = context.text;
 
     return Column(
@@ -39,9 +48,16 @@ class StatementApiClientDocument extends StatelessWidget {
         Text(l10n.navItems, style: text.sectionTitle),
         const SizedBox(height: AppSize.spaceSM),
         if (statement.items.isEmpty)
-          Text(
-            l10n.clientDetailNoItemSpend,
-            style: text.caption.copyWith(color: colors.onSurfaceMuted),
+          AppCard(
+            child: AppFallback.section(
+              leading: ShellNavIcon(
+                asset: Assets.icons.itemsLayersOutline,
+                color: context.colors.muted,
+                size: AppSize.icon,
+              ),
+              title: l10n.statementEmptyItemsTitle,
+              description: l10n.statementEmptyItemsDescription,
+            ),
           )
         else
           for (var i = 0; i < statement.items.length; i++) ...[
@@ -53,73 +69,115 @@ class StatementApiClientDocument extends StatelessWidget {
   }
 
   Widget _summaryStats(BuildContext context, AppLocalizations l10n) {
-    const cardWidth = 124.0;
     final cards = [
       _StatSpec(
-        l10n.statementTotalReceived,
+        l10n.openingBalance,
+        statement.openingBalanceMinor,
+        AppCardPreset.statRemaining,
+        AppAmountRole.remaining,
+      ),
+      _StatSpec(
+        l10n.statementPeriodReceived,
         statement.receivedMinor,
         AppCardPreset.statReceive,
         AppAmountRole.receive,
       ),
       _StatSpec(
-        l10n.statementTotalSpent,
+        l10n.statementPeriodSpent,
         statement.spentMinor,
         AppCardPreset.statSpend,
         AppAmountRole.spend,
       ),
       _StatSpec(
-        l10n.statementClosingEndOfPeriod,
-        statement.remainingMinor,
+        l10n.statementClosingLabel,
+        statement.closingBalanceMinor,
         AppCardPreset.statRemaining,
         AppAmountRole.remaining,
+        emphasized: true,
+        cardKey: const Key('statement_stat_closing'),
       ),
     ];
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final fitsRow = constraints.maxWidth >= cardWidth * cards.length + AppSize.spaceSM * (cards.length - 1);
-        final children = [
-          for (var i = 0; i < cards.length; i++) ...[
-            if (i > 0) const SizedBox(width: AppSize.spaceSM),
-            Expanded(
-              flex: fitsRow ? 1 : 0,
-              child: SizedBox(
-                width: fitsRow ? null : cardWidth,
-                child: StatementSummaryStatCard(
-                  label: cards[i].label,
-                  piastres: cards[i].piastres,
-                  preset: cards[i].preset,
-                  role: cards[i].role,
-                  localeCode: localeCode,
-                  minorPerMajor: _minorPerMajor,
-                ),
-              ),
-            ),
-          ],
-        ];
-        if (fitsRow) {
-          return IntrinsicHeight(
-            child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
-          );
-        }
-        return IntrinsicHeight(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
+    const gap = AppSize.spaceSM;
+
+    Widget statCell(_StatSpec spec) {
+      return StatementSummaryStatCard(
+        cardKey: spec.cardKey,
+        label: spec.label,
+        piastres: spec.piastres,
+        preset: spec.preset,
+        role: spec.role,
+        localeCode: localeCode,
+        minorPerMajor: _minorPerMajor,
+        emphasized: spec.emphasized,
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(child: statCell(cards[0])),
+              const SizedBox(width: gap),
+              Expanded(child: statCell(cards[1])),
+            ],
           ),
-        );
-      },
+        ),
+        const SizedBox(height: gap),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(child: statCell(cards[2])),
+              const SizedBox(width: gap),
+              Expanded(child: statCell(cards[3])),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
   Widget _itemRow(BuildContext context, AppClientStatementItemSpend item) {
     final text = context.text;
+    final visual = resolveStatementItemVisual(item, catalogById: catalogById);
+    final accent = itemSemanticAccentColor(visual.colorKey);
+
     return AppCard(
       padding: const EdgeInsets.all(AppSize.spaceMD),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(child: Text(item.name, style: text.sectionTitle)),
+          Material(
+            key: Key('statement_item_icon_${visual.iconKey}'),
+            color: accent.withValues(alpha: 0.15),
+            shape: AppShape.superellipse(radius: AppSize.radiusSM),
+            clipBehavior: Clip.antiAlias,
+            child: SizedBox(
+              width: AppSize.statIconBox,
+              height: AppSize.statIconBox,
+              child: Center(
+                child: itemSemanticIconWidget(
+                  iconKey: visual.iconKey,
+                  color: accent,
+                  size: AppSize.iconSmall,
+                ),
+              ),
+            ),
+          ),
+          AppSize.spaceMD.gap,
+          Expanded(
+            child: Text(
+              item.name,
+              style: text.sectionTitle,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          AppSize.spaceSM.gap,
           AppAmount(
             piastres: item.spentMinor,
             localeCode: localeCode,
@@ -134,10 +192,19 @@ class StatementApiClientDocument extends StatelessWidget {
 }
 
 class _StatSpec {
-  const _StatSpec(this.label, this.piastres, this.preset, this.role);
+  const _StatSpec(
+    this.label,
+    this.piastres,
+    this.preset,
+    this.role, {
+    this.emphasized = false,
+    this.cardKey,
+  });
 
   final String label;
   final int piastres;
   final AppCardPreset preset;
   final AppAmountRole role;
+  final bool emphasized;
+  final Key? cardKey;
 }

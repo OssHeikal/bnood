@@ -885,7 +885,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statementTotalReceived => 'Total received';
 
   @override
+  String get statementPeriodReceived => 'Received in period';
+
+  @override
   String get statementTotalSpent => 'Total spent';
+
+  @override
+  String get statementPeriodSpent => 'Spent in period';
 
   @override
   String get statementClosingLabel => 'Remaining';
@@ -912,6 +918,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statementEmptyReceipts => 'No receipts in the selected period.';
+
+  @override
+  String get statementEmptyItemsTitle => 'No spending in this period';
+
+  @override
+  String get statementEmptyItemsDescription =>
+      'Spending you record for this client will appear here, grouped by item. Change the period or record new spending.';
 
   @override
   String statementItemSectionTitle(String name) {

@@ -31,3 +31,16 @@ final itemIconsCatalogProvider = FutureProvider.autoDispose<ItemIconsCatalog>((r
   }
   return ref.watch(itemsRepositoryProvider).fetchIconsCatalog();
 });
+
+/// Full items catalog keyed by id (for statement row icon resolution and pickers).
+final itemsCatalogByIdProvider = FutureProvider<Map<String, CatalogItem>>((ref) async {
+  if (!ref.watch(remoteItemsEnabledProvider)) {
+    return const {};
+  }
+  try {
+    final items = await fetchAllCatalogItems(ref.read(itemsRepositoryProvider));
+    return {for (final item in items) item.id: item};
+  } catch (_) {
+    return const {};
+  }
+});

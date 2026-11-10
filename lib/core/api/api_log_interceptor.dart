@@ -112,12 +112,44 @@ class ApiLogInterceptor extends Interceptor {
     if (data == null) {
       return '(empty)';
     }
-    final redacted = ApiLogRedactor.body(data);
+    final compacted = _compactBinary(data);
+    final redacted = ApiLogRedactor.body(compacted);
     if (redacted is Map || redacted is List) {
       return const JsonEncoder.withIndent('  ').convert(redacted);
     }
     return redacted.toString();
   }
+
+  /// PDF and image bodies arrive as byte lists. Printing them as JSON floods the console.
+  Object? _compactBinary(Object? data) {
+    if (data is List<int>) {
+      return _binaryLabel(data.length);
+    }
+    if (data is List) {
+      if (_isOpaqueByteList(data)) {
+        return _binaryLabel(data.length);
+      }
+      return data.map(_compactBinary).toList();
+    }
+    if (data is Map) {
+      return data.map((key, value) => MapEntry(key, _compactBinary(value)));
+    }
+    return data;
+  }
+
+  bool _isOpaqueByteList(List<dynamic> data) {
+    if (data.length < 64) {
+      return false;
+    }
+    for (final item in data) {
+      if (item is! int || item < 0 || item > 255) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  String _binaryLabel(int length) => '(binary, $length bytes)';
 
   List<String> _indentBlock(String text) {
     return text.split('\n').map((line) => '  $line').toList(growable: false);

@@ -1,6 +1,8 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/providers/settings_provider.dart';
+import 'package:bnood/core/subscription/app_subscription.dart';
+import 'package:bnood/core/subscription/subscription_riverpod.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/auth_state.dart';
@@ -26,6 +28,22 @@ class _AuthUser extends AuthController {
       );
 }
 
+class _EnabledSubscription extends SubscriptionNotifier {
+  @override
+  Future<AppSubscriptionSnapshot?> build() async => AppSubscriptionSnapshot.fromDataJson({
+        'paywall_enabled': true,
+        'entitlements': {'show_paywall_surfaces': true},
+      });
+}
+
+class _DisabledSubscription extends SubscriptionNotifier {
+  @override
+  Future<AppSubscriptionSnapshot?> build() async => AppSubscriptionSnapshot.fromDataJson({
+        'paywall_enabled': false,
+        'entitlements': {'show_paywall_surfaces': true},
+      });
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -42,6 +60,7 @@ void main() {
         overrides: [
           appSettingsBootstrapProvider.overrideWithValue(snap),
           authControllerProvider.overrideWith(_AuthUser.new),
+          subscriptionProvider.overrideWith(_EnabledSubscription.new),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
@@ -83,6 +102,29 @@ void main() {
     expect(find.text('Subscription'), findsNothing);
   });
 
+  testWidgets('subscription row hidden when subscription is disabled', (tester) async {
+    final snap = await bootstrap();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appSettingsBootstrapProvider.overrideWithValue(snap),
+          authControllerProvider.overrideWith(_AuthUser.new),
+          subscriptionProvider.overrideWith(_DisabledSubscription.new),
+        ],
+        child: MaterialApp(
+          theme: AppFoundationTheme.light(),
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const Scaffold(body: AppMenuBody()),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Subscription'), findsNothing);
+    expect(find.text('Settings'), findsOneWidget);
+  });
+
   testWidgets('tapping subscription invokes paywall launcher', (tester) async {
     var paywallCalls = 0;
     final snap = await bootstrap();
@@ -91,6 +133,7 @@ void main() {
         overrides: [
           appSettingsBootstrapProvider.overrideWithValue(snap),
           authControllerProvider.overrideWith(_AuthUser.new),
+          subscriptionProvider.overrideWith(_EnabledSubscription.new),
           paywallPresentProvider.overrideWith(
             (ref) => (context, [refArg]) async {
               paywallCalls++;
@@ -141,6 +184,7 @@ void main() {
         overrides: [
           appSettingsBootstrapProvider.overrideWithValue(snap),
           authControllerProvider.overrideWith(_AuthUser.new),
+          subscriptionProvider.overrideWith(_DisabledSubscription.new),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
@@ -170,6 +214,7 @@ void main() {
         overrides: [
           appSettingsBootstrapProvider.overrideWithValue(snap),
           authControllerProvider.overrideWith(_AuthUser.new),
+          subscriptionProvider.overrideWith(_DisabledSubscription.new),
         ],
         child: MaterialApp.router(
           theme: AppFoundationTheme.light(),

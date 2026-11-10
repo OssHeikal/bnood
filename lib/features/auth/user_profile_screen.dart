@@ -56,7 +56,13 @@ class UserProfileScreen extends ConsumerWidget {
                   ),
                   AppSize.spaceMD.gap,
                   if (name.isNotEmpty)
-                    Text(name, style: text.pageTitle, textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
+                    Text(
+                      name,
+                      style: text.pageTitle,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   AppSize.spaceXS.gap,
                   Text(
                     phone != null && phone.isNotEmpty ? LtrIsolate.isolate(phone) : '—',
@@ -134,10 +140,7 @@ class _ProfileSection extends StatelessWidget {
         Text(title, style: context.text.groupTitle, textAlign: TextAlign.start),
         AppSize.spaceSM.gap,
         DecoratedBox(
-          decoration: BoxDecoration(
-            color: colors.surfaceSunken,
-            borderRadius: BorderRadius.circular(AppSize.radiusSM),
-          ),
+          decoration: BoxDecoration(color: colors.surfaceSunken, borderRadius: BorderRadius.circular(AppSize.radiusSM)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -217,12 +220,7 @@ class _ProfileActionRow extends StatelessWidget {
 }
 
 class _ProfileNavRow extends StatelessWidget {
-  const _ProfileNavRow({
-    required this.label,
-    required this.onTap,
-    this.subtitle,
-    this.destructive = false,
-  });
+  const _ProfileNavRow({required this.label, required this.onTap, this.subtitle, this.destructive = false});
 
   final String label;
   final String? subtitle;
@@ -233,14 +231,17 @@ class _ProfileNavRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final text = context.text;
-    final titleStyle = destructive
-        ? text.bodyEmphasis.copyWith(color: colors.error)
-        : text.bodyEmphasis;
+    final titleStyle = destructive ? text.bodyEmphasis.copyWith(color: colors.error) : text.bodyEmphasis;
 
     return AppPressable(
       onPressed: onTap,
       child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(AppSize.spaceMD, AppSize.spaceMD, AppSize.spaceSM, AppSize.spaceMD),
+        padding: const EdgeInsetsDirectional.fromSTEB(
+          AppSize.spaceMD,
+          AppSize.spaceMD,
+          AppSize.spaceSM,
+          AppSize.spaceMD,
+        ),
         child: Row(
           children: [
             Expanded(

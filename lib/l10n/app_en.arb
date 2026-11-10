@@ -341,7 +341,9 @@
   "statementPeriodMonth": "This month",
   "statementPeriodAll": "All time",
   "statementTotalReceived": "Total received",
+  "statementPeriodReceived": "Received in period",
   "statementTotalSpent": "Total spent",
+  "statementPeriodSpent": "Spent in period",
   "statementClosingLabel": "Remaining",
   "statementClosingEndOfPeriod": "Remaining at period end",
   "statementMaterialsLaborSummary": "Materials total: {materials} | Labor total: {labor}",
@@ -361,6 +363,8 @@
   "statementReceiptsSectionTitle": "Receipts from client",
   "statementReceiptsSectionCaption": "Payments appear here only and are not repeated under expense items.",
   "statementEmptyReceipts": "No receipts in the selected period.",
+  "statementEmptyItemsTitle": "No spending in this period",
+  "statementEmptyItemsDescription": "Spending you record for this client will appear here, grouped by item. Change the period or record new spending.",
   "statementItemSectionTitle": "Item: {name}",
   "@statementItemSectionTitle": {
     "placeholders": {

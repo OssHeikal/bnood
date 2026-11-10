@@ -6,6 +6,7 @@ import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/formatting/display_digits.dart';
+import '../../../core/resources/gen/assets.gen.dart';
 import '../../../core/subscription/app_subscription.dart';
 import '../../../core/subscription/subscription_colors.dart';
 import '../../../core/subscription/subscription_riverpod.dart';
@@ -45,13 +46,38 @@ class ProfileSubscriptionCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              l10n.profileSubscriptionSection,
-              style: text.groupTitle.copyWith(color: SubscriptionColors.violetDark),
-              textAlign: TextAlign.start,
+            Row(
+              spacing: AppSize.spaceSM,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: ShapeDecoration(
+                    color: SubscriptionColors.violet,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.radiusSM)),
+                  ),
+                  child: Assets.icons.crownOutline.svg(width: 24, height: 24),
+                ),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(l10n.profileSubscriptionSection, style: text.body, textAlign: TextAlign.start),
+                      if (isActivePremium)
+                        Text(ent.packageName, style: text.bodyEmphasis.copyWith(color: SubscriptionColors.violetDark))
+                      else
+                        Text(l10n.profileSubscriptionFreeBlurb, style: text.body.copyWith(color: muted)),
+                    ],
+                  ),
+                ),
+                if (isActivePremium)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: _premiumBody(context, l10n, ent, text, muted),
+                  ),
+              ],
             ),
             AppSize.spaceSM.gap,
-            if (isActivePremium) ..._premiumBody(context, l10n, ent, text, muted),
             if (!isActivePremium) ..._freeBody(context, l10n, snap, text, muted),
           ],
         ),
@@ -69,21 +95,9 @@ class ProfileSubscriptionCard extends ConsumerWidget {
     final expiry = ent.expiresAt;
     final days = ent.daysRemaining;
     return [
-      Text(ent.packageName, style: text.bodyEmphasis.copyWith(color: SubscriptionColors.violetDark)),
-      if (expiry != null) ...[
-        AppSize.spaceXS.gap,
-        Text(
-          l10n.profileSubscriptionRenewsOn(_formatDate(expiry)),
-          style: text.caption.copyWith(color: muted),
-        ),
-      ],
-      if (days != null) ...[
-        AppSize.spaceXS.gap,
-        Text(
-          l10n.profileSubscriptionDaysRemaining(days),
-          style: text.caption.copyWith(color: muted),
-        ),
-      ],
+      if (expiry != null)
+        Text(l10n.profileSubscriptionRenewsOn(_formatDate(expiry)), style: text.caption.copyWith(color: muted)),
+      if (days != null) Text(l10n.profileSubscriptionDaysRemaining(days), style: text.caption.copyWith(color: muted)),
     ];
   }
 
@@ -96,7 +110,6 @@ class ProfileSubscriptionCard extends ConsumerWidget {
   ) {
     final benefits = snap.paywall?.benefits ?? const <String>[];
     return [
-      Text(l10n.profileSubscriptionFreeBlurb, style: text.body.copyWith(color: muted)),
       if (benefits.isNotEmpty) ...[
         AppSize.spaceSM.gap,
         for (final b in benefits.take(3))

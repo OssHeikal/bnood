@@ -3,6 +3,8 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/clients/client_statement_record.dart';
+import '../../../core/clients/statement_item_visual.dart';
+import '../../../core/items/item_api_record.dart';
 import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_shape.dart';
@@ -169,7 +171,7 @@ class _ItemSheetBody extends StatelessWidget {
           _FilterSheetOption(
             label: item.name,
             selected: currentItemId == item.id,
-            leading: _ItemFilterIcon(iconKey: item.iconKey, colorKey: item.colorKey),
+            leading: _ItemFilterIcon.fromItemSpend(item),
             onTap: () => _closeSheet(
               context,
               MovementsItemPickResult(itemId: item.id, itemName: item.name),
@@ -194,6 +196,11 @@ class _ItemSheetBody extends StatelessWidget {
 
 class _ItemFilterIcon extends StatelessWidget {
   const _ItemFilterIcon({required this.iconKey, required this.colorKey});
+
+  factory _ItemFilterIcon.fromItemSpend(AppClientStatementItemSpend item, {Map<String, CatalogItem>? catalogById}) {
+    final visual = resolveStatementItemVisual(item, catalogById: catalogById);
+    return _ItemFilterIcon(iconKey: visual.iconKey, colorKey: visual.colorKey);
+  }
 
   final String iconKey;
   final String colorKey;

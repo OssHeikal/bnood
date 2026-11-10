@@ -27,6 +27,9 @@ abstract final class ApiLogRedactor {
   }
 
   static Object? body(Object? data) {
+    if (data is List<int>) {
+      return data;
+    }
     if (data is Map) {
       return _redactMap(Map<String, dynamic>.from(data));
     }
@@ -47,6 +50,8 @@ abstract final class ApiLogRedactor {
         out[key] = _redacted;
       } else if (value is Map) {
         out[key] = _redactMap(Map<String, dynamic>.from(value));
+      } else if (value is List<int>) {
+        out[key] = value;
       } else if (value is List) {
         out[key] = value.map(body).toList();
       } else {

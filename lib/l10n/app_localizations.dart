@@ -1694,11 +1694,23 @@ abstract class AppLocalizations {
   /// **'Total received'**
   String get statementTotalReceived;
 
+  /// No description provided for @statementPeriodReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Received in period'**
+  String get statementPeriodReceived;
+
   /// No description provided for @statementTotalSpent.
   ///
   /// In en, this message translates to:
   /// **'Total spent'**
   String get statementTotalSpent;
+
+  /// No description provided for @statementPeriodSpent.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent in period'**
+  String get statementPeriodSpent;
 
   /// No description provided for @statementClosingLabel.
   ///
@@ -1741,6 +1753,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No receipts in the selected period.'**
   String get statementEmptyReceipts;
+
+  /// No description provided for @statementEmptyItemsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No spending in this period'**
+  String get statementEmptyItemsTitle;
+
+  /// No description provided for @statementEmptyItemsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending you record for this client will appear here, grouped by item. Change the period or record new spending.'**
+  String get statementEmptyItemsDescription;
 
   /// No description provided for @statementItemSectionTitle.
   ///

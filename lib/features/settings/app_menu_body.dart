@@ -9,6 +9,7 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/content/content_page_record.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/subscription/subscription_colors.dart';
+import '../../core/subscription/subscription_riverpod.dart';
 import '../../core/widgets/grouped_list_divider.dart';
 import '../auth/auth_controller.dart';
 import '../auth/auth_paths.dart';
@@ -24,6 +25,7 @@ class AppMenuBody extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
     final isAuthenticated = ref.watch(authControllerProvider).isAuthenticated;
+    final showSubscription = isAuthenticated && ref.watch(subscriptionSurfacesEnabledProvider);
     final brandChip = colors.primary.withValues(alpha: 0.12);
     final subscriptionChip = SubscriptionColors.violet.withValues(alpha: 0.14);
 
@@ -41,7 +43,7 @@ class AppMenuBody extends ConsumerWidget {
           }
         },
       ),
-      if (isAuthenticated)
+      if (showSubscription)
         SettingsNavRow(
           label: l10n.profileSubscriptionSection,
           icon: Assets.icons.crownOutline,

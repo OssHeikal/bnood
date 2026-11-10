@@ -878,7 +878,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get statementTotalReceived => 'إجمالي المقبوض';
 
   @override
+  String get statementPeriodReceived => 'المستلم في الفترة';
+
+  @override
   String get statementTotalSpent => 'إجمالي المصروف';
+
+  @override
+  String get statementPeriodSpent => 'المصروف في الفترة';
 
   @override
   String get statementClosingLabel => 'المتبقي';
@@ -905,6 +911,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get statementEmptyReceipts => 'لا توجد مقبوضات في الفترة المحددة.';
+
+  @override
+  String get statementEmptyItemsTitle => 'مفيش مصروفات في الفترة دي';
+
+  @override
+  String get statementEmptyItemsDescription =>
+      'المصروفات اللي تسجلها للعميل ده هتظهر هنا متقسمة على البنود. غيّر الفترة أو سجّل صرف جديد.';
 
   @override
   String statementItemSectionTitle(String name) {

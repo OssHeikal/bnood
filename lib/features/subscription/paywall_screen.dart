@@ -10,9 +10,10 @@ import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import 'paywall_plan_period_title.dart';
+import 'widgets/paywall_benefit_row.dart';
+import 'widgets/paywall_legal_links.dart';
 import 'widgets/paywall_plan_tile.dart';
 import 'widgets/paywall_savings_badge.dart';
-import 'widgets/paywall_benefit_row.dart';
 
 class PaywallScreen extends StatefulWidget {
   const PaywallScreen({super.key, required this.content});
@@ -222,7 +223,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      if (content.legal.isNotEmpty)
+                      if (content.legal.isNotEmpty) ...[
                         Text(
                           content.legal,
                           style: const TextStyle(
@@ -233,6 +234,9 @@ class _PaywallScreenState extends State<PaywallScreen> {
                           ),
                           textAlign: TextAlign.center,
                         ),
+                        const SizedBox(height: 8),
+                      ],
+                      const PaywallLegalLinks(),
                       AppSize.spaceMD.gap,
                       AppButton.primary(
                         text: content.subscribeCta.isNotEmpty ? content.subscribeCta : l10n.paywallSubscribeCta,
@@ -251,7 +255,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                                 ? content.continueFreeCta
                                 : l10n.paywallContinueFree,
                             style: const TextStyle(
-                              color: SubscriptionColors.violet,
+                              color: Color(0xFF17141C),
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                             ),

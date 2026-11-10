@@ -17,6 +17,7 @@ import 'package:bnood/features/items/widgets/item_catalog_tile.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -63,7 +64,8 @@ void main() {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(
               size: size,
-              padding: itemsScreenMediaQueryForTests(context),
+              padding: itemsScreenMediaQueryForTests(context).copyWith(top: 59),
+              viewPadding: itemsScreenMediaQueryForTests(context).copyWith(top: 59),
               disableAnimations: true,
             ),
             child: HomeFoundationScope(child: appChild!),
@@ -114,6 +116,17 @@ void main() {
     expect(find.byType(Skeleton), findsOneWidget);
     expect(find.byType(ItemsLoadingSkeleton), findsOneWidget);
     expect(find.byType(SkeletonBox), findsWidgets);
+
+    final screen = tester.getRect(find.byType(Scaffold));
+    final grid = tester.getRect(find.byType(ItemsLoadingSkeleton));
+    final card = tester.getRect(find.byType(ItemCatalogTileSkeleton).first);
+    const gridInset = AppSize.screenPadding;
+    expect(card.top, grid.top);
+    expect(screen.right - card.right, gridInset);
+    expect(
+      tester.getRect(find.text('البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك')).right,
+      screen.right - gridInset,
+    );
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pumpAndSettle();
     expect(find.text('بند اختبار'), findsOneWidget);
@@ -132,11 +145,11 @@ void main() {
     expect(paged.gridPadding?.left, AppSize.screenPadding);
     expect(paged.gridPadding?.right, AppSize.screenPadding);
 
-    final icons = tester.widgetList<Icon>(
-      find.descendant(of: find.byType(ItemCatalogTile), matching: find.byType(Icon)),
+    final icons = tester.widgetList<SvgPicture>(
+      find.descendant(of: find.byType(ItemCatalogTile), matching: find.byType(SvgPicture)),
     );
     expect(icons, isNotEmpty);
-    expect(icons.every((icon) => icon.size == AppSize.icon), isTrue);
+    expect(icons.every((icon) => icon.width == AppSize.icon && icon.height == AppSize.icon), isTrue);
   });
 
   testWidgets('default item shows badge and custom item is tappable', (tester) async {

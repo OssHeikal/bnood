@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import '../../config/extensions/text_style_extensions.dart';
 import '../../config/theme/app_colors.dart';
 import '../../config/theme/app_size.dart';
+import '../text_field/app_input_direction.dart';
 import 'app_button_content.dart';
 import 'app_button_frame.dart';
 import 'app_button_style.dart';
@@ -724,6 +725,7 @@ class _AppButtonState extends State<AppButton> {
         ? null
         : Text(
             widget.text,
+            textDirection: rtlParagraphIfArabic(widget.text, Directionality.of(context)),
             maxLines: 1,
             softWrap: false,
             overflow: TextOverflow.ellipsis,

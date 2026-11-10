@@ -24,6 +24,7 @@ class StatementSummaryStatCard extends StatelessWidget {
     required this.localeCode,
     this.cardKey,
     this.minorPerMajor = 100,
+    this.emphasized = false,
   });
 
   final String label;
@@ -33,6 +34,7 @@ class StatementSummaryStatCard extends StatelessWidget {
   final String localeCode;
   final Key? cardKey;
   final int minorPerMajor;
+  final bool emphasized;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +54,10 @@ class StatementSummaryStatCard extends StatelessWidget {
             Text(
               label,
               textAlign: TextAlign.start,
-              style: text.caption.copyWith(color: colors.onSurfaceMuted),
-              maxLines: 3,
+              style: (emphasized ? text.label : text.caption).copyWith(
+                color: emphasized ? colors.onSurface : colors.onSurfaceMuted,
+              ),
+              maxLines: 2,
               softWrap: true,
               overflow: TextOverflow.ellipsis,
             ),
@@ -63,7 +67,7 @@ class StatementSummaryStatCard extends StatelessWidget {
               child: AppAmount(
                 piastres: piastres,
                 localeCode: localeCode,
-                size: AppAmountSize.small,
+                size: emphasized ? AppAmountSize.medium : AppAmountSize.small,
                 role: role,
                 minorPerMajor: minorPerMajor,
               ),

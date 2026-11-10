@@ -37,8 +37,8 @@ class SupplierStatementScreen extends ConsumerStatefulWidget {
 
 class _SupplierStatementScreenState extends ConsumerState<SupplierStatementScreen> {
   final _sharePdfButtonKey = GlobalKey();
-  StatementPeriodPreset _preset = StatementPeriodPreset.month;
-  late PeriodBounds _bounds = StatementPeriodLogic.monthBounds();
+  StatementPeriodPreset _preset = StatementPeriodPreset.all;
+  late PeriodBounds _bounds = StatementPeriodLogic.remoteAllTimeBounds();
   StatementExportRecord? _lastExport;
   bool _exporting = false;
   bool _prefsAvailable = true;
