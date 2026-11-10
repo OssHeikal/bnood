@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navAdd => 'New';
 
   @override
+  String get menuTitle => 'Menu';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override
@@ -1319,4 +1322,70 @@ class AppLocalizationsEn extends AppLocalizations {
   String profileSubscriptionDaysRemaining(int count) {
     return '$count days remaining';
   }
+
+  @override
+  String get gateMaintenanceTitle => 'Maintenance';
+
+  @override
+  String get gateMaintenanceFallbackMessage =>
+      'The app is temporarily unavailable. Please try again shortly.';
+
+  @override
+  String get gateForceUpdateTitle => 'Update required';
+
+  @override
+  String get gateForceUpdateFallbackMessage =>
+      'Please update to the latest version to keep using Bnood.';
+
+  @override
+  String get gateOptionalUpdateTitle => 'Update available';
+
+  @override
+  String get gateOptionalUpdateFallbackMessage =>
+      'A newer version of Bnood is available with improvements and fixes.';
+
+  @override
+  String get gateUpdateAction => 'Update';
+
+  @override
+  String get gateLaterAction => 'Later';
+
+  @override
+  String get settingsContentSection => 'About & legal';
+
+  @override
+  String get settingsContentAbout => 'About';
+
+  @override
+  String get settingsContentTerms => 'Terms of use';
+
+  @override
+  String get settingsContentPrivacy => 'Privacy policy';
+
+  @override
+  String get settingsContentCancellation => 'Cancellation policy';
+
+  @override
+  String get contentPageLoadingTitle => 'Page';
+
+  @override
+  String get contentPageNotFoundTitle => 'Page not found';
+
+  @override
+  String get contentPageNotFoundDescription =>
+      'This page is not available right now.';
+
+  @override
+  String get contentPageErrorTitle => 'Could not load page';
+
+  @override
+  String get contentPageErrorDescription =>
+      'Check your connection and try again.';
+
+  @override
+  String get authRegisterLegalPrefix =>
+      'By creating an account you agree to our';
+
+  @override
+  String get authRegisterLegalMiddle => 'and';
 }

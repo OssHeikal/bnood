@@ -72,7 +72,13 @@ class _ProviderDetailScreenState extends ConsumerState<ProviderDetailScreen> {
                   CustomAppBarAction(
                     key: const Key('provider_detail_edit'),
                     tooltip: l10n.edit,
-                    onPressed: () => showProviderEditSheet(context, provider: provider),
+                    onPressed: () async {
+                      await showProviderEditSheet(context, provider: provider);
+                      if (!context.mounted) return;
+                      await ref
+                          .read(providerDetailProvider(widget.providerId).notifier)
+                          .refreshSilently();
+                    },
                     child: ShellNavIcon(
                       asset: Assets.icons.documentEditOutline,
                       color: colors.onSurface,

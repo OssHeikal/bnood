@@ -16,6 +16,12 @@ import '../features/auth/register_screen.dart';
 import '../features/auth/register_verify_screen.dart';
 import '../features/auth/remote_workspace_screen.dart';
 import '../features/auth/user_profile_screen.dart';
+import '../features/app_gate/app_force_update_screen.dart';
+import '../features/app_gate/app_gate_paths.dart';
+import '../features/app_gate/app_maintenance_screen.dart';
+import '../features/app_gate/app_optional_update_screen.dart';
+import '../features/content/content_page_screen.dart';
+import '../features/settings/app_preferences_screen.dart';
 import '../features/settings/app_settings_screen.dart';
 import '../features/auth/reset_password_screen.dart';
 import '../features/clients/client_detail_screen.dart';
@@ -56,6 +62,9 @@ String? _authRedirect(Ref ref, GoRouterState state) {
 
   final auth = ref.read(authControllerProvider);
   final loc = state.matchedLocation;
+
+  if (isAppGateLocation(loc)) return null;
+  if (isPublicContentPageLocation(loc)) return null;
 
   if (loc == AuthPaths.bootstrap) {
     if (auth.isAuthenticated && auth.user != null) {
@@ -112,6 +121,24 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const AppStartupSplashPage()),
       ),
       GoRoute(
+        path: AppGatePaths.maintenance,
+        pageBuilder: (_, state) =>
+            NoTransitionPage<void>(key: state.pageKey, child: const AppMaintenanceScreen()),
+      ),
+      GoRoute(
+        path: AppGatePaths.forceUpdate,
+        pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const AppForceUpdateScreen()),
+      ),
+      GoRoute(
+        path: AppGatePaths.optionalUpdate,
+        pageBuilder: (_, state) =>
+            NoTransitionPage<void>(key: state.pageKey, child: const AppOptionalUpdateScreen()),
+      ),
+      GoRoute(
+        path: '/pages/:slug',
+        builder: (_, state) => ContentPageScreen(slug: state.pathParameters['slug']!),
+      ),
+      GoRoute(
         path: AuthPaths.bootstrap,
         pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const AuthBootstrapScreen()),
       ),
@@ -131,7 +158,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: AuthPaths.changePassword, builder: (_, _) => const ChangePasswordScreen()),
       GoRoute(path: AuthPaths.remote, builder: (_, _) => const RemoteWorkspaceScreen()),
       GoRoute(path: AuthPaths.profile, builder: (_, _) => const UserProfileScreen()),
-      GoRoute(path: AuthPaths.settings, builder: (_, _) => const AppSettingsScreen()),
+      GoRoute(path: AuthPaths.settings, builder: (_, _) => const AppMenuScreen()),
+      GoRoute(path: AuthPaths.preferences, builder: (_, _) => const AppPreferencesScreen()),
       StatefulShellRoute.indexedStack(
         pageBuilder: (context, state, navigationShell) {
           return NoTransitionPage<void>(

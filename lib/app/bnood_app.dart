@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/providers/settings_provider.dart';
 import '../core/theme/app_theme.dart';
+import 'app_gate_lifecycle.dart';
 import 'router.dart';
 
 final appToastBuilder = BotToastInit();
@@ -18,22 +19,24 @@ class BnoodApp extends ConsumerWidget {
     final router = ref.watch(goRouterProvider);
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
-    return MaterialApp.router(
-      builder: appToastBuilder,
-      onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,
-      theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
-      themeMode: themeMode,
-      locale: locale,
-      debugShowCheckedModeBanner: false,
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      routerConfig: router,
+    return AppGateLifecycle(
+      child: MaterialApp.router(
+        builder: appToastBuilder,
+        onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,
+        theme: AppTheme.light(),
+        darkTheme: AppTheme.dark(),
+        themeMode: themeMode,
+        locale: locale,
+        debugShowCheckedModeBanner: false,
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        routerConfig: router,
+      ),
     );
   }
 }

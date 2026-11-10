@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'New'**
   String get navAdd;
 
+  /// No description provided for @menuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menuTitle;
+
   /// No description provided for @settingsTitle.
   ///
   /// In en, this message translates to:
@@ -2430,6 +2436,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} days remaining'**
   String profileSubscriptionDaysRemaining(int count);
+
+  /// No description provided for @gateMaintenanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get gateMaintenanceTitle;
+
+  /// No description provided for @gateMaintenanceFallbackMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The app is temporarily unavailable. Please try again shortly.'**
+  String get gateMaintenanceFallbackMessage;
+
+  /// No description provided for @gateForceUpdateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update required'**
+  String get gateForceUpdateTitle;
+
+  /// No description provided for @gateForceUpdateFallbackMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please update to the latest version to keep using Bnood.'**
+  String get gateForceUpdateFallbackMessage;
+
+  /// No description provided for @gateOptionalUpdateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update available'**
+  String get gateOptionalUpdateTitle;
+
+  /// No description provided for @gateOptionalUpdateFallbackMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A newer version of Bnood is available with improvements and fixes.'**
+  String get gateOptionalUpdateFallbackMessage;
+
+  /// No description provided for @gateUpdateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get gateUpdateAction;
+
+  /// No description provided for @gateLaterAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get gateLaterAction;
+
+  /// No description provided for @settingsContentSection.
+  ///
+  /// In en, this message translates to:
+  /// **'About & legal'**
+  String get settingsContentSection;
+
+  /// No description provided for @settingsContentAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsContentAbout;
+
+  /// No description provided for @settingsContentTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of use'**
+  String get settingsContentTerms;
+
+  /// No description provided for @settingsContentPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get settingsContentPrivacy;
+
+  /// No description provided for @settingsContentCancellation.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation policy'**
+  String get settingsContentCancellation;
+
+  /// No description provided for @contentPageLoadingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Page'**
+  String get contentPageLoadingTitle;
+
+  /// No description provided for @contentPageNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Page not found'**
+  String get contentPageNotFoundTitle;
+
+  /// No description provided for @contentPageNotFoundDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This page is not available right now.'**
+  String get contentPageNotFoundDescription;
+
+  /// No description provided for @contentPageErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load page'**
+  String get contentPageErrorTitle;
+
+  /// No description provided for @contentPageErrorDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your connection and try again.'**
+  String get contentPageErrorDescription;
+
+  /// No description provided for @authRegisterLegalPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'By creating an account you agree to our'**
+  String get authRegisterLegalPrefix;
+
+  /// No description provided for @authRegisterLegalMiddle.
+  ///
+  /// In en, this message translates to:
+  /// **'and'**
+  String get authRegisterLegalMiddle;
 }
 
 class _AppLocalizationsDelegate

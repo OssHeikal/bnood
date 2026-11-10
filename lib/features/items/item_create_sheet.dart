@@ -27,7 +27,7 @@ class _ItemCreateSheetState extends ConsumerState<ItemCreateSheet> {
   var _attemptedSubmit = false;
   var _saving = false;
   String? _nameError;
-  String _iconKey = 'category';
+  String _iconKey = 'layers';
   String _colorKey = 'teal';
 
   @override

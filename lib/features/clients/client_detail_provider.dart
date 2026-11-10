@@ -170,7 +170,7 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
         itemId: e.key,
         name: item?.name ?? e.key,
         colorKey: item?.colorKey ?? 'teal',
-        iconName: item?.iconName ?? 'category',
+        iconName: item?.iconName ?? 'layers',
         breakdown: e.value,
       );
     }).toList();

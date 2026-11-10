@@ -23,7 +23,7 @@ class CatalogItem {
     return CatalogItem(
       id: json['id'] as String,
       name: json['name'] as String,
-      iconKey: (json['icon_key'] as String?) ?? 'category',
+      iconKey: (json['icon_key'] as String?) ?? 'layers',
       colorKey: (json['color_key'] as String?) ?? 'teal',
       isDefault: json['is_default'] == true,
       sortOrder: (json['sort_order'] as num?)?.toInt() ?? 0,

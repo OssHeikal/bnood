@@ -7,6 +7,7 @@
   "directoryTitle": "الموردين والصنايعية",
   "navItems": "البنود",
   "navAdd": "جديد",
+  "menuTitle": "القائمة",
   "settingsTitle": "الإعدادات",
   "settingsThemeSection": "المظهر",
   "settingsLanguageSection": "اللغة",
@@ -557,5 +558,25 @@
         "type": "int"
       }
     }
-  }
+  },
+  "gateMaintenanceTitle": "صيانة",
+  "gateMaintenanceFallbackMessage": "التطبيق غير متاح مؤقتاً. حاول مرة أخرى بعد قليل.",
+  "gateForceUpdateTitle": "تحديث مطلوب",
+  "gateForceUpdateFallbackMessage": "يُرجى التحديث إلى أحدث إصدار لمتابعة استخدام بنود.",
+  "gateOptionalUpdateTitle": "تحديث متاح",
+  "gateOptionalUpdateFallbackMessage": "يتوفر إصدار أحدث من بنود بتحسينات وإصلاحات.",
+  "gateUpdateAction": "تحديث",
+  "gateLaterAction": "لاحقاً",
+  "settingsContentSection": "عن التطبيق والشروط",
+  "settingsContentAbout": "عن بنود",
+  "settingsContentTerms": "شروط الاستخدام",
+  "settingsContentPrivacy": "سياسة الخصوصية",
+  "settingsContentCancellation": "سياسة الإلغاء",
+  "contentPageLoadingTitle": "صفحة",
+  "contentPageNotFoundTitle": "الصفحة غير موجودة",
+  "contentPageNotFoundDescription": "هذه الصفحة غير متاحة حالياً.",
+  "contentPageErrorTitle": "تعذّر تحميل الصفحة",
+  "contentPageErrorDescription": "تحقق من الاتصال ثم أعد المحاولة.",
+  "authRegisterLegalPrefix": "بإنشاء حساب فإنك توافق على",
+  "authRegisterLegalMiddle": "و"
 }

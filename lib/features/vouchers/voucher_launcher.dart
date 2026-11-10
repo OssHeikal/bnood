@@ -6,6 +6,7 @@ import '../../core/vouchers/vouchers_riverpod.dart';
 import '../../core/widgets/bnood_modal_sheet.dart';
 import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../home/home_foundation_scope.dart';
+import '../subscription/subscription_gates.dart';
 import 'voucher_draft.dart';
 import 'voucher_draft_enrich.dart';
 import 'voucher_draft_enrich_remote.dart';
@@ -62,8 +63,13 @@ class VoucherLauncher {
     await _show(context);
   }
 
-  static Future<void> _show(BuildContext context) {
-    return BnoodModalSheet.show<void>(
+  static Future<void> _show(BuildContext context) async {
+    final container = ProviderScope.containerOf(context);
+    if (container.read(remoteVouchersEnabledProvider)) {
+      if (!await guardFinancialMutationFromContainer(context, container)) return;
+    }
+    if (!context.mounted) return;
+    await BnoodModalSheet.show<void>(
       context: context,
       builder: (_) => HomeFoundationScope(
         child: BoundedSheetNavigator(builder: (_) => const VoucherSheet()),

@@ -44,4 +44,34 @@ void main() {
     expect(cap.isActiveProjectCapReached, isTrue);
     expect(fin.isSubscriptionFinancialReadOnly, isTrue);
   });
+
+  test('mayCreateActiveProject respects cap count and server flag', () {
+    final atCap = AppSubscriptionEntitlements.fromJson({
+      'can_create_active_project': true,
+      'active_projects_count': 1,
+      'active_project_cap': 1,
+    });
+    expect(atCap.mayCreateActiveProject, isFalse);
+
+    final underCap = AppSubscriptionEntitlements.fromJson({
+      'can_create_active_project': true,
+      'active_projects_count': 0,
+      'active_project_cap': 1,
+    });
+    expect(underCap.mayCreateActiveProject, isTrue);
+
+    final noCap = AppSubscriptionEntitlements.fromJson({
+      'can_create_active_project': true,
+      'active_projects_count': 99,
+      'active_project_cap': null,
+    });
+    expect(noCap.mayCreateActiveProject, isTrue);
+
+    final serverDenied = AppSubscriptionEntitlements.fromJson({
+      'can_create_active_project': false,
+      'active_projects_count': 0,
+      'active_project_cap': 1,
+    });
+    expect(serverDenied.mayCreateActiveProject, isFalse);
+  });
 }

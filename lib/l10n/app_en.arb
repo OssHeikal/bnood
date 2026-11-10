@@ -7,6 +7,7 @@
   "directoryTitle": "Directory",
   "navItems": "Items",
   "navAdd": "New",
+  "menuTitle": "Menu",
   "settingsTitle": "Settings",
   "settingsThemeSection": "Theme",
   "settingsLanguageSection": "Language",
@@ -563,5 +564,25 @@
         "type": "int"
       }
     }
-  }
+  },
+  "gateMaintenanceTitle": "Maintenance",
+  "gateMaintenanceFallbackMessage": "The app is temporarily unavailable. Please try again shortly.",
+  "gateForceUpdateTitle": "Update required",
+  "gateForceUpdateFallbackMessage": "Please update to the latest version to keep using Bnood.",
+  "gateOptionalUpdateTitle": "Update available",
+  "gateOptionalUpdateFallbackMessage": "A newer version of Bnood is available with improvements and fixes.",
+  "gateUpdateAction": "Update",
+  "gateLaterAction": "Later",
+  "settingsContentSection": "About & legal",
+  "settingsContentAbout": "About",
+  "settingsContentTerms": "Terms of use",
+  "settingsContentPrivacy": "Privacy policy",
+  "settingsContentCancellation": "Cancellation policy",
+  "contentPageLoadingTitle": "Page",
+  "contentPageNotFoundTitle": "Page not found",
+  "contentPageNotFoundDescription": "This page is not available right now.",
+  "contentPageErrorTitle": "Could not load page",
+  "contentPageErrorDescription": "Check your connection and try again.",
+  "authRegisterLegalPrefix": "By creating an account you agree to our",
+  "authRegisterLegalMiddle": "and"
 }

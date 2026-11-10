@@ -29,7 +29,7 @@ class AppClientStatementItemSpend {
       materialsMinor: materialsMinor,
       laborMinor: laborMinor,
       colorKey: json['color_key'] as String? ?? 'teal',
-      iconKey: json['icon_key'] as String? ?? 'category',
+      iconKey: json['icon_key'] as String? ?? 'layers',
     );
   }
 }

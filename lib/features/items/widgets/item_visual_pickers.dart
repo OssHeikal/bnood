@@ -39,6 +39,7 @@ class ItemVisualPickers extends StatelessWidget {
             for (final key in catalog.iconKeys)
               _IconChip(
                 iconKey: key,
+                tintColor: itemSemanticAccentColor(selectedColorKey),
                 selected: key == selectedIconKey,
                 onTap: () => onIconKey(key),
               ),
@@ -68,18 +69,20 @@ class ItemVisualPickers extends StatelessWidget {
 class _IconChip extends StatelessWidget {
   const _IconChip({
     required this.iconKey,
+    required this.tintColor,
     required this.selected,
     required this.onTap,
   });
 
   final String iconKey;
+  final Color tintColor;
   final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final accent = itemSemanticAccentColor('teal');
+    final accent = tintColor;
     return Material(
       color: selected ? accent.withValues(alpha: 0.15) : colors.surface,
       shape: AppShape.superellipse(radius: AppSize.radiusSM),

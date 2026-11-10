@@ -31,11 +31,13 @@ class EntityPickerPage extends StatefulWidget {
     this.tileBuilder,
     this.emptyTitle,
     this.emptyDescription,
+    this.onBeforeCreate,
   });
 
   final String title;
   final List<(String id, String label)> entries;
   final Widget Function() onCreateRoute;
+  final Future<bool> Function(BuildContext context)? onBeforeCreate;
   final String? selectedId;
   final List<String>? searchKeys;
   final EntityPickerTileBuilder? tileBuilder;
@@ -73,6 +75,10 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
   }
 
   Future<void> _create() async {
+    if (widget.onBeforeCreate != null) {
+      final allowed = await widget.onBeforeCreate!(context);
+      if (!allowed || !mounted) return;
+    }
     final created = await Navigator.of(context).push<String>(
       MaterialPageRoute(builder: (_) => widget.onCreateRoute()),
     );

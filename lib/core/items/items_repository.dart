@@ -1,12 +1,16 @@
 import '../api/items_api.dart';
 import 'item_api_record.dart';
+import 'item_icon_catalog.dart';
 
 class ItemsRepository {
   ItemsRepository(this._api);
 
   final ItemsApi _api;
 
-  Future<ItemIconsCatalog> fetchIconsCatalog() => _api.fetchIconsCatalog();
+  Future<ItemIconsCatalog> fetchIconsCatalog() async {
+    final catalog = await _api.fetchIconsCatalog();
+    return withFullItemIconCatalog(catalog);
+  }
 
   Future<ItemsListPage> listItems({
     String? q,

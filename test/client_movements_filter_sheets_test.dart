@@ -5,6 +5,7 @@ import 'package:bnood/features/clients/widgets/client_movements_filter_sheets.da
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -93,7 +94,7 @@ void main() {
     await tester.tap(find.text('Open item'));
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(Icons.plumbing_outlined), findsOneWidget);
+    expect(find.byType(SvgPicture), findsWidgets);
     await tester.tap(find.text('Plumbing'));
     await tester.pumpAndSettle();
 

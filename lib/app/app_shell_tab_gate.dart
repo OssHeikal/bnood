@@ -45,13 +45,13 @@ class AppShellTabGate extends ConsumerWidget {
               title: _tabTitle(l10n),
               actions: [
                 CustomAppBarAction(
-                  tooltip: l10n.settingsTitle,
+                  tooltip: l10n.menuTitle,
                   onPressed: () => context.push(AuthPaths.settings),
                   child: ShellNavIcon(
-                    asset: Assets.icons.settingsOutline,
+                    asset: Assets.icons.menuTwoLineOutline,
                     size: AppSize.icon,
                     color: context.colors.onSurface,
-                    semanticsLabel: l10n.settingsTitle,
+                    semanticsLabel: l10n.menuTitle,
                   ),
                 ),
               ],

@@ -213,6 +213,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             showDivider: showDivider,
           ),
           onCreateRoute: () => const InlineCreateClientPage(),
+          onBeforeCreate: (ctx) => guardCreateActiveProject(ctx, ref),
         ),
       ),
     );
@@ -255,6 +256,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             showDivider: showDivider,
           ),
           onCreateRoute: () => const InlineCreateClientPage(),
+          onBeforeCreate: (ctx) => guardCreateActiveProject(ctx, ref),
         ),
       ),
     );

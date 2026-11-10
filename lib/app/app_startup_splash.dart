@@ -8,6 +8,10 @@ import 'package:go_router/go_router.dart';
 
 import '../core/brand/app_brand_lockup.dart';
 import '../core/config/theme/app_colors.dart';
+import '../core/app_gate/app_config_record.dart';
+import '../features/app_gate/app_gate_cold_start.dart';
+import '../features/app_gate/app_gate_provider.dart';
+import '../features/app_gate/app_gate_session.dart';
 import '../features/auth/auth_controller.dart';
 import '../features/auth/auth_state.dart';
 import '../features/home/home_foundation_scope.dart';
@@ -122,6 +126,8 @@ class _AppStartupSplashPageState extends ConsumerState<AppStartupSplashPage>
   var _entranceDone = false;
   var _left = false;
   var _reducedMotion = false;
+  var _configReady = false;
+  AppConfigData? _gateConfig;
 
   @override
   void initState() {
@@ -142,6 +148,12 @@ class _AppStartupSplashPageState extends ConsumerState<AppStartupSplashPage>
       if (!mounted) return;
       _reducedMotion = MediaQuery.disableAnimationsOf(context);
       ref.read(authControllerProvider.notifier).ensureBootstrap();
+      ref.read(appGateProvider.notifier).fetchConfig(failOpen: true).then((config) {
+        if (!mounted || _left) return;
+        _gateConfig = config;
+        setState(() => _configReady = true);
+        _tryHandoff();
+      });
       _bootstrapTimeout = Timer(
         AppStartupSplash.splashBootstrapTimeout,
         _onBootstrapTimeout,
@@ -174,6 +186,10 @@ class _AppStartupSplashPageState extends ConsumerState<AppStartupSplashPage>
           .read(authControllerProvider.notifier)
           .abandonBootstrapAsUnauthenticated();
     }
+    if (!_configReady) {
+      _gateConfig = AppConfigData.failOpen();
+      _configReady = true;
+    }
     _tryHandoff();
   }
 
@@ -196,6 +212,7 @@ class _AppStartupSplashPageState extends ConsumerState<AppStartupSplashPage>
 
     final auth = ref.read(authControllerProvider);
     if (!appSplashSessionResolved(auth)) return;
+    if (!_configReady) return;
 
     _leave(auth);
   }
@@ -207,7 +224,11 @@ class _AppStartupSplashPageState extends ConsumerState<AppStartupSplashPage>
     _minDisplayTimer?.cancel();
     AppSplashSession.completed = true;
     final destination = appSplashDestinationFor(auth);
-    context.go(destination);
+    AppGateSession.postSplashDestination = destination;
+    final config = _gateConfig ?? ref.read(appGateProvider).valueOrNull ?? AppConfigData.failOpen();
+    final route = splashRouteForGate(config, destination);
+    AppGateColdStart.splashHandoffDone = true;
+    context.go(route);
   }
 
   @override

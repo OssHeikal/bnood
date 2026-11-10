@@ -30,6 +30,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navAdd => 'جديد';
 
   @override
+  String get menuTitle => 'القائمة';
+
+  @override
   String get settingsTitle => 'الإعدادات';
 
   @override
@@ -1307,4 +1310,67 @@ class AppLocalizationsAr extends AppLocalizations {
   String profileSubscriptionDaysRemaining(int count) {
     return '$count يوم متبقٍ';
   }
+
+  @override
+  String get gateMaintenanceTitle => 'صيانة';
+
+  @override
+  String get gateMaintenanceFallbackMessage =>
+      'التطبيق غير متاح مؤقتاً. حاول مرة أخرى بعد قليل.';
+
+  @override
+  String get gateForceUpdateTitle => 'تحديث مطلوب';
+
+  @override
+  String get gateForceUpdateFallbackMessage =>
+      'يُرجى التحديث إلى أحدث إصدار لمتابعة استخدام بنود.';
+
+  @override
+  String get gateOptionalUpdateTitle => 'تحديث متاح';
+
+  @override
+  String get gateOptionalUpdateFallbackMessage =>
+      'يتوفر إصدار أحدث من بنود بتحسينات وإصلاحات.';
+
+  @override
+  String get gateUpdateAction => 'تحديث';
+
+  @override
+  String get gateLaterAction => 'لاحقاً';
+
+  @override
+  String get settingsContentSection => 'عن التطبيق والشروط';
+
+  @override
+  String get settingsContentAbout => 'عن بنود';
+
+  @override
+  String get settingsContentTerms => 'شروط الاستخدام';
+
+  @override
+  String get settingsContentPrivacy => 'سياسة الخصوصية';
+
+  @override
+  String get settingsContentCancellation => 'سياسة الإلغاء';
+
+  @override
+  String get contentPageLoadingTitle => 'صفحة';
+
+  @override
+  String get contentPageNotFoundTitle => 'الصفحة غير موجودة';
+
+  @override
+  String get contentPageNotFoundDescription => 'هذه الصفحة غير متاحة حالياً.';
+
+  @override
+  String get contentPageErrorTitle => 'تعذّر تحميل الصفحة';
+
+  @override
+  String get contentPageErrorDescription => 'تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get authRegisterLegalPrefix => 'بإنشاء حساب فإنك توافق على';
+
+  @override
+  String get authRegisterLegalMiddle => 'و';
 }

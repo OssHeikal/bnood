@@ -42,6 +42,14 @@ class AppSubscriptionEntitlements {
 
   Color get premiumAvatarColor => SubscriptionColors.parsePremiumAvatar(premiumAvatarColorHex);
 
+  /// Client-side cap check; complements server `can_create_active_project`.
+  bool get mayCreateActiveProject {
+    if (!canCreateActiveProject) return false;
+    final cap = activeProjectCap;
+    if (cap == null) return true;
+    return activeProjectsCount < cap;
+  }
+
   static AppSubscriptionEntitlements fromJson(Map<String, dynamic> json) {
     DateTime? expires;
     final rawExpiry = json['expires_at'];

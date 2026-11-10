@@ -9,8 +9,10 @@ import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/providers/provider_detail_provider.dart';
+import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/providers/provider_detail_screen.dart';
 import 'package:bnood/features/providers/provider_detail_snapshot.dart';
+import 'package:bnood/features/providers/widgets/provider_detail_loading_skeleton.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,6 +34,22 @@ class _StubProviderDetailNotifier extends ProviderDetailNotifier {
   Future<ProviderDetailSnapshot> loadSnapshot(String providerId) async {
     openLoads++;
     return snapshot;
+  }
+}
+
+class _SequencedProviderDetailNotifier extends ProviderDetailNotifier {
+  _SequencedProviderDetailNotifier(this._values);
+
+  final List<ProviderDetailSnapshot> _values;
+  var _fetchCount = 0;
+
+  @override
+  Future<ProviderDetailSnapshot> build(String arg) => loadSnapshot(arg);
+
+  @override
+  Future<ProviderDetailSnapshot> loadSnapshot(String providerId) async {
+    final index = (_fetchCount++).clamp(0, _values.length - 1);
+    return _values[index];
   }
 }
 
@@ -182,6 +200,69 @@ void main() {
     expect(find.text('Labor'), findsOneWidget);
     expect(find.text('Cash'), findsOneWidget);
     expect(find.textContaining('2026'), findsOneWidget);
+  });
+
+  testWidgets('refreshSilently after edit keeps body without skeleton flash', (tester) async {
+    final initial = ProviderDetailSnapshot(
+      provider: AppProvider(
+        id: '01JCRAFT',
+        name: 'احمد السباك',
+        phone: '+201011111111',
+        type: AppProviderType.craftsman,
+        createdAt: DateTime.utc(2026, 11, 9),
+        updatedAt: DateTime.utc(2026, 11, 9),
+      ),
+      clientAgreements: const [],
+    );
+    final updated = ProviderDetailSnapshot(
+      provider: AppProvider(
+        id: '01JCRAFT',
+        name: 'احمد السباك الجديد',
+        phone: '+201099999999',
+        type: AppProviderType.craftsman,
+        createdAt: DateTime.utc(2026, 11, 9),
+        updatedAt: DateTime.utc(2026, 11, 10),
+      ),
+      clientAgreements: const [],
+    );
+    // build + refetchOnOpen both consume the first snapshot before our silent refresh.
+    final notifier = _SequencedProviderDetailNotifier([initial, initial, updated]);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          providerDetailProvider.overrideWith(() => notifier),
+          remoteVouchersEnabledProvider.overrideWithValue(false),
+          remoteAgreementsEnabledProvider.overrideWithValue(false),
+          authControllerProvider.overrideWith(_AuthOk.new),
+        ],
+        child: MaterialApp(
+          theme: AppFoundationTheme.light(),
+          locale: const Locale('ar'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const HomeFoundationScope(
+            child: ProviderDetailScreen(providerId: '01JCRAFT'),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pumpAndSettle();
+    expect(find.text('احمد السباك'), findsOneWidget);
+    expect(find.byType(ProviderDetailLoadingSkeleton), findsNothing);
+
+    final refresh = notifier.refreshSilently();
+    await tester.pump();
+    expect(find.byType(Skeleton), findsNothing);
+
+    await refresh;
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('احمد السباك الجديد'), findsOneWidget);
+    expect(find.textContaining('201099999999'), findsOneWidget);
+    expect(find.byType(ProviderDetailLoadingSkeleton), findsNothing);
   });
 
   testWidgets('refetchOnOpen loads details again when screen opens', (tester) async {

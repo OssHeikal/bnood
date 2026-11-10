@@ -42,7 +42,7 @@ class RemoteWorkspaceScreen extends ConsumerWidget {
                     ),
                     AppSize.spaceMD.gap,
                     AppButton.outlined(
-                      text: l10n.settingsTitle,
+                      text: l10n.menuTitle,
                       onPressed: () => context.push(AuthPaths.settings),
                     ),
                   ],

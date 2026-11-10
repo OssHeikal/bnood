@@ -48,6 +48,7 @@ void main() {
     expect(snap.entitlements.showPremiumAvatar, isFalse);
     expect(snap.paywall?.subscribeCta, 'اشترك في Premium');
     expect(snap.paywall?.continueFreeCta, 'الاستمرار مجاناً');
+    expect(snap.entitlements.mayCreateActiveProject, isFalse);
   });
 
   test('single plans object becomes yearly + monthly tiles with minors', () {

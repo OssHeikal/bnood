@@ -1,38 +1,79 @@
 import 'package:flutter/material.dart';
 
+import '../../core/items/item_icon_catalog.dart';
 import '../../core/theme/app_colors.dart' as legacy;
-
-/// Material icons keyed by server `icon_key` values.
-IconData itemSemanticIconData(String iconKey) => switch (iconKey) {
-      'layers' => Icons.layers_outlined,
-      'bathtub' => Icons.bathtub_outlined,
-      'plumbing' => Icons.plumbing_outlined,
-      'electrical_services' => Icons.electrical_services_outlined,
-      'dashboard' => Icons.dashboard_outlined,
-      'brush' => Icons.brush_outlined,
-      'format_paint' => Icons.format_paint_outlined,
-      'kitchen' => Icons.kitchen_outlined,
-      'window' => Icons.window_outlined,
-      'ac_unit' => Icons.ac_unit_outlined,
-      'light' => Icons.light_outlined,
-      'engineering' => Icons.engineering_outlined,
-      'local_shipping' => Icons.local_shipping_outlined,
-      'construction' => Icons.construction_outlined,
-      'door_front_door' => Icons.door_front_door_outlined,
-      'category' => Icons.category_outlined,
-      _ => Icons.category_outlined,
-    };
+import '../../core/resources/gen/assets.gen.dart';
 
 Color itemSemanticAccentColor(String colorKey) => legacy.AppColors.accent(colorKey);
+
+/// Maps legacy Material keys from older API payloads to the outline catalog.
+String resolveItemIconKey(String iconKey) {
+  if (itemIconCatalogKeys.contains(iconKey)) {
+    return iconKey;
+  }
+  return switch (iconKey) {
+    'construction' => 'pickaxe',
+    'format_paint' => 'brick_wall',
+    'plumbing' => 'sink',
+    'electrical_services' => 'plug_socket',
+    'dashboard' => 'dashboard_square',
+    'brush' => 'paint_roller',
+    'door_front_door' => 'door',
+    'kitchen' => 'refrigerator',
+    'window' => 'windows',
+    'ac_unit' => 'smart_ac',
+    'light' => 'lamp',
+    'engineering' => 'hard_hat',
+    'local_shipping' => 'pickup',
+    'category' => 'grid_table',
+    _ => 'tools',
+  };
+}
+
+SvgGenImage? itemSemanticIconAsset(String iconKey) {
+  final resolved = resolveItemIconKey(iconKey);
+  return switch (resolved) {
+    'paint_roller' => Assets.itemIcons.paintRoller,
+    'brick_wall' => Assets.itemIcons.brickWall,
+    'plug_socket' => Assets.itemIcons.plugSocket,
+    'sink' => Assets.itemIcons.sink,
+    'toilet' => Assets.itemIcons.toilet,
+    'bathtub' => Assets.itemIcons.bathtub,
+    'door' => Assets.itemIcons.door,
+    'windows' => Assets.itemIcons.windows,
+    'smart_ac' => Assets.itemIcons.smartAc,
+    'lamp' => Assets.itemIcons.lamp,
+    'hammer' => Assets.itemIcons.hammer,
+    'drill' => Assets.itemIcons.drill,
+    'wrench' => Assets.itemIcons.wrench,
+    'tools' => Assets.itemIcons.tools,
+    'shovel' => Assets.itemIcons.shovel,
+    'pickaxe' => Assets.itemIcons.pickaxe,
+    'hard_hat' => Assets.itemIcons.hardHat,
+    'pickup' => Assets.itemIcons.pickup,
+    'sofa' => Assets.itemIcons.sofa,
+    'sofa_single' => Assets.itemIcons.sofaSingle,
+    'bed_single' => Assets.itemIcons.bedSingle,
+    'desk' => Assets.itemIcons.desk,
+    'mirror' => Assets.itemIcons.mirror,
+    'refrigerator' => Assets.itemIcons.refrigerator,
+    'grid_table' => Assets.itemIcons.gridTable,
+    'dashboard_square' => Assets.itemIcons.dashboardSquare,
+    'layers' => Assets.itemIcons.layers,
+    _ => null,
+  };
+}
 
 Widget itemSemanticIconWidget({
   required String iconKey,
   required Color color,
   double size = 20,
 }) {
-  return Icon(
-    itemSemanticIconData(iconKey),
-    size: size,
-    color: color,
+  final asset = itemSemanticIconAsset(iconKey) ?? Assets.itemIcons.tools;
+  return asset.svg(
+    width: size,
+    height: size,
+    colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+    excludeFromSemantics: true,
   );
 }

@@ -289,8 +289,9 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   Future<_RemoteStatementData> _loadRemote() async {
     final clientsRepo = ref.read(clientsRepositoryProvider);
     final record = await clientsRepo.getClient(widget.clientId);
-    final from = _formatStatementDate(_bounds.start);
-    final to = _formatStatementDate(_bounds.end);
+    final apiBounds = StatementPeriodLogic.clampForRemoteApi(_bounds);
+    final from = _formatStatementDate(apiBounds.start);
+    final to = _formatStatementDate(apiBounds.end);
     final statement = await clientsRepo.getClientStatement(
       clientId: widget.clientId,
       from: from,
@@ -349,8 +350,9 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
     if (_exporting) return;
     setState(() => _exporting = true);
     try {
-      final from = _formatStatementDate(_bounds.start);
-      final to = _formatStatementDate(_bounds.end);
+      final apiBounds = StatementPeriodLogic.clampForRemoteApi(_bounds);
+      final from = _formatStatementDate(apiBounds.start);
+      final to = _formatStatementDate(apiBounds.end);
       try {
         final pdf = await ref.read(clientsRepositoryProvider).downloadClientStatementPdf(
               clientId: widget.clientId,

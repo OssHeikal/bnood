@@ -63,13 +63,13 @@ class HomeScreen extends ConsumerWidget {
               title: showIdentityHeader ? null : l10n.homeAppName,
               actions: [
                 CustomAppBarAction(
-                  tooltip: l10n.settingsTitle,
+                  tooltip: l10n.menuTitle,
                   onPressed: () => context.push(AuthPaths.settings),
                   child: ShellNavIcon(
-                    asset: Assets.icons.settingsOutline,
+                    asset: Assets.icons.menuTwoLineOutline,
                     size: AppSize.icon,
                     color: colors.onSurface,
-                    semanticsLabel: l10n.settingsTitle,
+                    semanticsLabel: l10n.menuTitle,
                   ),
                 ),
               ],
