@@ -178,4 +178,15 @@ class ItemsApi {
       ApiResponseParser.expectSuccess(response);
     });
   }
+
+  Future<void> reorderItems(List<String> ids) {
+    return _guard(() async {
+      final response = await _dio.put<Map<String, dynamic>>(
+        '$_prefix/reorder',
+        data: {'ids': ids},
+        options: Options(extra: _authenticatedExtra),
+      );
+      ApiResponseParser.expectSuccess(response);
+    });
+  }
 }

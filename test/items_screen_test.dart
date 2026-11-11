@@ -1,14 +1,13 @@
+import 'package:bnood/core/api/items_api.dart';
 import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/items/item_api_record.dart';
 import 'package:bnood/core/items/items_providers.dart';
-import 'package:bnood/core/shared/pagination/paged_fetch_page.dart';
-import 'package:bnood/core/shared/pagination/pagination.dart';
+import 'package:bnood/core/items/items_repository.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
-import 'package:bnood/features/items/items_list_paging.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton_box.dart';
 import 'package:bnood/features/items/widgets/items_loading_skeleton.dart';
@@ -76,17 +75,12 @@ void main() {
     );
   }
 
-  List<Override> remoteOverrides({List<CatalogItem>? items}) {
+  List<Override> remoteOverrides({List<CatalogItem>? items, Duration? catalogDelay}) {
     return [
       authControllerProvider.overrideWith(() => _AuthStub()),
       remoteItemsEnabledProvider.overrideWith((ref) => true),
-      itemsListPageFetcherProvider.overrideWith(
-        (ref) => ({required int page, required int pageSize}) async {
-          if (page > 1) {
-            return const PagedFetchPage(items: [], hasMore: false);
-          }
-          return PagedFetchPage(items: items ?? sampleItems, hasMore: false);
-        },
+      itemsRepositoryProvider.overrideWithValue(
+        _FakeCatalogRepository(items: items ?? sampleItems, catalogDelay: catalogDelay),
       ),
       itemIconsCatalogProvider.overrideWith(
         (ref) async => const ItemIconsCatalog(
@@ -101,15 +95,7 @@ void main() {
     await tester.pumpWidget(
       wrap(
         child: const ItemsScreen(),
-        overrides: [
-          ...remoteOverrides(),
-          itemsListPageFetcherProvider.overrideWith(
-            (ref) => ({required int page, required int pageSize}) async {
-              await Future<void>.delayed(const Duration(milliseconds: 200));
-              return PagedFetchPage(items: sampleItems, hasMore: false);
-            },
-          ),
-        ],
+        overrides: remoteOverrides(catalogDelay: const Duration(milliseconds: 200)),
       ),
     );
     await tester.pump();
@@ -141,10 +127,6 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final paged = tester.widget<AppPagedView<CatalogItem>>(find.byType(AppPagedView<CatalogItem>));
-    expect(paged.gridPadding?.left, AppSize.screenPadding);
-    expect(paged.gridPadding?.right, AppSize.screenPadding);
-
     final icons = tester.widgetList<SvgPicture>(
       find.descendant(of: find.byType(ItemCatalogTile), matching: find.byType(SvgPicture)),
     );
@@ -166,6 +148,18 @@ void main() {
     expect(find.text('تعديل البند'), findsOneWidget);
   });
 
+  testWidgets('user and default tiles are long-press draggable', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        child: const ItemsScreen(),
+        overrides: remoteOverrides(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(LongPressDraggable<int>), findsNWidgets(2));
+    expect(find.byType(ItemCatalogTile), findsNWidgets(2));
+  });
+
   testWidgets('create sheet rejects empty name', (tester) async {
     await tester.pumpWidget(
       wrap(
@@ -180,6 +174,21 @@ void main() {
     await tester.pump();
     expect(find.text('اكتب اسم البند'), findsOneWidget);
   });
+}
+
+class _FakeCatalogRepository extends ItemsRepository {
+  _FakeCatalogRepository({required this.items, this.catalogDelay}) : super(ItemsApi());
+
+  final List<CatalogItem> items;
+  final Duration? catalogDelay;
+
+  @override
+  Future<ItemsListPage> listItems({String? q, int page = 1, int perPage = 50}) async {
+    if (catalogDelay != null) {
+      await Future<void>.delayed(catalogDelay!);
+    }
+    return ItemsListPage(items: items, page: 1, perPage: perPage, total: items.length);
+  }
 }
 
 class _AuthStub extends AuthController {

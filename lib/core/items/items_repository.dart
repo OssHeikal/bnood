@@ -37,6 +37,8 @@ class ItemsRepository {
       _api.updateItem(id: id, name: name, iconKey: iconKey, colorKey: colorKey);
 
   Future<void> deleteItem(String id) => _api.deleteItem(id);
+
+  Future<void> reorderItems(List<String> ids) => _api.reorderItems(ids);
 }
 
 Future<List<CatalogItem>> fetchAllCatalogItems(

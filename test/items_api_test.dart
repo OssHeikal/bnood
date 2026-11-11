@@ -81,6 +81,19 @@ void main() {
       api.close();
     });
 
+    test('reorder sends ordered id list', () async {
+      late RequestOptions captured;
+      final api = _itemsApi((options) async {
+        captured = options;
+        return jsonResponse('{"success":true,"message":"ok","data":null}');
+      });
+      await api.reorderItems(['01A', '01B']);
+      expect(captured.method, 'PUT');
+      expect(captured.path, endsWith('/v1/items/reorder'));
+      expect(captured.data, {'ids': ['01A', '01B']});
+      api.close();
+    });
+
     test('delete succeeds for soft delete even when item is in use', () async {
       final api = _itemsApi(
         (_) async => jsonResponse('{"success":true,"message":"ok"}'),
