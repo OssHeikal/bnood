@@ -18,6 +18,7 @@ import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../home/home_foundation_scope.dart';
+import 'client_detail_provider.dart';
 import 'client_detail_snapshot.dart';
 import 'client_movement_lines.dart';
 import 'client_movements_filters.dart';
@@ -224,9 +225,11 @@ class _RemoteMovementsListState extends ConsumerState<_RemoteMovementsList> {
       ),
     );
 
+    final clientName = ref.watch(clientDetailProvider(widget.clientId)).valueOrNull?.client.name;
+
     return HomeFoundationScope(
       child: Scaffold(
-        appBar: CustomAppBar(title: l10n.movements),
+        appBar: CustomAppBar(title: l10n.movements, subtitle: clientName),
         body: Column(
           children: [
             Padding(
@@ -369,6 +372,7 @@ class _LocalMovementsListState extends ConsumerState<_LocalMovementsList> {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
     final repo = ref.watch(repositoryProvider);
+    final clientName = ref.watch(clientDetailProvider(widget.clientId)).valueOrNull?.client.name;
 
     return HomeFoundationScope(
       child: FutureBuilder<Project?>(
@@ -377,6 +381,7 @@ class _LocalMovementsListState extends ConsumerState<_LocalMovementsList> {
           if (projectSnap.connectionState != ConnectionState.done) {
             return _MovementsShell(
               title: l10n.movements,
+              subtitle: clientName,
               header: const SizedBox.shrink(),
               body: const Center(child: CircularProgressIndicator()),
             );
@@ -604,9 +609,15 @@ class _LocalMovementsListState extends ConsumerState<_LocalMovementsList> {
 }
 
 class _MovementsShell extends StatelessWidget {
-  const _MovementsShell({required this.title, required this.header, required this.body});
+  const _MovementsShell({
+    required this.title,
+    required this.header,
+    required this.body,
+    this.subtitle,
+  });
 
   final String title;
+  final String? subtitle;
   final Widget header;
   final Widget body;
 
@@ -615,7 +626,7 @@ class _MovementsShell extends StatelessWidget {
     final colors = context.colors;
     return Scaffold(
       backgroundColor: colors.canvas,
-      appBar: CustomAppBar(title: title),
+      appBar: CustomAppBar(title: title, subtitle: subtitle),
       body: Column(
         children: [
           Padding(

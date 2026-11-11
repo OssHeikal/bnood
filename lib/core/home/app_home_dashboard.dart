@@ -94,15 +94,31 @@ class AppHomeDashboard {
     required this.totals,
     required this.clients,
     required this.craftsmen,
+    required this.suppliers,
+    this.clientsCount,
+    this.craftsmenCount,
+    this.suppliersCount,
   });
 
   final AppHomeTotals totals;
   final List<AppHomeClientPreview> clients;
   final List<AppHomeCraftsmanPreview> craftsmen;
+  final List<AppHomeCraftsmanPreview> suppliers;
+  final int? clientsCount;
+  final int? craftsmenCount;
+  final int? suppliersCount;
+
+  static int? _readOptionalCount(Object? raw) {
+    if (raw == null) return null;
+    if (raw is int) return raw;
+    if (raw is num) return raw.round();
+    return null;
+  }
 
   static AppHomeDashboard fromDataJson(Map<String, dynamic> json) {
     final clientsRaw = json['clients'];
     final craftsmenRaw = json['craftsmen'];
+    final suppliersRaw = json['suppliers'];
     final clients = clientsRaw is List
         ? clientsRaw
             .map((e) => AppHomeClientPreview.fromJson(e as Map<String, dynamic>))
@@ -113,11 +129,20 @@ class AppHomeDashboard {
             .map((e) => AppHomeCraftsmanPreview.fromJson(e as Map<String, dynamic>))
             .toList()
         : const <AppHomeCraftsmanPreview>[];
+    final suppliers = suppliersRaw is List
+        ? suppliersRaw
+            .map((e) => AppHomeCraftsmanPreview.fromJson(e as Map<String, dynamic>))
+            .toList()
+        : const <AppHomeCraftsmanPreview>[];
 
     return AppHomeDashboard(
       totals: AppHomeTotals.fromDataJson(json),
       clients: clients,
       craftsmen: craftsmen,
+      suppliers: suppliers,
+      clientsCount: _readOptionalCount(json['clients_count']),
+      craftsmenCount: _readOptionalCount(json['craftsmen_count']),
+      suppliersCount: _readOptionalCount(json['suppliers_count']),
     );
   }
 }

@@ -11,6 +11,7 @@ import '../../../core/widgets/app_amount.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_chevron.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/providers_api/app_provider_record.dart';
 import '../client_detail_snapshot.dart';
 
 class ClientDetailCraftsmanRow extends StatelessWidget {
@@ -29,14 +30,17 @@ class ClientDetailCraftsmanRow extends StatelessWidget {
     final colors = context.colors;
     final text = context.text;
     final accent = legacy.AppColors.accent(preview.accentKey);
+    final isSupplier = preview.providerType == AppProviderType.supplier;
     final meta = preview.trade?.trim().isNotEmpty == true
         ? preview.trade!
-        : l10n.craftsman;
+        : (isSupplier ? l10n.suppliers : l10n.craftsman);
     final hasAgreed = preview.agreedPiastres != null;
     final onlineOnly = preview.onlineAgreementsOnly;
     final detailRoute = onlineOnly
         ? '/providers/${preview.craftsmanId}'
-        : '/craftsmen/${preview.craftsmanId}';
+        : isSupplier
+            ? '/suppliers/${preview.craftsmanId}'
+            : '/craftsmen/${preview.craftsmanId}';
 
     return AppCard(
       onTap: () => context.push(detailRoute),

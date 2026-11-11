@@ -1,4 +1,5 @@
 import '../money/remote_money_units.dart';
+import '../providers_api/app_provider_record.dart';
 
 class AppAgreement {
   const AppAgreement({
@@ -11,11 +12,13 @@ class AppAgreement {
     this.remainingMajor,
     this.clientName,
     this.providerName,
+    this.providerType,
   });
 
   final String id;
   final String clientId;
   final String providerId;
+  final AppProviderType? providerType;
 
   /// Local Drift rows: integer piastres (÷100). Online API: minor units (÷100) when [amountMajor] is set.
   final int? amountPiastres;
@@ -74,9 +77,11 @@ class AppAgreement {
     }
 
     String? providerName;
+    AppProviderType? providerType;
     final provider = json['provider'];
     if (provider is Map<String, dynamic>) {
       providerName = provider['name'] as String?;
+      providerType = AppProviderTypeApi.fromApi(provider['type'] as String?);
     }
 
     return AppAgreement(
@@ -89,6 +94,7 @@ class AppAgreement {
       remainingMajor: remainingMajor,
       clientName: clientName,
       providerName: providerName,
+      providerType: providerType,
     );
   }
 }

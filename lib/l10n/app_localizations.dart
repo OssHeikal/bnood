@@ -584,6 +584,12 @@ abstract class AppLocalizations {
   /// **'See all'**
   String get seeAll;
 
+  /// No description provided for @seeAllWithCount.
+  ///
+  /// In en, this message translates to:
+  /// **'See all ({count})'**
+  String seeAllWithCount(int count);
+
   /// No description provided for @movements.
   ///
   /// In en, this message translates to:
@@ -625,6 +631,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Assign craftsmen'**
   String get assignCraftsmen;
+
+  /// No description provided for @assignSuppliers.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign suppliers'**
+  String get assignSuppliers;
+
+  /// No description provided for @clientDetailNoSuppliers.
+  ///
+  /// In en, this message translates to:
+  /// **'No suppliers linked yet'**
+  String get clientDetailNoSuppliers;
+
+  /// No description provided for @clientDetailSuppliersEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Link suppliers to this client to track materials and agreements.'**
+  String get clientDetailSuppliersEmptyDescription;
+
+  /// No description provided for @homeSuppliersSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Suppliers'**
+  String get homeSuppliersSection;
+
+  /// No description provided for @homeNoSuppliersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No active suppliers'**
+  String get homeNoSuppliersTitle;
+
+  /// No description provided for @homeNoSuppliersDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add suppliers from the directory or link them to a client.'**
+  String get homeNoSuppliersDescription;
 
   /// No description provided for @clientDetailNoCraftsmen.
   ///

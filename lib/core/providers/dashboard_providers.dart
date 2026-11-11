@@ -4,6 +4,7 @@ import '../clients/clients_providers.dart';
 import '../clients/clients_repository.dart';
 import '../home/home_dashboard_mapping.dart';
 import '../home/home_riverpod.dart';
+import '../home/home_section_counts.dart';
 import '../database/database.dart';
 import '../repositories/bnood_repository.dart';
 import '../../features/clients/client_detail_provider.dart';
@@ -58,6 +59,11 @@ final homeCraftsmenProvider =
   HomeCraftsmenNotifier.new,
 );
 
+final homeSuppliersProvider =
+    AsyncNotifierProvider<HomeSuppliersNotifier, List<HomeCraftsmanActivityRow>>(
+  HomeSuppliersNotifier.new,
+);
+
 /// Silent reload of home sections. The future completes when those sections finish.
 Future<void> refreshHomeDashboard(WidgetRef ref) {
   if (ref.read(remoteClientsEnabledProvider)) {
@@ -68,6 +74,7 @@ Future<void> refreshHomeDashboard(WidgetRef ref) {
     ref.read(homeClientBalancesProvider.notifier).refreshSilently(),
     ref.read(homeSupplierSpendsProvider.notifier).refreshSilently(),
     ref.read(homeCraftsmenProvider.notifier).refreshSilently(),
+    ref.read(homeSuppliersProvider.notifier).refreshSilently(),
   ]);
   bumpPagingListRefresh(ref, PagingListIds.clients);
   return pending;
@@ -238,8 +245,24 @@ class HomeCraftsmenNotifier extends SilentAsyncNotifier<List<HomeCraftsmanActivi
   Future<List<HomeCraftsmanActivityRow>> fetch() async {
     if (ref.read(remoteClientsEnabledProvider)) {
       final dashboard = await ref.read(homeRepositoryProvider).getHomeDashboard();
+      ref.read(homeSectionCountsProvider.notifier).state = HomeSectionCounts(
+        clientsCount: dashboard.clientsCount ?? dashboard.clients.length,
+        craftsmenCount: dashboard.craftsmenCount ?? dashboard.craftsmen.length,
+        suppliersCount: dashboard.suppliersCount ?? dashboard.suppliers.length,
+      );
       return dashboard.craftsmen.map(homeCraftsmanRowFromPreview).toList();
     }
     return ref.read(repositoryProvider).homeCraftsmenByRecentLabor();
+  }
+}
+
+class HomeSuppliersNotifier extends SilentAsyncNotifier<List<HomeCraftsmanActivityRow>> {
+  @override
+  Future<List<HomeCraftsmanActivityRow>> fetch() async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      final dashboard = await ref.read(homeRepositoryProvider).getHomeDashboard();
+      return dashboard.suppliers.map(homeCraftsmanRowFromPreview).toList();
+    }
+    return const [];
   }
 }

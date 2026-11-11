@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/agreements/agreements_riverpod.dart';
+import '../../core/clients/client_provider_agreement_preview.dart';
 import '../../core/craftsmen/craftsman_snapshot_limit.dart';
 import '../../core/clients/clients_providers.dart';
+import '../../core/providers_api/app_provider_record.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
@@ -58,33 +60,28 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
   Future<ClientDetailSnapshot> _loadRemoteSnapshot(String clientId) async {
     final record = await ref.read(clientsRepositoryProvider).getClient(clientId);
     final balances = record.balances;
-    var previews = <ClientCraftsmanPreviewRow>[];
+    var craftsmanPreviews = <ClientCraftsmanPreviewRow>[];
+    var supplierPreviews = <ClientCraftsmanPreviewRow>[];
+    int? craftsmenCount;
+    int? suppliersCount;
     if (ref.read(remoteAgreementsEnabledProvider)) {
       final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
-      previews = agreements
-          .map(
-            (a) => ClientCraftsmanPreviewRow(
-              craftsmanId: a.providerId,
-              name: a.providerName ?? '—',
-              trade: null,
-              paidPiastres: a.paidMinorForDisplay,
-              agreedPiastres: a.amountMinorForDisplay,
-              remainingPiastres: a.remainingMinorForDisplay,
-              accentKey: clientAccentKeyFor(a.providerId),
-              agreementId: a.id,
-              onlineAgreementsOnly: true,
-              usesRemoteMoney: true,
-            ),
-          )
-          .toList()
-        ..sort((a, b) => a.name.compareTo(b.name));
-      previews = craftsmanSnapshotRows(previews);
+      craftsmanPreviews = craftsmanSnapshotRows(
+        clientAgreementPreviews(agreements, AppProviderType.craftsman),
+      );
+      supplierPreviews = craftsmanSnapshotRows(
+        clientAgreementPreviews(agreements, AppProviderType.supplier),
+      );
+      craftsmenCount = record.craftsmenCount ?? craftsmanPreviews.length;
+      suppliersCount = record.suppliersCount ?? supplierPreviews.length;
     }
 
     final itemSpend = await ref.read(clientsRepositoryProvider).getClientItemSpend(clientId);
+    final itemsCount = itemSpend.items.length;
     final topItems = clientItemRowsFromItemSpend(itemSpend.items.take(3));
 
     var latestMovements = <ClientDetailMovementLine>[];
+    int? movementsCount;
     final vouchersOnline = ref.read(remoteVouchersEnabledProvider);
     if (vouchersOnline) {
       final vouchers = await ref.read(vouchersRepositoryProvider).listClientVouchers(
@@ -92,6 +89,7 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
             page: 1,
             perPage: 5,
           );
+      movementsCount = vouchers.total;
       latestMovements = movementLinesFromVouchers(
         vouchers.items,
         projectId: record.project.id,
@@ -112,7 +110,12 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
       receivedPiastres: balances?.receivedPiastres,
       spentPiastres: spentMinor,
       estimatedProfitPiastres: profit,
-      craftsmanPreviews: previews,
+      craftsmanPreviews: craftsmanPreviews,
+      supplierPreviews: supplierPreviews,
+      craftsmenCount: craftsmenCount,
+      suppliersCount: suppliersCount,
+      itemsCount: itemsCount,
+      movementsCount: movementsCount,
       topItems: topItems,
       latestMovements: latestMovements,
       onlineIdentityOnly: !vouchersOnline,
@@ -192,6 +195,7 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
       spentPiastres: balance.spentPiastres,
       estimatedProfitPiastres: profit,
       craftsmanPreviews: previews,
+      supplierPreviews: const [],
       topItems: topItemsNamed,
       latestMovements: movementLines,
     );

@@ -92,6 +92,12 @@
   "save": "Save",
   "cancel": "Cancel",
   "seeAll": "See all",
+  "seeAllWithCount": "See all ({count})",
+  "@seeAllWithCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "movements": "Movements",
   "whatsappLaunchFailed": "Couldn't open WhatsApp",
   "whatsappInvalidPhone": "This phone number can't open in WhatsApp",
@@ -99,6 +105,12 @@
   "paid": "Paid",
   "craftsmen": "Craftsmen",
   "assignCraftsmen": "Assign craftsmen",
+  "assignSuppliers": "Assign suppliers",
+  "clientDetailNoSuppliers": "No suppliers linked yet",
+  "clientDetailSuppliersEmptyDescription": "Link suppliers to this client to track materials and agreements.",
+  "homeSuppliersSection": "Suppliers",
+  "homeNoSuppliersTitle": "No active suppliers",
+  "homeNoSuppliersDescription": "Add suppliers from the directory or link them to a client.",
   "clientDetailNoCraftsmen": "No craftsmen on this project yet",
   "clientDetailNoItemSpend": "No item spend recorded yet",
   "clientDetailNoMovements": "No movements yet",

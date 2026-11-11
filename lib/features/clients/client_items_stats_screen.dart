@@ -12,6 +12,7 @@ import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
 import '../home/home_foundation_scope.dart';
+import 'client_detail_provider.dart';
 import 'client_items_stats_provider.dart';
 import 'client_movements_navigation.dart';
 import 'widgets/client_detail_item_row.dart';
@@ -27,6 +28,7 @@ class ClientItemsStatsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
     final items = ref.watch(clientItemsStatsProvider(clientId));
+    final clientName = ref.watch(clientDetailProvider(clientId)).valueOrNull?.client.name;
     final remoteMoney = ref.watch(remoteClientsEnabledProvider);
 
     return HomeFoundationScope(
@@ -35,7 +37,7 @@ class ClientItemsStatsScreen extends ConsumerWidget {
           final colors = context.colors;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: CustomAppBar(title: l10n.navItems),
+            appBar: CustomAppBar(title: l10n.navItems, subtitle: clientName),
             body: ListView(
               padding: EdgeInsets.fromLTRB(
                 AppSize.screenPadding,

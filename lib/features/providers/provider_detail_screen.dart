@@ -125,7 +125,7 @@ class _ProviderDetailScreenState extends ConsumerState<ProviderDetailScreen> {
                   AsyncValueBody(
                     value: detail,
                     loadingPlaceholder: ProviderDetailLoadingSkeleton(
-                      showClients: detail.valueOrNull?.provider.type == AppProviderType.craftsman,
+                      showClients: detail.valueOrNull != null,
                     ),
                     error: (error, _) {
                       if (error is ProviderDetailNotFound) {
@@ -190,7 +190,7 @@ class _ProviderDetailBody extends ConsumerWidget {
       await ref.read(providerDetailProvider(providerId).notifier).refreshSilently();
     }
 
-    final agreementTotals = isCraftsman && data.clientAgreements.isNotEmpty
+    final agreementTotals = data.clientAgreements.isNotEmpty
         ? aggregateProviderAgreements(data.clientAgreements)
         : null;
     final mutationsEnabled = ref.watch(remoteVouchersEnabledProvider);
@@ -198,18 +198,17 @@ class _ProviderDetailBody extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (isCraftsman && agreementTotals != null) ...[
+        if (agreementTotals != null) ...[
           ProviderDetailTotalsCards(
             key: const Key('provider_detail_agreement_totals_header'),
             totals: agreementTotals,
-            agreedLabel: l10n.craftsmanAgreedAmount,
+            agreedLabel: isCraftsman ? l10n.craftsmanAgreedAmount : l10n.materials,
             paidLabel: l10n.paid,
             remainingLabel: l10n.remaining,
             localeCode: localeCode,
           ),
           AppSize.spaceXL.gap,
-        ],
-        if (!isCraftsman) ...[
+        ] else if (!isCraftsman) ...[
           AppCard(
             key: const Key('provider_detail_supplier_paid_header'),
             padding: const EdgeInsets.all(AppSize.spaceMD),
@@ -225,7 +224,7 @@ class _ProviderDetailBody extends ConsumerWidget {
           ),
           AppSize.spaceXL.gap,
         ],
-        if (isCraftsman) ...[
+        ...[
           HomeSectionHeader(title: l10n.providerDetailLinkedClientsTitle),
           AppSize.spaceSM.gap,
           if (data.clientAgreements.isEmpty)

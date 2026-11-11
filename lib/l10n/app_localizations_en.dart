@@ -270,6 +270,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get seeAll => 'See all';
 
   @override
+  String seeAllWithCount(int count) {
+    return 'See all ($count)';
+  }
+
+  @override
   String get movements => 'Movements';
 
   @override
@@ -290,6 +295,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assignCraftsmen => 'Assign craftsmen';
+
+  @override
+  String get assignSuppliers => 'Assign suppliers';
+
+  @override
+  String get clientDetailNoSuppliers => 'No suppliers linked yet';
+
+  @override
+  String get clientDetailSuppliersEmptyDescription =>
+      'Link suppliers to this client to track materials and agreements.';
+
+  @override
+  String get homeSuppliersSection => 'Suppliers';
+
+  @override
+  String get homeNoSuppliersTitle => 'No active suppliers';
+
+  @override
+  String get homeNoSuppliersDescription =>
+      'Add suppliers from the directory or link them to a client.';
 
   @override
   String get clientDetailNoCraftsmen => 'No craftsmen on this project yet';

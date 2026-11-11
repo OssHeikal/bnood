@@ -1,5 +1,6 @@
 import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart';
+import '../../core/providers_api/app_provider_record.dart';
 
 class ClientCraftsmanPreviewRow {
   const ClientCraftsmanPreviewRow({
@@ -13,7 +14,10 @@ class ClientCraftsmanPreviewRow {
     this.agreementId,
     this.onlineAgreementsOnly = false,
     this.usesRemoteMoney = false,
+    this.providerType = AppProviderType.craftsman,
   });
+
+  String get providerId => craftsmanId;
 
   final String craftsmanId;
   final String name;
@@ -25,6 +29,7 @@ class ClientCraftsmanPreviewRow {
   final String? agreementId;
   final bool onlineAgreementsOnly;
   final bool usesRemoteMoney;
+  final AppProviderType providerType;
 }
 
 class ClientDetailItemRowData {
@@ -67,6 +72,11 @@ class ClientDetailSnapshot {
     required this.spentPiastres,
     required this.estimatedProfitPiastres,
     required this.craftsmanPreviews,
+    this.supplierPreviews = const [],
+    this.craftsmenCount,
+    this.suppliersCount,
+    this.itemsCount,
+    this.movementsCount,
     required this.topItems,
     required this.latestMovements,
     this.onlineIdentityOnly = false,
@@ -80,6 +90,11 @@ class ClientDetailSnapshot {
   final int? spentPiastres;
   final int? estimatedProfitPiastres;
   final List<ClientCraftsmanPreviewRow> craftsmanPreviews;
+  final List<ClientCraftsmanPreviewRow> supplierPreviews;
+  final int? craftsmenCount;
+  final int? suppliersCount;
+  final int? itemsCount;
+  final int? movementsCount;
   final List<ClientDetailItemRowData> topItems;
   final List<ClientDetailMovementLine> latestMovements;
   final bool onlineIdentityOnly;

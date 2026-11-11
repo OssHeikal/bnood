@@ -27,6 +27,7 @@ import '../features/auth/reset_password_screen.dart';
 import '../features/clients/client_detail_screen.dart';
 import '../features/clients/clients_list_screen.dart';
 import '../features/clients/client_craftsmen_list_screen.dart';
+import '../features/clients/client_suppliers_list_screen.dart';
 import '../features/clients/client_items_stats_screen.dart';
 import '../features/clients/movements_list_screen.dart';
 import '../features/statements/supplier_statement_screen.dart';
@@ -222,6 +223,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/clients/:clientId/craftsmen',
         builder: (_, state) => ClientCraftsmenListScreen(clientId: state.pathParameters['clientId']!),
+      ),
+      GoRoute(
+        path: '/clients/:clientId/suppliers',
+        builder: (_, state) => ClientSuppliersListScreen(clientId: state.pathParameters['clientId']!),
       ),
       GoRoute(
         path: '/clients/:clientId/items',

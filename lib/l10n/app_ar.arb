@@ -92,6 +92,18 @@
   "save": "حفظ",
   "cancel": "إلغاء",
   "seeAll": "عرض الكل",
+  "seeAllWithCount": "عرض الكل ({count})",
+  "@seeAllWithCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "assignSuppliers": "ربط الموردين",
+  "clientDetailNoSuppliers": "مفيش موردين مربوطين",
+  "clientDetailSuppliersEmptyDescription": "اربط موردين بالعميل ده علشان تتابع المواد والاتفاقيات.",
+  "homeSuppliersSection": "الموردين",
+  "homeNoSuppliersTitle": "مفيش موردين نشطين",
+  "homeNoSuppliersDescription": "أضف موردين من الدليل أو اربطهم بعميل.",
   "movements": "الحركات",
   "whatsappLaunchFailed": "تعذّر فتح واتساب",
   "whatsappInvalidPhone": "رقم الهاتف ده مش صالح لفتح واتساب",

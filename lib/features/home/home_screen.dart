@@ -10,6 +10,8 @@ import '../../core/clients/clients_providers.dart';
 import '../../core/craftsmen/craftsman_snapshot_limit.dart';
 import '../../core/repositories/bnood_repository.dart';
 import '../../core/money/remote_money_units.dart';
+import '../../core/formatting/see_all_label.dart';
+import '../../core/home/home_section_counts.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_amount.dart';
@@ -53,6 +55,8 @@ class HomeScreen extends ConsumerWidget {
           final clients = ref.watch(homeClientBalancesProvider);
           final suppliers = ref.watch(homeSupplierSpendsProvider);
           final craftsmen = ref.watch(homeCraftsmenProvider);
+          final remoteSuppliers = ref.watch(homeSuppliersProvider);
+          final sectionCounts = ref.watch(homeSectionCountsProvider);
 
           return Scaffold(
             backgroundColor: colors.canvas,
@@ -102,7 +106,13 @@ class HomeScreen extends ConsumerWidget {
                   AppSize.spaceXL.gap,
                   HomeSectionHeader(
                     title: l10n.activeClients,
-                    seeAllLabel: l10n.seeAll,
+                    seeAllLabel: seeAllLabelWithCount(
+                      l10n,
+                      sectionSeeAllCount(
+                        total: sectionCounts.clientsCount,
+                        visibleLength: clients.valueOrNull?.length ?? 0,
+                      ),
+                    ),
                     onSeeAll: () {
                       if (remoteMoney) {
                         ref.read(clientsListFilterProvider.notifier).state = ClientListArchiveFilter.active;
@@ -161,7 +171,13 @@ class HomeScreen extends ConsumerWidget {
                   AppSize.spaceXL.gap,
                   HomeSectionHeader(
                     title: l10n.homeCraftsmenSection,
-                    seeAllLabel: l10n.seeAll,
+                    seeAllLabel: seeAllLabelWithCount(
+                      l10n,
+                      sectionSeeAllCount(
+                        total: sectionCounts.craftsmenCount,
+                        visibleLength: craftsmanSnapshotRows(craftsmen.valueOrNull ?? const []).length,
+                      ),
+                    ),
                     onSeeAll: () {
                       if (remoteMoney) {
                         ref.read(providersListTypeFilterProvider.notifier).state = ProvidersListTypeFilter.craftsman;
@@ -244,6 +260,70 @@ class HomeScreen extends ConsumerWidget {
                       );
                     },
                   ),
+                  if (remoteMoney) ...[
+                    AppSize.spaceXL.gap,
+                    HomeSectionHeader(
+                      title: l10n.homeSuppliersSection,
+                      seeAllLabel: seeAllLabelWithCount(
+                        l10n,
+                        sectionSeeAllCount(
+                          total: sectionCounts.suppliersCount,
+                          visibleLength: craftsmanSnapshotRows(remoteSuppliers.valueOrNull ?? const []).length,
+                        ),
+                      ),
+                      onSeeAll: () {
+                        ref.read(providersListTypeFilterProvider.notifier).state =
+                            ProvidersListTypeFilter.supplier;
+                        context.go('/directory');
+                      },
+                    ),
+                    AppSize.spaceSM.gap,
+                    AsyncValueBody(
+                      value: remoteSuppliers,
+                      loadingPlaceholder: const HomePersonListSkeleton(count: 1),
+                      error: (e, _) => AppFallback(
+                        isError: true,
+                        icon: Icons.error_outline,
+                        title: l10n.homeLoadErrorTitle,
+                        description: e.toString(),
+                        actionLabel: l10n.retry,
+                        onAction: () => ref.read(homeSuppliersProvider.notifier).refreshSilently(),
+                      ),
+                      data: (rows) {
+                        final visible = craftsmanSnapshotRows(rows);
+                        if (rows.isEmpty) {
+                          return AppCard(
+                            child: AppFallback.section(
+                              leading: ShellNavIcon(
+                                asset: Assets.icons.materialsPackageOutline,
+                                color: context.colors.muted,
+                                size: AppSize.icon,
+                              ),
+                              title: l10n.homeNoSuppliersTitle,
+                              description: l10n.homeNoSuppliersDescription,
+                            ),
+                          );
+                        }
+                        return Column(
+                          children: [
+                            for (var i = 0; i < visible.length; i++) ...[
+                              if (i > 0) AppSize.spaceMD.gap,
+                              RemoteCraftsmanSummaryCard(
+                                name: visible[i].craftsman.name,
+                                accentKey: homeAccentKeyFor(visible[i].craftsman.id),
+                                localeCode: localeCode,
+                                clientsCount: visible[i].clientsCount ?? 0,
+                                paidPiastres: visible[i].paidPiastres,
+                                remainingPiastres: visible[i].remainingPiastres,
+                                minorPerMajor: moneyScale,
+                                onTap: () => context.push('/providers/${visible[i].craftsman.id}'),
+                              ),
+                            ],
+                          ],
+                        );
+                      },
+                    ),
+                  ],
                   if (!remoteMoney) ...[
                     AppSize.spaceXL.gap,
                     HomeSectionHeader(

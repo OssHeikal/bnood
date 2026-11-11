@@ -6,11 +6,15 @@ class ClientApiRecord {
     required this.client,
     required this.project,
     this.balances,
+    this.craftsmenCount,
+    this.suppliersCount,
   });
 
   final Client client;
   final Project project;
   final ClientApiBalances? balances;
+  final int? craftsmenCount;
+  final int? suppliersCount;
 
   static ClientApiRecord fromDataJson(Map<String, dynamic> json) {
     final id = json['id'] as String;
@@ -59,7 +63,13 @@ class ClientApiRecord {
     final ClientApiBalances? balances =
         balancesRaw == null ? null : ClientApiBalances.fromJson(balancesRaw);
 
-    return ClientApiRecord(client: client, project: project, balances: balances);
+    return ClientApiRecord(
+      client: client,
+      project: project,
+      balances: balances,
+      craftsmenCount: readOptionalInt(json['craftsmen_count']),
+      suppliersCount: readOptionalInt(json['suppliers_count']),
+    );
   }
 }
 

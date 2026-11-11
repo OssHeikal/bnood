@@ -271,6 +271,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get seeAll => 'عرض الكل';
 
   @override
+  String seeAllWithCount(int count) {
+    return 'عرض الكل ($count)';
+  }
+
+  @override
   String get movements => 'الحركات';
 
   @override
@@ -290,6 +295,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get assignCraftsmen => 'تحديد الصنايعية';
+
+  @override
+  String get assignSuppliers => 'ربط الموردين';
+
+  @override
+  String get clientDetailNoSuppliers => 'مفيش موردين مربوطين';
+
+  @override
+  String get clientDetailSuppliersEmptyDescription =>
+      'اربط موردين بالعميل ده علشان تتابع المواد والاتفاقيات.';
+
+  @override
+  String get homeSuppliersSection => 'الموردين';
+
+  @override
+  String get homeNoSuppliersTitle => 'مفيش موردين نشطين';
+
+  @override
+  String get homeNoSuppliersDescription =>
+      'أضف موردين من الدليل أو اربطهم بعميل.';
 
   @override
   String get clientDetailNoCraftsmen => 'مفيش صنايعية على المشروع ده لسه';

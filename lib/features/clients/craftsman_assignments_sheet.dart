@@ -12,6 +12,7 @@ import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/client_api_record.dart';
+import '../../core/clients/client_provider_agreement_preview.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart';
@@ -37,12 +38,40 @@ Future<void> showCraftsmanAssignmentsSheet({
   required String projectId,
   String? clientId,
 }) {
+  return showProviderAssignmentsSheet(
+    context: context,
+    projectId: projectId,
+    clientId: clientId,
+    providerKind: AppProviderType.craftsman,
+  );
+}
+
+Future<void> showSupplierAssignmentsSheet({
+  required BuildContext context,
+  required String projectId,
+  String? clientId,
+}) {
+  return showProviderAssignmentsSheet(
+    context: context,
+    projectId: projectId,
+    clientId: clientId,
+    providerKind: AppProviderType.supplier,
+  );
+}
+
+Future<void> showProviderAssignmentsSheet({
+  required BuildContext context,
+  required String projectId,
+  String? clientId,
+  required AppProviderType providerKind,
+}) {
   return BnoodModalSheet.show<void>(
     context: context,
     builder: (_) => HomeFoundationScope(
       child: _CraftsmanAssignmentsModalHost(
         projectId: projectId,
         clientId: clientId,
+        providerKind: providerKind,
       ),
     ),
   );
@@ -52,10 +81,12 @@ class _CraftsmanAssignmentsModalHost extends StatelessWidget {
   const _CraftsmanAssignmentsModalHost({
     required this.projectId,
     this.clientId,
+    required this.providerKind,
   });
 
   final String projectId;
   final String? clientId;
+  final AppProviderType providerKind;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +94,7 @@ class _CraftsmanAssignmentsModalHost extends StatelessWidget {
       builder: (_) => CraftsmanAssignmentsSheet(
         projectId: projectId,
         clientId: clientId,
+        providerKind: providerKind,
       ),
     );
   }
@@ -73,11 +105,13 @@ class CraftsmanAssignmentsSheet extends ConsumerStatefulWidget {
     super.key,
     required this.projectId,
     this.clientId,
+    this.providerKind = AppProviderType.craftsman,
     this.embedInModalChrome = true,
   });
 
   final String projectId;
   final String? clientId;
+  final AppProviderType providerKind;
 
   /// When false (widget tests), renders roster body only.
   final bool embedInModalChrome;
@@ -190,19 +224,24 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       final providersRepo = ref.read(appProvidersRepositoryProvider);
       final agreementsRepo = ref.read(appAgreementsRepositoryProvider);
       final clientRecord = await clientsRepo.getClient(clientId);
-      final craftsmen = await providersRepo.listAllCraftsmen();
-      final agreements = await agreementsRepo.listAllClientAgreements(clientId);
+      final roster = widget.providerKind == AppProviderType.supplier
+          ? await providersRepo.listAllSuppliers()
+          : await providersRepo.listAllCraftsmen();
+      final agreements = clientAgreementPreviews(
+        await agreementsRepo.listAllClientAgreements(clientId),
+        widget.providerKind,
+      );
 
       final selected = <String>{};
       final baseline = <String, int?>{};
       for (final a in agreements) {
-        selected.add(a.providerId);
-        baseline[a.providerId] = a.amountMinorForDisplay;
+        selected.add(a.craftsmanId);
+        baseline[a.craftsmanId] = a.agreedPiastres;
       }
 
       if (mounted) {
         setState(() {
-          _roster = craftsmen.map(_craftsmanFromProvider).toList();
+          _roster = roster.map(_craftsmanFromProvider).toList();
           _clientName = clientRecord.client.name;
           _selected
             ..clear()

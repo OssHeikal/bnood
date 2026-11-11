@@ -57,6 +57,18 @@ void main() {
             'clients_count': 4,
           },
         ],
+        'suppliers': [
+          {
+            'id': 's1',
+            'name': 'Steel Co',
+            'paid': 500_000,
+            'remaining': 100_000,
+            'clients_count': 2,
+          },
+        ],
+        'clients_count': 10,
+        'craftsmen_count': 5,
+        'suppliers_count': 3,
       });
       expect(dashboard.totals.remainingMinor, 50_000);
       expect(dashboard.clients, hasLength(1));
@@ -66,6 +78,10 @@ void main() {
       expect(dashboard.craftsmen.single.paidMinor, 1_200_000);
       expect(dashboard.craftsmen.single.remainingMinor, isNull);
       expect(dashboard.craftsmen.single.clientsCount, 4);
+      expect(dashboard.suppliers.single.name, 'Steel Co');
+      expect(dashboard.suppliers.single.paidMinor, 500_000);
+      expect(dashboard.clientsCount, 10);
+      expect(dashboard.suppliersCount, 3);
     });
   });
 

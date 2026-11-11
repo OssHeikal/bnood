@@ -32,7 +32,10 @@ class ClientCraftsmenListScreen extends ConsumerWidget {
           final colors = context.colors;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: CustomAppBar(title: l10n.craftsmen),
+            appBar: CustomAppBar(
+              title: l10n.craftsmen,
+              subtitle: list.valueOrNull?.clientName,
+            ),
             body: ListView(
               padding: EdgeInsets.fromLTRB(
                 AppSize.screenPadding,

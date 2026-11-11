@@ -14,6 +14,7 @@ import '../subscription/subscription_error_handler.dart';
 import '../subscription/subscription_gates.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/clients/clients_providers.dart';
+import '../../core/formatting/see_all_label.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
@@ -38,6 +39,7 @@ import 'craftsman_assignments_sheet.dart';
 import 'engineer_edit_sheet.dart';
 import 'widgets/client_detail_action_grid.dart';
 import 'widgets/client_detail_craftsman_row.dart';
+import 'widgets/client_detail_linked_providers_section.dart';
 import 'widgets/client_detail_engineer_card.dart';
 import 'widgets/client_detail_item_row.dart';
 import 'widgets/client_detail_loading_skeleton.dart';
@@ -284,6 +286,18 @@ class _ClientDetailBody extends ConsumerWidget {
       }
     }
 
+    Future<void> openSupplierAssignments() async {
+      if (!mutationsEnabled) return;
+      await showSupplierAssignmentsSheet(
+        context: context,
+        projectId: data.project.id,
+        clientId: clientId,
+      );
+      if (context.mounted) {
+        ref.read(clientDetailProvider(clientId).notifier).refreshSilently();
+      }
+    }
+
     void openVoucher(String kind) {
       if (!mutationsEnabled) return;
       VoucherLauncher.openForClient(
@@ -382,6 +396,21 @@ class _ClientDetailBody extends ConsumerWidget {
                   localeCode: localeCode,
                 ),
               ],
+            if (ref.read(remoteAgreementsEnabledProvider)) ...[
+              AppSize.spaceXL.gap,
+              ClientDetailLinkedProvidersSection(
+                title: l10n.suppliers,
+                assignLabel: l10n.assignSuppliers,
+                emptyTitle: l10n.clientDetailNoSuppliers,
+                emptyDescription: l10n.clientDetailSuppliersEmptyDescription,
+                seeAllRoute: '/clients/$clientId/suppliers',
+                previews: data.supplierPreviews,
+                localeCode: localeCode,
+                mutationsEnabled: mutationsEnabled,
+                onAssign: openSupplierAssignments,
+                totalCount: data.suppliersCount,
+              ),
+            ],
           ],
           AppSize.spaceXL.gap,
           AppCard(
@@ -492,10 +521,25 @@ class _ClientDetailBody extends ConsumerWidget {
             if (i > 0) AppSize.spaceMD.gap,
             ClientDetailCraftsmanRow(preview: data.craftsmanPreviews[i], localeCode: localeCode),
           ],
+        if (ref.read(remoteAgreementsEnabledProvider)) ...[
+          AppSize.spaceXL.gap,
+          ClientDetailLinkedProvidersSection(
+            title: l10n.suppliers,
+            assignLabel: l10n.assignSuppliers,
+            emptyTitle: l10n.clientDetailNoSuppliers,
+            emptyDescription: l10n.clientDetailSuppliersEmptyDescription,
+            seeAllRoute: '/clients/$clientId/suppliers',
+            previews: data.supplierPreviews,
+            localeCode: localeCode,
+            mutationsEnabled: mutationsEnabled,
+            onAssign: openSupplierAssignments,
+            totalCount: data.suppliersCount,
+          ),
+        ],
         AppSize.spaceXL.gap,
         HomeSectionHeader(
           title: l10n.navItems,
-          seeAllLabel: l10n.seeAll,
+          seeAllLabel: seeAllLabelWithCount(l10n, data.itemsCount ?? data.topItems.length),
           seeAllEnabled: mutationsEnabled,
           onSeeAll: () => context.push('/clients/$clientId/items'),
         ),
@@ -529,7 +573,10 @@ class _ClientDetailBody extends ConsumerWidget {
         AppSize.spaceXL.gap,
         HomeSectionHeader(
           title: l10n.movements,
-          seeAllLabel: l10n.seeAll,
+          seeAllLabel: seeAllLabelWithCount(
+            l10n,
+            data.movementsCount ?? data.latestMovements.length,
+          ),
           seeAllEnabled: mutationsEnabled,
           onSeeAll: () => context.push('/clients/$clientId/movements'),
         ),

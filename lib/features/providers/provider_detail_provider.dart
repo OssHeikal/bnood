@@ -67,26 +67,18 @@ class ProviderDetailNotifier extends AutoDisposeFamilyAsyncNotifier<ProviderDeta
     }
 
     var clientAgreements = <ProviderDetailClientRow>[];
-    if (provider.type == AppProviderType.craftsman && ref.read(remoteAgreementsEnabledProvider)) {
+    if (ref.read(remoteAgreementsEnabledProvider)) {
       final agreementsRepo = ref.read(appAgreementsRepositoryProvider);
-      try {
-        final agreements = await agreementsRepo.listAllProviderAgreements(providerId);
-        clientAgreements = agreements
-            .map(
-              (a) => ProviderDetailClientRow(
-                agreement: a,
-                clientName: a.clientName ?? '—',
-              ),
-            )
-            .toList()
-          ..sort((a, b) => a.clientName.compareTo(b.clientName));
-      } on AuthApiException catch (e) {
-        if (e.isProviderNotCraftsman) {
-          clientAgreements = const [];
-        } else {
-          rethrow;
-        }
-      }
+      final agreements = await agreementsRepo.listAllProviderAgreements(providerId);
+      clientAgreements = agreements
+          .map(
+            (a) => ProviderDetailClientRow(
+              agreement: a,
+              clientName: a.clientName ?? '—',
+            ),
+          )
+          .toList()
+        ..sort((a, b) => a.clientName.compareTo(b.clientName));
     }
 
     var voucherHistory = <ProviderDetailVoucherRow>[];
