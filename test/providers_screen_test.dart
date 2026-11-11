@@ -11,6 +11,7 @@ import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/providers/providers_list_paging.dart';
 import 'package:bnood/features/providers/providers_screen.dart';
 import 'package:bnood/features/providers/widgets/providers_loading_skeleton.dart';
+import 'package:bnood/features/providers/widgets/remote_craftsman_summary_card.dart';
 import 'package:bnood/features/suppliers/widgets/directory_list_loading_skeleton.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -95,6 +96,55 @@ void main() {
     expect(find.text('مورد مواد'), findsOneWidget);
     expect(find.byKey(const Key('providers_filter_suppliers')), findsOneWidget);
     expect(find.byKey(const Key('providers_filter_craftsmen')), findsOneWidget);
+    expect(find.textContaining('201012345678'), findsOneWidget);
+  });
+
+  testWidgets('supplier and craftsman rows share one card', (tester) async {
+    final rows = [
+      sample.single,
+      AppProvider(
+        id: '02C',
+        name: 'صنايعي علي',
+        phone: null,
+        type: AppProviderType.craftsman,
+        createdAt: now,
+        updatedAt: now,
+        paidMinor: 500000,
+        remainingMinor: 250000,
+        clientsCount: 2,
+      ),
+    ];
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authControllerProvider.overrideWith(() => _AuthStub()),
+          remoteProvidersEnabledProvider.overrideWith((ref) => true),
+          providersListPagingProvider.overrideWith(
+            (ref) => ({required int page, required int pageSize}) async {
+              return PagedFetchPage(items: rows, hasMore: false);
+            },
+          ),
+        ],
+        child: MaterialApp(
+          theme: AppFoundationTheme.light(),
+          locale: const Locale('ar'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          builder: (context, child) => HomeFoundationScope(child: child!),
+          home: const ProvidersScreen(),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.byType(RemoteCraftsmanSummaryCard), findsNWidgets(2));
+    expect(find.text('مورد خامات'), findsOneWidget);
+    expect(find.text('صنايعي'), findsOneWidget);
+    expect(find.text('عميلان مرتبطان'), findsOneWidget);
+    expect(find.text('مدفوع'), findsOneWidget);
+    expect(find.text('المتبقي'), findsOneWidget);
     expect(find.textContaining('201012345678'), findsOneWidget);
   });
 }

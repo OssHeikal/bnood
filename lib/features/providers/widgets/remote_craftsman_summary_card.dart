@@ -7,21 +7,25 @@ import '../../../core/config/theme/app_size.dart';
 import '../../../core/money/remote_money_units.dart';
 import '../../../core/resources/gen/assets.gen.dart';
 import '../../../core/theme/app_colors.dart' as legacy;
+import '../../../core/utils/extensions/bidi_isolate.dart';
 import '../../../core/widgets/app_amount.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_overflow_menu.dart';
 import '../../../l10n/app_localizations.dart';
 
-/// Remote craftsman row: linked clients subtitle, paid + optional remaining metrics.
+/// Provider row shared by suppliers and craftsmen.
+/// Header is a title plus one subtitle. Kind, when set, is a badge on the title row.
 class RemoteCraftsmanSummaryCard extends StatelessWidget {
   const RemoteCraftsmanSummaryCard({
     super.key,
     required this.name,
     required this.accentKey,
     required this.localeCode,
-    required this.clientsCount,
-    required this.paidPiastres,
     required this.onTap,
+    this.kindLabel,
+    this.clientsCount,
+    this.phone,
+    this.paidPiastres,
     this.remainingPiastres,
     this.minorPerMajor = RemoteMoneyUnits.minorPerMajor,
     this.overflowActions,
@@ -30,8 +34,10 @@ class RemoteCraftsmanSummaryCard extends StatelessWidget {
   final String name;
   final String accentKey;
   final String localeCode;
-  final int clientsCount;
-  final int paidPiastres;
+  final String? kindLabel;
+  final int? clientsCount;
+  final String? phone;
+  final int? paidPiastres;
   final int? remainingPiastres;
   final int minorPerMajor;
   final VoidCallback onTap;
@@ -47,6 +53,10 @@ class RemoteCraftsmanSummaryCard extends StatelessWidget {
     final accent = legacy.AppColors.accent(accentKey);
     final initial = name.isNotEmpty ? name.characters.first : '?';
     final actions = overflowActions;
+    final kind = kindLabel?.trim();
+    final subtitle = _subtitle(l10n);
+    final showPaid = paidPiastres != null;
+    final showRemaining = remainingPiastres != null;
 
     return AppCard(
       onTap: onTap,
@@ -80,65 +90,126 @@ class RemoteCraftsmanSummaryCard extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text(
-                                name,
-                                style: text.bodyEmphasis,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
+                              Row(
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      name,
+                                      style: text.bodyEmphasis,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                  if (kind != null && kind.isNotEmpty) ...[
+                                    AppSize.spaceXS.gap,
+                                    _KindBadge(label: kind, color: accent),
+                                  ],
+                                ],
                               ),
-                              AppSize.spaceXS.gap,
-                              Text(
-                                l10n.craftsmanLinkedClientsMeta(clientsCount),
-                                style: text.caption.copyWith(color: colors.onSurfaceMuted),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                              ),
+                              if (subtitle != null) ...[
+                                AppSize.spaceXS.gap,
+                                Text(
+                                  subtitle.isolate ? LtrIsolate.isolate(subtitle.text) : subtitle.text,
+                                  style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.start,
+                                ),
+                              ],
                             ],
                           ),
                         ),
                       ],
                     ),
-                    AppSize.spaceMD.gap,
-                    IntrinsicHeight(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: _Metric(
-                              label: l10n.paid,
-                              piastres: paidPiastres,
-                              role: AppAmountRole.spend,
-                              localeCode: localeCode,
-                              minorPerMajor: minorPerMajor,
-                            ),
-                          ),
-                          if (remainingPiastres != null)
-                            Expanded(
-                              child: _Metric(
-                                label: l10n.remaining,
-                                piastres: remainingPiastres!,
-                                role: AppAmountRole.remaining,
-                                localeCode: localeCode,
-                                minorPerMajor: minorPerMajor,
+                    if (showPaid || showRemaining) ...[
+                      AppSize.spaceSM.gap,
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (showPaid)
+                              Expanded(
+                                child: _Metric(
+                                  label: l10n.paid,
+                                  piastres: paidPiastres!,
+                                  role: AppAmountRole.spend,
+                                  localeCode: localeCode,
+                                  minorPerMajor: minorPerMajor,
+                                ),
                               ),
-                            ),
-                        ],
+                            if (showRemaining)
+                              Expanded(
+                                child: _Metric(
+                                  label: l10n.remaining,
+                                  piastres: remainingPiastres!,
+                                  role: AppAmountRole.remaining,
+                                  localeCode: localeCode,
+                                  minorPerMajor: minorPerMajor,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),
             ),
             if (actions != null && actions.isNotEmpty)
               Padding(
-                padding: const EdgeInsetsDirectional.only(end: AppSize.spaceSM),
-                child: Center(
+                padding: const EdgeInsetsDirectional.only(top: AppSize.spaceXS, end: AppSize.spaceXS),
+                child: Align(
+                  alignment: AlignmentDirectional.topEnd,
                   child: AppOverflowMenu(actions: actions),
                 ),
               ),
           ],
+        ),
+      ),
+    );
+  }
+
+  _Subtitle? _subtitle(AppLocalizations l10n) {
+    final count = clientsCount;
+    if (count != null) {
+      return _Subtitle(l10n.craftsmanLinkedClientsMeta(count));
+    }
+    final number = phone?.trim();
+    if (number != null && number.isNotEmpty) {
+      return _Subtitle(number, isolate: true);
+    }
+    return null;
+  }
+}
+
+class _Subtitle {
+  const _Subtitle(this.text, {this.isolate = false});
+
+  final String text;
+  final bool isolate;
+}
+
+class _KindBadge extends StatelessWidget {
+  const _KindBadge({required this.label, required this.color});
+
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: color.withValues(alpha: 0.12),
+        shape: AppShape.superellipse(radius: AppSize.radiusSM),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceSM, vertical: 2),
+        child: Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: context.text.caption.copyWith(color: color, fontWeight: FontWeight.w700),
         ),
       ),
     );
@@ -226,9 +297,8 @@ class _Avatar extends StatelessWidget {
   }
 }
 
-List<AppOverflowMenuAction> craftsmanProviderOverflowActions({
+List<AppOverflowMenuAction> providerOverflowActions({
   required AppLocalizations l10n,
-  required VoidCallback onOpenDetail,
   required VoidCallback onEdit,
   required VoidCallback onDelete,
 }) =>

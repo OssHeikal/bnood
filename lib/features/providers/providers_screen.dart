@@ -143,12 +143,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          AppSize.screenPadding,
-                          0,
-                          AppSize.screenPadding,
-                          AppSize.spaceSM,
-                        ),
+                        padding: EdgeInsets.fromLTRB(AppSize.screenPadding, 0, AppSize.screenPadding, AppSize.spaceSM),
                         child: ProvidersListFilterChips(),
                       ),
                       Padding(
@@ -191,9 +186,9 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
               ),
               itemPadding: (index) => EdgeInsets.fromLTRB(
                 AppSize.screenPadding,
-                index == 0 ? AppSize.spaceSM : 0,
+                index == 0 ? AppSize.spaceXS : 0,
                 AppSize.screenPadding,
-                AppSize.spaceMD,
+                0,
               ),
               itemBuilder: (context, provider, index) {
                 return ProvidersListTile(
@@ -201,21 +196,14 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                   provider: provider,
                   onOpenDetail: () => context.push('/providers/${provider.id}'),
                   onEdit: () => showProviderEditSheet(context, provider: provider),
-                  onDelete: () => confirmDeleteProvider(
-                    context,
-                    ref,
-                    providerId: provider.id,
-                    name: provider.name,
-                  ),
+                  onDelete: () => confirmDeleteProvider(context, ref, providerId: provider.id, name: provider.name),
                 );
               },
               sliverFooters: [
                 SliverPadding(
                   padding: EdgeInsets.only(
                     bottom:
-                        FloatingShellDock.clearanceHeight +
-                        MediaQuery.viewPaddingOf(context).bottom +
-                        AppSize.spaceLG,
+                        FloatingShellDock.clearanceHeight + MediaQuery.viewPaddingOf(context).bottom + AppSize.spaceLG,
                   ),
                 ),
               ],

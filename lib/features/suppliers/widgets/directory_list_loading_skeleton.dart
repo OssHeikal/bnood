@@ -10,9 +10,10 @@ import '../../../core/widgets/skeleton/skeleton_text.dart';
 
 /// First-page placeholder for directory-style person rows (remote providers + local directory).
 class DirectoryListLoadingSkeleton extends StatelessWidget {
-  const DirectoryListLoadingSkeleton({super.key, this.count = 4});
+  const DirectoryListLoadingSkeleton({super.key, this.count = 4, this.gap = AppSize.spaceMD});
 
   final int count;
+  final double gap;
 
   static const _avatarSize = 40.0;
   static const _stripeWidth = 4.0;
@@ -24,7 +25,7 @@ class DirectoryListLoadingSkeleton extends StatelessWidget {
       child: Column(
         children: [
           for (var i = 0; i < count; i++) ...[
-            if (i > 0) AppSize.spaceMD.gap,
+            if (i > 0) SizedBox(height: gap),
             const DirectoryListRowSkeleton(),
           ],
         ],
