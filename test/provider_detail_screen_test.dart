@@ -99,8 +99,12 @@ void main() {
     expect(find.text('Paid'), findsWidgets);
     expect(find.text('Remaining'), findsWidgets);
     expect(find.text('Client Osama'), findsOneWidget);
-    expect(find.byKey(const Key('provider_detail_edit_agreement_ag1')), findsOneWidget);
-    expect(find.byKey(const Key('provider_detail_unlink_ag1')), findsOneWidget);
+    expect(find.byKey(const Key('provider_detail_link_clients')), findsOneWidget);
+    expect(find.byKey(const Key('provider_detail_agreement_menu_ag1')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('provider_detail_agreement_menu_ag1')));
+    await tester.pumpAndSettle();
+    expect(find.text('Edit agreement'), findsOneWidget);
+    expect(find.text('Unlink'), findsOneWidget);
     expect(find.textContaining('5 EGP'), findsWidgets);
   });
 
@@ -143,7 +147,8 @@ void main() {
     expect(find.byKey(const Key('provider_detail_supplier_paid_header')), findsOneWidget);
     expect(find.text('Total paid to supplier'), findsOneWidget);
     expect(find.textContaining('10,000'), findsOneWidget);
-    expect(find.text('Linked clients'), findsNothing);
+    expect(find.text('Linked clients'), findsOneWidget);
+    expect(find.text('No linked clients yet'), findsOneWidget);
   });
 
   testWidgets('provider movements use client movement card with client subtitle and chips', (tester) async {

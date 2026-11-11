@@ -8,12 +8,13 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
+import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
-import '../../core/widgets/skeleton/skeleton.dart';
 import '../home/home_foundation_scope.dart';
 import 'client_craftsmen_list_provider.dart';
 import 'craftsman_assignments_sheet.dart';
 import 'widgets/client_detail_craftsman_row.dart';
+import 'widgets/client_linked_provider_list_skeleton.dart';
 
 class ClientCraftsmenListScreen extends ConsumerWidget {
   const ClientCraftsmenListScreen({super.key, required this.clientId});
@@ -30,11 +31,30 @@ class ClientCraftsmenListScreen extends ConsumerWidget {
       child: Builder(
         builder: (context) {
           final colors = context.colors;
+          final snapshot = list.valueOrNull;
+          final canAssign = snapshot?.projectId != null;
           return Scaffold(
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
               title: l10n.craftsmen,
-              subtitle: list.valueOrNull?.clientName,
+              subtitle: snapshot?.clientName,
+              actions: canAssign
+                  ? [
+                      AppPressable(
+                        onPressed: () => _openAssignments(context, ref, clientId, snapshot!),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceSM),
+                          child: Text(
+                            l10n.assignCraftsmen,
+                            style: context.text.caption.copyWith(
+                              color: colors.primaryDark,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                  : null,
             ),
             body: ListView(
               padding: EdgeInsets.fromLTRB(
@@ -46,7 +66,7 @@ class ClientCraftsmenListScreen extends ConsumerWidget {
               children: [
                 AsyncValueBody(
                   value: list,
-                  loadingPlaceholder: const _ClientCraftsmenListSkeleton(),
+                  loadingPlaceholder: const ClientLinkedProviderListSkeleton(),
                   error: (e, _) => AppCard(
                     child: AppFallback.section(
                       icon: Icons.error_outline,
@@ -77,6 +97,24 @@ class ClientCraftsmenListScreen extends ConsumerWidget {
   }
 }
 
+Future<void> _openAssignments(
+  BuildContext context,
+  WidgetRef ref,
+  String clientId,
+  ClientCraftsmenListSnapshot data,
+) async {
+  final projectId = data.projectId;
+  if (projectId == null) return;
+  await showCraftsmanAssignmentsSheet(
+    context: context,
+    projectId: projectId,
+    clientId: clientId,
+  );
+  if (context.mounted) {
+    await ref.read(clientCraftsmenListProvider(clientId).notifier).refreshSilently();
+  }
+}
+
 class _ClientCraftsmenListBody extends ConsumerWidget {
   const _ClientCraftsmenListBody({
     required this.clientId,
@@ -104,24 +142,10 @@ class _ClientCraftsmenListBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final text = context.text;
-    final colors = context.colors;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (data.projectId != null)
-          Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: TextButton(
-              onPressed: () => _openAssignments(context, ref),
-              child: Text(
-                l10n.assignCraftsmen,
-                style: text.caption.copyWith(color: colors.primaryDark, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-        if (data.projectId != null) AppSize.spaceSM.gap,
         if (data.rows.isEmpty)
           AppCard(
             child: AppFallback.section(
@@ -145,22 +169,6 @@ class _ClientCraftsmenListBody extends ConsumerWidget {
             ClientDetailCraftsmanRow(preview: data.rows[i], localeCode: localeCode),
           ],
       ],
-    );
-  }
-}
-
-class _ClientCraftsmenListSkeleton extends StatelessWidget {
-  const _ClientCraftsmenListSkeleton();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Skeleton(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(height: AppSize.spaceLG),
-        ],
-      ),
     );
   }
 }

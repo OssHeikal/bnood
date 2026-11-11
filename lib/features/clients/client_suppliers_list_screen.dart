@@ -7,13 +7,14 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
+import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
-import '../../core/widgets/skeleton/skeleton.dart';
 import '../home/home_foundation_scope.dart';
 import 'client_suppliers_list_provider.dart';
 import 'craftsman_assignments_sheet.dart';
 import 'widgets/client_detail_craftsman_row.dart';
+import 'widgets/client_linked_provider_list_skeleton.dart';
 
 class ClientSuppliersListScreen extends ConsumerWidget {
   const ClientSuppliersListScreen({super.key, required this.clientId});
@@ -30,11 +31,30 @@ class ClientSuppliersListScreen extends ConsumerWidget {
       child: Builder(
         builder: (context) {
           final colors = context.colors;
+          final snapshot = list.valueOrNull;
+          final canAssign = snapshot?.projectId != null;
           return Scaffold(
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
               title: l10n.suppliers,
-              subtitle: list.valueOrNull?.clientName,
+              subtitle: snapshot?.clientName,
+              actions: canAssign
+                  ? [
+                      AppPressable(
+                        onPressed: () => _openAssignments(context, ref, clientId, snapshot!),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceSM),
+                          child: Text(
+                            l10n.assignSuppliers,
+                            style: context.text.caption.copyWith(
+                              color: colors.primaryDark,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                  : null,
             ),
             body: ListView(
               padding: EdgeInsets.fromLTRB(
@@ -46,7 +66,7 @@ class ClientSuppliersListScreen extends ConsumerWidget {
               children: [
                 AsyncValueBody(
                   value: list,
-                  loadingPlaceholder: const _ClientSuppliersListSkeleton(),
+                  loadingPlaceholder: const ClientLinkedProviderListSkeleton(),
                   error: (e, _) => AppCard(
                     child: AppFallback.section(
                       icon: Icons.error_outline,
@@ -77,6 +97,24 @@ class ClientSuppliersListScreen extends ConsumerWidget {
   }
 }
 
+Future<void> _openAssignments(
+  BuildContext context,
+  WidgetRef ref,
+  String clientId,
+  ClientSuppliersListSnapshot data,
+) async {
+  final projectId = data.projectId;
+  if (projectId == null) return;
+  await showSupplierAssignmentsSheet(
+    context: context,
+    projectId: projectId,
+    clientId: clientId,
+  );
+  if (context.mounted) {
+    await ref.read(clientSuppliersListProvider(clientId).notifier).refreshSilently();
+  }
+}
+
 class _ClientSuppliersListBody extends ConsumerWidget {
   const _ClientSuppliersListBody({
     required this.clientId,
@@ -104,24 +142,10 @@ class _ClientSuppliersListBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final text = context.text;
-    final colors = context.colors;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (data.projectId != null)
-          Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: TextButton(
-              onPressed: () => _openAssignments(context, ref),
-              child: Text(
-                l10n.assignSuppliers,
-                style: text.caption.copyWith(color: colors.primaryDark, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-        if (data.projectId != null) AppSize.spaceSM.gap,
         if (data.rows.isEmpty)
           AppCard(
             child: AppFallback.section(
@@ -145,22 +169,6 @@ class _ClientSuppliersListBody extends ConsumerWidget {
             ClientDetailCraftsmanRow(preview: data.rows[i], localeCode: localeCode),
           ],
       ],
-    );
-  }
-}
-
-class _ClientSuppliersListSkeleton extends StatelessWidget {
-  const _ClientSuppliersListSkeleton();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Skeleton(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(height: AppSize.spaceLG),
-        ],
-      ),
     );
   }
 }

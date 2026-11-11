@@ -22,7 +22,6 @@ import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/utils/whatsapp_phone.dart';
-import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
@@ -38,7 +37,6 @@ import 'client_edit_sheet.dart';
 import 'craftsman_assignments_sheet.dart';
 import 'engineer_edit_sheet.dart';
 import 'widgets/client_detail_action_grid.dart';
-import 'widgets/client_detail_craftsman_row.dart';
 import 'widgets/client_detail_linked_providers_section.dart';
 import 'widgets/client_detail_engineer_card.dart';
 import 'widgets/client_detail_item_row.dart';
@@ -269,8 +267,6 @@ class _ClientDetailBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
-    final text = context.text;
     final isArchived = data.client.archivedAt != null;
     final mutationsEnabled = !isArchived;
 
@@ -337,65 +333,18 @@ class _ClientDetailBody extends ConsumerWidget {
           ),
           if (ref.read(remoteAgreementsEnabledProvider)) ...[
             AppSize.spaceXL.gap,
-            Row(
-              children: [
-                Expanded(child: Text(l10n.craftsmen, style: text.sectionTitle)),
-                AppPressable(
-                  enabled: mutationsEnabled,
-                  onPressed: openAssignments,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                    child: Text(
-                      l10n.assignCraftsmen,
-                      style: text.caption.copyWith(
-                        color: mutationsEnabled ? colors.primaryDark : colors.onSurfaceMuted,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-                AppSize.spaceSM.gap,
-                AppPressable(
-                  enabled: mutationsEnabled,
-                  onPressed: mutationsEnabled ? () => context.push('/clients/$clientId/craftsmen') : null,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                    child: Text(
-                      l10n.seeAll,
-                      style: text.caption.copyWith(
-                        color: mutationsEnabled ? colors.primaryDark : colors.onSurfaceMuted,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            ClientDetailLinkedProvidersSection(
+              title: l10n.craftsmen,
+              assignLabel: l10n.assignCraftsmen,
+              emptyTitle: l10n.clientDetailNoCraftsmen,
+              emptyDescription: l10n.clientDetailCraftsmenEmptyDescription,
+              seeAllRoute: '/clients/$clientId/craftsmen',
+              previews: data.craftsmanPreviews,
+              localeCode: localeCode,
+              mutationsEnabled: mutationsEnabled,
+              onAssign: openAssignments,
+              totalCount: data.craftsmenCount,
             ),
-            AppSize.spaceSM.gap,
-            if (data.craftsmanPreviews.isEmpty)
-              AppCard(
-                child: AppFallback.section(
-                  icon: Icons.handyman_outlined,
-                  title: l10n.clientDetailNoCraftsmen,
-                  description: l10n.clientDetailCraftsmenEmptyDescription,
-                  actions: [
-                    if (mutationsEnabled)
-                      AppFallbackAction(
-                        label: l10n.assignCraftsmen,
-                        onPressed: openAssignments,
-                        role: AppFallbackActionRole.tertiary,
-                      ),
-                  ],
-                ),
-              )
-            else
-              for (var i = 0; i < data.craftsmanPreviews.length; i++) ...[
-                if (i > 0) AppSize.spaceMD.gap,
-                ClientDetailCraftsmanRow(
-                  preview: data.craftsmanPreviews[i],
-                  localeCode: localeCode,
-                ),
-              ],
             if (ref.read(remoteAgreementsEnabledProvider)) ...[
               AppSize.spaceXL.gap,
               ClientDetailLinkedProvidersSection(
@@ -465,62 +414,18 @@ class _ClientDetailBody extends ConsumerWidget {
           },
         ),
         AppSize.spaceXL.gap,
-        Row(
-          children: [
-            Expanded(child: Text(l10n.craftsmen, style: text.sectionTitle)),
-            AppPressable(
-              enabled: mutationsEnabled,
-              onPressed: openAssignments,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                child: Text(
-                  l10n.assignCraftsmen,
-                  style: text.caption.copyWith(
-                    color: mutationsEnabled ? colors.primaryDark : colors.onSurfaceMuted,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-            AppSize.spaceSM.gap,
-            AppPressable(
-              enabled: mutationsEnabled,
-              onPressed: mutationsEnabled ? () => context.push('/clients/$clientId/craftsmen') : null,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                child: Text(
-                  l10n.seeAll,
-                  style: text.caption.copyWith(
-                    color: mutationsEnabled ? colors.primaryDark : colors.onSurfaceMuted,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-          ],
+        ClientDetailLinkedProvidersSection(
+          title: l10n.craftsmen,
+          assignLabel: l10n.assignCraftsmen,
+          emptyTitle: l10n.clientDetailNoCraftsmen,
+          emptyDescription: l10n.clientDetailCraftsmenEmptyDescription,
+          seeAllRoute: '/clients/$clientId/craftsmen',
+          previews: data.craftsmanPreviews,
+          localeCode: localeCode,
+          mutationsEnabled: mutationsEnabled,
+          onAssign: openAssignments,
+          totalCount: data.craftsmenCount,
         ),
-        AppSize.spaceSM.gap,
-        if (data.craftsmanPreviews.isEmpty)
-          AppCard(
-            child: AppFallback.section(
-              icon: Icons.handyman_outlined,
-              title: l10n.clientDetailNoCraftsmen,
-              description: l10n.clientDetailCraftsmenEmptyDescription,
-              actions: [
-                if (mutationsEnabled)
-                  AppFallbackAction(
-                    label: l10n.assignCraftsmen,
-                    onPressed: openAssignments,
-                    role: AppFallbackActionRole.tertiary,
-                  ),
-              ],
-            ),
-          )
-        else
-          for (var i = 0; i < data.craftsmanPreviews.length; i++) ...[
-            if (i > 0) AppSize.spaceMD.gap,
-            ClientDetailCraftsmanRow(preview: data.craftsmanPreviews[i], localeCode: localeCode),
-          ],
         if (ref.read(remoteAgreementsEnabledProvider)) ...[
           AppSize.spaceXL.gap,
           ClientDetailLinkedProvidersSection(

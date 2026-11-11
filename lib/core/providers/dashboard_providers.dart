@@ -7,8 +7,11 @@ import '../home/home_riverpod.dart';
 import '../home/home_section_counts.dart';
 import '../database/database.dart';
 import '../repositories/bnood_repository.dart';
+import '../../features/clients/client_craftsmen_list_provider.dart';
 import '../../features/clients/client_detail_provider.dart';
 import '../../features/clients/client_items_stats_provider.dart';
+import '../../features/clients/client_suppliers_list_provider.dart';
+import '../../features/providers/provider_detail_provider.dart';
 import '../shared/pagination/paging_refresh.dart';
 import '../subscription/subscription_riverpod.dart';
 import 'app_providers.dart';
@@ -81,6 +84,19 @@ Future<void> refreshHomeDashboard(WidgetRef ref) {
 }
 
 /// After client create/update/archive — keeps Home, Clients list, and optional detail in sync (silent).
+void refreshAfterProviderClientAssignments(
+  WidgetRef ref, {
+  required String providerId,
+  required Iterable<String> affectedClientIds,
+}) {
+  ref.read(providerDetailProvider(providerId).notifier).refreshSilently();
+  for (final clientId in affectedClientIds.toSet()) {
+    refreshAfterClientMutation(ref, clientId: clientId);
+    ref.invalidate(clientCraftsmenListProvider(clientId));
+    ref.invalidate(clientSuppliersListProvider(clientId));
+  }
+}
+
 void refreshAfterClientMutation(WidgetRef ref, {String? clientId, String? priorClientId}) {
   final remoteClients = ref.read(remoteClientsEnabledProvider);
   if (remoteClients) {

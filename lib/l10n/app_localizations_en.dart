@@ -867,6 +867,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get providerDetailNoLinkedClients => 'No linked clients yet';
 
   @override
+  String get linkClients => 'Link clients';
+
+  @override
+  String get linkClientsIntro =>
+      'Choose which clients this directory entry is linked to. Agreement amounts stay optional and can be set from each client card later.';
+
+  @override
+  String linkClientsProviderContext(String name) {
+    return 'Linking to: $name';
+  }
+
+  @override
+  String get providerAssignmentsSaved => 'Client links updated';
+
+  @override
+  String get agreementUnlinkClientHasPaymentsTitle =>
+      'Unlink client with payments?';
+
+  @override
+  String agreementUnlinkClientHasPaymentsDescription(String name) {
+    return '$name has recorded payments on this agreement. Unlink anyway?';
+  }
+
+  @override
   String get agreementUnlinkTitle => 'Unlink craftsman?';
 
   @override

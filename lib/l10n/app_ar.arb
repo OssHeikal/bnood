@@ -330,6 +330,12 @@
   "providerDetailNotFoundTitle": "الجهة غير موجودة في الدليل",
   "providerDetailLinkedClientsTitle": "العملاء المرتبطون",
   "providerDetailNoLinkedClients": "لا يوجد عملاء مرتبطون بعد",
+  "linkClients": "ربط بعملاء",
+  "linkClientsIntro": "اختار العملاء المرتبطين بهذا السجل. مبالغ الاتفاق اختيارية ويمكن ضبطها لاحقاً من بطاقة العميل.",
+  "linkClientsProviderContext": "الربط مع: {name}",
+  "providerAssignmentsSaved": "تم تحديث ربط العملاء",
+  "agreementUnlinkClientHasPaymentsTitle": "إلغاء الربط رغم وجود مدفوعات؟",
+  "agreementUnlinkClientHasPaymentsDescription": "عند {name} مدفوعات مسجلة على هذا الاتفاق. هل تريد إلغاء الربط؟",
   "agreementUnlinkTitle": "إلغاء ربط الصنايعي؟",
   "agreementUnlinkDescription": "سيُزال {name} من العميل. يمكنك ربطه مرة أخرى لاحقاً.",
   "@agreementUnlinkDescription": {

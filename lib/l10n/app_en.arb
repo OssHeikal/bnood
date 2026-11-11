@@ -330,6 +330,22 @@
   "providerDetailNotFoundTitle": "Directory entry not found",
   "providerDetailLinkedClientsTitle": "Linked clients",
   "providerDetailNoLinkedClients": "No linked clients yet",
+  "linkClients": "Link clients",
+  "linkClientsIntro": "Choose which clients this directory entry is linked to. Agreement amounts stay optional and can be set from each client card later.",
+  "linkClientsProviderContext": "Linking to: {name}",
+  "@linkClientsProviderContext": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "providerAssignmentsSaved": "Client links updated",
+  "agreementUnlinkClientHasPaymentsTitle": "Unlink client with payments?",
+  "agreementUnlinkClientHasPaymentsDescription": "{name} has recorded payments on this agreement. Unlink anyway?",
+  "@agreementUnlinkClientHasPaymentsDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
   "agreementUnlinkTitle": "Unlink craftsman?",
   "agreementUnlinkDescription": "This removes {name} from the client. You can link them again later.",
   "@agreementUnlinkDescription": {

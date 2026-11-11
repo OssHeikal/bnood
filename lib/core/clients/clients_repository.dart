@@ -17,6 +17,18 @@ class ClientsRepository {
   }) =>
       _api.listClients(status: status, q: q, page: page, perPage: perPage);
 
+  Future<List<ClientApiRecord>> listAllActiveClients() async {
+    final all = <ClientApiRecord>[];
+    var page = 1;
+    while (true) {
+      final result = await listClients(status: ClientListArchiveFilter.active, page: page);
+      all.addAll(result.items);
+      if (!result.hasMore) break;
+      page++;
+    }
+    return all;
+  }
+
   Future<ClientApiRecord> getClient(String id) => _api.getClient(id);
 
   Future<ClientApiRecord> createClient({

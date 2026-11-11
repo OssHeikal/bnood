@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/widgets/app_amount.dart';
 import '../../core/resources/gen/assets.gen.dart';
@@ -18,6 +19,7 @@ import '../home/widgets/home_section_header.dart';
 import 'provider_detail_agreement_totals.dart';
 import 'provider_detail_provider.dart';
 import 'provider_detail_snapshot.dart';
+import 'provider_client_assignments_sheet.dart';
 import 'provider_edit_sheet.dart';
 import 'provider_mutation_actions.dart';
 import '../clients/widgets/client_movement_card.dart';
@@ -185,6 +187,19 @@ class _ProviderDetailBody extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final provider = data.provider;
     final isCraftsman = provider.type == AppProviderType.craftsman;
+    final linkClientsEnabled = ref.watch(remoteAgreementsEnabledProvider);
+
+    Future<void> openLinkClients() async {
+      await showProviderClientAssignmentsSheet(
+        context: context,
+        providerId: provider.id,
+        providerName: provider.name,
+        providerType: provider.type,
+      );
+      if (context.mounted) {
+        await ref.read(providerDetailProvider(providerId).notifier).refreshSilently();
+      }
+    }
 
     Future<void> afterAgreementChanged() async {
       await ref.read(providerDetailProvider(providerId).notifier).refreshSilently();
@@ -225,13 +240,27 @@ class _ProviderDetailBody extends ConsumerWidget {
           AppSize.spaceXL.gap,
         ],
         ...[
-          HomeSectionHeader(title: l10n.providerDetailLinkedClientsTitle),
+          HomeSectionHeader(
+            title: l10n.providerDetailLinkedClientsTitle,
+            actionLabel: linkClientsEnabled ? l10n.linkClients : null,
+            onAction: linkClientsEnabled ? openLinkClients : null,
+            actionKey: const Key('provider_detail_link_clients'),
+          ),
           AppSize.spaceSM.gap,
           if (data.clientAgreements.isEmpty)
             AppCard(
               child: AppFallback.section(
                 icon: Icons.people_outline,
                 title: l10n.providerDetailNoLinkedClients,
+                actions: linkClientsEnabled
+                    ? [
+                        AppFallbackAction(
+                          label: l10n.linkClients,
+                          onPressed: openLinkClients,
+                          role: AppFallbackActionRole.tertiary,
+                        ),
+                      ]
+                    : const [],
               ),
             )
           else

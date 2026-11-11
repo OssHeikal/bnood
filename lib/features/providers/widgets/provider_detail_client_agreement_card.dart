@@ -16,13 +16,13 @@ class ProviderDetailClientAgreementCard extends StatelessWidget {
     required this.row,
     required this.localeCode,
     this.radius = AppSize.radiusMD,
-    this.clipBottom = false,
+    this.titleTrailing,
   });
 
   final ProviderDetailClientRow row;
   final String localeCode;
   final double radius;
-  final bool clipBottom;
+  final Widget? titleTrailing;
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +36,11 @@ class ProviderDetailClientAgreementCard extends StatelessWidget {
         ? RemoteMoneyUnits.minorPerMajor
         : 100;
 
-    final borderRadius = clipBottom
-        ? BorderRadius.vertical(top: Radius.circular(radius))
-        : BorderRadius.circular(radius);
-
     return Material(
       color: colors.surface,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: borderRadius,
+        borderRadius: BorderRadius.circular(radius),
         side: BorderSide(color: colors.outlineSubtle),
       ),
       clipBehavior: Clip.antiAlias,
@@ -53,20 +49,26 @@ class ProviderDetailClientAgreementCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            AppPressable(
-              onPressed: () => context.push('/clients/${agreement.clientId}'),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    row.clientName,
-                    style: text.bodyEmphasis.copyWith(color: colors.primaryDark),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.start,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: AppPressable(
+                    onPressed: () => context.push('/clients/${agreement.clientId}'),
+                    child: Text(
+                      row.clientName,
+                      style: text.bodyEmphasis.copyWith(color: colors.primaryDark),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.start,
+                    ),
                   ),
+                ),
+                if (titleTrailing != null) ...[
+                  const SizedBox(width: AppSize.spaceXS),
+                  titleTrailing!,
                 ],
-              ),
+              ],
             ),
             if (!hasAgreed) ...[
               AppSize.spaceSM.gap,

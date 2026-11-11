@@ -1658,6 +1658,42 @@ abstract class AppLocalizations {
   /// **'No linked clients yet'**
   String get providerDetailNoLinkedClients;
 
+  /// No description provided for @linkClients.
+  ///
+  /// In en, this message translates to:
+  /// **'Link clients'**
+  String get linkClients;
+
+  /// No description provided for @linkClientsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose which clients this directory entry is linked to. Agreement amounts stay optional and can be set from each client card later.'**
+  String get linkClientsIntro;
+
+  /// No description provided for @linkClientsProviderContext.
+  ///
+  /// In en, this message translates to:
+  /// **'Linking to: {name}'**
+  String linkClientsProviderContext(String name);
+
+  /// No description provided for @providerAssignmentsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Client links updated'**
+  String get providerAssignmentsSaved;
+
+  /// No description provided for @agreementUnlinkClientHasPaymentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlink client with payments?'**
+  String get agreementUnlinkClientHasPaymentsTitle;
+
+  /// No description provided for @agreementUnlinkClientHasPaymentsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has recorded payments on this agreement. Unlink anyway?'**
+  String agreementUnlinkClientHasPaymentsDescription(String name);
+
   /// No description provided for @agreementUnlinkTitle.
   ///
   /// In en, this message translates to:

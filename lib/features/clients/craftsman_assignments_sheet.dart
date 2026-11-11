@@ -227,16 +227,18 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       final roster = widget.providerKind == AppProviderType.supplier
           ? await providersRepo.listAllSuppliers()
           : await providersRepo.listAllCraftsmen();
+      final kindProviderIds = roster.map((p) => p.id).toSet();
       final agreements = clientAgreementPreviews(
         await agreementsRepo.listAllClientAgreements(clientId),
         widget.providerKind,
+        kindProviderIds: kindProviderIds,
       );
 
       final selected = <String>{};
       final baseline = <String, int?>{};
-      for (final a in agreements) {
-        selected.add(a.craftsmanId);
-        baseline[a.craftsmanId] = a.agreedPiastres;
+      for (final row in agreements) {
+        selected.add(row.craftsmanId);
+        baseline[row.craftsmanId] = row.agreedPiastres;
       }
 
       if (mounted) {
@@ -421,11 +423,22 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
     final clientId = widget.clientId!;
     final agreementsRepo = ref.read(appAgreementsRepositoryProvider);
     try {
-      final existing = await agreementsRepo.listAllClientAgreements(clientId);
-      final existingByProvider = {for (final a in existing) a.providerId: a};
+      final kindProviderIds = _roster.map((c) => c.id).toSet();
+      final allAgreements = await agreementsRepo.listAllClientAgreements(clientId);
+      final toDelete = clientAgreementsToDeleteOnAssignmentsSave(
+        allAgreements: allAgreements,
+        kind: widget.providerKind,
+        kindProviderIds: kindProviderIds,
+        selectedProviderIds: _selected,
+      );
+      final scoped = clientAgreementsForKind(
+        allAgreements,
+        widget.providerKind,
+        kindProviderIds: kindProviderIds,
+      );
+      final existingByProvider = {for (final a in scoped) a.providerId: a};
 
-      for (final ag in existing) {
-        if (_selected.contains(ag.providerId)) continue;
+      for (final ag in toDelete) {
         await agreementsRepo.deleteAgreement(ag.id);
       }
 

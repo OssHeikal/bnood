@@ -860,6 +860,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String get providerDetailNoLinkedClients => 'لا يوجد عملاء مرتبطون بعد';
 
   @override
+  String get linkClients => 'ربط بعملاء';
+
+  @override
+  String get linkClientsIntro =>
+      'اختار العملاء المرتبطين بهذا السجل. مبالغ الاتفاق اختيارية ويمكن ضبطها لاحقاً من بطاقة العميل.';
+
+  @override
+  String linkClientsProviderContext(String name) {
+    return 'الربط مع: $name';
+  }
+
+  @override
+  String get providerAssignmentsSaved => 'تم تحديث ربط العملاء';
+
+  @override
+  String get agreementUnlinkClientHasPaymentsTitle =>
+      'إلغاء الربط رغم وجود مدفوعات؟';
+
+  @override
+  String agreementUnlinkClientHasPaymentsDescription(String name) {
+    return 'عند $name مدفوعات مسجلة على هذا الاتفاق. هل تريد إلغاء الربط؟';
+  }
+
+  @override
   String get agreementUnlinkTitle => 'إلغاء ربط الصنايعي؟';
 
   @override
