@@ -492,6 +492,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voucherSelectItem => 'Select an item';
 
   @override
+  String get voucherDiscardTitle => 'Discard voucher?';
+
+  @override
+  String get voucherDiscardDescription =>
+      'You have unsaved changes. Leave without saving?';
+
+  @override
+  String get discard => 'Discard';
+
+  @override
+  String get voucherProviderLinkedBadge => 'Linked';
+
+  @override
+  String get voucherLinkAgreementAmountOptional =>
+      'Agreement amount (optional)';
+
+  @override
   String get voucherSelectCraftsman => 'Select a craftsman';
 
   @override

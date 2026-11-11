@@ -491,6 +491,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get voucherSelectItem => 'اختر البند';
 
   @override
+  String get voucherDiscardTitle => 'تجاهل السند؟';
+
+  @override
+  String get voucherDiscardDescription =>
+      'توجد تغييرات لم تُحفظ. هل تريد الخروج دون حفظ؟';
+
+  @override
+  String get discard => 'تجاهل';
+
+  @override
+  String get voucherProviderLinkedBadge => 'مرتبط';
+
+  @override
+  String get voucherLinkAgreementAmountOptional => 'مبلغ الاتفاق (اختياري)';
+
+  @override
   String get voucherSelectCraftsman => 'اختر الصنايعي';
 
   @override

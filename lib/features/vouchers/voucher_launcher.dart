@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/providers/app_providers.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
-import '../../core/widgets/bnood_modal_sheet.dart';
-import '../../core/widgets/bounded_sheet_navigator.dart';
-import '../home/home_foundation_scope.dart';
 import '../subscription/subscription_gates.dart';
 import 'voucher_draft.dart';
 import 'voucher_draft_enrich.dart';
 import 'voucher_draft_enrich_remote.dart';
-import 'voucher_sheet.dart';
+import 'voucher_screen.dart';
 
 final voucherDraftProvider =
     StateProvider<VoucherDraft>((ref) => VoucherDraft.fresh);
@@ -24,7 +22,7 @@ class VoucherLauncher {
     );
   }
 
-  /// Opens a single root bottom sheet; all pickers push on the nested [Navigator].
+  /// Opens full-screen voucher route; pickers push on the same navigator stack.
   static Future<void> openFresh(BuildContext context) async {
     final container = ProviderScope.containerOf(context);
     container.read(voucherDraftProvider.notifier).state = draftForFreshEntry();
@@ -69,11 +67,6 @@ class VoucherLauncher {
       if (!await guardFinancialMutationFromContainer(context, container)) return;
     }
     if (!context.mounted) return;
-    await BnoodModalSheet.show<void>(
-      context: context,
-      builder: (_) => HomeFoundationScope(
-        child: BoundedSheetNavigator(builder: (_) => const VoucherSheet()),
-      ),
-    );
+    await context.push(VoucherScreen.path);
   }
 }

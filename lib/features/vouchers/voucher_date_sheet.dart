@@ -10,15 +10,24 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/formatting/display_digits.dart';
 import '../../core/widgets/app_chevron.dart';
 import '../../core/widgets/buttons/app_button.dart';
+import '../../core/widgets/custom_app_bar.dart';
+import '../../core/widgets/overlay_form_presentation.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 
 /// Staged voucher date picker: swipe months, header wheels, confirm commits.
 class VoucherDateSheetPage extends StatefulWidget {
-  const VoucherDateSheetPage({super.key, required this.initial, required this.firstDate, required this.lastDate});
+  const VoucherDateSheetPage({
+    super.key,
+    required this.initial,
+    required this.firstDate,
+    required this.lastDate,
+    this.presentation = OverlayFormPresentation.inSheet,
+  });
 
   final DateTime initial;
   final DateTime firstDate;
   final DateTime lastDate;
+  final OverlayFormPresentation presentation;
 
   @override
   State<VoucherDateSheetPage> createState() => _VoucherDateSheetPageState();
@@ -100,6 +109,91 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
     // final colors = context.colors;
     final today = _dateOnly(DateTime.now());
 
+    final calendarBody = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _CalendarHeader(
+          visibleMonth: _visibleMonth,
+          localeTag: localeTag,
+          onPrev: () => _shiftMonth(-1),
+          onNext: () => _shiftMonth(1),
+          onTitleTap: _openWheels,
+        ),
+        AppSize.spaceMD.gap,
+        _MonthGrid(
+          month: _visibleMonth,
+          localeTag: localeTag,
+          selected: _staged,
+          today: today,
+          firstDate: widget.firstDate,
+          lastDate: widget.lastDate,
+          onSelect: _selectDay,
+          onSwipe: _shiftMonth,
+        ),
+      ],
+    );
+
+    final confirmButton = AppButton.primary(
+      key: const ValueKey('voucher-date-confirm'),
+      text: l10n.save,
+      onPressed: _confirm,
+    );
+
+    final wheels = _showWheels
+        ? _MonthYearWheelsOverlay(
+            firstDate: widget.firstDate,
+            lastDate: widget.lastDate,
+            month: _wheelMonth,
+            year: _wheelYear,
+            localeTag: localeTag,
+            onMonthChanged: (m) => setState(() => _wheelMonth = m),
+            onYearChanged: (y) => setState(() => _wheelYear = y),
+            onCancel: _cancelWheels,
+            onApply: _applyWheels,
+          )
+        : null;
+
+    if (widget.presentation == OverlayFormPresentation.fullScreen) {
+      return Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: CustomAppBar(title: l10n.date),
+        body: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSize.screenPadding,
+                      AppSize.spaceMD,
+                      AppSize.screenPadding,
+                      AppSize.spaceMD,
+                    ),
+                    child: calendarBody,
+                  ),
+                ),
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSize.screenPadding,
+                      AppSize.spaceMD,
+                      AppSize.screenPadding,
+                      AppSize.spaceMD,
+                    ),
+                    child: confirmButton,
+                  ),
+                ),
+              ],
+            ),
+            if (wheels != null) wheels,
+          ],
+        ),
+      );
+    }
+
     return Material(
       child: SafeArea(
         child: Stack(
@@ -126,47 +220,15 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
                         ],
                       ),
                       AppSize.spaceMD.gap,
-                      _CalendarHeader(
-                        visibleMonth: _visibleMonth,
-                        localeTag: localeTag,
-                        onPrev: () => _shiftMonth(-1),
-                        onNext: () => _shiftMonth(1),
-                        onTitleTap: _openWheels,
-                      ),
-                      AppSize.spaceMD.gap,
-                      _MonthGrid(
-                        month: _visibleMonth,
-                        localeTag: localeTag,
-                        selected: _staged,
-                        today: today,
-                        firstDate: widget.firstDate,
-                        lastDate: widget.lastDate,
-                        onSelect: _selectDay,
-                        onSwipe: _shiftMonth,
-                      ),
+                      calendarBody,
                       AppSize.spaceLG.gap,
-                      AppButton.primary(
-                        key: const ValueKey('voucher-date-confirm'),
-                        text: l10n.save,
-                        onPressed: _confirm,
-                      ),
+                      confirmButton,
                     ],
                   ),
                 );
               },
             ),
-            if (_showWheels)
-              _MonthYearWheelsOverlay(
-                firstDate: widget.firstDate,
-                lastDate: widget.lastDate,
-                month: _wheelMonth,
-                year: _wheelYear,
-                localeTag: localeTag,
-                onMonthChanged: (m) => setState(() => _wheelMonth = m),
-                onYearChanged: (y) => setState(() => _wheelYear = y),
-                onCancel: _cancelWheels,
-                onApply: _applyWheels,
-              ),
+            if (wheels != null) wheels,
           ],
         ),
       ),

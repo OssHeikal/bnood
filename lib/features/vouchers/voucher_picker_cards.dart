@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
@@ -95,11 +96,7 @@ class VoucherPickerItemCard extends StatelessWidget {
         shape: AppShape.superellipse(radius: AppSize.radiusSM),
         clipBehavior: Clip.antiAlias,
         child: Center(
-          child: itemSemanticIconWidget(
-            iconKey: iconName,
-            color: accent,
-            size: AppSize.iconSmall,
-          ),
+          child: itemSemanticIconWidget(iconKey: iconName, color: accent, size: AppSize.iconSmall),
         ),
       ),
       title: name,
@@ -114,11 +111,13 @@ class VoucherPickerCraftsmanCard extends StatelessWidget {
     required this.trade,
     required this.selected,
     required this.onTap,
+    this.linkedToClient = false,
     this.showDivider = true,
   });
 
   final String name;
   final String? trade;
+  final bool linkedToClient;
   final bool selected;
   final VoidCallback onTap;
   final bool showDivider;
@@ -129,6 +128,7 @@ class VoucherPickerCraftsmanCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final subtitleText = trade?.trim();
+    final l10n = AppLocalizations.of(context);
     return EntityPickerOptionRow(
       selected: selected,
       onSelect: onTap,
@@ -140,6 +140,7 @@ class VoucherPickerCraftsmanCard extends StatelessWidget {
       subtitle: subtitleText != null && subtitleText.isNotEmpty
           ? Text(subtitleText, maxLines: 1, overflow: TextOverflow.ellipsis)
           : null,
+      trailing: linkedToClient ? _LinkedToClientBadge(label: l10n.voucherProviderLinkedBadge) : null,
     );
   }
 }
@@ -151,11 +152,13 @@ class VoucherPickerSupplierCard extends StatelessWidget {
     required this.phone,
     required this.selected,
     required this.onTap,
+    this.linkedToClient = false,
     this.showDivider = true,
   });
 
   final String name;
   final String? phone;
+  final bool linkedToClient;
   final bool selected;
   final VoidCallback onTap;
   final bool showDivider;
@@ -166,6 +169,7 @@ class VoucherPickerSupplierCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final rawPhone = phone?.trim();
+    final l10n = AppLocalizations.of(context);
     return EntityPickerOptionRow(
       selected: selected,
       onSelect: onTap,
@@ -183,6 +187,29 @@ class VoucherPickerSupplierCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             )
           : null,
+      trailing: linkedToClient ? _LinkedToClientBadge(label: l10n.voucherProviderLinkedBadge) : null,
+    );
+  }
+}
+
+class _LinkedToClientBadge extends StatelessWidget {
+  const _LinkedToClientBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final text = context.text;
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: AppSize.screenPadding),
+      child: DecoratedBox(
+        decoration: BoxDecoration(color: colors.primaryTint, borderRadius: BorderRadius.circular(AppSize.radiusSM)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceSM, vertical: 2),
+          child: Text(label, style: text.caption.semiBold.setColor(colors.primaryDark)),
+        ),
+      ),
     );
   }
 }

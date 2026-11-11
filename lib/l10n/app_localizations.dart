@@ -992,6 +992,36 @@ abstract class AppLocalizations {
   /// **'Select an item'**
   String get voucherSelectItem;
 
+  /// No description provided for @voucherDiscardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard voucher?'**
+  String get voucherDiscardTitle;
+
+  /// No description provided for @voucherDiscardDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have unsaved changes. Leave without saving?'**
+  String get voucherDiscardDescription;
+
+  /// No description provided for @discard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get discard;
+
+  /// No description provided for @voucherProviderLinkedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked'**
+  String get voucherProviderLinkedBadge;
+
+  /// No description provided for @voucherLinkAgreementAmountOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreement amount (optional)'**
+  String get voucherLinkAgreementAmountOptional;
+
   /// No description provided for @voucherSelectCraftsman.
   ///
   /// In en, this message translates to:

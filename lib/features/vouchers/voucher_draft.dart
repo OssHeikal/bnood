@@ -17,6 +17,7 @@ class VoucherDraft {
     this.date,
     this.editingTransactionId,
     this.receiptImagePath,
+    this.providerLinkedToClient,
   });
 
   final String? clientId;
@@ -37,6 +38,9 @@ class VoucherDraft {
   final String? editingTransactionId;
   final String? receiptImagePath;
 
+  /// After picking a spend payee: whether client already has an agreement with that provider.
+  final bool? providerLinkedToClient;
+
   VoucherDraft copyWith({
     String? clientId,
     String? projectId,
@@ -55,9 +59,11 @@ class VoucherDraft {
     DateTime? date,
     String? editingTransactionId,
     String? receiptImagePath,
+    bool? providerLinkedToClient,
     bool clearCraftsman = false,
     bool clearSupplier = false,
     bool clearItem = false,
+    bool clearProviderLink = false,
   }) {
     return VoucherDraft(
       clientId: clientId ?? this.clientId,
@@ -79,6 +85,8 @@ class VoucherDraft {
       date: date ?? this.date,
       editingTransactionId: editingTransactionId ?? this.editingTransactionId,
       receiptImagePath: receiptImagePath ?? this.receiptImagePath,
+      providerLinkedToClient:
+          clearProviderLink ? null : (providerLinkedToClient ?? this.providerLinkedToClient),
     );
   }
 

@@ -33,6 +33,7 @@ import '../features/clients/movements_list_screen.dart';
 import '../features/statements/supplier_statement_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/statements/client_statement_screen.dart';
+import '../features/vouchers/voucher_screen.dart';
 import '../features/providers/provider_detail_screen.dart';
 import '../features/suppliers/craftsman_detail_screen.dart';
 import 'app_shell_directory_body.dart';
@@ -251,6 +252,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/craftsmen/:craftsmanId',
         builder: (_, state) => CraftsmanDetailScreen(craftsmanId: state.pathParameters['craftsmanId']!),
+      ),
+      GoRoute(
+        path: VoucherScreen.path,
+        builder: (_, __) => const VoucherScreen(),
       ),
     ],
   );

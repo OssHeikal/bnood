@@ -17,11 +17,17 @@ import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/contacts/contact_import_action.dart';
 import '../../core/widgets/custom_text_field.dart';
+import '../../core/widgets/overlay_form_presentation.dart';
 import 'inline_entity_create_shell.dart';
 
 class InlineCreateClientPage extends ConsumerStatefulWidget {
-  const InlineCreateClientPage({super.key, this.padForSystemChrome = true});
+  const InlineCreateClientPage({
+    super.key,
+    this.presentation = OverlayFormPresentation.inSheet,
+    this.padForSystemChrome = true,
+  });
 
+  final OverlayFormPresentation presentation;
   final bool padForSystemChrome;
 
   @override
@@ -81,6 +87,7 @@ class _InlineCreateClientPageState
     final l10n = AppLocalizations.of(context);
     return InlineEntityCreateShell(
       title: l10n.addClient,
+      presentation: widget.presentation,
       padForSystemChrome: widget.padForSystemChrome,
       body: Form(
         key: _formKey,
@@ -209,8 +216,13 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
 }
 
 class InlineCreateSupplierPage extends ConsumerStatefulWidget {
-  const InlineCreateSupplierPage({super.key, this.padForSystemChrome = true});
+  const InlineCreateSupplierPage({
+    super.key,
+    this.presentation = OverlayFormPresentation.inSheet,
+    this.padForSystemChrome = true,
+  });
 
+  final OverlayFormPresentation presentation;
   final bool padForSystemChrome;
 
   @override
@@ -278,6 +290,7 @@ class _InlineCreateSupplierPageState
     final l10n = AppLocalizations.of(context);
     return InlineEntityCreateShell(
       title: l10n.directoryAddSupplier,
+      presentation: widget.presentation,
       padForSystemChrome: widget.padForSystemChrome,
       body: Form(
         key: _formKey,
@@ -327,10 +340,12 @@ class _InlineCreateSupplierPageState
 class InlineCreateCraftsmanPage extends ConsumerStatefulWidget {
   const InlineCreateCraftsmanPage({
     super.key,
+    this.presentation = OverlayFormPresentation.inSheet,
     this.padForSystemChrome = true,
     this.preferContentHeight = false,
   });
 
+  final OverlayFormPresentation presentation;
   final bool padForSystemChrome;
   final bool preferContentHeight;
 
@@ -391,6 +406,7 @@ class _InlineCreateCraftsmanPageState
     final l10n = AppLocalizations.of(context);
     return InlineEntityCreateShell(
       title: l10n.directoryAddCraftsman,
+      presentation: widget.presentation,
       padForSystemChrome: widget.padForSystemChrome,
       preferContentHeight: widget.preferContentHeight,
       body: Form(

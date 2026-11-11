@@ -32,6 +32,7 @@ import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_list_tile.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/entity_picker_page.dart';
+import '../../core/widgets/overlay_form_presentation.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/custom_app_bar.dart';
@@ -40,6 +41,9 @@ import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/toast/app_tone.dart';
 import 'inline_create_routes.dart';
 import 'receipt_image_codec.dart';
+import 'voucher_item_create_page.dart';
+import 'voucher_provider_link.dart';
+import 'voucher_screen.dart';
 import 'voucher_date_sheet.dart';
 import 'voucher_draft.dart';
 import 'voucher_form_chrome.dart';
@@ -56,8 +60,17 @@ import 'voucher_remote_receipts.dart';
 import 'voucher_receipt_upload_errors.dart';
 import 'voucher_sheet_receipt.dart';
 
+enum VoucherSheetPresentation { modal, fullScreen }
+
+final GlobalKey<_VoucherSheetState> voucherSheetStateKey = GlobalKey<_VoucherSheetState>();
+
 class VoucherSheet extends ConsumerStatefulWidget {
-  const VoucherSheet({super.key});
+  const VoucherSheet({
+    super.key,
+    this.presentation = VoucherSheetPresentation.modal,
+  });
+
+  final VoucherSheetPresentation presentation;
 
   @override
   ConsumerState<VoucherSheet> createState() => _VoucherSheetState();
@@ -67,6 +80,11 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   final _formKey = GlobalKey<FormState>();
   final _amountCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
+  final _linkAmountCtrl = TextEditingController();
+  late VoucherDraft _baselineDraft;
+  var _baselineAmountText = '';
+  var _baselineDescText = '';
+  var _baselineReceiptPaths = <String>[];
   final _receiptRows = <VoucherSheetReceipt>[];
   final _pendingReceiptDeletes = <String>{};
   final _receiptPicker = VoucherReceiptPicker();
@@ -80,10 +98,54 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
 
   bool get _isEditing => ref.read(voucherDraftProvider).editingTransactionId != null;
 
+  OverlayFormPresentation get _nestedPresentation =>
+      widget.presentation == VoucherSheetPresentation.fullScreen
+          ? OverlayFormPresentation.fullScreen
+          : OverlayFormPresentation.inSheet;
+
+  bool get hasNestedRouteToPop {
+    final nav = Navigator.maybeOf(context);
+    return nav != null && nav.canPop();
+  }
+
+  bool hasUnsavedChanges() {
+    final draft = ref.read(voucherDraftProvider);
+    if (!voucherDraftsEqual(draft, _baselineDraft)) return true;
+    if (_amountCtrl.text.trim() != _baselineAmountText) return true;
+    if (_descCtrl.text.trim() != _baselineDescText) return true;
+    if (_linkAmountCtrl.text.trim().isNotEmpty) return true;
+    final paths = _receiptRows.map((r) => r.localPath).toList();
+    if (paths.length != _baselineReceiptPaths.length) return true;
+    for (var i = 0; i < paths.length; i++) {
+      if (paths[i] != _baselineReceiptPaths[i]) return true;
+    }
+  if (_pendingReceiptDeletes.isNotEmpty) return true;
+    return false;
+  }
+
+  void _closeVoucherRoute() {
+    if (widget.presentation == VoucherSheetPresentation.fullScreen) {
+      if (context.mounted) Navigator.of(context).pop();
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+  Future<int?> _inlineAgreementAmountPiastres() async {
+    final raw = _linkAmountCtrl.text.trim();
+    if (raw.isEmpty) return null;
+    final remote = ref.read(remoteVouchersEnabledProvider);
+    if (remote) {
+      return RemoteMoneyFormat.parseMajorInput(raw);
+    }
+    return MoneyFormat.parseEgpInput(raw);
+  }
+
   @override
   void initState() {
     super.initState();
     final draft = ref.read(voucherDraftProvider);
+    _baselineDraft = draft;
     if (draft.amountPiastres != null) {
       final remote = ref.read(remoteVouchersEnabledProvider);
       _amountCtrl.text = remote
@@ -91,11 +153,14 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           : _localAmountFieldText(draft.amountPiastres!);
     }
     _descCtrl.text = draft.description ?? '';
+    _baselineAmountText = _amountCtrl.text;
+    _baselineDescText = _descCtrl.text;
     _receiptRows.addAll(
       ReceiptImageCodec.decode(draft.receiptImagePath).map(
         (path) => VoucherSheetReceipt(localPath: path),
       ),
     );
+    _baselineReceiptPaths = _receiptRows.map((r) => r.localPath).toList();
     final remote = ref.read(remoteVouchersEnabledProvider);
     if (remote && draft.editingTransactionId != null) {
       _hydrateRemoteReceipts(draft.editingTransactionId!);
@@ -163,6 +228,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   void dispose() {
     _amountCtrl.dispose();
     _descCtrl.dispose();
+    _linkAmountCtrl.dispose();
     super.dispose();
   }
 
@@ -199,6 +265,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       MaterialPageRoute(
         builder: (_) => EntityPickerPage(
           title: l10n.navClients,
+          presentation: _nestedPresentation,
           entries: clients.map((c) => (c.id, c.name)).toList(),
           selectedId: draft.clientId,
           emptyTitle: l10n.homeNoActiveClientsTitle,
@@ -212,7 +279,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             onTap: onSelect,
             showDivider: showDivider,
           ),
-          onCreateRoute: () => const InlineCreateClientPage(),
+          onCreateRoute: () => InlineCreateClientPage(presentation: _nestedPresentation),
           onBeforeCreate: (ctx) => guardCreateActiveProject(ctx, ref),
         ),
       ),
@@ -222,8 +289,18 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final project = await repo.primaryActiveProject(picked);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
-        .copyWith(clientId: picked, clientLabel: client.name, projectId: project?.id, clearCraftsman: true);
-    setState(() => _clientPickerError = null);
+        .copyWith(
+          clientId: picked,
+          clientLabel: client.name,
+          projectId: project?.id,
+          clearCraftsman: true,
+          clearSupplier: true,
+          clearProviderLink: true,
+        );
+    setState(() {
+      _clientPickerError = null;
+      _linkAmountCtrl.clear();
+    });
   }
 
   Future<void> _pickClientRemote() async {
@@ -242,6 +319,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       MaterialPageRoute(
         builder: (_) => EntityPickerPage(
           title: l10n.navClients,
+          presentation: _nestedPresentation,
           entries: clients.map((c) => (c.client.id, c.client.name)).toList(),
           selectedId: draft.clientId,
           emptyTitle: l10n.homeNoActiveClientsTitle,
@@ -255,7 +333,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             onTap: onSelect,
             showDivider: showDivider,
           ),
-          onCreateRoute: () => const InlineCreateClientPage(),
+          onCreateRoute: () => InlineCreateClientPage(presentation: _nestedPresentation),
           onBeforeCreate: (ctx) => guardCreateActiveProject(ctx, ref),
         ),
       ),
@@ -267,8 +345,13 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           clientLabel: record.client.name,
           projectId: record.project.id,
           clearCraftsman: true,
+          clearSupplier: true,
+          clearProviderLink: true,
         );
-    setState(() => _clientPickerError = null);
+    setState(() {
+      _clientPickerError = null;
+      _linkAmountCtrl.clear();
+    });
   }
 
   Future<void> _pickItem() async {
@@ -291,6 +374,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       MaterialPageRoute(
         builder: (_) => EntityPickerPage(
           title: l10n.item,
+          presentation: _nestedPresentation,
           entries: items.map((i) => (i.id, i.name)).toList(),
           selectedId: draft.itemId,
           tileBuilder: (ctx, id, selected, onSelect, showDivider) {
@@ -304,7 +388,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
               showDivider: showDivider,
             );
           },
-          onCreateRoute: () => const InlineCreateItemPage(),
+          onCreateRoute: () => const VoucherItemCreatePage(),
         ),
       ),
     );
@@ -327,10 +411,12 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     if (!mounted) return;
     final draft = ref.read(voucherDraftProvider);
     final l10n = AppLocalizations.of(context);
+    const linked = <String>{};
     final picked = await Navigator.of(context).push<String>(
       MaterialPageRoute(
         builder: (_) => EntityPickerPage(
           title: l10n.supplier,
+          presentation: _nestedPresentation,
           entries: suppliers.map((s) => (s.id, s.name)).toList(),
           selectedId: draft.supplierId,
           searchKeys: suppliers.map((s) => s.phone ?? '').toList(),
@@ -339,12 +425,13 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             return VoucherPickerSupplierCard(
               name: s.name,
               phone: s.phone,
+              linkedToClient: linked.contains(s.id),
               selected: selected,
               onTap: onSelect,
               showDivider: showDivider,
             );
           },
-          onCreateRoute: () => const InlineCreateSupplierPage(),
+          onCreateRoute: () => InlineCreateSupplierPage(presentation: _nestedPresentation),
         ),
       ),
     );
@@ -352,19 +439,28 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final label = await resolveLocalSupplierLabel(ref.read, picked, cached: suppliers);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
-        .copyWith(supplierId: picked, supplierLabel: label);
-    setState(() {});
+        .copyWith(
+          supplierId: picked,
+          supplierLabel: label,
+          providerLinkedToClient: linked.contains(picked),
+        );
+    setState(() => _linkAmountCtrl.clear());
   }
 
   Future<void> _pickSupplierRemote() async {
     final suppliers = await ref.read(appProvidersRepositoryProvider).listAllSuppliers();
     if (!mounted) return;
     final draft = ref.read(voucherDraftProvider);
+    final clientId = draft.clientId;
+    final linked = clientId == null
+        ? const <String>{}
+        : await linkedProviderIdsForClient(ref, clientId, remote: true);
     final l10n = AppLocalizations.of(context);
     final picked = await Navigator.of(context).push<String>(
       MaterialPageRoute(
         builder: (_) => EntityPickerPage(
           title: l10n.supplier,
+          presentation: _nestedPresentation,
           entries: suppliers.map((s) => (s.id, s.name)).toList(),
           selectedId: draft.supplierId,
           searchKeys: suppliers.map((s) => s.phone ?? '').toList(),
@@ -373,12 +469,13 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             return VoucherPickerSupplierCard(
               name: s.name,
               phone: s.phone,
+              linkedToClient: linked.contains(s.id),
               selected: selected,
               onTap: onSelect,
               showDivider: showDivider,
             );
           },
-          onCreateRoute: () => const InlineCreateSupplierPage(),
+          onCreateRoute: () => InlineCreateSupplierPage(presentation: _nestedPresentation),
         ),
       ),
     );
@@ -386,8 +483,12 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final label = await resolveRemoteProviderLabel(ref.read, picked, cached: suppliers);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
-        .copyWith(supplierId: picked, supplierLabel: label);
-    setState(() {});
+        .copyWith(
+          supplierId: picked,
+          supplierLabel: label,
+          providerLinkedToClient: linked.contains(picked),
+        );
+    setState(() => _linkAmountCtrl.clear());
   }
 
   Future<void> _pickCraftsman() async {
@@ -403,6 +504,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final craftsmen = await ref.read(repositoryProvider).watchActiveCraftsmen().first;
     if (!mounted) return;
     final l10n = AppLocalizations.of(context);
+    final linked = await linkedCraftsmanIdsForProject(ref, draft.projectId!);
     if (craftsmen.isEmpty) {
       AppToaster.show(l10n.voucherSelectCraftsman, kind: ToastKind.warning);
       return;
@@ -411,6 +513,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       MaterialPageRoute(
         builder: (_) => EntityPickerPage(
           title: l10n.craftsman,
+          presentation: _nestedPresentation,
           entries: craftsmen.map((c) => (c.id, c.name)).toList(),
           selectedId: draft.craftsmanId,
           searchKeys: craftsmen.map((c) => c.trade ?? '').toList(),
@@ -419,12 +522,13 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             return VoucherPickerCraftsmanCard(
               name: c.name,
               trade: c.trade,
+              linkedToClient: linked.contains(c.id),
               selected: selected,
               onTap: onSelect,
               showDivider: showDivider,
             );
           },
-          onCreateRoute: () => const InlineCreateCraftsmanPage(),
+          onCreateRoute: () => InlineCreateCraftsmanPage(presentation: _nestedPresentation),
         ),
       ),
     );
@@ -432,8 +536,15 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final label = await resolveLocalCraftsmanLabel(ref.read, picked, cached: craftsmen);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
-        .copyWith(craftsmanId: picked, craftsmanLabel: label);
-    setState(() => _craftsmanPickerError = null);
+        .copyWith(
+          craftsmanId: picked,
+          craftsmanLabel: label,
+          providerLinkedToClient: linked.contains(picked),
+        );
+    setState(() {
+      _craftsmanPickerError = null;
+      _linkAmountCtrl.clear();
+    });
   }
 
   Future<void> _pickCraftsmanRemote() async {
@@ -443,6 +554,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       return;
     }
     final craftsmen = await ref.read(appProvidersRepositoryProvider).listAllCraftsmen();
+    final linked = await linkedProviderIdsForClient(ref, draft.clientId!, remote: true);
     if (!mounted) return;
     final l10n = AppLocalizations.of(context);
     if (craftsmen.isEmpty) {
@@ -453,6 +565,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       MaterialPageRoute(
         builder: (_) => EntityPickerPage(
           title: l10n.craftsman,
+          presentation: _nestedPresentation,
           entries: craftsmen.map((c) => (c.id, c.name)).toList(),
           selectedId: draft.craftsmanId,
           searchKeys: craftsmen.map((c) => '').toList(),
@@ -461,12 +574,13 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             return VoucherPickerCraftsmanCard(
               name: c.name,
               trade: null,
+              linkedToClient: linked.contains(c.id),
               selected: selected,
               onTap: onSelect,
               showDivider: showDivider,
             );
           },
-          onCreateRoute: () => const InlineCreateCraftsmanPage(),
+          onCreateRoute: () => InlineCreateCraftsmanPage(presentation: _nestedPresentation),
         ),
       ),
     );
@@ -474,8 +588,15 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final label = await resolveRemoteProviderLabel(ref.read, picked, cached: craftsmen);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
-        .copyWith(craftsmanId: picked, craftsmanLabel: label);
-    setState(() => _craftsmanPickerError = null);
+        .copyWith(
+          craftsmanId: picked,
+          craftsmanLabel: label,
+          providerLinkedToClient: linked.contains(picked),
+        );
+    setState(() {
+      _craftsmanPickerError = null;
+      _linkAmountCtrl.clear();
+    });
   }
 
   bool _validatePickers(VoucherDraft draft, AppLocalizations l10n) {
@@ -533,7 +654,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
         );
       }
       AppToaster.show(l10n.delete, kind: ToastKind.success);
-      if (mounted) Navigator.of(context, rootNavigator: true).pop();
+      if (mounted) _closeVoucherRoute();
     } on AuthApiException catch (e) {
       if (mounted) AppToaster.show(e.message, kind: ToastKind.failure);
     } catch (e) {
@@ -564,7 +685,16 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     setState(() => _saving = true);
     final repo = ref.read(repositoryProvider);
     final date = draft.date ?? DateTime.now();
+    final needsProviderLink = draft.kind == 'spend' && draft.providerLinkedToClient != true;
+    final linkAmount = needsProviderLink ? await _inlineAgreementAmountPiastres() : null;
     try {
+      if (needsProviderLink) {
+        await ensureVoucherProviderAgreementBeforeSave(
+          ref: ref,
+          draft: draft,
+          agreementAmountPiastres: linkAmount,
+        );
+      }
       if (remote) {
         final result = await saveRemoteVoucher(
           context: context,
@@ -610,7 +740,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           return;
         }
         AppToaster.show(l10n.save, kind: ToastKind.success);
-        if (mounted) Navigator.of(context, rootNavigator: true).pop();
+        if (mounted) _closeVoucherRoute();
         return;
       }
       if (draft.editingTransactionId != null) {
@@ -644,12 +774,6 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           craftsmanId: draft.expenseType == 'labor' ? draft.craftsmanId : null,
         );
       }
-      if (draft.kind == 'spend' &&
-          draft.expenseType == 'labor' &&
-          draft.craftsmanId != null &&
-          draft.projectId != null) {
-        await repo.ensureProjectCraftsmanLink(projectId: draft.projectId!, craftsmanId: draft.craftsmanId!);
-      }
       refreshAfterTransactionMutation(
         ref,
         clientId: draft.clientId,
@@ -657,7 +781,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
         craftsmanId: draft.expenseType == 'labor' ? draft.craftsmanId : null,
       );
       AppToaster.show(l10n.save, kind: ToastKind.success);
-      if (mounted) Navigator.of(context, rootNavigator: true).pop();
+      if (mounted) _closeVoucherRoute();
     } catch (e) {
       AppToaster.show('$e', kind: ToastKind.failure);
     } finally {
@@ -674,6 +798,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           initial: initial,
           firstDate: VoucherTransactionDateBounds.first,
           lastDate: VoucherTransactionDateBounds.last,
+          presentation: _nestedPresentation,
         ),
       ),
     );
@@ -818,12 +943,16 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final viewInsets = MediaQuery.viewInsetsOf(context);
     final safeBottom = viewPadding.bottom > 0 ? viewPadding.bottom : AppSize.spaceMD;
     final footerBottom = viewInsets.bottom > 0 ? AppSize.spaceMD : safeBottom;
+    final fullScreen = widget.presentation == VoucherSheetPresentation.fullScreen;
+    final showLinkAmount = isSpend &&
+        draft.providerLinkedToClient != true &&
+        ((draft.expenseType == 'labor' && draft.craftsmanId != null) ||
+            (draft.expenseType == 'materials' && draft.supplierId != null));
 
-    return Material(
-      color: context.colors.surface,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+    final body = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (!fullScreen)
           Padding(
             padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, 0),
             child: Column(
@@ -836,7 +965,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
                     Expanded(child: Text(title, style: context.text.title)),
                     IconButton(
                       visualDensity: VisualDensity.compact,
-                      onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                      onPressed: _closeVoucherRoute,
                       icon: const Icon(Icons.close),
                     ),
                   ],
@@ -844,7 +973,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
               ],
             ),
           ),
-          Expanded(
+        Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(
                 AppSize.screenPadding,
@@ -892,10 +1021,12 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
                                 expenseType: value,
                                 clearCraftsman: true,
                                 clearSupplier: true,
+                                clearProviderLink: true,
                               );
                               setState(() {
                                 _craftsmanPickerError = null;
                                 _itemPickerError = null;
+                                _linkAmountCtrl.clear();
                               });
                             },
                           ),
@@ -920,6 +1051,17 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
                               placeholder: l10n.voucherSelectCraftsman,
                               onTap: _pickCraftsman,
                               errorMessage: _craftsmanPickerError,
+                            ),
+                          if (showLinkAmount)
+                            CustomTextField(
+                              controller: _linkAmountCtrl,
+                              label: l10n.voucherLinkAgreementAmountOptional,
+                              placeholder: l10n.amountHint,
+                              type: AppInputType.currency,
+                              ltrValue: true,
+                              suffix: Text(MoneyFormat.currencyLabel),
+                              fieldHeight: AppSize.fieldHeightComfortable,
+                              textInputAction: TextInputAction.next,
                             ),
                         ],
                         CustomTextField(
@@ -1043,7 +1185,20 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
             ),
           ),
         ],
-      ),
+      );
+
+    if (fullScreen) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(child: body),
+        ],
+      );
+    }
+
+    return Material(
+      color: context.colors.surface,
+      child: body,
     );
   }
 }

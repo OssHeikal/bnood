@@ -15,7 +15,15 @@ import 'item_mutation_actions.dart';
 import 'widgets/item_visual_pickers.dart';
 
 class ItemCreateSheet extends ConsumerStatefulWidget {
-  const ItemCreateSheet({super.key});
+  const ItemCreateSheet({
+    super.key,
+    this.returnCreatedItemId = false,
+    this.showSheetChrome = true,
+  });
+
+  final bool returnCreatedItemId;
+  /// When false, expect an outer [Scaffold] app bar (voucher full-screen create).
+  final bool showSheetChrome;
 
   @override
   ConsumerState<ItemCreateSheet> createState() => _ItemCreateSheetState();
@@ -52,7 +60,9 @@ class _ItemCreateSheetState extends ConsumerState<ItemCreateSheet> {
         iconKey: _iconKey,
         colorKey: _colorKey,
       );
-      if (item != null && mounted) Navigator.pop(context);
+      if (item != null && mounted) {
+        Navigator.pop(context, widget.returnCreatedItemId ? item.id : null);
+      }
     } on AuthApiException catch (e) {
       if (!mounted) return;
       final l10n = AppLocalizations.of(context);
@@ -69,22 +79,26 @@ class _ItemCreateSheetState extends ConsumerState<ItemCreateSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final catalog = ref.watch(itemIconsCatalogProvider);
+    final viewPadding = MediaQuery.viewPaddingOf(context);
+    final bottomPad = widget.showSheetChrome ? AppSize.spaceMD : AppSize.spaceMD + viewPadding.bottom;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
+      padding: EdgeInsets.fromLTRB(
         AppSize.screenPadding,
-        AppSize.spaceSM,
+        widget.showSheetChrome ? AppSize.spaceSM : AppSize.spaceMD,
         AppSize.screenPadding,
-        AppSize.spaceMD,
+        bottomPad,
       ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SheetDragHandle(),
-            AppSize.spaceMD.gap,
-            Text(l10n.itemCreateSheetTitle, style: context.text.title),
-            AppSize.spaceMD.gap,
+            if (widget.showSheetChrome) ...[
+              const SheetDragHandle(),
+              AppSize.spaceMD.gap,
+              Text(l10n.itemCreateSheetTitle, style: context.text.title),
+              AppSize.spaceMD.gap,
+            ],
             Form(
               key: _formKey,
               autovalidateMode:
