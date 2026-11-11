@@ -39,6 +39,20 @@ void main() {
       expect(RemoteMoneyFormat.formatMinor(statement.items.first.spentMinor), '5,000 EGP');
     });
 
+    test('parses period_start from API', () {
+      final statement = AppClientStatement.fromDataJson({
+        'period_start': '2025-03-10',
+        'from': '2025-03-10',
+        'to': '2026-11-09',
+        'received': 0,
+        'spent': 0,
+        'remaining': 0,
+        'items': [],
+      });
+      expect(statement.periodStart, '2025-03-10');
+      expect(statement.from, '2025-03-10');
+    });
+
     test('opening and closing balance fields optional with fallbacks', () {
       final statement = AppClientStatement.fromDataJson({
         'from': '2026-01-01',
@@ -108,6 +122,20 @@ void main() {
       expect(uri.queryParameters['from'], '2026-01-01');
       expect(uri.queryParameters['to'], '2026-01-31');
       expect(uri.path, endsWith('/clients/c1/statement'));
+      api.close();
+    });
+
+    test('getClientStatement omits from query param when null', () async {
+      late Uri uri;
+      final api = _clientsApi((options) async {
+        uri = options.uri;
+        return jsonResponse(
+          '{"success":true,"data":{"period_start":"2026-09-15","from":"2026-09-15","to":"2026-11-09","received":0,"spent":0,"remaining":0,"items":[]}}',
+        );
+      });
+      await api.getClientStatement(clientId: 'c1', to: '2026-11-09');
+      expect(uri.queryParameters.containsKey('from'), isFalse);
+      expect(uri.queryParameters['to'], '2026-11-09');
       api.close();
     });
 

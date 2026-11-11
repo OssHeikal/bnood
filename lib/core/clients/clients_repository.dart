@@ -69,7 +69,7 @@ class ClientsRepository {
 
   Future<AppClientStatement> getClientStatement({
     required String clientId,
-    required String from,
+    String? from,
     required String to,
   }) =>
       _api.getClientStatement(clientId: clientId, from: from, to: to);
@@ -79,7 +79,7 @@ class ClientsRepository {
 
   Future<ClientStatementPdf> downloadClientStatementPdf({
     required String clientId,
-    required String from,
+    String? from,
     required String to,
   }) =>
       _api.downloadClientStatementPdf(clientId: clientId, from: from, to: to);

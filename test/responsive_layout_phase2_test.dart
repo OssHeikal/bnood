@@ -239,6 +239,29 @@ void main() {
       } else {
         expect(find.byType(BnoodTwoColumn), findsOneWidget);
         expect(_hasMaxWidth(tester, BnoodLayout.pageMaxWidth), isTrue);
+        expect(find.byKey(HomeScreen.primaryColumnKey), findsOneWidget);
+        expect(find.byKey(HomeScreen.providersColumnKey), findsOneWidget);
+        expect(
+          find.descendant(
+            of: find.byKey(HomeScreen.providersColumnKey),
+            matching: find.text('Active clients'),
+          ),
+          findsNothing,
+        );
+        expect(
+          find.descendant(
+            of: find.byKey(HomeScreen.providersColumnKey),
+            matching: find.text('Craftsmen with recent labor'),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(
+            of: find.byKey(HomeScreen.primaryColumnKey),
+            matching: find.text('Active clients'),
+          ),
+          findsOneWidget,
+        );
       }
     });
 

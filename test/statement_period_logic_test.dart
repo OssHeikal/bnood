@@ -63,4 +63,20 @@ void main() {
     expect(b.end.isBefore(DateTime.now().add(const Duration(days: 1))), isTrue);
     expect(b.start.month, 1);
   });
+
+  test('all time bounds use client createdAt when no transactions', () {
+    final fallback = DateTime(2024, 8, 20);
+    final b = StatementPeriodLogic.allTimeBounds(const [], emptyFallbackStart: fallback);
+    expect(b.start.year, 2024);
+    expect(b.start.month, 8);
+    expect(b.start.day, 20);
+  });
+
+  test('parseStatementApiDate reads Y-m-d', () {
+    final d = StatementPeriodLogic.parseStatementApiDate('2026-09-15');
+    expect(d, isNotNull);
+    expect(d!.year, 2026);
+    expect(d.month, 9);
+    expect(d.day, 15);
+  });
 }

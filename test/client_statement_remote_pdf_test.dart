@@ -21,7 +21,7 @@ void main() {
     dio.httpClientAdapter = ScriptedDioAdapter((options) async {
       if (options.path.endsWith('/statement') && !options.path.endsWith('.pdf')) {
         return jsonResponse(
-          '{"success":true,"data":{"from":"2000-01-01","to":"2026-11-09","received":0,"spent":0,"remaining":0,"items":[]}}',
+          '{"success":true,"data":{"period_start":"2026-09-15","from":"2026-09-15","to":"2026-11-09","received":0,"spent":0,"remaining":0,"items":[]}}',
         );
       }
       if (options.path.endsWith('/clients/c1')) {

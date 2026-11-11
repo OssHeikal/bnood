@@ -89,10 +89,12 @@ void main() {
     addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
 
     final dio = createAppDio(FakeSessionStore(token: 'tok'));
+    Uri? statementRequestUri;
     dio.httpClientAdapter = ScriptedDioAdapter((options) async {
       if (options.path.endsWith('/statement') && !options.path.endsWith('.pdf')) {
+        statementRequestUri = options.uri;
         return jsonResponse(
-          '{"success":true,"data":{"from":"2000-01-01","to":"2026-11-09","received":1000,"spent":500,"remaining":500,"items":[]}}',
+          '{"success":true,"data":{"period_start":"2026-09-15","from":"2026-09-15","to":"2026-11-09","received":1000,"spent":500,"remaining":500,"items":[]}}',
         );
       }
       if (options.path.contains('/clients/c1')) {
@@ -135,5 +137,8 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.text('عميل كشف'), findsOneWidget);
     expect(find.byType(FilterChip), findsNWidgets(5));
+    expect(statementRequestUri, isNotNull);
+    expect(statementRequestUri!.queryParameters.containsKey('from'), isFalse);
+    expect(statementRequestUri!.queryParameters['to'], isNotEmpty);
   });
 }

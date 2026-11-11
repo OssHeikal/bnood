@@ -26,16 +26,43 @@ abstract final class StatementPeriodLogic {
     );
   }
 
-  /// Online statements: server accepts `from` not before 2000-01-01.
-  static PeriodBounds remoteAllTimeBounds([DateTime? referenceUtc]) => PeriodBounds.normalize(
-        start: DateTime(2000, 1, 1),
-        end: cairoTodayDate(referenceUtc),
-      );
+  /// Whole-period preset: natural client start through Cairo today (remote API).
+  static PeriodBounds wholePeriodBounds({DateTime? naturalStart, DateTime? referenceUtc}) {
+    final today = cairoTodayDate(referenceUtc);
+    final rawStart = naturalStart ?? today;
+    final startDay = DateTime(rawStart.year, rawStart.month, rawStart.day);
+    final start = startDay.isAfter(today) ? today : startDay;
+    return PeriodBounds.normalize(start: start, end: today);
+  }
 
-  static PeriodBounds allTimeBounds(Iterable<Transaction> rows, [DateTime? referenceUtc]) {
+  static DateTime cairoCalendarDayFromUtc(DateTime utc) {
+    final cairo = cairoLocalNow(utc.toUtc());
+    return DateTime(cairo.year, cairo.month, cairo.day);
+  }
+
+  static DateTime? parseStatementApiDate(String? ymd) {
+    if (ymd == null || ymd.isEmpty) return null;
+    final parts = ymd.split('-');
+    if (parts.length != 3) return null;
+    final y = int.tryParse(parts[0]);
+    final m = int.tryParse(parts[1]);
+    final d = int.tryParse(parts[2]);
+    if (y == null || m == null || d == null) return null;
+    return DateTime(y, m, d);
+  }
+
+  static PeriodBounds allTimeBounds(
+    Iterable<Transaction> rows, {
+    DateTime? emptyFallbackStart,
+    DateTime? referenceUtc,
+  }) {
     final today = cairoTodayDate(referenceUtc);
     if (rows.isEmpty) {
-      return PeriodBounds.normalize(start: today, end: today);
+      final fallback = emptyFallbackStart != null
+          ? DateTime(emptyFallbackStart.year, emptyFallbackStart.month, emptyFallbackStart.day)
+          : today;
+      final start = fallback.isAfter(today) ? today : fallback;
+      return PeriodBounds.normalize(start: start, end: today);
     }
     var min = rows.first.date;
     var max = rows.first.date;

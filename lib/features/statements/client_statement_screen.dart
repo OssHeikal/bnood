@@ -44,11 +44,14 @@ class ClientStatementScreen extends ConsumerStatefulWidget {
 class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   final _sharePdfButtonKey = GlobalKey();
   StatementPeriodPreset _preset = StatementPeriodPreset.all;
-  late PeriodBounds _bounds = StatementPeriodLogic.remoteAllTimeBounds();
+  late PeriodBounds _bounds = StatementPeriodLogic.wholePeriodBounds();
   StatementExportRecord? _lastExport;
   bool _exporting = false;
   bool _prefsAvailable = true;
   List<Transaction> _allRows = const [];
+  DateTime? _remoteNaturalStart;
+  DateTime? _clientCreatedAtDay;
+  Client? _localClient;
   Future<_StatementData>? _loadFuture;
   Future<_RemoteStatementData>? _remoteLoadFuture;
 
@@ -105,11 +108,45 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
       StatementPeriodPreset.today => StatementPeriodLogic.todayBounds(),
       StatementPeriodPreset.month => StatementPeriodLogic.monthBounds(),
       StatementPeriodPreset.all => remote
-          ? StatementPeriodLogic.remoteAllTimeBounds()
-          : StatementPeriodLogic.allTimeBounds(_allRows),
+          ? StatementPeriodLogic.wholePeriodBounds(
+              naturalStart: _remoteNaturalStart ?? _clientCreatedAtDay,
+            )
+          : StatementPeriodLogic.allTimeBounds(
+              _allRows,
+              emptyFallbackStart: _localClient?.createdAt,
+            ),
       StatementPeriodPreset.sinceLastExport => StatementPeriodLogic.sinceLastExportBounds(_lastExport) ?? _bounds,
       StatementPeriodPreset.custom => _bounds,
     };
+  }
+
+  ({String? from, String to}) _remoteStatementQuery() {
+    final apiBounds = StatementPeriodLogic.clampForRemoteApi(_bounds);
+    final to = _formatStatementDate(apiBounds.end);
+    if (_preset == StatementPeriodPreset.all) {
+      if (_remoteNaturalStart != null) {
+        return (from: _formatStatementDate(_remoteNaturalStart!), to: to);
+      }
+      return (from: null, to: to);
+    }
+    return (from: _formatStatementDate(apiBounds.start), to: to);
+  }
+
+  void _applyRemoteWholePeriodBounds(AppClientStatement statement, DateTime clientCreatedDay) {
+    if (_preset != StatementPeriodPreset.all) return;
+    final periodStart = StatementPeriodLogic.parseStatementApiDate(statement.periodStart) ??
+        StatementPeriodLogic.parseStatementApiDate(statement.from) ??
+        clientCreatedDay;
+    final effectiveTo = StatementPeriodLogic.parseStatementApiDate(statement.to) ?? StatementPeriodLogic.cairoTodayDate();
+    final nextNatural = periodStart;
+    final nextBounds = PeriodBounds.normalize(start: periodStart, end: effectiveTo);
+    if (_remoteNaturalStart == nextNatural &&
+        _bounds.start == nextBounds.start &&
+        _bounds.end == nextBounds.end) {
+      return;
+    }
+    _remoteNaturalStart = nextNatural;
+    _bounds = nextBounds;
   }
 
   static String _formatStatementDate(DateTime date) {
@@ -292,14 +329,22 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   Future<_RemoteStatementData> _loadRemote() async {
     final clientsRepo = ref.read(clientsRepositoryProvider);
     final record = await clientsRepo.getClient(widget.clientId);
-    final apiBounds = StatementPeriodLogic.clampForRemoteApi(_bounds);
-    final from = _formatStatementDate(apiBounds.start);
-    final to = _formatStatementDate(apiBounds.end);
+    final clientCreatedDay = StatementPeriodLogic.cairoCalendarDayFromUtc(record.client.createdAt);
+    _clientCreatedAtDay ??= clientCreatedDay;
+    if (_preset == StatementPeriodPreset.all && _remoteNaturalStart == null) {
+      _bounds = StatementPeriodLogic.wholePeriodBounds(naturalStart: clientCreatedDay);
+    }
+    final query = _remoteStatementQuery();
     final statement = await clientsRepo.getClientStatement(
       clientId: widget.clientId,
-      from: from,
-      to: to,
+      from: query.from,
+      to: query.to,
     );
+    if (mounted) {
+      setState(() => _applyRemoteWholePeriodBounds(statement, clientCreatedDay));
+    } else {
+      _applyRemoteWholePeriodBounds(statement, clientCreatedDay);
+    }
     Map<String, CatalogItem> catalogById = const {};
     try {
       catalogById = await ref.read(itemsCatalogByIdProvider.future);
@@ -315,10 +360,16 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
 
   Future<_StatementData> _load(BnoodRepository repo) async {
     final client = await repo.getClient(widget.clientId);
+    _localClient = client;
     final project = await repo.primaryActiveProject(widget.clientId);
     if (project == null) throw StateError('missing');
     final rows = await repo.transactionsForProject(project.id);
     _allRows = rows;
+    if (mounted && _preset == StatementPeriodPreset.all) {
+      setState(() {
+        _bounds = StatementPeriodLogic.allTimeBounds(_allRows, emptyFallbackStart: client.createdAt);
+      });
+    }
     final totals = LedgerMath.periodTotals(projectRows: rows, periodStart: _bounds.start, periodEnd: _bounds.end);
     final periodSpend = rows.where((t) => t.kind == 'spend' && _bounds.containsLocalDate(t.date)).toList();
     final periodReceive = rows.where((t) => t.kind == 'receive' && _bounds.containsLocalDate(t.date)).toList();
@@ -363,14 +414,12 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
     if (_exporting) return;
     setState(() => _exporting = true);
     try {
-      final apiBounds = StatementPeriodLogic.clampForRemoteApi(_bounds);
-      final from = _formatStatementDate(apiBounds.start);
-      final to = _formatStatementDate(apiBounds.end);
+      final query = _remoteStatementQuery();
       try {
         final pdf = await ref.read(clientsRepositoryProvider).downloadClientStatementPdf(
               clientId: widget.clientId,
-              from: from,
-              to: to,
+              from: query.from,
+              to: query.to,
             );
         await _shareDownloadedPdf(pdf.bytes, pdf.fileName, l10n);
       } on AuthApiException catch (e, st) {

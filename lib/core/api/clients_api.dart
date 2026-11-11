@@ -169,11 +169,18 @@ class ClientsApi {
     });
   }
 
-  Future<AppClientStatement> getClientStatement({required String clientId, required String from, required String to}) {
+  Future<AppClientStatement> getClientStatement({
+    required String clientId,
+    String? from,
+    required String to,
+  }) {
     return _guard(() async {
       final response = await _dio.get<Map<String, dynamic>>(
         '$_prefix/$clientId/statement',
-        queryParameters: {'from': from, 'to': to},
+        queryParameters: {
+          if (from != null) 'from': from,
+          'to': to,
+        },
         options: Options(extra: _authenticatedExtra),
       );
       return ApiResponseParser.expectData(response, (json) => AppClientStatement.fromDataJson(json ?? const {}));
@@ -192,13 +199,16 @@ class ClientsApi {
 
   Future<ClientStatementPdf> downloadClientStatementPdf({
     required String clientId,
-    required String from,
+    String? from,
     required String to,
   }) {
     return _guard(() async {
       final response = await _dio.get<List<int>>(
         '$_prefix/$clientId/statement.pdf',
-        queryParameters: {'from': from, 'to': to},
+        queryParameters: {
+          if (from != null) 'from': from,
+          'to': to,
+        },
         options: Options(
           extra: _authenticatedExtra,
           responseType: ResponseType.bytes,

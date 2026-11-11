@@ -68,11 +68,14 @@ class AppClientStatement {
     required this.closingBalanceMinor,
     required this.remainingMinor,
     required this.items,
+    this.periodStart,
     this.issuer,
   });
 
   final String from;
   final String to;
+  /// Earliest statement day for this client (`period_start` from API).
+  final String? periodStart;
   final int openingBalanceMinor;
   final int receivedMinor;
   final int spentMinor;
@@ -100,6 +103,7 @@ class AppClientStatement {
     return AppClientStatement(
       from: json['from'] as String? ?? '',
       to: json['to'] as String? ?? '',
+      periodStart: _readOptionalString(json['period_start']),
       openingBalanceMinor: opening,
       receivedMinor: _readMinor(json['received']),
       spentMinor: _readMinor(json['spent']),

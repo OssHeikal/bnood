@@ -38,6 +38,9 @@ import '../suppliers/widgets/directory_person_card.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
+  static const primaryColumnKey = Key('home-column-primary');
+  static const providersColumnKey = Key('home-column-providers');
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
@@ -78,7 +81,7 @@ class HomeScreen extends ConsumerWidget {
             ),
           ];
 
-          final snapshotChildren = <Widget>[
+          final activeClientsChildren = <Widget>[
             HomeSectionHeader(
               title: l10n.activeClients,
               seeAllLabel: seeAllLabelWithCount(
@@ -143,7 +146,9 @@ class HomeScreen extends ConsumerWidget {
                 );
               },
             ),
-            AppSize.spaceXL.gap,
+          ];
+
+          final providerSnapshotChildren = <Widget>[
             HomeSectionHeader(
               title: l10n.homeCraftsmenSection,
               seeAllLabel: seeAllLabelWithCount(
@@ -353,6 +358,12 @@ class HomeScreen extends ConsumerWidget {
             ],
           ];
 
+          final snapshotChildren = <Widget>[
+            ...activeClientsChildren,
+            AppSize.spaceXL.gap,
+            ...providerSnapshotChildren,
+          ];
+
           return Scaffold(
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
@@ -389,17 +400,23 @@ class HomeScreen extends ConsumerWidget {
                       ...summaryChildren,
                       AppSize.spaceXL.gap,
                       ...snapshotChildren,
-                    ] else
+                    ]                     else
                       BnoodTwoColumn(
                         spacing: AppSize.spaceLG,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         start: Column(
+                          key: primaryColumnKey,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: summaryChildren,
+                          children: [
+                            ...summaryChildren,
+                            AppSize.spaceXL.gap,
+                            ...activeClientsChildren,
+                          ],
                         ),
                         end: Column(
+                          key: providersColumnKey,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: snapshotChildren,
+                          children: providerSnapshotChildren,
                         ),
                       ),
                   ],
