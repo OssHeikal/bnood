@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/brand/app_brand_lockup.dart';
+import '../../../core/layout/bnood_form_route_canvas.dart';
 import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
@@ -36,11 +37,11 @@ class AuthFlowScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final insetBottom = MediaQuery.viewInsetsOf(context).bottom;
-    return HomeFoundationScope(
-      child: Builder(
-        builder: (context) {
-          final colors = context.colors;
-          return Scaffold(
+    return BnoodFormRouteCanvas(
+      child: HomeFoundationScope(
+        child: Builder(
+          builder: (context) {
+            return Scaffold(
             appBar: const CustomAppBar(),
             body: SafeArea(
               child: SingleChildScrollView(
@@ -77,8 +78,9 @@ class AuthFlowScaffold extends StatelessWidget {
                 ),
               ),
             ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

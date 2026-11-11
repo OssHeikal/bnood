@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
+import '../../core/layout/bnood_form_route_canvas.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/custom_app_bar.dart';
@@ -29,7 +30,8 @@ class InlineEntityCreateShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (presentation == OverlayFormPresentation.fullScreen) {
-      return Scaffold(
+      return BnoodFormRouteCanvas(
+        child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: CustomAppBar(title: title),
         body: Column(
@@ -59,6 +61,7 @@ class InlineEntityCreateShell extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       );
     }

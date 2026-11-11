@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
 import '../config/extensions/num_extensions.dart';
+import '../layout/bnood_form_route_canvas.dart';
 import '../config/extensions/text_style_extensions.dart';
 import '../config/theme/app_colors.dart';
 import '../config/theme/app_size.dart';
@@ -192,7 +193,8 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
     final footer = _createFooter(l10n, showCreateRow);
 
     if (widget.presentation == OverlayFormPresentation.fullScreen) {
-      return Scaffold(
+      return BnoodFormRouteCanvas(
+        child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: CustomAppBar(title: widget.title),
         body: Column(
@@ -211,6 +213,7 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
             Expanded(child: _listBody(l10n, indices, isCompletelyEmpty, isSearchEmpty)),
             if (footer != null) SafeArea(top: false, child: footer),
           ],
+        ),
         ),
       );
     }

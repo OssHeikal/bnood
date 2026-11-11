@@ -3,6 +3,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/layout/bnood_form_route_canvas.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/toast/app_tone.dart';
@@ -24,8 +25,9 @@ class VoucherScreen extends ConsumerWidget {
     final isEditing = draft.editingTransactionId != null;
     final title = isEditing ? l10n.edit : (isSpend ? l10n.voucherSpendTitle : l10n.voucherReceiveTitle);
 
-    return HomeFoundationScope(
-      child: PopScope(
+    return BnoodFormRouteCanvas(
+      child: HomeFoundationScope(
+        child: PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, result) async {
           if (didPop) return;
@@ -39,6 +41,7 @@ class VoucherScreen extends ConsumerWidget {
           body: VoucherSheet(
             key: voucherSheetStateKey,
             presentation: VoucherSheetPresentation.fullScreen,
+          ),
           ),
         ),
       ),

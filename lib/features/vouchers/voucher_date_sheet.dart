@@ -4,6 +4,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
 import '../../core/config/extensions/num_extensions.dart';
+import '../../core/layout/bnood_form_route_canvas.dart';
 import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
@@ -13,6 +14,7 @@ import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/overlay_form_presentation.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
+import '../home/home_foundation_scope.dart';
 
 /// Staged voucher date picker: swipe months, header wheels, confirm commits.
 class VoucherDateSheetPage extends StatefulWidget {
@@ -155,7 +157,9 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
         : null;
 
     if (widget.presentation == OverlayFormPresentation.fullScreen) {
-      return Scaffold(
+      return BnoodFormRouteCanvas(
+        child: HomeFoundationScope(
+          child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: CustomAppBar(title: l10n.date),
         body: Stack(
@@ -190,6 +194,8 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
             ),
             if (wheels != null) wheels,
           ],
+        ),
+          ),
         ),
       );
     }

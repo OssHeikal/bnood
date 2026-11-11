@@ -1,5 +1,8 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+
+import '../core/layout/bnood_breakpoints.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +26,13 @@ class BnoodApp extends ConsumerWidget {
     final locale = ref.watch(localeProvider);
     return AppGateLifecycle(
       child: MaterialApp.router(
-        builder: appToastBuilder,
+        builder: (context, child) {
+          final responsive = ResponsiveBreakpoints.builder(
+            breakpoints: BnoodBreakpoints.all,
+            child: child ?? const SizedBox.shrink(),
+          );
+          return appToastBuilder(context, responsive);
+        },
         onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,
         theme: AppTheme.light(),
         darkTheme: AppTheme.dark(),
