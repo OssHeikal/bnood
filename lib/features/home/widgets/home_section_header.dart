@@ -27,6 +27,17 @@ class HomeSectionHeader extends StatelessWidget {
   final bool actionEnabled;
   final Key? actionKey;
 
+  /// Matches this header row plus the [AppSize.spaceSM] gap before the first ledger card
+  /// (see client/provider detail two-column layouts on tablet+).
+  static double columnLeadBeforeContent(BuildContext context) {
+    final text = context.text;
+    final titleLine = (text.sectionTitle.fontSize ?? 15) * (text.sectionTitle.height ?? 1.25);
+    final captionLine = (text.caption.fontSize ?? 12) * (text.caption.height ?? 1.2);
+    const seeAllVerticalPad = 8.0;
+    final rowHeight = titleLine > captionLine + seeAllVerticalPad ? titleLine : captionLine + seeAllVerticalPad;
+    return rowHeight + AppSize.spaceSM;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;

@@ -2,6 +2,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_list_canvas.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../home/home_foundation_scope.dart';
 import 'app_menu_body.dart';
@@ -16,9 +17,11 @@ class AppMenuScreen extends StatelessWidget {
     return HomeFoundationScope(
       child: Scaffold(
         appBar: CustomAppBar(title: l10n.menuTitle),
-        body: const SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: AppSize.spaceMD),
-          child: AppMenuBody(),
+        body: const BnoodListCanvas(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(vertical: AppSize.spaceMD),
+            child: AppMenuBody(),
+          ),
         ),
       ),
     );

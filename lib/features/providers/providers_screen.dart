@@ -7,6 +7,7 @@ import '../../app/widgets/floating_shell_dock.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_layout.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/resources/gen/assets.gen.dart';
@@ -99,10 +100,13 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
       child: Builder(
         builder: (context) {
           final colors = context.colors;
+          final gutter = context.pageGutter;
+          final useGrid = !context.isBnoodMobile;
           return Scaffold(
             backgroundColor: colors.canvas,
             body: AppPagedView<AppProvider>(
               controller: _pagingController,
+              layout: useGrid ? AppPagedLayout.sliverTwoColumn : AppPagedLayout.sliverListSeparated,
               pullToRefresh: true,
               refreshEdgeOffset: MediaQuery.paddingOf(context).top + kToolbarHeight,
               sliverHeaders: [
@@ -128,12 +132,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                     key: _collapsingHeaderKey,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          AppSize.screenPadding,
-                          0,
-                          AppSize.screenPadding,
-                          AppSize.spaceSM,
-                        ),
+                        padding: EdgeInsets.fromLTRB(gutter, 0, gutter, AppSize.spaceSM),
                         child: CustomTextField.search(
                           controller: _searchController,
                           placeholder: l10n.providersSearchHint,
@@ -142,17 +141,12 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                           },
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(AppSize.screenPadding, 0, AppSize.screenPadding, AppSize.spaceSM),
-                        child: ProvidersListFilterChips(),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(gutter, 0, gutter, AppSize.spaceSM),
+                        child: const ProvidersListFilterChips(),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          AppSize.screenPadding,
-                          0,
-                          AppSize.screenPadding,
-                          AppSize.spaceMD,
-                        ),
+                        padding: EdgeInsets.fromLTRB(gutter, 0, gutter, AppSize.spaceMD),
                         child: Align(
                           alignment: AlignmentDirectional.centerStart,
                           child: Text(
@@ -184,12 +178,9 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                   ],
                 ),
               ),
-              itemPadding: (index) => EdgeInsets.fromLTRB(
-                AppSize.screenPadding,
-                index == 0 ? AppSize.spaceXS : 0,
-                AppSize.screenPadding,
-                0,
-              ),
+              itemPadding: (index) =>
+                  useGrid ? EdgeInsets.zero : EdgeInsets.fromLTRB(gutter, index == 0 ? AppSize.spaceXS : 0, gutter, 0),
+              gridPadding: useGrid ? EdgeInsets.fromLTRB(gutter, AppSize.spaceXS, gutter, 0) : null,
               itemBuilder: (context, provider, index) {
                 return ProvidersListTile(
                   key: ValueKey(provider.id),

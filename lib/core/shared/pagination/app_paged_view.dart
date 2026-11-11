@@ -4,8 +4,9 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../config/theme/app_size.dart';
 import 'app_paged_builders.dart';
 import 'app_paging_controller.dart';
+import 'paged_sliver_two_column.dart';
 
-enum AppPagedLayout { list, listSeparated, sliverList, sliverListSeparated, sliverGrid }
+enum AppPagedLayout { list, listSeparated, sliverList, sliverListSeparated, sliverGrid, sliverTwoColumn }
 
 class AppPagedView<T> extends StatelessWidget {
   AppPagedView({
@@ -132,6 +133,30 @@ class AppPagedView<T> extends StatelessWidget {
                   fetchNextPage: fetchNextPage,
                   shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
                   gridDelegate: gridDelegate,
+                  builderDelegate: delegate,
+                ),
+              ...sliverFooters,
+            ],
+          ),
+          AppPagedLayout.sliverTwoColumn => CustomScrollView(
+            physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              ...sliverHeaders,
+              if (gridPadding != null)
+                SliverPadding(
+                  padding: gridPadding!,
+                  sliver: PagedSliverTwoColumn<int, T>(
+                    state: state,
+                    fetchNextPage: fetchNextPage,
+                    shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
+                    builderDelegate: delegate,
+                  ),
+                )
+              else
+                PagedSliverTwoColumn<int, T>(
+                  state: state,
+                  fetchNextPage: fetchNextPage,
+                  shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
                   builderDelegate: delegate,
                 ),
               ...sliverFooters,

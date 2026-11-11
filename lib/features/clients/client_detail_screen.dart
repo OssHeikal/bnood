@@ -8,6 +8,9 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/bnood_max_width.dart';
+import '../../core/layout/bnood_two_column.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_error_handler.dart';
 import '../subscription/subscription_error_handler.dart';
@@ -120,11 +123,13 @@ class ClientDetailScreen extends ConsumerWidget {
                     ]
                   : null,
             ),
-            body: ListView(
+            body: BnoodMaxWidth(
+              maxWidth: BnoodLayout.pageMaxWidth,
+              child: ListView(
               padding: EdgeInsets.fromLTRB(
-                AppSize.screenPadding,
+                0,
                 AppSize.spaceSM,
-                AppSize.screenPadding,
+                0,
                 AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
               ),
               children: [
@@ -164,6 +169,7 @@ class ClientDetailScreen extends ConsumerWidget {
                   ),
                 ),
               ],
+            ),
             ),
           );
         },
@@ -310,9 +316,7 @@ class _ClientDetailBody extends ConsumerWidget {
     }
 
     if (data.onlineIdentityOnly) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+      final summary = <Widget>[
           ClientDetailStatGrid(
             receivedPiastres: data.receivedPiastres,
             spentPiastres: data.spentPiastres,
@@ -361,7 +365,8 @@ class _ClientDetailBody extends ConsumerWidget {
               ),
             ],
           ],
-          AppSize.spaceXL.gap,
+      ];
+      final ledger = <Widget>[
           AppCard(
             child: AppFallback.section(
               icon: Icons.cloud_off_outlined,
@@ -369,13 +374,11 @@ class _ClientDetailBody extends ConsumerWidget {
               description: l10n.clientLedgerNotOnlineDescription,
             ),
           ),
-        ],
-      );
+      ];
+      return _clientDetailColumns(context, summary: summary, ledger: ledger);
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+    final summary = <Widget>[
         ClientDetailStatGrid(
           receivedPiastres: data.receivedPiastres,
           spentPiastres: data.spentPiastres,
@@ -441,7 +444,8 @@ class _ClientDetailBody extends ConsumerWidget {
             totalCount: data.suppliersCount,
           ),
         ],
-        AppSize.spaceXL.gap,
+    ];
+    final ledger = <Widget>[
         HomeSectionHeader(
           title: l10n.navItems,
           seeAllLabel: seeAllLabelWithCount(l10n, data.itemsCount ?? data.topItems.length),
@@ -507,9 +511,35 @@ class _ClientDetailBody extends ConsumerWidget {
               ],
             ],
           ),
-      ],
+    ];
+    return _clientDetailColumns(context, summary: summary, ledger: ledger);
+  }
+}
+
+Widget _clientDetailColumns(
+  BuildContext context, {
+  required List<Widget> summary,
+  required List<Widget> ledger,
+}) {
+  if (context.isBnoodMobile) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [...summary, ...ledger],
     );
   }
+  final lead = HomeSectionHeader.columnLeadBeforeContent(context);
+  return BnoodTwoColumn(
+    spacing: AppSize.spaceLG,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    start: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(height: lead),
+        ...summary,
+      ],
+    ),
+    end: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: ledger),
+  );
 }
 
 class _ArchivedBadge extends StatelessWidget {

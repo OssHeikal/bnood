@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/bnood_max_width.dart';
+import '../../core/layout/bnood_two_column.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/widgets/app_amount.dart';
@@ -115,12 +118,14 @@ class _ProviderDetailScreenState extends ConsumerState<ProviderDetailScreen> {
             body: RefreshIndicator.adaptive(
               onRefresh: () =>
                   ref.read(providerDetailProvider(widget.providerId).notifier).refetchOnOpen(),
-              child: ListView(
+              child: BnoodMaxWidth(
+                maxWidth: BnoodLayout.pageMaxWidth,
+                child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: EdgeInsets.fromLTRB(
-                  AppSize.screenPadding,
+                  0,
                   AppSize.spaceSM,
-                  AppSize.screenPadding,
+                  0,
                   AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
                 ),
                 children: [
@@ -162,6 +167,7 @@ class _ProviderDetailScreenState extends ConsumerState<ProviderDetailScreen> {
                     ),
                   ),
                 ],
+              ),
               ),
             ),
           );
@@ -210,9 +216,7 @@ class _ProviderDetailBody extends ConsumerWidget {
         : null;
     final mutationsEnabled = ref.watch(remoteVouchersEnabledProvider);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+    final summary = <Widget>[
         if (agreementTotals != null) ...[
           ProviderDetailTotalsCards(
             key: const Key('provider_detail_agreement_totals_header'),
@@ -276,6 +280,8 @@ class _ProviderDetailBody extends ConsumerWidget {
             ],
           AppSize.spaceXL.gap,
         ],
+    ];
+    final ledger = <Widget>[
         if (data.voucherHistory.isNotEmpty) ...[
           HomeSectionHeader(title: l10n.movements),
           if (isCraftsman) AppSize.spaceSM.gap,
@@ -294,7 +300,28 @@ class _ProviderDetailBody extends ConsumerWidget {
             ),
           ],
         ],
-      ],
+    ];
+    if (context.isBnoodMobile) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [...summary, ...ledger],
+      );
+    }
+    final lead = ledger.isEmpty ? 0.0 : HomeSectionHeader.columnLeadBeforeContent(context);
+    return BnoodTwoColumn(
+      spacing: AppSize.spaceLG,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      start: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (lead > 0) SizedBox(height: lead),
+          ...summary,
+        ],
+      ),
+      end: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: ledger.isEmpty ? [const SizedBox.shrink()] : ledger,
+      ),
     );
   }
 }

@@ -7,6 +7,8 @@ import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/bnood_max_width.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/paging_refresh.dart';
@@ -86,7 +88,9 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                 ),
               ],
             ),
-            body: MediaQuery.removePadding(
+            body: BnoodMaxWidth(
+              maxWidth: BnoodLayout.pageMaxWidth,
+              child: MediaQuery.removePadding(
               context: context,
               removeBottom: true,
               child: catalog.when(
@@ -95,7 +99,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                   slivers: [
                     _captionSliver(context, l10n),
                     const SliverPadding(
-                      padding: EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
+                      padding: EdgeInsets.zero,
                       sliver: SliverToBoxAdapter(child: ItemsLoadingSkeleton()),
                     ),
                     SliverPadding(padding: EdgeInsets.only(bottom: bottomClearance)),
@@ -108,7 +112,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                     SliverFillRemaining(
                       hasScrollBody: false,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
+                        padding: EdgeInsets.zero,
                         child: AppFallback.section(
                           icon: Icons.error_outline,
                           title: error.toString(),
@@ -133,7 +137,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                         SliverFillRemaining(
                           hasScrollBody: false,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
+                            padding: EdgeInsets.zero,
                             child: AppCard(
                               child: AppFallback.section(
                                 leading: ShellNavIcon(
@@ -165,7 +169,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                       slivers: [
                         _captionSliver(context, l10n),
                         SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
+                          padding: EdgeInsets.zero,
                           sliver: SliverToBoxAdapter(
                             child: ItemsReorderableUserGrid(
                               items: items,
@@ -181,6 +185,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                 },
               ),
             ),
+            ),
           );
         },
       ),
@@ -193,9 +198,9 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
-          AppSize.screenPadding,
+          0,
           AppSize.spaceSM,
-          AppSize.screenPadding,
+          0,
           AppSize.spaceMD,
         ),
         child: Text(l10n.itemsCatalogCaption, style: text.caption.copyWith(color: colors.onSurfaceMuted)),

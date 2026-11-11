@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_list_canvas.dart';
 import '../../core/utils/extensions/bidi_isolate.dart';
 import '../../core/widgets/app_chevron.dart';
 import '../../core/widgets/app_pressable.dart';
@@ -58,9 +59,10 @@ class UserProfileScreen extends ConsumerWidget {
 
           return Scaffold(
             appBar: CustomAppBar(title: l10n.userProfileTitle),
-            body: SafeArea(
+            body: BnoodListCanvas(
+              child: SafeArea(
               child: ListView(
-                padding: const EdgeInsets.all(AppSize.screenPadding),
+                padding: EdgeInsets.symmetric(vertical: AppSize.screenPadding),
                 children: [
                   Align(
                     child: UserIdentityAvatar(
@@ -167,6 +169,7 @@ class UserProfileScreen extends ConsumerWidget {
                   ),
                 ],
               ),
+            ),
             ),
           );
         },

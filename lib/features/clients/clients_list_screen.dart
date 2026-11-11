@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_layout.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/providers/dashboard_providers.dart';
@@ -131,10 +132,13 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
       child: Builder(
         builder: (context) {
           final colors = context.colors;
+          final gutter = context.pageGutter;
+          final useGrid = !context.isBnoodMobile;
           return Scaffold(
             backgroundColor: colors.canvas,
             body: AppPagedView<HomeClientBalanceRow>(
               controller: _pagingController,
+              layout: useGrid ? AppPagedLayout.sliverTwoColumn : AppPagedLayout.sliverListSeparated,
               pullToRefresh: true,
               refreshEdgeOffset: MediaQuery.paddingOf(context).top + kToolbarHeight,
               sliverHeaders: [
@@ -160,10 +164,10 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                     key: _collapsingHeaderKey,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          AppSize.screenPadding,
+                        padding: EdgeInsets.fromLTRB(
+                          gutter,
                           0,
-                          AppSize.screenPadding,
+                          gutter,
                           AppSize.spaceSM,
                         ),
                         child: CustomTextField.search(
@@ -174,21 +178,26 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                           },
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(AppSize.screenPadding, 0, AppSize.screenPadding, AppSize.spaceSM),
-                        child: ClientsListFilterChips(),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(gutter, 0, gutter, AppSize.spaceSM),
+                        child: const ClientsListFilterChips(),
                       ),
                     ],
                   ),
                 ),
               ],
               builders: AppPagedBuilders(empty: (ctx) => _emptyFallback(ctx, filter)),
-              itemPadding: (index) => EdgeInsets.fromLTRB(
-                AppSize.screenPadding,
-                index == 0 ? AppSize.spaceSM : 0,
-                AppSize.screenPadding,
-                0,
-              ),
+              itemPadding: (index) => useGrid
+                  ? EdgeInsets.zero
+                  : EdgeInsets.fromLTRB(
+                      gutter,
+                      index == 0 ? AppSize.spaceSM : 0,
+                      gutter,
+                      0,
+                    ),
+              gridPadding: useGrid
+                  ? EdgeInsets.fromLTRB(gutter, AppSize.spaceSM, gutter, 0)
+                  : null,
               itemBuilder: (context, row, index) {
                 final remoteMoney = ref.watch(remoteClientsEnabledProvider);
                 return ClientBalanceCard(

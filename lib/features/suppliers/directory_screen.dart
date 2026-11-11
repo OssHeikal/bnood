@@ -7,6 +7,8 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_column_grid.dart';
+import '../../core/layout/bnood_layout.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_card.dart';
@@ -75,6 +77,7 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen> with SingleTi
         builder: (context) {
           final colors = context.colors;
           final text = context.text;
+          final gutter = context.pageGutter;
           return Scaffold(
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
@@ -106,10 +109,10 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen> with SingleTi
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSize.screenPadding,
+                      padding: EdgeInsets.fromLTRB(
+                        gutter,
                         0,
-                        AppSize.screenPadding,
+                        gutter,
                         AppSize.spaceSM,
                       ),
                       child: _DirectorySegmentedTabs(controller: _tabController),
@@ -121,10 +124,10 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen> with SingleTi
                             ? l10n.directorySuppliersHint
                             : l10n.directoryCraftsmenHint;
                         return Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            AppSize.screenPadding,
+                          padding: EdgeInsets.fromLTRB(
+                            gutter,
                             0,
-                            AppSize.screenPadding,
+                            gutter,
                             AppSize.spaceMD,
                           ),
                           child: Text(hint, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
@@ -243,8 +246,9 @@ class _DirectorySupplierTab extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final rows = ref.watch(directorySuppliersProvider);
 
+    final gutter = context.pageGutter;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, 0, AppSize.screenPadding, AppSize.spaceMD),
+      padding: EdgeInsets.fromLTRB(gutter, 0, gutter, AppSize.spaceMD),
       children: [
         AsyncValueBody(
           value: rows,
@@ -289,24 +293,22 @@ class _DirectorySupplierTab extends ConsumerWidget {
                 ),
               );
             }
-            return Column(
+            return BnoodColumnGrid(
               children: [
-                for (var i = 0; i < list.length; i++) ...[
-                  if (i > 0) AppSize.spaceMD.gap,
+                for (final row in list)
                   DirectoryPersonCard(
-                    name: list[i].supplier.name,
-                    paidPiastres: list[i].paidPiastres,
-                    accentKey: directoryAccentKeyFor(list[i].supplier.id),
+                    name: row.supplier.name,
+                    paidPiastres: row.paidPiastres,
+                    accentKey: directoryAccentKeyFor(row.supplier.id),
                     localeCode: localeCode,
-                    onOpenDetail: () => context.push('/suppliers/${list[i].supplier.id}'),
+                    onOpenDetail: () => context.push('/suppliers/${row.supplier.id}'),
                     onArchive: () => _confirmArchiveSupplier(
                       context,
                       ref,
-                      supplierId: list[i].supplier.id,
-                      name: list[i].supplier.name,
+                      supplierId: row.supplier.id,
+                      name: row.supplier.name,
                     ),
                   ),
-                ],
               ],
             );
           },
@@ -326,8 +328,9 @@ class _DirectoryCraftsmenTab extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final rows = ref.watch(directoryCraftsmenProvider);
 
+    final gutter = context.pageGutter;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, 0, AppSize.screenPadding, AppSize.spaceMD),
+      padding: EdgeInsets.fromLTRB(gutter, 0, gutter, AppSize.spaceMD),
       children: [
         AsyncValueBody(
           value: rows,
@@ -372,25 +375,23 @@ class _DirectoryCraftsmenTab extends ConsumerWidget {
                 ),
               );
             }
-            return Column(
+            return BnoodColumnGrid(
               children: [
-                for (var i = 0; i < list.length; i++) ...[
-                  if (i > 0) AppSize.spaceMD.gap,
+                for (final row in list)
                   DirectoryPersonCard(
-                    name: list[i].craftsman.name,
-                    paidPiastres: list[i].paidPiastres,
+                    name: row.craftsman.name,
+                    paidPiastres: row.paidPiastres,
                     paidInTrailing: true,
-                    accentKey: directoryAccentKeyFor(list[i].craftsman.id),
+                    accentKey: directoryAccentKeyFor(row.craftsman.id),
                     localeCode: localeCode,
-                    onOpenDetail: () => context.push('/craftsmen/${list[i].craftsman.id}'),
+                    onOpenDetail: () => context.push('/craftsmen/${row.craftsman.id}'),
                     onArchive: () => _confirmArchiveCraftsman(
                       context,
                       ref,
-                      craftsmanId: list[i].craftsman.id,
-                      name: list[i].craftsman.name,
+                      craftsmanId: row.craftsman.id,
+                      name: row.craftsman.name,
                     ),
                   ),
-                ],
               ],
             );
           },

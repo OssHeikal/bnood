@@ -5,6 +5,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_list_canvas.dart';
 import '../../core/utils/safe_external_url.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
@@ -48,17 +49,19 @@ class ContentPageScreen extends ConsumerWidget {
               ],
             );
           },
-          data: (page) => SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(AppSize.screenPadding),
-              child: HtmlWidget(
-                page.body,
-                onTapUrl: (url) async {
-                  if (!isAllowedExternalUrlString(url)) return false;
-                  await launchAllowedUrl(url);
-                  return true;
-                },
-                textStyle: context.text.body,
+          data: (page) => BnoodListCanvas(
+            child: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(vertical: AppSize.screenPadding),
+                child: HtmlWidget(
+                  page.body,
+                  onTapUrl: (url) async {
+                    if (!isAllowedExternalUrlString(url)) return false;
+                    await launchAllowedUrl(url);
+                    return true;
+                  },
+                  textStyle: context.text.body,
+                ),
               ),
             ),
           ),
@@ -75,7 +78,7 @@ class _ContentPageLoadingBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Skeleton(
       child: Padding(
-        padding: EdgeInsets.all(AppSize.screenPadding),
+        padding: EdgeInsets.symmetric(vertical: AppSize.screenPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

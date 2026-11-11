@@ -10,6 +10,9 @@ import '../../core/clients/clients_providers.dart';
 import '../../core/craftsmen/craftsman_snapshot_limit.dart';
 import '../../core/repositories/bnood_repository.dart';
 import '../../core/money/remote_money_units.dart';
+import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/bnood_max_width.dart';
+import '../../core/layout/bnood_two_column.dart';
 import '../../core/formatting/see_all_label.dart';
 import '../../core/home/home_section_counts.dart';
 import '../../core/providers/dashboard_providers.dart';
@@ -57,6 +60,298 @@ class HomeScreen extends ConsumerWidget {
           final craftsmen = ref.watch(homeCraftsmenProvider);
           final remoteSuppliers = ref.watch(homeSuppliersProvider);
           final sectionCounts = ref.watch(homeSectionCountsProvider);
+          final summaryChildren = <Widget>[
+            Text(l10n.homeTotalsCaption, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
+            AppSize.spaceMD.gap,
+            AsyncValueBody(
+              value: totals,
+              loadingPlaceholder: const HomeStatGridSkeleton(),
+              error: (e, _) => AppFallback(
+                isError: true,
+                icon: Icons.error_outline,
+                title: l10n.homeLoadErrorTitle,
+                description: e.toString(),
+                actionLabel: l10n.retry,
+                onAction: () => ref.read(homeTotalsProvider.notifier).refreshSilently(),
+              ),
+              data: (t) => HomeStatGrid(totals: t, localeCode: localeCode, minorPerMajor: moneyScale),
+            ),
+          ];
+
+          final snapshotChildren = <Widget>[
+            HomeSectionHeader(
+              title: l10n.activeClients,
+              seeAllLabel: seeAllLabelWithCount(
+                l10n,
+                sectionSeeAllCount(
+                  total: sectionCounts.clientsCount,
+                  visibleLength: clients.valueOrNull?.length ?? 0,
+                ),
+              ),
+              onSeeAll: () {
+                if (remoteMoney) {
+                  ref.read(clientsListFilterProvider.notifier).state = ClientListArchiveFilter.active;
+                }
+                context.go('/clients');
+              },
+            ),
+            AppSize.spaceSM.gap,
+            AsyncValueBody(
+              value: clients,
+              loadingPlaceholder: const HomePersonListSkeleton(),
+              error: (e, _) => AppFallback(
+                isError: true,
+                icon: Icons.error_outline,
+                title: l10n.homeLoadErrorTitle,
+                description: e.toString(),
+                actionLabel: l10n.retry,
+                onAction: () => ref.read(homeClientBalancesProvider.notifier).refreshSilently(),
+              ),
+              data: (rows) {
+                if (rows.isEmpty) {
+                  return AppCard(
+                    child: AppFallback.section(
+                      icon: Icons.people_outline,
+                      title: l10n.homeNoActiveClientsTitle,
+                      description: l10n.homeNoActiveClientsDescription,
+                      actions: [
+                        AppFallbackAction(
+                          label: l10n.seeAll,
+                          onPressed: () => context.go('/clients'),
+                          role: AppFallbackActionRole.tertiary,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return Column(
+                  children: [
+                    for (var i = 0; i < rows.length; i++) ...[
+                      if (i > 0) AppSize.spaceMD.gap,
+                      HomePersonCard(
+                        name: rows[i].client.name,
+                        receivedPiastres: rows[i].receivedPiastres,
+                        spentPiastres: rows[i].spentPiastres,
+                        amountPiastres: rows[i].remainingPiastres,
+                        accentKey: homeAccentKeyFor(rows[i].client.id),
+                        localeCode: localeCode,
+                        minorPerMajor: moneyScale,
+                        onTap: () => context.push('/clients/${rows[i].client.id}'),
+                      ),
+                    ],
+                  ],
+                );
+              },
+            ),
+            AppSize.spaceXL.gap,
+            HomeSectionHeader(
+              title: l10n.homeCraftsmenSection,
+              seeAllLabel: seeAllLabelWithCount(
+                l10n,
+                sectionSeeAllCount(
+                  total: sectionCounts.craftsmenCount,
+                  visibleLength: craftsmanSnapshotRows(craftsmen.valueOrNull ?? const []).length,
+                ),
+              ),
+              onSeeAll: () {
+                if (remoteMoney) {
+                  ref.read(providersListTypeFilterProvider.notifier).state = ProvidersListTypeFilter.craftsman;
+                  context.go('/directory');
+                } else {
+                  context.go('/directory?tab=craftsmen');
+                }
+              },
+            ),
+            AppSize.spaceSM.gap,
+            AsyncValueBody(
+              value: craftsmen,
+              loadingPlaceholder: const HomePersonListSkeleton(count: 1),
+              error: (e, _) => AppFallback(
+                isError: true,
+                icon: Icons.error_outline,
+                title: l10n.homeLoadErrorTitle,
+                description: e.toString(),
+                actionLabel: l10n.retry,
+                onAction: () => ref.read(homeCraftsmenProvider.notifier).refreshSilently(),
+              ),
+              data: (rows) {
+                final visible = craftsmanSnapshotRows(rows);
+                if (rows.isEmpty) {
+                  return AppCard(
+                    child: AppFallback.section(
+                      leading: ShellNavIcon(
+                        asset: Assets.icons.directoryOutline,
+                        color: context.colors.muted,
+                        size: AppSize.icon,
+                      ),
+                      title: l10n.homeNoCraftsmenTitle,
+                      description: l10n.homeNoCraftsmenDescription,
+                      actions: [
+                        AppFallbackAction(
+                          label: l10n.seeAll,
+                          onPressed: () {
+                            if (remoteMoney) {
+                              ref.read(providersListTypeFilterProvider.notifier).state =
+                                  ProvidersListTypeFilter.craftsman;
+                              context.go('/directory');
+                            } else {
+                              context.go('/directory?tab=craftsmen');
+                            }
+                          },
+                          role: AppFallbackActionRole.tertiary,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return Column(
+                  children: [
+                    for (var i = 0; i < visible.length; i++) ...[
+                      if (i > 0) AppSize.spaceMD.gap,
+                      remoteMoney
+                          ? RemoteCraftsmanSummaryCard(
+                              name: visible[i].craftsman.name,
+                              accentKey: homeAccentKeyFor(visible[i].craftsman.id),
+                              localeCode: localeCode,
+                              clientsCount: visible[i].clientsCount ?? 0,
+                              paidPiastres: visible[i].paidPiastres,
+                              remainingPiastres: visible[i].remainingPiastres,
+                              minorPerMajor: moneyScale,
+                              onTap: () => context.push('/providers/${visible[i].craftsman.id}'),
+                            )
+                          : DirectoryPersonCard(
+                              name: visible[i].craftsman.name,
+                              trade: visible[i].craftsman.trade,
+                              paidPiastres: visible[i].paidPiastres,
+                              remainingPiastres: visible[i].remainingPiastres,
+                              paidInTrailing: true,
+                              accentKey: homeAccentKeyFor(visible[i].craftsman.id),
+                              localeCode: localeCode,
+                              showOverflowMenu: false,
+                              onOpenDetail: () => context.push('/craftsmen/${visible[i].craftsman.id}'),
+                            ),
+                    ],
+                  ],
+                );
+              },
+            ),
+            if (remoteMoney) ...[
+              AppSize.spaceXL.gap,
+              HomeSectionHeader(
+                title: l10n.homeSuppliersSection,
+                seeAllLabel: seeAllLabelWithCount(
+                  l10n,
+                  sectionSeeAllCount(
+                    total: sectionCounts.suppliersCount,
+                    visibleLength: craftsmanSnapshotRows(remoteSuppliers.valueOrNull ?? const []).length,
+                  ),
+                ),
+                onSeeAll: () {
+                  ref.read(providersListTypeFilterProvider.notifier).state =
+                      ProvidersListTypeFilter.supplier;
+                  context.go('/directory');
+                },
+              ),
+              AppSize.spaceSM.gap,
+              AsyncValueBody(
+                value: remoteSuppliers,
+                loadingPlaceholder: const HomePersonListSkeleton(count: 1),
+                error: (e, _) => AppFallback(
+                  isError: true,
+                  icon: Icons.error_outline,
+                  title: l10n.homeLoadErrorTitle,
+                  description: e.toString(),
+                  actionLabel: l10n.retry,
+                  onAction: () => ref.read(homeSuppliersProvider.notifier).refreshSilently(),
+                ),
+                data: (rows) {
+                  final visible = craftsmanSnapshotRows(rows);
+                  if (rows.isEmpty) {
+                    return AppCard(
+                      child: AppFallback.section(
+                        leading: ShellNavIcon(
+                          asset: Assets.icons.materialsPackageOutline,
+                          color: context.colors.muted,
+                          size: AppSize.icon,
+                        ),
+                        title: l10n.homeNoSuppliersTitle,
+                        description: l10n.homeNoSuppliersDescription,
+                      ),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      for (var i = 0; i < visible.length; i++) ...[
+                        if (i > 0) AppSize.spaceMD.gap,
+                        RemoteCraftsmanSummaryCard(
+                          name: visible[i].craftsman.name,
+                          accentKey: homeAccentKeyFor(visible[i].craftsman.id),
+                          localeCode: localeCode,
+                          clientsCount: visible[i].clientsCount ?? 0,
+                          paidPiastres: visible[i].paidPiastres,
+                          remainingPiastres: visible[i].remainingPiastres,
+                          minorPerMajor: moneyScale,
+                          onTap: () => context.push('/providers/${visible[i].craftsman.id}'),
+                        ),
+                      ],
+                    ],
+                  );
+                },
+              ),
+            ],
+            if (!remoteMoney) ...[
+              AppSize.spaceXL.gap,
+              HomeSectionHeader(
+                title: l10n.homeSupplierSpendSection,
+                seeAllLabel: l10n.seeAll,
+                onSeeAll: () => context.go('/directory'),
+              ),
+              AppSize.spaceSM.gap,
+              AsyncValueBody(
+                value: suppliers,
+                loadingPlaceholder: const HomePersonListSkeleton(count: 1),
+                error: (e, _) => AppFallback(
+                  isError: true,
+                  icon: Icons.error_outline,
+                  title: l10n.homeLoadErrorTitle,
+                  actionLabel: l10n.retry,
+                  onAction: () => ref.read(homeSupplierSpendsProvider.notifier).refreshSilently(),
+                ),
+                data: (rows) {
+                  if (rows.isEmpty) {
+                    final colors = context.colors;
+                    return AppCard(
+                      child: AppFallback.section(
+                        leading: ShellNavIcon(
+                          asset: Assets.icons.materialsPackageOutline,
+                          color: colors.muted,
+                          size: AppSize.icon,
+                        ),
+                        title: l10n.homeNoSupplierSpendTitle,
+                        description: l10n.homeNoSupplierSpendDescription,
+                      ),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      for (var i = 0; i < rows.length; i++) ...[
+                        if (i > 0) AppSize.spaceMD.gap,
+                        HomePersonCard(
+                          name: rows[i].supplier.name,
+                          amountPiastres: rows[i].spentPiastres,
+                          amountRole: AppAmountRole.spend,
+                          showAmountCaption: false,
+                          accentKey: homeAccentKeyFor(rows[i].supplier.id),
+                          localeCode: localeCode,
+                          onTap: () => context.push('/suppliers/${rows[i].supplier.id}'),
+                        ),
+                      ],
+                    ],
+                  );
+                },
+              ),
+            ],
+          ];
 
           return Scaffold(
             backgroundColor: colors.canvas,
@@ -79,304 +374,36 @@ class HomeScreen extends ConsumerWidget {
             ),
             body: RefreshIndicator.adaptive(
               onRefresh: () => refreshHomeDashboard(ref),
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.fromLTRB(
-                  AppSize.screenPadding,
-                  AppSize.spaceMD,
-                  AppSize.screenPadding,
-                  bottomInset + AppSize.spaceMD,
-                ),
-                children: [
-                  Text(l10n.homeTotalsCaption, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
-                  AppSize.spaceMD.gap,
-                  AsyncValueBody(
-                    value: totals,
-                    loadingPlaceholder: const HomeStatGridSkeleton(),
-                    error: (e, _) => AppFallback(
-                      isError: true,
-                      icon: Icons.error_outline,
-                      title: l10n.homeLoadErrorTitle,
-                      description: e.toString(),
-                      actionLabel: l10n.retry,
-                      onAction: () => ref.read(homeTotalsProvider.notifier).refreshSilently(),
-                    ),
-                    data: (t) => HomeStatGrid(totals: t, localeCode: localeCode, minorPerMajor: moneyScale),
+              child: BnoodMaxWidth(
+                maxWidth: BnoodLayout.pageMaxWidth,
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.fromLTRB(
+                    0,
+                    AppSize.spaceMD,
+                    0,
+                    bottomInset + AppSize.spaceMD,
                   ),
-                  AppSize.spaceXL.gap,
-                  HomeSectionHeader(
-                    title: l10n.activeClients,
-                    seeAllLabel: seeAllLabelWithCount(
-                      l10n,
-                      sectionSeeAllCount(
-                        total: sectionCounts.clientsCount,
-                        visibleLength: clients.valueOrNull?.length ?? 0,
-                      ),
-                    ),
-                    onSeeAll: () {
-                      if (remoteMoney) {
-                        ref.read(clientsListFilterProvider.notifier).state = ClientListArchiveFilter.active;
-                      }
-                      context.go('/clients');
-                    },
-                  ),
-                  AppSize.spaceSM.gap,
-                  AsyncValueBody(
-                    value: clients,
-                    loadingPlaceholder: const HomePersonListSkeleton(),
-                    error: (e, _) => AppFallback(
-                      isError: true,
-                      icon: Icons.error_outline,
-                      title: l10n.homeLoadErrorTitle,
-                      description: e.toString(),
-                      actionLabel: l10n.retry,
-                      onAction: () => ref.read(homeClientBalancesProvider.notifier).refreshSilently(),
-                    ),
-                    data: (rows) {
-                      if (rows.isEmpty) {
-                        return AppCard(
-                          child: AppFallback.section(
-                            icon: Icons.people_outline,
-                            title: l10n.homeNoActiveClientsTitle,
-                            description: l10n.homeNoActiveClientsDescription,
-                            actions: [
-                              AppFallbackAction(
-                                label: l10n.seeAll,
-                                onPressed: () => context.go('/clients'),
-                                role: AppFallbackActionRole.tertiary,
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      return Column(
-                        children: [
-                          for (var i = 0; i < rows.length; i++) ...[
-                            if (i > 0) AppSize.spaceMD.gap,
-                            HomePersonCard(
-                              name: rows[i].client.name,
-                              receivedPiastres: rows[i].receivedPiastres,
-                              spentPiastres: rows[i].spentPiastres,
-                              amountPiastres: rows[i].remainingPiastres,
-                              accentKey: homeAccentKeyFor(rows[i].client.id),
-                              localeCode: localeCode,
-                              minorPerMajor: moneyScale,
-                              onTap: () => context.push('/clients/${rows[i].client.id}'),
-                            ),
-                          ],
-                        ],
-                      );
-                    },
-                  ),
-                  AppSize.spaceXL.gap,
-                  HomeSectionHeader(
-                    title: l10n.homeCraftsmenSection,
-                    seeAllLabel: seeAllLabelWithCount(
-                      l10n,
-                      sectionSeeAllCount(
-                        total: sectionCounts.craftsmenCount,
-                        visibleLength: craftsmanSnapshotRows(craftsmen.valueOrNull ?? const []).length,
-                      ),
-                    ),
-                    onSeeAll: () {
-                      if (remoteMoney) {
-                        ref.read(providersListTypeFilterProvider.notifier).state = ProvidersListTypeFilter.craftsman;
-                        context.go('/directory');
-                      } else {
-                        context.go('/directory?tab=craftsmen');
-                      }
-                    },
-                  ),
-                  AppSize.spaceSM.gap,
-                  AsyncValueBody(
-                    value: craftsmen,
-                    loadingPlaceholder: const HomePersonListSkeleton(count: 1),
-                    error: (e, _) => AppFallback(
-                      isError: true,
-                      icon: Icons.error_outline,
-                      title: l10n.homeLoadErrorTitle,
-                      description: e.toString(),
-                      actionLabel: l10n.retry,
-                      onAction: () => ref.read(homeCraftsmenProvider.notifier).refreshSilently(),
-                    ),
-                    data: (rows) {
-                      final visible = craftsmanSnapshotRows(rows);
-                      if (rows.isEmpty) {
-                        return AppCard(
-                          child: AppFallback.section(
-                            leading: ShellNavIcon(
-                              asset: Assets.icons.directoryOutline,
-                              color: context.colors.muted,
-                              size: AppSize.icon,
-                            ),
-                            title: l10n.homeNoCraftsmenTitle,
-                            description: l10n.homeNoCraftsmenDescription,
-                            actions: [
-                              AppFallbackAction(
-                                label: l10n.seeAll,
-                                onPressed: () {
-                                  if (remoteMoney) {
-                                    ref.read(providersListTypeFilterProvider.notifier).state =
-                                        ProvidersListTypeFilter.craftsman;
-                                    context.go('/directory');
-                                  } else {
-                                    context.go('/directory?tab=craftsmen');
-                                  }
-                                },
-                                role: AppFallbackActionRole.tertiary,
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      return Column(
-                        children: [
-                          for (var i = 0; i < visible.length; i++) ...[
-                            if (i > 0) AppSize.spaceMD.gap,
-                            remoteMoney
-                                ? RemoteCraftsmanSummaryCard(
-                                    name: visible[i].craftsman.name,
-                                    accentKey: homeAccentKeyFor(visible[i].craftsman.id),
-                                    localeCode: localeCode,
-                                    clientsCount: visible[i].clientsCount ?? 0,
-                                    paidPiastres: visible[i].paidPiastres,
-                                    remainingPiastres: visible[i].remainingPiastres,
-                                    minorPerMajor: moneyScale,
-                                    onTap: () => context.push('/providers/${visible[i].craftsman.id}'),
-                                  )
-                                : DirectoryPersonCard(
-                                    name: visible[i].craftsman.name,
-                                    trade: visible[i].craftsman.trade,
-                                    paidPiastres: visible[i].paidPiastres,
-                                    remainingPiastres: visible[i].remainingPiastres,
-                                    paidInTrailing: true,
-                                    accentKey: homeAccentKeyFor(visible[i].craftsman.id),
-                                    localeCode: localeCode,
-                                    showOverflowMenu: false,
-                                    onOpenDetail: () => context.push('/craftsmen/${visible[i].craftsman.id}'),
-                                  ),
-                          ],
-                        ],
-                      );
-                    },
-                  ),
-                  if (remoteMoney) ...[
-                    AppSize.spaceXL.gap,
-                    HomeSectionHeader(
-                      title: l10n.homeSuppliersSection,
-                      seeAllLabel: seeAllLabelWithCount(
-                        l10n,
-                        sectionSeeAllCount(
-                          total: sectionCounts.suppliersCount,
-                          visibleLength: craftsmanSnapshotRows(remoteSuppliers.valueOrNull ?? const []).length,
+                  children: [
+                    if (context.isBnoodMobile) ...[
+                      ...summaryChildren,
+                      AppSize.spaceXL.gap,
+                      ...snapshotChildren,
+                    ] else
+                      BnoodTwoColumn(
+                        spacing: AppSize.spaceLG,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        start: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: summaryChildren,
+                        ),
+                        end: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: snapshotChildren,
                         ),
                       ),
-                      onSeeAll: () {
-                        ref.read(providersListTypeFilterProvider.notifier).state =
-                            ProvidersListTypeFilter.supplier;
-                        context.go('/directory');
-                      },
-                    ),
-                    AppSize.spaceSM.gap,
-                    AsyncValueBody(
-                      value: remoteSuppliers,
-                      loadingPlaceholder: const HomePersonListSkeleton(count: 1),
-                      error: (e, _) => AppFallback(
-                        isError: true,
-                        icon: Icons.error_outline,
-                        title: l10n.homeLoadErrorTitle,
-                        description: e.toString(),
-                        actionLabel: l10n.retry,
-                        onAction: () => ref.read(homeSuppliersProvider.notifier).refreshSilently(),
-                      ),
-                      data: (rows) {
-                        final visible = craftsmanSnapshotRows(rows);
-                        if (rows.isEmpty) {
-                          return AppCard(
-                            child: AppFallback.section(
-                              leading: ShellNavIcon(
-                                asset: Assets.icons.materialsPackageOutline,
-                                color: context.colors.muted,
-                                size: AppSize.icon,
-                              ),
-                              title: l10n.homeNoSuppliersTitle,
-                              description: l10n.homeNoSuppliersDescription,
-                            ),
-                          );
-                        }
-                        return Column(
-                          children: [
-                            for (var i = 0; i < visible.length; i++) ...[
-                              if (i > 0) AppSize.spaceMD.gap,
-                              RemoteCraftsmanSummaryCard(
-                                name: visible[i].craftsman.name,
-                                accentKey: homeAccentKeyFor(visible[i].craftsman.id),
-                                localeCode: localeCode,
-                                clientsCount: visible[i].clientsCount ?? 0,
-                                paidPiastres: visible[i].paidPiastres,
-                                remainingPiastres: visible[i].remainingPiastres,
-                                minorPerMajor: moneyScale,
-                                onTap: () => context.push('/providers/${visible[i].craftsman.id}'),
-                              ),
-                            ],
-                          ],
-                        );
-                      },
-                    ),
                   ],
-                  if (!remoteMoney) ...[
-                    AppSize.spaceXL.gap,
-                    HomeSectionHeader(
-                      title: l10n.homeSupplierSpendSection,
-                      seeAllLabel: l10n.seeAll,
-                      onSeeAll: () => context.go('/directory'),
-                    ),
-                    AppSize.spaceSM.gap,
-                    AsyncValueBody(
-                      value: suppliers,
-                      loadingPlaceholder: const HomePersonListSkeleton(count: 1),
-                      error: (e, _) => AppFallback(
-                        isError: true,
-                        icon: Icons.error_outline,
-                        title: l10n.homeLoadErrorTitle,
-                        actionLabel: l10n.retry,
-                        onAction: () => ref.read(homeSupplierSpendsProvider.notifier).refreshSilently(),
-                      ),
-                      data: (rows) {
-                        if (rows.isEmpty) {
-                          final colors = context.colors;
-                          return AppCard(
-                            child: AppFallback.section(
-                              leading: ShellNavIcon(
-                                asset: Assets.icons.materialsPackageOutline,
-                                color: colors.muted,
-                                size: AppSize.icon,
-                              ),
-                              title: l10n.homeNoSupplierSpendTitle,
-                              description: l10n.homeNoSupplierSpendDescription,
-                            ),
-                          );
-                        }
-                        return Column(
-                          children: [
-                            for (var i = 0; i < rows.length; i++) ...[
-                              if (i > 0) AppSize.spaceMD.gap,
-                              HomePersonCard(
-                                name: rows[i].supplier.name,
-                                amountPiastres: rows[i].spentPiastres,
-                                amountRole: AppAmountRole.spend,
-                                showAmountCaption: false,
-                                accentKey: homeAccentKeyFor(rows[i].supplier.id),
-                                localeCode: localeCode,
-                                onTap: () => context.push('/suppliers/${rows[i].supplier.id}'),
-                              ),
-                            ],
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ],
+                ),
               ),
             ),
           );

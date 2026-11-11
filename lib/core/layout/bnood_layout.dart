@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import 'bnood_breakpoints.dart';
+
 /// Layout tokens and [BuildContext] helpers. Without a [ResponsiveBreakpoints]
 /// ancestor, helpers assume mobile so default test surfaces (e.g. 800px) stay phone.
 abstract final class BnoodLayout {
@@ -19,22 +21,27 @@ extension BnoodLayoutContext on BuildContext {
     return inherited?.data;
   }
 
-  bool get isBnoodMobile {
+  double get _layoutWidth {
     final data = _breakpoints;
-    if (data == null) return true;
-    return data.isMobile;
+    final reported = data?.screenWidth ?? 0;
+    if (reported > 0) return reported;
+    return MediaQuery.sizeOf(this).width;
+  }
+
+  bool get isBnoodMobile {
+    if (_breakpoints == null) return true;
+    return _layoutWidth <= BnoodBreakpoints.mobileMax;
   }
 
   bool get isBnoodTablet {
-    final data = _breakpoints;
-    if (data == null) return false;
-    return data.isTablet;
+    if (_breakpoints == null) return false;
+    final w = _layoutWidth;
+    return w > BnoodBreakpoints.mobileMax && w <= BnoodBreakpoints.tabletMax;
   }
 
   bool get isBnoodDesktop {
-    final data = _breakpoints;
-    if (data == null) return false;
-    return data.isDesktop;
+    if (_breakpoints == null) return false;
+    return _layoutWidth > BnoodBreakpoints.tabletMax;
   }
 
   /// Shorthand used by layout widgets.
