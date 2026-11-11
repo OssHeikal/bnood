@@ -158,13 +158,54 @@ class AuthApi {
         data: {'name': name},
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (data) => User.fromJson(
-          (data?['user'] as Map<String, dynamic>?) ?? data!,
-        ),
-      );
+      return _parseUserEnvelope(response);
     });
+  }
+
+  Future<User> updateContactPhone({String? contactPhone}) {
+    return _guard(() async {
+      final response = await _dio.patch<Map<String, dynamic>>(
+        '$_authPrefix/profile/contact-phone',
+        data: {'contact_phone': contactPhone},
+        options: Options(extra: _authenticatedExtra),
+      );
+      return _parseUserEnvelope(response);
+    });
+  }
+
+  Future<User> uploadProfileLogo({
+    required String filePath,
+    String? filename,
+  }) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_authPrefix/profile/logo',
+        data: FormData.fromMap({
+          'logo': await MultipartFile.fromFile(filePath, filename: filename ?? 'logo.jpg'),
+        }),
+        options: Options(extra: _authenticatedExtra),
+      );
+      return _parseUserEnvelope(response);
+    });
+  }
+
+  Future<User> deleteProfileLogo() {
+    return _guard(() async {
+      final response = await _dio.delete<Map<String, dynamic>>(
+        '$_authPrefix/profile/logo',
+        options: Options(extra: _authenticatedExtra),
+      );
+      return _parseUserEnvelope(response);
+    });
+  }
+
+  User _parseUserFromData(Map<String, dynamic>? data) {
+    final userJson = (data?['user'] as Map<String, dynamic>?) ?? data!;
+    return User.fromJson(userJson);
+  }
+
+  User _parseUserEnvelope(Response<Map<String, dynamic>> response) {
+    return ApiResponseParser.expectData(response, _parseUserFromData);
   }
 
   Future<void> logout() {

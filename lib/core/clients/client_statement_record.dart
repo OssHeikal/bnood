@@ -35,6 +35,29 @@ class AppClientStatementItemSpend {
   }
 }
 
+class StatementIssuer {
+  const StatementIssuer({
+    required this.name,
+    required this.contactPhone,
+    this.logoUrl,
+  });
+
+  final String name;
+  final String? logoUrl;
+  final String contactPhone;
+
+  static StatementIssuer? fromDataJson(Object? raw) {
+    if (raw is! Map<String, dynamic>) return null;
+    final name = (raw['name'] as String?)?.trim() ?? '';
+    if (name.isEmpty) return null;
+    final phone = raw['contact_phone'];
+    if (phone == null) return null;
+    final contactPhone = phone.toString();
+    final logo = _readOptionalString(raw['logo_url']);
+    return StatementIssuer(name: name, logoUrl: logo, contactPhone: contactPhone);
+  }
+}
+
 class AppClientStatement {
   const AppClientStatement({
     required this.from,
@@ -45,6 +68,7 @@ class AppClientStatement {
     required this.closingBalanceMinor,
     required this.remainingMinor,
     required this.items,
+    this.issuer,
   });
 
   final String from;
@@ -56,6 +80,7 @@ class AppClientStatement {
   /// Same as [closingBalanceMinor] for API compatibility.
   final int remainingMinor;
   final List<AppClientStatementItemSpend> items;
+  final StatementIssuer? issuer;
 
   static AppClientStatement fromDataJson(Map<String, dynamic> json) {
     final itemsRaw = json['items'];
@@ -81,6 +106,7 @@ class AppClientStatement {
       closingBalanceMinor: closing,
       remainingMinor: remaining,
       items: items,
+      issuer: StatementIssuer.fromDataJson(json['issuer']),
     );
   }
 }

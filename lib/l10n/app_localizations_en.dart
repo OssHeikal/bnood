@@ -1323,6 +1323,73 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileEditNameTitle => 'Edit name';
 
   @override
+  String get profileStatementBrandingSection => 'On client statements';
+
+  @override
+  String get profileLogo => 'Logo';
+
+  @override
+  String get profileLogoSet => 'Added';
+
+  @override
+  String get profileLogoNotSet => 'Not set';
+
+  @override
+  String get profileLogoPickTitle => 'Choose logo';
+
+  @override
+  String get profileLogoFromGallery => 'Photo library';
+
+  @override
+  String get profileLogoFromCamera => 'Camera';
+
+  @override
+  String get profileLogoChange => 'Change logo';
+
+  @override
+  String get profileLogoRemove => 'Remove logo';
+
+  @override
+  String get profileLogoRemoveConfirmTitle => 'Remove logo?';
+
+  @override
+  String get profileLogoRemoveConfirmBody =>
+      'Statements will show your initials again.';
+
+  @override
+  String get profileLogoTooLarge => 'Image must be 2 MB or smaller.';
+
+  @override
+  String get profileLogoMustBeSquare =>
+      'Logo must be square (equal width and height).';
+
+  @override
+  String get profileLogoUnreadable =>
+      'Could not read this image. Use JPG, PNG, or WebP.';
+
+  @override
+  String get profileLogoUpdated => 'Logo updated.';
+
+  @override
+  String get profileLogoRemoved => 'Logo removed.';
+
+  @override
+  String get profileContactPhone => 'Contact phone';
+
+  @override
+  String get profileContactPhoneStatementHint =>
+      'Shown on client statements. Leave empty to use your sign-in number.';
+
+  @override
+  String get profileContactPhoneUsesLogin => 'sign-in number';
+
+  @override
+  String get profileEditContactPhoneTitle => 'Edit contact phone';
+
+  @override
+  String get profileContactPhoneUpdated => 'Contact phone updated.';
+
+  @override
   String get profileChangePasswordHint => 'Update your sign-in password.';
 
   @override

@@ -10,16 +10,32 @@ import '../../core/utils/extensions/bidi_isolate.dart';
 import '../../core/widgets/app_chevron.dart';
 import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/custom_app_bar.dart';
+import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/grouped_list_divider.dart';
 import '../home/home_foundation_scope.dart';
 import 'auth_controller.dart';
 import 'auth_paths.dart';
 import 'delete_account_confirm_sheet.dart';
+import 'profile_edit_contact_phone_sheet.dart';
 import 'profile_edit_name_sheet.dart';
+import 'profile_logo_actions.dart';
 import '../../core/subscription/subscription_colors.dart';
 import '../../core/subscription/subscription_riverpod.dart';
+import 'models/user.dart';
 import 'widgets/profile_subscription_card.dart';
 import 'widgets/user_identity_avatar.dart';
+
+String _contactPhoneSummary(AppLocalizations l10n, User? user) {
+  final custom = user?.contactPhone?.trim();
+  if (custom != null && custom.isNotEmpty) {
+    return LtrIsolate.isolate(custom);
+  }
+  final login = user?.phone;
+  if (login != null && login.isNotEmpty) {
+    return '${LtrIsolate.isolate(login)} (${l10n.profileContactPhoneUsesLogin})';
+  }
+  return '—';
+}
 
 class UserProfileScreen extends ConsumerWidget {
   const UserProfileScreen({super.key});
@@ -50,6 +66,9 @@ class UserProfileScreen extends ConsumerWidget {
                     child: UserIdentityAvatar(
                       displayName: name.isNotEmpty ? name : '?',
                       size: 80,
+                      imageUrl: user?.logoUrl,
+                      onTap: user == null ? null : () => showProfileLogoOptions(context, ref, hasLogo: user.logoUrl?.isNotEmpty == true),
+                      semanticsLabel: l10n.profileLogo,
                       backgroundColor: premiumAvatar ? entitlements!.premiumAvatarColor : null,
                       foregroundColor: premiumAvatar ? SubscriptionColors.onViolet : null,
                     ),
@@ -89,6 +108,37 @@ class UserProfileScreen extends ConsumerWidget {
                         label: l10n.authPhone,
                         value: phone != null && phone.isNotEmpty ? LtrIsolate.isolate(phone) : '—',
                         valueLtr: true,
+                      ),
+                    ],
+                  ),
+                  AppSize.spaceXL.gap,
+                  _ProfileSection(
+                    title: l10n.profileStatementBrandingSection,
+                    children: [
+                      _ProfileActionRow(
+                        label: l10n.profileLogo,
+                        value: user?.logoUrl?.isNotEmpty == true ? l10n.profileLogoSet : l10n.profileLogoNotSet,
+                        actionLabel: l10n.edit,
+                        onAction: user == null
+                            ? null
+                            : () => showProfileLogoOptions(context, ref, hasLogo: user.logoUrl?.isNotEmpty == true),
+                      ),
+                      _ProfileActionRow(
+                        label: l10n.profileContactPhone,
+                        value: _contactPhoneSummary(l10n, user),
+                        valueLtr: true,
+                        actionLabel: l10n.edit,
+                        onAction: user == null
+                            ? null
+                            : () async {
+                                final saved = await showProfileEditContactPhoneSheet(
+                                  context,
+                                  initialContactPhone: user.contactPhone,
+                                );
+                                if (saved == true && context.mounted) {
+                                  AppToaster.show(l10n.profileContactPhoneUpdated, kind: ToastKind.success);
+                                }
+                              },
                       ),
                     ],
                   ),

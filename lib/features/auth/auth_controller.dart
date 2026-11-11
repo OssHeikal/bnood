@@ -210,6 +210,37 @@ class AuthController extends Notifier<AuthState> {
     }
   }
 
+  Future<AuthApiException?> saveContactPhone(String? contactPhone) async {
+    try {
+      final trimmed = contactPhone?.trim() ?? '';
+      final user = await _api.updateContactPhone(contactPhone: trimmed.isEmpty ? null : trimmed);
+      state = state.copyWith(user: user);
+      return null;
+    } on AuthApiException catch (e) {
+      return e;
+    }
+  }
+
+  Future<AuthApiException?> uploadProfileLogo({required String filePath, String? filename}) async {
+    try {
+      final user = await _api.uploadProfileLogo(filePath: filePath, filename: filename);
+      state = state.copyWith(user: user);
+      return null;
+    } on AuthApiException catch (e) {
+      return e;
+    }
+  }
+
+  Future<AuthApiException?> deleteProfileLogo() async {
+    try {
+      final user = await _api.deleteProfileLogo();
+      state = state.copyWith(user: user);
+      return null;
+    } on AuthApiException catch (e) {
+      return e;
+    }
+  }
+
   Future<AuthApiException?> deleteAccount({required String currentPassword}) async {
     try {
       await _api.deleteAccount(currentPassword: currentPassword);

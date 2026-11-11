@@ -10,6 +10,7 @@ class UserIdentityAvatar extends StatelessWidget {
     super.key,
     required this.displayName,
     this.size = 48,
+    this.imageUrl,
     this.onTap,
     this.semanticsLabel,
     this.backgroundColor,
@@ -18,6 +19,7 @@ class UserIdentityAvatar extends StatelessWidget {
 
   final String displayName;
   final double size;
+  final String? imageUrl;
   final VoidCallback? onTap;
   final String? semanticsLabel;
   final Color? backgroundColor;
@@ -30,23 +32,22 @@ class UserIdentityAvatar extends StatelessWidget {
     final initials = personInitials(displayName);
     final fontSize = size * 0.38;
 
+    final url = imageUrl?.trim();
+    final Widget face = url != null && url.isNotEmpty
+        ? Image.network(
+            url,
+            width: size,
+            height: size,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => _initialsFace(text, initials, fontSize, colors),
+          )
+        : _initialsFace(text, initials, fontSize, colors);
+
     final avatar = Material(
       color: backgroundColor ?? colors.surfaceSunken,
       shape: AppShape.circle,
       clipBehavior: Clip.antiAlias,
-      child: SizedBox(
-        width: size,
-        height: size,
-        child: Center(
-          child: Text(
-            initials,
-            style: text.bodyEmphasis.copyWith(
-              color: foregroundColor ?? colors.primary,
-              fontSize: fontSize,
-            ),
-          ),
-        ),
-      ),
+      child: SizedBox(width: size, height: size, child: face),
     );
 
     if (onTap == null) return avatar;
@@ -55,6 +56,18 @@ class UserIdentityAvatar extends StatelessWidget {
       button: true,
       label: semanticsLabel,
       child: InkWell(onTap: onTap, customBorder: AppShape.circle, child: avatar),
+    );
+  }
+
+  Widget _initialsFace(AppText text, String initials, double fontSize, AppColors colors) {
+    return Center(
+      child: Text(
+        initials,
+        style: text.bodyEmphasis.copyWith(
+          color: foregroundColor ?? colors.primary,
+          fontSize: fontSize,
+        ),
+      ),
     );
   }
 }

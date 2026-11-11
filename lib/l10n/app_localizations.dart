@@ -2431,6 +2431,132 @@ abstract class AppLocalizations {
   /// **'Edit name'**
   String get profileEditNameTitle;
 
+  /// No description provided for @profileStatementBrandingSection.
+  ///
+  /// In en, this message translates to:
+  /// **'On client statements'**
+  String get profileStatementBrandingSection;
+
+  /// No description provided for @profileLogo.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo'**
+  String get profileLogo;
+
+  /// No description provided for @profileLogoSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Added'**
+  String get profileLogoSet;
+
+  /// No description provided for @profileLogoNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get profileLogoNotSet;
+
+  /// No description provided for @profileLogoPickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose logo'**
+  String get profileLogoPickTitle;
+
+  /// No description provided for @profileLogoFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo library'**
+  String get profileLogoFromGallery;
+
+  /// No description provided for @profileLogoFromCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get profileLogoFromCamera;
+
+  /// No description provided for @profileLogoChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change logo'**
+  String get profileLogoChange;
+
+  /// No description provided for @profileLogoRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove logo'**
+  String get profileLogoRemove;
+
+  /// No description provided for @profileLogoRemoveConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove logo?'**
+  String get profileLogoRemoveConfirmTitle;
+
+  /// No description provided for @profileLogoRemoveConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Statements will show your initials again.'**
+  String get profileLogoRemoveConfirmBody;
+
+  /// No description provided for @profileLogoTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Image must be 2 MB or smaller.'**
+  String get profileLogoTooLarge;
+
+  /// No description provided for @profileLogoMustBeSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo must be square (equal width and height).'**
+  String get profileLogoMustBeSquare;
+
+  /// No description provided for @profileLogoUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read this image. Use JPG, PNG, or WebP.'**
+  String get profileLogoUnreadable;
+
+  /// No description provided for @profileLogoUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo updated.'**
+  String get profileLogoUpdated;
+
+  /// No description provided for @profileLogoRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo removed.'**
+  String get profileLogoRemoved;
+
+  /// No description provided for @profileContactPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact phone'**
+  String get profileContactPhone;
+
+  /// No description provided for @profileContactPhoneStatementHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown on client statements. Leave empty to use your sign-in number.'**
+  String get profileContactPhoneStatementHint;
+
+  /// No description provided for @profileContactPhoneUsesLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'sign-in number'**
+  String get profileContactPhoneUsesLogin;
+
+  /// No description provided for @profileEditContactPhoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit contact phone'**
+  String get profileEditContactPhoneTitle;
+
+  /// No description provided for @profileContactPhoneUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact phone updated.'**
+  String get profileContactPhoneUpdated;
+
   /// No description provided for @profileChangePasswordHint.
   ///
   /// In en, this message translates to:

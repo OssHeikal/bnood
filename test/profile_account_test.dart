@@ -26,6 +26,8 @@ void main() {
 
   group('UserProfileScreen', () {
     testWidgets('shows hierarchy and uppercase initials', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 1400));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(
         ProviderScope(
           overrides: [authControllerProvider.overrideWith(_AuthUser.new)],
@@ -46,9 +48,13 @@ void main() {
       expect(find.text('Change password'), findsOneWidget);
       expect(find.text('Delete account'), findsOneWidget);
       expect(find.text('Client name'), findsNothing);
+      expect(find.text('On client statements'), findsOneWidget);
+      expect(find.text('Contact phone'), findsOneWidget);
     });
 
     testWidgets('change password navigates to existing screen', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 1400));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       final router = GoRouter(
         routes: [
           GoRoute(path: AuthPaths.profile, builder: (_, _) => const UserProfileScreen()),

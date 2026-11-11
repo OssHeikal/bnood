@@ -15,6 +15,7 @@ import '../../core/widgets/app_amount.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../features/items/item_semantic_icon.dart';
+import 'statement_issuer_header.dart';
 import 'statement_summary_widgets.dart';
 
 class StatementApiClientDocument extends StatelessWidget {
@@ -38,9 +39,15 @@ class StatementApiClientDocument extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final text = context.text;
 
+    final issuer = statement.issuer;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (issuer != null) ...[
+          StatementIssuerHeader(issuer: issuer),
+          const SizedBox(height: AppSize.spaceMD),
+        ],
         Text(clientName, style: text.pageTitle),
         const SizedBox(height: AppSize.spaceMD),
         _summaryStats(context, l10n),

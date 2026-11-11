@@ -69,6 +69,35 @@ void main() {
       api.close();
     });
 
+    test('updateContactPhone PATCH contact-phone', () async {
+      final api = _apiWithAdapter(FakeSessionStore(token: 'tok'), (options) async {
+        expect(options.method, 'PATCH');
+        expect(options.path.endsWith('/profile/contact-phone'), isTrue);
+        expect((options.data as Map)['contact_phone'], '01022223333');
+        return jsonResponse('''
+{"success":true,"message":"ok","data":{
+  "user":{"id":"u1","phone":"+201012345678","name":"Owner","contact_phone":"+201022223333","logo_url":null,"phone_verified_at":"2025-01-01T00:00:00Z"}
+}}''');
+      });
+      final user = await api.updateContactPhone(contactPhone: '01022223333');
+      expect(user.contactPhone, '+201022223333');
+      api.close();
+    });
+
+    test('deleteProfileLogo DELETE profile/logo', () async {
+      final api = _apiWithAdapter(FakeSessionStore(token: 'tok'), (options) async {
+        expect(options.method, 'DELETE');
+        expect(options.path.endsWith('/profile/logo'), isTrue);
+        return jsonResponse('''
+{"success":true,"message":"ok","data":{
+  "user":{"id":"u1","phone":"+201012345678","name":"Owner","contact_phone":null,"logo_url":null,"phone_verified_at":"2025-01-01T00:00:00Z"}
+}}''');
+      });
+      final user = await api.deleteProfileLogo();
+      expect(user.logoUrl, isNull);
+      api.close();
+    });
+
     test('verifyRegistration accepts 201 session payload', () async {
       final api = _apiWithAdapter(
         FakeSessionStore(),

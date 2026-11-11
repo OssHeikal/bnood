@@ -1310,6 +1310,73 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileEditNameTitle => 'تعديل الاسم';
 
   @override
+  String get profileStatementBrandingSection => 'على كشوف العملاء';
+
+  @override
+  String get profileLogo => 'الشعار';
+
+  @override
+  String get profileLogoSet => 'مضاف';
+
+  @override
+  String get profileLogoNotSet => 'غير مضاف';
+
+  @override
+  String get profileLogoPickTitle => 'اختيار الشعار';
+
+  @override
+  String get profileLogoFromGallery => 'مكتبة الصور';
+
+  @override
+  String get profileLogoFromCamera => 'الكاميرا';
+
+  @override
+  String get profileLogoChange => 'تغيير الشعار';
+
+  @override
+  String get profileLogoRemove => 'إزالة الشعار';
+
+  @override
+  String get profileLogoRemoveConfirmTitle => 'إزالة الشعار؟';
+
+  @override
+  String get profileLogoRemoveConfirmBody =>
+      'ستظهر الأحرف الأولى من اسمك على الكشوف بدلاً من الشعار.';
+
+  @override
+  String get profileLogoTooLarge => 'يجب ألا يتجاوز حجم الصورة 2 ميجابايت.';
+
+  @override
+  String get profileLogoMustBeSquare =>
+      'يجب أن يكون الشعار مربعاً (عرض وارتفاع متساويان).';
+
+  @override
+  String get profileLogoUnreadable =>
+      'تعذّر قراءة الصورة. استخدم JPG أو PNG أو WebP.';
+
+  @override
+  String get profileLogoUpdated => 'تم تحديث الشعار.';
+
+  @override
+  String get profileLogoRemoved => 'تمت إزالة الشعار.';
+
+  @override
+  String get profileContactPhone => 'هاتف التواصل';
+
+  @override
+  String get profileContactPhoneStatementHint =>
+      'يُعرض على كشوف العملاء. اتركه فارغاً لاستخدام رقم تسجيل الدخول.';
+
+  @override
+  String get profileContactPhoneUsesLogin => 'رقم الدخول';
+
+  @override
+  String get profileEditContactPhoneTitle => 'تعديل هاتف التواصل';
+
+  @override
+  String get profileContactPhoneUpdated => 'تم تحديث هاتف التواصل.';
+
+  @override
   String get profileChangePasswordHint => 'حدّث كلمة مرور تسجيل الدخول.';
 
   @override
