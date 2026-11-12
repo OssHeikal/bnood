@@ -19,6 +19,8 @@ Future<VoucherDraft> enrichVoucherDraftRemote(ProviderContainer container, Vouch
 
   if (next.editingTransactionId != null) {
     final voucher = await container.read(vouchersRepositoryProvider).getVoucher(next.editingTransactionId!);
+    final hasLinkedProvider = voucher.isSpend &&
+        (voucher.supplierId != null || voucher.craftsmanId != null);
     next = next.copyWith(
       clientLabel: voucher.clientName ?? next.clientLabel,
       itemLabel: voucher.itemName ?? next.itemLabel,
@@ -26,6 +28,7 @@ Future<VoucherDraft> enrichVoucherDraftRemote(ProviderContainer container, Vouch
           voucher.expenseClassification == 'materials' ? voucher.providerName ?? next.supplierLabel : next.supplierLabel,
       craftsmanLabel:
           voucher.expenseClassification == 'labor' ? voucher.providerName ?? next.craftsmanLabel : next.craftsmanLabel,
+      providerLinkedToClient: hasLinkedProvider ? true : next.providerLinkedToClient,
     );
   }
 

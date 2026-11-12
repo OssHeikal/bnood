@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/api/auth_api_exception.dart';
 import '../../core/agreements/agreement_amount_api.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/providers/app_providers.dart';
@@ -73,12 +74,16 @@ Future<void> ensureVoucherProviderAgreementBeforeSave({
   if (providerId == null) return;
 
   if (remote) {
-    await ref.read(appAgreementsRepositoryProvider).createAgreement(
-          clientId: draft.clientId!,
-          providerId: providerId,
-          amountMajor: agreementAmountMajorFromMinor(agreementAmountPiastres),
-          omitAmount: agreementAmountPiastres == null,
-        );
+    try {
+      await ref.read(appAgreementsRepositoryProvider).createAgreement(
+            clientId: draft.clientId!,
+            providerId: providerId,
+            amountMajor: agreementAmountMajorFromMinor(agreementAmountPiastres),
+            omitAmount: agreementAmountPiastres == null,
+          );
+    } on AuthApiException catch (e) {
+      if (!e.isAlreadyLinked) rethrow;
+    }
     return;
   }
 

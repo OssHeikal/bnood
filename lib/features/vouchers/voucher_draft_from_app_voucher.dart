@@ -6,6 +6,8 @@ VoucherDraft voucherDraftFromAppVoucher(
   required String projectId,
   String? clientId,
 }) {
+  final hasLinkedProvider = voucher.isSpend &&
+      (voucher.supplierId != null || voucher.craftsmanId != null);
   return VoucherDraft(
     clientId: clientId ?? voucher.clientId,
     projectId: projectId,
@@ -23,5 +25,6 @@ VoucherDraft voucherDraftFromAppVoucher(
     description: voucher.description,
     date: voucher.voucherDate,
     editingTransactionId: voucher.id,
+    providerLinkedToClient: hasLinkedProvider ? true : null,
   );
 }
