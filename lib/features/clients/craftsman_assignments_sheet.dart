@@ -10,6 +10,7 @@ import '../../core/agreements/agreement_amount_api.dart';
 import '../../core/agreements/agreements_error_handler.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/money/remote_money_units.dart';
+import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/client_api_record.dart';
 import '../../core/clients/client_provider_agreement_preview.dart';
@@ -412,7 +413,8 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       );
     } catch (e) {
       if (mounted) {
-        AppToaster.show(e.toString(), kind: ToastKind.failure);
+        final l10n = AppLocalizations.of(context);
+        AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
       }
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -420,6 +422,7 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
   }
 
   Future<void> _saveRemote() async {
+    final l10n = AppLocalizations.of(context);
     final clientId = widget.clientId!;
     final agreementsRepo = ref.read(appAgreementsRepositoryProvider);
     try {
@@ -478,9 +481,11 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       if (await handleAgreementsApiAuthError(context: context, ref: ref, error: e)) {
         return;
       }
-      AppToaster.show(e.message, kind: ToastKind.failure);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     } catch (e) {
-      if (mounted) AppToaster.show(e.toString(), kind: ToastKind.failure);
+      if (mounted) {
+        AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }

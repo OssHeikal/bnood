@@ -7,6 +7,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/api/api_accept_language.dart';
 import '../core/providers/settings_provider.dart';
 import '../core/session/user_session_lifecycle.dart';
 import '../core/theme/app_theme.dart';
@@ -24,6 +25,7 @@ class BnoodApp extends ConsumerWidget {
     final router = ref.watch(goRouterProvider);
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
+    ApiAcceptLanguage.syncLocale(locale);
     return AppGateLifecycle(
       child: MaterialApp.router(
         builder: (context, child) {

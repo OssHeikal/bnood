@@ -85,6 +85,28 @@ class AuthApiException implements Exception {
 
   bool get isStorageFailed => statusCode == 500 && code == 'storage_failed';
 
+  /// Best user-facing detail from the API body (field messages before top-level [message]).
+  ///
+  /// Network localization belongs in [apiErrorUserMessage] — this getter keeps the transport copy.
+  String get displayMessage {
+    final errors = fieldErrors;
+    if (errors != null && errors.isNotEmpty) {
+      final seen = <String>{};
+      final parts = <String>[];
+      for (final list in errors.values) {
+        for (final raw in list) {
+          final text = raw.trim();
+          if (text.isEmpty || !seen.add(text)) continue;
+          parts.add(text);
+          if (parts.length >= 3) break;
+        }
+        if (parts.length >= 3) break;
+      }
+      if (parts.isNotEmpty) return parts.join('\n');
+    }
+    return message;
+  }
+
   @override
   String toString() => 'AuthApiException($statusCode, $code, $message)';
 }

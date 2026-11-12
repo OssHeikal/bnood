@@ -16,6 +16,7 @@ import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/database/database.dart' show TransactionsCompanion;
+import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/money/money_format.dart';
@@ -629,15 +630,15 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           craftsmanId: tx.craftsmanId,
         );
       }
-      AppToaster.show(l10n.delete, kind: ToastKind.success);
+      AppToaster.show(l10n.toastVoucherDeleted, kind: ToastKind.success);
       if (mounted) _closeVoucherRoute();
     } on AuthApiException catch (e) {
       if (!mounted) return;
       if (await handleVouchersApiAuthError(context: context, ref: ref, error: e)) return;
       if (await handleSubscriptionApiError(context: context, ref: ref, error: e)) return;
-      AppToaster.show(e.message, kind: ToastKind.failure);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     } catch (e) {
-      if (mounted) AppToaster.show('$e', kind: ToastKind.failure);
+      if (mounted) AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     } finally {
       if (mounted) setState(() => _deleting = false);
     }
@@ -711,7 +712,10 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           }
           return;
         }
-        AppToaster.show(l10n.save, kind: ToastKind.success);
+        final successMessage = draft.editingTransactionId != null
+            ? l10n.toastVoucherUpdated
+            : l10n.toastVoucherCreated;
+        AppToaster.show(successMessage, kind: ToastKind.success);
         if (mounted) _closeVoucherRoute();
         return;
       }
@@ -752,15 +756,18 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
         supplierId: draft.expenseType == 'materials' ? draft.supplierId : null,
         craftsmanId: draft.expenseType == 'labor' ? draft.craftsmanId : null,
       );
-      AppToaster.show(l10n.save, kind: ToastKind.success);
+      final successMessage = draft.editingTransactionId != null
+          ? l10n.toastVoucherUpdated
+          : l10n.toastVoucherCreated;
+      AppToaster.show(successMessage, kind: ToastKind.success);
       if (mounted) _closeVoucherRoute();
     } on AuthApiException catch (e) {
       if (!mounted) return;
       if (await handleVouchersApiAuthError(context: context, ref: ref, error: e)) return;
       if (await handleSubscriptionApiError(context: context, ref: ref, error: e)) return;
-      AppToaster.show(e.message, kind: ToastKind.failure);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     } catch (e) {
-      if (mounted) AppToaster.show('$e', kind: ToastKind.failure);
+      if (mounted) AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     } finally {
       if (mounted) setState(() => _saving = false);
     }

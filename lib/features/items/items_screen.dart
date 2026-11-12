@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/widgets/floating_shell_dock.dart';
 import '../../app/widgets/shell_nav_icon.dart';
+import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
@@ -48,7 +49,8 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
       await ref.read(itemsCatalogProvider.notifier).reorderCatalogItem(oldIndex: oldIndex, newIndex: newIndex);
     } on AuthApiException catch (e) {
       if (!mounted) return;
-      AppToaster.show(e.message, kind: ToastKind.failure);
+      final l10n = AppLocalizations.of(context);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     }
   }
 

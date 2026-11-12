@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
+import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/items/item_api_record.dart';
 import '../../core/items/items_error_handler.dart';
@@ -34,7 +35,7 @@ Future<CatalogItem?> saveItemCreate({
       return null;
     }
     if (e.isDuplicateName) rethrow;
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }
 }
@@ -59,10 +60,10 @@ Future<CatalogItem?> saveItemUpdate({
     }
     if (e.isDuplicateName) rethrow;
     if (e.isDefaultItemReadonly) {
-      AppToaster.show(e.message, kind: ToastKind.failure);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
       return null;
     }
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }
 }
@@ -94,7 +95,7 @@ Future<bool> confirmDeleteItem(
     if (await handleItemsApiAuthError(context: context, ref: ref, error: e)) {
       return false;
     }
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return false;
   }
 }

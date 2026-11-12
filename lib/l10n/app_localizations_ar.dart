@@ -1110,7 +1110,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authPhone => 'رقم الموبايل';
 
   @override
-  String get authPhoneInvalid => 'أدخل رقم موبايل من 11 رقماً يبدأ بـ 01.';
+  String get authPhoneInvalid =>
+      'اكتب رقم موبايل مصري صحيح (11 رقم يبدأ بـ 01).';
 
   @override
   String get authPassword => 'كلمة المرور';
@@ -1255,6 +1256,66 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get authSessionExpired =>
       'انتهت الجلسة. سجّل الدخول من جديد للمتابعة.';
+
+  @override
+  String get apiErrorNetwork =>
+      'تعذر الاتصال بالسيرفر، اتأكد من الإنترنت وحاول تاني.';
+
+  @override
+  String get apiErrorSessionExpired => 'انتهت الجلسة، سجّل دخول تاني.';
+
+  @override
+  String get apiErrorThrottled => 'محاولات كتير. استنى شوية وحاول تاني.';
+
+  @override
+  String get apiErrorServer => 'في مشكلة في السيرفر. حاول تاني بعد شوية.';
+
+  @override
+  String get apiErrorPayloadTooLarge =>
+      'الملف كبير أوي. اختار ملف أصغر وحاول تاني.';
+
+  @override
+  String get apiGenericFailure => 'حصل خطأ. حاول تاني.';
+
+  @override
+  String get egyptMobileInvalid =>
+      'اكتب رقم موبايل مصري صحيح (11 رقم يبدأ بـ 01).';
+
+  @override
+  String get toastClientCreated => 'اتضاف العميل.';
+
+  @override
+  String get toastClientUpdated => 'اتحدّث العميل.';
+
+  @override
+  String get toastClientArchived => 'اتأرشف العميل.';
+
+  @override
+  String get toastSupplierCreated => 'اتضاف المورد.';
+
+  @override
+  String get toastCraftsmanCreated => 'اتضاف الصنايعي.';
+
+  @override
+  String get toastProviderUpdated => 'اتحدّثت البيانات.';
+
+  @override
+  String get toastItemCreated => 'اتضاف البند.';
+
+  @override
+  String get toastItemUpdated => 'اتحدّث البند.';
+
+  @override
+  String get toastItemDeleted => 'اتمسح البند.';
+
+  @override
+  String get toastVoucherCreated => 'اتسجّل السند.';
+
+  @override
+  String get toastVoucherUpdated => 'اتحدّث السند.';
+
+  @override
+  String get toastVoucherDeleted => 'اتمسح السند.';
 
   @override
   String get authFieldRequired => 'املأ هذا الحقل للمتابعة.';

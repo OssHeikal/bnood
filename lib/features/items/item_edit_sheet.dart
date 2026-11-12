@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/api/api_field_errors.dart';
 import '../../core/api/auth_api_exception.dart';
+import '../../core/widgets/app_toaster.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
@@ -73,11 +75,16 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
         iconKey: _iconKey,
         colorKey: _colorKey,
       );
-      if (updated != null && mounted) Navigator.pop(context);
+      if (updated != null && mounted) {
+        final l10n = AppLocalizations.of(context);
+        AppToaster.show(l10n.toastItemUpdated, kind: ToastKind.success);
+        Navigator.pop(context);
+      }
     } on AuthApiException catch (e) {
       if (!mounted) return;
       final l10n = AppLocalizations.of(context);
-      final fieldError = duplicateItemNameFieldError(l10n, e);
+      final lookup = ApiFieldErrorLookup(e);
+      final fieldError = duplicateItemNameFieldError(l10n, e) ?? lookup.textFor('name');
       if (fieldError != null) {
         setState(() => _nameError = fieldError);
       }
@@ -93,7 +100,11 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
       itemId: widget.item.id,
       name: _nameCtrl.text.trim().isEmpty ? widget.item.name : _nameCtrl.text.trim(),
     );
-    if (deleted && mounted) Navigator.pop(context);
+    if (deleted && mounted) {
+      final l10n = AppLocalizations.of(context);
+      AppToaster.show(l10n.toastItemDeleted, kind: ToastKind.success);
+      Navigator.pop(context);
+    }
   }
 
   @override

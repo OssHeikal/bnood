@@ -4,7 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/api/api_error_user_message.dart';
+import '../../core/api/api_field_errors.dart';
 import '../../core/api/auth_api_exception.dart';
+import '../../core/validation/egypt_mobile_phone_validation.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
@@ -42,6 +45,7 @@ class _InlineCreateClientPageState
   final _phone = TextEditingController();
   var _attemptedSubmit = false;
   var _saving = false;
+  String? _nameError;
   String? _phoneError;
 
   @override
@@ -52,10 +56,15 @@ class _InlineCreateClientPageState
   }
 
   Future<void> _save() async {
-    setState(() => _attemptedSubmit = true);
+    setState(() {
+      _attemptedSubmit = true;
+      _nameError = null;
+      _phoneError = null;
+    });
     if (_formKey.currentState?.validate() != true) return;
     if (_saving) return;
     setState(() => _saving = true);
+  final l10n = AppLocalizations.of(context);
     try {
       final client = await saveClientCreate(
         ref: ref,
@@ -67,17 +76,20 @@ class _InlineCreateClientPageState
         setState(() => _saving = false);
         return;
       }
+      AppToaster.show(l10n.toastClientCreated, kind: ToastKind.success);
       Navigator.pop(context, client.id);
     } on AuthApiException catch (e) {
       if (!mounted) return;
-      final l10n = AppLocalizations.of(context);
+      final lookup = ApiFieldErrorLookup(e);
       setState(() {
-        _phoneError = duplicatePhoneFieldError(l10n, e);
+        _nameError = lookup.textFor('name');
+        _phoneError = duplicatePhoneFieldError(l10n, e) ?? lookup.textFor('phone');
         _saving = false;
       });
     } catch (e) {
       if (!mounted) return;
-      AppToaster.show(e.toString(), kind: ToastKind.failure);
+      final messageL10n = AppLocalizations.of(context);
+      AppToaster.show(apiErrorUserMessage(messageL10n, e), kind: ToastKind.failure);
       setState(() => _saving = false);
     }
   }
@@ -111,6 +123,10 @@ class _InlineCreateClientPageState
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
               autofillHints: const [AutofillHints.name],
+              errorMessage: _nameError,
+              onChanged: (_) {
+                if (_nameError != null) setState(() => _nameError = null);
+              },
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
                   return l10n.clientNameRequired;
@@ -132,6 +148,7 @@ class _InlineCreateClientPageState
               onChanged: (_) {
                 if (_phoneError != null) setState(() => _phoneError = null);
               },
+              validator: (value) => validateOptionalEgyptMobile(l10n, value),
             ),
           ],
         ),
@@ -237,6 +254,8 @@ class _InlineCreateSupplierPageState
   final _phone = TextEditingController();
   var _attemptedSubmit = false;
   var _saving = false;
+  String? _nameError;
+  String? _phoneError;
 
   @override
   void dispose() {
@@ -246,10 +265,15 @@ class _InlineCreateSupplierPageState
   }
 
   Future<void> _save() async {
-    setState(() => _attemptedSubmit = true);
+    setState(() {
+      _attemptedSubmit = true;
+      _nameError = null;
+      _phoneError = null;
+    });
     if (_formKey.currentState?.validate() != true) return;
     if (_saving) return;
     setState(() => _saving = true);
+    final l10n = AppLocalizations.of(context);
     try {
       final phoneText = _phone.text.trim();
       if (ref.read(remoteProvidersEnabledProvider) || ref.read(remoteVouchersEnabledProvider)) {
@@ -264,6 +288,7 @@ class _InlineCreateSupplierPageState
           setState(() => _saving = false);
           return;
         }
+        AppToaster.show(l10n.toastSupplierCreated, kind: ToastKind.success);
         Navigator.pop(context, provider.id);
         return;
       }
@@ -275,12 +300,15 @@ class _InlineCreateSupplierPageState
       Navigator.pop(context, s.id);
     } on AuthApiException catch (e) {
       if (!mounted) return;
-      final l10n = AppLocalizations.of(context);
-      AppToaster.show(duplicatePhoneFieldError(l10n, e) ?? e.message, kind: ToastKind.failure);
-      setState(() => _saving = false);
+      final lookup = ApiFieldErrorLookup(e);
+      setState(() {
+        _nameError = duplicateProviderNameFieldError(l10n, e) ?? lookup.textFor('name');
+        _phoneError = duplicateProviderPhoneFieldError(l10n, e) ?? lookup.textFor('phone');
+        _saving = false;
+      });
     } catch (e) {
       if (!mounted) return;
-      AppToaster.show(e.toString(), kind: ToastKind.failure);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
       setState(() => _saving = false);
     }
   }
@@ -307,6 +335,10 @@ class _InlineCreateSupplierPageState
               autofocus: true,
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
+              errorMessage: _nameError,
+              onChanged: (_) {
+                if (_nameError != null) setState(() => _nameError = null);
+              },
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
                   return l10n.supplierNameRequired;
@@ -324,6 +356,11 @@ class _InlineCreateSupplierPageState
               ltrValue: true,
               textInputAction: TextInputAction.done,
               autofillHints: const [AutofillHints.telephoneNumber],
+              errorMessage: _phoneError,
+              onChanged: (_) {
+                if (_phoneError != null) setState(() => _phoneError = null);
+              },
+              validator: (value) => validateOptionalEgyptMobile(l10n, value),
             ),
           ],
         ),
@@ -361,6 +398,8 @@ class _InlineCreateCraftsmanPageState
   final _phone = TextEditingController();
   var _attemptedSubmit = false;
   var _saving = false;
+  String? _nameError;
+  String? _phoneError;
 
   @override
   void dispose() {
@@ -370,10 +409,15 @@ class _InlineCreateCraftsmanPageState
   }
 
   Future<void> _save() async {
-    setState(() => _attemptedSubmit = true);
+    setState(() {
+      _attemptedSubmit = true;
+      _nameError = null;
+      _phoneError = null;
+    });
     if (_formKey.currentState?.validate() != true) return;
     if (_saving) return;
     setState(() => _saving = true);
+    final l10n = AppLocalizations.of(context);
     try {
       final phoneText = _phone.text.trim();
       if (ref.read(remoteProvidersEnabledProvider)) {
@@ -384,7 +428,11 @@ class _InlineCreateCraftsmanPageState
           type: AppProviderType.craftsman,
           phone: phoneText.isEmpty ? null : phoneText,
         );
-        if (!mounted || provider == null) return;
+        if (!mounted || provider == null) {
+          setState(() => _saving = false);
+          return;
+        }
+        AppToaster.show(l10n.toastCraftsmanCreated, kind: ToastKind.success);
         Navigator.pop(context, provider.id);
         return;
       }
@@ -394,9 +442,17 @@ class _InlineCreateCraftsmanPageState
           );
       if (!mounted) return;
       Navigator.pop(context, c.id);
+    } on AuthApiException catch (e) {
+      if (!mounted) return;
+      final lookup = ApiFieldErrorLookup(e);
+      setState(() {
+        _nameError = duplicateProviderNameFieldError(l10n, e) ?? lookup.textFor('name');
+        _phoneError = duplicateProviderPhoneFieldError(l10n, e) ?? lookup.textFor('phone');
+        _saving = false;
+      });
     } catch (e) {
       if (!mounted) return;
-      AppToaster.show(e.toString(), kind: ToastKind.failure);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
       setState(() => _saving = false);
     }
   }
@@ -430,6 +486,10 @@ class _InlineCreateCraftsmanPageState
               autofocus: true,
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
+              errorMessage: _nameError,
+              onChanged: (_) {
+                if (_nameError != null) setState(() => _nameError = null);
+              },
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
                   return l10n.craftsmanNameRequired;
@@ -447,6 +507,11 @@ class _InlineCreateCraftsmanPageState
               ltrValue: true,
               textInputAction: TextInputAction.done,
               autofillHints: const [AutofillHints.telephoneNumber],
+              errorMessage: _phoneError,
+              onChanged: (_) {
+                if (_phoneError != null) setState(() => _phoneError = null);
+              },
+              validator: (value) => validateOptionalEgyptMobile(l10n, value),
             ),
           ],
         ),

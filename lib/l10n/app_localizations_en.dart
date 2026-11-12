@@ -1119,7 +1119,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authPhoneInvalid =>
-      'Enter an 11-digit mobile number that starts with 01.';
+      'Enter a valid Egyptian mobile (11 digits starting with 01).';
 
   @override
   String get authPassword => 'Password';
@@ -1267,6 +1267,69 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authSessionExpired =>
       'Your session ended. Sign in again to continue.';
+
+  @override
+  String get apiErrorNetwork =>
+      'Could not reach the server. Check your internet and try again.';
+
+  @override
+  String get apiErrorSessionExpired =>
+      'Your session ended. Sign in again to continue.';
+
+  @override
+  String get apiErrorThrottled =>
+      'Too many attempts. Wait a moment, then try again.';
+
+  @override
+  String get apiErrorServer =>
+      'The server had a problem. Try again in a moment.';
+
+  @override
+  String get apiErrorPayloadTooLarge =>
+      'This file is too large. Choose a smaller one and try again.';
+
+  @override
+  String get apiGenericFailure => 'Something went wrong. Try again.';
+
+  @override
+  String get egyptMobileInvalid =>
+      'Enter a valid Egyptian mobile (11 digits starting with 01).';
+
+  @override
+  String get toastClientCreated => 'Client added.';
+
+  @override
+  String get toastClientUpdated => 'Client updated.';
+
+  @override
+  String get toastClientArchived => 'Client archived.';
+
+  @override
+  String get toastSupplierCreated => 'Supplier added.';
+
+  @override
+  String get toastCraftsmanCreated => 'Craftsman added.';
+
+  @override
+  String get toastProviderUpdated => 'Details updated.';
+
+  @override
+  String get toastItemCreated => 'Item added.';
+
+  @override
+  String get toastItemUpdated => 'Item updated.';
+
+  @override
+  String get toastItemDeleted => 'Item removed.';
+
+  @override
+  String get toastVoucherCreated => 'Voucher saved.';
+
+  @override
+  String get toastVoucherUpdated => 'Voucher updated.';
+
+  @override
+  String get toastVoucherDeleted => 'Voucher deleted.';
 
   @override
   String get authFieldRequired => 'Fill in this field to continue.';

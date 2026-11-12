@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/api/api_field_errors.dart';
 import '../../core/api/auth_api_exception.dart';
+import '../../core/widgets/app_toaster.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
@@ -52,7 +54,8 @@ class _ItemCreateSheetState extends ConsumerState<ItemCreateSheet> {
     if (_formKey.currentState?.validate() != true) return;
     if (_saving) return;
     setState(() => _saving = true);
-  try {
+    final l10n = AppLocalizations.of(context);
+    try {
       final item = await saveItemCreate(
         ref: ref,
         context: context,
@@ -61,12 +64,14 @@ class _ItemCreateSheetState extends ConsumerState<ItemCreateSheet> {
         colorKey: _colorKey,
       );
       if (item != null && mounted) {
+        AppToaster.show(l10n.toastItemCreated, kind: ToastKind.success);
         Navigator.pop(context, widget.returnCreatedItemId ? item.id : null);
       }
     } on AuthApiException catch (e) {
       if (!mounted) return;
       final l10n = AppLocalizations.of(context);
-      final fieldError = duplicateItemNameFieldError(l10n, e);
+      final lookup = ApiFieldErrorLookup(e);
+      final fieldError = duplicateItemNameFieldError(l10n, e) ?? lookup.textFor('name');
       if (fieldError != null) {
         setState(() => _nameError = fieldError);
       }

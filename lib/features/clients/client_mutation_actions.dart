@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
+import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
+import '../../core/validation/egypt_mobile_phone_validation.dart';
 import '../../core/clients/clients_error_handler.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/database/database.dart';
@@ -23,7 +25,7 @@ Future<Client?> saveClientCreate({
   if (ref.read(remoteClientsEnabledProvider)) {
     return _saveRemoteCreate(ref, context, l10n, name: name, phone: phone);
   }
-  return ref.read(repositoryProvider).createClient(name: name, phone: phone);
+  return ref.read(repositoryProvider).createClient(name: name, phone: egyptMobileForApi(phone));
 }
 
 Future<Client?> saveClientUpdate({
@@ -47,7 +49,7 @@ Future<Client?> saveClientUpdate({
   return ref.read(repositoryProvider).updateClient(
         clientId: clientId,
         name: name,
-        phone: phoneField.trim().isEmpty ? '' : phoneField.trim(),
+        phone: egyptMobileForApi(phoneField) ?? '',
       );
 }
 
@@ -62,7 +64,7 @@ Future<Client?> _saveRemoteCreate(
 
   final repo = ref.read(clientsRepositoryProvider);
   try {
-    final record = await repo.createClient(name: name, phone: phone);
+    final record = await repo.createClient(name: name, phone: egyptMobileForApi(phone));
     refreshAfterClientMutation(ref, clientId: record.client.id);
     return record.client;
   } on AuthApiException catch (e) {
@@ -85,7 +87,7 @@ Future<Client?> _saveRemoteCreate(
       try {
         final record = await repo.createClient(
           name: name,
-          phone: phone,
+          phone: egyptMobileForApi(phone),
           confirmDuplicateName: true,
         );
         refreshAfterClientMutation(ref, clientId: record.client.id);
@@ -101,12 +103,12 @@ Future<Client?> _saveRemoteCreate(
         if (retry.isDuplicatePhone) {
           throw retry;
         }
-        AppToaster.show(retry.message, kind: ToastKind.failure);
+        AppToaster.show(apiErrorUserMessage(l10n, retry), kind: ToastKind.failure);
       }
       return null;
     }
     if (e.isDuplicatePhone) rethrow;
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }
 }
@@ -120,13 +122,13 @@ Future<Client?> _saveRemoteUpdate(
   required String phoneField,
 }) async {
   final repo = ref.read(clientsRepositoryProvider);
-  final trimmedPhone = phoneField.trim();
-  final clearPhone = trimmedPhone.isEmpty;
+  final normalized = egyptMobileForApi(phoneField);
+  final clearPhone = normalized == null;
   try {
     final record = await repo.updateClient(
       id: clientId,
       name: name,
-      phone: clearPhone ? null : trimmedPhone,
+      phone: clearPhone ? null : normalized,
       clearPhone: clearPhone,
     );
     refreshAfterClientMutation(ref, clientId: record.client.id);
@@ -149,7 +151,7 @@ Future<Client?> _saveRemoteUpdate(
         final record = await repo.updateClient(
           id: clientId,
           name: name,
-          phone: clearPhone ? null : trimmedPhone,
+          phone: clearPhone ? null : normalized,
           clearPhone: clearPhone,
           confirmDuplicateName: true,
         );
@@ -161,12 +163,12 @@ Future<Client?> _saveRemoteUpdate(
           return null;
         }
         if (retry.isDuplicatePhone) rethrow;
-        AppToaster.show(retry.message, kind: ToastKind.failure);
+        AppToaster.show(apiErrorUserMessage(l10n, retry), kind: ToastKind.failure);
       }
       return null;
     }
     if (e.isDuplicatePhone) rethrow;
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }
 }

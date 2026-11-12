@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
+import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
+import '../../core/validation/egypt_mobile_phone_validation.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/providers_api/providers_error_handler.dart';
 import '../../core/providers_api/providers_riverpod.dart';
@@ -24,7 +26,7 @@ Future<AppProvider?> saveProviderCreate({
 }) async {
   final repo = ref.read(appProvidersRepositoryProvider);
   try {
-    final provider = await repo.createProvider(name: name, type: type, phone: phone);
+    final provider = await repo.createProvider(name: name, type: type, phone: egyptMobileForApi(phone));
     refreshAfterProviderMutation(ref);
     return provider;
   } on AuthApiException catch (e) {
@@ -33,7 +35,7 @@ Future<AppProvider?> saveProviderCreate({
       return null;
     }
     if (e.isDuplicateName || e.isDuplicatePhone) rethrow;
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }
 }
@@ -46,13 +48,13 @@ Future<AppProvider?> saveProviderUpdate({
   required String phoneField,
 }) async {
   final repo = ref.read(appProvidersRepositoryProvider);
-  final trimmedPhone = phoneField.trim();
-  final clearPhone = trimmedPhone.isEmpty;
+  final normalized = egyptMobileForApi(phoneField);
+  final clearPhone = normalized == null;
   try {
     final provider = await repo.updateProvider(
       id: providerId,
       name: name,
-      phone: clearPhone ? null : trimmedPhone,
+      phone: clearPhone ? null : normalized,
       clearPhone: clearPhone,
     );
     refreshAfterProviderMutation(ref);
@@ -63,7 +65,7 @@ Future<AppProvider?> saveProviderUpdate({
       return null;
     }
     if (e.isDuplicateName || e.isDuplicatePhone) rethrow;
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }
 }
@@ -95,7 +97,7 @@ Future<bool> confirmDeleteProvider(
     if (await handleProvidersApiAuthError(context: context, ref: ref, error: e)) {
       return false;
     }
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return false;
   }
 }

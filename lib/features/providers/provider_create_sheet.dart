@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/api/api_field_errors.dart';
 import '../../core/api/auth_api_exception.dart';
+import '../../core/validation/egypt_mobile_phone_validation.dart';
+import '../../core/widgets/app_toaster.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_shape.dart';
@@ -52,6 +55,7 @@ class _ProviderCreateSheetState extends ConsumerState<ProviderCreateSheet> {
     if (_formKey.currentState?.validate() != true) return;
     if (_saving) return;
     setState(() => _saving = true);
+    final l10n = AppLocalizations.of(context);
     final phoneRaw = _phone.text.trim();
     try {
       final created = await saveProviderCreate(
@@ -61,13 +65,20 @@ class _ProviderCreateSheetState extends ConsumerState<ProviderCreateSheet> {
         type: _type,
         phone: phoneRaw.isEmpty ? null : phoneRaw,
       );
-      if (created != null && mounted) Navigator.pop(context);
+      if (created != null && mounted) {
+        final message = _type == AppProviderType.supplier
+            ? l10n.toastSupplierCreated
+            : l10n.toastCraftsmanCreated;
+        AppToaster.show(message, kind: ToastKind.success);
+        Navigator.pop(context);
+      }
     } on AuthApiException catch (e) {
       if (!mounted) return;
       final l10n = AppLocalizations.of(context);
+      final lookup = ApiFieldErrorLookup(e);
       setState(() {
-        _nameError = duplicateProviderNameFieldError(l10n, e);
-        _phoneError = duplicateProviderPhoneFieldError(l10n, e);
+        _nameError = duplicateProviderNameFieldError(l10n, e) ?? lookup.textFor('name');
+        _phoneError = duplicateProviderPhoneFieldError(l10n, e) ?? lookup.textFor('phone');
       });
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -150,6 +161,7 @@ class _ProviderCreateSheetState extends ConsumerState<ProviderCreateSheet> {
                     onChanged: (_) {
                       if (_phoneError != null) setState(() => _phoneError = null);
                     },
+                    validator: (value) => validateOptionalEgyptMobile(l10n, value),
                   ),
                 ],
               ),

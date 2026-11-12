@@ -6,6 +6,7 @@ import '../../core/agreements/app_agreement_record.dart';
 import '../../core/agreements/agreements_error_handler.dart';
 import '../../core/agreements/agreement_amount_api.dart';
 import '../../core/agreements/agreements_riverpod.dart';
+import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_toaster.dart';
@@ -90,7 +91,7 @@ Future<bool> confirmUnlinkAgreement({
     if (await handleAgreementsApiAuthError(context: context, ref: ref, error: e)) {
       return false;
     }
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return false;
   }
 }
@@ -119,10 +120,10 @@ Future<bool> saveRemoteAgreementAmount({
       return false;
     }
     if (e.isClientArchivedAgreement) {
-      AppToaster.show(e.message, kind: ToastKind.failure);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
       return false;
     }
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return false;
   }
 }

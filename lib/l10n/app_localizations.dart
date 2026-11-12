@@ -2335,6 +2335,44 @@ abstract class AppLocalizations {
   /// **'Your session ended. Sign in again to continue.'**
   String get authSessionExpired;
 
+  String get apiErrorNetwork;
+
+  String get apiErrorSessionExpired;
+
+  String get apiErrorThrottled;
+
+  String get apiErrorServer;
+
+  String get apiErrorPayloadTooLarge;
+
+  String get apiGenericFailure;
+
+  String get egyptMobileInvalid;
+
+  String get toastClientCreated;
+
+  String get toastClientUpdated;
+
+  String get toastClientArchived;
+
+  String get toastSupplierCreated;
+
+  String get toastCraftsmanCreated;
+
+  String get toastProviderUpdated;
+
+  String get toastItemCreated;
+
+  String get toastItemUpdated;
+
+  String get toastItemDeleted;
+
+  String get toastVoucherCreated;
+
+  String get toastVoucherUpdated;
+
+  String get toastVoucherDeleted;
+
   /// No description provided for @authFieldRequired.
   ///
   /// In en, this message translates to:
