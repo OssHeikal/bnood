@@ -5,7 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/api/api_field_errors.dart';
 import '../../core/api/auth_api_exception.dart';
+import '../../core/validation/egypt_mobile_phone_validation.dart';
+import '../../core/widgets/app_toaster.dart';
 import 'client_mutation_actions.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
@@ -53,6 +56,7 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
   late final _phoneCtrl = TextEditingController(text: widget.phone ?? '');
   var _attemptedSubmit = false;
   var _saving = false;
+  String? _nameError;
   String? _phoneError;
 
   @override
@@ -63,7 +67,11 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
   }
 
   Future<void> _save() async {
-    setState(() => _attemptedSubmit = true);
+    setState(() {
+      _attemptedSubmit = true;
+      _nameError = null;
+      _phoneError = null;
+    });
     if (_formKey.currentState?.validate() != true) return;
     if (_saving) return;
     setState(() => _saving = true);
@@ -76,10 +84,17 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
         name: _nameCtrl.text.trim(),
         phoneField: _phoneCtrl.text,
       );
-      if (updated != null && mounted) Navigator.pop(context);
+      if (updated != null && mounted) {
+        AppToaster.show(l10n.toastClientUpdated, kind: ToastKind.success);
+        Navigator.pop(context);
+      }
     } on AuthApiException catch (e) {
       if (!mounted) return;
-      setState(() => _phoneError = duplicatePhoneFieldError(l10n, e));
+      final lookup = ApiFieldErrorLookup(e);
+      setState(() {
+        _nameError = lookup.textFor('name');
+        _phoneError = duplicatePhoneFieldError(l10n, e) ?? lookup.textFor('phone');
+      });
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -118,6 +133,10 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
                   fieldHeight: AppSize.fieldHeightComfortable,
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
+                  errorMessage: _nameError,
+                  onChanged: (_) {
+                    if (_nameError != null) setState(() => _nameError = null);
+                  },
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return l10n.clientNameRequired;
@@ -138,6 +157,7 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
                   onChanged: (_) {
                     if (_phoneError != null) setState(() => _phoneError = null);
                   },
+                  validator: (value) => validateOptionalEgyptMobile(l10n, value),
                 ),
               ],
             ),

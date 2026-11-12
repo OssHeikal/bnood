@@ -11,14 +11,11 @@ import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../home/home_foundation_scope.dart';
 import 'auth_controller.dart';
-import 'auth_form_utils.dart';
+import '../../core/validation/egypt_mobile_phone_validation.dart';
 import 'auth_messages.dart';
 
-String? validateOptionalEgyptContactPhone(AppLocalizations l10n, String? raw) {
-  final value = raw?.trim() ?? '';
-  if (value.isEmpty) return null;
-  return validateEgyptPhone(l10n, value);
-}
+String? validateOptionalEgyptContactPhone(AppLocalizations l10n, String? raw) =>
+    validateOptionalEgyptMobile(l10n, raw);
 
 Future<bool?> showProfileEditContactPhoneSheet(
   BuildContext context, {

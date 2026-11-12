@@ -11,6 +11,7 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/layout/bnood_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
 import '../../core/layout/bnood_two_column.dart';
+import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_error_handler.dart';
 import '../subscription/subscription_error_handler.dart';
@@ -217,12 +218,15 @@ class _ClientDetailBody extends ConsumerWidget {
         await ref.read(repositoryProvider).archiveClient(clientId);
       }
       refreshAfterClientMutation(ref, clientId: clientId);
-      if (context.mounted) context.pop();
+      if (context.mounted) {
+        AppToaster.show(l10n.toastClientArchived, kind: ToastKind.success);
+        context.pop();
+      }
     } on AuthApiException catch (e) {
       if (!context.mounted) return;
       if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) return;
       if (await handleClientsApiSubscriptionError(context: context, ref: ref, error: e)) return;
-      AppToaster.show(e.message, kind: ToastKind.failure);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     }
   }
 
@@ -258,7 +262,7 @@ class _ClientDetailBody extends ConsumerWidget {
         }
         return;
       }
-      AppToaster.show(e.message, kind: ToastKind.failure);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     }
   }
 

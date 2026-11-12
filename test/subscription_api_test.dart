@@ -1,5 +1,6 @@
 import 'package:bnood/core/api/api_accept_language.dart';
 import 'package:bnood/core/api/app_dio.dart';
+import 'package:flutter/material.dart';
 import 'package:bnood/core/api/subscription_api.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +16,8 @@ SubscriptionApi _api(Future<ResponseBody> Function(RequestOptions options) handl
 
 void main() {
   test('getSubscription maps paywall payload and sends Accept-Language', () async {
-  late String? acceptLanguage;
+    ApiAcceptLanguage.syncLocale(const Locale('ar'));
+    late String? acceptLanguage;
     final api = _api((options) async {
       acceptLanguage = options.headers['Accept-Language'] as String?;
       return jsonResponse('''
@@ -46,6 +48,6 @@ void main() {
     expect(snap.paywallEnabled, isTrue);
     expect(snap.entitlements.canCreateActiveProject, isFalse);
     expect(snap.paywall?.title, 'Title');
-    expect(snap.paywall?.planById('yearly')?.monthlyEquivalentMinor, 299000 ~/ 12);
+    expect(snap.paywall?.planById('yearly')?.monthlyEquivalentMinor, (299000 / 12).round());
   });
 }

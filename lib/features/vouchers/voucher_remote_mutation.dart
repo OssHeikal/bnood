@@ -1,7 +1,9 @@
+import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/vouchers/app_voucher_record.dart';
 import '../../core/vouchers/vouchers_error_handler.dart';
@@ -103,7 +105,8 @@ Future<RemoteVoucherSaveResult> saveRemoteVoucher({
     if (await handleSubscriptionApiError(context: context, ref: ref, error: e)) {
       return const RemoteVoucherSaveResult(voucherSaved: false);
     }
-    AppToaster.show(e.message, kind: ToastKind.failure);
+    final l10n = AppLocalizations.of(context);
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return const RemoteVoucherSaveResult(voucherSaved: false);
   }
 }
@@ -133,7 +136,8 @@ Future<bool> deleteRemoteVoucher({
       return false;
     }
     if (context.mounted) {
-      AppToaster.show(e.message, kind: ToastKind.failure);
+      final l10n = AppLocalizations.of(context);
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     }
     return false;
   }

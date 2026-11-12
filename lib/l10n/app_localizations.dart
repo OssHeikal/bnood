@@ -2074,7 +2074,7 @@ abstract class AppLocalizations {
   /// No description provided for @authPhoneInvalid.
   ///
   /// In en, this message translates to:
-  /// **'Enter an 11-digit mobile number that starts with 01.'**
+  /// **'Enter a valid Egyptian mobile (11 digits starting with 01).'**
   String get authPhoneInvalid;
 
   /// No description provided for @authPassword.
@@ -2334,6 +2334,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your session ended. Sign in again to continue.'**
   String get authSessionExpired;
+
+  /// No description provided for @apiErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server. Check your internet and try again.'**
+  String get apiErrorNetwork;
+
+  /// No description provided for @apiErrorSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session ended. Sign in again to continue.'**
+  String get apiErrorSessionExpired;
+
+  /// No description provided for @apiErrorThrottled.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Wait a moment, then try again.'**
+  String get apiErrorThrottled;
+
+  /// No description provided for @apiErrorServer.
+  ///
+  /// In en, this message translates to:
+  /// **'The server had a problem. Try again in a moment.'**
+  String get apiErrorServer;
+
+  /// No description provided for @apiErrorPayloadTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is too large. Choose a smaller one and try again.'**
+  String get apiErrorPayloadTooLarge;
+
+  /// No description provided for @apiGenericFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again.'**
+  String get apiGenericFailure;
+
+  /// No description provided for @egyptMobileInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid Egyptian mobile (11 digits starting with 01).'**
+  String get egyptMobileInvalid;
+
+  /// No description provided for @toastClientCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Client added.'**
+  String get toastClientCreated;
+
+  /// No description provided for @toastClientUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Client updated.'**
+  String get toastClientUpdated;
+
+  /// No description provided for @toastClientArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Client archived.'**
+  String get toastClientArchived;
+
+  /// No description provided for @toastSupplierCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplier added.'**
+  String get toastSupplierCreated;
+
+  /// No description provided for @toastCraftsmanCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Craftsman added.'**
+  String get toastCraftsmanCreated;
+
+  /// No description provided for @toastProviderUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Details updated.'**
+  String get toastProviderUpdated;
+
+  /// No description provided for @toastItemCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Item added.'**
+  String get toastItemCreated;
+
+  /// No description provided for @toastItemUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Item updated.'**
+  String get toastItemUpdated;
+
+  /// No description provided for @toastItemDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Item removed.'**
+  String get toastItemDeleted;
+
+  /// No description provided for @toastVoucherCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher saved.'**
+  String get toastVoucherCreated;
+
+  /// No description provided for @toastVoucherUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher updated.'**
+  String get toastVoucherUpdated;
+
+  /// No description provided for @toastVoucherDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher deleted.'**
+  String get toastVoucherDeleted;
 
   /// No description provided for @authFieldRequired.
   ///

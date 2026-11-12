@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import '../config/api_config.dart';
 import '../storage/session_store.dart';
+import 'accept_language_interceptor.dart';
 import 'api_log_interceptor.dart';
 import 'auth_interceptor.dart';
 
@@ -20,6 +21,7 @@ Dio createAppDio(SessionStore store) {
   );
   // Auth before log on requests (final headers). Log must stay last so its
   // onError runs after auth maps failures (auth reject uses callFollowing).
+  dio.interceptors.add(AcceptLanguageInterceptor());
   dio.interceptors.add(AuthInterceptor(store));
   if (kDebugMode) {
     dio.interceptors.add(ApiLogInterceptor());

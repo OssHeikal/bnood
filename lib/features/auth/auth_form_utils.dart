@@ -1,14 +1,9 @@
 import 'package:bnood/l10n/app_localizations.dart';
 
-String? validateEgyptPhone(AppLocalizations l10n, String? raw) {
-  final value = raw?.trim() ?? '';
-  if (value.isEmpty) return l10n.authFieldRequired;
-  final digits = value.replaceAll(RegExp(r'\D'), '');
-  if (digits.length != 11 || !digits.startsWith('01')) {
-    return l10n.authPhoneInvalid;
-  }
-  return null;
-}
+import '../../core/validation/egypt_mobile_phone_validation.dart';
+
+String? validateEgyptPhone(AppLocalizations l10n, String? raw) =>
+    validateRequiredEgyptMobile(l10n, raw);
 
 String? validateRequired(AppLocalizations l10n, String? value) {
   if (value == null || value.trim().isEmpty) return l10n.authFieldRequired;

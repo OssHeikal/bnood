@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-import 'api_accept_language.dart';
 import '../subscription/app_subscription.dart';
 import 'api_response_parser.dart';
 import 'app_dio.dart';
@@ -32,12 +31,7 @@ class SubscriptionApi {
     try {
       final response = await _dio.get<Map<String, dynamic>>(
         '/v1/subscription',
-        options: Options(
-          extra: _authenticatedExtra,
-          headers: {
-            'Accept-Language': acceptLanguageHeaderForLocale(languageCode),
-          },
-        ),
+        options: Options(extra: _authenticatedExtra),
       );
       return ApiResponseParser.expectData(
         response,

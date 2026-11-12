@@ -1,5 +1,6 @@
 import 'package:bnood/l10n/app_localizations.dart';
 
+import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import 'receipt_image_compress.dart';
 
@@ -15,7 +16,7 @@ String voucherReceiptUploadErrorMessage(AppLocalizations l10n, Object? error) {
       return l10n.voucherReceiptInvalidMime;
     }
     if (!error.isNetwork) {
-      return error.message;
+      return apiAuthErrorUserMessage(l10n, error);
     }
   }
   return l10n.voucherReceiptUploadRetry;
