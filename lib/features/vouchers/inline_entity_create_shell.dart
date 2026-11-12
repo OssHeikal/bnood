@@ -129,20 +129,35 @@ class InlineEntityCreateShell extends StatelessWidget {
               children: [
                 header,
                 AppSize.spaceMD.gap,
-                paddedBody,
+                if (hasFiniteMax) Flexible(child: scrollBody) else paddedBody,
                 footerPad,
               ],
             );
           }
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              header,
-              AppSize.spaceMD.gap,
-              Expanded(child: scrollBody),
-              footerPad,
-            ],
+          // Single scroll surface so the keyboard-lifted footer never
+          // overflows a sheet whose max height ignores the keyboard.
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      header,
+                      AppSize.spaceMD.gap,
+                      paddedBody,
+                    ],
+                  ),
+                  footerPad,
+                ],
+              ),
+            ),
           );
         },
       ),
