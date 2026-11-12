@@ -104,6 +104,7 @@ Future<bool> saveRemoteAgreementAmount({
   String? clientId,
   String? providerId,
 }) async {
+  final l10n = AppLocalizations.of(context);
   final repo = ref.read(appAgreementsRepositoryProvider);
   try {
     await repo.patchAgreement(id: agreementId, amountMajor: agreementAmountMajorFromMinor(amountPiastres));

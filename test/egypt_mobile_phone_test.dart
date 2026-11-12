@@ -15,6 +15,8 @@ void main() {
     test('strips +20 and 0020 prefixes', () {
       expect(EgyptMobilePhone.normalizeDigits('+201012345678'), '01012345678');
       expect(EgyptMobilePhone.normalizeDigits('00201012345678'), '01012345678');
+      expect(EgyptMobilePhone.normalizeDigits('201012345678'), '01012345678');
+      expect(EgyptMobilePhone.normalizeDigits('+20 10 1234-5678'), '01012345678');
     });
 
     test('rejects invalid prefix or length', () {

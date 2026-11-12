@@ -35,6 +35,7 @@ Future<AppProvider?> saveProviderCreate({
       return null;
     }
     if (e.isDuplicateName || e.isDuplicatePhone) rethrow;
+    final l10n = AppLocalizations.of(context);
     AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }
@@ -65,6 +66,7 @@ Future<AppProvider?> saveProviderUpdate({
       return null;
     }
     if (e.isDuplicateName || e.isDuplicatePhone) rethrow;
+    final l10n = AppLocalizations.of(context);
     AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }

@@ -35,6 +35,7 @@ Future<CatalogItem?> saveItemCreate({
       return null;
     }
     if (e.isDuplicateName) rethrow;
+    final l10n = AppLocalizations.of(context);
     AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }
@@ -59,6 +60,7 @@ Future<CatalogItem?> saveItemUpdate({
       return null;
     }
     if (e.isDuplicateName) rethrow;
+    final l10n = AppLocalizations.of(context);
     if (e.isDefaultItemReadonly) {
       AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
       return null;

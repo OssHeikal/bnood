@@ -48,6 +48,6 @@ void main() {
     expect(snap.paywallEnabled, isTrue);
     expect(snap.entitlements.canCreateActiveProject, isFalse);
     expect(snap.paywall?.title, 'Title');
-    expect(snap.paywall?.planById('yearly')?.monthlyEquivalentMinor, 299000 ~/ 12);
+    expect(snap.paywall?.planById('yearly')?.monthlyEquivalentMinor, (299000 / 12).round());
   });
 }
