@@ -2,7 +2,6 @@ import 'package:bnood/core/api/app_dio.dart';
 import 'package:bnood/core/api/clients_api.dart';
 import 'package:bnood/core/clients/clients_providers.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/items/items_providers.dart';
 import 'package:bnood/core/layout/bnood_breakpoints.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/core/database/connection.dart';

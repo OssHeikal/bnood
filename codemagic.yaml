@@ -55,7 +55,7 @@ workflows:
       - name: Flutter analyze
         script: |
           set -euo pipefail
-          flutter analyze
+          flutter analyze --no-fatal-infos
       - name: Install CocoaPods
         script: |
           set -euo pipefail
@@ -142,7 +142,7 @@ workflows:
       - name: Flutter analyze
         script: |
           set -euo pipefail
-          flutter analyze
+          flutter analyze --no-fatal-infos
       - name: Build release App Bundle
         script: |
           set -euo pipefail

@@ -8,7 +8,6 @@ import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/settings/app_menu_body.dart';
-import 'package:bnood/features/settings/app_preferences_body.dart';
 import 'package:bnood/features/settings/app_preferences_screen.dart';
 import 'package:bnood/features/settings/app_settings_screen.dart';
 import 'package:bnood/features/subscription/paywall_launcher.dart';

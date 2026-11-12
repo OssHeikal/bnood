@@ -333,7 +333,6 @@ List<AppPaywallPlan> _orderYearlyThenMonthly(List<AppPaywallPlan> plans) {
 }
 
 List<AppPaywallPlan> _plansFromPremiumPackage(Map<String, dynamic> pkg, AppPaywallOffer? offer) {
-  final name = pkg['name'] as String? ?? pkg['slug'] as String? ?? 'Premium';
   final badge = pkg['badge_text'] as String? ?? offer?.yearlySavingsBadge;
 
   final priceMonthly = _readOptionalMinor(pkg['price_monthly_minor']);

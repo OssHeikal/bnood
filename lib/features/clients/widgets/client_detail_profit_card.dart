@@ -4,7 +4,6 @@ import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/money/basis_points.dart';
-import '../../../core/money/remote_money_units.dart';
 import '../../../core/widgets/app_amount.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_chevron.dart';

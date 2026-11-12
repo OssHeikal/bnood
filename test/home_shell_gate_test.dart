@@ -29,6 +29,7 @@ class CountingHomeRepository extends HomeRepository {
       totals: AppHomeTotals(receivedMinor: 0, spentMinor: 0, remainingMinor: 0),
       clients: [],
       craftsmen: [],
+      suppliers: [],
     );
   }
 }

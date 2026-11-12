@@ -11,12 +11,6 @@ class _VoucherHost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const Scaffold(body: Text('voucher'));
-
-  static Future<void> openCamera(BuildContext context, VoucherReceiptPicker picker) {
-    return Navigator.of(context).push<VoucherCameraPickResult>(
-      PageRouteBuilder(opaque: false, pageBuilder: (_, _, _) => VoucherCameraPickRoute(picker: picker)),
-    );
-  }
 }
 
 class _FakePicker extends VoucherReceiptPicker {

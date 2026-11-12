@@ -3,7 +3,6 @@ import 'package:bnood/core/config/theme/app_shape.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/database/database.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
-import 'package:bnood/features/home/widgets/home_loading_skeleton.dart';
 import 'package:bnood/features/clients/clients_list_paging.dart';
 import 'package:bnood/features/clients/clients_list_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';

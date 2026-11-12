@@ -5,7 +5,6 @@ import 'package:bnood/core/home/app_home_dashboard.dart';
 import 'package:bnood/core/home/home_riverpod.dart';
 import 'package:bnood/core/home/home_repository.dart';
 import 'package:bnood/core/providers/dashboard_providers.dart';
-import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/core/session/user_session_lifecycle.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/models/user.dart';

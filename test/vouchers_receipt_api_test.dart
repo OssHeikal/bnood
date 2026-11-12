@@ -1,4 +1,3 @@
-import 'package:bnood/core/api/auth_api_exception.dart';
 import 'package:bnood/core/api/vouchers_api.dart';
 import 'package:bnood/core/vouchers/app_voucher_receipt.dart';
 import 'package:bnood/core/vouchers/vouchers_repository.dart';
