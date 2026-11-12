@@ -1,11 +1,14 @@
-# Bnood — release builds triggered only by version tags (e.g. v1.0.1).
-# Configure integrations, keystores, and env groups in Codemagic UI (see docs/codemagic-setup.md).
+# Bnood — store releases: auto on v* tags, or manual Start build (see docs/codemagic-setup.md).
 
 workflows:
   ios-release:
     name: iOS Release (TestFlight)
     instance_type: mac_mini_m2
-    max_build_duration: 60
+    max_build_duration: 45
+    cache:
+      cache_paths:
+        - $HOME/.pub-cache
+        - $HOME/Library/Caches/CocoaPods
     integrations:
       app_store_connect: bnood_app_store_connect
     environment:
@@ -28,15 +31,19 @@ workflows:
         - pattern: "v*"
           include: true
     scripts:
-      - name: Verify release tag
+      - name: Resolve release version name
         script: |
           set -euo pipefail
-          if [ -z "${CM_TAG:-}" ]; then
-            echo "This workflow must be triggered by a git tag (e.g. v1.0.1)."
+          if [ -n "${CM_TAG:-}" ]; then
+            RESOLVED="${CM_TAG#v}"
+          elif [ -n "${VERSION_NAME:-}" ]; then
+            RESOLVED="${VERSION_NAME}"
+          else
+            echo "Release version required: push a v* tag (e.g. v1.0.1) or start a manual build with environment variable VERSION_NAME (e.g. 1.0.1)."
             exit 1
           fi
-          export VERSION_NAME="${CM_TAG#v}"
-          echo "Release version name: $VERSION_NAME"
+          echo "VERSION_NAME=$RESOLVED" >> "$CM_ENV"
+          echo "Release version name: $RESOLVED"
       - name: Get Flutter packages
         script: |
           set -euo pipefail
@@ -60,7 +67,6 @@ workflows:
       - name: Build signed IPA
         script: |
           set -euo pipefail
-          VERSION_NAME="${CM_TAG#v}"
           if [ -z "${APP_STORE_APPLE_ID:-}" ]; then
             echo "APP_STORE_APPLE_ID is not set. Add it to the bnood_release_config env group in Codemagic."
             exit 1
@@ -86,8 +92,12 @@ workflows:
 
   android-release:
     name: Android Release (Play internal)
-    instance_type: linux_x2
-    max_build_duration: 60
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    cache:
+      cache_paths:
+        - $HOME/.pub-cache
+        - $HOME/.gradle/caches
     environment:
       android_signing:
         - bnood_android_release
@@ -104,15 +114,19 @@ workflows:
         - pattern: "v*"
           include: true
     scripts:
-      - name: Verify release tag
+      - name: Resolve release version name
         script: |
           set -euo pipefail
-          if [ -z "${CM_TAG:-}" ]; then
-            echo "This workflow must be triggered by a git tag (e.g. v1.0.1)."
+          if [ -n "${CM_TAG:-}" ]; then
+            RESOLVED="${CM_TAG#v}"
+          elif [ -n "${VERSION_NAME:-}" ]; then
+            RESOLVED="${VERSION_NAME}"
+          else
+            echo "Release version required: push a v* tag (e.g. v1.0.1) or start a manual build with environment variable VERSION_NAME (e.g. 1.0.1)."
             exit 1
           fi
-          export VERSION_NAME="${CM_TAG#v}"
-          echo "Release version name: $VERSION_NAME"
+          echo "VERSION_NAME=$RESOLVED" >> "$CM_ENV"
+          echo "Release version name: $RESOLVED"
       - name: Set up local.properties
         script: |
           set -euo pipefail
@@ -132,7 +146,6 @@ workflows:
       - name: Build release App Bundle
         script: |
           set -euo pipefail
-          VERSION_NAME="${CM_TAG#v}"
           LATEST_BUILD="$(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK" 2>/dev/null || true)"
           if [ -z "$LATEST_BUILD" ]; then
             LATEST_BUILD=0

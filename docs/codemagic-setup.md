@@ -6,7 +6,9 @@
 
 1. أنشئ تطبيقًا جديدًا في [Codemagic](https://codemagic.io/).
 2. اربط مستودع **Bnood** (Flutter).
-3. تأكد أن الفرع الذي تحتويه الوسوم عليه يتضمّن ملف `codemagic.yaml` في الجذر (مثلًا `migration/remote` ثم الدمج لاحقًا إلى الفرع الافتراضي).
+3. تأكد أن فرع **`main`** يحتوي ملف `codemagic.yaml` في الجذر.
+
+**الخطة المجانية:** كل workflow يستخدم **`mac_mini_m2`** فقط (لا `linux_*`). حدّ 500 دقيقة/شهر وبناء واحد متزامن.
 
 ## 2) تكامل App Store Connect (iOS)
 
@@ -56,9 +58,9 @@ storeFile=/المسار/إلى/upload-keystore.jks
 | Env group (Play) | `bnood_google_play` |
 | Env group (Apple ID) | `bnood_release_config` |
 
-## 7) كيف تُطلق إصدارًا
+## 7) إطلاق إصدار تلقائي (وسم)
 
-من جهازك (بعد دمج `codemagic.yaml` ورفع التغييرات إلى الريموت):
+من فرع **`main`** بعد دمج التغييرات ورفعها:
 
 ```bash
 git tag v1.0.1
@@ -71,8 +73,16 @@ git push origin v1.0.1
 - iOS: رفع إلى **TestFlight** فقط (بدون إرسال لمراجعة App Store).
 - Android: رفع إلى مسار **internal** فقط (بدون ترقية للإنتاج).
 
-## 8) ملاحظات
+## 8) بناء يدوي أو إعادة محاولة لمنصة واحدة
+
+- **Start new build** في Codemagic → اختر الفرع (مثلًا `main`) → اختر workflow واحدًا (**iOS** أو **Android** فقط).
+- أضف متغير البيئة **`VERSION_NAME`** بنفس رقم الإصدار (مثلًا `1.0.1`) عند عدم وجود وسم `CM_TAG`.
+- الدفع العادي إلى `main` **لا** يشغّل CI؛ فقط الوسوم `v*` تشغّل البناء تلقائيًا.
+- بعد إصلاح الكود دون تغيير الوسم: إما إعادة البناء (**Rebuild**) لنفس الوسم، أو بناء يدوي بـ `VERSION_NAME`، أو حذف الوسم وإعادة دفعه ليشغّل المنصتين معًا.
+
+## 9) ملاحظات
 
 - إصدار Flutter في CI: **3.41.1** (مطابق لـ `.fvmrc`).
 - لا تُشغَّل الاختبارات في CI (عددها كبير); يُشغَّل `flutter analyze` فقط.
-- يُشغَّل `build_runner` لأن المشروع يستخدم Drift و`flutter_gen` حتى لو كانت بعض الملفات مُولَّدة في Git.
+- يُشغَّل `build_runner` لأن المشروع يستخدم Drift و`flutter_gen`.
+- يُخزَّن cache لـ pub وGradle (Android) وCocoaPods (iOS) لتوفير الدقائق على الخطة المجانية.
