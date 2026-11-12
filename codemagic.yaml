@@ -19,6 +19,7 @@ workflows:
         - bnood_release_config
       vars:
         BUNDLE_ID: com.bnood.app
+        BNOOD_API_BASE_URL: https://bnood.etbaaly.com/api
         XCODE_WORKSPACE: ios/Runner.xcworkspace
         XCODE_SCHEME: Runner
       flutter: 3.41.1
@@ -80,6 +81,7 @@ workflows:
           flutter build ipa --release \
             --build-name="$VERSION_NAME" \
             --build-number="$BUILD_NUMBER" \
+            --dart-define=BNOOD_API_BASE_URL="$BNOOD_API_BASE_URL" \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
@@ -105,6 +107,7 @@ workflows:
         - bnood_google_play
       vars:
         PACKAGE_NAME: com.bnood.app
+        BNOOD_API_BASE_URL: https://bnood.etbaaly.com/api
         GOOGLE_PLAY_TRACK: internal
       flutter: 3.41.1
     triggering:
@@ -154,7 +157,8 @@ workflows:
           echo "Building $VERSION_NAME ($BUILD_NUMBER)"
           flutter build appbundle --release \
             --build-name="$VERSION_NAME" \
-            --build-number="$BUILD_NUMBER"
+            --build-number="$BUILD_NUMBER" \
+            --dart-define=BNOOD_API_BASE_URL="$BNOOD_API_BASE_URL"
     artifacts:
       - build/**/outputs/**/*.aab
       - build/**/outputs/**/mapping.txt
