@@ -1,4 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/theme/app_theme.dart';
 import 'package:bnood/features/vouchers/voucher_date_sheet.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,38 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     await body();
   }
+
+  testWidgets('date sheet builds under production AppTheme extensions', (tester) async {
+    await tallSurface(tester, () async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(),
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push<void>(
+                  MaterialPageRoute(
+                    builder: (_) => VoucherDateSheetPage(
+                      initial: DateTime(2026, 3, 10),
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2100),
+                    ),
+                  ),
+                );
+              },
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('voucher-date-confirm')), findsOneWidget);
+    });
+  });
 
   testWidgets('date sheet confirm returns staged day', (tester) async {
     DateTime? result;

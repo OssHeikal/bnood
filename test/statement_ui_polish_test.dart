@@ -1,6 +1,6 @@
 import 'package:bnood/core/config/theme/app_colors.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/foundation_app_bar.dart';
+import 'package:bnood/core/widgets/custom_app_bar.dart';
 import 'package:bnood/core/widgets/buttons/app_button.dart';
 import 'package:bnood/core/database/connection.dart';
 import 'package:bnood/core/providers/app_providers.dart';
@@ -86,15 +86,16 @@ void main() {
     await tester.pump();
     for (var i = 0; i < 25; i++) {
       await tester.pump(const Duration(milliseconds: 50));
-      if (find.byType(FoundationAppBar).evaluate().isNotEmpty) break;
+      if (find.byType(CustomAppBar).evaluate().isNotEmpty) break;
     }
 
-    final bar = tester.widget<FoundationAppBar>(find.byType(FoundationAppBar));
-    final appBar = tester.widget<AppBar>(find.descendant(of: find.byType(FoundationAppBar), matching: find.byType(AppBar)));
+    final bar = tester.widget<CustomAppBar>(find.byType(CustomAppBar));
+    final appBar = tester.widget<AppBar>(find.descendant(of: find.byType(CustomAppBar), matching: find.byType(AppBar)));
     expect(appBar.backgroundColor, AppColors.dark.canvas);
     expect(appBar.surfaceTintColor, Colors.transparent);
     expect(appBar.scrolledUnderElevation, 0);
     expect(appBar.foregroundColor, AppColors.dark.onSurface);
+    expect(appBar.centerTitle, isFalse);
     expect(bar.title, isNotNull);
     expect(tester.takeException(), isNull);
   });
@@ -114,13 +115,14 @@ void main() {
     await tester.pump();
     for (var i = 0; i < 25; i++) {
       await tester.pump(const Duration(milliseconds: 50));
-      if (find.byType(FoundationAppBar).evaluate().isNotEmpty) break;
+      if (find.byType(CustomAppBar).evaluate().isNotEmpty) break;
     }
 
-    final appBar = tester.widget<AppBar>(find.descendant(of: find.byType(FoundationAppBar), matching: find.byType(AppBar)));
+    final appBar = tester.widget<AppBar>(find.descendant(of: find.byType(CustomAppBar), matching: find.byType(AppBar)));
     expect(appBar.backgroundColor, AppColors.light.canvas);
     expect(appBar.surfaceTintColor, Colors.transparent);
     expect(appBar.foregroundColor, AppColors.light.onSurface);
+    expect(appBar.centerTitle, isFalse);
   });
 
   testWidgets('client statement AR dark uses bottom share bar and dark stat palette', (tester) async {

@@ -1,5 +1,6 @@
 import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart';
+import '../../core/providers_api/app_provider_record.dart';
 
 class ClientCraftsmanPreviewRow {
   const ClientCraftsmanPreviewRow({
@@ -10,7 +11,13 @@ class ClientCraftsmanPreviewRow {
     this.agreedPiastres,
     this.remainingPiastres,
     required this.accentKey,
+    this.agreementId,
+    this.onlineAgreementsOnly = false,
+    this.usesRemoteMoney = false,
+    this.providerType = AppProviderType.craftsman,
   });
+
+  String get providerId => craftsmanId;
 
   final String craftsmanId;
   final String name;
@@ -19,16 +26,22 @@ class ClientCraftsmanPreviewRow {
   final int? agreedPiastres;
   final int? remainingPiastres;
   final String accentKey;
+  final String? agreementId;
+  final bool onlineAgreementsOnly;
+  final bool usesRemoteMoney;
+  final AppProviderType providerType;
 }
 
 class ClientDetailItemRowData {
   const ClientDetailItemRowData({
+    this.itemId,
     required this.name,
     required this.colorKey,
     required this.iconName,
     required this.breakdown,
   });
 
+  final String? itemId;
   final String name;
   final String colorKey;
   final String iconName;
@@ -41,12 +54,14 @@ class ClientDetailMovementLine {
     this.itemName,
     this.payeeName,
     this.payeeIsSupplier,
+    this.usesRemoteMinorUnits = false,
   });
 
   final Transaction transaction;
   final String? itemName;
   final String? payeeName;
   final bool? payeeIsSupplier;
+  final bool usesRemoteMinorUnits;
 }
 
 class ClientDetailSnapshot {
@@ -57,18 +72,43 @@ class ClientDetailSnapshot {
     required this.spentPiastres,
     required this.estimatedProfitPiastres,
     required this.craftsmanPreviews,
+    this.supplierPreviews = const [],
+    this.craftsmenCount,
+    this.suppliersCount,
+    this.itemsCount,
+    this.movementsCount,
     required this.topItems,
     required this.latestMovements,
+    this.onlineIdentityOnly = false,
+    this.usesRemoteMoney = false,
+    this.remainingFromServer,
   });
 
   final Client client;
   final Project project;
-  final int receivedPiastres;
-  final int spentPiastres;
+  final int? receivedPiastres;
+  final int? spentPiastres;
   final int? estimatedProfitPiastres;
   final List<ClientCraftsmanPreviewRow> craftsmanPreviews;
+  final List<ClientCraftsmanPreviewRow> supplierPreviews;
+  final int? craftsmenCount;
+  final int? suppliersCount;
+  final int? itemsCount;
+  final int? movementsCount;
   final List<ClientDetailItemRowData> topItems;
   final List<ClientDetailMovementLine> latestMovements;
+  final bool onlineIdentityOnly;
 
-  int get remainingPiastres => receivedPiastres - spentPiastres;
+  /// Online voucher/client balances use minor units per EGP × 100.
+  final bool usesRemoteMoney;
+
+  final int? remainingFromServer;
+
+  bool get hasBalances => receivedPiastres != null && spentPiastres != null;
+
+  int? get remainingPiastres {
+    if (remainingFromServer != null) return remainingFromServer;
+    if (!hasBalances) return null;
+    return receivedPiastres! - spentPiastres!;
+  }
 }

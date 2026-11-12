@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
 import '../config/navigation/root_navigator_key.dart';
@@ -8,14 +9,12 @@ import 'toast/app_tone.dart';
 
 export 'toast/app_toast.dart' show ToastAction;
 
-final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-
 enum ToastKind { success, failure, warning, info }
 
 /// Where to anchor floating toasts above chrome (shell dock vs statement export bar).
 enum AppToastLayoutHint { standard, statementExportFooter }
 
-/// Canonical transient notification API — themed [AppToast] via root [ScaffoldMessenger].
+/// Canonical transient notification API — themed [AppToast] via [BotToast].
 abstract final class AppToaster {
   static const Duration _persistentDuration = Duration(days: 1);
 
@@ -39,25 +38,17 @@ abstract final class AppToaster {
     };
   }
 
-  static ScaffoldMessengerState? _messenger({BuildContext? layoutContext}) {
-    return rootScaffoldMessengerKey.currentState ??
-        (layoutContext != null && layoutContext.mounted
-            ? ScaffoldMessenger.maybeOf(layoutContext)
-            : null);
-  }
-
   static BuildContext? _layoutContext(BuildContext? layoutContext) {
     if (layoutContext != null && layoutContext.mounted) return layoutContext;
     final root = rootNavigatorKey.currentContext;
     if (root != null && root.mounted) return root;
-    return rootScaffoldMessengerKey.currentState?.context;
+    return null;
   }
 
   static EdgeInsetsDirectional _margin(BuildContext? layoutContext, AppToastLayoutHint layout) {
     final ctx = _layoutContext(layoutContext);
     final mq = ctx != null ? MediaQuery.maybeOf(ctx) : null;
     final bottomInset = mq?.viewPadding.bottom ?? 0;
-    final keyboard = mq?.viewInsets.bottom ?? 0;
     final base = switch (layout) {
       AppToastLayoutHint.standard => AppSize.spaceMD + bottomInset + AppSize.shellDockClearance,
       AppToastLayoutHint.statementExportFooter =>
@@ -66,7 +57,7 @@ abstract final class AppToaster {
     return EdgeInsetsDirectional.only(
       start: AppSize.spaceMD,
       end: AppSize.spaceMD,
-      bottom: base + keyboard,
+      bottom: base,
     );
   }
 
@@ -82,32 +73,35 @@ abstract final class AppToaster {
     bool persistent = false,
     bool replace = true,
   }) {
-    final messenger = _messenger(layoutContext: layoutContext);
-    if (messenger == null) return;
-
     final tone = _toneFor(kind, isLoading: isLoading);
     final resolvedDuration = persistent ? _persistentDuration : (duration ?? _defaultDuration(kind, isLoading: isLoading));
 
-    ToastAction? resolvedAction;
-    if (action case final action?) {
-      resolvedAction = ToastAction(
-        label: action.label,
-        onPressed: () {
-          action.onPressed();
-          messenger.hideCurrentSnackBar();
-        },
-      );
-    }
+    BotToast.showCustomText(
+      onlyOne: replace,
+      duration: persistent ? null : resolvedDuration,
+      align: Alignment.bottomCenter,
+      backgroundColor: Colors.transparent,
+      clickClose: false,
+      ignoreContentClick: false,
+      crossPage: true,
+      useSafeArea: false,
+      enableKeyboardSafeArea: true,
+      toastBuilder: (cancel) {
+        ToastAction? resolvedAction;
+        if (action case final action?) {
+          resolvedAction = ToastAction(
+            label: action.label,
+            onPressed: () {
+              action.onPressed();
+              cancel();
+            },
+          );
+        }
 
-    if (replace) {
-      messenger.hideCurrentSnackBar();
-    }
-
-    messenger.showSnackBar(
-      SnackBar(
-        content: HomeFoundationScope(
-          child: Builder(
-            builder: (ctx) => AppToast(
+        return Padding(
+          padding: _margin(layoutContext, layout),
+          child: HomeFoundationScope(
+            child: AppToast(
               tone: tone,
               message: message,
               title: title,
@@ -115,14 +109,8 @@ abstract final class AppToaster {
               isLoading: isLoading,
             ),
           ),
-        ),
-        duration: resolvedDuration,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        padding: EdgeInsets.zero,
-        margin: _margin(layoutContext, layout),
-      ),
+        );
+      },
     );
   }
 
@@ -221,11 +209,6 @@ abstract final class AppToaster {
   }
 
   static void clear() {
-    final messenger = rootScaffoldMessengerKey.currentState;
-    messenger?.clearSnackBars();
-    final ctx = rootNavigatorKey.currentContext;
-    if (ctx != null && ctx.mounted) {
-      ScaffoldMessenger.maybeOf(ctx)?.clearSnackBars();
-    }
+    BotToast.cleanAll();
   }
 }

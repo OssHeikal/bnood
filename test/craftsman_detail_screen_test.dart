@@ -21,9 +21,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          craftsmanDetailProvider.overrideWith(() => _PendingCraftsmanDetailNotifier(gate.future)),
-        ],
+        overrides: [craftsmanDetailProvider.overrideWith(() => _PendingCraftsmanDetailNotifier(gate.future))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -89,9 +87,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          craftsmanDetailProvider.overrideWith(() => _StubCraftsmanDetailNotifier(snap)),
-        ],
+        overrides: [craftsmanDetailProvider.overrideWith(() => _StubCraftsmanDetailNotifier(snap))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -145,9 +141,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          craftsmanDetailProvider.overrideWith(() => _StubCraftsmanDetailNotifier(snap)),
-        ],
+        overrides: [craftsmanDetailProvider.overrideWith(() => _StubCraftsmanDetailNotifier(snap))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -196,9 +190,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          craftsmanDetailProvider.overrideWith(() => _StubCraftsmanDetailNotifier(snap)),
-        ],
+        overrides: [craftsmanDetailProvider.overrideWith(() => _StubCraftsmanDetailNotifier(snap))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -239,9 +231,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          craftsmanDetailProvider.overrideWith(() => _StubCraftsmanDetailNotifier(snap)),
-        ],
+        overrides: [craftsmanDetailProvider.overrideWith(() => _StubCraftsmanDetailNotifier(snap))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('ar'),
@@ -313,9 +303,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          craftsmanDetailProvider.overrideWith(() => notifier),
-        ],
+        overrides: [craftsmanDetailProvider.overrideWith(() => notifier)],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -369,9 +357,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          craftsmanDetailProvider.overrideWith(() => _StubCraftsmanDetailNotifier(snap)),
-        ],
+        overrides: [craftsmanDetailProvider.overrideWith(() => _StubCraftsmanDetailNotifier(snap))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -392,9 +378,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          craftsmanDetailProvider.overrideWith(
-            () => _ErrorCraftsmanDetailNotifier(const CraftsmanDetailNotFound()),
-          ),
+          craftsmanDetailProvider.overrideWith(() => _ErrorCraftsmanDetailNotifier(const CraftsmanDetailNotFound())),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
@@ -413,6 +397,7 @@ void main() {
 
 class _PendingCraftsmanDetailNotifier extends CraftsmanDetailNotifier {
   _PendingCraftsmanDetailNotifier(this.future);
+  @override
   final Future<CraftsmanDetailSnapshot> future;
   @override
   Future<CraftsmanDetailSnapshot> build(String arg) => future;

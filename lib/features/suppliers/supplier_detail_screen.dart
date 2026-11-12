@@ -9,7 +9,7 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
-import '../../core/widgets/foundation_app_bar_title.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../home/home_foundation_scope.dart';
@@ -41,33 +41,21 @@ class SupplierDetailScreen extends ConsumerWidget {
           final colors = context.colors;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: AppBar(
-              backgroundColor: colors.canvas,
-              surfaceTintColor: Colors.transparent,
-              scrolledUnderElevation: 0,
-              elevation: 0,
-              centerTitle: false,
-              title: FoundationAppBarTitle(
-                title: supplierName ?? l10n.suppliers,
-                subtitle: hasPhone ? phone : null,
-                subtitleLtr: true,
-              ),
+            appBar: CustomAppBar(
+              title: supplierName ?? l10n.suppliers,
+              subtitle: hasPhone ? phone : null,
+              subtitleLtr: true,
               actions: [
                 if (detail.valueOrNull != null)
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(end: AppSize.spaceXS),
-                    child: Tooltip(
-                      message: l10n.statement,
-                      child: IconButton(
-                        key: const Key('supplier_detail_statement'),
-                        onPressed: () => context.push('/suppliers/$supplierId/statement'),
-                        icon: ShellNavIcon(
-                          asset: Assets.icons.documentAttachmentOutline,
-                          color: colors.onSurface,
-                          size: AppSize.icon,
-                          semanticsLabel: l10n.statement,
-                        ),
-                      ),
+                  CustomAppBarAction(
+                    key: const Key('supplier_detail_statement'),
+                    tooltip: l10n.statement,
+                    onPressed: () => context.push('/suppliers/$supplierId/statement'),
+                    child: ShellNavIcon(
+                      asset: Assets.icons.documentAttachmentOutline,
+                      color: colors.onSurface,
+                      size: AppSize.icon,
+                      semanticsLabel: l10n.statement,
                     ),
                   ),
               ],

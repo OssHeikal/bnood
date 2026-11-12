@@ -18,6 +18,7 @@ class ClientDetailProfitCard extends StatelessWidget {
     required this.localeCode,
     required this.onEdit,
     this.mutationsEnabled = true,
+    this.minorPerMajor = 100,
   });
 
   final int? engineerBasisPoints;
@@ -25,6 +26,7 @@ class ClientDetailProfitCard extends StatelessWidget {
   final String localeCode;
   final VoidCallback onEdit;
   final bool mutationsEnabled;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +67,7 @@ class ClientDetailProfitCard extends StatelessWidget {
                   role: AppAmountRole.neutral,
                   size: AppAmountSize.medium,
                   localeCode: localeCode,
+                  minorPerMajor: minorPerMajor,
                 ),
               AppSize.spaceSM.gap,
               if (mutationsEnabled) const AppChevron.forward(size: AppSize.iconSmall),

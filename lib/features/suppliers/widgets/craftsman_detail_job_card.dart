@@ -6,7 +6,9 @@ import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/widgets/app_amount.dart';
+import '../../../core/resources/gen/assets.gen.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/app_overflow_menu.dart';
 import '../../../core/widgets/app_pressable.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../clients/craftsman_agreement_amount_sheet.dart';
@@ -66,38 +68,27 @@ class CraftsmanDetailJobCard extends ConsumerWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
               ),
-              const SizedBox(width: AppSize.spaceSM),
-              AppPressable(
-                key: Key('craftsman_detail_edit_agreement_${job.projectId}'),
-                onPressed: () async {
-                  await showCraftsmanProjectAgreementEditSheet(
-                    context: context,
-                    ref: ref,
-                    projectId: job.projectId,
-                    craftsmanId: craftsmanId,
-                    craftsmanName: craftsmanName,
-                    clientName: job.clientName,
-                    clientId: job.clientId,
-                    initialAmountPiastres: job.agreedPiastres,
-                  );
-                  if (context.mounted) await onAgreementSaved();
-                },
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(
-                    AppSize.spaceSM,
-                    AppSize.spaceXS,
-                    AppSize.spaceSM,
-                    AppSize.spaceXS,
+              AppOverflowMenu(
+                buttonKey: Key('craftsman_detail_agreement_menu_${job.projectId}'),
+                actions: [
+                  AppOverflowMenuAction(
+                    label: l10n.craftsmanDetailEditAgreement,
+                    icon: Assets.icons.documentEditOutline,
+                    onSelected: () async {
+                      await showCraftsmanProjectAgreementEditSheet(
+                        context: context,
+                        ref: ref,
+                        projectId: job.projectId,
+                        craftsmanId: craftsmanId,
+                        craftsmanName: craftsmanName,
+                        clientName: job.clientName,
+                        clientId: job.clientId,
+                        initialAmountPiastres: job.agreedPiastres,
+                      );
+                      if (context.mounted) await onAgreementSaved();
+                    },
                   ),
-                  child: Text(
-                    l10n.craftsmanDetailEditAgreement,
-                    style: text.caption.copyWith(
-                      color: colors.primaryDark,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    textAlign: TextAlign.end,
-                  ),
-                ),
+                ],
               ),
             ],
           ),

@@ -1,39 +1,32 @@
 # Bnood بنود
 
-Foundation documentation for **Bnood** (formerly عهدة): a local-first mobile app for finishing/site engineers and contractors who manage client funds, work items, material suppliers, and labor craftsmen.
+Flutter app for site/finishing engineers: client fund balances, vouchers, suppliers, craftsmen, and statements — with Arabic/English UI and online API sync.
 
-**Status:** V1 Flutter app (local-only) on branch `cursor/v1-implementation-edb5`. Foundation docs in PR #1.
+## Local setup
 
-## Documentation index
+- **Flutter:** [FVM](https://fvm.app/) — project pins **3.41.1** (`.fvmrc`).
+- **Codegen:** Drift + flutter_gen — run after pulling schema/asset changes:
 
-| Document | Summary |
-|----------|---------|
-| [Scope (V1 & V2)](docs/scope.md) | Product boundaries, in-scope vs deferred, localization |
-| [Architecture](docs/architecture.md) | Flutter layout, modules, stack, repository pattern |
-| [Data schema & invariants](docs/data-schema.md) | Entities, relationships, money rules, ER diagram |
-| [UX & screen flows](docs/ux-flows.md) | Navigation, screens, vouchers, inline create, statements |
-| [Design system](docs/design.md) | Theme, tokens, typography roles, Cairo/font notes |
-| [Visual reference](docs/visual-reference.md) | index.html authority and nav override |
-| [UI acceptance](docs/ui-acceptance.md) | Visual checklist and outstanding UI tasks |
-| [Porting phase 1](docs/porting-phase1.md) | SmartRx SHA, boundaries, preview launch |
-| [Shared components](docs/shared-components.md) | SmartRx reuse, AppCard/Amount/Fallback, sheets |
-| [Static assets](docs/assets/README.md) | SVG icons, FlutterGen, `Assets.icons.*` usage |
-| [Implementation plan](docs/implementation-plan.md) | Phased delivery and acceptance checks |
-| [Open questions](docs/open-questions.md) | Unresolved product and technical decisions |
-| [Confirmed decisions](docs/decisions.md) | Locked choices vs proposals |
+```bash
+fvm flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+```
 
-## Cursor rules
+- **Run (dev API):**
 
-Project rules live under [`.cursor/rules/`](.cursor/rules/). UI work: `bnood-impeccable.mdc` (global Impeccable), `bnood-ui-design.mdc`, `bnood-ui-components.mdc`, `bnood-ux-navigation.mdc`.
+```bash
+fvm flutter run --dart-define-from-file=.env.dev
+```
 
-## Working agreements (standing)
+See [.vscode/launch.json](.vscode/launch.json) for **Bnood (dev)** / **Bnood (prod)**. API base URL: `lib/core/config/api_config.dart` and root `.env.dev` / `.env.prod` (public URLs only).
 
-- Ask before heavy cloud-agent cost; one cloud agent at a time.
-- Planning: explicit Grok 4.7 / 4.6; implementation and doc edits: Composer 2.5 fast (`fast: false`); no Auto.
-- **No application implementation** until explicitly approved beyond this documentation pass.
+## Documentation
 
-## Quick links
+Product and architecture docs live under [`docs/`](docs/) — start with [scope](docs/scope.md) and [architecture](docs/architecture.md). Cursor rules: [`.cursor/rules/`](.cursor/rules/).
 
-- V1: [local-only scope](docs/scope.md#v1-local-only)
-- Money model: [piastres & balances](docs/data-schema.md#financial-invariants)
-- Build order: [phase 1–5](docs/implementation-plan.md)
+## Release & CI/CD
+
+- **Branching and tags:** `main` ships; tags `vX.Y.Z` only from `main` after merging `develop`. Details: [`.cursor/rules/release-ci.mdc`](.cursor/rules/release-ci.mdc).
+- **CI:** [Codemagic](https://codemagic.io/) runs **iOS** (TestFlight) and **Android** (Play internal) on `v*` tag push. Configure integrations and secrets in the UI — step-by-step: [`docs/codemagic-setup.md`](docs/codemagic-setup.md).
+- **Typical release:** merge to `main` → `git tag v1.0.2` → `git push origin v1.0.2` (when approved). Build numbers come from the stores, not `pubspec.yaml`.
+- **Retry one platform:** Codemagic **Start new build**, pick `ios-release` or `android-release`, branch `main`, set `VERSION_NAME` to the semver (e.g. `1.0.1`).

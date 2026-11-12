@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'New'**
   String get navAdd;
 
+  /// No description provided for @menuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menuTitle;
+
   /// No description provided for @settingsTitle.
   ///
   /// In en, this message translates to:
@@ -224,6 +230,30 @@ abstract class AppLocalizations {
   /// **'Bnood'**
   String get homeAppName;
 
+  /// No description provided for @homeGreetingMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get homeGreetingMorning;
+
+  /// No description provided for @homeGreetingEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get homeGreetingEvening;
+
+  /// No description provided for @userProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get userProfileTitle;
+
+  /// No description provided for @craftsmanLinkedClientsMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'{count,plural, =0{No linked clients} =1{1 linked client} other{{count} linked clients}}'**
+  String craftsmanLinkedClientsMeta(int count);
+
   /// No description provided for @homeSubtitle.
   ///
   /// In en, this message translates to:
@@ -271,6 +301,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not load home'**
   String get homeLoadErrorTitle;
+
+  /// No description provided for @clientMovementsLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load movements'**
+  String get clientMovementsLoadErrorTitle;
+
+  /// No description provided for @movementsSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search notes'**
+  String get movementsSearchHint;
+
+  /// No description provided for @movementsFilterSort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get movementsFilterSort;
+
+  /// No description provided for @movementsFilterItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Item'**
+  String get movementsFilterItem;
+
+  /// No description provided for @movementsFilterDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get movementsFilterDate;
+
+  /// No description provided for @movementsSortNewest.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get movementsSortNewest;
+
+  /// No description provided for @movementsSortOldest.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest'**
+  String get movementsSortOldest;
+
+  /// No description provided for @movementsFilterAllItems.
+  ///
+  /// In en, this message translates to:
+  /// **'All items'**
+  String get movementsFilterAllItems;
+
+  /// No description provided for @movementsClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get movementsClearFilters;
+
+  /// No description provided for @movementsClearFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get movementsClearFilter;
+
+  /// No description provided for @movementsDateFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get movementsDateFrom;
+
+  /// No description provided for @movementsDateTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get movementsDateTo;
+
+  /// No description provided for @movementsDateRangeSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{from} — {to}'**
+  String movementsDateRangeSummary(String from, String to);
 
   /// No description provided for @homeNoSupplierSpendTitle.
   ///
@@ -476,6 +584,12 @@ abstract class AppLocalizations {
   /// **'See all'**
   String get seeAll;
 
+  /// No description provided for @seeAllWithCount.
+  ///
+  /// In en, this message translates to:
+  /// **'See all ({count})'**
+  String seeAllWithCount(int count);
+
   /// No description provided for @movements.
   ///
   /// In en, this message translates to:
@@ -517,6 +631,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Assign craftsmen'**
   String get assignCraftsmen;
+
+  /// No description provided for @assignSuppliers.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign suppliers'**
+  String get assignSuppliers;
+
+  /// No description provided for @clientDetailNoSuppliers.
+  ///
+  /// In en, this message translates to:
+  /// **'No suppliers linked yet'**
+  String get clientDetailNoSuppliers;
+
+  /// No description provided for @clientDetailSuppliersEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Link suppliers to this client to track materials and agreements.'**
+  String get clientDetailSuppliersEmptyDescription;
+
+  /// No description provided for @homeSuppliersSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Suppliers'**
+  String get homeSuppliersSection;
+
+  /// No description provided for @homeNoSuppliersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No active suppliers'**
+  String get homeNoSuppliersTitle;
+
+  /// No description provided for @homeNoSuppliersDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add suppliers from the directory or link them to a client.'**
+  String get homeNoSuppliersDescription;
 
   /// No description provided for @clientDetailNoCraftsmen.
   ///
@@ -629,8 +779,92 @@ abstract class AppLocalizations {
   /// No description provided for @archiveClientDescription.
   ///
   /// In en, this message translates to:
-  /// **'This moves {name}\'s project to the archive. You can restore it later.'**
+  /// **'Archive {name}? This is one-way — archived clients stay read-only.'**
   String archiveClientDescription(String name);
+
+  /// No description provided for @clientsSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or phone'**
+  String get clientsSearchHint;
+
+  /// No description provided for @amountUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get amountUnavailable;
+
+  /// No description provided for @clientDuplicateNameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Same client name'**
+  String get clientDuplicateNameTitle;
+
+  /// No description provided for @clientDuplicateNameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A client with this name already exists. Continue anyway?'**
+  String get clientDuplicateNameDescription;
+
+  /// No description provided for @clientDuplicateNameConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get clientDuplicateNameConfirm;
+
+  /// No description provided for @clientDuplicatePhoneError.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone number is already used for another client.'**
+  String get clientDuplicatePhoneError;
+
+  /// No description provided for @clientDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete client?'**
+  String get clientDeleteTitle;
+
+  /// No description provided for @clientDeleteDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {name}? This removes the client and project.'**
+  String clientDeleteDescription(String name);
+
+  /// No description provided for @clientDeleteHasActivityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Client has activity'**
+  String get clientDeleteHasActivityTitle;
+
+  /// No description provided for @clientDeleteHasActivityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This client has transactions or links. Archive instead to keep history.'**
+  String get clientDeleteHasActivityDescription;
+
+  /// No description provided for @clientDeleteArchiveInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive instead'**
+  String get clientDeleteArchiveInstead;
+
+  /// No description provided for @clientArchivedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get clientArchivedBadge;
+
+  /// No description provided for @clientLedgerNotOnlineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger not online yet'**
+  String get clientLedgerNotOnlineTitle;
+
+  /// No description provided for @clientLedgerNotOnlineDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Movements and balances will appear here after the online ledger ships.'**
+  String get clientLedgerNotOnlineDescription;
 
   /// No description provided for @craftsmanAgreedAmount.
   ///
@@ -758,6 +992,36 @@ abstract class AppLocalizations {
   /// **'Select an item'**
   String get voucherSelectItem;
 
+  /// No description provided for @voucherDiscardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard voucher?'**
+  String get voucherDiscardTitle;
+
+  /// No description provided for @voucherDiscardDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have unsaved changes. Leave without saving?'**
+  String get voucherDiscardDescription;
+
+  /// No description provided for @discard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get discard;
+
+  /// No description provided for @voucherProviderLinkedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked'**
+  String get voucherProviderLinkedBadge;
+
+  /// No description provided for @voucherLinkAgreementAmountOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreement amount (optional)'**
+  String get voucherLinkAgreementAmountOptional;
+
   /// No description provided for @voucherSelectCraftsman.
   ///
   /// In en, this message translates to:
@@ -829,6 +1093,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not attach the receipt. Try again.'**
   String get voucherReceiptAttachFailed;
+
+  /// No description provided for @voucherReceiptUploadRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher saved. Tap Save again to retry uploading receipt photos.'**
+  String get voucherReceiptUploadRetry;
+
+  /// No description provided for @voucherReceiptDeleteRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher saved but a receipt could not be removed. Tap Save to try again.'**
+  String get voucherReceiptDeleteRetry;
+
+  /// No description provided for @voucherReceiptTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'This receipt image is too large. Try a smaller photo or save again after compression.'**
+  String get voucherReceiptTooLarge;
+
+  /// No description provided for @voucherReceiptCompressFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not prepare the receipt image for upload. Try another photo or save again.'**
+  String get voucherReceiptCompressFailed;
+
+  /// No description provided for @voucherReceiptInvalidMime.
+  ///
+  /// In en, this message translates to:
+  /// **'This file type is not accepted. Use JPEG, PNG, or WebP.'**
+  String get voucherReceiptInvalidMime;
 
   /// No description provided for @voucherAssignCraftsmanFirst.
   ///
@@ -1151,13 +1445,13 @@ abstract class AppLocalizations {
   /// No description provided for @craftsmanSetAgreedAmount.
   ///
   /// In en, this message translates to:
-  /// **'Set agreed amount'**
+  /// **'Set amount'**
   String get craftsmanSetAgreedAmount;
 
   /// No description provided for @craftsmanEditAgreedAmount.
   ///
   /// In en, this message translates to:
-  /// **'Edit agreed amount'**
+  /// **'Edit amount'**
   String get craftsmanEditAgreedAmount;
 
   /// No description provided for @craftsmanAgreedAmountSheetTitle.
@@ -1211,7 +1505,7 @@ abstract class AppLocalizations {
   /// No description provided for @itemsCatalogCaption.
   ///
   /// In en, this message translates to:
-  /// **'Default items — you can add, edit, and archive'**
+  /// **'Default items are read-only — add your own items below'**
   String get itemsCatalogCaption;
 
   /// No description provided for @addItem.
@@ -1262,17 +1556,221 @@ abstract class AppLocalizations {
   /// **'Add an item to categorize project spend.'**
   String get itemsEmptyDescription;
 
-  /// No description provided for @archiveItemTitle.
+  /// No description provided for @deleteItemTitle.
   ///
   /// In en, this message translates to:
-  /// **'Archive item?'**
-  String get archiveItemTitle;
+  /// **'Delete item?'**
+  String get deleteItemTitle;
 
-  /// No description provided for @archiveItemDescription.
+  /// No description provided for @deleteItemDescription.
   ///
   /// In en, this message translates to:
-  /// **'{name} will be hidden from lists. Expense history is kept.'**
-  String archiveItemDescription(String name);
+  /// **'{name} will be removed. Linked expenses keep their history.'**
+  String deleteItemDescription(String name);
+
+  /// No description provided for @itemInUseError.
+  ///
+  /// In en, this message translates to:
+  /// **'This item is linked to transactions and cannot be deleted or changed.'**
+  String get itemInUseError;
+
+  /// No description provided for @itemDuplicateNameError.
+  ///
+  /// In en, this message translates to:
+  /// **'An item with this name already exists.'**
+  String get itemDuplicateNameError;
+
+  /// No description provided for @providersSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or phone'**
+  String get providersSearchHint;
+
+  /// No description provided for @providersFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get providersFilterAll;
+
+  /// No description provided for @providersOnlineCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Suppliers and craftsmen in your directory — payments and agreements stay on transactions.'**
+  String get providersOnlineCaption;
+
+  /// No description provided for @providersEmptyAllTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No suppliers or craftsmen yet'**
+  String get providersEmptyAllTitle;
+
+  /// No description provided for @providersEmptySuppliersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No suppliers yet'**
+  String get providersEmptySuppliersTitle;
+
+  /// No description provided for @providersEmptyCraftsmenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No craftsmen yet'**
+  String get providersEmptyCraftsmenTitle;
+
+  /// No description provided for @providersEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a supplier or craftsman to link them on spend vouchers and client projects.'**
+  String get providersEmptyDescription;
+
+  /// No description provided for @directoryAddProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to directory'**
+  String get directoryAddProvider;
+
+  /// No description provided for @providerCreateSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New directory entry'**
+  String get providerCreateSheetTitle;
+
+  /// No description provided for @providerTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get providerTypeLabel;
+
+  /// No description provided for @providerNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get providerNameLabel;
+
+  /// No description provided for @providerNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Materials supplier'**
+  String get providerNameHint;
+
+  /// No description provided for @providerNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name'**
+  String get providerNameRequired;
+
+  /// No description provided for @providerDuplicateNameError.
+  ///
+  /// In en, this message translates to:
+  /// **'This name is already in your directory.'**
+  String get providerDuplicateNameError;
+
+  /// No description provided for @providerDuplicatePhoneError.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone number is already used for another directory entry.'**
+  String get providerDuplicatePhoneError;
+
+  /// No description provided for @providerDetailNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Directory entry not found'**
+  String get providerDetailNotFoundTitle;
+
+  /// No description provided for @providerDetailLinkedClientsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked clients'**
+  String get providerDetailLinkedClientsTitle;
+
+  /// No description provided for @providerDetailNoLinkedClients.
+  ///
+  /// In en, this message translates to:
+  /// **'No linked clients yet'**
+  String get providerDetailNoLinkedClients;
+
+  /// No description provided for @linkClients.
+  ///
+  /// In en, this message translates to:
+  /// **'Link clients'**
+  String get linkClients;
+
+  /// No description provided for @linkClientsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose which clients this directory entry is linked to. Agreement amounts stay optional and can be set from each client card later.'**
+  String get linkClientsIntro;
+
+  /// No description provided for @linkClientsProviderContext.
+  ///
+  /// In en, this message translates to:
+  /// **'Linking to: {name}'**
+  String linkClientsProviderContext(String name);
+
+  /// No description provided for @providerAssignmentsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Client links updated'**
+  String get providerAssignmentsSaved;
+
+  /// No description provided for @agreementUnlinkClientHasPaymentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlink client with payments?'**
+  String get agreementUnlinkClientHasPaymentsTitle;
+
+  /// No description provided for @agreementUnlinkClientHasPaymentsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has recorded payments on this agreement. Unlink anyway?'**
+  String agreementUnlinkClientHasPaymentsDescription(String name);
+
+  /// No description provided for @agreementUnlinkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlink craftsman?'**
+  String get agreementUnlinkTitle;
+
+  /// No description provided for @agreementUnlinkDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes {name} from the client. You can link them again later.'**
+  String agreementUnlinkDescription(String name);
+
+  /// No description provided for @unlink.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlink'**
+  String get unlink;
+
+  /// No description provided for @deleteProviderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from directory?'**
+  String get deleteProviderTitle;
+
+  /// No description provided for @deleteProviderDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be removed from your directory list.'**
+  String deleteProviderDescription(String name);
+
+  /// No description provided for @itemDefaultBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get itemDefaultBadge;
+
+  /// No description provided for @itemPickIconLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get itemPickIconLabel;
+
+  /// No description provided for @itemPickColorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get itemPickColorLabel;
 
   /// No description provided for @statementClientHeading.
   ///
@@ -1304,11 +1802,23 @@ abstract class AppLocalizations {
   /// **'Total received'**
   String get statementTotalReceived;
 
+  /// No description provided for @statementPeriodReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Received in period'**
+  String get statementPeriodReceived;
+
   /// No description provided for @statementTotalSpent.
   ///
   /// In en, this message translates to:
   /// **'Total spent'**
   String get statementTotalSpent;
+
+  /// No description provided for @statementPeriodSpent.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent in period'**
+  String get statementPeriodSpent;
 
   /// No description provided for @statementClosingLabel.
   ///
@@ -1351,6 +1861,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No receipts in the selected period.'**
   String get statementEmptyReceipts;
+
+  /// No description provided for @statementEmptyItemsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No spending in this period'**
+  String get statementEmptyItemsTitle;
+
+  /// No description provided for @statementEmptyItemsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending you record for this client will appear here, grouped by item. Change the period or record new spending.'**
+  String get statementEmptyItemsDescription;
 
   /// No description provided for @statementItemSectionTitle.
   ///
@@ -1518,6 +2040,798 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No payments in the selected period.'**
   String get statementEmptyPayments;
+
+  /// No description provided for @authLoginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authLoginTitle;
+
+  /// No description provided for @authLoginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track client funds, vouchers, and finishing projects from your account.'**
+  String get authLoginSubtitle;
+
+  /// No description provided for @authRegisterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get authRegisterTitle;
+
+  /// No description provided for @authRegisterSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account to keep your workspace and sign in on another phone.'**
+  String get authRegisterSubtitle;
+
+  /// No description provided for @authPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number'**
+  String get authPhone;
+
+  /// No description provided for @authPhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an 11-digit mobile number that starts with 01.'**
+  String get authPhoneInvalid;
+
+  /// No description provided for @authPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPassword;
+
+  /// No description provided for @authPasswordConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get authPasswordConfirm;
+
+  /// No description provided for @authCurrentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get authCurrentPassword;
+
+  /// No description provided for @authNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get authNewPassword;
+
+  /// No description provided for @authForgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get authForgotPassword;
+
+  /// No description provided for @authForgotPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Password recovery'**
+  String get authForgotPasswordTitle;
+
+  /// No description provided for @authForgotPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the mobile number on your account. We will send a confirmation code.'**
+  String get authForgotPasswordSubtitle;
+
+  /// No description provided for @authVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code'**
+  String get authVerificationTitle;
+
+  /// No description provided for @authVerificationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the verification code you received.'**
+  String get authVerificationSubtitle;
+
+  /// No description provided for @authVerificationDeliverySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the code sent to {phone}.'**
+  String authVerificationDeliverySubtitle(String phone);
+
+  /// No description provided for @authRecoveryVerifySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the recovery code you received.'**
+  String get authRecoveryVerifySubtitle;
+
+  /// No description provided for @authRecoveryDeliverySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the password recovery code sent to {phone}.'**
+  String authRecoveryDeliverySubtitle(String phone);
+
+  /// No description provided for @authCompleteProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get authCompleteProfileTitle;
+
+  /// No description provided for @authCompleteProfileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the name you use at work, then tap Continue.'**
+  String get authCompleteProfileSubtitle;
+
+  /// No description provided for @authDisplayName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get authDisplayName;
+
+  /// No description provided for @authDisplayNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Ahmed Hassan'**
+  String get authDisplayNameHint;
+
+  /// No description provided for @authVerificationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get authVerificationCode;
+
+  /// No description provided for @authResendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get authResendCode;
+
+  /// No description provided for @authResendWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait {seconds}s, then send again.'**
+  String authResendWait(int seconds);
+
+  /// No description provided for @authCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get authCreateAccount;
+
+  /// No description provided for @authLoginAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authLoginAction;
+
+  /// No description provided for @authVerifyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get authVerifyAction;
+
+  /// No description provided for @authContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get authContinue;
+
+  /// No description provided for @authRegisterLink.
+  ///
+  /// In en, this message translates to:
+  /// **'New here? Create an account'**
+  String get authRegisterLink;
+
+  /// No description provided for @authLoginLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Sign in'**
+  String get authLoginLink;
+
+  /// No description provided for @authResetPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get authResetPasswordTitle;
+
+  /// No description provided for @authResetPasswordAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Update password'**
+  String get authResetPasswordAction;
+
+  /// No description provided for @authChangePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get authChangePassword;
+
+  /// No description provided for @authSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get authSignOut;
+
+  /// No description provided for @authSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to cloud account'**
+  String get authSignIn;
+
+  /// No description provided for @authAccountSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get authAccountSection;
+
+  /// No description provided for @authRemoteWorkspaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get authRemoteWorkspaceTitle;
+
+  /// No description provided for @authRemoteWorkspaceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You are signed in. Cloud project data is not available yet.'**
+  String get authRemoteWorkspaceBody;
+
+  /// No description provided for @authRemoteWorkspaceMovedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Account management is in Profile and Settings.'**
+  String get authRemoteWorkspaceMovedBody;
+
+  /// No description provided for @shellTabNotOnlineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available online yet'**
+  String get shellTabNotOnlineTitle;
+
+  /// No description provided for @shellTabNotOnlineDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This tab is not ready for online use yet. Use Clients for what is available today.'**
+  String get shellTabNotOnlineDescription;
+
+  /// No description provided for @authSignedInAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as'**
+  String get authSignedInAs;
+
+  /// No description provided for @authBootstrapRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get authBootstrapRetry;
+
+  /// No description provided for @authNetworkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect. Check the network, then try again.'**
+  String get authNetworkError;
+
+  /// No description provided for @authInvalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number or password is wrong. Check them, then try again.'**
+  String get authInvalidCredentials;
+
+  /// No description provided for @authChallengeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That code is wrong or expired. Request a new one, then enter it.'**
+  String get authChallengeInvalid;
+
+  /// No description provided for @authThrottled.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Wait a moment, then try again.'**
+  String get authThrottled;
+
+  /// No description provided for @authSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session ended. Sign in again to continue.'**
+  String get authSessionExpired;
+
+  /// No description provided for @authFieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in this field to continue.'**
+  String get authFieldRequired;
+
+  /// No description provided for @authPasswordMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too short. Use at least 8 characters.'**
+  String get authPasswordMinLength;
+
+  /// No description provided for @authPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Those passwords differ. Type the same password in both fields.'**
+  String get authPasswordMismatch;
+
+  /// No description provided for @authCodeLengthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code.'**
+  String get authCodeLengthHint;
+
+  /// No description provided for @authAccountExistsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone already linked'**
+  String get authAccountExistsTitle;
+
+  /// No description provided for @authAccountExistsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone is already linked to an account. Sign in with that number or use a different phone.'**
+  String get authAccountExistsMessage;
+
+  /// No description provided for @authAccountExistsLoginAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authAccountExistsLoginAction;
+
+  /// No description provided for @authAccountExistsAnotherPhoneAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter another phone'**
+  String get authAccountExistsAnotherPhoneAction;
+
+  /// No description provided for @authFlowExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This step expired. Start again.'**
+  String get authFlowExpired;
+
+  /// No description provided for @authPasswordResetSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated. Sign in with the new one.'**
+  String get authPasswordResetSuccess;
+
+  /// No description provided for @authPasswordChangedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed. Use the new one next time.'**
+  String get authPasswordChangedSuccess;
+
+  /// No description provided for @authDisplayNameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is too long. Use at most 120 characters.'**
+  String get authDisplayNameTooLong;
+
+  /// No description provided for @profilePersonalSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal details'**
+  String get profilePersonalSection;
+
+  /// No description provided for @profileSecuritySection.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get profileSecuritySection;
+
+  /// No description provided for @profileDangerSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Account closure'**
+  String get profileDangerSection;
+
+  /// No description provided for @profileEditNameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit name'**
+  String get profileEditNameTitle;
+
+  /// No description provided for @profileStatementBrandingSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Your details on statements'**
+  String get profileStatementBrandingSection;
+
+  /// No description provided for @profileStatementBrandingSectionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown to your client at the top of the statement'**
+  String get profileStatementBrandingSectionSubtitle;
+
+  /// No description provided for @profileLogo.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo'**
+  String get profileLogo;
+
+  /// No description provided for @profileLogoSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo added'**
+  String get profileLogoSet;
+
+  /// No description provided for @profileLogoNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'No logo added yet'**
+  String get profileLogoNotSet;
+
+  /// No description provided for @profileBrandingActionAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get profileBrandingActionAdd;
+
+  /// No description provided for @profileBrandingActionChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get profileBrandingActionChange;
+
+  /// No description provided for @profileLogoPickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose logo'**
+  String get profileLogoPickTitle;
+
+  /// No description provided for @profileLogoFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo library'**
+  String get profileLogoFromGallery;
+
+  /// No description provided for @profileLogoFromCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get profileLogoFromCamera;
+
+  /// No description provided for @profileLogoChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change logo'**
+  String get profileLogoChange;
+
+  /// No description provided for @profileLogoRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove logo'**
+  String get profileLogoRemove;
+
+  /// No description provided for @profileLogoRemoveConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove logo?'**
+  String get profileLogoRemoveConfirmTitle;
+
+  /// No description provided for @profileLogoRemoveConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Statements will show your initials again.'**
+  String get profileLogoRemoveConfirmBody;
+
+  /// No description provided for @profileLogoTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Image must be 5 MB or smaller.'**
+  String get profileLogoTooLarge;
+
+  /// No description provided for @profileLogoUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read this image. Use JPG, PNG, or WebP.'**
+  String get profileLogoUnreadable;
+
+  /// No description provided for @profileLogoUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo updated.'**
+  String get profileLogoUpdated;
+
+  /// No description provided for @profileLogoRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo removed.'**
+  String get profileLogoRemoved;
+
+  /// No description provided for @profileContactPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact phone'**
+  String get profileContactPhone;
+
+  /// No description provided for @profileContactPhoneNotOnStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'No number will appear on statements'**
+  String get profileContactPhoneNotOnStatement;
+
+  /// No description provided for @profileContactPhoneStatementHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown at the top of the statement for your client. Leave empty to hide a number.'**
+  String get profileContactPhoneStatementHint;
+
+  /// No description provided for @profileContactPhoneUsesLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'sign-in number'**
+  String get profileContactPhoneUsesLogin;
+
+  /// No description provided for @profileEditContactPhoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit contact phone'**
+  String get profileEditContactPhoneTitle;
+
+  /// No description provided for @profileContactPhoneUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact phone updated.'**
+  String get profileContactPhoneUpdated;
+
+  /// No description provided for @profileChangePasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your sign-in password.'**
+  String get profileChangePasswordHint;
+
+  /// No description provided for @profileDeleteAccountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently close your account and sign out on all devices.'**
+  String get profileDeleteAccountHint;
+
+  /// No description provided for @authDeleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get authDeleteAccount;
+
+  /// No description provided for @authDeleteAccountConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get authDeleteAccountConfirmTitle;
+
+  /// No description provided for @authDeleteAccountConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password to confirm. This cannot be undone.'**
+  String get authDeleteAccountConfirmBody;
+
+  /// No description provided for @authDeleteAccountSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account was closed.'**
+  String get authDeleteAccountSuccess;
+
+  /// No description provided for @authAccountDeletedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This account is already closed.'**
+  String get authAccountDeletedMessage;
+
+  /// No description provided for @authLogoutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out?'**
+  String get authLogoutConfirmTitle;
+
+  /// No description provided for @authLogoutConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You will need to sign in again to continue using your cloud data.'**
+  String get authLogoutConfirmBody;
+
+  /// No description provided for @paywallBenefitsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'PREMIUM BENEFITS'**
+  String get paywallBenefitsHeading;
+
+  /// No description provided for @paywallBilledYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Billed yearly at {amount}'**
+  String paywallBilledYearly(String amount);
+
+  /// No description provided for @paywallBilledMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Billed monthly'**
+  String get paywallBilledMonthly;
+
+  /// No description provided for @paywallPerMonthSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' / month'**
+  String get paywallPerMonthSuffix;
+
+  /// No description provided for @paywallPlanYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get paywallPlanYearly;
+
+  /// No description provided for @paywallPlanMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get paywallPlanMonthly;
+
+  /// No description provided for @paywallSubscribeCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe to Premium'**
+  String get paywallSubscribeCta;
+
+  /// No description provided for @paywallContinueFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue for free'**
+  String get paywallContinueFree;
+
+  /// No description provided for @subscriptionPaymentNotConnectedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'In-app payment is not connected yet.'**
+  String get subscriptionPaymentNotConnectedYet;
+
+  /// No description provided for @profileSubscriptionSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get profileSubscriptionSection;
+
+  /// No description provided for @profileSubscriptionFreeBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium for unlimited active projects and more.'**
+  String get profileSubscriptionFreeBlurb;
+
+  /// No description provided for @profileSubscriptionSubscribeCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe to Premium'**
+  String get profileSubscriptionSubscribeCta;
+
+  /// No description provided for @profileSubscriptionRenewsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Renews on {date}'**
+  String profileSubscriptionRenewsOn(String date);
+
+  /// No description provided for @profileSubscriptionDaysRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days remaining'**
+  String profileSubscriptionDaysRemaining(int count);
+
+  /// No description provided for @gateMaintenanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get gateMaintenanceTitle;
+
+  /// No description provided for @gateMaintenanceFallbackMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The app is temporarily unavailable. Please try again shortly.'**
+  String get gateMaintenanceFallbackMessage;
+
+  /// No description provided for @gateForceUpdateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update required'**
+  String get gateForceUpdateTitle;
+
+  /// No description provided for @gateForceUpdateFallbackMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please update to the latest version to keep using Bnood.'**
+  String get gateForceUpdateFallbackMessage;
+
+  /// No description provided for @gateOptionalUpdateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update available'**
+  String get gateOptionalUpdateTitle;
+
+  /// No description provided for @gateOptionalUpdateFallbackMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A newer version of Bnood is available with improvements and fixes.'**
+  String get gateOptionalUpdateFallbackMessage;
+
+  /// No description provided for @gateUpdateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get gateUpdateAction;
+
+  /// No description provided for @gateLaterAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get gateLaterAction;
+
+  /// No description provided for @settingsContentSection.
+  ///
+  /// In en, this message translates to:
+  /// **'About & legal'**
+  String get settingsContentSection;
+
+  /// No description provided for @settingsContentAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsContentAbout;
+
+  /// No description provided for @settingsContentTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of use'**
+  String get settingsContentTerms;
+
+  /// No description provided for @settingsContentPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get settingsContentPrivacy;
+
+  /// No description provided for @settingsContentCancellation.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation policy'**
+  String get settingsContentCancellation;
+
+  /// No description provided for @contentPageLoadingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Page'**
+  String get contentPageLoadingTitle;
+
+  /// No description provided for @contentPageNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Page not found'**
+  String get contentPageNotFoundTitle;
+
+  /// No description provided for @contentPageNotFoundDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This page is not available right now.'**
+  String get contentPageNotFoundDescription;
+
+  /// No description provided for @contentPageErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load page'**
+  String get contentPageErrorTitle;
+
+  /// No description provided for @contentPageErrorDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your connection and try again.'**
+  String get contentPageErrorDescription;
+
+  /// No description provided for @authRegisterLegalPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'By creating an account you agree to our'**
+  String get authRegisterLegalPrefix;
+
+  /// No description provided for @authRegisterLegalMiddle.
+  ///
+  /// In en, this message translates to:
+  /// **'and'**
+  String get authRegisterLegalMiddle;
 }
 
 class _AppLocalizationsDelegate

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/config/extensions/num_extensions.dart';
-import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_fallback.dart';
@@ -13,11 +12,7 @@ import '../../home/widgets/home_section_header.dart';
 import '../supplier_detail_snapshot.dart';
 
 class SupplierDetailHistorySection extends StatelessWidget {
-  const SupplierDetailHistorySection({
-    super.key,
-    required this.history,
-    required this.localeCode,
-  });
+  const SupplierDetailHistorySection({super.key, required this.history, required this.localeCode});
 
   final List<SupplierDetailHistoryEntry> history;
   final String localeCode;
@@ -25,7 +20,6 @@ class SupplierDetailHistorySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -34,20 +28,14 @@ class SupplierDetailHistorySection extends StatelessWidget {
         AppSize.spaceSM.gap,
         if (history.isEmpty)
           AppCard(
-            child: AppFallback.section(
-              icon: Icons.receipt_long_outlined,
-              title: l10n.supplierDetailNoTransactions,
-            ),
+            child: AppFallback.section(icon: Icons.receipt_long_outlined, title: l10n.supplierDetailNoTransactions),
           )
         else
           Column(
             children: [
               for (var i = 0; i < history.length; i++) ...[
                 if (i > 0) AppSize.spaceMD.gap,
-                _SupplierHistoryBlock(
-                  entry: history[i],
-                  localeCode: localeCode,
-                ),
+                _SupplierHistoryBlock(entry: history[i], localeCode: localeCode),
               ],
             ],
           ),
@@ -57,10 +45,7 @@ class SupplierDetailHistorySection extends StatelessWidget {
 }
 
 class _SupplierHistoryBlock extends ConsumerWidget {
-  const _SupplierHistoryBlock({
-    required this.entry,
-    required this.localeCode,
-  });
+  const _SupplierHistoryBlock({required this.entry, required this.localeCode});
 
   final SupplierDetailHistoryEntry entry;
   final String localeCode;

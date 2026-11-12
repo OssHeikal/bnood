@@ -7,9 +7,7 @@ Future<VoucherDraft> enrichVoucherDraft(BnoodRepository repo, VoucherDraft draft
 
   if (next.clientLabel == null && next.clientId != null) {
     final client = await repo.getClient(next.clientId!);
-    if (client != null) {
-      next = next.copyWith(clientLabel: client.name);
-    }
+    next = next.copyWith(clientLabel: client.name);
   }
 
   if (next.receiptImagePath == null && next.editingTransactionId != null) {

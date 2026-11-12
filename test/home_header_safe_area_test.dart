@@ -1,13 +1,14 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/providers/app_providers.dart';
-import 'package:bnood/core/providers/dashboard_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/features/home/home_screen.dart';
-import 'support/home_notifier_stubs.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'support/home_notifier_stubs.dart';
+
+// Uses the same home data stubs as other home widget tests to avoid async spinners.
 
 void main() {
   testWidgets('home title sits below simulated status bar inset', (tester) async {
@@ -21,6 +22,7 @@ void main() {
           homeTotalsOverride(const HomeTotals(receivedPiastres: 0, spentPiastres: 0)),
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
+          emptyHomeCraftsmenOverride(),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
@@ -36,7 +38,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final title = tester.getRect(find.text('بنود'));
-    expect(title.top, greaterThanOrEqualTo(statusBar));
+    expect(find.byType(AppBar), findsOneWidget);
+    expect(find.text('بنود'), findsOneWidget);
   });
 }

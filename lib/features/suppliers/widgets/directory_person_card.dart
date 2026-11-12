@@ -6,12 +6,12 @@ import '../../../core/config/theme/app_shape.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/theme/app_colors.dart' as legacy;
 import '../../../core/widgets/app_amount.dart';
+import '../../../core/resources/gen/assets.gen.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/app_overflow_menu.dart';
 import '../../../core/widgets/app_pressable.dart';
 import '../../../features/clients/widgets/client_balance_card.dart';
 import '../../../l10n/app_localizations.dart';
-
-enum _DirectoryPersonMenuAction { details, archive }
 
 /// Directory list row: stripe, avatar, name, paid subtitle, overflow menu.
 /// Craftsman rows set [paidInTrailing]: paid amount at the end, remaining amount under the name.
@@ -153,30 +153,20 @@ class DirectoryPersonCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsetsDirectional.only(end: AppSize.spaceSM),
                 child: Center(
-                  child: PopupMenuButton<_DirectoryPersonMenuAction>(
-                    key: Key('directory_person_menu_$name'),
-                    padding: EdgeInsets.zero,
-                    icon: Icon(Icons.more_vert, size: AppSize.icon, color: colors.onSurfaceMuted),
-                    shape: AppShape.superellipse(
-                      radius: AppSize.radiusSM,
-                      side: BorderSide(color: colors.outline),
-                    ),
-                    onSelected: (action) async {
-                      switch (action) {
-                        case _DirectoryPersonMenuAction.details:
-                          onOpenDetail();
-                        case _DirectoryPersonMenuAction.archive:
-                          await onArchive!();
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: _DirectoryPersonMenuAction.details,
-                        child: Text(l10n.directoryViewDetails),
+                  child: AppOverflowMenu(
+                    buttonKey: Key('directory_person_menu_$name'),
+                    actions: [
+                      AppOverflowMenuAction(
+                        label: l10n.directoryViewDetails,
+                        icon: Assets.icons.infoCircleOutline,
+                        onSelected: onOpenDetail,
                       ),
-                      PopupMenuItem(
-                        value: _DirectoryPersonMenuAction.archive,
-                        child: Text(l10n.archive),
+                      AppOverflowMenuAction(
+                        label: l10n.archive,
+                        icon: Assets.icons.archiveRestoreOutline,
+                        onSelected: () {
+                          onArchive!();
+                        },
                       ),
                     ],
                   ),

@@ -1,7 +1,6 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/database/connection.dart';
 import 'package:bnood/core/money/ledger_math.dart';
-import 'package:bnood/core/providers/app_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/features/clients/client_craftsmen_list_provider.dart';
 import 'package:bnood/features/clients/client_craftsmen_list_screen.dart';
@@ -15,7 +14,6 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('client craftsmen list shows zero paid assignment', (tester) async {
-    final now = DateTime.utc(2026, 11, 1);
     final snap = ClientCraftsmenListSnapshot(
       projectId: 'p1',
       rows: [
@@ -33,9 +31,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          clientCraftsmenListProvider.overrideWith(() => _StubListNotifier(snap)),
-        ],
+        overrides: [clientCraftsmenListProvider.overrideWith(() => _StubListNotifier(snap))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -82,11 +78,7 @@ void main() {
     final client = await repo.createClient(name: 'Site');
     final project = (await repo.primaryActiveProject(client.id))!;
     final craftsman = await repo.createCraftsman(name: 'Idle');
-    await repo.upsertAgreement(
-      projectId: project.id,
-      craftsmanId: craftsman.id,
-      initialAmountPiastres: 0,
-    );
+    await repo.upsertAgreement(projectId: project.id, craftsmanId: craftsman.id, initialAmountPiastres: 0);
     final agreements = await repo.agreementsForProject(project.id);
     final tx = await repo.transactionsForProject(project.id);
     final paid = LedgerMath.craftsmanPaidPiastres(rows: tx, craftsmanId: craftsman.id);

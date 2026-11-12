@@ -1,10 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/agreements/agreements_riverpod.dart';
+import '../../core/clients/client_provider_agreement_preview.dart';
+import '../../core/craftsmen/craftsman_snapshot_limit.dart';
+import '../../core/clients/clients_providers.dart';
+import '../../core/providers_api/app_provider_record.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/vouchers/vouchers_riverpod.dart';
 import 'client_detail_snapshot.dart';
+import 'client_item_spend_rows.dart';
 import 'client_movement_lines.dart';
+import 'client_voucher_movement_lines.dart';
 import 'widgets/client_balance_card.dart';
 
 final clientDetailProvider =
@@ -43,6 +51,80 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
   }
 
   Future<ClientDetailSnapshot> loadSnapshot(String clientId) async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      return _loadRemoteSnapshot(clientId);
+    }
+    return _loadLocalSnapshot(clientId);
+  }
+
+  Future<ClientDetailSnapshot> _loadRemoteSnapshot(String clientId) async {
+    final record = await ref.read(clientsRepositoryProvider).getClient(clientId);
+    final balances = record.balances;
+    var craftsmanPreviews = <ClientCraftsmanPreviewRow>[];
+    var supplierPreviews = <ClientCraftsmanPreviewRow>[];
+    int? craftsmenCount;
+    int? suppliersCount;
+    if (ref.read(remoteAgreementsEnabledProvider)) {
+      final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
+      craftsmanPreviews = craftsmanSnapshotRows(
+        clientAgreementPreviews(agreements, AppProviderType.craftsman),
+      );
+      supplierPreviews = craftsmanSnapshotRows(
+        clientAgreementPreviews(agreements, AppProviderType.supplier),
+      );
+      craftsmenCount = record.craftsmenCount ?? craftsmanPreviews.length;
+      suppliersCount = record.suppliersCount ?? supplierPreviews.length;
+    }
+
+    final itemSpend = await ref.read(clientsRepositoryProvider).getClientItemSpend(clientId);
+    final itemsCount = itemSpend.items.length;
+    final topItems = clientItemRowsFromItemSpend(itemSpend.items.take(3));
+
+    var latestMovements = <ClientDetailMovementLine>[];
+    int? movementsCount;
+    final vouchersOnline = ref.read(remoteVouchersEnabledProvider);
+    if (vouchersOnline) {
+      final vouchers = await ref.read(vouchersRepositoryProvider).listClientVouchers(
+            clientId: clientId,
+            page: 1,
+            perPage: 5,
+          );
+      movementsCount = vouchers.total;
+      latestMovements = movementLinesFromVouchers(
+        vouchers.items,
+        projectId: record.project.id,
+      );
+    }
+
+    final spentMinor = balances?.spentPiastres;
+    final profit = record.project.engineerBasisPoints == null || spentMinor == null
+        ? null
+        : MoneyFormat.estimatedProfitPiastres(
+            totalSpendPiastres: spentMinor,
+            engineerBasisPoints: record.project.engineerBasisPoints!,
+          );
+
+    return ClientDetailSnapshot(
+      client: record.client,
+      project: record.project,
+      receivedPiastres: balances?.receivedPiastres,
+      spentPiastres: spentMinor,
+      estimatedProfitPiastres: profit,
+      craftsmanPreviews: craftsmanPreviews,
+      supplierPreviews: supplierPreviews,
+      craftsmenCount: craftsmenCount,
+      suppliersCount: suppliersCount,
+      itemsCount: itemsCount,
+      movementsCount: movementsCount,
+      topItems: topItems,
+      latestMovements: latestMovements,
+      onlineIdentityOnly: !vouchersOnline,
+      usesRemoteMoney: true,
+      remainingFromServer: balances?.remainingPiastres,
+    );
+  }
+
+  Future<ClientDetailSnapshot> _loadLocalSnapshot(String clientId) async {
     final repo = ref.read(repositoryProvider);
     final client = await repo.getClient(clientId);
     final project = await repo.primaryProjectForClient(clientId);
@@ -64,7 +146,7 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
     final craftsmanById = {for (final c in craftsmen) c.id: c};
 
     final previews = <ClientCraftsmanPreviewRow>[];
-    for (final a in agreements.take(3)) {
+    for (final a in agreements.take(craftsmanSnapshotLimit)) {
       final c = craftsmanById[a.craftsmanId];
       if (c == null) continue;
       final paid = LedgerMath.craftsmanPaidPiastres(rows: tx, craftsmanId: a.craftsmanId);
@@ -90,9 +172,10 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
     final topItemsNamed = topItems.take(3).map((e) {
       final item = itemById[e.key];
       return ClientDetailItemRowData(
+        itemId: e.key,
         name: item?.name ?? e.key,
         colorKey: item?.colorKey ?? 'teal',
-        iconName: item?.iconName ?? 'category',
+        iconName: item?.iconName ?? 'layers',
         breakdown: e.value,
       );
     }).toList();
@@ -112,6 +195,7 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
       spentPiastres: balance.spentPiastres,
       estimatedProfitPiastres: profit,
       craftsmanPreviews: previews,
+      supplierPreviews: const [],
       topItems: topItemsNamed,
       latestMovements: movementLines,
     );

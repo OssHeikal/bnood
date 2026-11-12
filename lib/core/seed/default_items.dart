@@ -12,35 +12,20 @@ class DefaultItemSeed {
 
 /// Arabic catalog labels seeded on first workspace creation (no demo transactions).
 const defaultItemSeeds = <DefaultItemSeed>[
-  DefaultItemSeed(
-      arabicName: 'هدم وإزالة', colorKey: 'brick', iconName: 'construction'),
-  DefaultItemSeed(
-      arabicName: 'محارة', colorKey: 'olive', iconName: 'format_paint'),
+  DefaultItemSeed(arabicName: 'هدم وإزالة', colorKey: 'brick', iconName: 'pickaxe'),
+  DefaultItemSeed(arabicName: 'محارة', colorKey: 'olive', iconName: 'brick_wall'),
   DefaultItemSeed(arabicName: 'أرضيات', colorKey: 'gold', iconName: 'layers'),
-  DefaultItemSeed(
-      arabicName: 'سيراميك وحمامات', colorKey: 'blue', iconName: 'bathtub'),
-  DefaultItemSeed(
-      arabicName: 'سباكة', colorKey: 'turquoise', iconName: 'plumbing'),
-  DefaultItemSeed(
-      arabicName: 'كهرباء',
-      colorKey: 'orange',
-      iconName: 'electrical_services'),
-  DefaultItemSeed(
-      arabicName: 'جبس بورد', colorKey: 'purple', iconName: 'dashboard'),
-  DefaultItemSeed(arabicName: 'دهانات', colorKey: 'pink', iconName: 'brush'),
-  DefaultItemSeed(
-      arabicName: 'نجارة وأبواب',
-      colorKey: 'brick',
-      iconName: 'door_front_door'),
-  DefaultItemSeed(arabicName: 'مطبخ', colorKey: 'teal', iconName: 'kitchen'),
-  DefaultItemSeed(
-      arabicName: 'ألوميتال وشتر', colorKey: 'blue', iconName: 'window'),
-  DefaultItemSeed(arabicName: 'تكييف', colorKey: 'green', iconName: 'ac_unit'),
-  DefaultItemSeed(arabicName: 'إضاءة', colorKey: 'gold', iconName: 'light'),
-  DefaultItemSeed(
-      arabicName: 'أيدي عاملة', colorKey: 'olive', iconName: 'engineering'),
-  DefaultItemSeed(
-      arabicName: 'نقل ومهمات', colorKey: 'orange', iconName: 'local_shipping'),
-  DefaultItemSeed(
-      arabicName: 'متنوعات', colorKey: 'purple', iconName: 'category'),
+  DefaultItemSeed(arabicName: 'سيراميك وحمامات', colorKey: 'blue', iconName: 'bathtub'),
+  DefaultItemSeed(arabicName: 'سباكة', colorKey: 'turquoise', iconName: 'sink'),
+  DefaultItemSeed(arabicName: 'كهرباء', colorKey: 'orange', iconName: 'plug_socket'),
+  DefaultItemSeed(arabicName: 'جبس بورد', colorKey: 'purple', iconName: 'dashboard_square'),
+  DefaultItemSeed(arabicName: 'دهانات', colorKey: 'pink', iconName: 'paint_roller'),
+  DefaultItemSeed(arabicName: 'نجارة وأبواب', colorKey: 'brick', iconName: 'door'),
+  DefaultItemSeed(arabicName: 'مطبخ', colorKey: 'teal', iconName: 'refrigerator'),
+  DefaultItemSeed(arabicName: 'ألوميتال وشتر', colorKey: 'blue', iconName: 'windows'),
+  DefaultItemSeed(arabicName: 'تكييف', colorKey: 'green', iconName: 'smart_ac'),
+  DefaultItemSeed(arabicName: 'إضاءة', colorKey: 'gold', iconName: 'lamp'),
+  DefaultItemSeed(arabicName: 'أيدي عاملة', colorKey: 'olive', iconName: 'hard_hat'),
+  DefaultItemSeed(arabicName: 'نقل ومهمات', colorKey: 'orange', iconName: 'pickup'),
+  DefaultItemSeed(arabicName: 'متنوعات', colorKey: 'purple', iconName: 'grid_table'),
 ];

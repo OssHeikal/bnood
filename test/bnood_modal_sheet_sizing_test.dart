@@ -1,5 +1,4 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/bnood_modal_sheet.dart';
 import 'package:bnood/core/widgets/bounded_sheet_navigator.dart';
 import 'package:bnood/core/widgets/custom_bottom_sheet.dart';
 import 'package:bnood/core/widgets/sheet_drag_handle.dart';

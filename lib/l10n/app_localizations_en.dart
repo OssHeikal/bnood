@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navAdd => 'New';
 
   @override
+  String get menuTitle => 'Menu';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override
@@ -73,6 +76,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAppName => 'Bnood';
 
   @override
+  String get homeGreetingMorning => 'Good morning';
+
+  @override
+  String get homeGreetingEvening => 'Good evening';
+
+  @override
+  String get userProfileTitle => 'Profile';
+
+  @override
+  String craftsmanLinkedClientsMeta(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count linked clients',
+      one: '1 linked client',
+      zero: 'No linked clients',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get homeSubtitle => 'Finishing funds, simply';
 
   @override
@@ -97,6 +121,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeLoadErrorTitle => 'Could not load home';
+
+  @override
+  String get clientMovementsLoadErrorTitle => 'Could not load movements';
+
+  @override
+  String get movementsSearchHint => 'Search notes';
+
+  @override
+  String get movementsFilterSort => 'Sort';
+
+  @override
+  String get movementsFilterItem => 'Item';
+
+  @override
+  String get movementsFilterDate => 'Date';
+
+  @override
+  String get movementsSortNewest => 'Newest';
+
+  @override
+  String get movementsSortOldest => 'Oldest';
+
+  @override
+  String get movementsFilterAllItems => 'All items';
+
+  @override
+  String get movementsClearFilters => 'Clear filters';
+
+  @override
+  String get movementsClearFilter => 'Clear';
+
+  @override
+  String get movementsDateFrom => 'From';
+
+  @override
+  String get movementsDateTo => 'To';
+
+  @override
+  String movementsDateRangeSummary(String from, String to) {
+    return '$from — $to';
+  }
 
   @override
   String get homeNoSupplierSpendTitle => 'No material spend yet';
@@ -205,6 +270,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get seeAll => 'See all';
 
   @override
+  String seeAllWithCount(int count) {
+    return 'See all ($count)';
+  }
+
+  @override
   String get movements => 'Movements';
 
   @override
@@ -225,6 +295,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assignCraftsmen => 'Assign craftsmen';
+
+  @override
+  String get assignSuppliers => 'Assign suppliers';
+
+  @override
+  String get clientDetailNoSuppliers => 'No suppliers linked yet';
+
+  @override
+  String get clientDetailSuppliersEmptyDescription =>
+      'Link suppliers to this client to track materials and agreements.';
+
+  @override
+  String get homeSuppliersSection => 'Suppliers';
+
+  @override
+  String get homeNoSuppliersTitle => 'No active suppliers';
+
+  @override
+  String get homeNoSuppliersDescription =>
+      'Add suppliers from the directory or link them to a client.';
 
   @override
   String get clientDetailNoCraftsmen => 'No craftsmen on this project yet';
@@ -286,8 +376,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String archiveClientDescription(String name) {
-    return 'This moves $name\'s project to the archive. You can restore it later.';
+    return 'Archive $name? This is one-way — archived clients stay read-only.';
   }
+
+  @override
+  String get clientsSearchHint => 'Search by name or phone';
+
+  @override
+  String get amountUnavailable => '—';
+
+  @override
+  String get clientDuplicateNameTitle => 'Same client name';
+
+  @override
+  String get clientDuplicateNameDescription =>
+      'A client with this name already exists. Continue anyway?';
+
+  @override
+  String get clientDuplicateNameConfirm => 'Continue';
+
+  @override
+  String get clientDuplicatePhoneError =>
+      'This phone number is already used for another client.';
+
+  @override
+  String get clientDeleteTitle => 'Delete client?';
+
+  @override
+  String clientDeleteDescription(String name) {
+    return 'Delete $name? This removes the client and project.';
+  }
+
+  @override
+  String get clientDeleteHasActivityTitle => 'Client has activity';
+
+  @override
+  String get clientDeleteHasActivityDescription =>
+      'This client has transactions or links. Archive instead to keep history.';
+
+  @override
+  String get clientDeleteArchiveInstead => 'Archive instead';
+
+  @override
+  String get clientArchivedBadge => 'Archived';
+
+  @override
+  String get clientLedgerNotOnlineTitle => 'Ledger not online yet';
+
+  @override
+  String get clientLedgerNotOnlineDescription =>
+      'Movements and balances will appear here after the online ledger ships.';
 
   @override
   String get craftsmanAgreedAmount => 'Agreed';
@@ -354,6 +492,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voucherSelectItem => 'Select an item';
 
   @override
+  String get voucherDiscardTitle => 'Discard voucher?';
+
+  @override
+  String get voucherDiscardDescription =>
+      'You have unsaved changes. Leave without saving?';
+
+  @override
+  String get discard => 'Discard';
+
+  @override
+  String get voucherProviderLinkedBadge => 'Linked';
+
+  @override
+  String get voucherLinkAgreementAmountOptional =>
+      'Agreement amount (optional)';
+
+  @override
   String get voucherSelectCraftsman => 'Select a craftsman';
 
   @override
@@ -393,6 +548,26 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get voucherReceiptAttachFailed =>
       'Could not attach the receipt. Try again.';
+
+  @override
+  String get voucherReceiptUploadRetry =>
+      'Voucher saved. Tap Save again to retry uploading receipt photos.';
+
+  @override
+  String get voucherReceiptDeleteRetry =>
+      'Voucher saved but a receipt could not be removed. Tap Save to try again.';
+
+  @override
+  String get voucherReceiptTooLarge =>
+      'This receipt image is too large. Try a smaller photo or save again after compression.';
+
+  @override
+  String get voucherReceiptCompressFailed =>
+      'Could not prepare the receipt image for upload. Try another photo or save again.';
+
+  @override
+  String get voucherReceiptInvalidMime =>
+      'This file type is not accepted. Use JPEG, PNG, or WebP.';
 
   @override
   String get voucherAssignCraftsmanFirst =>
@@ -574,10 +749,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get craftsmanSetAgreedAmount => 'Set agreed amount';
+  String get craftsmanSetAgreedAmount => 'Set amount';
 
   @override
-  String get craftsmanEditAgreedAmount => 'Edit agreed amount';
+  String get craftsmanEditAgreedAmount => 'Edit amount';
 
   @override
   String get craftsmanAgreedAmountSheetTitle => 'Agreed amount';
@@ -608,7 +783,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get itemsCatalogCaption =>
-      'Default items — you can add, edit, and archive';
+      'Default items are read-only — add your own items below';
 
   @override
   String get addItem => 'Add item';
@@ -636,12 +811,129 @@ class AppLocalizationsEn extends AppLocalizations {
       'Add an item to categorize project spend.';
 
   @override
-  String get archiveItemTitle => 'Archive item?';
+  String get deleteItemTitle => 'Delete item?';
 
   @override
-  String archiveItemDescription(String name) {
-    return '$name will be hidden from lists. Expense history is kept.';
+  String deleteItemDescription(String name) {
+    return '$name will be removed. Linked expenses keep their history.';
   }
+
+  @override
+  String get itemInUseError =>
+      'This item is linked to transactions and cannot be deleted or changed.';
+
+  @override
+  String get itemDuplicateNameError => 'An item with this name already exists.';
+
+  @override
+  String get providersSearchHint => 'Search by name or phone';
+
+  @override
+  String get providersFilterAll => 'All';
+
+  @override
+  String get providersOnlineCaption =>
+      'Suppliers and craftsmen in your directory — payments and agreements stay on transactions.';
+
+  @override
+  String get providersEmptyAllTitle => 'No suppliers or craftsmen yet';
+
+  @override
+  String get providersEmptySuppliersTitle => 'No suppliers yet';
+
+  @override
+  String get providersEmptyCraftsmenTitle => 'No craftsmen yet';
+
+  @override
+  String get providersEmptyDescription =>
+      'Add a supplier or craftsman to link them on spend vouchers and client projects.';
+
+  @override
+  String get directoryAddProvider => 'Add to directory';
+
+  @override
+  String get providerCreateSheetTitle => 'New directory entry';
+
+  @override
+  String get providerTypeLabel => 'Type';
+
+  @override
+  String get providerNameLabel => 'Name';
+
+  @override
+  String get providerNameHint => 'e.g. Materials supplier';
+
+  @override
+  String get providerNameRequired => 'Enter a name';
+
+  @override
+  String get providerDuplicateNameError =>
+      'This name is already in your directory.';
+
+  @override
+  String get providerDuplicatePhoneError =>
+      'This phone number is already used for another directory entry.';
+
+  @override
+  String get providerDetailNotFoundTitle => 'Directory entry not found';
+
+  @override
+  String get providerDetailLinkedClientsTitle => 'Linked clients';
+
+  @override
+  String get providerDetailNoLinkedClients => 'No linked clients yet';
+
+  @override
+  String get linkClients => 'Link clients';
+
+  @override
+  String get linkClientsIntro =>
+      'Choose which clients this directory entry is linked to. Agreement amounts stay optional and can be set from each client card later.';
+
+  @override
+  String linkClientsProviderContext(String name) {
+    return 'Linking to: $name';
+  }
+
+  @override
+  String get providerAssignmentsSaved => 'Client links updated';
+
+  @override
+  String get agreementUnlinkClientHasPaymentsTitle =>
+      'Unlink client with payments?';
+
+  @override
+  String agreementUnlinkClientHasPaymentsDescription(String name) {
+    return '$name has recorded payments on this agreement. Unlink anyway?';
+  }
+
+  @override
+  String get agreementUnlinkTitle => 'Unlink craftsman?';
+
+  @override
+  String agreementUnlinkDescription(String name) {
+    return 'This removes $name from the client. You can link them again later.';
+  }
+
+  @override
+  String get unlink => 'Unlink';
+
+  @override
+  String get deleteProviderTitle => 'Delete from directory?';
+
+  @override
+  String deleteProviderDescription(String name) {
+    return '$name will be removed from your directory list.';
+  }
+
+  @override
+  String get itemDefaultBadge => 'Default';
+
+  @override
+  String get itemPickIconLabel => 'Icon';
+
+  @override
+  String get itemPickColorLabel => 'Color';
 
   @override
   String get statementClientHeading => 'Fund / client statement';
@@ -659,7 +951,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statementTotalReceived => 'Total received';
 
   @override
+  String get statementPeriodReceived => 'Received in period';
+
+  @override
   String get statementTotalSpent => 'Total spent';
+
+  @override
+  String get statementPeriodSpent => 'Spent in period';
 
   @override
   String get statementClosingLabel => 'Remaining';
@@ -686,6 +984,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statementEmptyReceipts => 'No receipts in the selected period.';
+
+  @override
+  String get statementEmptyItemsTitle => 'No spending in this period';
+
+  @override
+  String get statementEmptyItemsDescription =>
+      'Spending you record for this client will appear here, grouped by item. Change the period or record new spending.';
 
   @override
   String statementItemSectionTitle(String name) {
@@ -794,4 +1099,449 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statementEmptyPayments => 'No payments in the selected period.';
+
+  @override
+  String get authLoginTitle => 'Sign in';
+
+  @override
+  String get authLoginSubtitle =>
+      'Track client funds, vouchers, and finishing projects from your account.';
+
+  @override
+  String get authRegisterTitle => 'Create account';
+
+  @override
+  String get authRegisterSubtitle =>
+      'Create an account to keep your workspace and sign in on another phone.';
+
+  @override
+  String get authPhone => 'Mobile number';
+
+  @override
+  String get authPhoneInvalid =>
+      'Enter an 11-digit mobile number that starts with 01.';
+
+  @override
+  String get authPassword => 'Password';
+
+  @override
+  String get authPasswordConfirm => 'Confirm password';
+
+  @override
+  String get authCurrentPassword => 'Current password';
+
+  @override
+  String get authNewPassword => 'New password';
+
+  @override
+  String get authForgotPassword => 'Forgot password?';
+
+  @override
+  String get authForgotPasswordTitle => 'Password recovery';
+
+  @override
+  String get authForgotPasswordSubtitle =>
+      'Enter the mobile number on your account. We will send a confirmation code.';
+
+  @override
+  String get authVerificationTitle => 'Verification code';
+
+  @override
+  String get authVerificationSubtitle =>
+      'Enter the verification code you received.';
+
+  @override
+  String authVerificationDeliverySubtitle(String phone) {
+    return 'Enter the code sent to $phone.';
+  }
+
+  @override
+  String get authRecoveryVerifySubtitle =>
+      'Enter the recovery code you received.';
+
+  @override
+  String authRecoveryDeliverySubtitle(String phone) {
+    return 'Enter the password recovery code sent to $phone.';
+  }
+
+  @override
+  String get authCompleteProfileTitle => 'Your name';
+
+  @override
+  String get authCompleteProfileSubtitle =>
+      'Enter the name you use at work, then tap Continue.';
+
+  @override
+  String get authDisplayName => 'Full name';
+
+  @override
+  String get authDisplayNameHint => 'e.g. Ahmed Hassan';
+
+  @override
+  String get authVerificationCode => 'Code';
+
+  @override
+  String get authResendCode => 'Resend code';
+
+  @override
+  String authResendWait(int seconds) {
+    return 'Wait ${seconds}s, then send again.';
+  }
+
+  @override
+  String get authCreateAccount => 'Create account';
+
+  @override
+  String get authLoginAction => 'Sign in';
+
+  @override
+  String get authVerifyAction => 'Verify';
+
+  @override
+  String get authContinue => 'Continue';
+
+  @override
+  String get authRegisterLink => 'New here? Create an account';
+
+  @override
+  String get authLoginLink => 'Already have an account? Sign in';
+
+  @override
+  String get authResetPasswordTitle => 'New password';
+
+  @override
+  String get authResetPasswordAction => 'Update password';
+
+  @override
+  String get authChangePassword => 'Change password';
+
+  @override
+  String get authSignOut => 'Sign out';
+
+  @override
+  String get authSignIn => 'Sign in to cloud account';
+
+  @override
+  String get authAccountSection => 'Account';
+
+  @override
+  String get authRemoteWorkspaceTitle => 'Account';
+
+  @override
+  String get authRemoteWorkspaceBody =>
+      'You are signed in. Cloud project data is not available yet.';
+
+  @override
+  String get authRemoteWorkspaceMovedBody =>
+      'Account management is in Profile and Settings.';
+
+  @override
+  String get shellTabNotOnlineTitle => 'Not available online yet';
+
+  @override
+  String get shellTabNotOnlineDescription =>
+      'This tab is not ready for online use yet. Use Clients for what is available today.';
+
+  @override
+  String get authSignedInAs => 'Signed in as';
+
+  @override
+  String get authBootstrapRetry => 'Retry';
+
+  @override
+  String get authNetworkError =>
+      'Could not connect. Check the network, then try again.';
+
+  @override
+  String get authInvalidCredentials =>
+      'Mobile number or password is wrong. Check them, then try again.';
+
+  @override
+  String get authChallengeInvalid =>
+      'That code is wrong or expired. Request a new one, then enter it.';
+
+  @override
+  String get authThrottled =>
+      'Too many attempts. Wait a moment, then try again.';
+
+  @override
+  String get authSessionExpired =>
+      'Your session ended. Sign in again to continue.';
+
+  @override
+  String get authFieldRequired => 'Fill in this field to continue.';
+
+  @override
+  String get authPasswordMinLength =>
+      'Password is too short. Use at least 8 characters.';
+
+  @override
+  String get authPasswordMismatch =>
+      'Those passwords differ. Type the same password in both fields.';
+
+  @override
+  String get authCodeLengthHint => 'Enter the 6-digit code.';
+
+  @override
+  String get authAccountExistsTitle => 'Phone already linked';
+
+  @override
+  String get authAccountExistsMessage =>
+      'This phone is already linked to an account. Sign in with that number or use a different phone.';
+
+  @override
+  String get authAccountExistsLoginAction => 'Sign in';
+
+  @override
+  String get authAccountExistsAnotherPhoneAction => 'Enter another phone';
+
+  @override
+  String get authFlowExpired => 'This step expired. Start again.';
+
+  @override
+  String get authPasswordResetSuccess =>
+      'Password updated. Sign in with the new one.';
+
+  @override
+  String get authPasswordChangedSuccess =>
+      'Password changed. Use the new one next time.';
+
+  @override
+  String get authDisplayNameTooLong =>
+      'Name is too long. Use at most 120 characters.';
+
+  @override
+  String get profilePersonalSection => 'Personal details';
+
+  @override
+  String get profileSecuritySection => 'Security';
+
+  @override
+  String get profileDangerSection => 'Account closure';
+
+  @override
+  String get profileEditNameTitle => 'Edit name';
+
+  @override
+  String get profileStatementBrandingSection => 'Your details on statements';
+
+  @override
+  String get profileStatementBrandingSectionSubtitle =>
+      'Shown to your client at the top of the statement';
+
+  @override
+  String get profileLogo => 'Logo';
+
+  @override
+  String get profileLogoSet => 'Logo added';
+
+  @override
+  String get profileLogoNotSet => 'No logo added yet';
+
+  @override
+  String get profileBrandingActionAdd => 'Add';
+
+  @override
+  String get profileBrandingActionChange => 'Change';
+
+  @override
+  String get profileLogoPickTitle => 'Choose logo';
+
+  @override
+  String get profileLogoFromGallery => 'Photo library';
+
+  @override
+  String get profileLogoFromCamera => 'Camera';
+
+  @override
+  String get profileLogoChange => 'Change logo';
+
+  @override
+  String get profileLogoRemove => 'Remove logo';
+
+  @override
+  String get profileLogoRemoveConfirmTitle => 'Remove logo?';
+
+  @override
+  String get profileLogoRemoveConfirmBody =>
+      'Statements will show your initials again.';
+
+  @override
+  String get profileLogoTooLarge => 'Image must be 5 MB or smaller.';
+
+  @override
+  String get profileLogoUnreadable =>
+      'Could not read this image. Use JPG, PNG, or WebP.';
+
+  @override
+  String get profileLogoUpdated => 'Logo updated.';
+
+  @override
+  String get profileLogoRemoved => 'Logo removed.';
+
+  @override
+  String get profileContactPhone => 'Contact phone';
+
+  @override
+  String get profileContactPhoneNotOnStatement =>
+      'No number will appear on statements';
+
+  @override
+  String get profileContactPhoneStatementHint =>
+      'Shown at the top of the statement for your client. Leave empty to hide a number.';
+
+  @override
+  String get profileContactPhoneUsesLogin => 'sign-in number';
+
+  @override
+  String get profileEditContactPhoneTitle => 'Edit contact phone';
+
+  @override
+  String get profileContactPhoneUpdated => 'Contact phone updated.';
+
+  @override
+  String get profileChangePasswordHint => 'Update your sign-in password.';
+
+  @override
+  String get profileDeleteAccountHint =>
+      'Permanently close your account and sign out on all devices.';
+
+  @override
+  String get authDeleteAccount => 'Delete account';
+
+  @override
+  String get authDeleteAccountConfirmTitle => 'Delete your account?';
+
+  @override
+  String get authDeleteAccountConfirmBody =>
+      'Enter your current password to confirm. This cannot be undone.';
+
+  @override
+  String get authDeleteAccountSuccess => 'Your account was closed.';
+
+  @override
+  String get authAccountDeletedMessage => 'This account is already closed.';
+
+  @override
+  String get authLogoutConfirmTitle => 'Sign out?';
+
+  @override
+  String get authLogoutConfirmBody =>
+      'You will need to sign in again to continue using your cloud data.';
+
+  @override
+  String get paywallBenefitsHeading => 'PREMIUM BENEFITS';
+
+  @override
+  String paywallBilledYearly(String amount) {
+    return 'Billed yearly at $amount';
+  }
+
+  @override
+  String get paywallBilledMonthly => 'Billed monthly';
+
+  @override
+  String get paywallPerMonthSuffix => ' / month';
+
+  @override
+  String get paywallPlanYearly => 'Yearly';
+
+  @override
+  String get paywallPlanMonthly => 'Monthly';
+
+  @override
+  String get paywallSubscribeCta => 'Subscribe to Premium';
+
+  @override
+  String get paywallContinueFree => 'Continue for free';
+
+  @override
+  String get subscriptionPaymentNotConnectedYet =>
+      'In-app payment is not connected yet.';
+
+  @override
+  String get profileSubscriptionSection => 'Subscription';
+
+  @override
+  String get profileSubscriptionFreeBlurb =>
+      'Upgrade to Premium for unlimited active projects and more.';
+
+  @override
+  String get profileSubscriptionSubscribeCta => 'Subscribe to Premium';
+
+  @override
+  String profileSubscriptionRenewsOn(String date) {
+    return 'Renews on $date';
+  }
+
+  @override
+  String profileSubscriptionDaysRemaining(int count) {
+    return '$count days remaining';
+  }
+
+  @override
+  String get gateMaintenanceTitle => 'Maintenance';
+
+  @override
+  String get gateMaintenanceFallbackMessage =>
+      'The app is temporarily unavailable. Please try again shortly.';
+
+  @override
+  String get gateForceUpdateTitle => 'Update required';
+
+  @override
+  String get gateForceUpdateFallbackMessage =>
+      'Please update to the latest version to keep using Bnood.';
+
+  @override
+  String get gateOptionalUpdateTitle => 'Update available';
+
+  @override
+  String get gateOptionalUpdateFallbackMessage =>
+      'A newer version of Bnood is available with improvements and fixes.';
+
+  @override
+  String get gateUpdateAction => 'Update';
+
+  @override
+  String get gateLaterAction => 'Later';
+
+  @override
+  String get settingsContentSection => 'About & legal';
+
+  @override
+  String get settingsContentAbout => 'About';
+
+  @override
+  String get settingsContentTerms => 'Terms of use';
+
+  @override
+  String get settingsContentPrivacy => 'Privacy policy';
+
+  @override
+  String get settingsContentCancellation => 'Cancellation policy';
+
+  @override
+  String get contentPageLoadingTitle => 'Page';
+
+  @override
+  String get contentPageNotFoundTitle => 'Page not found';
+
+  @override
+  String get contentPageNotFoundDescription =>
+      'This page is not available right now.';
+
+  @override
+  String get contentPageErrorTitle => 'Could not load page';
+
+  @override
+  String get contentPageErrorDescription =>
+      'Check your connection and try again.';
+
+  @override
+  String get authRegisterLegalPrefix =>
+      'By creating an account you agree to our';
+
+  @override
+  String get authRegisterLegalMiddle => 'and';
 }

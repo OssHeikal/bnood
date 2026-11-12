@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/clients/clients_providers.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/providers/app_providers.dart';
 import 'client_detail_snapshot.dart';
+import 'client_item_spend_rows.dart';
 
 final clientItemsStatsProvider =
     AsyncNotifierProvider.family<ClientItemsStatsNotifier, List<ClientDetailItemRowData>, String>(
@@ -40,6 +42,10 @@ class ClientItemsStatsNotifier extends FamilyAsyncNotifier<List<ClientDetailItem
   }
 
   Future<List<ClientDetailItemRowData>> loadSnapshot(String clientId) async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      final spend = await ref.read(clientsRepositoryProvider).getClientItemSpend(clientId);
+      return clientItemRowsFromItemSpend(spend.items);
+    }
     final repo = ref.read(repositoryProvider);
     final project = await repo.primaryActiveProject(clientId);
     if (project == null) return [];
@@ -53,9 +59,10 @@ class ClientItemsStatsNotifier extends FamilyAsyncNotifier<List<ClientDetailItem
         .map((e) {
           final item = itemById[e.key];
           return ClientDetailItemRowData(
+            itemId: e.key,
             name: item?.name ?? e.key,
             colorKey: item?.colorKey ?? 'teal',
-            iconName: item?.iconName ?? 'category',
+            iconName: item?.iconName ?? 'layers',
             breakdown: e.value,
           );
         })

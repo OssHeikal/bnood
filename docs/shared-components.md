@@ -35,6 +35,10 @@ Composable card: padding, radius (8/16/24), optional gradient, border, shadow, b
 - Controls: size role, show/hide currency, sign policy.
 - Single implementation for lists, home, sheets, client header.
 
+### CustomAppBar
+
+Product scaffold app bar: canvas background, flat elevation, title at logical start with `AppText.pageTitle`, optional subtitle (phones via `LtrIsolate`), `CustomAppBarAction` (tint vs surface). Home dashboard uses an in-body header, not this widget.
+
 ### AppFallback
 
 Empty or recoverable error: icon, title, optional description, optional action (add entity, retry). Fills a section (`SliverFillRemaining` / card body) or full screen. No raw exceptions.

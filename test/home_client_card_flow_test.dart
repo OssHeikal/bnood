@@ -1,6 +1,5 @@
 import 'package:bnood/app/widgets/shell_nav_icon.dart';
 import 'package:bnood/core/config/theme/app_size.dart';
-import 'package:bnood/core/widgets/app_card.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_amount.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';

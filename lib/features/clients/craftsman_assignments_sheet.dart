@@ -6,10 +6,20 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/agreements/agreement_amount_api.dart';
+import '../../core/agreements/agreements_error_handler.dart';
+import '../../core/agreements/agreements_riverpod.dart';
+import '../../core/money/remote_money_units.dart';
+import '../../core/api/auth_api_exception.dart';
+import '../../core/clients/client_api_record.dart';
+import '../../core/clients/client_provider_agreement_preview.dart';
+import '../../core/clients/clients_providers.dart';
 import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
+import '../../core/providers_api/app_provider_record.dart';
+import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/app_toaster.dart';
@@ -28,12 +38,40 @@ Future<void> showCraftsmanAssignmentsSheet({
   required String projectId,
   String? clientId,
 }) {
+  return showProviderAssignmentsSheet(
+    context: context,
+    projectId: projectId,
+    clientId: clientId,
+    providerKind: AppProviderType.craftsman,
+  );
+}
+
+Future<void> showSupplierAssignmentsSheet({
+  required BuildContext context,
+  required String projectId,
+  String? clientId,
+}) {
+  return showProviderAssignmentsSheet(
+    context: context,
+    projectId: projectId,
+    clientId: clientId,
+    providerKind: AppProviderType.supplier,
+  );
+}
+
+Future<void> showProviderAssignmentsSheet({
+  required BuildContext context,
+  required String projectId,
+  String? clientId,
+  required AppProviderType providerKind,
+}) {
   return BnoodModalSheet.show<void>(
     context: context,
     builder: (_) => HomeFoundationScope(
       child: _CraftsmanAssignmentsModalHost(
         projectId: projectId,
         clientId: clientId,
+        providerKind: providerKind,
       ),
     ),
   );
@@ -43,10 +81,12 @@ class _CraftsmanAssignmentsModalHost extends StatelessWidget {
   const _CraftsmanAssignmentsModalHost({
     required this.projectId,
     this.clientId,
+    required this.providerKind,
   });
 
   final String projectId;
   final String? clientId;
+  final AppProviderType providerKind;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +94,7 @@ class _CraftsmanAssignmentsModalHost extends StatelessWidget {
       builder: (_) => CraftsmanAssignmentsSheet(
         projectId: projectId,
         clientId: clientId,
+        providerKind: providerKind,
       ),
     );
   }
@@ -64,11 +105,13 @@ class CraftsmanAssignmentsSheet extends ConsumerStatefulWidget {
     super.key,
     required this.projectId,
     this.clientId,
+    this.providerKind = AppProviderType.craftsman,
     this.embedInModalChrome = true,
   });
 
   final String projectId;
   final String? clientId;
+  final AppProviderType providerKind;
 
   /// When false (widget tests), renders roster body only.
   final bool embedInModalChrome;
@@ -95,11 +138,29 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
     _bootstrap();
   }
 
+  CraftsmenData _craftsmanFromProvider(AppProvider provider) {
+    return CraftsmenData(
+      id: provider.id,
+      workspaceId: remoteWorkspaceMarker,
+      name: provider.name,
+      phone: provider.phone ?? '',
+      trade: null,
+      notes: null,
+      archivedAt: null,
+      createdAt: provider.createdAt,
+      updatedAt: provider.updatedAt,
+    );
+  }
+
   Future<void> _bootstrap() async {
     setState(() {
       _loading = true;
       _error = null;
     });
+    if (ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null) {
+      await _bootstrapRemote();
+      return;
+    }
     try {
       final repo = ref.read(repositoryProvider);
       final roster = await repo.listActiveCraftsmen();
@@ -156,6 +217,64 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
     }
   }
 
+  Future<void> _bootstrapRemote() async {
+    try {
+      final clientId = widget.clientId!;
+      final clientsRepo = ref.read(clientsRepositoryProvider);
+      final providersRepo = ref.read(appProvidersRepositoryProvider);
+      final agreementsRepo = ref.read(appAgreementsRepositoryProvider);
+      final clientRecord = await clientsRepo.getClient(clientId);
+      final roster = widget.providerKind == AppProviderType.supplier
+          ? await providersRepo.listAllSuppliers()
+          : await providersRepo.listAllCraftsmen();
+      final kindProviderIds = roster.map((p) => p.id).toSet();
+      final agreements = clientAgreementPreviews(
+        await agreementsRepo.listAllClientAgreements(clientId),
+        widget.providerKind,
+        kindProviderIds: kindProviderIds,
+      );
+
+      final selected = <String>{};
+      final baseline = <String, int?>{};
+      for (final row in agreements) {
+        selected.add(row.craftsmanId);
+        baseline[row.craftsmanId] = row.agreedPiastres;
+      }
+
+      if (mounted) {
+        setState(() {
+          _roster = roster.map(_craftsmanFromProvider).toList();
+          _clientName = clientRecord.client.name;
+          _selected
+            ..clear()
+            ..addAll(selected);
+          _selectionLocked.clear();
+          _baselineAmountPiastres
+            ..clear()
+            ..addAll(baseline);
+          _draftAmountPiastres.clear();
+          _loading = false;
+        });
+      }
+    } on AuthApiException catch (e, st) {
+      if (mounted) {
+        setState(() {
+          _error = e;
+          _loading = false;
+        });
+        debugPrintStack(stackTrace: st, label: 'remote craftsman roster load failed');
+      }
+    } catch (e, st) {
+      if (mounted) {
+        setState(() {
+          _error = e;
+          _loading = false;
+        });
+        debugPrintStack(stackTrace: st, label: 'remote craftsman roster load failed');
+      }
+    }
+  }
+
   int? _resolvedAmountPiastres(String craftsmanId) {
     if (_draftAmountPiastres.containsKey(craftsmanId)) {
       return _draftAmountPiastres[craftsmanId];
@@ -189,6 +308,22 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       ),
     );
     if (id == null || !mounted) return;
+    if (ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null) {
+      try {
+        final provider = await ref.read(appProvidersRepositoryProvider).getProvider(id);
+        final craftsman = _craftsmanFromProvider(provider);
+        setState(() {
+          if (!_roster.any((c) => c.id == id)) {
+            _roster = [..._roster, craftsman];
+          }
+          _selected.add(id);
+        });
+      } catch (_) {
+        await _bootstrapRemote();
+        if (mounted) setState(() => _selected.add(id));
+      }
+      return;
+    }
     final roster = await ref.read(repositoryProvider).listActiveCraftsmen();
     setState(() {
       _roster = roster;
@@ -234,6 +369,10 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
   Future<void> _save() async {
     if (_saving || _roster.isEmpty) return;
     setState(() => _saving = true);
+    if (ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null) {
+      await _saveRemote();
+      return;
+    }
     try {
       final repo = ref.read(repositoryProvider);
       final agreements = await repo.agreementsForProject(widget.projectId);
@@ -280,6 +419,73 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
     }
   }
 
+  Future<void> _saveRemote() async {
+    final clientId = widget.clientId!;
+    final agreementsRepo = ref.read(appAgreementsRepositoryProvider);
+    try {
+      final kindProviderIds = _roster.map((c) => c.id).toSet();
+      final allAgreements = await agreementsRepo.listAllClientAgreements(clientId);
+      final toDelete = clientAgreementsToDeleteOnAssignmentsSave(
+        allAgreements: allAgreements,
+        kind: widget.providerKind,
+        kindProviderIds: kindProviderIds,
+        selectedProviderIds: _selected,
+      );
+      final scoped = clientAgreementsForKind(
+        allAgreements,
+        widget.providerKind,
+        kindProviderIds: kindProviderIds,
+      );
+      final existingByProvider = {for (final a in scoped) a.providerId: a};
+
+      for (final ag in toDelete) {
+        await agreementsRepo.deleteAgreement(ag.id);
+      }
+
+      for (final providerId in _selected) {
+        final amountMinor = _amountForPersist(providerId);
+        final amountMajor = agreementAmountMajorFromMinor(amountMinor);
+        final existingAg = existingByProvider[providerId];
+        if (existingAg == null) {
+          await agreementsRepo.createAgreement(
+            clientId: clientId,
+            providerId: providerId,
+            amountMajor: amountMajor,
+            omitAmount:
+                amountMinor == null && !_draftAmountPiastres.containsKey(providerId),
+          );
+        } else {
+          final changed = _draftAmountPiastres.containsKey(providerId) ||
+              amountMinor != existingAg.amountMinorForDisplay;
+          if (changed) {
+            await agreementsRepo.patchAgreement(
+              id: existingAg.id,
+              amountMajor: amountMajor,
+            );
+          }
+        }
+      }
+
+      refreshAfterClientMutation(ref, clientId: clientId);
+      if (!mounted) return;
+      _closeHostModal();
+      AppToaster.show(
+        AppLocalizations.of(context).crewAssignmentsSaved,
+        kind: ToastKind.success,
+      );
+    } on AuthApiException catch (e) {
+      if (!mounted) return;
+      if (await handleAgreementsApiAuthError(context: context, ref: ref, error: e)) {
+        return;
+      }
+      AppToaster.show(e.message, kind: ToastKind.failure);
+    } catch (e) {
+      if (mounted) AppToaster.show(e.toString(), kind: ToastKind.failure);
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
   Widget _buildHeader(AppLocalizations l10n, AppColors colors) {
     if (!widget.embedInModalChrome) return const SizedBox.shrink();
     return Padding(
@@ -306,6 +512,9 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
   }
 
   Widget _buildRosterBody(AppLocalizations l10n, AppColors colors, String localeCode) {
+    final remoteAmountScale =
+        ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null;
+
     if (_loading) {
       return const _RosterSkeleton();
     }
@@ -364,6 +573,8 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
               onToggle: () => _toggleSelection(_roster[i].id),
               showDivider: i < _roster.length - 1,
               localeCode: localeCode,
+              minorPerMajor:
+                  remoteAmountScale ? RemoteMoneyUnits.minorPerMajor : 100,
               showAmountSummary: _selected.contains(_roster[i].id) &&
                   _showAmountSummary(_roster[i].id),
               agreedPiastres: _resolvedAmountPiastres(_roster[i].id),

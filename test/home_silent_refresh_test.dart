@@ -77,4 +77,41 @@ void main() {
     expect(find.byType(Skeleton), findsNothing);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('pull to refresh reloads totals without a skeleton', (tester) async {
+    final totalsNotifier = SequencedHomeTotalsNotifier(const [
+      HomeTotals(receivedPiastres: 10000, spentPiastres: 0),
+      HomeTotals(receivedPiastres: 25000, spentPiastres: 0),
+    ]);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          homeTotalsProvider.overrideWith(() => totalsNotifier),
+          homeClientBalancesOverride(const []),
+          emptyHomeSupplierSpendsOverride(),
+          emptyHomeCraftsmenOverride(),
+        ],
+        child: const MaterialApp(
+          locale: Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: HomeScreen(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.textContaining('100'), findsWidgets);
+    expect(find.textContaining('250'), findsNothing);
+    expect(find.byType(RefreshIndicator), findsOneWidget);
+
+    await tester.fling(find.byType(ListView), const Offset(0, 400), 1500);
+    await tester.pump();
+    expect(find.byType(Skeleton), findsNothing);
+
+    await tester.pumpAndSettle();
+    expect(find.textContaining('250'), findsWidgets);
+    expect(find.byType(Skeleton), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 }

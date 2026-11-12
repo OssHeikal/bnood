@@ -7,6 +7,7 @@
   "directoryTitle": "الموردين والصنايعية",
   "navItems": "البنود",
   "navAdd": "جديد",
+  "menuTitle": "القائمة",
   "settingsTitle": "الإعدادات",
   "settingsThemeSection": "المظهر",
   "settingsLanguageSection": "اللغة",
@@ -21,6 +22,15 @@
   "remaining": "المتبقي",
   "activeClients": "عملاء نشطون",
   "homeAppName": "بنود",
+  "homeGreetingMorning": "صباح الخير",
+  "homeGreetingEvening": "مساء الخير",
+  "userProfileTitle": "الملف الشخصي",
+  "craftsmanLinkedClientsMeta": "{count,plural, =0{لا عملاء مرتبطين} =1{عميل واحد مرتبط} =2{عميلان مرتبطان} few{{count} عملاء مرتبطين} many{{count} عميلًا مرتبطًا} other{{count} عميل مرتبط}}",
+  "@craftsmanLinkedClientsMeta": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
   "homeSubtitle": "حسابات التشطيب ببساطة",
   "homeTotalsCaption": "للعملاء الناشطين فقط · منذ بداية كل مشروع",
   "homeSupplierSpendSection": "مصروفات الخامات للموردين",
@@ -29,6 +39,25 @@
   "homeNoActiveClientsTitle": "مفيش عملاء نشطين",
   "homeNoActiveClientsDescription": "أضف عميل من تبويب العملاء عشان تبدأ المتابعة.",
   "homeLoadErrorTitle": "تعذر تحميل الرئيسية",
+  "clientMovementsLoadErrorTitle": "تعذر تحميل الحركات",
+  "movementsSearchHint": "بحث في الملاحظات",
+  "movementsFilterSort": "ترتيب",
+  "movementsFilterItem": "البند",
+  "movementsFilterDate": "التاريخ",
+  "movementsSortNewest": "الأحدث",
+  "movementsSortOldest": "الأقدم",
+  "movementsFilterAllItems": "كل البنود",
+  "movementsClearFilters": "مسح الفلاتر",
+  "movementsClearFilter": "مسح",
+  "movementsDateFrom": "من",
+  "movementsDateTo": "إلى",
+  "movementsDateRangeSummary": "{from} — {to}",
+  "@movementsDateRangeSummary": {
+    "placeholders": {
+      "from": {"type": "String"},
+      "to": {"type": "String"}
+    }
+  },
   "homeNoSupplierSpendTitle": "مفيش مصروف خامات لسه",
   "homeNoSupplierSpendDescription": "مصروفات الخامات من الموردين للعملاء الناشطين هتظهر هنا بعد ما تسجّل صرف خامات.",
   "homeCraftsmenSection": "صنايعية بآخر أعمال",
@@ -63,6 +92,18 @@
   "save": "حفظ",
   "cancel": "إلغاء",
   "seeAll": "عرض الكل",
+  "seeAllWithCount": "عرض الكل ({count})",
+  "@seeAllWithCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "assignSuppliers": "ربط الموردين",
+  "clientDetailNoSuppliers": "مفيش موردين مربوطين",
+  "clientDetailSuppliersEmptyDescription": "اربط موردين بالعميل ده علشان تتابع المواد والاتفاقيات.",
+  "homeSuppliersSection": "الموردين",
+  "homeNoSuppliersTitle": "مفيش موردين نشطين",
+  "homeNoSuppliersDescription": "أضف موردين من الدليل أو اربطهم بعميل.",
   "movements": "الحركات",
   "whatsappLaunchFailed": "تعذّر فتح واتساب",
   "whatsappInvalidPhone": "رقم الهاتف ده مش صالح لفتح واتساب",
@@ -93,12 +134,31 @@
   "clientDetailUnspecifiedItem": "بند غير محدد",
   "clientDetailNoDescription": "بدون وصف",
   "archiveClientTitle": "أرشفة العميل؟",
-  "archiveClientDescription": "هتنقل عهدة {name} للأرشيف. تقدر ترجعها بعدين.",
+  "archiveClientDescription": "أرشفة {name}؟ العملية نهائية — العميل المؤرشف للقراءة فقط.",
   "@archiveClientDescription": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
+  "clientsSearchHint": "ابحث بالاسم أو الهاتف",
+  "amountUnavailable": "—",
+  "clientDuplicateNameTitle": "اسم عميل مكرر",
+  "clientDuplicateNameDescription": "يوجد عميل بنفس الاسم. متابعة؟",
+  "clientDuplicateNameConfirm": "متابعة",
+  "clientDuplicatePhoneError": "رقم الهاتف مستخدم لعميل آخر.",
+  "clientDeleteTitle": "حذف العميل؟",
+  "clientDeleteDescription": "حذف {name}؟ سيُحذف العميل والمشروع.",
+  "@clientDeleteDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "clientDeleteHasActivityTitle": "العميل عليه حركات",
+  "clientDeleteHasActivityDescription": "هذا العميل مرتبط بمعاملات أو روابط. أرشفه للاحتفاظ بالسجل.",
+  "clientDeleteArchiveInstead": "أرشفة بدلًا من ذلك",
+  "clientArchivedBadge": "مؤرشف",
+  "clientLedgerNotOnlineTitle": "العهدة غير متصلة بعد",
+  "clientLedgerNotOnlineDescription": "الحركات والأرصدة ستظهر هنا عند تفعيل العهدة أونلاين.",
   "craftsmanAgreedAmount": "المتفق عليه",
   "suppliers": "موردين",
   "statement": "كشف حساب",
@@ -120,6 +180,11 @@
   "voucherAmountRequired": "أدخل مبلغًا أكبر من صفر",
   "voucherSelectClient": "اختر العميل",
   "voucherSelectItem": "اختر البند",
+  "voucherDiscardTitle": "تجاهل السند؟",
+  "voucherDiscardDescription": "توجد تغييرات لم تُحفظ. هل تريد الخروج دون حفظ؟",
+  "discard": "تجاهل",
+  "voucherProviderLinkedBadge": "مرتبط",
+  "voucherLinkAgreementAmountOptional": "مبلغ الاتفاق (اختياري)",
   "voucherSelectCraftsman": "اختر الصنايعي",
   "voucherPickerSearchHint": "بحث",
   "voucherPickerNoResults": "لا توجد نتائج",
@@ -132,6 +197,11 @@
   "voucherReceiptGalleryDenied": "تم رفض الوصول إلى الصور. يمكنك تفعيله من الإعدادات لإرفاق إيصالات من المعرض.",
   "voucherReceiptGalleryRestricted": "الوصول إلى الصور مقيّد على هذا الجهاز.",
   "voucherReceiptAttachFailed": "تعذّر إرفاق الإيصال. حاول مرة أخرى.",
+  "voucherReceiptUploadRetry": "تم حفظ السند. اضغط حفظ مرة أخرى لإعادة رفع صور الإيصال.",
+  "voucherReceiptDeleteRetry": "تم حفظ السند لكن تعذّر حذف إيصال. اضغط حفظ للمحاولة مرة أخرى.",
+  "voucherReceiptTooLarge": "صورة الإيصال كبيرة جدًا. جرّب صورة أصغر أو احفظ مرة أخرى بعد الضغط.",
+  "voucherReceiptCompressFailed": "تعذّر تجهيز صورة الإيصال للرفع. جرّب صورة أخرى أو احفظ مجددًا.",
+  "voucherReceiptInvalidMime": "نوع الملف غير مقبول. استخدم JPEG أو PNG أو WebP.",
   "voucherAssignCraftsmanFirst": "عيّن صنايعية للمشروع أولًا",
   "amountHint": "0.00",
   "voucherReceiveTitle": "سند قبض",
@@ -219,8 +289,8 @@
       "name": { "type": "String" }
     }
   },
-  "craftsmanSetAgreedAmount": "تعيين المبلغ المتفق عليه",
-  "craftsmanEditAgreedAmount": "تعديل المبلغ المتفق عليه",
+  "craftsmanSetAgreedAmount": "تعيين المبلغ",
+  "craftsmanEditAgreedAmount": "تعديل المبلغ",
   "craftsmanAgreedAmountSheetTitle": "المبلغ المتفق عليه",
   "craftsmanAgreedForClientLabel": "المتفق عليه لهذا العميل (اختياري)",
   "craftsmanAgreementAmountPlaceholder": "غير محدد",
@@ -229,7 +299,7 @@
   "craftsmanAgreementHasPayments": "له مدفوعات مسجلة",
   "directoryAddCraftsmanToRoster": "إضافة صنايعي للدليل",
   "crewAssignmentsSaved": "حُفظت اختيارات الصنايعية لهذا العميل",
-  "itemsCatalogCaption": "البنود الافتراضية — يمكنك الإضافة والتعديل والأرشفة",
+  "itemsCatalogCaption": "البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك",
   "addItem": "إضافة بند",
   "itemCreateSheetTitle": "بند جديد",
   "itemEditSheetTitle": "تعديل البند",
@@ -238,19 +308,60 @@
   "itemNameHint": "مثال: عزل",
   "itemsEmptyTitle": "لا توجد بنود بعد",
   "itemsEmptyDescription": "أضف بندًا لتصنيف مصروفات المشروع.",
-  "archiveItemTitle": "أرشفة البند؟",
-  "archiveItemDescription": "سيُخفى {name} من القوائم. سجل المصروفات يبقى محفوظًا.",
-  "@archiveItemDescription": {
+  "deleteItemTitle": "حذف البند؟",
+  "deleteItemDescription": "سيُحذف {name}. المصروفات المرتبطة تبقى في السجل.",
+  "@deleteItemDescription": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
+  "itemInUseError": "البند مرتبط بمعاملات ولا يمكن حذفه أو تعديله.",
+  "itemDuplicateNameError": "يوجد بند بنفس الاسم.",
+  "providersSearchHint": "بحث بالاسم أو الهاتف",
+  "providersFilterAll": "الكل",
+  "providersOnlineCaption": "الموردون والصنايعية في دليلك — المدفوعات والاتفاقيات تبقى في المعاملات.",
+  "providersEmptyAllTitle": "لا موردين أو صنايعية بعد",
+  "providersEmptySuppliersTitle": "لا موردين بعد",
+  "providersEmptyCraftsmenTitle": "لا صنايعية بعد",
+  "providersEmptyDescription": "أضف مورّدًا أو صنايعيًا لربطه ببنود الصرف ومشاريع العملاء.",
+  "directoryAddProvider": "إضافة للدليل",
+  "providerCreateSheetTitle": "إضافة للدليل",
+  "providerTypeLabel": "النوع",
+  "providerNameLabel": "الاسم",
+  "providerNameHint": "مثال: مورد مواد",
+  "providerNameRequired": "أدخل الاسم",
+  "providerDuplicateNameError": "هذا الاسم موجود في دليلك.",
+  "providerDuplicatePhoneError": "رقم الهاتف مستخدم لجهة أخرى في الدليل.",
+  "providerDetailNotFoundTitle": "الجهة غير موجودة في الدليل",
+  "providerDetailLinkedClientsTitle": "العملاء المرتبطون",
+  "providerDetailNoLinkedClients": "لا يوجد عملاء مرتبطون بعد",
+  "linkClients": "ربط بعملاء",
+  "linkClientsIntro": "اختار العملاء المرتبطين بهذا السجل. مبالغ الاتفاق اختيارية ويمكن ضبطها لاحقاً من بطاقة العميل.",
+  "linkClientsProviderContext": "الربط مع: {name}",
+  "providerAssignmentsSaved": "تم تحديث ربط العملاء",
+  "agreementUnlinkClientHasPaymentsTitle": "إلغاء الربط رغم وجود مدفوعات؟",
+  "agreementUnlinkClientHasPaymentsDescription": "عند {name} مدفوعات مسجلة على هذا الاتفاق. هل تريد إلغاء الربط؟",
+  "agreementUnlinkTitle": "إلغاء ربط الصنايعي؟",
+  "agreementUnlinkDescription": "سيُزال {name} من العميل. يمكنك ربطه مرة أخرى لاحقاً.",
+  "@agreementUnlinkDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "unlink": "إلغاء الربط",
+  "deleteProviderTitle": "حذف من الدليل؟",
+  "deleteProviderDescription": "سيُزال {name} من قائمة الدليل.",
+  "itemDefaultBadge": "افتراضي",
+  "itemPickIconLabel": "الأيقونة",
+  "itemPickColorLabel": "اللون",
   "statementClientHeading": "عهدة / كشف حساب العميل",
   "statementPeriodToday": "اليوم",
   "statementPeriodMonth": "هذا الشهر",
   "statementPeriodAll": "كل الفترة",
   "statementTotalReceived": "إجمالي المقبوض",
+  "statementPeriodReceived": "المستلم في الفترة",
   "statementTotalSpent": "إجمالي المصروف",
+  "statementPeriodSpent": "المصروف في الفترة",
   "statementClosingLabel": "المتبقي",
   "statementClosingEndOfPeriod": "المتبقي بنهاية الفترة",
   "statementMaterialsLaborSummary": "إجمالي مونة (خامات): {materials} | إجمالي مصنعية: {labor}",
@@ -270,6 +381,8 @@
   "statementReceiptsSectionTitle": "المقبوضات من العميل",
   "statementReceiptsSectionCaption": "تُعرض الدفعات هنا فقط، ولا تُكرر داخل بنود المصروفات.",
   "statementEmptyReceipts": "لا توجد مقبوضات في الفترة المحددة.",
+  "statementEmptyItemsTitle": "مفيش مصروفات في الفترة دي",
+  "statementEmptyItemsDescription": "المصروفات اللي تسجلها للعميل ده هتظهر هنا متقسمة على البنود. غيّر الفترة أو سجّل صرف جديد.",
   "statementItemSectionTitle": "بند: {name}",
   "@statementItemSectionTitle": {
     "placeholders": {
@@ -348,5 +461,173 @@
   "statementPeriodTo": "إلى",
   "statementSupplierPaymentsTitle": "مدفوعات الفترة",
   "statementSupplierPaymentsCaption": "حركات صرف خامات مرتبطة بالمورد فقط.",
-  "statementEmptyPayments": "لا توجد مدفوعات في الفترة المحددة."
+  "statementEmptyPayments": "لا توجد مدفوعات في الفترة المحددة.",
+  "authLoginTitle": "تسجيل الدخول",
+  "authLoginSubtitle": "تابع أموال العملاء والبنود ومشاريع التشطيب من حسابك.",
+  "authRegisterTitle": "إنشاء حساب",
+  "authRegisterSubtitle": "أنشئ حساباً لحفظ مساحة عملك وفتحها من أي موبايل.",
+  "authPhone": "رقم الموبايل",
+  "authPhoneInvalid": "أدخل رقم موبايل من 11 رقماً يبدأ بـ 01.",
+  "authPassword": "كلمة المرور",
+  "authPasswordConfirm": "تأكيد كلمة المرور",
+  "authCurrentPassword": "كلمة المرور الحالية",
+  "authNewPassword": "كلمة المرور الجديدة",
+  "authForgotPassword": "نسيت كلمة المرور؟",
+  "authForgotPasswordTitle": "استرداد كلمة المرور",
+  "authForgotPasswordSubtitle": "أدخل رقم الموبايل المسجّل. سنرسل رمز تأكيد.",
+  "authVerificationTitle": "رمز التحقق",
+  "authVerificationSubtitle": "أدخل رمز التحقق الذي استلمته.",
+  "authVerificationDeliverySubtitle": "أدخل الرمز الذي وصل إلى {phone}.",
+  "@authVerificationDeliverySubtitle": {
+    "placeholders": {
+      "phone": { "type": "String" }
+    }
+  },
+  "authRecoveryVerifySubtitle": "أدخل رمز الاسترداد الذي استلمته.",
+  "authRecoveryDeliverySubtitle": "أدخل رمز استرجاع كلمة المرور الذي وصل إلى {phone}.",
+  "@authRecoveryDeliverySubtitle": {
+    "placeholders": {
+      "phone": { "type": "String" }
+    }
+  },
+  "authCompleteProfileTitle": "اسمك",
+  "authCompleteProfileSubtitle": "اكتب اسمك كما يظهر في العمل، ثم اضغط متابعة.",
+  "authDisplayName": "الاسم الكامل",
+  "authDisplayNameHint": "مثال: أحمد حسن",
+  "authVerificationCode": "الرمز",
+  "authResendCode": "إعادة إرسال الرمز",
+  "authResendWait": "انتظر {seconds} ث ثم أعد الإرسال.",
+  "@authResendWait": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "authCreateAccount": "إنشاء حساب",
+  "authLoginAction": "تسجيل الدخول",
+  "authVerifyAction": "تحقق",
+  "authContinue": "متابعة",
+  "authRegisterLink": "مستخدم جديد؟ أنشئ حساباً",
+  "authLoginLink": "لديك حساب؟ سجّل الدخول",
+  "authResetPasswordTitle": "كلمة مرور جديدة",
+  "authResetPasswordAction": "تحديث كلمة المرور",
+  "authChangePassword": "تغيير كلمة المرور",
+  "authSignOut": "تسجيل الخروج",
+  "authSignIn": "تسجيل الدخول للحساب السحابي",
+  "authAccountSection": "الحساب",
+  "authRemoteWorkspaceTitle": "الحساب",
+  "authRemoteWorkspaceBody": "تم تسجيل الدخول. بيانات المشاريع على السحابة غير متاحة الآن.",
+  "shellTabNotOnlineTitle": "غير متاح على الإنترنت بعد",
+  "shellTabNotOnlineDescription": "هذا التبويب غير جاهز للاستخدام أونلاين بعد. استخدم «العملاء» لما هو متاح الآن.",
+  "authSignedInAs": "مسجّل الدخول كـ",
+  "authBootstrapRetry": "إعادة المحاولة",
+  "authNetworkError": "تعذر الاتصال. تحقق من الشبكة، ثم أعد المحاولة.",
+  "authInvalidCredentials": "رقم الموبايل أو كلمة المرور غير صحيحة. راجعها ثم حاول مرة أخرى.",
+  "authChallengeInvalid": "الرمز غير صحيح أو انتهت صلاحيته. اطلب رمزاً جديداً ثم أدخله.",
+  "authThrottled": "محاولات كثيرة. انتظر قليلاً، ثم أعد المحاولة.",
+  "authSessionExpired": "انتهت الجلسة. سجّل الدخول من جديد للمتابعة.",
+  "authFieldRequired": "املأ هذا الحقل للمتابعة.",
+  "authPasswordMinLength": "كلمة المرور قصيرة. استخدم 8 أحرف على الأقل.",
+  "authPasswordMismatch": "كلمتا المرور مختلفتان. اكتبهما بالنص نفسه.",
+  "authCodeLengthHint": "أدخل الرمز المكوّن من 6 أرقام.",
+  "authAccountExistsTitle": "الرقم مربوط بحساب",
+  "authAccountExistsMessage": "هذا الرقم مربوط بحساب بالفعل. سجّل الدخول به أو استخدم رقمًا آخر.",
+  "authAccountExistsLoginAction": "تسجيل الدخول",
+  "authAccountExistsAnotherPhoneAction": "إدخال رقم آخر",
+  "authFlowExpired": "انتهت هذه الخطوة. ابدأ من جديد.",
+  "authPasswordResetSuccess": "تم تحديث كلمة المرور. سجّل الدخول بالكلمة الجديدة.",
+  "authPasswordChangedSuccess": "تم تغيير كلمة المرور. استخدم الكلمة الجديدة في المرة القادمة.",
+  "authDisplayNameTooLong": "الاسم طويل. الحد الأقصى 120 حرفًا.",
+  "profilePersonalSection": "البيانات الشخصية",
+  "profileSecuritySection": "الأمان",
+  "profileDangerSection": "إغلاق الحساب",
+  "profileEditNameTitle": "تعديل الاسم",
+  "profileStatementBrandingSection": "بياناتك في كشف الحساب",
+  "profileStatementBrandingSectionSubtitle": "تظهر للعميل في أعلى كشف الحساب",
+  "profileLogo": "الشعار",
+  "profileLogoSet": "تم إضافة الشعار",
+  "profileLogoNotSet": "لم تضف شعارًا بعد",
+  "profileBrandingActionAdd": "إضافة",
+  "profileBrandingActionChange": "تغيير",
+  "profileLogoPickTitle": "اختيار الشعار",
+  "profileLogoFromGallery": "مكتبة الصور",
+  "profileLogoFromCamera": "الكاميرا",
+  "profileLogoChange": "تغيير الشعار",
+  "profileLogoRemove": "إزالة الشعار",
+  "profileLogoRemoveConfirmTitle": "إزالة الشعار؟",
+  "profileLogoRemoveConfirmBody": "ستظهر الأحرف الأولى من اسمك على الكشوف بدلاً من الشعار.",
+  "profileLogoTooLarge": "يجب ألا يتجاوز حجم الصورة 5 ميجابايت.",
+  "profileLogoUnreadable": "تعذّر قراءة الصورة. استخدم JPG أو PNG أو WebP.",
+  "profileLogoUpdated": "تم تحديث الشعار.",
+  "profileLogoRemoved": "تمت إزالة الشعار.",
+  "profileContactPhone": "هاتف التواصل",
+  "profileContactPhoneNotOnStatement": "لن يظهر رقم في الكشف",
+  "profileContactPhoneStatementHint": "يظهر في أعلى كشف الحساب للعميل. اتركه فارغاً إذا لا تريد إظهار رقم.",
+  "profileContactPhoneUsesLogin": "رقم الدخول",
+  "profileEditContactPhoneTitle": "تعديل هاتف التواصل",
+  "profileContactPhoneUpdated": "تم تحديث هاتف التواصل.",
+  "profileChangePasswordHint": "حدّث كلمة مرور تسجيل الدخول.",
+  "profileDeleteAccountHint": "إغلاق الحساب نهائيًا وتسجيل الخروج من كل الأجهزة.",
+  "authDeleteAccount": "حذف الحساب",
+  "authDeleteAccountConfirmTitle": "حذف حسابك؟",
+  "authDeleteAccountConfirmBody": "أدخل كلمة المرور الحالية للتأكيد. لا يمكن التراجع.",
+  "authDeleteAccountSuccess": "تم إغلاق حسابك.",
+  "authAccountDeletedMessage": "هذا الحساب مُغلق بالفعل.",
+  "authLogoutConfirmTitle": "تسجيل الخروج؟",
+  "authLogoutConfirmBody": "ستحتاج لتسجيل الدخول مجددًا لمتابعة بياناتك السحابية.",
+  "authRemoteWorkspaceMovedBody": "إدارة الحساب انتقلت إلى الملف الشخصي والإعدادات.",
+  "paywallBenefitsHeading": "مزايا PREMIUM",
+  "paywallBilledYearly": "يتحسب سنوياً {amount}",
+  "@paywallBilledYearly": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallBilledMonthly": "يتحسب شهرياً",
+  "paywallPerMonthSuffix": " / الشهر",
+  "paywallPlanYearly": "سنوية",
+  "paywallPlanMonthly": "شهرية",
+  "paywallSubscribeCta": "اشترك في Premium",
+  "paywallContinueFree": "الاستمرار مجاناً",
+  "subscriptionPaymentNotConnectedYet": "الدفع داخل التطبيق غير متصل بعد.",
+  "profileSubscriptionSection": "الاشتراك",
+  "profileSubscriptionFreeBlurb": "ترقية Premium لفتح مشاريع نشطة بلا حد ومزايا إضافية.",
+  "profileSubscriptionSubscribeCta": "اشترك في Premium",
+  "profileSubscriptionRenewsOn": "تتجدد في {date}",
+  "@profileSubscriptionRenewsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSubscriptionDaysRemaining": "{count} يوم متبقٍ",
+  "@profileSubscriptionDaysRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gateMaintenanceTitle": "صيانة",
+  "gateMaintenanceFallbackMessage": "التطبيق غير متاح مؤقتاً. حاول مرة أخرى بعد قليل.",
+  "gateForceUpdateTitle": "تحديث مطلوب",
+  "gateForceUpdateFallbackMessage": "يُرجى التحديث إلى أحدث إصدار لمتابعة استخدام بنود.",
+  "gateOptionalUpdateTitle": "تحديث متاح",
+  "gateOptionalUpdateFallbackMessage": "يتوفر إصدار أحدث من بنود بتحسينات وإصلاحات.",
+  "gateUpdateAction": "تحديث",
+  "gateLaterAction": "لاحقاً",
+  "settingsContentSection": "عن التطبيق والشروط",
+  "settingsContentAbout": "عن بنود",
+  "settingsContentTerms": "شروط الاستخدام",
+  "settingsContentPrivacy": "سياسة الخصوصية",
+  "settingsContentCancellation": "سياسة الإلغاء",
+  "contentPageLoadingTitle": "صفحة",
+  "contentPageNotFoundTitle": "الصفحة غير موجودة",
+  "contentPageNotFoundDescription": "هذه الصفحة غير متاحة حالياً.",
+  "contentPageErrorTitle": "تعذّر تحميل الصفحة",
+  "contentPageErrorDescription": "تحقق من الاتصال ثم أعد المحاولة.",
+  "authRegisterLegalPrefix": "بإنشاء حساب فإنك توافق على",
+  "authRegisterLegalMiddle": "و"
 }

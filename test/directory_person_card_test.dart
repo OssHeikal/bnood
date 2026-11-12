@@ -21,7 +21,7 @@ void main() {
           routes: [
             GoRoute(
               path: '/',
-              builder: (_, __) => HomeFoundationScope(
+              builder: (_, _) => HomeFoundationScope(
                 child: Scaffold(
                   body: DirectoryPersonCard(
                     name: 'Ahmed Steel',
@@ -34,7 +34,10 @@ void main() {
                 ),
               ),
             ),
-            GoRoute(path: '/suppliers/x', builder: (_, __) => const Scaffold(body: Text('detail'))),
+            GoRoute(
+              path: '/suppliers/x',
+              builder: (_, _) => const Scaffold(body: Text('detail')),
+            ),
           ],
         ),
       ),
@@ -67,7 +70,7 @@ void main() {
           routes: [
             GoRoute(
               path: '/',
-              builder: (_, __) => HomeFoundationScope(
+              builder: (_, _) => HomeFoundationScope(
                 child: Scaffold(
                   body: DirectoryPersonCard(
                     name: 'Vendor',

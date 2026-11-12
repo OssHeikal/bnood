@@ -928,11 +928,17 @@ class BnoodRepository {
 }
 
 class HomeTotals {
-  const HomeTotals(
-      {required this.receivedPiastres, required this.spentPiastres});
+  const HomeTotals({
+    required this.receivedPiastres,
+    required this.spentPiastres,
+    this.remainingPiastresOverride,
+  });
+
   final int receivedPiastres;
   final int spentPiastres;
-  int get remainingPiastres => receivedPiastres - spentPiastres;
+  final int? remainingPiastresOverride;
+
+  int get remainingPiastres => remainingPiastresOverride ?? receivedPiastres - spentPiastres;
 }
 
 class HomeSupplierSpendRow {
@@ -947,12 +953,14 @@ class HomeCraftsmanActivityRow {
     required this.paidPiastres,
     required this.lastLaborAt,
     required this.remainingPiastres,
+    this.clientsCount,
   });
 
   final CraftsmenData craftsman;
   final int paidPiastres;
   final DateTime lastLaborAt;
   final int? remainingPiastres;
+  final int? clientsCount;
 }
 
 class HomeClientBalanceRow {
@@ -961,12 +969,17 @@ class HomeClientBalanceRow {
     required this.remainingPiastres,
     required this.receivedPiastres,
     required this.spentPiastres,
+    this.project,
   });
 
   final Client client;
-  final int remainingPiastres;
-  final int receivedPiastres;
-  final int spentPiastres;
+  final int? remainingPiastres;
+  final int? receivedPiastres;
+  final int? spentPiastres;
+  final Project? project;
+
+  bool get hasBalances =>
+      remainingPiastres != null && receivedPiastres != null && spentPiastres != null;
 }
 
 class DirectorySupplierRow {

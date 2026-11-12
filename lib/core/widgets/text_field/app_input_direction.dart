@@ -12,6 +12,28 @@ TextDirection inferTextDirection(String text, TextDirection ambient) {
   return ambient;
 }
 
+/// RTL paragraph for Arabic copy inside a parent that forces LTR.
+///
+/// Action buttons lock their frame to LTR. A mixed label such as
+/// `اشترك في Premium` then draws the Latin word on the leading edge.
+/// When the locale is RTL and the string contains Arabic, the label keeps
+/// an RTL paragraph so the Latin run stays embedded.
+TextDirection? rtlParagraphIfArabic(String text, TextDirection ambient) {
+  if (ambient != TextDirection.rtl || !_containsStrongRtl(text)) {
+    return null;
+  }
+  return TextDirection.rtl;
+}
+
+bool _containsStrongRtl(String text) {
+  for (final rune in text.runes) {
+    if (_isStrongRtl(rune)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /// LTR copy on an RTL screen aligns to the layout start edge (physical right).
 TextAlign alignTextInAmbient(String text, TextDirection ambient) {
   final content = inferTextDirection(text, ambient);

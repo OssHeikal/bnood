@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../config/theme/app_colors.dart' as foundation;
 import 'app_colors.dart';
 
 abstract final class AppTheme {
@@ -7,6 +9,8 @@ abstract final class AppTheme {
 
   static ThemeData _build(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
+    final colors = isDark ? foundation.AppColors.dark : foundation.AppColors.light;
+    final text = foundation.AppText.fromColors(colors);
     final base = ThemeData(
       useMaterial3: true,
       brightness: brightness,
@@ -24,24 +28,23 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
     );
     return base.copyWith(
+      extensions: [colors, text],
       textTheme: base.textTheme.apply(fontFamily: 'Cairo'),
       appBarTheme: AppBarTheme(
-        centerTitle: true,
-        backgroundColor:
-            isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        foregroundColor:
-            isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface,
+        centerTitle: false,
+        backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
+        foregroundColor: isDark ? AppColors.darkOnSurface : AppColors.lightOnSurface,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
       ),
       navigationBarTheme: NavigationBarThemeData(
         indicatorColor: AppColors.primary.withValues(alpha: 0.15),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return TextStyle(
-                color: AppColors.primary, fontWeight: FontWeight.w700);
+            return TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700);
           }
-          return TextStyle(
-              color: isDark ? AppColors.darkMuted : AppColors.lightMuted);
+          return TextStyle(color: isDark ? AppColors.darkMuted : AppColors.lightMuted);
         }),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(

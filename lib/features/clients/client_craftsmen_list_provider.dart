@@ -1,5 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/agreements/agreements_riverpod.dart';
+import '../../core/clients/client_provider_agreement_preview.dart';
+import '../../core/clients/clients_providers.dart';
+import '../../core/providers_api/app_provider_record.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/providers/app_providers.dart';
 import 'client_detail_snapshot.dart';
@@ -19,10 +23,12 @@ class ClientCraftsmenListSnapshot {
   const ClientCraftsmenListSnapshot({
     required this.projectId,
     required this.rows,
+    this.clientName,
   });
 
   final String? projectId;
   final List<ClientCraftsmanPreviewRow> rows;
+  final String? clientName;
 }
 
 class ClientCraftsmenListNotifier extends FamilyAsyncNotifier<ClientCraftsmenListSnapshot, String> {
@@ -66,6 +72,9 @@ class ClientCraftsmenListNotifier extends FamilyAsyncNotifier<ClientCraftsmenLis
   }
 
   Future<ClientCraftsmenListSnapshot> loadSnapshot(String clientId) async {
+    if (ref.read(remoteClientsEnabledProvider)) {
+      return _loadRemoteSnapshot(clientId);
+    }
     final repo = ref.read(repositoryProvider);
     final project = await repo.primaryActiveProject(clientId);
     if (project == null) {
@@ -98,5 +107,16 @@ class ClientCraftsmenListNotifier extends FamilyAsyncNotifier<ClientCraftsmenLis
     }
     rows.sort((a, b) => a.name.compareTo(b.name));
     return ClientCraftsmenListSnapshot(projectId: project.id, rows: rows);
+  }
+
+  Future<ClientCraftsmenListSnapshot> _loadRemoteSnapshot(String clientId) async {
+    final record = await ref.read(clientsRepositoryProvider).getClient(clientId);
+    final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
+    final rows = clientAgreementPreviews(agreements, AppProviderType.craftsman);
+    return ClientCraftsmenListSnapshot(
+      projectId: record.project.id,
+      clientName: record.client.name,
+      rows: rows,
+    );
   }
 }

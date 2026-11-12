@@ -19,20 +19,54 @@ class ClientDetailActionGrid extends StatelessWidget {
     required this.onArchive,
     required this.isArchived,
     this.mutationsEnabled = true,
+    this.onlineIdentityOnly = false,
+    this.onDelete,
   });
 
   final VoidCallback onReceive;
   final VoidCallback onSpend;
   final VoidCallback onStatement;
   final VoidCallback onArchive;
+  final VoidCallback? onDelete;
   final bool isArchived;
   final bool mutationsEnabled;
+  final bool onlineIdentityOnly;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final archiveEnabled = true;
+    if (onlineIdentityOnly) {
+      return Row(
+        children: [
+          if (!isArchived)
+            Expanded(
+              child: _ActionTile(
+                key: const Key('client_detail_action_archive'),
+                label: l10n.archive,
+                tint: colors.onSurfaceMuted,
+                tintBg: colors.surfaceSunken,
+                icon: Assets.icons.archiveRestoreOutline,
+                onPressed: onArchive,
+                enabled: mutationsEnabled,
+              ),
+            ),
+          if (!isArchived && onDelete != null) AppSize.spaceSM.gap,
+          if (onDelete != null)
+            Expanded(
+              child: _ActionTile(
+                key: const Key('client_detail_action_delete'),
+                label: l10n.delete,
+                tint: colors.spend,
+                tintBg: colors.errorBg,
+                icon: Assets.icons.deleteSquareOutline,
+                onPressed: onDelete!,
+                enabled: true,
+              ),
+            ),
+        ],
+      );
+    }
     return Row(
       children: [
         Expanded(
@@ -71,17 +105,18 @@ class ClientDetailActionGrid extends StatelessWidget {
           ),
         ),
         AppSize.spaceSM.gap,
-        Expanded(
-          child: _ActionTile(
-            key: isArchived ? const Key('client_detail_action_unarchive') : const Key('client_detail_action_archive'),
-            label: isArchived ? l10n.unarchive : l10n.archive,
-            tint: isArchived ? colors.primary : colors.onSurfaceMuted,
-            tintBg: isArchived ? colors.accentTeal.tint : colors.surfaceSunken,
-            icon: Assets.icons.archiveRestoreOutline,
-            onPressed: onArchive,
-            enabled: archiveEnabled,
+        if (!isArchived)
+          Expanded(
+            child: _ActionTile(
+              key: const Key('client_detail_action_archive'),
+              label: l10n.archive,
+              tint: colors.onSurfaceMuted,
+              tintBg: colors.surfaceSunken,
+              icon: Assets.icons.archiveRestoreOutline,
+              onPressed: onArchive,
+              enabled: mutationsEnabled,
+            ),
           ),
-        ),
       ],
     );
   }
@@ -122,7 +157,7 @@ class _ActionTile extends StatelessWidget {
         child: AppCard(
           padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceXS, vertical: AppSize.spaceMD),
           child: Column(
-        mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Material(
                 color: iconBg,

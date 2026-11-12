@@ -1,0 +1,22 @@
+---
+description: Do not use the project name in code identifiers
+alwaysApply: true
+---
+
+# No project name in identifiers
+
+Do **not** name classes, files, folders, providers, methods, variables, or other members after the product (**`bnood`**, **`Bnood`**, **`BNOOD`**).
+
+Use **neutral** names. For **shared / cross-feature** code, use the **`App`** prefix (and snake_case file names), e.g.:
+
+- `AppPagingController`, `app_paging_controller.dart`
+- `AppPagedView`, `app_paged_view.dart`
+- `AppPagedBuilders`
+
+Domain-neutral types without `App` are fine when they are not UI shells (`PagedFetchPage`, `PagingListIds`).
+
+**OK:** package imports (`package:bnood/...`), rules/docs that refer to the product, `README`, l10n app title.
+
+**Not OK:** `BnoodPagingController`, `bnood_paged_view.dart`, or any new `Bnood*` / `bnood_*` symbol.
+
+Do not rename established legacy identifiers outside the slice you are editing unless the owner asks.

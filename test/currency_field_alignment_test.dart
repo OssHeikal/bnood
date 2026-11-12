@@ -1,7 +1,6 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/money/money_format.dart';
 import 'package:bnood/core/widgets/custom_text_field.dart';
-import 'package:bnood/core/widgets/text_field/app_input_type.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

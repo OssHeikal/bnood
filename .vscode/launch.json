@@ -1,0 +1,62 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Bnood (dev)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "toolArgs": [
+        "--dart-define-from-file=.env.dev"
+      ]
+    },
+    {
+      "name": "Bnood (prod)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "toolArgs": [
+        "--dart-define-from-file=.env.prod"
+      ]
+    },
+    {
+      "name": "Bnood · Herd (iOS Simulator)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "toolArgs": [
+        "--dart-define=BNOOD_API_BASE_URL=http://bnood-admin.test/api"
+      ]
+    },
+    {
+      "name": "Bnood · Android emulator → host",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "toolArgs": [
+        "--dart-define=BNOOD_API_BASE_URL=http://10.0.2.2/api"
+      ]
+    },
+    {
+      "name": "Bnood · LAN IP (physical device)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "toolArgs": [
+        "--dart-define=BNOOD_API_BASE_URL=http://192.168.1.141/api"
+      ]
+    },
+    {
+      "name": "Bnood · api_config default (no define)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart"
+    },
+    {
+      "name": "Bnood · UI foundation preview",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/preview/ui_foundation_main.dart"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import '../../../core/config/theme/app_size.dart';
 import '../../../core/money/ledger_math.dart';
 import '../../../core/widgets/app_amount.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/app_pressable.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../items/item_semantic_icon.dart';
 
@@ -18,6 +19,8 @@ class ClientDetailItemRow extends StatelessWidget {
     required this.iconName,
     required this.breakdown,
     required this.localeCode,
+    this.minorPerMajor = 100,
+    this.onTap,
   });
 
   final String itemName;
@@ -25,6 +28,8 @@ class ClientDetailItemRow extends StatelessWidget {
   final String iconName;
   final ItemExpenseBreakdown breakdown;
   final String localeCode;
+  final int minorPerMajor;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +39,7 @@ class ClientDetailItemRow extends StatelessWidget {
     final total = breakdown.totalPiastres;
     final materialsShare = total == 0 ? 0.0 : breakdown.materialsPiastres / total;
     final accent = itemSemanticAccentColor(colorKey);
-    final icon = itemSemanticIconAsset(iconName);
-
-    return AppCard(
+    final card = AppCard(
       padding: const EdgeInsets.all(AppSize.spaceLG),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,7 +54,11 @@ class ClientDetailItemRow extends StatelessWidget {
                   width: AppSize.statIconBox,
                   height: AppSize.statIconBox,
                   child: Center(
-                    child: icon.svg(width: AppSize.iconSmall, height: AppSize.iconSmall, colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
+                    child: itemSemanticIconWidget(
+                      iconKey: iconName,
+                      color: accent,
+                      size: AppSize.iconSmall,
+                    ),
                   ),
                 ),
               ),
@@ -62,86 +69,122 @@ class ClientDetailItemRow extends StatelessWidget {
                 role: AppAmountRole.spend,
                 size: AppAmountSize.small,
                 localeCode: localeCode,
+                minorPerMajor: minorPerMajor,
               ),
             ],
           ),
-          AppSize.spaceMD.gap,
-          Row(
-            children: [
-              _SplitLabel(
-                label: l10n.materials,
-                piastres: breakdown.materialsPiastres,
-                dotColor: colors.receive,
-                localeCode: localeCode,
-              ),
-              AppSize.spaceMD.gap,
-              _SplitLabel(
-                label: l10n.labor,
-                piastres: breakdown.laborPiastres,
-                dotColor: colors.spend,
-                localeCode: localeCode,
-              ),
-            ],
-          ),
-          AppSize.spaceSM.gap,
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppSize.radiusSM),
-            child: SizedBox(
-              height: 8,
+          ...[
+            AppSize.spaceMD.gap,
+            IntrinsicHeight(
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (materialsShare > 0)
-                    Expanded(
-                      flex: (materialsShare * 1000).round().clamp(1, 1000),
-                      child: ColoredBox(color: colors.receive),
+                  Expanded(
+                    child: _SplitMetric(
+                      label: l10n.materials,
+                      piastres: breakdown.materialsPiastres,
+                      dotColor: colors.receive,
+                      role: AppAmountRole.receive,
+                      localeCode: localeCode,
+                      minorPerMajor: minorPerMajor,
                     ),
-                  if (materialsShare < 1)
-                    Expanded(
-                      flex: ((1 - materialsShare) * 1000).round().clamp(1, 1000),
-                      child: ColoredBox(color: colors.spend.withValues(alpha: 0.35)),
+                  ),
+                  Expanded(
+                    child: _SplitMetric(
+                      label: l10n.labor,
+                      piastres: breakdown.laborPiastres,
+                      dotColor: colors.spend,
+                      role: AppAmountRole.spend,
+                      localeCode: localeCode,
+                      minorPerMajor: minorPerMajor,
                     ),
+                  ),
                 ],
               ),
             ),
-          ),
+            AppSize.spaceSM.gap,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(AppSize.radiusSM),
+              child: SizedBox(
+                height: 8,
+                child: Row(
+                  children: [
+                    if (materialsShare > 0)
+                      Expanded(
+                        flex: (materialsShare * 1000).round().clamp(1, 1000),
+                        child: ColoredBox(color: colors.receive),
+                      ),
+                    if (materialsShare < 1)
+                      Expanded(
+                        flex: ((1 - materialsShare) * 1000).round().clamp(1, 1000),
+                        child: ColoredBox(color: colors.spend.withValues(alpha: 0.35)),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
+    if (onTap == null) return card;
+    return AppPressable(onPressed: onTap, child: card);
   }
 }
 
-class _SplitLabel extends StatelessWidget {
-  const _SplitLabel({
+class _SplitMetric extends StatelessWidget {
+  const _SplitMetric({
     required this.label,
     required this.piastres,
     required this.dotColor,
+    required this.role,
     required this.localeCode,
+    this.minorPerMajor = 100,
   });
 
   final String label;
   final int piastres;
   final Color dotColor;
+  final AppAmountRole role;
   final String localeCode;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
     final text = context.text;
-    return Expanded(
-      child: Row(
+    final colors = context.colors;
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: AppSize.spaceXS),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
+              ),
+              AppSize.spaceXS.gap,
+              Flexible(
+                child: Text(
+                  label,
+                  style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
           AppSize.spaceXS.gap,
-          Flexible(
-            child: Text(
-              '$label ${AppAmount.format(piastres: piastres, localeCode: localeCode)}',
-              style: text.caption.copyWith(color: context.colors.onSurfaceMuted),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+          AppAmount(
+            piastres: piastres,
+            role: role,
+            size: AppAmountSize.small,
+            localeCode: localeCode,
+            minorPerMajor: minorPerMajor,
           ),
         ],
       ),

@@ -13,7 +13,7 @@ Future<VoucherDraft?> voucherDraftFromTransaction(
   return VoucherDraft(
     clientId: project.clientId,
     projectId: transaction.projectId,
-    clientLabel: clientLabel ?? client?.name,
+    clientLabel: clientLabel ?? client.name,
     kind: transaction.kind,
     expenseType: transaction.expenseType ?? 'materials',
     method: transaction.method,

@@ -20,9 +20,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          supplierDetailProvider.overrideWith(() => _PendingSupplierDetailNotifier(gate.future)),
-        ],
+        overrides: [supplierDetailProvider.overrideWith(() => _PendingSupplierDetailNotifier(gate.future))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -78,9 +76,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          supplierDetailProvider.overrideWith(() => _StubSupplierDetailNotifier(snap)),
-        ],
+        overrides: [supplierDetailProvider.overrideWith(() => _StubSupplierDetailNotifier(snap))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -107,13 +103,7 @@ void main() {
   testWidgets('supplier detail AR narrow width', (tester) async {
     final now = DateTime.utc(2026, 11, 1);
     final snap = SupplierDetailSnapshot(
-      supplier: Supplier(
-        id: 's1',
-        workspaceId: 'w',
-        name: 'حديد',
-        createdAt: now,
-        updatedAt: now,
-      ),
+      supplier: Supplier(id: 's1', workspaceId: 'w', name: 'حديد', createdAt: now, updatedAt: now),
       totalPaidPiastres: 0,
       history: const [],
     );
@@ -123,9 +113,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          supplierDetailProvider.overrideWith(() => _StubSupplierDetailNotifier(snap)),
-        ],
+        overrides: [supplierDetailProvider.overrideWith(() => _StubSupplierDetailNotifier(snap))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('ar'),
@@ -171,6 +159,7 @@ void main() {
 class _PendingSupplierDetailNotifier extends SupplierDetailNotifier {
   _PendingSupplierDetailNotifier(this.future);
 
+  @override
   final Future<SupplierDetailSnapshot> future;
 
   @override

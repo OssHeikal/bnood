@@ -28,7 +28,7 @@ void main() {
 
   test('export cursor unchanged when share fails after successful bytes', () async {
     SharedPreferences.setMockInitialValues({});
-    final prefs = (await SharedPreferences.getInstance())!;
+    final prefs = (await SharedPreferences.getInstance());
     final db = openTestDatabase();
     addTearDown(db.close);
     final repo = BnoodRepository(db);
@@ -37,16 +37,13 @@ void main() {
     final store = StatementExportStore(prefs);
     const entityIdKey = 'client';
 
-    StatementPdfExport.shareFromFile = (_, __, {sharePositionOrigin}) async {
+    StatementPdfExport.shareFromFile = (_, _, {sharePositionOrigin}) async {
       expect(sharePositionOrigin, isNotNull);
       expect(sharePositionOrigin!.width, greaterThan(0));
       throw StateError('share_plus_mock_failure');
     };
 
-    expect(
-      store.read(workspaceId: ws, kind: StatementEntityKind.client, entityId: client.id),
-      isNull,
-    );
+    expect(store.read(workspaceId: ws, kind: StatementEntityKind.client, entityId: client.id), isNull);
 
     // Simulate successful generation + cursor write (screen does this before share).
     await store.recordSuccessfulExport(

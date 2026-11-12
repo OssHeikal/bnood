@@ -30,6 +30,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navAdd => 'جديد';
 
   @override
+  String get menuTitle => 'القائمة';
+
+  @override
   String get settingsTitle => 'الإعدادات';
 
   @override
@@ -73,6 +76,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeAppName => 'بنود';
 
   @override
+  String get homeGreetingMorning => 'صباح الخير';
+
+  @override
+  String get homeGreetingEvening => 'مساء الخير';
+
+  @override
+  String get userProfileTitle => 'الملف الشخصي';
+
+  @override
+  String craftsmanLinkedClientsMeta(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عميل مرتبط',
+      many: '$count عميلًا مرتبطًا',
+      few: '$count عملاء مرتبطين',
+      two: 'عميلان مرتبطان',
+      one: 'عميل واحد مرتبط',
+      zero: 'لا عملاء مرتبطين',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get homeSubtitle => 'حسابات التشطيب ببساطة';
 
   @override
@@ -96,6 +123,47 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get homeLoadErrorTitle => 'تعذر تحميل الرئيسية';
+
+  @override
+  String get clientMovementsLoadErrorTitle => 'تعذر تحميل الحركات';
+
+  @override
+  String get movementsSearchHint => 'بحث في الملاحظات';
+
+  @override
+  String get movementsFilterSort => 'ترتيب';
+
+  @override
+  String get movementsFilterItem => 'البند';
+
+  @override
+  String get movementsFilterDate => 'التاريخ';
+
+  @override
+  String get movementsSortNewest => 'الأحدث';
+
+  @override
+  String get movementsSortOldest => 'الأقدم';
+
+  @override
+  String get movementsFilterAllItems => 'كل البنود';
+
+  @override
+  String get movementsClearFilters => 'مسح الفلاتر';
+
+  @override
+  String get movementsClearFilter => 'مسح';
+
+  @override
+  String get movementsDateFrom => 'من';
+
+  @override
+  String get movementsDateTo => 'إلى';
+
+  @override
+  String movementsDateRangeSummary(String from, String to) {
+    return '$from — $to';
+  }
 
   @override
   String get homeNoSupplierSpendTitle => 'مفيش مصروف خامات لسه';
@@ -203,6 +271,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get seeAll => 'عرض الكل';
 
   @override
+  String seeAllWithCount(int count) {
+    return 'عرض الكل ($count)';
+  }
+
+  @override
   String get movements => 'الحركات';
 
   @override
@@ -222,6 +295,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get assignCraftsmen => 'تحديد الصنايعية';
+
+  @override
+  String get assignSuppliers => 'ربط الموردين';
+
+  @override
+  String get clientDetailNoSuppliers => 'مفيش موردين مربوطين';
+
+  @override
+  String get clientDetailSuppliersEmptyDescription =>
+      'اربط موردين بالعميل ده علشان تتابع المواد والاتفاقيات.';
+
+  @override
+  String get homeSuppliersSection => 'الموردين';
+
+  @override
+  String get homeNoSuppliersTitle => 'مفيش موردين نشطين';
+
+  @override
+  String get homeNoSuppliersDescription =>
+      'أضف موردين من الدليل أو اربطهم بعميل.';
 
   @override
   String get clientDetailNoCraftsmen => 'مفيش صنايعية على المشروع ده لسه';
@@ -284,8 +377,54 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String archiveClientDescription(String name) {
-    return 'هتنقل عهدة $name للأرشيف. تقدر ترجعها بعدين.';
+    return 'أرشفة $name؟ العملية نهائية — العميل المؤرشف للقراءة فقط.';
   }
+
+  @override
+  String get clientsSearchHint => 'ابحث بالاسم أو الهاتف';
+
+  @override
+  String get amountUnavailable => '—';
+
+  @override
+  String get clientDuplicateNameTitle => 'اسم عميل مكرر';
+
+  @override
+  String get clientDuplicateNameDescription => 'يوجد عميل بنفس الاسم. متابعة؟';
+
+  @override
+  String get clientDuplicateNameConfirm => 'متابعة';
+
+  @override
+  String get clientDuplicatePhoneError => 'رقم الهاتف مستخدم لعميل آخر.';
+
+  @override
+  String get clientDeleteTitle => 'حذف العميل؟';
+
+  @override
+  String clientDeleteDescription(String name) {
+    return 'حذف $name؟ سيُحذف العميل والمشروع.';
+  }
+
+  @override
+  String get clientDeleteHasActivityTitle => 'العميل عليه حركات';
+
+  @override
+  String get clientDeleteHasActivityDescription =>
+      'هذا العميل مرتبط بمعاملات أو روابط. أرشفه للاحتفاظ بالسجل.';
+
+  @override
+  String get clientDeleteArchiveInstead => 'أرشفة بدلًا من ذلك';
+
+  @override
+  String get clientArchivedBadge => 'مؤرشف';
+
+  @override
+  String get clientLedgerNotOnlineTitle => 'العهدة غير متصلة بعد';
+
+  @override
+  String get clientLedgerNotOnlineDescription =>
+      'الحركات والأرصدة ستظهر هنا عند تفعيل العهدة أونلاين.';
 
   @override
   String get craftsmanAgreedAmount => 'المتفق عليه';
@@ -352,6 +491,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get voucherSelectItem => 'اختر البند';
 
   @override
+  String get voucherDiscardTitle => 'تجاهل السند؟';
+
+  @override
+  String get voucherDiscardDescription =>
+      'توجد تغييرات لم تُحفظ. هل تريد الخروج دون حفظ؟';
+
+  @override
+  String get discard => 'تجاهل';
+
+  @override
+  String get voucherProviderLinkedBadge => 'مرتبط';
+
+  @override
+  String get voucherLinkAgreementAmountOptional => 'مبلغ الاتفاق (اختياري)';
+
+  @override
   String get voucherSelectCraftsman => 'اختر الصنايعي';
 
   @override
@@ -391,6 +546,26 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get voucherReceiptAttachFailed =>
       'تعذّر إرفاق الإيصال. حاول مرة أخرى.';
+
+  @override
+  String get voucherReceiptUploadRetry =>
+      'تم حفظ السند. اضغط حفظ مرة أخرى لإعادة رفع صور الإيصال.';
+
+  @override
+  String get voucherReceiptDeleteRetry =>
+      'تم حفظ السند لكن تعذّر حذف إيصال. اضغط حفظ للمحاولة مرة أخرى.';
+
+  @override
+  String get voucherReceiptTooLarge =>
+      'صورة الإيصال كبيرة جدًا. جرّب صورة أصغر أو احفظ مرة أخرى بعد الضغط.';
+
+  @override
+  String get voucherReceiptCompressFailed =>
+      'تعذّر تجهيز صورة الإيصال للرفع. جرّب صورة أخرى أو احفظ مجددًا.';
+
+  @override
+  String get voucherReceiptInvalidMime =>
+      'نوع الملف غير مقبول. استخدم JPEG أو PNG أو WebP.';
 
   @override
   String get voucherAssignCraftsmanFirst => 'عيّن صنايعية للمشروع أولًا';
@@ -569,10 +744,10 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get craftsmanSetAgreedAmount => 'تعيين المبلغ المتفق عليه';
+  String get craftsmanSetAgreedAmount => 'تعيين المبلغ';
 
   @override
-  String get craftsmanEditAgreedAmount => 'تعديل المبلغ المتفق عليه';
+  String get craftsmanEditAgreedAmount => 'تعديل المبلغ';
 
   @override
   String get craftsmanAgreedAmountSheetTitle => 'المبلغ المتفق عليه';
@@ -603,7 +778,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get itemsCatalogCaption =>
-      'البنود الافتراضية — يمكنك الإضافة والتعديل والأرشفة';
+      'البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك';
 
   @override
   String get addItem => 'إضافة بند';
@@ -630,12 +805,127 @@ class AppLocalizationsAr extends AppLocalizations {
   String get itemsEmptyDescription => 'أضف بندًا لتصنيف مصروفات المشروع.';
 
   @override
-  String get archiveItemTitle => 'أرشفة البند؟';
+  String get deleteItemTitle => 'حذف البند؟';
 
   @override
-  String archiveItemDescription(String name) {
-    return 'سيُخفى $name من القوائم. سجل المصروفات يبقى محفوظًا.';
+  String deleteItemDescription(String name) {
+    return 'سيُحذف $name. المصروفات المرتبطة تبقى في السجل.';
   }
+
+  @override
+  String get itemInUseError => 'البند مرتبط بمعاملات ولا يمكن حذفه أو تعديله.';
+
+  @override
+  String get itemDuplicateNameError => 'يوجد بند بنفس الاسم.';
+
+  @override
+  String get providersSearchHint => 'بحث بالاسم أو الهاتف';
+
+  @override
+  String get providersFilterAll => 'الكل';
+
+  @override
+  String get providersOnlineCaption =>
+      'الموردون والصنايعية في دليلك — المدفوعات والاتفاقيات تبقى في المعاملات.';
+
+  @override
+  String get providersEmptyAllTitle => 'لا موردين أو صنايعية بعد';
+
+  @override
+  String get providersEmptySuppliersTitle => 'لا موردين بعد';
+
+  @override
+  String get providersEmptyCraftsmenTitle => 'لا صنايعية بعد';
+
+  @override
+  String get providersEmptyDescription =>
+      'أضف مورّدًا أو صنايعيًا لربطه ببنود الصرف ومشاريع العملاء.';
+
+  @override
+  String get directoryAddProvider => 'إضافة للدليل';
+
+  @override
+  String get providerCreateSheetTitle => 'إضافة للدليل';
+
+  @override
+  String get providerTypeLabel => 'النوع';
+
+  @override
+  String get providerNameLabel => 'الاسم';
+
+  @override
+  String get providerNameHint => 'مثال: مورد مواد';
+
+  @override
+  String get providerNameRequired => 'أدخل الاسم';
+
+  @override
+  String get providerDuplicateNameError => 'هذا الاسم موجود في دليلك.';
+
+  @override
+  String get providerDuplicatePhoneError =>
+      'رقم الهاتف مستخدم لجهة أخرى في الدليل.';
+
+  @override
+  String get providerDetailNotFoundTitle => 'الجهة غير موجودة في الدليل';
+
+  @override
+  String get providerDetailLinkedClientsTitle => 'العملاء المرتبطون';
+
+  @override
+  String get providerDetailNoLinkedClients => 'لا يوجد عملاء مرتبطون بعد';
+
+  @override
+  String get linkClients => 'ربط بعملاء';
+
+  @override
+  String get linkClientsIntro =>
+      'اختار العملاء المرتبطين بهذا السجل. مبالغ الاتفاق اختيارية ويمكن ضبطها لاحقاً من بطاقة العميل.';
+
+  @override
+  String linkClientsProviderContext(String name) {
+    return 'الربط مع: $name';
+  }
+
+  @override
+  String get providerAssignmentsSaved => 'تم تحديث ربط العملاء';
+
+  @override
+  String get agreementUnlinkClientHasPaymentsTitle =>
+      'إلغاء الربط رغم وجود مدفوعات؟';
+
+  @override
+  String agreementUnlinkClientHasPaymentsDescription(String name) {
+    return 'عند $name مدفوعات مسجلة على هذا الاتفاق. هل تريد إلغاء الربط؟';
+  }
+
+  @override
+  String get agreementUnlinkTitle => 'إلغاء ربط الصنايعي؟';
+
+  @override
+  String agreementUnlinkDescription(String name) {
+    return 'سيُزال $name من العميل. يمكنك ربطه مرة أخرى لاحقاً.';
+  }
+
+  @override
+  String get unlink => 'إلغاء الربط';
+
+  @override
+  String get deleteProviderTitle => 'حذف من الدليل؟';
+
+  @override
+  String deleteProviderDescription(String name) {
+    return 'سيُزال $name من قائمة الدليل.';
+  }
+
+  @override
+  String get itemDefaultBadge => 'افتراضي';
+
+  @override
+  String get itemPickIconLabel => 'الأيقونة';
+
+  @override
+  String get itemPickColorLabel => 'اللون';
 
   @override
   String get statementClientHeading => 'عهدة / كشف حساب العميل';
@@ -653,7 +943,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get statementTotalReceived => 'إجمالي المقبوض';
 
   @override
+  String get statementPeriodReceived => 'المستلم في الفترة';
+
+  @override
   String get statementTotalSpent => 'إجمالي المصروف';
+
+  @override
+  String get statementPeriodSpent => 'المصروف في الفترة';
 
   @override
   String get statementClosingLabel => 'المتبقي';
@@ -680,6 +976,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get statementEmptyReceipts => 'لا توجد مقبوضات في الفترة المحددة.';
+
+  @override
+  String get statementEmptyItemsTitle => 'مفيش مصروفات في الفترة دي';
+
+  @override
+  String get statementEmptyItemsDescription =>
+      'المصروفات اللي تسجلها للعميل ده هتظهر هنا متقسمة على البنود. غيّر الفترة أو سجّل صرف جديد.';
 
   @override
   String statementItemSectionTitle(String name) {
@@ -788,4 +1091,440 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get statementEmptyPayments => 'لا توجد مدفوعات في الفترة المحددة.';
+
+  @override
+  String get authLoginTitle => 'تسجيل الدخول';
+
+  @override
+  String get authLoginSubtitle =>
+      'تابع أموال العملاء والبنود ومشاريع التشطيب من حسابك.';
+
+  @override
+  String get authRegisterTitle => 'إنشاء حساب';
+
+  @override
+  String get authRegisterSubtitle =>
+      'أنشئ حساباً لحفظ مساحة عملك وفتحها من أي موبايل.';
+
+  @override
+  String get authPhone => 'رقم الموبايل';
+
+  @override
+  String get authPhoneInvalid => 'أدخل رقم موبايل من 11 رقماً يبدأ بـ 01.';
+
+  @override
+  String get authPassword => 'كلمة المرور';
+
+  @override
+  String get authPasswordConfirm => 'تأكيد كلمة المرور';
+
+  @override
+  String get authCurrentPassword => 'كلمة المرور الحالية';
+
+  @override
+  String get authNewPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get authForgotPassword => 'نسيت كلمة المرور؟';
+
+  @override
+  String get authForgotPasswordTitle => 'استرداد كلمة المرور';
+
+  @override
+  String get authForgotPasswordSubtitle =>
+      'أدخل رقم الموبايل المسجّل. سنرسل رمز تأكيد.';
+
+  @override
+  String get authVerificationTitle => 'رمز التحقق';
+
+  @override
+  String get authVerificationSubtitle => 'أدخل رمز التحقق الذي استلمته.';
+
+  @override
+  String authVerificationDeliverySubtitle(String phone) {
+    return 'أدخل الرمز الذي وصل إلى $phone.';
+  }
+
+  @override
+  String get authRecoveryVerifySubtitle => 'أدخل رمز الاسترداد الذي استلمته.';
+
+  @override
+  String authRecoveryDeliverySubtitle(String phone) {
+    return 'أدخل رمز استرجاع كلمة المرور الذي وصل إلى $phone.';
+  }
+
+  @override
+  String get authCompleteProfileTitle => 'اسمك';
+
+  @override
+  String get authCompleteProfileSubtitle =>
+      'اكتب اسمك كما يظهر في العمل، ثم اضغط متابعة.';
+
+  @override
+  String get authDisplayName => 'الاسم الكامل';
+
+  @override
+  String get authDisplayNameHint => 'مثال: أحمد حسن';
+
+  @override
+  String get authVerificationCode => 'الرمز';
+
+  @override
+  String get authResendCode => 'إعادة إرسال الرمز';
+
+  @override
+  String authResendWait(int seconds) {
+    return 'انتظر $seconds ث ثم أعد الإرسال.';
+  }
+
+  @override
+  String get authCreateAccount => 'إنشاء حساب';
+
+  @override
+  String get authLoginAction => 'تسجيل الدخول';
+
+  @override
+  String get authVerifyAction => 'تحقق';
+
+  @override
+  String get authContinue => 'متابعة';
+
+  @override
+  String get authRegisterLink => 'مستخدم جديد؟ أنشئ حساباً';
+
+  @override
+  String get authLoginLink => 'لديك حساب؟ سجّل الدخول';
+
+  @override
+  String get authResetPasswordTitle => 'كلمة مرور جديدة';
+
+  @override
+  String get authResetPasswordAction => 'تحديث كلمة المرور';
+
+  @override
+  String get authChangePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get authSignOut => 'تسجيل الخروج';
+
+  @override
+  String get authSignIn => 'تسجيل الدخول للحساب السحابي';
+
+  @override
+  String get authAccountSection => 'الحساب';
+
+  @override
+  String get authRemoteWorkspaceTitle => 'الحساب';
+
+  @override
+  String get authRemoteWorkspaceBody =>
+      'تم تسجيل الدخول. بيانات المشاريع على السحابة غير متاحة الآن.';
+
+  @override
+  String get authRemoteWorkspaceMovedBody =>
+      'إدارة الحساب انتقلت إلى الملف الشخصي والإعدادات.';
+
+  @override
+  String get shellTabNotOnlineTitle => 'غير متاح على الإنترنت بعد';
+
+  @override
+  String get shellTabNotOnlineDescription =>
+      'هذا التبويب غير جاهز للاستخدام أونلاين بعد. استخدم «العملاء» لما هو متاح الآن.';
+
+  @override
+  String get authSignedInAs => 'مسجّل الدخول كـ';
+
+  @override
+  String get authBootstrapRetry => 'إعادة المحاولة';
+
+  @override
+  String get authNetworkError =>
+      'تعذر الاتصال. تحقق من الشبكة، ثم أعد المحاولة.';
+
+  @override
+  String get authInvalidCredentials =>
+      'رقم الموبايل أو كلمة المرور غير صحيحة. راجعها ثم حاول مرة أخرى.';
+
+  @override
+  String get authChallengeInvalid =>
+      'الرمز غير صحيح أو انتهت صلاحيته. اطلب رمزاً جديداً ثم أدخله.';
+
+  @override
+  String get authThrottled => 'محاولات كثيرة. انتظر قليلاً، ثم أعد المحاولة.';
+
+  @override
+  String get authSessionExpired =>
+      'انتهت الجلسة. سجّل الدخول من جديد للمتابعة.';
+
+  @override
+  String get authFieldRequired => 'املأ هذا الحقل للمتابعة.';
+
+  @override
+  String get authPasswordMinLength =>
+      'كلمة المرور قصيرة. استخدم 8 أحرف على الأقل.';
+
+  @override
+  String get authPasswordMismatch =>
+      'كلمتا المرور مختلفتان. اكتبهما بالنص نفسه.';
+
+  @override
+  String get authCodeLengthHint => 'أدخل الرمز المكوّن من 6 أرقام.';
+
+  @override
+  String get authAccountExistsTitle => 'الرقم مربوط بحساب';
+
+  @override
+  String get authAccountExistsMessage =>
+      'هذا الرقم مربوط بحساب بالفعل. سجّل الدخول به أو استخدم رقمًا آخر.';
+
+  @override
+  String get authAccountExistsLoginAction => 'تسجيل الدخول';
+
+  @override
+  String get authAccountExistsAnotherPhoneAction => 'إدخال رقم آخر';
+
+  @override
+  String get authFlowExpired => 'انتهت هذه الخطوة. ابدأ من جديد.';
+
+  @override
+  String get authPasswordResetSuccess =>
+      'تم تحديث كلمة المرور. سجّل الدخول بالكلمة الجديدة.';
+
+  @override
+  String get authPasswordChangedSuccess =>
+      'تم تغيير كلمة المرور. استخدم الكلمة الجديدة في المرة القادمة.';
+
+  @override
+  String get authDisplayNameTooLong => 'الاسم طويل. الحد الأقصى 120 حرفًا.';
+
+  @override
+  String get profilePersonalSection => 'البيانات الشخصية';
+
+  @override
+  String get profileSecuritySection => 'الأمان';
+
+  @override
+  String get profileDangerSection => 'إغلاق الحساب';
+
+  @override
+  String get profileEditNameTitle => 'تعديل الاسم';
+
+  @override
+  String get profileStatementBrandingSection => 'بياناتك في كشف الحساب';
+
+  @override
+  String get profileStatementBrandingSectionSubtitle =>
+      'تظهر للعميل في أعلى كشف الحساب';
+
+  @override
+  String get profileLogo => 'الشعار';
+
+  @override
+  String get profileLogoSet => 'تم إضافة الشعار';
+
+  @override
+  String get profileLogoNotSet => 'لم تضف شعارًا بعد';
+
+  @override
+  String get profileBrandingActionAdd => 'إضافة';
+
+  @override
+  String get profileBrandingActionChange => 'تغيير';
+
+  @override
+  String get profileLogoPickTitle => 'اختيار الشعار';
+
+  @override
+  String get profileLogoFromGallery => 'مكتبة الصور';
+
+  @override
+  String get profileLogoFromCamera => 'الكاميرا';
+
+  @override
+  String get profileLogoChange => 'تغيير الشعار';
+
+  @override
+  String get profileLogoRemove => 'إزالة الشعار';
+
+  @override
+  String get profileLogoRemoveConfirmTitle => 'إزالة الشعار؟';
+
+  @override
+  String get profileLogoRemoveConfirmBody =>
+      'ستظهر الأحرف الأولى من اسمك على الكشوف بدلاً من الشعار.';
+
+  @override
+  String get profileLogoTooLarge => 'يجب ألا يتجاوز حجم الصورة 5 ميجابايت.';
+
+  @override
+  String get profileLogoUnreadable =>
+      'تعذّر قراءة الصورة. استخدم JPG أو PNG أو WebP.';
+
+  @override
+  String get profileLogoUpdated => 'تم تحديث الشعار.';
+
+  @override
+  String get profileLogoRemoved => 'تمت إزالة الشعار.';
+
+  @override
+  String get profileContactPhone => 'هاتف التواصل';
+
+  @override
+  String get profileContactPhoneNotOnStatement => 'لن يظهر رقم في الكشف';
+
+  @override
+  String get profileContactPhoneStatementHint =>
+      'يظهر في أعلى كشف الحساب للعميل. اتركه فارغاً إذا لا تريد إظهار رقم.';
+
+  @override
+  String get profileContactPhoneUsesLogin => 'رقم الدخول';
+
+  @override
+  String get profileEditContactPhoneTitle => 'تعديل هاتف التواصل';
+
+  @override
+  String get profileContactPhoneUpdated => 'تم تحديث هاتف التواصل.';
+
+  @override
+  String get profileChangePasswordHint => 'حدّث كلمة مرور تسجيل الدخول.';
+
+  @override
+  String get profileDeleteAccountHint =>
+      'إغلاق الحساب نهائيًا وتسجيل الخروج من كل الأجهزة.';
+
+  @override
+  String get authDeleteAccount => 'حذف الحساب';
+
+  @override
+  String get authDeleteAccountConfirmTitle => 'حذف حسابك؟';
+
+  @override
+  String get authDeleteAccountConfirmBody =>
+      'أدخل كلمة المرور الحالية للتأكيد. لا يمكن التراجع.';
+
+  @override
+  String get authDeleteAccountSuccess => 'تم إغلاق حسابك.';
+
+  @override
+  String get authAccountDeletedMessage => 'هذا الحساب مُغلق بالفعل.';
+
+  @override
+  String get authLogoutConfirmTitle => 'تسجيل الخروج؟';
+
+  @override
+  String get authLogoutConfirmBody =>
+      'ستحتاج لتسجيل الدخول مجددًا لمتابعة بياناتك السحابية.';
+
+  @override
+  String get paywallBenefitsHeading => 'مزايا PREMIUM';
+
+  @override
+  String paywallBilledYearly(String amount) {
+    return 'يتحسب سنوياً $amount';
+  }
+
+  @override
+  String get paywallBilledMonthly => 'يتحسب شهرياً';
+
+  @override
+  String get paywallPerMonthSuffix => ' / الشهر';
+
+  @override
+  String get paywallPlanYearly => 'سنوية';
+
+  @override
+  String get paywallPlanMonthly => 'شهرية';
+
+  @override
+  String get paywallSubscribeCta => 'اشترك في Premium';
+
+  @override
+  String get paywallContinueFree => 'الاستمرار مجاناً';
+
+  @override
+  String get subscriptionPaymentNotConnectedYet =>
+      'الدفع داخل التطبيق غير متصل بعد.';
+
+  @override
+  String get profileSubscriptionSection => 'الاشتراك';
+
+  @override
+  String get profileSubscriptionFreeBlurb =>
+      'ترقية Premium لفتح مشاريع نشطة بلا حد ومزايا إضافية.';
+
+  @override
+  String get profileSubscriptionSubscribeCta => 'اشترك في Premium';
+
+  @override
+  String profileSubscriptionRenewsOn(String date) {
+    return 'تتجدد في $date';
+  }
+
+  @override
+  String profileSubscriptionDaysRemaining(int count) {
+    return '$count يوم متبقٍ';
+  }
+
+  @override
+  String get gateMaintenanceTitle => 'صيانة';
+
+  @override
+  String get gateMaintenanceFallbackMessage =>
+      'التطبيق غير متاح مؤقتاً. حاول مرة أخرى بعد قليل.';
+
+  @override
+  String get gateForceUpdateTitle => 'تحديث مطلوب';
+
+  @override
+  String get gateForceUpdateFallbackMessage =>
+      'يُرجى التحديث إلى أحدث إصدار لمتابعة استخدام بنود.';
+
+  @override
+  String get gateOptionalUpdateTitle => 'تحديث متاح';
+
+  @override
+  String get gateOptionalUpdateFallbackMessage =>
+      'يتوفر إصدار أحدث من بنود بتحسينات وإصلاحات.';
+
+  @override
+  String get gateUpdateAction => 'تحديث';
+
+  @override
+  String get gateLaterAction => 'لاحقاً';
+
+  @override
+  String get settingsContentSection => 'عن التطبيق والشروط';
+
+  @override
+  String get settingsContentAbout => 'عن بنود';
+
+  @override
+  String get settingsContentTerms => 'شروط الاستخدام';
+
+  @override
+  String get settingsContentPrivacy => 'سياسة الخصوصية';
+
+  @override
+  String get settingsContentCancellation => 'سياسة الإلغاء';
+
+  @override
+  String get contentPageLoadingTitle => 'صفحة';
+
+  @override
+  String get contentPageNotFoundTitle => 'الصفحة غير موجودة';
+
+  @override
+  String get contentPageNotFoundDescription => 'هذه الصفحة غير متاحة حالياً.';
+
+  @override
+  String get contentPageErrorTitle => 'تعذّر تحميل الصفحة';
+
+  @override
+  String get contentPageErrorDescription => 'تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get authRegisterLegalPrefix => 'بإنشاء حساب فإنك توافق على';
+
+  @override
+  String get authRegisterLegalMiddle => 'و';
 }

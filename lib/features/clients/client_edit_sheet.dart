@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/providers/app_providers.dart';
-import '../../core/providers/dashboard_providers.dart';
+import '../../core/api/auth_api_exception.dart';
+import 'client_mutation_actions.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/bnood_modal_sheet.dart';
@@ -53,6 +53,7 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
   late final _phoneCtrl = TextEditingController(text: widget.phone ?? '');
   var _attemptedSubmit = false;
   var _saving = false;
+  String? _phoneError;
 
   @override
   void dispose() {
@@ -66,14 +67,19 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
     if (_formKey.currentState?.validate() != true) return;
     if (_saving) return;
     setState(() => _saving = true);
+    final l10n = AppLocalizations.of(context);
     try {
-      await ref.read(repositoryProvider).updateClient(
-            clientId: widget.clientId,
-            name: _nameCtrl.text.trim(),
-            phone: _phoneCtrl.text.trim().isEmpty ? '' : _phoneCtrl.text.trim(),
-          );
-      refreshAfterClientMutation(ref, clientId: widget.clientId);
-      if (mounted) Navigator.pop(context);
+      final updated = await saveClientUpdate(
+        ref: ref,
+        context: context,
+        clientId: widget.clientId,
+        name: _nameCtrl.text.trim(),
+        phoneField: _phoneCtrl.text,
+      );
+      if (updated != null && mounted) Navigator.pop(context);
+    } on AuthApiException catch (e) {
+      if (!mounted) return;
+      setState(() => _phoneError = duplicatePhoneFieldError(l10n, e));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -82,6 +88,7 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final phoneError = _phoneError;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSize.screenPadding,
@@ -127,6 +134,10 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
                   type: AppInputType.phone,
                   ltrValue: true,
                   textInputAction: TextInputAction.done,
+                  errorMessage: phoneError,
+                  onChanged: (_) {
+                    if (_phoneError != null) setState(() => _phoneError = null);
+                  },
                 ),
               ],
             ),

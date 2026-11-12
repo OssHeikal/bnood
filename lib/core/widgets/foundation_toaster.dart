@@ -1,7 +1,7 @@
 import 'app_toaster.dart';
 import 'bnood_failure.dart';
 
-export 'app_toaster.dart' show ToastAction, AppToaster, ToastKind, AppToastLayoutHint, rootScaffoldMessengerKey;
+export 'app_toaster.dart' show ToastAction, AppToaster, ToastKind, AppToastLayoutHint;
 
 /// Preview / legacy entrypoints — delegate to [AppToaster].
 class FoundationToaster {

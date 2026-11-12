@@ -34,12 +34,12 @@ class AppBrandLockup extends StatelessWidget {
     final inverse = _useInverse(context);
     final svg = switch (kind) {
       AppBrandLockupKind.horizontal =>
-        inverse ? Assets.brand.logoArHorizontalWhite : Assets.brand.logoArHorizontalPrimary,
+        inverse ? Assets.brand.logoArHorizontalWhiteSvg : Assets.brand.logoArHorizontalPrimarySvg,
       AppBrandLockupKind.vertical =>
-        inverse ? Assets.brand.logoArVerticalWhite : Assets.brand.logoArVerticalPrimary,
+        inverse ? Assets.brand.logoArVerticalWhiteSvg : Assets.brand.logoArVerticalPrimarySvg,
       AppBrandLockupKind.hero =>
         inverse ? Assets.brand.heroArDarkSvg : Assets.brand.heroArLightSvg,
-      AppBrandLockupKind.symbol => inverse ? Assets.brand.iconWhite : Assets.brand.iconPrimarySvg,
+      AppBrandLockupKind.symbol => inverse ? Assets.brand.iconWhiteSvg : Assets.brand.iconPrimarySvg,
     };
     return svg.svg(
       height: height,

@@ -1,9 +1,9 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/app_toaster.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/statements/statement_pdf_export.dart';
 import 'package:bnood/features/statements/statement_screen_toast.dart';
 import 'package:bnood/l10n/app_localizations.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,25 +14,20 @@ void main() {
 
   testWidgets('sharePositionOriginFor returns non-zero rect from export button', (tester) async {
     Rect? captured;
-    StatementPdfExport.shareFromFile = (_, __, {sharePositionOrigin}) async {
+    StatementPdfExport.shareFromFile = (_, _, {sharePositionOrigin}) async {
       captured = sharePositionOrigin;
     };
 
     final buttonKey = GlobalKey();
     await tester.pumpWidget(
       MaterialApp(
-        scaffoldMessengerKey: rootScaffoldMessengerKey,
         theme: AppFoundationTheme.light(),
         home: HomeFoundationScope(
           child: Scaffold(
             bottomNavigationBar: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: ElevatedButton(
-                  key: buttonKey,
-                  onPressed: () {},
-                  child: const Text('Share PDF'),
-                ),
+                child: ElevatedButton(key: buttonKey, onPressed: () {}, child: const Text('Share PDF')),
               ),
             ),
           ),
@@ -52,11 +47,12 @@ void main() {
     expect(captured!.top, greaterThanOrEqualTo(0));
   });
 
-  testWidgets('statement share failure toast does not throw without AppColors on root theme',
-      (tester) async {
+  testWidgets('statement share failure toast does not throw without AppColors on root theme', (tester) async {
+    final botToastBuilder = BotToastInit();
     await tester.pumpWidget(
       MaterialApp(
-        scaffoldMessengerKey: rootScaffoldMessengerKey,
+        builder: botToastBuilder,
+        navigatorObservers: [BotToastNavigatorObserver()],
         theme: ThemeData.light(),
         locale: const Locale('ar'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,

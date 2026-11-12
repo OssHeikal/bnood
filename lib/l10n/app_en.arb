@@ -7,6 +7,7 @@
   "directoryTitle": "Directory",
   "navItems": "Items",
   "navAdd": "New",
+  "menuTitle": "Menu",
   "settingsTitle": "Settings",
   "settingsThemeSection": "Theme",
   "settingsLanguageSection": "Language",
@@ -21,6 +22,15 @@
   "remaining": "Remaining",
   "activeClients": "Active clients",
   "homeAppName": "Bnood",
+  "homeGreetingMorning": "Good morning",
+  "homeGreetingEvening": "Good evening",
+  "userProfileTitle": "Profile",
+  "craftsmanLinkedClientsMeta": "{count,plural, =0{No linked clients} =1{1 linked client} other{{count} linked clients}}",
+  "@craftsmanLinkedClientsMeta": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
   "homeSubtitle": "Finishing funds, simply",
   "homeTotalsCaption": "Active clients only · Since each project started",
   "homeSupplierSpendSection": "Supplier material spend",
@@ -29,6 +39,25 @@
   "homeNoActiveClientsTitle": "No active clients",
   "homeNoActiveClientsDescription": "Add a client from the Clients tab to start tracking.",
   "homeLoadErrorTitle": "Could not load home",
+  "clientMovementsLoadErrorTitle": "Could not load movements",
+  "movementsSearchHint": "Search notes",
+  "movementsFilterSort": "Sort",
+  "movementsFilterItem": "Item",
+  "movementsFilterDate": "Date",
+  "movementsSortNewest": "Newest",
+  "movementsSortOldest": "Oldest",
+  "movementsFilterAllItems": "All items",
+  "movementsClearFilters": "Clear filters",
+  "movementsClearFilter": "Clear",
+  "movementsDateFrom": "From",
+  "movementsDateTo": "To",
+  "movementsDateRangeSummary": "{from} — {to}",
+  "@movementsDateRangeSummary": {
+    "placeholders": {
+      "from": {"type": "String"},
+      "to": {"type": "String"}
+    }
+  },
   "homeNoSupplierSpendTitle": "No material spend yet",
   "homeNoSupplierSpendDescription": "Supplier purchases for active clients will show here after you record material expenses.",
   "homeCraftsmenSection": "Craftsmen with recent labor",
@@ -63,6 +92,12 @@
   "save": "Save",
   "cancel": "Cancel",
   "seeAll": "See all",
+  "seeAllWithCount": "See all ({count})",
+  "@seeAllWithCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "movements": "Movements",
   "whatsappLaunchFailed": "Couldn't open WhatsApp",
   "whatsappInvalidPhone": "This phone number can't open in WhatsApp",
@@ -70,6 +105,12 @@
   "paid": "Paid",
   "craftsmen": "Craftsmen",
   "assignCraftsmen": "Assign craftsmen",
+  "assignSuppliers": "Assign suppliers",
+  "clientDetailNoSuppliers": "No suppliers linked yet",
+  "clientDetailSuppliersEmptyDescription": "Link suppliers to this client to track materials and agreements.",
+  "homeSuppliersSection": "Suppliers",
+  "homeNoSuppliersTitle": "No active suppliers",
+  "homeNoSuppliersDescription": "Add suppliers from the directory or link them to a client.",
   "clientDetailNoCraftsmen": "No craftsmen on this project yet",
   "clientDetailNoItemSpend": "No item spend recorded yet",
   "clientDetailNoMovements": "No movements yet",
@@ -93,12 +134,31 @@
   "clientDetailUnspecifiedItem": "Unspecified item",
   "clientDetailNoDescription": "No description",
   "archiveClientTitle": "Archive client?",
-  "archiveClientDescription": "This moves {name}'s project to the archive. You can restore it later.",
+  "archiveClientDescription": "Archive {name}? This is one-way — archived clients stay read-only.",
   "@archiveClientDescription": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
+  "clientsSearchHint": "Search by name or phone",
+  "amountUnavailable": "—",
+  "clientDuplicateNameTitle": "Same client name",
+  "clientDuplicateNameDescription": "A client with this name already exists. Continue anyway?",
+  "clientDuplicateNameConfirm": "Continue",
+  "clientDuplicatePhoneError": "This phone number is already used for another client.",
+  "clientDeleteTitle": "Delete client?",
+  "clientDeleteDescription": "Delete {name}? This removes the client and project.",
+  "@clientDeleteDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "clientDeleteHasActivityTitle": "Client has activity",
+  "clientDeleteHasActivityDescription": "This client has transactions or links. Archive instead to keep history.",
+  "clientDeleteArchiveInstead": "Archive instead",
+  "clientArchivedBadge": "Archived",
+  "clientLedgerNotOnlineTitle": "Ledger not online yet",
+  "clientLedgerNotOnlineDescription": "Movements and balances will appear here after the online ledger ships.",
   "craftsmanAgreedAmount": "Agreed",
   "suppliers": "Suppliers",
   "statement": "Statement",
@@ -120,6 +180,11 @@
   "voucherAmountRequired": "Enter an amount greater than zero",
   "voucherSelectClient": "Select a client",
   "voucherSelectItem": "Select an item",
+  "voucherDiscardTitle": "Discard voucher?",
+  "voucherDiscardDescription": "You have unsaved changes. Leave without saving?",
+  "discard": "Discard",
+  "voucherProviderLinkedBadge": "Linked",
+  "voucherLinkAgreementAmountOptional": "Agreement amount (optional)",
   "voucherSelectCraftsman": "Select a craftsman",
   "voucherPickerSearchHint": "Search",
   "voucherPickerNoResults": "No matches",
@@ -132,6 +197,11 @@
   "voucherReceiptGalleryDenied": "Photo access was denied. You can enable it in Settings to attach gallery receipts.",
   "voucherReceiptGalleryRestricted": "Photo access is restricted on this device.",
   "voucherReceiptAttachFailed": "Could not attach the receipt. Try again.",
+  "voucherReceiptUploadRetry": "Voucher saved. Tap Save again to retry uploading receipt photos.",
+  "voucherReceiptDeleteRetry": "Voucher saved but a receipt could not be removed. Tap Save to try again.",
+  "voucherReceiptTooLarge": "This receipt image is too large. Try a smaller photo or save again after compression.",
+  "voucherReceiptCompressFailed": "Could not prepare the receipt image for upload. Try another photo or save again.",
+  "voucherReceiptInvalidMime": "This file type is not accepted. Use JPEG, PNG, or WebP.",
   "voucherAssignCraftsmanFirst": "Assign craftsmen to the project first",
   "amountHint": "0.00",
   "voucherReceiveTitle": "Receive voucher",
@@ -219,8 +289,8 @@
       "name": { "type": "String" }
     }
   },
-  "craftsmanSetAgreedAmount": "Set agreed amount",
-  "craftsmanEditAgreedAmount": "Edit agreed amount",
+  "craftsmanSetAgreedAmount": "Set amount",
+  "craftsmanEditAgreedAmount": "Edit amount",
   "craftsmanAgreedAmountSheetTitle": "Agreed amount",
   "craftsmanAgreedForClientLabel": "Agreed for this client (optional)",
   "craftsmanAgreementAmountPlaceholder": "Not set",
@@ -229,7 +299,7 @@
   "craftsmanAgreementHasPayments": "Has recorded payments",
   "directoryAddCraftsmanToRoster": "Add craftsman to directory",
   "crewAssignmentsSaved": "Craftsman choices saved for this client",
-  "itemsCatalogCaption": "Default items — you can add, edit, and archive",
+  "itemsCatalogCaption": "Default items are read-only — add your own items below",
   "addItem": "Add item",
   "itemCreateSheetTitle": "New item",
   "itemEditSheetTitle": "Edit item",
@@ -238,19 +308,75 @@
   "itemNameHint": "e.g. Insulation",
   "itemsEmptyTitle": "No items yet",
   "itemsEmptyDescription": "Add an item to categorize project spend.",
-  "archiveItemTitle": "Archive item?",
-  "archiveItemDescription": "{name} will be hidden from lists. Expense history is kept.",
-  "@archiveItemDescription": {
+  "deleteItemTitle": "Delete item?",
+  "deleteItemDescription": "{name} will be removed. Linked expenses keep their history.",
+  "@deleteItemDescription": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
+  "itemInUseError": "This item is linked to transactions and cannot be deleted or changed.",
+  "itemDuplicateNameError": "An item with this name already exists.",
+  "providersSearchHint": "Search by name or phone",
+  "providersFilterAll": "All",
+  "providersOnlineCaption": "Suppliers and craftsmen in your directory — payments and agreements stay on transactions.",
+  "providersEmptyAllTitle": "No suppliers or craftsmen yet",
+  "providersEmptySuppliersTitle": "No suppliers yet",
+  "providersEmptyCraftsmenTitle": "No craftsmen yet",
+  "providersEmptyDescription": "Add a supplier or craftsman to link them on spend vouchers and client projects.",
+  "directoryAddProvider": "Add to directory",
+  "providerCreateSheetTitle": "New directory entry",
+  "providerTypeLabel": "Type",
+  "providerNameLabel": "Name",
+  "providerNameHint": "e.g. Materials supplier",
+  "providerNameRequired": "Enter a name",
+  "providerDuplicateNameError": "This name is already in your directory.",
+  "providerDuplicatePhoneError": "This phone number is already used for another directory entry.",
+  "providerDetailNotFoundTitle": "Directory entry not found",
+  "providerDetailLinkedClientsTitle": "Linked clients",
+  "providerDetailNoLinkedClients": "No linked clients yet",
+  "linkClients": "Link clients",
+  "linkClientsIntro": "Choose which clients this directory entry is linked to. Agreement amounts stay optional and can be set from each client card later.",
+  "linkClientsProviderContext": "Linking to: {name}",
+  "@linkClientsProviderContext": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "providerAssignmentsSaved": "Client links updated",
+  "agreementUnlinkClientHasPaymentsTitle": "Unlink client with payments?",
+  "agreementUnlinkClientHasPaymentsDescription": "{name} has recorded payments on this agreement. Unlink anyway?",
+  "@agreementUnlinkClientHasPaymentsDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "agreementUnlinkTitle": "Unlink craftsman?",
+  "agreementUnlinkDescription": "This removes {name} from the client. You can link them again later.",
+  "@agreementUnlinkDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "unlink": "Unlink",
+  "deleteProviderTitle": "Delete from directory?",
+  "deleteProviderDescription": "{name} will be removed from your directory list.",
+  "@deleteProviderDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "itemDefaultBadge": "Default",
+  "itemPickIconLabel": "Icon",
+  "itemPickColorLabel": "Color",
   "statementClientHeading": "Fund / client statement",
   "statementPeriodToday": "Today",
   "statementPeriodMonth": "This month",
   "statementPeriodAll": "All time",
   "statementTotalReceived": "Total received",
+  "statementPeriodReceived": "Received in period",
   "statementTotalSpent": "Total spent",
+  "statementPeriodSpent": "Spent in period",
   "statementClosingLabel": "Remaining",
   "statementClosingEndOfPeriod": "Remaining at period end",
   "statementMaterialsLaborSummary": "Materials total: {materials} | Labor total: {labor}",
@@ -270,6 +396,8 @@
   "statementReceiptsSectionTitle": "Receipts from client",
   "statementReceiptsSectionCaption": "Payments appear here only and are not repeated under expense items.",
   "statementEmptyReceipts": "No receipts in the selected period.",
+  "statementEmptyItemsTitle": "No spending in this period",
+  "statementEmptyItemsDescription": "Spending you record for this client will appear here, grouped by item. Change the period or record new spending.",
   "statementItemSectionTitle": "Item: {name}",
   "@statementItemSectionTitle": {
     "placeholders": {
@@ -348,5 +476,174 @@
   "statementPeriodTo": "To",
   "statementSupplierPaymentsTitle": "Payments in period",
   "statementSupplierPaymentsCaption": "Material spend rows linked to this supplier only.",
-  "statementEmptyPayments": "No payments in the selected period."
+  "statementEmptyPayments": "No payments in the selected period.",
+  "authLoginTitle": "Sign in",
+  "authLoginSubtitle": "Track client funds, vouchers, and finishing projects from your account.",
+  "authRegisterTitle": "Create account",
+  "authRegisterSubtitle": "Create an account to keep your workspace and sign in on another phone.",
+  "authPhone": "Mobile number",
+  "authPhoneInvalid": "Enter an 11-digit mobile number that starts with 01.",
+  "authPassword": "Password",
+  "authPasswordConfirm": "Confirm password",
+  "authCurrentPassword": "Current password",
+  "authNewPassword": "New password",
+  "authForgotPassword": "Forgot password?",
+  "authForgotPasswordTitle": "Password recovery",
+  "authForgotPasswordSubtitle": "Enter the mobile number on your account. We will send a confirmation code.",
+  "authVerificationTitle": "Verification code",
+  "authVerificationSubtitle": "Enter the verification code you received.",
+  "authVerificationDeliverySubtitle": "Enter the code sent to {phone}.",
+  "@authVerificationDeliverySubtitle": {
+    "placeholders": {
+      "phone": { "type": "String" }
+    }
+  },
+  "authRecoveryVerifySubtitle": "Enter the recovery code you received.",
+  "authRecoveryDeliverySubtitle": "Enter the password recovery code sent to {phone}.",
+  "@authRecoveryDeliverySubtitle": {
+    "placeholders": {
+      "phone": { "type": "String" }
+    }
+  },
+  "authCompleteProfileTitle": "Your name",
+  "authCompleteProfileSubtitle": "Enter the name you use at work, then tap Continue.",
+  "authDisplayName": "Full name",
+  "authDisplayNameHint": "e.g. Ahmed Hassan",
+  "authVerificationCode": "Code",
+  "authResendCode": "Resend code",
+  "authResendWait": "Wait {seconds}s, then send again.",
+  "@authResendWait": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "authCreateAccount": "Create account",
+  "authLoginAction": "Sign in",
+  "authVerifyAction": "Verify",
+  "authContinue": "Continue",
+  "authRegisterLink": "New here? Create an account",
+  "authLoginLink": "Already have an account? Sign in",
+  "authResetPasswordTitle": "New password",
+  "authResetPasswordAction": "Update password",
+  "authChangePassword": "Change password",
+  "authSignOut": "Sign out",
+  "authSignIn": "Sign in to cloud account",
+  "authAccountSection": "Account",
+  "authRemoteWorkspaceTitle": "Account",
+  "authRemoteWorkspaceBody": "You are signed in. Cloud project data is not available yet.",
+  "authRemoteWorkspaceMovedBody": "Account management is now on Profile and Settings.",
+  "shellTabNotOnlineTitle": "Not available online yet",
+  "shellTabNotOnlineDescription": "This tab is not ready for online use yet. Use Clients for what is available today.",
+  "authSignedInAs": "Signed in as",
+  "authBootstrapRetry": "Retry",
+  "authNetworkError": "Could not connect. Check the network, then try again.",
+  "authInvalidCredentials": "Mobile number or password is wrong. Check them, then try again.",
+  "authChallengeInvalid": "That code is wrong or expired. Request a new one, then enter it.",
+  "authThrottled": "Too many attempts. Wait a moment, then try again.",
+  "authSessionExpired": "Your session ended. Sign in again to continue.",
+  "authFieldRequired": "Fill in this field to continue.",
+  "authPasswordMinLength": "Password is too short. Use at least 8 characters.",
+  "authPasswordMismatch": "Those passwords differ. Type the same password in both fields.",
+  "authCodeLengthHint": "Enter the 6-digit code.",
+  "authAccountExistsTitle": "Phone already linked",
+  "authAccountExistsMessage": "This phone is already linked to an account. Sign in with that number or use a different phone.",
+  "authAccountExistsLoginAction": "Sign in",
+  "authAccountExistsAnotherPhoneAction": "Enter another phone",
+  "authFlowExpired": "This step expired. Start again.",
+  "authPasswordResetSuccess": "Password updated. Sign in with the new one.",
+  "authPasswordChangedSuccess": "Password changed. Use the new one next time.",
+  "authDisplayNameTooLong": "Name is too long. Use at most 120 characters.",
+  "profilePersonalSection": "Personal details",
+  "profileSecuritySection": "Security",
+  "profileDangerSection": "Account closure",
+  "profileEditNameTitle": "Edit name",
+  "profileStatementBrandingSection": "Your details on statements",
+  "profileStatementBrandingSectionSubtitle": "Shown to your client at the top of the statement",
+  "profileLogo": "Logo",
+  "profileLogoSet": "Logo added",
+  "profileLogoNotSet": "No logo added yet",
+  "profileBrandingActionAdd": "Add",
+  "profileBrandingActionChange": "Change",
+  "profileLogoPickTitle": "Choose logo",
+  "profileLogoFromGallery": "Photo library",
+  "profileLogoFromCamera": "Camera",
+  "profileLogoChange": "Change logo",
+  "profileLogoRemove": "Remove logo",
+  "profileLogoRemoveConfirmTitle": "Remove logo?",
+  "profileLogoRemoveConfirmBody": "Statements will show your initials again.",
+  "profileLogoTooLarge": "Image must be 5 MB or smaller.",
+  "profileLogoUnreadable": "Could not read this image. Use JPG, PNG, or WebP.",
+  "profileLogoUpdated": "Logo updated.",
+  "profileLogoRemoved": "Logo removed.",
+  "profileContactPhone": "Contact phone",
+  "profileContactPhoneNotOnStatement": "No number will appear on statements",
+  "profileContactPhoneStatementHint": "Shown at the top of the statement for your client. Leave empty to hide a number.",
+  "profileContactPhoneUsesLogin": "sign-in number",
+  "profileEditContactPhoneTitle": "Edit contact phone",
+  "profileContactPhoneUpdated": "Contact phone updated.",
+  "profileChangePasswordHint": "Update your sign-in password.",
+  "profileDeleteAccountHint": "Permanently close your account and sign out on all devices.",
+  "authDeleteAccount": "Delete account",
+  "authDeleteAccountConfirmTitle": "Delete your account?",
+  "authDeleteAccountConfirmBody": "Enter your current password to confirm. This cannot be undone.",
+  "authDeleteAccountSuccess": "Your account was closed.",
+  "authAccountDeletedMessage": "This account is already closed.",
+  "authLogoutConfirmTitle": "Sign out?",
+  "authLogoutConfirmBody": "You will need to sign in again to continue using your cloud data.",
+  "authRemoteWorkspaceMovedBody": "Account management is in Profile and Settings.",
+  "paywallBenefitsHeading": "PREMIUM BENEFITS",
+  "paywallBilledYearly": "Billed yearly at {amount}",
+  "@paywallBilledYearly": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallBilledMonthly": "Billed monthly",
+  "paywallPerMonthSuffix": " / month",
+  "paywallPlanYearly": "Yearly",
+  "paywallPlanMonthly": "Monthly",
+  "paywallSubscribeCta": "Subscribe to Premium",
+  "paywallContinueFree": "Continue for free",
+  "subscriptionPaymentNotConnectedYet": "In-app payment is not connected yet.",
+  "profileSubscriptionSection": "Subscription",
+  "profileSubscriptionFreeBlurb": "Upgrade to Premium for unlimited active projects and more.",
+  "profileSubscriptionSubscribeCta": "Subscribe to Premium",
+  "profileSubscriptionRenewsOn": "Renews on {date}",
+  "@profileSubscriptionRenewsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSubscriptionDaysRemaining": "{count} days remaining",
+  "@profileSubscriptionDaysRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gateMaintenanceTitle": "Maintenance",
+  "gateMaintenanceFallbackMessage": "The app is temporarily unavailable. Please try again shortly.",
+  "gateForceUpdateTitle": "Update required",
+  "gateForceUpdateFallbackMessage": "Please update to the latest version to keep using Bnood.",
+  "gateOptionalUpdateTitle": "Update available",
+  "gateOptionalUpdateFallbackMessage": "A newer version of Bnood is available with improvements and fixes.",
+  "gateUpdateAction": "Update",
+  "gateLaterAction": "Later",
+  "settingsContentSection": "About & legal",
+  "settingsContentAbout": "About",
+  "settingsContentTerms": "Terms of use",
+  "settingsContentPrivacy": "Privacy policy",
+  "settingsContentCancellation": "Cancellation policy",
+  "contentPageLoadingTitle": "Page",
+  "contentPageNotFoundTitle": "Page not found",
+  "contentPageNotFoundDescription": "This page is not available right now.",
+  "contentPageErrorTitle": "Could not load page",
+  "contentPageErrorDescription": "Check your connection and try again.",
+  "authRegisterLegalPrefix": "By creating an account you agree to our",
+  "authRegisterLegalMiddle": "and"
 }

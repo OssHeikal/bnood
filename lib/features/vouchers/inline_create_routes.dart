@@ -4,16 +4,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/api/auth_api_exception.dart';
+import '../../core/items/items_providers.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/vouchers/vouchers_riverpod.dart';
+import '../items/item_mutation_actions.dart';
 import '../../core/widgets/app_toaster.dart';
+import '../clients/client_mutation_actions.dart';
+import '../providers/provider_mutation_actions.dart';
+import '../../core/providers_api/app_provider_record.dart';
+import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/contacts/contact_import_action.dart';
 import '../../core/widgets/custom_text_field.dart';
+import '../../core/widgets/overlay_form_presentation.dart';
 import 'inline_entity_create_shell.dart';
 
 class InlineCreateClientPage extends ConsumerStatefulWidget {
-  const InlineCreateClientPage({super.key, this.padForSystemChrome = true});
+  const InlineCreateClientPage({
+    super.key,
+    this.presentation = OverlayFormPresentation.inSheet,
+    this.padForSystemChrome = true,
+  });
 
+  final OverlayFormPresentation presentation;
   final bool padForSystemChrome;
 
   @override
@@ -28,6 +42,7 @@ class _InlineCreateClientPageState
   final _phone = TextEditingController();
   var _attemptedSubmit = false;
   var _saving = false;
+  String? _phoneError;
 
   @override
   void dispose() {
@@ -42,12 +57,24 @@ class _InlineCreateClientPageState
     if (_saving) return;
     setState(() => _saving = true);
     try {
-      final client = await ref.read(repositoryProvider).createClient(
-            name: _name.text.trim(),
-            phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(),
-          );
-      if (!mounted) return;
+      final client = await saveClientCreate(
+        ref: ref,
+        context: context,
+        name: _name.text.trim(),
+        phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(),
+      );
+      if (!mounted || client == null) {
+        setState(() => _saving = false);
+        return;
+      }
       Navigator.pop(context, client.id);
+    } on AuthApiException catch (e) {
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
+      setState(() {
+        _phoneError = duplicatePhoneFieldError(l10n, e);
+        _saving = false;
+      });
     } catch (e) {
       if (!mounted) return;
       AppToaster.show(e.toString(), kind: ToastKind.failure);
@@ -60,6 +87,7 @@ class _InlineCreateClientPageState
     final l10n = AppLocalizations.of(context);
     return InlineEntityCreateShell(
       title: l10n.addClient,
+      presentation: widget.presentation,
       padForSystemChrome: widget.padForSystemChrome,
       body: Form(
         key: _formKey,
@@ -100,6 +128,10 @@ class _InlineCreateClientPageState
               ltrValue: true,
               textInputAction: TextInputAction.done,
               autofillHints: const [AutofillHints.telephoneNumber],
+              errorMessage: _phoneError,
+              onChanged: (_) {
+                if (_phoneError != null) setState(() => _phoneError = null);
+              },
             ),
           ],
         ),
@@ -135,6 +167,18 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
     if (_name.text.trim().isEmpty || _saving) return;
     setState(() => _saving = true);
     try {
+      if (ref.read(remoteItemsEnabledProvider)) {
+        final item = await saveItemCreate(
+          ref: ref,
+          context: context,
+          name: _name.text.trim(),
+          iconKey: 'category',
+          colorKey: 'teal',
+        );
+        if (!mounted || item == null) return;
+        Navigator.pop(context, item.id);
+        return;
+      }
       final item = await ref.read(repositoryProvider).createItem(
             name: _name.text.trim(),
             colorKey: 'teal',
@@ -142,6 +186,8 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
           );
       if (!mounted) return;
       Navigator.pop(context, item.id);
+    } on AuthApiException {
+      if (mounted) setState(() => _saving = false);
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -170,8 +216,13 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
 }
 
 class InlineCreateSupplierPage extends ConsumerStatefulWidget {
-  const InlineCreateSupplierPage({super.key, this.padForSystemChrome = true});
+  const InlineCreateSupplierPage({
+    super.key,
+    this.presentation = OverlayFormPresentation.inSheet,
+    this.padForSystemChrome = true,
+  });
 
+  final OverlayFormPresentation presentation;
   final bool padForSystemChrome;
 
   @override
@@ -200,12 +251,33 @@ class _InlineCreateSupplierPageState
     if (_saving) return;
     setState(() => _saving = true);
     try {
+      final phoneText = _phone.text.trim();
+      if (ref.read(remoteProvidersEnabledProvider) || ref.read(remoteVouchersEnabledProvider)) {
+        final provider = await saveProviderCreate(
+          ref: ref,
+          context: context,
+          name: _name.text.trim(),
+          type: AppProviderType.supplier,
+          phone: phoneText.isEmpty ? null : phoneText,
+        );
+        if (!mounted || provider == null) {
+          setState(() => _saving = false);
+          return;
+        }
+        Navigator.pop(context, provider.id);
+        return;
+      }
       final s = await ref.read(repositoryProvider).createSupplier(
             name: _name.text.trim(),
-            phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(),
+            phone: phoneText.isEmpty ? null : phoneText,
           );
       if (!mounted) return;
       Navigator.pop(context, s.id);
+    } on AuthApiException catch (e) {
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
+      AppToaster.show(duplicatePhoneFieldError(l10n, e) ?? e.message, kind: ToastKind.failure);
+      setState(() => _saving = false);
     } catch (e) {
       if (!mounted) return;
       AppToaster.show(e.toString(), kind: ToastKind.failure);
@@ -218,6 +290,7 @@ class _InlineCreateSupplierPageState
     final l10n = AppLocalizations.of(context);
     return InlineEntityCreateShell(
       title: l10n.directoryAddSupplier,
+      presentation: widget.presentation,
       padForSystemChrome: widget.padForSystemChrome,
       body: Form(
         key: _formKey,
@@ -267,10 +340,12 @@ class _InlineCreateSupplierPageState
 class InlineCreateCraftsmanPage extends ConsumerStatefulWidget {
   const InlineCreateCraftsmanPage({
     super.key,
+    this.presentation = OverlayFormPresentation.inSheet,
     this.padForSystemChrome = true,
     this.preferContentHeight = false,
   });
 
+  final OverlayFormPresentation presentation;
   final bool padForSystemChrome;
   final bool preferContentHeight;
 
@@ -301,6 +376,18 @@ class _InlineCreateCraftsmanPageState
     setState(() => _saving = true);
     try {
       final phoneText = _phone.text.trim();
+      if (ref.read(remoteProvidersEnabledProvider)) {
+        final provider = await saveProviderCreate(
+          ref: ref,
+          context: context,
+          name: _name.text.trim(),
+          type: AppProviderType.craftsman,
+          phone: phoneText.isEmpty ? null : phoneText,
+        );
+        if (!mounted || provider == null) return;
+        Navigator.pop(context, provider.id);
+        return;
+      }
       final c = await ref.read(repositoryProvider).createCraftsman(
             name: _name.text.trim(),
             phone: phoneText.isEmpty ? null : phoneText,
@@ -319,6 +406,7 @@ class _InlineCreateCraftsmanPageState
     final l10n = AppLocalizations.of(context);
     return InlineEntityCreateShell(
       title: l10n.directoryAddCraftsman,
+      presentation: widget.presentation,
       padForSystemChrome: widget.padForSystemChrome,
       preferContentHeight: widget.preferContentHeight,
       body: Form(

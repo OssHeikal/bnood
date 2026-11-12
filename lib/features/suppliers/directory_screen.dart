@@ -7,18 +7,20 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_column_grid.dart';
+import '../../core/layout/bnood_layout.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
-import '../../core/widgets/app_pressable.dart';
+import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
 import '../../core/widgets/toast/app_tone.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../home/home_foundation_scope.dart';
-import '../home/widgets/home_loading_skeleton.dart';
+import 'widgets/directory_list_loading_skeleton.dart';
 import '../vouchers/inline_create_routes.dart';
 import 'directory_providers.dart';
 import 'widgets/directory_person_card.dart';
@@ -32,18 +34,13 @@ class DirectoryScreen extends ConsumerStatefulWidget {
   ConsumerState<DirectoryScreen> createState() => _DirectoryScreenState();
 }
 
-class _DirectoryScreenState extends ConsumerState<DirectoryScreen>
-    with SingleTickerProviderStateMixin {
+class _DirectoryScreenState extends ConsumerState<DirectoryScreen> with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(
-      length: 2,
-      vsync: this,
-      initialIndex: widget.initialTabIndex.clamp(0, 1),
-    );
+    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialTabIndex.clamp(0, 1));
   }
 
   @override
@@ -80,44 +77,27 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen>
         builder: (context) {
           final colors = context.colors;
           final text = context.text;
+          final gutter = context.pageGutter;
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: AppBar(
-              backgroundColor: colors.canvas,
-              elevation: 0,
-              title: Text(l10n.directoryTitle, style: text.pageTitle),
+            appBar: CustomAppBar(
+              title: l10n.directoryTitle,
               actions: [
                 ListenableBuilder(
                   listenable: _tabController,
                   builder: (context, _) {
                     final suppliersTab = _tabController.index == 0;
                     final label = suppliersTab ? l10n.directoryAddSupplier : l10n.directoryAddCraftsman;
-                    return Padding(
-                      padding: const EdgeInsetsDirectional.only(end: AppSize.spaceMD),
-                      child: Tooltip(
-                        message: label,
-                        child: AppPressable(
-                          onPressed: () =>
-                              suppliersTab ? _addSupplier(context) : _addCraftsman(context),
-                          child: Material(
-                            key: Key(suppliersTab ? 'directory_add_supplier' : 'directory_add_craftsman'),
-                            color: colors.accentTeal.tint,
-                            shape: AppShape.superellipse(radius: AppSize.radiusSM),
-                            clipBehavior: Clip.antiAlias,
-                            child: SizedBox(
-                              width: AppSize.buttonHeight,
-                              height: AppSize.buttonHeight,
-                              child: Center(
-                                child: ShellNavIcon(
-                                  asset: Assets.icons.addOutline,
-                                  color: colors.primaryOnTint,
-                                  size: AppSize.icon,
-                                  semanticsLabel: label,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                    return CustomAppBarAction(
+                      key: Key(suppliersTab ? 'directory_add_supplier' : 'directory_add_craftsman'),
+                      tooltip: label,
+                      tone: CustomAppBarActionTone.tint,
+                      onPressed: () => suppliersTab ? _addSupplier(context) : _addCraftsman(context),
+                      child: ShellNavIcon(
+                        asset: Assets.icons.addOutline,
+                        color: colors.primaryOnTint,
+                        size: AppSize.icon,
+                        semanticsLabel: label,
                       ),
                     );
                   },
@@ -129,10 +109,10 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen>
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSize.screenPadding,
+                      padding: EdgeInsets.fromLTRB(
+                        gutter,
                         0,
-                        AppSize.screenPadding,
+                        gutter,
                         AppSize.spaceSM,
                       ),
                       child: _DirectorySegmentedTabs(controller: _tabController),
@@ -144,16 +124,13 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen>
                             ? l10n.directorySuppliersHint
                             : l10n.directoryCraftsmenHint;
                         return Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            AppSize.screenPadding,
+                          padding: EdgeInsets.fromLTRB(
+                            gutter,
                             0,
-                            AppSize.screenPadding,
+                            gutter,
                             AppSize.spaceMD,
                           ),
-                          child: Text(
-                            hint,
-                            style: text.caption.copyWith(color: colors.onSurfaceMuted),
-                          ),
+                          child: Text(hint, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
                         );
                       },
                     ),
@@ -269,17 +246,13 @@ class _DirectorySupplierTab extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final rows = ref.watch(directorySuppliersProvider);
 
+    final gutter = context.pageGutter;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppSize.screenPadding,
-        0,
-        AppSize.screenPadding,
-        AppSize.spaceMD,
-      ),
+      padding: EdgeInsets.fromLTRB(gutter, 0, gutter, AppSize.spaceMD),
       children: [
         AsyncValueBody(
           value: rows,
-          loadingPlaceholder: const HomePersonListSkeleton(count: 3),
+          loadingPlaceholder: const DirectoryListLoadingSkeleton(count: 3),
           error: (e, _) => AppCard(
             child: AppFallback.section(
               icon: Icons.error_outline,
@@ -320,24 +293,22 @@ class _DirectorySupplierTab extends ConsumerWidget {
                 ),
               );
             }
-            return Column(
+            return BnoodColumnGrid(
               children: [
-                for (var i = 0; i < list.length; i++) ...[
-                  if (i > 0) AppSize.spaceMD.gap,
+                for (final row in list)
                   DirectoryPersonCard(
-                    name: list[i].supplier.name,
-                    paidPiastres: list[i].paidPiastres,
-                    accentKey: directoryAccentKeyFor(list[i].supplier.id),
+                    name: row.supplier.name,
+                    paidPiastres: row.paidPiastres,
+                    accentKey: directoryAccentKeyFor(row.supplier.id),
                     localeCode: localeCode,
-                    onOpenDetail: () => context.push('/suppliers/${list[i].supplier.id}'),
+                    onOpenDetail: () => context.push('/suppliers/${row.supplier.id}'),
                     onArchive: () => _confirmArchiveSupplier(
                       context,
                       ref,
-                      supplierId: list[i].supplier.id,
-                      name: list[i].supplier.name,
+                      supplierId: row.supplier.id,
+                      name: row.supplier.name,
                     ),
                   ),
-                ],
               ],
             );
           },
@@ -357,17 +328,13 @@ class _DirectoryCraftsmenTab extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final rows = ref.watch(directoryCraftsmenProvider);
 
+    final gutter = context.pageGutter;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppSize.screenPadding,
-        0,
-        AppSize.screenPadding,
-        AppSize.spaceMD,
-      ),
+      padding: EdgeInsets.fromLTRB(gutter, 0, gutter, AppSize.spaceMD),
       children: [
         AsyncValueBody(
           value: rows,
-          loadingPlaceholder: const HomePersonListSkeleton(count: 3),
+          loadingPlaceholder: const DirectoryListLoadingSkeleton(count: 3),
           error: (e, _) => AppCard(
             child: AppFallback.section(
               icon: Icons.error_outline,
@@ -408,25 +375,23 @@ class _DirectoryCraftsmenTab extends ConsumerWidget {
                 ),
               );
             }
-            return Column(
+            return BnoodColumnGrid(
               children: [
-                for (var i = 0; i < list.length; i++) ...[
-                  if (i > 0) AppSize.spaceMD.gap,
+                for (final row in list)
                   DirectoryPersonCard(
-                    name: list[i].craftsman.name,
-                    paidPiastres: list[i].paidPiastres,
+                    name: row.craftsman.name,
+                    paidPiastres: row.paidPiastres,
                     paidInTrailing: true,
-                    accentKey: directoryAccentKeyFor(list[i].craftsman.id),
+                    accentKey: directoryAccentKeyFor(row.craftsman.id),
                     localeCode: localeCode,
-                    onOpenDetail: () => context.push('/craftsmen/${list[i].craftsman.id}'),
+                    onOpenDetail: () => context.push('/craftsmen/${row.craftsman.id}'),
                     onArchive: () => _confirmArchiveCraftsman(
                       context,
                       ref,
-                      craftsmanId: list[i].craftsman.id,
-                      name: list[i].craftsman.name,
+                      craftsmanId: row.craftsman.id,
+                      name: row.craftsman.name,
                     ),
                   ),
-                ],
               ],
             );
           },
@@ -434,7 +399,6 @@ class _DirectoryCraftsmenTab extends ConsumerWidget {
       ],
     );
   }
-
 }
 
 Future<void> _confirmArchiveSupplier(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_shape.dart';
 import '../../../core/config/theme/app_size.dart';
@@ -23,13 +22,15 @@ class ClientsListFilterChips extends ConsumerWidget {
     void select(ClientListArchiveFilter next) {
       if (filter == next) return;
       ref.read(clientsListFilterProvider.notifier).state = next;
-      ref.read(clientsListBalancesProvider.notifier).refreshSilently();
     }
 
-    return Row(
-      children: [
-        Expanded(
-          child: _FilterChip(
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Wrap(
+        spacing: AppSize.spaceSM,
+        runSpacing: AppSize.spaceSM,
+        children: [
+          _FilterChip(
             key: const Key('clients_filter_all'),
             label: l10n.clientsFilterAll,
             selected: filter == ClientListArchiveFilter.all,
@@ -37,10 +38,7 @@ class ClientsListFilterChips extends ConsumerWidget {
             colors: colors,
             text: text,
           ),
-        ),
-        AppSize.spaceSM.gap,
-        Expanded(
-          child: _FilterChip(
+          _FilterChip(
             key: const Key('clients_filter_active'),
             label: l10n.clientsFilterActive,
             selected: filter == ClientListArchiveFilter.active,
@@ -48,10 +46,7 @@ class ClientsListFilterChips extends ConsumerWidget {
             colors: colors,
             text: text,
           ),
-        ),
-        AppSize.spaceSM.gap,
-        Expanded(
-          child: _FilterChip(
+          _FilterChip(
             key: const Key('clients_filter_archived'),
             label: l10n.clientsFilterArchived,
             selected: filter == ClientListArchiveFilter.archived,
@@ -59,8 +54,8 @@ class ClientsListFilterChips extends ConsumerWidget {
             colors: colors,
             text: text,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -89,19 +84,22 @@ class _FilterChip extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: AppPressable(
         onPressed: onTap,
-        child: SizedBox(
-          height: 40,
-          child: Center(
-            child: Text(
-              label,
-              style: text.bodyEmphasis.copyWith(
-                color: selected ? colors.onPrimary : colors.onSurfaceMuted,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: AppSize.buttonHeightSmall),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
+            child: Center(
+              widthFactor: 1,
+              heightFactor: 1,
+              child: Text(
+                label,
+                style: text.bodyEmphasis.copyWith(
+                  color: selected ? colors.onPrimary : colors.onSurfaceMuted,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+                maxLines: 1,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
             ),
           ),
         ),

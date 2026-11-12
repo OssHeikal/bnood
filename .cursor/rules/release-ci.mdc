@@ -1,0 +1,44 @@
+---
+description: Git branching, semver releases, Codemagic CI, and store publishing for Bnood — use for release/hotfix/tag/Codemagic tasks
+alwaysApply: false
+---
+
+# Release & CI (Bnood)
+
+## Branching
+
+- **`main`** — what ships to App Store / Play. Release tags are created only from `main`.
+- **`develop`** — daily integration work.
+- **`feature/<name>`** — branch from `develop`, merge back to `develop`.
+- **`hotfix/<name>`** — branch from `main`, merge to **`main`** and **`develop`**.
+- **`migration/remote`** — retired; do not use for new work.
+
+## Release flow
+
+1. Merge `develop` → `main` (owner approves push).
+2. On `main`: `git tag vX.Y.Z` (semver: patch = fix, minor = feature, major = breaking/product shift).
+3. `git push origin vX.Y.Z` only when the owner asks — tags trigger CI.
+
+## Codemagic (`codemagic.yaml`)
+
+- **Auto builds:** only on git tags matching `v*` (normal branch pushes build nothing).
+- **Version name:** from tag (strip leading `v`) or manual `VERSION_NAME` when starting one workflow from the UI.
+- **Build number:** latest on store track + 1 (TestFlight / Play internal); **`pubspec.yaml` version is ignored in CI**.
+- **Destinations:** TestFlight only; Google Play **internal** only — no App Store review submit, no production promotion in CI.
+- **Free plan:** both workflows use `mac_mini_m2`; respect 500 min/month and one concurrent build.
+
+## Retrying a release
+
+- **Transient failure (same commit):** Codemagic **Rebuild** on the failed workflow.
+- **Code fix, same marketing version:** merge to `main`, then either (a) delete & re-push tag `vX.Y.Z` (runs iOS + Android), or (b) **Start new build** for one workflow on `main` with env `VERSION_NAME=X.Y.Z`.
+- **Manual store upload:** use any build number **greater** than the store’s latest; CI picks latest + 1 automatically on the next run.
+
+## Safety
+
+- Never commit: `android/key.properties`, `*.jks` / `*.keystore`, App Store `.p8` / certs, Play service-account JSON, or local secrets.
+- No `git push --force`, no `reset --hard` on shared branches.
+- Ask the owner before **commit**, **push**, or **tag**.
+
+## Docs
+
+- Codemagic UI setup (Arabic): [docs/codemagic-setup.md](../../docs/codemagic-setup.md)

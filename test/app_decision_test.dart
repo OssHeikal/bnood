@@ -1,8 +1,10 @@
 import 'package:bnood/app/widgets/shell_nav_icon.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_decision.dart';
 import 'package:bnood/core/widgets/buttons/app_button.dart';
 import 'package:bnood/core/widgets/toast/app_tone.dart';
+import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -186,5 +188,36 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byIcon(Icons.warning_amber_rounded), findsOneWidget);
     expect(find.byIcon(Icons.logout), findsNothing);
+  });
+
+  testWidgets('root dialog keeps colors when only the page has foundation theme', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light(),
+        home: HomeFoundationScope(
+          child: Builder(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () => AppDecision.show(
+                    context,
+                    title: 'Account exists',
+                    description: 'Log in instead',
+                    confirmLabel: 'Log in',
+                    cancelLabel: 'Other phone',
+                  ),
+                  child: const Text('open-auth'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open-auth'));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(find.text('Account exists'), findsOneWidget);
+    expect(find.text('Log in'), findsOneWidget);
   });
 }

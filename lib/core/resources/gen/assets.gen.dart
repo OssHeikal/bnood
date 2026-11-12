@@ -29,8 +29,11 @@ class $AssetsBrandGen {
   /// File path: assets/brand/hero_ar_light.svg
   SvgGenImage get heroArLightSvg => const SvgGenImage('assets/brand/hero_ar_light.svg');
 
+  /// File path: assets/brand/icon_black.png
+  AssetGenImage get iconBlackPng => const AssetGenImage('assets/brand/icon_black.png');
+
   /// File path: assets/brand/icon_black.svg
-  SvgGenImage get iconBlack => const SvgGenImage('assets/brand/icon_black.svg');
+  SvgGenImage get iconBlackSvg => const SvgGenImage('assets/brand/icon_black.svg');
 
   /// File path: assets/brand/icon_black@2x.png
   AssetGenImage get iconBlack2x => const AssetGenImage('assets/brand/icon_black@2x.png');
@@ -44,26 +47,38 @@ class $AssetsBrandGen {
   /// File path: assets/brand/icon_primary@2x.png
   AssetGenImage get iconPrimary2x => const AssetGenImage('assets/brand/icon_primary@2x.png');
 
+  /// File path: assets/brand/icon_white.png
+  AssetGenImage get iconWhitePng => const AssetGenImage('assets/brand/icon_white.png');
+
   /// File path: assets/brand/icon_white.svg
-  SvgGenImage get iconWhite => const SvgGenImage('assets/brand/icon_white.svg');
+  SvgGenImage get iconWhiteSvg => const SvgGenImage('assets/brand/icon_white.svg');
 
   /// File path: assets/brand/icon_white@2x.png
   AssetGenImage get iconWhite2x => const AssetGenImage('assets/brand/icon_white@2x.png');
 
+  /// File path: assets/brand/logo_ar_horizontal_black.png
+  AssetGenImage get logoArHorizontalBlackPng => const AssetGenImage('assets/brand/logo_ar_horizontal_black.png');
+
   /// File path: assets/brand/logo_ar_horizontal_black.svg
-  SvgGenImage get logoArHorizontalBlack => const SvgGenImage('assets/brand/logo_ar_horizontal_black.svg');
+  SvgGenImage get logoArHorizontalBlackSvg => const SvgGenImage('assets/brand/logo_ar_horizontal_black.svg');
 
   /// File path: assets/brand/logo_ar_horizontal_black@2x.png
   AssetGenImage get logoArHorizontalBlack2x => const AssetGenImage('assets/brand/logo_ar_horizontal_black@2x.png');
 
+  /// File path: assets/brand/logo_ar_horizontal_primary.png
+  AssetGenImage get logoArHorizontalPrimaryPng => const AssetGenImage('assets/brand/logo_ar_horizontal_primary.png');
+
   /// File path: assets/brand/logo_ar_horizontal_primary.svg
-  SvgGenImage get logoArHorizontalPrimary => const SvgGenImage('assets/brand/logo_ar_horizontal_primary.svg');
+  SvgGenImage get logoArHorizontalPrimarySvg => const SvgGenImage('assets/brand/logo_ar_horizontal_primary.svg');
 
   /// File path: assets/brand/logo_ar_horizontal_primary@2x.png
   AssetGenImage get logoArHorizontalPrimary2x => const AssetGenImage('assets/brand/logo_ar_horizontal_primary@2x.png');
 
+  /// File path: assets/brand/logo_ar_horizontal_white.png
+  AssetGenImage get logoArHorizontalWhitePng => const AssetGenImage('assets/brand/logo_ar_horizontal_white.png');
+
   /// File path: assets/brand/logo_ar_horizontal_white.svg
-  SvgGenImage get logoArHorizontalWhite => const SvgGenImage('assets/brand/logo_ar_horizontal_white.svg');
+  SvgGenImage get logoArHorizontalWhiteSvg => const SvgGenImage('assets/brand/logo_ar_horizontal_white.svg');
 
   /// File path: assets/brand/logo_ar_horizontal_white@2x.png
   AssetGenImage get logoArHorizontalWhite2x => const AssetGenImage('assets/brand/logo_ar_horizontal_white@2x.png');
@@ -74,20 +89,29 @@ class $AssetsBrandGen {
   /// File path: assets/brand/logo_ar_primary.svg
   SvgGenImage get logoArPrimarySvg => const SvgGenImage('assets/brand/logo_ar_primary.svg');
 
+  /// File path: assets/brand/logo_ar_vertical_black.png
+  AssetGenImage get logoArVerticalBlackPng => const AssetGenImage('assets/brand/logo_ar_vertical_black.png');
+
   /// File path: assets/brand/logo_ar_vertical_black.svg
-  SvgGenImage get logoArVerticalBlack => const SvgGenImage('assets/brand/logo_ar_vertical_black.svg');
+  SvgGenImage get logoArVerticalBlackSvg => const SvgGenImage('assets/brand/logo_ar_vertical_black.svg');
 
   /// File path: assets/brand/logo_ar_vertical_black@2x.png
   AssetGenImage get logoArVerticalBlack2x => const AssetGenImage('assets/brand/logo_ar_vertical_black@2x.png');
 
+  /// File path: assets/brand/logo_ar_vertical_primary.png
+  AssetGenImage get logoArVerticalPrimaryPng => const AssetGenImage('assets/brand/logo_ar_vertical_primary.png');
+
   /// File path: assets/brand/logo_ar_vertical_primary.svg
-  SvgGenImage get logoArVerticalPrimary => const SvgGenImage('assets/brand/logo_ar_vertical_primary.svg');
+  SvgGenImage get logoArVerticalPrimarySvg => const SvgGenImage('assets/brand/logo_ar_vertical_primary.svg');
 
   /// File path: assets/brand/logo_ar_vertical_primary@2x.png
   AssetGenImage get logoArVerticalPrimary2x => const AssetGenImage('assets/brand/logo_ar_vertical_primary@2x.png');
 
+  /// File path: assets/brand/logo_ar_vertical_white.png
+  AssetGenImage get logoArVerticalWhitePng => const AssetGenImage('assets/brand/logo_ar_vertical_white.png');
+
   /// File path: assets/brand/logo_ar_vertical_white.svg
-  SvgGenImage get logoArVerticalWhite => const SvgGenImage('assets/brand/logo_ar_vertical_white.svg');
+  SvgGenImage get logoArVerticalWhiteSvg => const SvgGenImage('assets/brand/logo_ar_vertical_white.svg');
 
   /// File path: assets/brand/logo_ar_vertical_white@2x.png
   AssetGenImage get logoArVerticalWhite2x => const AssetGenImage('assets/brand/logo_ar_vertical_white@2x.png');
@@ -98,26 +122,34 @@ class $AssetsBrandGen {
     heroArDarkSvg,
     heroArLightPng,
     heroArLightSvg,
-    iconBlack,
+    iconBlackPng,
+    iconBlackSvg,
     iconBlack2x,
     iconPrimaryPng,
     iconPrimarySvg,
     iconPrimary2x,
-    iconWhite,
+    iconWhitePng,
+    iconWhiteSvg,
     iconWhite2x,
-    logoArHorizontalBlack,
+    logoArHorizontalBlackPng,
+    logoArHorizontalBlackSvg,
     logoArHorizontalBlack2x,
-    logoArHorizontalPrimary,
+    logoArHorizontalPrimaryPng,
+    logoArHorizontalPrimarySvg,
     logoArHorizontalPrimary2x,
-    logoArHorizontalWhite,
+    logoArHorizontalWhitePng,
+    logoArHorizontalWhiteSvg,
     logoArHorizontalWhite2x,
     logoArPrimaryPng,
     logoArPrimarySvg,
-    logoArVerticalBlack,
+    logoArVerticalBlackPng,
+    logoArVerticalBlackSvg,
     logoArVerticalBlack2x,
-    logoArVerticalPrimary,
+    logoArVerticalPrimaryPng,
+    logoArVerticalPrimarySvg,
     logoArVerticalPrimary2x,
-    logoArVerticalWhite,
+    logoArVerticalWhitePng,
+    logoArVerticalWhiteSvg,
     logoArVerticalWhite2x,
   ];
 }
@@ -222,6 +254,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/contact_book_outline.svg
   SvgGenImage get contactBookOutline => const SvgGenImage('assets/icons/contact_book_outline.svg');
 
+  /// File path: assets/icons/crown_outline.svg
+  SvgGenImage get crownOutline => const SvgGenImage('assets/icons/crown_outline.svg');
+
   /// File path: assets/icons/dashboard_outline.svg
   SvgGenImage get dashboardOutline => const SvgGenImage('assets/icons/dashboard_outline.svg');
 
@@ -252,8 +287,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/error_circle_outline.svg
   SvgGenImage get errorCircleOutline => const SvgGenImage('assets/icons/error_circle_outline.svg');
 
+  /// File path: assets/icons/file_remove_outline.svg
+  SvgGenImage get fileRemoveOutline => const SvgGenImage('assets/icons/file_remove_outline.svg');
+
   /// File path: assets/icons/filter_sliders_outline.svg
   SvgGenImage get filterSlidersOutline => const SvgGenImage('assets/icons/filter_sliders_outline.svg');
+
+  /// File path: assets/icons/google_doc_outline.svg
+  SvgGenImage get googleDocOutline => const SvgGenImage('assets/icons/google_doc_outline.svg');
 
   /// File path: assets/icons/home_outline.svg
   SvgGenImage get homeOutline => const SvgGenImage('assets/icons/home_outline.svg');
@@ -294,8 +335,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/language_square_outline.svg
   SvgGenImage get languageSquareOutline => const SvgGenImage('assets/icons/language_square_outline.svg');
 
+  /// File path: assets/icons/logout_02_outline.svg
+  SvgGenImage get logout02Outline => const SvgGenImage('assets/icons/logout_02_outline.svg');
+
   /// File path: assets/icons/materials_package_outline.svg
   SvgGenImage get materialsPackageOutline => const SvgGenImage('assets/icons/materials_package_outline.svg');
+
+  /// File path: assets/icons/menu_two_line_outline.svg
+  SvgGenImage get menuTwoLineOutline => const SvgGenImage('assets/icons/menu_two_line_outline.svg');
 
   /// File path: assets/icons/mobile_phone_outline.svg
   SvgGenImage get mobilePhoneOutline => const SvgGenImage('assets/icons/mobile_phone_outline.svg');
@@ -332,6 +379,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/share_outline.svg
   SvgGenImage get shareOutline => const SvgGenImage('assets/icons/share_outline.svg');
+
+  /// File path: assets/icons/shield_02_outline.svg
+  SvgGenImage get shield02Outline => const SvgGenImage('assets/icons/shield_02_outline.svg');
 
   /// File path: assets/icons/shovel_outline.svg
   SvgGenImage get shovelOutline => const SvgGenImage('assets/icons/shovel_outline.svg');
@@ -389,6 +439,7 @@ class $AssetsIconsGen {
     clockOutline,
     closeOutline,
     contactBookOutline,
+    crownOutline,
     dashboardOutline,
     deleteSquareOutline,
     directoryOutline,
@@ -399,7 +450,9 @@ class $AssetsIconsGen {
     electricalPlugOutline,
     emptyInboxOutline,
     errorCircleOutline,
+    fileRemoveOutline,
     filterSlidersOutline,
+    googleDocOutline,
     homeOutline,
     homeRoundedOutline,
     imageAddOutline,
@@ -413,7 +466,9 @@ class $AssetsIconsGen {
     keyOutline,
     laborHardHatOutline,
     languageSquareOutline,
+    logout02Outline,
     materialsPackageOutline,
+    menuTwoLineOutline,
     mobilePhoneOutline,
     paintRollerOutline,
     paymentCardOutline,
@@ -426,6 +481,7 @@ class $AssetsIconsGen {
     searchOutline,
     settingsOutline,
     shareOutline,
+    shield02Outline,
     shovelOutline,
     successCircleOutline,
     toiletOutline,
@@ -438,10 +494,127 @@ class $AssetsIconsGen {
   ];
 }
 
+class $AssetsItemIconsGen {
+  const $AssetsItemIconsGen();
+
+  /// File path: assets/item-icons/bathtub.svg
+  SvgGenImage get bathtub => const SvgGenImage('assets/item-icons/bathtub.svg');
+
+  /// File path: assets/item-icons/bed_single.svg
+  SvgGenImage get bedSingle => const SvgGenImage('assets/item-icons/bed_single.svg');
+
+  /// File path: assets/item-icons/brick_wall.svg
+  SvgGenImage get brickWall => const SvgGenImage('assets/item-icons/brick_wall.svg');
+
+  /// File path: assets/item-icons/dashboard_square.svg
+  SvgGenImage get dashboardSquare => const SvgGenImage('assets/item-icons/dashboard_square.svg');
+
+  /// File path: assets/item-icons/desk.svg
+  SvgGenImage get desk => const SvgGenImage('assets/item-icons/desk.svg');
+
+  /// File path: assets/item-icons/door.svg
+  SvgGenImage get door => const SvgGenImage('assets/item-icons/door.svg');
+
+  /// File path: assets/item-icons/drill.svg
+  SvgGenImage get drill => const SvgGenImage('assets/item-icons/drill.svg');
+
+  /// File path: assets/item-icons/grid_table.svg
+  SvgGenImage get gridTable => const SvgGenImage('assets/item-icons/grid_table.svg');
+
+  /// File path: assets/item-icons/hammer.svg
+  SvgGenImage get hammer => const SvgGenImage('assets/item-icons/hammer.svg');
+
+  /// File path: assets/item-icons/hard_hat.svg
+  SvgGenImage get hardHat => const SvgGenImage('assets/item-icons/hard_hat.svg');
+
+  /// File path: assets/item-icons/lamp.svg
+  SvgGenImage get lamp => const SvgGenImage('assets/item-icons/lamp.svg');
+
+  /// File path: assets/item-icons/layers.svg
+  SvgGenImage get layers => const SvgGenImage('assets/item-icons/layers.svg');
+
+  /// File path: assets/item-icons/mirror.svg
+  SvgGenImage get mirror => const SvgGenImage('assets/item-icons/mirror.svg');
+
+  /// File path: assets/item-icons/paint_roller.svg
+  SvgGenImage get paintRoller => const SvgGenImage('assets/item-icons/paint_roller.svg');
+
+  /// File path: assets/item-icons/pickaxe.svg
+  SvgGenImage get pickaxe => const SvgGenImage('assets/item-icons/pickaxe.svg');
+
+  /// File path: assets/item-icons/pickup.svg
+  SvgGenImage get pickup => const SvgGenImage('assets/item-icons/pickup.svg');
+
+  /// File path: assets/item-icons/plug_socket.svg
+  SvgGenImage get plugSocket => const SvgGenImage('assets/item-icons/plug_socket.svg');
+
+  /// File path: assets/item-icons/refrigerator.svg
+  SvgGenImage get refrigerator => const SvgGenImage('assets/item-icons/refrigerator.svg');
+
+  /// File path: assets/item-icons/shovel.svg
+  SvgGenImage get shovel => const SvgGenImage('assets/item-icons/shovel.svg');
+
+  /// File path: assets/item-icons/sink.svg
+  SvgGenImage get sink => const SvgGenImage('assets/item-icons/sink.svg');
+
+  /// File path: assets/item-icons/smart_ac.svg
+  SvgGenImage get smartAc => const SvgGenImage('assets/item-icons/smart_ac.svg');
+
+  /// File path: assets/item-icons/sofa.svg
+  SvgGenImage get sofa => const SvgGenImage('assets/item-icons/sofa.svg');
+
+  /// File path: assets/item-icons/sofa_single.svg
+  SvgGenImage get sofaSingle => const SvgGenImage('assets/item-icons/sofa_single.svg');
+
+  /// File path: assets/item-icons/toilet.svg
+  SvgGenImage get toilet => const SvgGenImage('assets/item-icons/toilet.svg');
+
+  /// File path: assets/item-icons/tools.svg
+  SvgGenImage get tools => const SvgGenImage('assets/item-icons/tools.svg');
+
+  /// File path: assets/item-icons/windows.svg
+  SvgGenImage get windows => const SvgGenImage('assets/item-icons/windows.svg');
+
+  /// File path: assets/item-icons/wrench.svg
+  SvgGenImage get wrench => const SvgGenImage('assets/item-icons/wrench.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+    bathtub,
+    bedSingle,
+    brickWall,
+    dashboardSquare,
+    desk,
+    door,
+    drill,
+    gridTable,
+    hammer,
+    hardHat,
+    lamp,
+    layers,
+    mirror,
+    paintRoller,
+    pickaxe,
+    pickup,
+    plugSocket,
+    refrigerator,
+    shovel,
+    sink,
+    smartAc,
+    sofa,
+    sofaSingle,
+    toilet,
+    tools,
+    windows,
+    wrench,
+  ];
+}
+
 abstract final class Assets {
   static const $AssetsBrandGen brand = $AssetsBrandGen();
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsItemIconsGen itemIcons = $AssetsItemIconsGen();
 }
 
 class AssetGenImage {

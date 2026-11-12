@@ -4,6 +4,7 @@ import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart
 import 'package:flutter_native_contact_picker/model/contact.dart';
 
 import '../formatting/display_digits.dart';
+import '../layout/bnood_layout.dart';
 import '../widgets/app_toaster.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -90,24 +91,41 @@ abstract final class DeviceContactPicker {
   static Future<String?> _choosePhone(BuildContext context, List<String> phones, AppLocalizations l10n) {
     return showModalBottomSheet<String>(
       context: context,
+      isScrollControlled: true,
       showDragHandle: true,
-      builder: (ctx) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              child: Text(l10n.contactPickChoosePhone, textAlign: TextAlign.start),
+      builder: (ctx) {
+        final insets = MediaQuery.viewInsetsOf(ctx);
+        Widget sheet = Padding(
+          padding: EdgeInsets.only(bottom: insets.bottom),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                  child: Text(l10n.contactPickChoosePhone, textAlign: TextAlign.start),
+                ),
+                for (final p in phones)
+                  ListTile(
+                    title: Text(DisplayDigits.toWesternDigits(p), textDirection: TextDirection.ltr),
+                    onTap: () => Navigator.pop(ctx, p),
+                  ),
+              ],
             ),
-            for (final p in phones)
-              ListTile(
-                title: Text(DisplayDigits.toWesternDigits(p), textDirection: TextDirection.ltr),
-                onTap: () => Navigator.pop(ctx, p),
-              ),
-          ],
-        ),
-      ),
+          ),
+        );
+        if (!ctx.isBnoodMobile) {
+          sheet = Align(
+            alignment: Alignment.bottomCenter,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: ctx.formMaxWidth),
+              child: sheet,
+            ),
+          );
+        }
+        return sheet;
+      },
     );
   }
 }

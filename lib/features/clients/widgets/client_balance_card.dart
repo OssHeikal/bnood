@@ -27,19 +27,21 @@ class ClientBalanceCard extends StatelessWidget {
     this.showAmountCaption = true,
     this.receivedPiastres,
     this.spentPiastres,
+    this.minorPerMajor = 100,
   });
 
   final String name;
   final String? meta;
   final int? receivedPiastres;
   final int? spentPiastres;
-  final int amountPiastres;
+  final int? amountPiastres;
   final String accentKey;
   final String localeCode;
   final VoidCallback onTap;
   final AppAmountRole amountRole;
   final String? amountCaption;
   final bool showAmountCaption;
+  final int minorPerMajor;
 
   static const _stripeWidth = 4.0;
 
@@ -52,6 +54,7 @@ class ClientBalanceCard extends StatelessWidget {
         ? (amountCaption ?? AppLocalizations.of(context).remaining)
         : null;
     final showClientFlows = receivedPiastres != null && spentPiastres != null;
+    final hasAmount = amountPiastres != null;
 
     return AppCard(
       onTap: onTap,
@@ -84,12 +87,19 @@ class ClientBalanceCard extends StatelessWidget {
                             AppSize.spaceXS.gap,
                             Align(
                               alignment: AlignmentDirectional.centerStart,
-                              child: AppAmount(
-                                piastres: amountPiastres,
-                                role: amountRole,
-                                size: AppAmountSize.small,
-                                localeCode: localeCode,
-                              ),
+                              child: hasAmount
+                                  ? AppAmount(
+                                      piastres: amountPiastres!,
+                                      role: amountRole,
+                                      size: AppAmountSize.small,
+                                      localeCode: localeCode,
+                                      minorPerMajor: minorPerMajor,
+                                    )
+                                  : Text(
+                                      AppLocalizations.of(context).amountUnavailable,
+                                      style: text.moneySm.copyWith(color: colors.onSurfaceMuted),
+                                      textDirection: TextDirection.ltr,
+                                    ),
                             ),
                           ] else if (meta != null && meta!.isNotEmpty) ...[
                             const SizedBox(height: 2),
@@ -113,6 +123,7 @@ class ClientBalanceCard extends StatelessWidget {
                                 receivedPiastres: receivedPiastres!,
                                 spentPiastres: spentPiastres!,
                                 localeCode: localeCode,
+                                minorPerMajor: minorPerMajor,
                               )
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -121,12 +132,20 @@ class ClientBalanceCard extends StatelessWidget {
                                 children: [
                                   if (caption != null)
                                     Text(caption, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
-                                  AppAmount(
-                                    piastres: amountPiastres,
-                                    role: amountRole,
-                                    size: AppAmountSize.small,
-                                    localeCode: localeCode,
-                                  ),
+                                  if (hasAmount)
+                                    AppAmount(
+                                      piastres: amountPiastres!,
+                                      role: amountRole,
+                                      size: AppAmountSize.small,
+                                      localeCode: localeCode,
+                                      minorPerMajor: minorPerMajor,
+                                    )
+                                  else
+                                    Text(
+                                      AppLocalizations.of(context).amountUnavailable,
+                                      style: text.moneySm.copyWith(color: colors.onSurfaceMuted),
+                                      textDirection: TextDirection.ltr,
+                                    ),
                                 ],
                               ),
                       ),
@@ -148,11 +167,13 @@ class ClientInOutTrailing extends StatelessWidget {
     required this.receivedPiastres,
     required this.spentPiastres,
     required this.localeCode,
+    this.minorPerMajor = 100,
   });
 
   final int receivedPiastres;
   final int spentPiastres;
   final String localeCode;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -172,6 +193,7 @@ class ClientInOutTrailing extends StatelessWidget {
               piastres: receivedPiastres,
               role: AppAmountRole.receive,
               localeCode: localeCode,
+              minorPerMajor: minorPerMajor,
             ),
             AppSize.spaceXS.gap,
             _FlowAmount(
@@ -180,6 +202,7 @@ class ClientInOutTrailing extends StatelessWidget {
               piastres: spentPiastres,
               role: AppAmountRole.spend,
               localeCode: localeCode,
+              minorPerMajor: minorPerMajor,
             ),
           ],
         ),
@@ -195,6 +218,7 @@ class _FlowAmount extends StatelessWidget {
     required this.piastres,
     required this.role,
     required this.localeCode,
+    this.minorPerMajor = 100,
   });
 
   final SvgGenImage icon;
@@ -202,6 +226,7 @@ class _FlowAmount extends StatelessWidget {
   final int piastres;
   final AppAmountRole role;
   final String localeCode;
+  final int minorPerMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +235,13 @@ class _FlowAmount extends StatelessWidget {
       children: [
         ShellNavIcon(asset: icon, color: tint, size: AppSize.iconSmall),
         const SizedBox(width: AppSize.spaceXS),
-        AppAmount(piastres: piastres, role: role, size: AppAmountSize.small, localeCode: localeCode),
+        AppAmount(
+          piastres: piastres,
+          role: role,
+          size: AppAmountSize.small,
+          localeCode: localeCode,
+          minorPerMajor: minorPerMajor,
+        ),
       ],
     );
   }

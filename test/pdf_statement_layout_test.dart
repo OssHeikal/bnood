@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bnood/core/database/connection.dart';
-import 'package:bnood/core/database/database.dart';
 import 'package:bnood/core/money/ledger_math.dart';
 import 'package:bnood/core/money/period_bounds.dart';
 import 'package:bnood/core/money/supplier_period_math.dart';
@@ -22,9 +21,7 @@ void main() {
     addTearDown(db.close);
     final repo = BnoodRepository(db);
     const unitAddress = 'الشيخ زايد - فيلا 12';
-    final client = await repo.createClient(
-      name: 'عميل تنسيق طويل الاسم للوحدات السكنية والتشطيبات الكاملة',
-    );
+    final client = await repo.createClient(name: 'عميل تنسيق طويل الاسم للوحدات السكنية والتشطيبات الكاملة');
     final project = (await repo.primaryActiveProject(client.id))!;
     final item = (await repo.watchActiveItems().first).first;
     for (var i = 1; i <= 28; i++) {
@@ -40,15 +37,8 @@ void main() {
       );
     }
     final rows = await repo.transactionsForProject(project.id);
-    final bounds = PeriodBounds.normalize(
-      start: DateTime(2025, 6, 1),
-      end: DateTime(2025, 6, 30),
-    );
-    final totals = LedgerMath.periodTotals(
-      projectRows: rows,
-      periodStart: bounds.start,
-      periodEnd: bounds.end,
-    );
+    final bounds = PeriodBounds.normalize(start: DateTime(2025, 6, 1), end: DateTime(2025, 6, 30));
+    final totals = LedgerMath.periodTotals(projectRows: rows, periodStart: bounds.start, periodEnd: bounds.end);
     final copy = StatementPdfCopy(AppLocalizationsAr());
     expect(copy.periodRangeFromTo(bounds), contains('من'));
     expect(copy.periodRangeFromTo(bounds), contains('إلى'));
@@ -98,10 +88,7 @@ void main() {
       );
     }
     final rows = await repo.supplierTransactions(supplier.id);
-    final bounds = PeriodBounds.normalize(
-      start: DateTime(2025, 7, 1),
-      end: DateTime(2025, 7, 31),
-    );
+    final bounds = PeriodBounds.normalize(start: DateTime(2025, 7, 1), end: DateTime(2025, 7, 31));
     final totals = SupplierPeriodMath.totals(supplierSpends: rows, bounds: bounds);
     final copy = StatementPdfCopy(AppLocalizationsAr());
     final bytes = await PdfStatementService().buildSupplierStatement(
