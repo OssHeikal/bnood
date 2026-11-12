@@ -25,7 +25,9 @@ import '../../core/items/items_repository.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/repositories/bnood_repository.dart';
+import '../../core/vouchers/vouchers_error_handler.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
+import '../subscription/subscription_error_handler.dart';
 import '../subscription/subscription_gates.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
@@ -630,7 +632,10 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       AppToaster.show(l10n.delete, kind: ToastKind.success);
       if (mounted) _closeVoucherRoute();
     } on AuthApiException catch (e) {
-      if (mounted) AppToaster.show(e.message, kind: ToastKind.failure);
+      if (!mounted) return;
+      if (await handleVouchersApiAuthError(context: context, ref: ref, error: e)) return;
+      if (await handleSubscriptionApiError(context: context, ref: ref, error: e)) return;
+      AppToaster.show(e.message, kind: ToastKind.failure);
     } catch (e) {
       if (mounted) AppToaster.show('$e', kind: ToastKind.failure);
     } finally {
@@ -749,8 +754,13 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       );
       AppToaster.show(l10n.save, kind: ToastKind.success);
       if (mounted) _closeVoucherRoute();
+    } on AuthApiException catch (e) {
+      if (!mounted) return;
+      if (await handleVouchersApiAuthError(context: context, ref: ref, error: e)) return;
+      if (await handleSubscriptionApiError(context: context, ref: ref, error: e)) return;
+      AppToaster.show(e.message, kind: ToastKind.failure);
     } catch (e) {
-      AppToaster.show('$e', kind: ToastKind.failure);
+      if (mounted) AppToaster.show('$e', kind: ToastKind.failure);
     } finally {
       if (mounted) setState(() => _saving = false);
     }

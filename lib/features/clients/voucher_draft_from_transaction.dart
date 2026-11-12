@@ -10,6 +10,8 @@ Future<VoucherDraft?> voucherDraftFromTransaction(
   final project = await repo.projectById(transaction.projectId);
   if (project == null) return null;
   final client = await repo.getClient(project.clientId);
+  final hasLinkedProvider = transaction.kind == 'spend' &&
+      (transaction.supplierId != null || transaction.craftsmanId != null);
   return VoucherDraft(
     clientId: project.clientId,
     projectId: transaction.projectId,
@@ -25,5 +27,6 @@ Future<VoucherDraft?> voucherDraftFromTransaction(
     date: transaction.date,
     editingTransactionId: transaction.id,
     receiptImagePath: transaction.receiptImagePath,
+    providerLinkedToClient: hasLinkedProvider ? true : null,
   );
 }

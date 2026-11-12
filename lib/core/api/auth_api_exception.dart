@@ -84,4 +84,7 @@ class AuthApiException implements Exception {
       statusCode == 413 || (statusCode == 422 && code == 'invalid_size');
 
   bool get isStorageFailed => statusCode == 500 && code == 'storage_failed';
+
+  @override
+  String toString() => 'AuthApiException($statusCode, $code, $message)';
 }
