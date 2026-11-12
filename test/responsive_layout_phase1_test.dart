@@ -26,11 +26,7 @@ void _setSurface(WidgetTester tester, double width, {double textScale = 1.0}) {
   addTearDown(() => tester.platformDispatcher.textScaleFactorTestValue = 1.0);
 }
 
-Widget _wrap({
-  required Widget child,
-  Locale locale = const Locale('ar'),
-  double textScale = 1.0,
-}) {
+Widget _wrap({required Widget child, Locale locale = const Locale('ar'), double textScale = 1.0}) {
   return ProviderScope(
     child: MaterialApp(
       locale: locale,
@@ -40,10 +36,7 @@ Widget _wrap({
         final media = MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScale));
         return MediaQuery(
           data: media,
-          child: ResponsiveBreakpoints.builder(
-            breakpoints: BnoodBreakpoints.all,
-            child: appChild!,
-          ),
+          child: ResponsiveBreakpoints.builder(breakpoints: BnoodBreakpoints.all, child: appChild!),
         );
       },
       home: child,
@@ -60,15 +53,12 @@ Future<void> _openVoucher(WidgetTester tester, BnoodRepository repo) async {
         builder: (context, _) => HomeFoundationScope(
           child: Scaffold(
             body: Center(
-              child: FilledButton(
-                onPressed: () => VoucherLauncher.openFresh(context),
-                child: const Text('trigger'),
-              ),
+              child: FilledButton(onPressed: () => VoucherLauncher.openFresh(context), child: const Text('trigger')),
             ),
           ),
         ),
       ),
-      GoRoute(path: VoucherScreen.path, builder: (_, __) => const VoucherScreen()),
+      GoRoute(path: VoucherScreen.path, builder: (_, _) => const VoucherScreen()),
     ],
   );
   await tester.pumpWidget(
@@ -79,10 +69,7 @@ Future<void> _openVoucher(WidgetTester tester, BnoodRepository repo) async {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         builder: (context, child) {
-          return ResponsiveBreakpoints.builder(
-            breakpoints: BnoodBreakpoints.all,
-            child: child!,
-          );
+          return ResponsiveBreakpoints.builder(breakpoints: BnoodBreakpoints.all, child: child!);
         },
         routerConfig: router,
       ),
@@ -146,10 +133,7 @@ void main() {
         expect(find.byType(ConstrainedBox), findsWidgets);
       } else {
         final boxes = tester.widgetList<ConstrainedBox>(find.byType(ConstrainedBox));
-        expect(
-          boxes.any((b) => b.constraints.maxWidth == BnoodLayout.formMaxWidth),
-          isTrue,
-        );
+        expect(boxes.any((b) => b.constraints.maxWidth == BnoodLayout.formMaxWidth), isTrue);
         final panel = find.byWidgetPredicate(
           (w) => w is ConstrainedBox && w.constraints.maxWidth == BnoodLayout.formMaxWidth,
         );
@@ -181,11 +165,7 @@ void main() {
 
   testWidgets('Arabic RTL auth shell', (tester) async {
     _setSurface(tester, 1024);
-    await tester.pumpWidget(
-      _wrap(
-        child: const LoginScreen(),
-      ),
-    );
+    await tester.pumpWidget(_wrap(child: const LoginScreen()));
     await tester.pumpAndSettle();
     final direction = tester.widget<Directionality>(find.byType(Directionality).first);
     expect(direction.textDirection, TextDirection.rtl);
@@ -196,10 +176,7 @@ void main() {
     await tester.pumpWidget(
       _wrap(
         textScale: 1.3,
-        child: AuthFlowScaffold(
-          title: 'title',
-          child: const Text('body'),
-        ),
+        child: AuthFlowScaffold(title: 'title', child: const Text('body')),
       ),
     );
     await tester.pumpAndSettle();
@@ -211,10 +188,7 @@ void main() {
     await tester.pumpWidget(
       _wrap(
         child: AuthFlowScaffold(
-          child: CustomTextField(
-            label: 'email',
-            placeholder: 'email',
-          ),
+          child: CustomTextField(label: 'email', placeholder: 'email'),
         ),
       ),
     );

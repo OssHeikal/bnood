@@ -105,10 +105,7 @@ Future<bool> saveRemoteAgreementAmount({
 }) async {
   final repo = ref.read(appAgreementsRepositoryProvider);
   try {
-    await repo.patchAgreement(
-      id: agreementId,
-      amountMajor: agreementAmountMajorFromMinor(amountPiastres),
-    );
+    await repo.patchAgreement(id: agreementId, amountMajor: agreementAmountMajorFromMinor(amountPiastres));
     if (clientId != null) {
       refreshAfterClientMutation(ref, clientId: clientId);
     }

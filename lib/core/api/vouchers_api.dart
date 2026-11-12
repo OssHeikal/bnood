@@ -9,20 +9,16 @@ import 'auth_interceptor.dart';
 import '../storage/session_store.dart';
 
 class VouchersApi {
-  VouchersApi({
-    Dio? dio,
-    SessionStore? sessionStore,
-  })  : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
-        _ownsDio = dio == null;
+  VouchersApi({Dio? dio, SessionStore? sessionStore})
+    : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
+      _ownsDio = dio == null;
 
   final Dio _dio;
   final bool _ownsDio;
 
   static const _prefix = '/v1/vouchers';
 
-  Map<String, dynamic> get _authenticatedExtra => {
-        AuthInterceptor.authenticatedExtraKey: true,
-      };
+  Map<String, dynamic> get _authenticatedExtra => {AuthInterceptor.authenticatedExtraKey: true};
 
   void close({bool force = false}) {
     if (_ownsDio) {
@@ -45,11 +41,7 @@ class VouchersApi {
     }
   }
 
-  Future<VouchersListPage> listVouchers({
-    String? q,
-    int page = 1,
-    int perPage = 50,
-  }) =>
+  Future<VouchersListPage> listVouchers({String? q, int page = 1, int perPage = 50}) =>
       _list(_prefix, q: q, page: page, perPage: perPage);
 
   Future<VouchersListPage> listClientVouchers({
@@ -61,25 +53,23 @@ class VouchersApi {
     String sort = 'date_desc',
     int page = 1,
     int perPage = 50,
-  }) =>
-      _list(
-        '/v1/clients/$clientId/vouchers',
-        q: q,
-        itemId: itemId,
-        from: from,
-        to: to,
-        sort: sort,
-        page: page,
-        perPage: perPage,
-      );
+  }) => _list(
+    '/v1/clients/$clientId/vouchers',
+    q: q,
+    itemId: itemId,
+    from: from,
+    to: to,
+    sort: sort,
+    page: page,
+    perPage: perPage,
+  );
 
   Future<VouchersListPage> listProviderVouchers({
     required String providerId,
     String? q,
     int page = 1,
     int perPage = 50,
-  }) =>
-      _list('/v1/providers/$providerId/vouchers', q: q, page: page, perPage: perPage);
+  }) => _list('/v1/providers/$providerId/vouchers', q: q, page: page, perPage: perPage);
 
   Future<VouchersListPage> _list(
     String path, {
@@ -131,10 +121,7 @@ class VouchersApi {
         '$_prefix/$id',
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (json) => AppVoucher.fromDataJson(json ?? const {}),
-      );
+      return ApiResponseParser.expectData(response, (json) => AppVoucher.fromDataJson(json ?? const {}));
     });
   }
 
@@ -160,7 +147,7 @@ class VouchersApi {
         if (type == 'spend') ...{
           'item_id': itemId,
           'expense_classification': expenseClassification,
-          if (providerId != null) 'provider_id': providerId,
+          'provider_id': ?providerId,
         },
       };
       final response = await _dio.post<Map<String, dynamic>>(
@@ -168,10 +155,7 @@ class VouchersApi {
         data: body,
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (json) => AppVoucher.fromDataJson(json ?? const {}),
-      );
+      return ApiResponseParser.expectData(response, (json) => AppVoucher.fromDataJson(json ?? const {}));
     });
   }
 
@@ -189,13 +173,13 @@ class VouchersApi {
   }) {
     return _guard(() async {
       final body = <String, dynamic>{
-        if (amountMinor != null) 'amount': amountMinor,
-        if (voucherDate != null) 'date': voucherDate,
-        if (method != null) 'payment_method': method,
+        'amount': ?amountMinor,
+        'date': ?voucherDate,
+        'payment_method': ?method,
         if (clearDescription) 'description': null,
-        if (description != null) 'description': description,
-        if (itemId != null) 'item_id': itemId,
-        if (expenseClassification != null) 'expense_classification': expenseClassification,
+        'description': ?description,
+        'item_id': ?itemId,
+        'expense_classification': ?expenseClassification,
       };
       if (clearProvider) {
         body['provider_id'] = null;
@@ -207,10 +191,7 @@ class VouchersApi {
         data: body,
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (json) => AppVoucher.fromDataJson(json ?? const {}),
-      );
+      return ApiResponseParser.expectData(response, (json) => AppVoucher.fromDataJson(json ?? const {}));
     });
   }
 
@@ -247,21 +228,13 @@ class VouchersApi {
     required String filename,
   }) {
     return _guard(() async {
-      final formData = FormData.fromMap({
-        'image': await MultipartFile.fromFile(filePath, filename: filename),
-      });
+      final formData = FormData.fromMap({'image': await MultipartFile.fromFile(filePath, filename: filename)});
       final response = await _dio.post<Map<String, dynamic>>(
         '$_prefix/$voucherId/receipts',
         data: formData,
-        options: Options(
-          extra: _authenticatedExtra,
-          contentType: 'multipart/form-data',
-        ),
+        options: Options(extra: _authenticatedExtra, contentType: 'multipart/form-data'),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (json) => AppVoucherReceipt.fromDataJson(json ?? const {}),
-      );
+      return ApiResponseParser.expectData(response, (json) => AppVoucherReceipt.fromDataJson(json ?? const {}));
     });
   }
 
@@ -269,10 +242,7 @@ class VouchersApi {
     return _guard(() async {
       final response = await _dio.get<List<int>>(
         '/v1/receipts/$receiptId',
-        options: Options(
-          extra: _authenticatedExtra,
-          responseType: ResponseType.bytes,
-        ),
+        options: Options(extra: _authenticatedExtra, responseType: ResponseType.bytes),
       );
       final statusCode = response.statusCode ?? 0;
       if (statusCode < 200 || statusCode >= 300) {

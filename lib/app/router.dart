@@ -124,8 +124,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppGatePaths.maintenance,
-        pageBuilder: (_, state) =>
-            NoTransitionPage<void>(key: state.pageKey, child: const AppMaintenanceScreen()),
+        pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const AppMaintenanceScreen()),
       ),
       GoRoute(
         path: AppGatePaths.forceUpdate,
@@ -133,8 +132,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppGatePaths.optionalUpdate,
-        pageBuilder: (_, state) =>
-            NoTransitionPage<void>(key: state.pageKey, child: const AppOptionalUpdateScreen()),
+        pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const AppOptionalUpdateScreen()),
       ),
       GoRoute(
         path: '/pages/:slug',
@@ -253,10 +251,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/craftsmen/:craftsmanId',
         builder: (_, state) => CraftsmanDetailScreen(craftsmanId: state.pathParameters['craftsmanId']!),
       ),
-      GoRoute(
-        path: VoucherScreen.path,
-        builder: (_, __) => const VoucherScreen(),
-      ),
+      GoRoute(path: VoucherScreen.path, builder: (_, _) => const VoucherScreen()),
     ],
   );
 });

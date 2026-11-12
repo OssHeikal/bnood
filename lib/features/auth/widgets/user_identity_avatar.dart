@@ -39,7 +39,7 @@ class UserIdentityAvatar extends StatelessWidget {
             width: size,
             height: size,
             fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => _initialsFace(text, initials, fontSize, colors),
+            errorBuilder: (_, _, _) => _initialsFace(text, initials, fontSize, colors),
           )
         : _initialsFace(text, initials, fontSize, colors);
 
@@ -63,10 +63,7 @@ class UserIdentityAvatar extends StatelessWidget {
     return Center(
       child: Text(
         initials,
-        style: text.bodyEmphasis.copyWith(
-          color: foregroundColor ?? colors.primary,
-          fontSize: fontSize,
-        ),
+        style: text.bodyEmphasis.copyWith(color: foregroundColor ?? colors.primary, fontSize: fontSize),
       ),
     );
   }
