@@ -1,0 +1,152 @@
+# Bnood — release builds triggered only by version tags (e.g. v1.0.1).
+# Configure integrations, keystores, and env groups in Codemagic UI (see docs/codemagic-setup.md).
+
+workflows:
+  ios-release:
+    name: iOS Release (TestFlight)
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    integrations:
+      app_store_connect: bnood_app_store_connect
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.bnood.app
+      groups:
+        - bnood_release_config
+      vars:
+        BUNDLE_ID: com.bnood.app
+        XCODE_WORKSPACE: ios/Runner.xcworkspace
+        XCODE_SCHEME: Runner
+      flutter: 3.41.1
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: "v*"
+          include: true
+    scripts:
+      - name: Verify release tag
+        script: |
+          set -euo pipefail
+          if [ -z "${CM_TAG:-}" ]; then
+            echo "This workflow must be triggered by a git tag (e.g. v1.0.1)."
+            exit 1
+          fi
+          export VERSION_NAME="${CM_TAG#v}"
+          echo "Release version name: $VERSION_NAME"
+      - name: Get Flutter packages
+        script: |
+          set -euo pipefail
+          flutter pub get
+      - name: Generate code (Drift / flutter_gen)
+        script: |
+          set -euo pipefail
+          dart run build_runner build --delete-conflicting-outputs
+      - name: Flutter analyze
+        script: |
+          set -euo pipefail
+          flutter analyze
+      - name: Install CocoaPods
+        script: |
+          set -euo pipefail
+          find . -name "Podfile" -execdir pod install \;
+      - name: Set up code signing settings on Xcode project
+        script: |
+          set -euo pipefail
+          xcode-project use-profiles
+      - name: Build signed IPA
+        script: |
+          set -euo pipefail
+          VERSION_NAME="${CM_TAG#v}"
+          if [ -z "${APP_STORE_APPLE_ID:-}" ]; then
+            echo "APP_STORE_APPLE_ID is not set. Add it to the bnood_release_config env group in Codemagic."
+            exit 1
+          fi
+          LATEST_BUILD="$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" --pre-release-version="$VERSION_NAME" 2>/dev/null || true)"
+          if [ -z "$LATEST_BUILD" ]; then
+            LATEST_BUILD=0
+          fi
+          BUILD_NUMBER=$((LATEST_BUILD + 1))
+          echo "Building $VERSION_NAME ($BUILD_NUMBER)"
+          flutter build ipa --release \
+            --build-name="$VERSION_NAME" \
+            --build-number="$BUILD_NUMBER" \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+  android-release:
+    name: Android Release (Play internal)
+    instance_type: linux_x2
+    max_build_duration: 60
+    environment:
+      android_signing:
+        - bnood_android_release
+      groups:
+        - bnood_google_play
+      vars:
+        PACKAGE_NAME: com.bnood.app
+        GOOGLE_PLAY_TRACK: internal
+      flutter: 3.41.1
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: "v*"
+          include: true
+    scripts:
+      - name: Verify release tag
+        script: |
+          set -euo pipefail
+          if [ -z "${CM_TAG:-}" ]; then
+            echo "This workflow must be triggered by a git tag (e.g. v1.0.1)."
+            exit 1
+          fi
+          export VERSION_NAME="${CM_TAG#v}"
+          echo "Release version name: $VERSION_NAME"
+      - name: Set up local.properties
+        script: |
+          set -euo pipefail
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          set -euo pipefail
+          flutter pub get
+      - name: Generate code (Drift / flutter_gen)
+        script: |
+          set -euo pipefail
+          dart run build_runner build --delete-conflicting-outputs
+      - name: Flutter analyze
+        script: |
+          set -euo pipefail
+          flutter analyze
+      - name: Build release App Bundle
+        script: |
+          set -euo pipefail
+          VERSION_NAME="${CM_TAG#v}"
+          LATEST_BUILD="$(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK" 2>/dev/null || true)"
+          if [ -z "$LATEST_BUILD" ]; then
+            LATEST_BUILD=0
+          fi
+          BUILD_NUMBER=$((LATEST_BUILD + 1))
+          echo "Building $VERSION_NAME ($BUILD_NUMBER)"
+          flutter build appbundle --release \
+            --build-name="$VERSION_NAME" \
+            --build-number="$BUILD_NUMBER"
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+    publishing:
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: $GOOGLE_PLAY_TRACK
+        submit_as_draft: false
