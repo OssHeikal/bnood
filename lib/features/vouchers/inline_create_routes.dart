@@ -64,7 +64,7 @@ class _InlineCreateClientPageState
     if (_formKey.currentState?.validate() != true) return;
     if (_saving) return;
     setState(() => _saving = true);
-  final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context);
     try {
       final client = await saveClientCreate(
         ref: ref,
