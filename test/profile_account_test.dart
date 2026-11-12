@@ -21,6 +21,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
+Future<void> pumpUserProfile(WidgetTester tester, User user) async {
+  await tester.binding.setSurfaceSize(const Size(390, 1400));
+  addTearDown(() => tester.binding.setSurfaceSize(null));
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [authControllerProvider.overrideWith(() => _AuthUserWith(user))],
+      child: MaterialApp(
+        theme: AppFoundationTheme.light(),
+        locale: const Locale('en'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const UserProfileScreen(),
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -48,8 +66,57 @@ void main() {
       expect(find.text('Change password'), findsOneWidget);
       expect(find.text('Delete account'), findsOneWidget);
       expect(find.text('Client name'), findsNothing);
-      expect(find.text('On client statements'), findsOneWidget);
+      expect(find.text('Your details on statements'), findsOneWidget);
+      expect(find.text('Shown to your client at the top of the statement'), findsOneWidget);
       expect(find.text('Contact phone'), findsOneWidget);
+    });
+
+    testWidgets('statement branding — no logo, no contact phone', (tester) async {
+      await pumpUserProfile(tester, const User(id: 'u1', phone: '+201012345678', name: 'Osama heikal'));
+      expect(find.text('No logo added yet'), findsOneWidget);
+      expect(find.text('No number will appear on statements'), findsOneWidget);
+      expect(find.text('Add'), findsNWidgets(2));
+      expect(find.text('Change'), findsNothing);
+    });
+
+    testWidgets('statement branding — logo set, no contact phone', (tester) async {
+      await pumpUserProfile(
+        tester,
+        const User(id: 'u1', phone: '+201012345678', name: 'Osama heikal', logoUrl: 'https://cdn.example/logo.png'),
+      );
+      expect(find.text('Logo added'), findsOneWidget);
+      expect(find.text('Change'), findsOneWidget);
+      expect(find.text('No number will appear on statements'), findsOneWidget);
+      expect(find.text('Add'), findsOneWidget);
+    });
+
+    testWidgets('statement branding — no logo, contact phone set', (tester) async {
+      await pumpUserProfile(
+        tester,
+        const User(id: 'u1', phone: '+201012345678', name: 'Osama heikal', contactPhone: '+201234567890'),
+      );
+      expect(find.text('No logo added yet'), findsOneWidget);
+      expect(find.textContaining('201234567890'), findsOneWidget);
+      expect(find.text('Edit'), findsWidgets);
+      expect(find.text('Add'), findsOneWidget);
+    });
+
+    testWidgets('statement branding — logo and contact phone set', (tester) async {
+      await pumpUserProfile(
+        tester,
+        const User(
+          id: 'u1',
+          phone: '+201012345678',
+          name: 'Osama heikal',
+          logoUrl: 'https://cdn.example/logo.png',
+          contactPhone: '+201234567890',
+        ),
+      );
+      expect(find.text('Logo added'), findsOneWidget);
+      expect(find.textContaining('201234567890'), findsOneWidget);
+      expect(find.text('Change'), findsOneWidget);
+      expect(find.text('Edit'), findsNWidgets(2));
+      expect(find.text('Add'), findsNothing);
     });
 
     testWidgets('change password navigates to existing screen', (tester) async {
@@ -139,6 +206,19 @@ class _AuthUser extends AuthController {
   AuthState build() => AuthState(
         bootstrapStatus: AuthBootstrapStatus.authenticated,
         user: const User(id: 'u1', phone: '+201012345678', name: 'Osama heikal'),
+        bootstrapStarted: true,
+      );
+}
+
+class _AuthUserWith extends AuthController {
+  _AuthUserWith(this.user);
+
+  final User user;
+
+  @override
+  AuthState build() => AuthState(
+        bootstrapStatus: AuthBootstrapStatus.authenticated,
+        user: user,
         bootstrapStarted: true,
       );
 }

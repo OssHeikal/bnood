@@ -3,7 +3,6 @@ import 'package:bnood/core/subscription/app_subscription.dart';
 import 'package:bnood/core/subscription/subscription_riverpod.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/database/database.dart';
-import 'package:bnood/core/money/remote_money_units.dart';
 import 'package:bnood/core/providers/dashboard_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
@@ -13,6 +12,7 @@ import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/home/home_screen.dart';
 import 'package:bnood/features/home/widgets/home_identity_title.dart';
+import 'package:bnood/features/auth/widgets/user_identity_avatar.dart';
 import 'package:bnood/features/providers/widgets/remote_craftsman_summary_card.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/providers/settings_provider.dart';
@@ -61,6 +61,7 @@ void main() {
           ]),
         ),
         emptyHomeSupplierSpendsOverride(),
+        emptyHomeSuppliersOverride(),
         subscriptionProvider.overrideWith(_SilentSubscriptionNotifier.new),
         ...extra,
       ],
@@ -87,6 +88,60 @@ void main() {
     expect(find.text('3 عملاء مرتبطين'), findsOneWidget);
     expect(find.byType(RemoteCraftsmanSummaryCard), findsOneWidget);
     expect(find.text('Paid'), findsNothing);
+  });
+
+
+  Future<void> pumpIdentityTitle(
+    WidgetTester tester, {
+    required User user,
+  }) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          subscriptionProvider.overrideWith(_SilentSubscriptionNotifier.new),
+          authControllerProvider.overrideWith(() => _AuthWithUser(user)),
+        ],
+        child: MaterialApp(
+          theme: AppFoundationTheme.light(),
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: HomeFoundationScope(
+            child: Scaffold(body: HomeIdentityTitle(displayName: user.name ?? '')),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+  }
+
+  testWidgets('HomeIdentityTitle passes profile logo to avatar', (tester) async {
+    const logo = 'https://cdn.example/logo-home.png';
+    await pumpIdentityTitle(
+      tester,
+      user: User(
+        id: 'u1',
+        phone: '+201012345678',
+        name: 'Osama Engineer',
+        logoUrl: logo,
+        phoneVerifiedAt: DateTime.utc(2026, 1, 1),
+      ),
+    );
+    expect(tester.widget<UserIdentityAvatar>(find.byType(UserIdentityAvatar)).imageUrl, logo);
+  });
+
+  testWidgets('HomeIdentityTitle clears logo when auth drops logoUrl', (tester) async {
+    await pumpIdentityTitle(
+      tester,
+      user: User(
+        id: 'u1',
+        phone: '+201012345678',
+        name: 'Osama Engineer',
+        phoneVerifiedAt: DateTime.utc(2026, 1, 1),
+      ),
+    );
+    expect(tester.widget<UserIdentityAvatar>(find.byType(UserIdentityAvatar)).imageUrl, isNull);
+    expect(find.text('OE'), findsOneWidget);
   });
 
   testWidgets('avatar opens profile screen', (tester) async {
@@ -201,6 +256,19 @@ void main() {
     await tester.pump();
     expect(find.text('Good morning'), findsOneWidget);
   });
+}
+
+class _AuthWithUser extends AuthController {
+  _AuthWithUser(this.user);
+
+  final User user;
+
+  @override
+  AuthState build() => AuthState(
+        bootstrapStatus: AuthBootstrapStatus.authenticated,
+        user: user,
+        bootstrapStarted: true,
+      );
 }
 
 class _AuthOsama extends AuthController {

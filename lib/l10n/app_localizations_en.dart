@@ -1323,16 +1323,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileEditNameTitle => 'Edit name';
 
   @override
-  String get profileStatementBrandingSection => 'On client statements';
+  String get profileStatementBrandingSection => 'Your details on statements';
+
+  @override
+  String get profileStatementBrandingSectionSubtitle =>
+      'Shown to your client at the top of the statement';
 
   @override
   String get profileLogo => 'Logo';
 
   @override
-  String get profileLogoSet => 'Added';
+  String get profileLogoSet => 'Logo added';
 
   @override
-  String get profileLogoNotSet => 'Not set';
+  String get profileLogoNotSet => 'No logo added yet';
+
+  @override
+  String get profileBrandingActionAdd => 'Add';
+
+  @override
+  String get profileBrandingActionChange => 'Change';
 
   @override
   String get profileLogoPickTitle => 'Choose logo';
@@ -1357,11 +1367,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Statements will show your initials again.';
 
   @override
-  String get profileLogoTooLarge => 'Image must be 2 MB or smaller.';
-
-  @override
-  String get profileLogoMustBeSquare =>
-      'Logo must be square (equal width and height).';
+  String get profileLogoTooLarge => 'Image must be 5 MB or smaller.';
 
   @override
   String get profileLogoUnreadable =>
@@ -1377,8 +1383,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileContactPhone => 'Contact phone';
 
   @override
+  String get profileContactPhoneNotOnStatement =>
+      'No number will appear on statements';
+
+  @override
   String get profileContactPhoneStatementHint =>
-      'Shown on client statements. Leave empty to use your sign-in number.';
+      'Shown at the top of the statement for your client. Leave empty to hide a number.';
 
   @override
   String get profileContactPhoneUsesLogin => 'sign-in number';

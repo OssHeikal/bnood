@@ -2434,8 +2434,14 @@ abstract class AppLocalizations {
   /// No description provided for @profileStatementBrandingSection.
   ///
   /// In en, this message translates to:
-  /// **'On client statements'**
+  /// **'Your details on statements'**
   String get profileStatementBrandingSection;
+
+  /// No description provided for @profileStatementBrandingSectionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown to your client at the top of the statement'**
+  String get profileStatementBrandingSectionSubtitle;
 
   /// No description provided for @profileLogo.
   ///
@@ -2446,14 +2452,26 @@ abstract class AppLocalizations {
   /// No description provided for @profileLogoSet.
   ///
   /// In en, this message translates to:
-  /// **'Added'**
+  /// **'Logo added'**
   String get profileLogoSet;
 
   /// No description provided for @profileLogoNotSet.
   ///
   /// In en, this message translates to:
-  /// **'Not set'**
+  /// **'No logo added yet'**
   String get profileLogoNotSet;
+
+  /// No description provided for @profileBrandingActionAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get profileBrandingActionAdd;
+
+  /// No description provided for @profileBrandingActionChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get profileBrandingActionChange;
 
   /// No description provided for @profileLogoPickTitle.
   ///
@@ -2500,14 +2518,8 @@ abstract class AppLocalizations {
   /// No description provided for @profileLogoTooLarge.
   ///
   /// In en, this message translates to:
-  /// **'Image must be 2 MB or smaller.'**
+  /// **'Image must be 5 MB or smaller.'**
   String get profileLogoTooLarge;
-
-  /// No description provided for @profileLogoMustBeSquare.
-  ///
-  /// In en, this message translates to:
-  /// **'Logo must be square (equal width and height).'**
-  String get profileLogoMustBeSquare;
 
   /// No description provided for @profileLogoUnreadable.
   ///
@@ -2533,10 +2545,16 @@ abstract class AppLocalizations {
   /// **'Contact phone'**
   String get profileContactPhone;
 
+  /// No description provided for @profileContactPhoneNotOnStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'No number will appear on statements'**
+  String get profileContactPhoneNotOnStatement;
+
   /// No description provided for @profileContactPhoneStatementHint.
   ///
   /// In en, this message translates to:
-  /// **'Shown on client statements. Leave empty to use your sign-in number.'**
+  /// **'Shown at the top of the statement for your client. Leave empty to hide a number.'**
   String get profileContactPhoneStatementHint;
 
   /// No description provided for @profileContactPhoneUsesLogin.

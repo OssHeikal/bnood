@@ -38,7 +38,7 @@ class UserIdentityAvatar extends StatelessWidget {
             url,
             width: size,
             height: size,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             errorBuilder: (_, __, ___) => _initialsFace(text, initials, fontSize, colors),
           )
         : _initialsFace(text, initials, fontSize, colors);

@@ -22,14 +22,18 @@ class StatementIssuerHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (logoUrl != null && logoUrl.isNotEmpty)
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppSize.radiusSM),
-            child: Image.network(
-              logoUrl,
-              width: 48,
-              height: 48,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => UserIdentityAvatar(displayName: issuer.name, size: 48),
+          SizedBox(
+            width: 48,
+            height: 48,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(AppSize.radiusSM),
+              child: Image.network(
+                logoUrl,
+                width: 48,
+                height: 48,
+                fit: BoxFit.contain,
+                errorBuilder: (_, __, ___) => UserIdentityAvatar(displayName: issuer.name, size: 48),
+              ),
             ),
           )
         else

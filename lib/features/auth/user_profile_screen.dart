@@ -29,13 +29,9 @@ import 'widgets/user_identity_avatar.dart';
 String _contactPhoneSummary(AppLocalizations l10n, User? user) {
   final custom = user?.contactPhone?.trim();
   if (custom != null && custom.isNotEmpty) {
-    return LtrIsolate.isolate(custom);
+    return custom;
   }
-  final login = user?.phone;
-  if (login != null && login.isNotEmpty) {
-    return '${LtrIsolate.isolate(login)} (${l10n.profileContactPhoneUsesLogin})';
-  }
-  return '—';
+  return l10n.profileContactPhoneNotOnStatement;
 }
 
 class UserProfileScreen extends ConsumerWidget {
@@ -116,11 +112,14 @@ class UserProfileScreen extends ConsumerWidget {
                   AppSize.spaceXL.gap,
                   _ProfileSection(
                     title: l10n.profileStatementBrandingSection,
+                    subtitle: l10n.profileStatementBrandingSectionSubtitle,
                     children: [
                       _ProfileActionRow(
                         label: l10n.profileLogo,
                         value: user?.logoUrl?.isNotEmpty == true ? l10n.profileLogoSet : l10n.profileLogoNotSet,
-                        actionLabel: l10n.edit,
+                        actionLabel: user?.logoUrl?.isNotEmpty == true
+                            ? l10n.profileBrandingActionChange
+                            : l10n.profileBrandingActionAdd,
                         onAction: user == null
                             ? null
                             : () => showProfileLogoOptions(context, ref, hasLogo: user.logoUrl?.isNotEmpty == true),
@@ -128,8 +127,10 @@ class UserProfileScreen extends ConsumerWidget {
                       _ProfileActionRow(
                         label: l10n.profileContactPhone,
                         value: _contactPhoneSummary(l10n, user),
-                        valueLtr: true,
-                        actionLabel: l10n.edit,
+                        valueLtr: user?.contactPhone?.trim().isNotEmpty == true,
+                        actionLabel: user?.contactPhone?.trim().isNotEmpty == true
+                            ? l10n.edit
+                            : l10n.profileBrandingActionAdd,
                         onAction: user == null
                             ? null
                             : () async {
@@ -179,18 +180,28 @@ class UserProfileScreen extends ConsumerWidget {
 }
 
 class _ProfileSection extends StatelessWidget {
-  const _ProfileSection({required this.title, required this.children});
+  const _ProfileSection({required this.title, required this.children, this.subtitle});
 
   final String title;
+  final String? subtitle;
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final text = context.text;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(title, style: context.text.groupTitle, textAlign: TextAlign.start),
+        Text(title, style: text.groupTitle, textAlign: TextAlign.start),
+        if (subtitle != null) ...[
+          AppSize.spaceXS.gap,
+          Text(
+            subtitle!,
+            style: text.caption.copyWith(color: colors.onSurfaceMuted),
+            textAlign: TextAlign.start,
+          ),
+        ],
         AppSize.spaceSM.gap,
         DecoratedBox(
           decoration: BoxDecoration(color: colors.surfaceSunken, borderRadius: BorderRadius.circular(AppSize.radiusSM)),

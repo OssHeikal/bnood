@@ -120,3 +120,16 @@ Override emptyHomeCraftsmenOverride() =>
 
 Override homeCraftsmenOverride(List<HomeCraftsmanActivityRow> rows) =>
     homeCraftsmenProvider.overrideWith(() => StubHomeCraftsmenNotifier(rows));
+
+class StubHomeSuppliersNotifier extends HomeSuppliersNotifier {
+  StubHomeSuppliersNotifier(this.rows);
+
+  final List<HomeCraftsmanActivityRow> rows;
+
+  @override
+  Future<List<HomeCraftsmanActivityRow>> fetch() async => rows;
+}
+
+Override emptyHomeSuppliersOverride() =>
+    homeSuppliersProvider.overrideWith(() => StubHomeSuppliersNotifier(const []));
+

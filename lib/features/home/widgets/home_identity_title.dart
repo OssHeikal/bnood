@@ -9,6 +9,7 @@ import '../../../core/formatting/cairo_local_time.dart';
 import '../../../core/subscription/subscription_colors.dart';
 import '../../../core/subscription/subscription_riverpod.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../auth/auth_controller.dart';
 import '../../auth/auth_paths.dart';
 import '../../auth/widgets/user_identity_avatar.dart';
 
@@ -32,11 +33,13 @@ class HomeIdentityTitle extends ConsumerWidget {
     final entitlements = ref.watch(subscriptionEntitlementsProvider);
     final surfaces = ref.watch(subscriptionSurfacesEnabledProvider);
     final premiumAvatar = surfaces && (entitlements?.showPremiumAvatar ?? false);
+    final logoUrl = ref.watch(authControllerProvider.select((s) => s.user?.logoUrl));
 
     return Row(
       children: [
         UserIdentityAvatar(
           displayName: displayName,
+          imageUrl: logoUrl,
           size: AppSize.buttonHeight,
           semanticsLabel: l10n.userProfileTitle,
           onTap: () => context.push(AuthPaths.profile),

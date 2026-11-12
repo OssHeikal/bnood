@@ -1310,16 +1310,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileEditNameTitle => 'تعديل الاسم';
 
   @override
-  String get profileStatementBrandingSection => 'على كشوف العملاء';
+  String get profileStatementBrandingSection => 'بياناتك في كشف الحساب';
+
+  @override
+  String get profileStatementBrandingSectionSubtitle =>
+      'تظهر للعميل في أعلى كشف الحساب';
 
   @override
   String get profileLogo => 'الشعار';
 
   @override
-  String get profileLogoSet => 'مضاف';
+  String get profileLogoSet => 'تم إضافة الشعار';
 
   @override
-  String get profileLogoNotSet => 'غير مضاف';
+  String get profileLogoNotSet => 'لم تضف شعارًا بعد';
+
+  @override
+  String get profileBrandingActionAdd => 'إضافة';
+
+  @override
+  String get profileBrandingActionChange => 'تغيير';
 
   @override
   String get profileLogoPickTitle => 'اختيار الشعار';
@@ -1344,11 +1354,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'ستظهر الأحرف الأولى من اسمك على الكشوف بدلاً من الشعار.';
 
   @override
-  String get profileLogoTooLarge => 'يجب ألا يتجاوز حجم الصورة 2 ميجابايت.';
-
-  @override
-  String get profileLogoMustBeSquare =>
-      'يجب أن يكون الشعار مربعاً (عرض وارتفاع متساويان).';
+  String get profileLogoTooLarge => 'يجب ألا يتجاوز حجم الصورة 5 ميجابايت.';
 
   @override
   String get profileLogoUnreadable =>
@@ -1364,8 +1370,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileContactPhone => 'هاتف التواصل';
 
   @override
+  String get profileContactPhoneNotOnStatement => 'لن يظهر رقم في الكشف';
+
+  @override
   String get profileContactPhoneStatementHint =>
-      'يُعرض على كشوف العملاء. اتركه فارغاً لاستخدام رقم تسجيل الدخول.';
+      'يظهر في أعلى كشف الحساب للعميل. اتركه فارغاً إذا لا تريد إظهار رقم.';
 
   @override
   String get profileContactPhoneUsesLogin => 'رقم الدخول';

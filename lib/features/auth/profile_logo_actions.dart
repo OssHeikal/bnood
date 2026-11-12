@@ -43,10 +43,9 @@ Future<void> pickAndUploadProfileLogo(BuildContext context, WidgetRef ref) async
     return;
   }
 
-  final error = await ref.read(authControllerProvider.notifier).uploadProfileLogo(
-        filePath: file.path,
-        filename: file.name,
-      );
+  final error = await ref
+      .read(authControllerProvider.notifier)
+      .uploadProfileLogo(filePath: file.path, filename: file.name);
   if (!context.mounted) return;
   if (error != null) {
     AppToaster.show(authApiMessage(l10n, error), kind: ToastKind.failure);
@@ -65,10 +64,7 @@ Future<void> showProfileLogoOptions(BuildContext context, WidgetRef ref, {requir
     context,
     title: l10n.profileLogo,
     actions: [
-      SheetAction(
-        label: l10n.profileLogoChange,
-        onPressed: () => pickAndUploadProfileLogo(context, ref),
-      ),
+      SheetAction(label: l10n.profileLogoChange, onPressed: () => pickAndUploadProfileLogo(context, ref)),
       SheetAction(
         label: l10n.profileLogoRemove,
         destructive: true,
@@ -95,7 +91,6 @@ Future<void> _deleteLogoAfterConfirm(BuildContext context, WidgetRef ref) async 
 String _logoValidationMessage(AppLocalizations l10n, ProfileLogoValidationFailure failure) {
   return switch (failure) {
     ProfileLogoValidationFailure.tooLarge => l10n.profileLogoTooLarge,
-    ProfileLogoValidationFailure.notSquare => l10n.profileLogoMustBeSquare,
     ProfileLogoValidationFailure.unreadable => l10n.profileLogoUnreadable,
   };
 }
