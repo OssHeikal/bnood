@@ -348,6 +348,13 @@
       "name": { "type": "String" }
     }
   },
+  "agreementUnlinkSupplierTitle": "إلغاء ربط المورد؟",
+  "agreementUnlinkSupplierDescription": "سيُزال {name} من العميل. يمكنك ربط المورد مرة أخرى لاحقاً.",
+  "@agreementUnlinkSupplierDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
   "unlink": "إلغاء الربط",
   "deleteProviderTitle": "حذف من الدليل؟",
   "deleteProviderDescription": "سيُزال {name} من قائمة الدليل.",

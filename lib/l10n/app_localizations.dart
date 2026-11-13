@@ -1736,6 +1736,18 @@ abstract class AppLocalizations {
   /// **'This removes {name} from the client. You can link them again later.'**
   String agreementUnlinkDescription(String name);
 
+  /// No description provided for @agreementUnlinkSupplierTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlink supplier?'**
+  String get agreementUnlinkSupplierTitle;
+
+  /// No description provided for @agreementUnlinkSupplierDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes {name} from the client. You can link this supplier again later.'**
+  String agreementUnlinkSupplierDescription(String name);
+
   /// No description provided for @unlink.
   ///
   /// In en, this message translates to:

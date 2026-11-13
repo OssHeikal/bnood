@@ -358,6 +358,13 @@
       "name": { "type": "String" }
     }
   },
+  "agreementUnlinkSupplierTitle": "Unlink supplier?",
+  "agreementUnlinkSupplierDescription": "This removes {name} from the client. You can link this supplier again later.",
+  "@agreementUnlinkSupplierDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
   "unlink": "Unlink",
   "deleteProviderTitle": "Delete from directory?",
   "deleteProviderDescription": "{name} will be removed from your directory list.",

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/providers_api/app_provider_record.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../clients/agreement_mutation_actions.dart';
 import '../../clients/craftsman_agreement_amount_sheet.dart';
@@ -14,6 +15,7 @@ class ProviderDetailLinkedClientBlock extends ConsumerWidget {
     required this.row,
     required this.providerId,
     required this.providerName,
+    required this.providerType,
     required this.localeCode,
     required this.onChanged,
   });
@@ -21,6 +23,7 @@ class ProviderDetailLinkedClientBlock extends ConsumerWidget {
   final ProviderDetailClientRow row;
   final String providerId;
   final String providerName;
+  final AppProviderType providerType;
   final String localeCode;
   final Future<void> Function() onChanged;
 
@@ -56,6 +59,7 @@ class ProviderDetailLinkedClientBlock extends ConsumerWidget {
               agreement: agreement,
               paidGuardClientName: row.clientName,
               unlinkDialogPartyName: providerName,
+              providerType: providerType,
               clientId: agreement.clientId,
               providerId: providerId,
             );
