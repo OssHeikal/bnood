@@ -22,15 +22,21 @@ abstract final class BnoodModalSheet {
       useRootNavigator: useRootNavigator,
       isScrollControlled: true,
       showDragHandle: false,
-      useSafeArea: true,
+      useSafeArea: false,
       backgroundColor: backgroundColor ?? colors.surface,
       shape: shape ?? AppShape.superellipse(radius: AppSize.radiusLG),
       builder: (ctx) {
-        final insets = MediaQuery.viewInsetsOf(ctx);
-        final keyboardGap = insets.bottom > 0 ? AppSize.spaceMD : 0.0;
-        Widget sheet = Padding(
-          padding: EdgeInsets.only(bottom: insets.bottom > 0 ? insets.bottom + keyboardGap : 0),
-          child: frame(context: ctx, child: Builder(builder: builder)),
+        final media = MediaQuery.of(ctx);
+        final bottomPad = SheetChromeInsets.modalBottomPadding(media);
+        Widget sheet = SafeArea(
+          top: true,
+          left: true,
+          right: true,
+          bottom: false,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: bottomPad),
+            child: frame(context: ctx, child: Builder(builder: builder)),
+          ),
         );
         if (!ctx.isBnoodMobile) {
           sheet = Align(

@@ -908,6 +908,14 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get agreementUnlinkSupplierTitle => 'إلغاء ربط المورد؟';
+
+  @override
+  String agreementUnlinkSupplierDescription(String name) {
+    return 'سيُزال $name من العميل. يمكنك ربط المورد مرة أخرى لاحقاً.';
+  }
+
+  @override
   String get unlink => 'إلغاء الربط';
 
   @override

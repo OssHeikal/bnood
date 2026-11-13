@@ -274,6 +274,7 @@ class _ProviderDetailBody extends ConsumerWidget {
                 row: data.clientAgreements[i],
                 providerId: providerId,
                 providerName: provider.name,
+                providerType: provider.type,
                 localeCode: localeCode,
                 onChanged: afterAgreementChanged,
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
 import '../config/extensions/num_extensions.dart';
+import '../utils/arabic_search_normalizer.dart';
 import '../layout/bnood_form_route_canvas.dart';
 import '../config/extensions/text_style_extensions.dart';
 import '../config/theme/app_colors.dart';
@@ -11,6 +12,7 @@ import 'app_pressable.dart';
 import 'custom_app_bar.dart';
 import 'custom_text_field.dart';
 import 'entity_picker_row.dart';
+import 'bounded_sheet_navigator.dart';
 import 'overlay_form_presentation.dart';
 import 'sheet_drag_handle.dart';
 
@@ -60,11 +62,11 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
   String _blobForIndex(int index) {
     final label = widget.entries[index].$2;
     final extra = widget.searchKeys != null && index < widget.searchKeys!.length ? widget.searchKeys![index] : '';
-    return '$label $extra'.toLowerCase();
+    return ArabicSearchNormalizer.normalize('$label $extra');
   }
 
   List<int> get _filteredIndices {
-    final q = _search.text.trim().toLowerCase();
+    final q = ArabicSearchNormalizer.normalize(_search.text);
     final out = <int>[];
     for (var i = 0; i < widget.entries.length; i++) {
       if (q.isEmpty || _blobForIndex(i).contains(q)) out.add(i);
@@ -137,9 +139,12 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
   Widget? _createFooter(AppLocalizations l10n, bool showCreateRow) {
     if (!showCreateRow) return null;
     final colors = context.colors;
-    final viewPadding = MediaQuery.viewPaddingOf(context);
-    final viewInsets = MediaQuery.viewInsetsOf(context);
-    final bottomPad = viewInsets.bottom > 0 ? AppSize.spaceMD : AppSize.spaceMD + viewPadding.bottom;
+    final media = MediaQuery.of(context);
+    final inModal = widget.presentation != OverlayFormPresentation.fullScreen;
+    final bottomPad = SheetChromeInsets.sheetFooterBottomPadding(
+      media: media,
+      outerModalChromeApplied: inModal,
+    );
 
     return Padding(
       padding: EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, bottomPad),

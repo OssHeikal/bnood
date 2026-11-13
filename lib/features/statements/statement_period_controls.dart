@@ -4,9 +4,12 @@ import 'package:intl/intl.dart';
 
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/formatting/display_digits.dart';
 import '../../core/money/period_bounds.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_pressable.dart';
+import '../vouchers/voucher_date_sheet.dart';
+import '../vouchers/voucher_transaction_date_bounds.dart';
 import 'statement_export_store.dart';
 import 'statement_period_logic.dart';
 
@@ -97,18 +100,14 @@ class StatementPeriodControls extends StatelessWidget {
                   context,
                   label: l10n.statementPeriodFrom,
                   date: bounds.start,
-                  onTap: () => _pick(context, initial: bounds.start, onPicked: (d) {
-                    onChanged(PeriodBounds.normalize(start: d, end: bounds.end), StatementPeriodPreset.custom);
-                  }),
+                  onTap: () => _pickFrom(context),
                 ),
                 Divider(height: 1, color: colors.outlineSubtle),
                 _compactDateRow(
                   context,
                   label: l10n.statementPeriodTo,
                   date: bounds.end,
-                  onTap: () => _pick(context, initial: bounds.end, onPicked: (d) {
-                    onChanged(PeriodBounds.normalize(start: bounds.start, end: d), StatementPeriodPreset.custom);
-                  }),
+                  onTap: () => _pickTo(context),
                 ),
               ],
             ),
@@ -141,19 +140,45 @@ class StatementPeriodControls extends StatelessWidget {
     );
   }
 
-  Future<void> _pick(
-    BuildContext context, {
-    required DateTime initial,
-    required void Function(DateTime) onPicked,
-  }) async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: initial,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2100),
-      helpText: AppLocalizations.of(context).period,
+  DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
+
+  Future<void> _pickFrom(BuildContext context) async {
+    final today = StatementPeriodLogic.cairoTodayDate();
+    final first = VoucherTransactionDateBounds.first;
+    final cap = _dateOnly(bounds.end);
+    final effectiveLast = cap.isAfter(today)
+        ? today
+        : (cap.isBefore(first) ? first : cap);
+    final picked = await showVoucherDateSheet(
+      context,
+      initial: bounds.start,
+      firstDate: first,
+      lastDate: effectiveLast,
     );
-    if (picked != null) onPicked(picked);
+    if (picked == null) return;
+    onChanged(
+      PeriodBounds.normalize(start: picked, end: bounds.end),
+      StatementPeriodPreset.custom,
+    );
+  }
+
+  Future<void> _pickTo(BuildContext context) async {
+    final today = StatementPeriodLogic.cairoTodayDate();
+    final firstFloor = _dateOnly(bounds.start);
+    final domainFirst = VoucherTransactionDateBounds.first;
+    final effectiveFirst =
+        firstFloor.isAfter(domainFirst) ? firstFloor : domainFirst;
+    final picked = await showVoucherDateSheet(
+      context,
+      initial: bounds.end,
+      firstDate: effectiveFirst,
+      lastDate: today,
+    );
+    if (picked == null) return;
+    onChanged(
+      PeriodBounds.normalize(start: bounds.start, end: picked),
+      StatementPeriodPreset.custom,
+    );
   }
 
   Widget _compactDateRow(
@@ -172,7 +197,7 @@ class StatementPeriodControls extends StatelessWidget {
           children: [
             Text(label, style: text.label),
             const Spacer(),
-            Text(fmt.format(date), style: text.bodyEmphasis),
+            Text(DisplayDigits.toWesternDigits(fmt.format(date)), style: text.bodyEmphasis),
             const SizedBox(width: AppSize.spaceSM),
             Icon(Icons.calendar_today, size: AppSize.iconCompact, color: context.colors.muted),
           ],

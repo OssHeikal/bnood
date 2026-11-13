@@ -16,6 +16,28 @@ import '../../core/widgets/overlay_form_presentation.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../home/home_foundation_scope.dart';
 
+/// Opens the app calendar date sheet; returns the confirmed day or null.
+Future<DateTime?> showVoucherDateSheet(
+  BuildContext context, {
+  required DateTime initial,
+  required DateTime firstDate,
+  required DateTime lastDate,
+  OverlayFormPresentation presentation = OverlayFormPresentation.inSheet,
+  bool fullscreenDialog = true,
+}) {
+  return Navigator.of(context).push<DateTime>(
+    MaterialPageRoute(
+      fullscreenDialog: fullscreenDialog,
+      builder: (_) => VoucherDateSheetPage(
+        initial: initial,
+        firstDate: firstDate,
+        lastDate: lastDate,
+        presentation: presentation,
+      ),
+    ),
+  );
+}
+
 /// Staged voucher date picker: swipe months, header wheels, confirm commits.
 class VoucherDateSheetPage extends StatefulWidget {
   const VoucherDateSheetPage({

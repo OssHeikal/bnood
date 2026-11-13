@@ -46,4 +46,16 @@ void main() {
     expect(lines.length, 1);
     expect(lines.first.transaction.id, 't1');
   });
+
+  test('local search is Arabic-insensitive on notes', () {
+    final tx = _tx(id: 't4', date: DateTime(2026, 3, 1), description: 'الوميتال');
+    final lines = filterLocalMovementLines(
+      transactions: [tx],
+      filters: const ClientMovementsFilters(searchQuery: 'ألومي'),
+      itemById: const {},
+      supplierById: const {},
+      craftsmanById: const {},
+    );
+    expect(lines.length, 1);
+  });
 }
