@@ -23,31 +23,23 @@ class AppSettingsSheet extends ConsumerWidget {
     final brightness = Theme.of(context).brightness;
     final colors = brightness == Brightness.dark ? AppColors.dark : AppColors.light;
     final text = AppText.fromColors(colors);
-    final bottom = MediaQuery.viewPaddingOf(context).bottom;
     final maxHeight = SheetContentBounds.viewportCap(MediaQuery.of(context));
 
     return Theme(
       data: Theme.of(context).copyWith(extensions: [colors, text]),
-      child: SafeArea(
-        top: false,
-        bottom: false,
-        child: Padding(
-          padding: EdgeInsets.only(bottom: bottom),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: maxHeight),
-            child: const SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(height: AppSize.spaceMD),
-                  SheetDragHandle(),
-                  SizedBox(height: AppSize.spaceLG),
-                  AppMenuBody(),
-                  SizedBox(height: AppSize.spaceLG),
-                ],
-              ),
-            ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: maxHeight),
+        child: const SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: AppSize.spaceMD),
+              SheetDragHandle(),
+              SizedBox(height: AppSize.spaceLG),
+              AppMenuBody(),
+              SizedBox(height: AppSize.spaceLG),
+            ],
           ),
         ),
       ),

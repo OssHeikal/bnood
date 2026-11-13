@@ -73,16 +73,10 @@ class _ChoiceSheetBody<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottom = MediaQuery.viewPaddingOf(context).bottom;
     final maxListHeight = SheetContentBounds.viewportCap(MediaQuery.of(context)) * 0.7;
     final colors = context.colors;
 
-    return SafeArea(
-      top: false,
-      bottom: false,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: bottom),
-        child: Column(
+    return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -117,8 +111,6 @@ class _ChoiceSheetBody<T> extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
     );
   }
 }
@@ -155,34 +147,29 @@ class _ActionSheetBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottom = MediaQuery.viewPaddingOf(context).bottom;
-
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(
-          AppSize.screenPadding,
-          AppSize.spaceMD,
-          AppSize.screenPadding,
-          AppSize.screenPadding + bottom,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SheetDragHandle(),
-            AppSize.spaceLG.gap,
-            Text(title, style: context.text.title),
-            AppSize.spaceLG.gap,
-            for (final action in actions) ...[
-              if (action.destructive)
-                AppButton.destructive(text: action.label, isExpanded: true, onPressed: () => _onAction(context, action))
-              else
-                AppButton.primary(text: action.label, isExpanded: true, onPressed: () => _onAction(context, action)),
-              AppSize.gap.gap,
-            ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSize.screenPadding,
+        AppSize.spaceMD,
+        AppSize.screenPadding,
+        AppSize.screenPadding,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SheetDragHandle(),
+          AppSize.spaceLG.gap,
+          Text(title, style: context.text.title),
+          AppSize.spaceLG.gap,
+          for (final action in actions) ...[
+            if (action.destructive)
+              AppButton.destructive(text: action.label, isExpanded: true, onPressed: () => _onAction(context, action))
+            else
+              AppButton.primary(text: action.label, isExpanded: true, onPressed: () => _onAction(context, action)),
+            AppSize.gap.gap,
           ],
-        ),
+        ],
       ),
     );
   }

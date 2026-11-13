@@ -618,13 +618,15 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
 
   Widget _buildSaveFooter(AppLocalizations l10n) {
     if (_loading || _error != null) return const SizedBox.shrink();
-    final viewPadding = MediaQuery.viewPaddingOf(context);
     return Padding(
       padding: EdgeInsets.fromLTRB(
         AppSize.screenPadding,
         AppSize.spaceLG,
         AppSize.screenPadding,
-        AppSize.spaceMD + (widget.embedInModalChrome ? viewPadding.bottom : 0),
+        SheetChromeInsets.sheetFooterBottomPadding(
+          media: MediaQuery.of(context),
+          outerModalChromeApplied: widget.embedInModalChrome,
+        ),
       ),
       child: AppButton.primary(
         key: const Key('craftsman_assignments_save'),

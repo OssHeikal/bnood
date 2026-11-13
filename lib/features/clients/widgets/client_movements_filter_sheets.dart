@@ -46,12 +46,9 @@ class _MovementsFilterSheetScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottom = MediaQuery.viewPaddingOf(context).bottom;
     final text = context.text;
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: bottom > 0 ? bottom : AppSize.spaceSM),
-      child: Column(
+    return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -67,7 +64,6 @@ class _MovementsFilterSheetScaffold extends StatelessWidget {
           AppSize.spaceMD.gap,
           child,
         ],
-      ),
     );
   }
 }

@@ -6,6 +6,7 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/money/money_format.dart';
 import '../../core/money/remote_money_format.dart';
@@ -214,7 +215,6 @@ class _CraftsmanAgreementAmountPageState extends ConsumerState<CraftsmanAgreemen
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final viewPadding = MediaQuery.viewPaddingOf(context);
     final showBack = widget.entry == CraftsmanAgreementAmountEntry.rosterDraft;
 
     final body = Column(
@@ -291,7 +291,10 @@ class _CraftsmanAgreementAmountPageState extends ConsumerState<CraftsmanAgreemen
             AppSize.screenPadding,
             AppSize.spaceLG,
             AppSize.screenPadding,
-            AppSize.spaceMD + viewPadding.bottom,
+            SheetChromeInsets.sheetFooterBottomPadding(
+              media: MediaQuery.of(context),
+              outerModalChromeApplied: true,
+            ),
           ),
           child: AppButton.primary(
             text: l10n.save,

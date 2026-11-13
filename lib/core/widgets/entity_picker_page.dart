@@ -11,6 +11,7 @@ import 'app_pressable.dart';
 import 'custom_app_bar.dart';
 import 'custom_text_field.dart';
 import 'entity_picker_row.dart';
+import 'bounded_sheet_navigator.dart';
 import 'overlay_form_presentation.dart';
 import 'sheet_drag_handle.dart';
 
@@ -137,9 +138,12 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
   Widget? _createFooter(AppLocalizations l10n, bool showCreateRow) {
     if (!showCreateRow) return null;
     final colors = context.colors;
-    final viewPadding = MediaQuery.viewPaddingOf(context);
-    final viewInsets = MediaQuery.viewInsetsOf(context);
-    final bottomPad = viewInsets.bottom > 0 ? AppSize.spaceMD : AppSize.spaceMD + viewPadding.bottom;
+    final media = MediaQuery.of(context);
+    final inModal = widget.presentation != OverlayFormPresentation.fullScreen;
+    final bottomPad = SheetChromeInsets.sheetFooterBottomPadding(
+      media: media,
+      outerModalChromeApplied: inModal,
+    );
 
     return Padding(
       padding: EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, bottomPad),
