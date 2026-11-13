@@ -159,6 +159,27 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   bool get _sinceLastExportAvailable =>
       _prefsAvailable && StatementPeriodLogic.sinceLastExportBounds(_lastExport) != null;
 
+  Future<void> _recordSuccessfulExportCursor() async {
+    final prefs = await StatementPrefsAccess.getInstance();
+    if (prefs == null) return;
+    final repo = ref.read(repositoryProvider);
+    final store = StatementExportStore(prefs);
+    final ws = await repo.workspaceId();
+    await store.recordSuccessfulExport(
+      workspaceId: ws,
+      kind: StatementEntityKind.client,
+      entityId: widget.clientId,
+      exportedAt: DateTime.now(),
+      periodEndInclusive: _bounds.end,
+    );
+    if (mounted) {
+      setState(() {
+        _prefsAvailable = true;
+        _lastExport = store.read(workspaceId: ws, kind: StatementEntityKind.client, entityId: widget.clientId);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -255,8 +276,8 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
         StatementPeriodControls(
           bounds: _bounds,
           preset: _preset,
-          lastExport: null,
-          sinceLastExportAvailable: false,
+          lastExport: _lastExport,
+          sinceLastExportAvailable: _sinceLastExportAvailable,
           onChanged: (b, preset) {
             setState(() {
               _preset = preset;
@@ -421,6 +442,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
               from: query.from,
               to: query.to,
             );
+        await _recordSuccessfulExportCursor();
         await _shareDownloadedPdf(pdf.bytes, pdf.fileName, l10n);
       } on AuthApiException catch (e, st) {
         FlutterError.reportError(FlutterErrorDetails(exception: e, stack: st, library: 'statement_pdf_remote'));
@@ -497,26 +519,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
         return;
       }
 
-      final prefs = await StatementPrefsAccess.getInstance();
-      if (prefs != null) {
-        final repo = ref.read(repositoryProvider);
-        final store = StatementExportStore(prefs);
-        final ws = await repo.workspaceId();
-        await store.recordSuccessfulExport(
-          workspaceId: ws,
-          kind: StatementEntityKind.client,
-          entityId: widget.clientId,
-          exportedAt: DateTime.now(),
-          periodEndInclusive: _bounds.end,
-        );
-        if (mounted) {
-          setState(() {
-            _prefsAvailable = true;
-            _lastExport = store.read(workspaceId: ws, kind: StatementEntityKind.client, entityId: widget.clientId);
-          });
-        }
-      }
-
+      await _recordSuccessfulExportCursor();
       await _shareDownloadedPdf(bytes, fileName, l10n);
     } finally {
       if (mounted) setState(() => _exporting = false);
