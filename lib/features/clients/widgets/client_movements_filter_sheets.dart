@@ -263,15 +263,11 @@ class _DateSheetBodyState extends State<_DateSheetBody> {
     final last = VoucherTransactionDateBounds.last;
     final cap = _to != null ? _dateOnly(_to!) : last;
     final effectiveLast = cap.isBefore(last) ? cap : last;
-    final picked = await Navigator.of(context).push<DateTime>(
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (_) => VoucherDateSheetPage(
-          initial: _from ?? _to ?? effectiveLast,
-          firstDate: VoucherTransactionDateBounds.first,
-          lastDate: effectiveLast,
-        ),
-      ),
+    final picked = await showVoucherDateSheet(
+      context,
+      initial: _from ?? _to ?? effectiveLast,
+      firstDate: VoucherTransactionDateBounds.first,
+      lastDate: effectiveLast,
     );
     if (picked == null || !mounted) return;
     setState(() {
@@ -286,15 +282,11 @@ class _DateSheetBodyState extends State<_DateSheetBody> {
     final first = VoucherTransactionDateBounds.first;
     final floor = _from != null ? _dateOnly(_from!) : first;
     final effectiveFirst = floor.isAfter(first) ? floor : first;
-    final picked = await Navigator.of(context).push<DateTime>(
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (_) => VoucherDateSheetPage(
-          initial: _to ?? _from ?? VoucherTransactionDateBounds.last,
-          firstDate: effectiveFirst,
-          lastDate: VoucherTransactionDateBounds.last,
-        ),
-      ),
+    final picked = await showVoucherDateSheet(
+      context,
+      initial: _to ?? _from ?? VoucherTransactionDateBounds.last,
+      firstDate: effectiveFirst,
+      lastDate: VoucherTransactionDateBounds.last,
     );
     if (picked == null || !mounted) return;
     setState(() {

@@ -776,15 +776,13 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   Future<void> _pickDate() async {
     final draft = ref.read(voucherDraftProvider);
     final initial = draft.date ?? DateTime.now();
-    final picked = await Navigator.of(context).push<DateTime>(
-      MaterialPageRoute(
-        builder: (_) => VoucherDateSheetPage(
-          initial: initial,
-          firstDate: VoucherTransactionDateBounds.first,
-          lastDate: VoucherTransactionDateBounds.last,
-          presentation: _nestedPresentation,
-        ),
-      ),
+    final picked = await showVoucherDateSheet(
+      context,
+      initial: initial,
+      firstDate: VoucherTransactionDateBounds.first,
+      lastDate: VoucherTransactionDateBounds.last,
+      presentation: _nestedPresentation,
+      fullscreenDialog: false,
     );
     if (picked == null || !mounted) return;
     ref.read(voucherDraftProvider.notifier).state = draft.copyWith(date: picked);
