@@ -10,6 +10,7 @@ import '../../core/clients/client_api_record.dart';
 import '../../core/clients/client_provider_agreement_preview.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/config/extensions/num_extensions.dart';
+import '../../core/utils/arabic_search_normalizer.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/providers/dashboard_providers.dart';
@@ -111,12 +112,13 @@ class _ProviderClientAssignmentsSheetState extends ConsumerState<ProviderClientA
   void _onSearchChanged() => setState(() {});
 
   List<ClientApiRecord> get _filteredClients {
-    final q = _search.text.trim().toLowerCase();
+    final q = _search.text.trim();
     if (q.isEmpty) return _clients;
     return _clients.where((record) {
-      final name = record.client.name.toLowerCase();
-      final phone = record.client.phone?.toLowerCase() ?? '';
-      return name.contains(q) || phone.contains(q);
+      return ArabicSearchNormalizer.matchesAny(
+        query: q,
+        haystacks: [record.client.name, record.client.phone ?? ''],
+      );
     }).toList();
   }
 

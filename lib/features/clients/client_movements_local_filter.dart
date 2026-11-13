@@ -1,4 +1,5 @@
 import '../../core/database/database.dart' show Transaction, Item, Supplier, CraftsmenData;
+import '../../core/utils/arabic_search_normalizer.dart';
 import 'client_detail_snapshot.dart';
 import 'client_movement_lines.dart';
 import 'client_movements_filters.dart';
@@ -28,9 +29,9 @@ List<ClientDetailMovementLine> filterLocalMovementLines({
     rows = rows.where((t) => !t.date.isAfter(end));
   }
 
-  final q = filters.searchQuery.trim().toLowerCase();
+  final q = filters.searchQuery.trim();
   if (q.isNotEmpty) {
-    rows = rows.where((t) => (t.description ?? '').toLowerCase().contains(q));
+    rows = rows.where((t) => ArabicSearchNormalizer.matches(query: q, haystack: t.description ?? ''));
   }
 
   final sorted = rows.toList()

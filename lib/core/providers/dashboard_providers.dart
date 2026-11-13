@@ -7,6 +7,7 @@ import '../home/home_riverpod.dart';
 import '../home/home_section_counts.dart';
 import '../database/database.dart';
 import '../repositories/bnood_repository.dart';
+import '../clients/client_list_local_search.dart';
 import '../../features/clients/client_craftsmen_list_provider.dart';
 import '../../features/clients/client_detail_provider.dart';
 import '../../features/clients/client_items_stats_provider.dart';
@@ -240,8 +241,12 @@ class ClientsListNotifier extends SilentAsyncNotifier<ClientsListSnapshot> {
     }
     final repo = ref.read(repositoryProvider);
     final filter = ref.read(clientsListFilterProvider);
+    final q = ref.read(clientsListSearchQueryProvider);
     final clients = await repo.listClients(filter);
-    final rows = await homeClientBalanceRows(repo, clients, activeProjectsOnly: false);
+    final rows = filterHomeClientRowsBySearch(
+      await homeClientBalanceRows(repo, clients, activeProjectsOnly: false),
+      q,
+    );
     return ClientsListSnapshot(rows: rows, page: 1, total: rows.length, hasMore: false);
   }
 }

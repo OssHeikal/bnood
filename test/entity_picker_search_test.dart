@@ -37,6 +37,27 @@ void main() {
     expect(find.text('No matches'), findsNothing);
   });
 
+  testWidgets('entity picker Arabic search ignores alif and ta marbuta', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppFoundationTheme.light(),
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const EntityPickerPage(
+          title: 'موردون',
+          entries: [('a', 'الوميتال')],
+          onCreateRoute: _FakeCreate.new,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'ألومي');
+    await tester.pump(AppMotion.searchDebounce);
+    await tester.pumpAndSettle();
+    expect(find.text('الوميتال'), findsOneWidget);
+  });
+
   testWidgets('entity picker no search hits shows fallback', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
