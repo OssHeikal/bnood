@@ -71,9 +71,7 @@ class _ProfileEditNameSheetState extends ConsumerState<ProfileEditNameSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom),
-      child: Column(
+    return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -124,7 +122,6 @@ class _ProfileEditNameSheetState extends ConsumerState<ProfileEditNameSheet> {
           ),
           AppSize.spaceLG.gap,
         ],
-      ),
     );
   }
 }

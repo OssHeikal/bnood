@@ -916,6 +916,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get agreementUnlinkSupplierTitle => 'Unlink supplier?';
+
+  @override
+  String agreementUnlinkSupplierDescription(String name) {
+    return 'This removes $name from the client. You can link this supplier again later.';
+  }
+
+  @override
   String get unlink => 'Unlink';
 
   @override

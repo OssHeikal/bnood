@@ -5,6 +5,7 @@ import 'package:flutter_native_contact_picker/model/contact.dart';
 
 import '../formatting/display_digits.dart';
 import '../layout/bnood_layout.dart';
+import '../widgets/bnood_modal_sheet.dart';
 import '../widgets/app_toaster.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -89,31 +90,23 @@ abstract final class DeviceContactPicker {
   }
 
   static Future<String?> _choosePhone(BuildContext context, List<String> phones, AppLocalizations l10n) {
-    return showModalBottomSheet<String>(
+    return BnoodModalSheet.show<String>(
       context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
       builder: (ctx) {
-        final insets = MediaQuery.viewInsetsOf(ctx);
-        Widget sheet = Padding(
-          padding: EdgeInsets.only(bottom: insets.bottom),
-          child: SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                  child: Text(l10n.contactPickChoosePhone, textAlign: TextAlign.start),
-                ),
-                for (final p in phones)
-                  ListTile(
-                    title: Text(DisplayDigits.toWesternDigits(p), textDirection: TextDirection.ltr),
-                    onTap: () => Navigator.pop(ctx, p),
-                  ),
-              ],
+        Widget sheet = Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              child: Text(l10n.contactPickChoosePhone, textAlign: TextAlign.start),
             ),
-          ),
+            for (final p in phones)
+              ListTile(
+                title: Text(DisplayDigits.toWesternDigits(p), textDirection: TextDirection.ltr),
+                onTap: () => Navigator.pop(ctx, p),
+              ),
+          ],
         );
         if (!ctx.isBnoodMobile) {
           sheet = Align(

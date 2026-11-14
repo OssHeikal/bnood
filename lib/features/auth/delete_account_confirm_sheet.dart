@@ -79,9 +79,7 @@ class _DeleteAccountConfirmSheetState extends ConsumerState<DeleteAccountConfirm
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom),
-      child: Column(
+    return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -136,7 +134,6 @@ class _DeleteAccountConfirmSheetState extends ConsumerState<DeleteAccountConfirm
           ),
           AppSize.spaceLG.gap,
         ],
-      ),
     );
   }
 }

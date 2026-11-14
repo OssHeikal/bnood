@@ -403,18 +403,15 @@ class _AppDecisionSheetState extends State<_AppDecisionSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bottom = MediaQuery.viewPaddingOf(context).bottom;
-    final keyboard = MediaQuery.viewInsetsOf(context).bottom;
-
     return HomeFoundationScope(
       child: PopScope(
         canPop: _canPopRoute,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(
+          padding: const EdgeInsets.fromLTRB(
             AppSize.screenPadding,
             AppSize.spaceMD,
             AppSize.screenPadding,
-            AppSize.screenPadding + bottom + keyboard,
+            AppSize.screenPadding,
           ),
           child: _DecisionBody(
             title: widget.title,

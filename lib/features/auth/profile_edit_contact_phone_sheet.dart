@@ -85,9 +85,7 @@ class _ProfileEditContactPhoneSheetState extends ConsumerState<ProfileEditContac
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom),
-      child: Column(
+    return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -149,7 +147,6 @@ class _ProfileEditContactPhoneSheetState extends ConsumerState<ProfileEditContac
           ),
           AppSize.spaceLG.gap,
         ],
-      ),
     );
   }
 }
