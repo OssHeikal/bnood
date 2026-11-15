@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 import 'package:flutter_native_contact_picker/model/contact.dart';
 
+import 'android_contacts_permission.dart';
 import '../formatting/display_digits.dart';
 import '../layout/bnood_layout.dart';
 import '../widgets/bnood_modal_sheet.dart';
@@ -59,6 +60,8 @@ abstract final class DeviceContactPicker {
     _picking = true;
     try {
       final l10n = AppLocalizations.of(context);
+      if (!await ensureAndroidContactsPermission(context)) return null;
+      if (!context.mounted) return null;
       final Contact? contact = await (pickOverride ?? () => _native.selectPhoneNumber())();
       if (contact == null) return null;
 

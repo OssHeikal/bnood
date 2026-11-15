@@ -210,6 +210,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pickFromContacts => 'اختيار من جهات الاتصال';
 
   @override
+  String get contactsPermissionDeniedBody =>
+      'يلزم الوصول لجهات الاتصال لاستيراد الاسم ورقم الهاتف.';
+
+  @override
+  String get contactsPermissionRestrictedBody =>
+      'الوصول لجهات الاتصال مقيّد على هذا الجهاز.';
+
+  @override
+  String get contactsPermissionSettingsTitle => 'السماح بالوصول لجهات الاتصال';
+
+  @override
+  String get contactsPermissionSettingsBody =>
+      'افتح الإعدادات للسماح بالوصول، ثم أعد المحاولة.';
+
+  @override
+  String get contactsPermissionOpenSettings => 'فتح الإعدادات';
+
+  @override
   String get contactPickFailed =>
       'تعذّر فتح جهات الاتصال. يمكنك الإدخال يدوياً.';
 
@@ -526,6 +544,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get voucherAttachGallery => 'المعرض';
+
+  @override
+  String get voucherAttachFiles => 'الملفات';
+
+  @override
+  String get voucherAttachUploadPrompt => 'اضغط لإرفاق صورة أو مستند للإيصال';
+
+  @override
+  String get voucherAttachSourceTitle => 'إرفاق إيصال';
 
   @override
   String get voucherReceiptCameraDenied =>

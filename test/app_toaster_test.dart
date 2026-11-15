@@ -1,11 +1,14 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/layout/bnood_layout.dart';
 import 'package:bnood/core/widgets/app_toaster.dart';
+import 'package:bnood/core/widgets/toast/app_toast.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/statements/statement_screen_toast.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -110,6 +113,55 @@ void main() {
     );
     expect(marginPadding.padding.resolve(TextDirection.ltr).bottom, 80);
     expect(find.text('تعذّرت المشاركة'), findsOneWidget);
+  });
+
+  testWidgets('tablet toast is centered and capped at toastMaxWidth', (tester) async {
+    tester.view.physicalSize = const Size(820, 1180);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        builder: (context, child) => ResponsiveBreakpoints.builder(
+          breakpoints: const [
+            Breakpoint(start: 0, end: 450, name: MOBILE),
+            Breakpoint(start: 451, end: 1023, name: TABLET),
+            Breakpoint(start: 1024, end: double.infinity, name: DESKTOP),
+          ],
+          child: botToastBuilder(context, child ?? const SizedBox.shrink()),
+        ),
+        navigatorObservers: [BotToastNavigatorObserver()],
+        theme: AppFoundationTheme.light(),
+        home: HomeFoundationScope(
+          child: Scaffold(
+            body: Builder(
+              builder: (context) => Center(
+                child: ElevatedButton(
+                  onPressed: () => AppToaster.success('Wide layout', layoutContext: context),
+                  child: const Text('toast-wide'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.tap(find.text('toast-wide'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 200));
+
+    final toast = tester.widget<AppToast>(find.byType(AppToast));
+    expect(toast.message, 'Wide layout');
+
+    final box = tester.renderObject<RenderBox>(
+      find.ancestor(of: find.byType(AppToast), matching: find.byType(ConstrainedBox)).first,
+    );
+    expect(box.size.width, BnoodLayout.toastMaxWidth);
+    final screen = tester.renderObject<RenderBox>(find.byType(Scaffold));
+    final toastGlobal = tester.getTopLeft(find.byType(AppToast));
+    final expectedStart = (screen.size.width - BnoodLayout.toastMaxWidth) / 2;
+    expect(toastGlobal.dx, closeTo(expectedStart, 2));
   });
 
   testWidgets('toast action does not change route', (tester) async {

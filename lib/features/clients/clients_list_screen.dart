@@ -15,7 +15,7 @@ import '../../core/shared/pagination/pagination.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
-import '../../core/widgets/custom_text_field.dart';
+import '../../core/widgets/directory_search_field.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../home/home_foundation_scope.dart';
 import '../vouchers/inline_create_routes.dart';
@@ -54,6 +54,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
   }
 
   Future<void> _addClient(BuildContext context, WidgetRef ref) async {
+    FocusManager.instance.primaryFocus?.unfocus();
     if (!await guardCreateActiveProject(context, ref)) return;
     final createdId = await CustomBottomSheet.show<String?>(
       context: context,
@@ -170,7 +171,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                           gutter,
                           AppSize.spaceSM,
                         ),
-                        child: CustomTextField.search(
+                        child: DirectorySearchField(
                           controller: _searchController,
                           placeholder: l10n.clientsSearchHint,
                           onChanged: (value) {

@@ -112,8 +112,7 @@ class _ProfitPercentageSheetState extends ConsumerState<ProfitPercentageSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    return SafeArea(
-      child: Padding(
+    return Padding(
         padding: const EdgeInsets.fromLTRB(
           AppSize.screenPadding,
           AppSize.spaceSM,
@@ -156,7 +155,6 @@ class _ProfitPercentageSheetState extends ConsumerState<ProfitPercentageSheet> {
             AppButton.primary(text: l10n.save, isLoading: _saving, onPressed: _saving ? null : _save),
           ],
         ),
-      ),
     );
   }
 }
