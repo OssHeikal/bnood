@@ -17,6 +17,8 @@ abstract final class BnoodModalSheet {
     Color? backgroundColor,
     ShapeBorder? shape,
     bool fitContent = true,
+    bool isDismissible = true,
+    bool enableDrag = true,
   }) {
     final brightness = Theme.of(context).brightness;
     final colors = brightness == Brightness.dark ? AppColors.dark : AppColors.light;
@@ -24,6 +26,8 @@ abstract final class BnoodModalSheet {
       context: context,
       useRootNavigator: useRootNavigator,
       isScrollControlled: true,
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
       showDragHandle: false,
       useSafeArea: false,
       backgroundColor: Colors.transparent,

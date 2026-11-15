@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Dismisses the primary focus when the user taps outside editable fields,
-/// without blocking buttons and other tappable widgets.
+/// without blocking buttons, modal barriers, or other tappable widgets.
 class AppKeyboardScope extends StatelessWidget {
   const AppKeyboardScope({super.key, required this.child});
 
@@ -14,16 +14,20 @@ class AppKeyboardScope extends StatelessWidget {
     return ctx.findAncestorWidgetOfExactType<EditableText>() != null;
   }
 
+  static void _unfocusEditableIfNeeded() {
+    final focus = FocusManager.instance.primaryFocus;
+    if (_shouldDismissFocus(focus)) {
+      focus?.unfocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    // [Listener] + deferToChild avoids competing with [ModalBarrier] tap-to-dismiss
+    // in the gesture arena (unlike a wrapping [GestureDetector.onTap]).
+    return Listener(
       behavior: HitTestBehavior.deferToChild,
-      onTap: () {
-        final focus = FocusManager.instance.primaryFocus;
-        if (_shouldDismissFocus(focus)) {
-          focus?.unfocus();
-        }
-      },
+      onPointerDown: (_) => _unfocusEditableIfNeeded(),
       child: child,
     );
   }
