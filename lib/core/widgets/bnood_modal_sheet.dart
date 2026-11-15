@@ -50,6 +50,7 @@ abstract final class BnoodModalSheet {
                   Flexible(
                     fit: FlexFit.loose,
                     child: SingleChildScrollView(
+                      primary: false,
                       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                       child: child,
                     ),
@@ -69,17 +70,14 @@ abstract final class BnoodModalSheet {
             ? AppShape.sheetMobileTop(radius: AppSize.radiusLG)
             : AppShape.superellipse(radius: AppSize.radiusLG);
 
-        Widget sheet = MediaQuery(
-          data: media.copyWith(viewInsets: EdgeInsets.zero),
-          child: Material(
-            color: backgroundColor ?? colors.surface,
-            shape: shape ?? defaultShape,
-            clipBehavior: Clip.antiAlias,
-            child: ConstrainedBox(
-              key: sheetBoundsKey,
-              constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: cap),
-              child: body,
-            ),
+        Widget sheet = Material(
+          color: backgroundColor ?? colors.surface,
+          shape: shape ?? defaultShape,
+          clipBehavior: Clip.antiAlias,
+          child: ConstrainedBox(
+            key: sheetBoundsKey,
+            constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: cap),
+            child: body,
           ),
         );
 
@@ -96,6 +94,13 @@ abstract final class BnoodModalSheet {
               child: sheet,
             ),
           );
+          final keyboardLift = media.viewInsets.bottom;
+          if (keyboardLift > 0) {
+            sheet = Padding(
+              padding: EdgeInsets.only(bottom: keyboardLift),
+              child: sheet,
+            );
+          }
         } else {
           sheet = Padding(
             padding: EdgeInsets.fromLTRB(

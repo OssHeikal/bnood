@@ -14,20 +14,19 @@ class AppKeyboardScope extends StatelessWidget {
     return ctx.findAncestorWidgetOfExactType<EditableText>() != null;
   }
 
-  static void _unfocusEditableIfNeeded() {
+  static void _onTap() {
     final focus = FocusManager.instance.primaryFocus;
-    if (_shouldDismissFocus(focus)) {
-      focus?.unfocus();
-    }
+    if (!_shouldDismissFocus(focus)) return;
+    focus?.unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
-    // [Listener] + deferToChild avoids competing with [ModalBarrier] tap-to-dismiss
-    // in the gesture arena (unlike a wrapping [GestureDetector.onTap]).
-    return Listener(
+    // [onTap] + deferToChild: taps on text fields and buttons stay with the child;
+    // pointer-down on sheet drag does not unfocus; barrier taps stay on the barrier.
+    return GestureDetector(
       behavior: HitTestBehavior.deferToChild,
-      onPointerDown: (_) => _unfocusEditableIfNeeded(),
+      onTap: _onTap,
       child: child,
     );
   }
