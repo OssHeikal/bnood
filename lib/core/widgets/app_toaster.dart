@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../config/navigation/root_navigator_key.dart';
 import '../config/theme/app_size.dart';
+import '../layout/bnood_layout.dart';
 import '../../features/home/home_foundation_scope.dart';
 import 'toast/app_toast.dart';
 import 'toast/app_tone.dart';
@@ -45,19 +46,49 @@ abstract final class AppToaster {
     return null;
   }
 
-  static EdgeInsetsDirectional _margin(BuildContext? layoutContext, AppToastLayoutHint layout) {
-    final ctx = _layoutContext(layoutContext);
-    final mq = ctx != null ? MediaQuery.maybeOf(ctx) : null;
-    final bottomInset = mq?.viewPadding.bottom ?? 0;
-    final base = switch (layout) {
+  static EdgeInsetsDirectional _margin(BuildContext ctx, AppToastLayoutHint layout) {
+    final mq = MediaQuery.maybeOf(ctx);
+    final safeBottom = mq?.viewPadding.bottom ?? 0;
+    final keyboard = mq?.viewInsets.bottom ?? 0;
+    final bottomInset = keyboard > safeBottom ? keyboard : safeBottom;
+    final chromeBottom = switch (layout) {
       AppToastLayoutHint.standard => AppSize.spaceMD + bottomInset + AppSize.shellDockClearance,
       AppToastLayoutHint.statementExportFooter =>
         AppSize.buttonHeight + AppSize.spaceMD + AppSize.spaceSM + bottomInset + AppSize.spaceMD,
     };
+    final wide = !ctx.isBnoodMobile;
     return EdgeInsetsDirectional.only(
-      start: AppSize.spaceMD,
-      end: AppSize.spaceMD,
-      bottom: base,
+      start: wide ? 0 : AppSize.spaceMD,
+      end: wide ? 0 : AppSize.spaceMD,
+      bottom: chromeBottom,
+    );
+  }
+
+  static Widget _toastShell({
+    required BuildContext layoutCtx,
+    required AppTone tone,
+    required String message,
+    String? title,
+    ToastAction? action,
+    required bool isLoading,
+  }) {
+    final toast = AppToast(
+      tone: tone,
+      message: message,
+      title: title,
+      action: action,
+      isLoading: isLoading,
+    );
+    if (layoutCtx.isBnoodMobile) {
+      return toast;
+    }
+    return Align(
+      alignment: Alignment.bottomCenter,
+      widthFactor: 1,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: BnoodLayout.toastMaxWidth),
+        child: toast,
+      ),
     );
   }
 
@@ -87,6 +118,7 @@ abstract final class AppToaster {
       useSafeArea: false,
       enableKeyboardSafeArea: true,
       toastBuilder: (cancel) {
+        final layoutCtx = _layoutContext(layoutContext);
         ToastAction? resolvedAction;
         if (action case final action?) {
           resolvedAction = ToastAction(
@@ -98,10 +130,23 @@ abstract final class AppToaster {
           );
         }
 
-        return Padding(
-          padding: _margin(layoutContext, layout),
-          child: HomeFoundationScope(
+        if (layoutCtx == null) {
+          return HomeFoundationScope(
             child: AppToast(
+              tone: tone,
+              message: message,
+              title: title,
+              action: resolvedAction,
+              isLoading: isLoading,
+            ),
+          );
+        }
+
+        return Padding(
+          padding: _margin(layoutCtx, layout),
+          child: HomeFoundationScope(
+            child: _toastShell(
+              layoutCtx: layoutCtx,
               tone: tone,
               message: message,
               title: title,

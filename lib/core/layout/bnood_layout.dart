@@ -7,6 +7,7 @@ import 'bnood_breakpoints.dart';
 /// ancestor, helpers assume mobile so default test surfaces (e.g. 800px) stay phone.
 abstract final class BnoodLayout {
   static const formMaxWidth = 600.0;
+  static const toastMaxWidth = 520.0;
   static const listMaxWidth = 720.0;
   static const pageMaxWidth = 1120.0;
 
