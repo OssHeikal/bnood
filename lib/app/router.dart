@@ -22,6 +22,7 @@ import '../features/app_gate/app_maintenance_screen.dart';
 import '../features/app_gate/app_optional_update_screen.dart';
 import '../features/content/content_page_screen.dart';
 import '../features/settings/app_preferences_screen.dart';
+import '../features/settings/notification_settings_screen.dart';
 import '../features/settings/app_settings_screen.dart';
 import '../features/auth/reset_password_screen.dart';
 import '../features/clients/client_detail_screen.dart';
@@ -160,6 +161,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: AuthPaths.profile, builder: (_, _) => const UserProfileScreen()),
       GoRoute(path: AuthPaths.settings, builder: (_, _) => const AppMenuScreen()),
       GoRoute(path: AuthPaths.preferences, builder: (_, _) => const AppPreferencesScreen()),
+      GoRoute(path: AuthPaths.notifications, builder: (_, _) => const NotificationSettingsScreen()),
       StatefulShellRoute.indexedStack(
         pageBuilder: (context, state, navigationShell) {
           return NoTransitionPage<void>(

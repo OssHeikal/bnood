@@ -3012,6 +3012,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'and'**
   String get authRegisterLegalMiddle;
+
+  /// No description provided for @notificationSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationSettingsTitle;
+
+  /// No description provided for @notificationSettingsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose when Bnood sends push alerts to this device.'**
+  String get notificationSettingsDescription;
+
+  /// No description provided for @notificationSettingsAlertsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get notificationSettingsAlertsSection;
+
+  /// No description provided for @notificationSettingsLowBalanceToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Low client balance'**
+  String get notificationSettingsLowBalanceToggle;
+
+  /// No description provided for @notificationSettingsLowBalanceAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert when balance is below'**
+  String get notificationSettingsLowBalanceAmountLabel;
+
+  /// No description provided for @notificationSettingsLowBalanceAmountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed amount in EGP for each active client.'**
+  String get notificationSettingsLowBalanceAmountHint;
+
+  /// No description provided for @notificationSettingsAmountInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid amount in EGP.'**
+  String get notificationSettingsAmountInvalid;
+
+  /// No description provided for @notificationSettingsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification settings updated.'**
+  String get notificationSettingsSaved;
+
+  /// No description provided for @pushNotificationOpenAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get pushNotificationOpenAction;
 }
 
 class _AppLocalizationsDelegate

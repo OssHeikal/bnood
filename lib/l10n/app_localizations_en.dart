@@ -1645,4 +1645,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authRegisterLegalMiddle => 'and';
+
+  @override
+  String get notificationSettingsTitle => 'Notifications';
+
+  @override
+  String get notificationSettingsDescription =>
+      'Choose when Bnood sends push alerts to this device.';
+
+  @override
+  String get notificationSettingsAlertsSection => 'Alerts';
+
+  @override
+  String get notificationSettingsLowBalanceToggle => 'Low client balance';
+
+  @override
+  String get notificationSettingsLowBalanceAmountLabel =>
+      'Alert when balance is below';
+
+  @override
+  String get notificationSettingsLowBalanceAmountHint =>
+      'Fixed amount in EGP for each active client.';
+
+  @override
+  String get notificationSettingsAmountInvalid =>
+      'Enter a valid amount in EGP.';
+
+  @override
+  String get notificationSettingsSaved => 'Notification settings updated.';
+
+  @override
+  String get pushNotificationOpenAction => 'Open';
 }

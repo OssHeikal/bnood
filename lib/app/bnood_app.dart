@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/api/api_accept_language.dart';
 import '../core/providers/settings_provider.dart';
+import '../core/push/push_coordinator.dart';
 import '../core/session/user_session_lifecycle.dart';
 import '../core/theme/app_theme.dart';
 import '../core/widgets/app_keyboard_scope.dart';
@@ -23,6 +24,7 @@ class BnoodApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(userSessionLifecycleProvider);
+    ref.watch(pushLifecycleProvider);
     final router = ref.watch(goRouterProvider);
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
