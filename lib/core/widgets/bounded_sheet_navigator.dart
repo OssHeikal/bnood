@@ -40,6 +40,15 @@ abstract final class SheetChromeInsets {
     return media.viewPadding.bottom + spacing;
   }
 
+  /// Inner padding for [BnoodModalSheet] after the route has already lifted for the keyboard.
+  static double modalInnerBottomPadding(
+    MediaQueryData media, {
+    double spacing = AppSize.spaceMD,
+  }) {
+    if (media.viewInsets.bottom > 0) return spacing;
+    return media.viewPadding.bottom + spacing;
+  }
+
   /// Alias for tests and call sites that predate [sheetContentBottomPadding].
   static double modalBottomPadding(
     MediaQueryData media, {

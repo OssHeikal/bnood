@@ -34,20 +34,29 @@ abstract final class BnoodModalSheet {
         final cap = SheetContentBounds.viewportCap(media);
         final isMobile = ctx.isBnoodMobile;
         final maxWidth = isMobile ? media.size.width : ctx.formMaxWidth;
-        final contentBottom =
-            SheetChromeInsets.sheetContentBottomPadding(media);
+        final innerBottom = SheetChromeInsets.modalInnerBottomPadding(media);
+
+        Widget child = Builder(builder: builder);
 
         Widget body = fitContent
             ? Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [Builder(builder: builder)],
+                children: [
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: SingleChildScrollView(
+                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                      child: child,
+                    ),
+                  ),
+                ],
               )
-            : frame(context: ctx, child: Builder(builder: builder));
+            : frame(context: ctx, child: child);
 
         if (isMobile) {
           body = Padding(
-            padding: EdgeInsets.only(bottom: contentBottom),
+            padding: EdgeInsets.only(bottom: innerBottom),
             child: body,
           );
         }
@@ -56,14 +65,17 @@ abstract final class BnoodModalSheet {
             ? AppShape.sheetMobileTop(radius: AppSize.radiusLG)
             : AppShape.superellipse(radius: AppSize.radiusLG);
 
-        Widget sheet = Material(
-          color: backgroundColor ?? colors.surface,
-          shape: shape ?? defaultShape,
-          clipBehavior: Clip.antiAlias,
-          child: ConstrainedBox(
-            key: sheetBoundsKey,
-            constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: cap),
-            child: body,
+        Widget sheet = MediaQuery(
+          data: media.copyWith(viewInsets: EdgeInsets.zero),
+          child: Material(
+            color: backgroundColor ?? colors.surface,
+            shape: shape ?? defaultShape,
+            clipBehavior: Clip.antiAlias,
+            child: ConstrainedBox(
+              key: sheetBoundsKey,
+              constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: cap),
+              child: body,
+            ),
           ),
         );
 
@@ -86,7 +98,7 @@ abstract final class BnoodModalSheet {
               viewPad.left,
               viewPad.top,
               viewPad.right,
-              contentBottom,
+              innerBottom,
             ),
             child: Align(alignment: Alignment.bottomCenter, child: sheet),
           );
