@@ -12,6 +12,7 @@ import '../../core/formatting/display_digits.dart';
 import '../../core/widgets/app_chevron.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_app_bar.dart';
+import '../../core/widgets/overlay_form_keyboard_chrome.dart';
 import '../../core/widgets/overlay_form_presentation.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../home/home_foundation_scope.dart';
@@ -200,17 +201,14 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
                     child: calendarBody,
                   ),
                 ),
-                SafeArea(
-                  top: false,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSize.screenPadding,
-                      AppSize.spaceMD,
-                      AppSize.screenPadding,
-                      AppSize.spaceMD,
-                    ),
-                    child: confirmButton,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    AppSize.screenPadding,
+                    AppSize.spaceMD,
+                    AppSize.screenPadding,
+                    OverlayFormKeyboardChrome.pinnedFooterBottom(MediaQuery.of(context)),
                   ),
+                  child: confirmButton,
                 ),
               ],
             ),

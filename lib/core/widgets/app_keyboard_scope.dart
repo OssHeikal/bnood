@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Dismisses the primary focus when the user taps outside editable fields,
-/// without blocking buttons, modal barriers, or other tappable widgets.
+/// App-wide: dismisses primary focus on tap outside editables (shell, sheets,
+/// full-screen routes). Does not use pointer-down, so modal autofocus and
+/// drag-to-dismiss stay stable; barrier taps still reach [ModalBarrier].
 class AppKeyboardScope extends StatelessWidget {
   const AppKeyboardScope({super.key, required this.child});
 

@@ -28,7 +28,11 @@ class BoundedSheetNavigator extends StatelessWidget {
 }
 
 /// Viewport cap (80% of screen) and content max-height helpers for modal sheets.
-/// Home indicator, keyboard lift, and content spacing for modal sheets.
+///
+/// Keyboard/home spacing:
+/// - [BnoodModalSheet]: [OverlayFormKeyboardChrome.liftModalSheet] + [modalInnerBottomPadding]
+/// - Full-screen overlays: [Scaffold.resizeToAvoidBottomInset] + [modalInnerBottomPadding] on footers
+/// - Standalone footers: [sheetFooterBottomPadding] with [outerModalChromeApplied: false]
 abstract final class SheetChromeInsets {
   /// Space below the last control: home indicator **or** keyboard lift, not both.
   static double sheetContentBottomPadding(

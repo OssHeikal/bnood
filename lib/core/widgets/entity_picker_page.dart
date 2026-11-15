@@ -13,7 +13,7 @@ import 'custom_app_bar.dart';
 import 'custom_text_field.dart';
 import 'entity_picker_row.dart';
 import 'bounded_sheet_navigator.dart';
-import 'full_screen_overlay_keyboard_scope.dart';
+import 'overlay_form_keyboard_chrome.dart';
 import 'overlay_form_presentation.dart';
 import 'sheet_drag_handle.dart';
 
@@ -146,7 +146,7 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
     final colors = context.colors;
     final inModal = widget.presentation != OverlayFormPresentation.fullScreen;
     final bottomPad = widget.presentation == OverlayFormPresentation.fullScreen
-        ? FullScreenOverlayKeyboardScope.pinnedFooterBottomPadding(media)
+        ? OverlayFormKeyboardChrome.pinnedFooterBottom(media)
         : SheetChromeInsets.sheetFooterBottomPadding(
             media: media,
             outerModalChromeApplied: inModal,
@@ -184,24 +184,22 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: CustomAppBar(title: widget.title),
-          body: FullScreenOverlayKeyboardScope(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSize.screenPadding,
-                    AppSize.spaceMD,
-                    AppSize.screenPadding,
-                    0,
-                  ),
-                  child: _searchField(l10n),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSize.screenPadding,
+                  AppSize.spaceMD,
+                  AppSize.screenPadding,
+                  0,
                 ),
-                AppSize.spaceMD.gap,
-                Expanded(child: _listBody(l10n, indices, isCompletelyEmpty, isSearchEmpty)),
-                if (footer != null) footer,
-              ],
-            ),
+                child: _searchField(l10n),
+              ),
+              AppSize.spaceMD.gap,
+              Expanded(child: _listBody(l10n, indices, isCompletelyEmpty, isSearchEmpty)),
+              if (footer != null) footer,
+            ],
           ),
         ),
       );

@@ -5,6 +5,7 @@ import '../config/theme/app_colors.dart';
 import '../config/theme/app_shape.dart';
 import '../config/theme/app_size.dart';
 import 'bounded_sheet_navigator.dart';
+import 'overlay_form_keyboard_chrome.dart';
 
 /// Shared Bnood modal bottom sheet: content-sized up to [SheetContentBounds.viewportCap].
 abstract final class BnoodModalSheet {
@@ -94,13 +95,11 @@ abstract final class BnoodModalSheet {
               child: sheet,
             ),
           );
-          final keyboardLift = media.viewInsets.bottom;
-          if (keyboardLift > 0) {
-            sheet = Padding(
-              padding: EdgeInsets.only(bottom: keyboardLift),
-              child: sheet,
-            );
-          }
+          sheet = OverlayFormKeyboardChrome.liftModalSheet(
+            media: media,
+            enabled: true,
+            child: sheet,
+          );
         } else {
           sheet = Padding(
             padding: EdgeInsets.fromLTRB(
