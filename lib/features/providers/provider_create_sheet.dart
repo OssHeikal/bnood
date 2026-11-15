@@ -93,7 +93,7 @@ class _ProviderCreateSheetState extends ConsumerState<ProviderCreateSheet> {
       AppSize.screenPadding,
       0,
       AppSize.screenPadding,
-      AppSize.spaceMD,
+      0,
     );
     return SheetFormScaffold(
       padding: padding,

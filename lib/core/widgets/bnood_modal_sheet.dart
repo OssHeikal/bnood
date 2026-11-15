@@ -30,10 +30,12 @@ abstract final class BnoodModalSheet {
       shape: const RoundedRectangleBorder(),
       builder: (ctx) {
         final media = MediaQuery.of(ctx);
-        final bottomPad = SheetChromeInsets.modalBottomPadding(media);
         final viewPad = media.viewPadding;
         final cap = SheetContentBounds.viewportCap(media);
-        final maxWidth = ctx.isBnoodMobile ? media.size.width : ctx.formMaxWidth;
+        final isMobile = ctx.isBnoodMobile;
+        final maxWidth = isMobile ? media.size.width : ctx.formMaxWidth;
+        final contentBottom =
+            SheetChromeInsets.sheetContentBottomPadding(media);
 
         Widget body = fitContent
             ? Column(
@@ -43,9 +45,20 @@ abstract final class BnoodModalSheet {
               )
             : frame(context: ctx, child: Builder(builder: builder));
 
+        if (isMobile) {
+          body = Padding(
+            padding: EdgeInsets.only(bottom: contentBottom),
+            child: body,
+          );
+        }
+
+        final defaultShape = isMobile
+            ? AppShape.sheetMobileTop(radius: AppSize.radiusLG)
+            : AppShape.superellipse(radius: AppSize.radiusLG);
+
         Widget sheet = Material(
           color: backgroundColor ?? colors.surface,
-          shape: shape ?? AppShape.superellipse(radius: AppSize.radiusLG),
+          shape: shape ?? defaultShape,
           clipBehavior: Clip.antiAlias,
           child: ConstrainedBox(
             key: sheetBoundsKey,
@@ -54,18 +67,29 @@ abstract final class BnoodModalSheet {
           ),
         );
 
-        sheet = Padding(
-          padding: EdgeInsets.only(
-            top: viewPad.top,
-            left: viewPad.left,
-            right: viewPad.right,
-            bottom: bottomPad,
-          ),
-          child: sheet,
-        );
-
-        if (!ctx.isBnoodMobile) {
-          sheet = Align(alignment: Alignment.bottomCenter, child: sheet);
+        if (isMobile) {
+          sheet = Padding(
+            padding: EdgeInsets.only(
+              top: viewPad.top,
+              left: viewPad.left,
+              right: viewPad.right,
+            ),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              widthFactor: 1,
+              child: sheet,
+            ),
+          );
+        } else {
+          sheet = Padding(
+            padding: EdgeInsets.fromLTRB(
+              viewPad.left,
+              viewPad.top,
+              viewPad.right,
+              contentBottom,
+            ),
+            child: Align(alignment: Alignment.bottomCenter, child: sheet),
+          );
         }
         return sheet;
       },

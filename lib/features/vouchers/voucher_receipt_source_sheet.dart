@@ -33,7 +33,7 @@ class VoucherReceiptSourceSheet extends StatelessWidget {
         AppSize.screenPadding,
         AppSize.spaceSM,
         AppSize.screenPadding,
-        AppSize.spaceMD,
+        0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

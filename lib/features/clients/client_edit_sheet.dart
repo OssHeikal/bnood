@@ -109,7 +109,7 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
         AppSize.screenPadding,
         AppSize.spaceSM,
         AppSize.screenPadding,
-        AppSize.spaceMD,
+        0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

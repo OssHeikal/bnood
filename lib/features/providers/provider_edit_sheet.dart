@@ -111,7 +111,7 @@ class _ProviderEditSheetState extends ConsumerState<ProviderEditSheet> {
         AppSize.screenPadding,
         AppSize.spaceSM,
         AppSize.screenPadding,
-        AppSize.spaceMD,
+        0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

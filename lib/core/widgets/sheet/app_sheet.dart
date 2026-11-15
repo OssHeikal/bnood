@@ -152,7 +152,7 @@ class _ActionSheetBody extends StatelessWidget {
         AppSize.screenPadding,
         AppSize.spaceMD,
         AppSize.screenPadding,
-        AppSize.screenPadding,
+        0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

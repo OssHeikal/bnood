@@ -117,7 +117,7 @@ class _ProfitPercentageSheetState extends ConsumerState<ProfitPercentageSheet> {
           AppSize.screenPadding,
           AppSize.spaceSM,
           AppSize.screenPadding,
-          AppSize.spaceMD,
+          0,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

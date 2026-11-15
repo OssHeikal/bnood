@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../config/theme/app_size.dart';
@@ -32,22 +30,31 @@ class BoundedSheetNavigator extends StatelessWidget {
 /// Viewport cap (80% of screen) and content max-height helpers for modal sheets.
 /// Home indicator, keyboard lift, and content spacing for modal sheets.
 abstract final class SheetChromeInsets {
-  /// Bottom inset for [BnoodModalSheet] chrome: `max(home, keyboard) + [spacing]`.
-  static double modalBottomPadding(
+  /// Space below the last control: home indicator **or** keyboard lift, not both.
+  static double sheetContentBottomPadding(
     MediaQueryData media, {
     double spacing = AppSize.spaceMD,
   }) {
-    return math.max(media.viewPadding.bottom, media.viewInsets.bottom) + spacing;
+    final keyboard = media.viewInsets.bottom;
+    if (keyboard > 0) return keyboard + spacing;
+    return media.viewPadding.bottom + spacing;
   }
 
-  /// Footer padding inside a sheet when outer modal chrome already applied.
+  /// Alias for tests and call sites that predate [sheetContentBottomPadding].
+  static double modalBottomPadding(
+    MediaQueryData media, {
+    double spacing = AppSize.spaceMD,
+  }) =>
+      sheetContentBottomPadding(media, spacing: spacing);
+
+  /// Footer padding when the sheet is **not** wrapped by [BnoodModalSheet] chrome.
   static double sheetFooterBottomPadding({
     required MediaQueryData media,
     required bool outerModalChromeApplied,
     double spacing = AppSize.spaceMD,
   }) {
-    if (outerModalChromeApplied) return spacing;
-    return math.max(media.viewPadding.bottom, media.viewInsets.bottom) + spacing;
+    if (outerModalChromeApplied) return 0;
+    return sheetContentBottomPadding(media, spacing: spacing);
   }
 }
 

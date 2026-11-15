@@ -21,16 +21,16 @@ void _applyDeviceInsets(WidgetTester tester) {
 }
 
 void main() {
-  test('modalBottomPadding uses max home and keyboard plus spacing', () {
+  test('sheetContentBottomPadding uses keyboard or home plus spacing', () {
     const homeOnly = MediaQueryData(viewPadding: EdgeInsets.only(bottom: _bottomInset));
     expect(
-      SheetChromeInsets.modalBottomPadding(homeOnly),
+      SheetChromeInsets.sheetContentBottomPadding(homeOnly),
       _bottomInset + AppSize.spaceMD,
     );
 
     const keyboard = MediaQueryData(viewInsets: EdgeInsets.only(bottom: 320));
     expect(
-      SheetChromeInsets.modalBottomPadding(keyboard),
+      SheetChromeInsets.sheetContentBottomPadding(keyboard),
       320 + AppSize.spaceMD,
     );
 
@@ -39,7 +39,7 @@ void main() {
       viewInsets: const EdgeInsets.only(bottom: 320),
     );
     expect(
-      SheetChromeInsets.modalBottomPadding(both),
+      SheetChromeInsets.sheetContentBottomPadding(both),
       320 + AppSize.spaceMD,
     );
   });
@@ -86,7 +86,7 @@ void main() {
     final deleteButton = find.text('حذف');
     expect(deleteButton, findsOneWidget);
     final bottom = tester.getBottomLeft(deleteButton).dy;
-    expect(bottom, lessThanOrEqualTo(932 - _bottomInset + 1));
+    expect(bottom, lessThanOrEqualTo(932 - _bottomInset - AppSize.spaceMD + 1));
     expect(tester.takeException(), isNull);
   });
 }
