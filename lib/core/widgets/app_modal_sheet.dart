@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../layout/app_layout.dart';
 import '../config/theme/app_colors.dart';
+import '../config/theme/app_overlay.dart';
 import '../config/theme/app_shape.dart';
 import '../config/theme/app_size.dart';
 import 'bounded_sheet_navigator.dart';
@@ -61,6 +62,7 @@ abstract final class AppModalSheet {
     final openerKeyboard = MediaQuery.viewInsetsOf(context).bottom;
     return showModalBottomSheet<T>(
       context: context,
+      barrierColor: AppOverlay.barrierColor(context),
       useRootNavigator: useRootNavigator,
       isScrollControlled: true,
       isDismissible: isDismissible,
@@ -242,10 +244,13 @@ class _ModalSheetSlotsState extends State<_ModalSheetSlots> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (widget.header != null) widget.header!,
-          Flexible(
-            fit: FlexFit.loose,
-            child: _wrapBody(widget.body),
-          ),
+          if (widget.scrollable)
+            Flexible(
+              fit: FlexFit.loose,
+              child: _wrapBody(widget.body),
+            )
+          else
+            _wrapBody(widget.body),
           _padFooter(widget.footer),
         ],
       ),

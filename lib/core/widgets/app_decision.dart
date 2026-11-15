@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../config/extensions/num_extensions.dart';
 import '../config/extensions/text_style_extensions.dart';
+import '../config/theme/app_overlay.dart';
 import '../config/theme/app_size.dart';
 import '../config/theme/app_colors.dart';
 import '../resources/gen/assets.gen.dart';
@@ -100,6 +101,7 @@ abstract final class AppDecision {
 
     return showDialog<OverlayAnswer>(
       context: context,
+      barrierColor: AppOverlay.barrierColor(context),
       barrierDismissible: barrierDismiss,
       builder: (dialogContext) => _AppDecisionDialog(
         title: title,
