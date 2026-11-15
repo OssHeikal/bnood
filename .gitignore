@@ -27,3 +27,4 @@ coverage/
 # Secrets
 *.jks
 *.keystore
+test/failures/
