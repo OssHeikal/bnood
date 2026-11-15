@@ -13,6 +13,7 @@ import 'custom_app_bar.dart';
 import 'custom_text_field.dart';
 import 'entity_picker_row.dart';
 import 'bounded_sheet_navigator.dart';
+import 'full_screen_overlay_keyboard_scope.dart';
 import 'overlay_form_presentation.dart';
 import 'sheet_drag_handle.dart';
 
@@ -136,15 +137,20 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
     );
   }
 
-  Widget? _createFooter(AppLocalizations l10n, bool showCreateRow) {
+  Widget? _createFooter(
+    AppLocalizations l10n,
+    bool showCreateRow,
+    MediaQueryData media,
+  ) {
     if (!showCreateRow) return null;
     final colors = context.colors;
-    final media = MediaQuery.of(context);
     final inModal = widget.presentation != OverlayFormPresentation.fullScreen;
-    final bottomPad = SheetChromeInsets.sheetFooterBottomPadding(
-      media: media,
-      outerModalChromeApplied: inModal,
-    );
+    final bottomPad = widget.presentation == OverlayFormPresentation.fullScreen
+        ? FullScreenOverlayKeyboardScope.pinnedFooterBottomPadding(media)
+        : SheetChromeInsets.sheetFooterBottomPadding(
+            media: media,
+            outerModalChromeApplied: inModal,
+          );
 
     return Padding(
       padding: EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, bottomPad),
@@ -166,28 +172,36 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
+    final media = MediaQuery.of(context);
     final indices = _filteredIndices;
     final isCompletelyEmpty = widget.entries.isEmpty;
     final isSearchEmpty = !isCompletelyEmpty && indices.isEmpty;
     final showCreateRow = !isCompletelyEmpty && !isSearchEmpty;
-    final footer = _createFooter(l10n, showCreateRow);
+    final footer = _createFooter(l10n, showCreateRow, media);
 
     if (widget.presentation == OverlayFormPresentation.fullScreen) {
       return BnoodFormRouteCanvas(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: CustomAppBar(title: widget.title),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceMD, AppSize.screenPadding, 0),
-                child: _searchField(l10n),
-              ),
-              AppSize.spaceMD.gap,
-              Expanded(child: _listBody(l10n, indices, isCompletelyEmpty, isSearchEmpty)),
-              if (footer != null) SafeArea(top: false, child: footer),
-            ],
+          body: FullScreenOverlayKeyboardScope(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSize.screenPadding,
+                    AppSize.spaceMD,
+                    AppSize.screenPadding,
+                    0,
+                  ),
+                  child: _searchField(l10n),
+                ),
+                AppSize.spaceMD.gap,
+                Expanded(child: _listBody(l10n, indices, isCompletelyEmpty, isSearchEmpty)),
+                if (footer != null) footer,
+              ],
+            ),
           ),
         ),
       );
