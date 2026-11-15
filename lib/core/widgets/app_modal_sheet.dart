@@ -11,10 +11,12 @@ class AppModalSheetScope extends InheritedWidget {
   const AppModalSheetScope({
     super.key,
     required this.footerScrollPadding,
+    required this.homeIndicatorBottom,
     required super.child,
   });
 
   final double footerScrollPadding;
+  final double homeIndicatorBottom;
 
   static AppModalSheetScope? maybeOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<AppModalSheetScope>();
@@ -23,14 +25,19 @@ class AppModalSheetScope extends InheritedWidget {
   static double footerPaddingOf(BuildContext context) =>
       maybeOf(context)?.footerScrollPadding ?? 0;
 
+  static double homeIndicatorOf(BuildContext context) =>
+      maybeOf(context)?.homeIndicatorBottom ?? 0;
+
   @override
   bool updateShouldNotify(AppModalSheetScope oldWidget) =>
-      oldWidget.footerScrollPadding != footerScrollPadding;
+      oldWidget.footerScrollPadding != footerScrollPadding ||
+      oldWidget.homeIndicatorBottom != homeIndicatorBottom;
 }
 
 /// Shared modal bottom sheet with header / scrollable body / pinned footer slots.
 abstract final class AppModalSheet {
   static const sheetBoundsKey = Key('app_modal_sheet_bounds');
+  static const footerChromeKey = Key('app_modal_sheet_footer_chrome');
 
   static Future<T?> show<T>({
     required BuildContext context,
@@ -46,6 +53,12 @@ abstract final class AppModalSheet {
   }) {
     final brightness = Theme.of(context).brightness;
     final colors = brightness == Brightness.dark ? AppColors.dark : AppColors.light;
+    final openerViewPadding = MediaQuery.viewPaddingOf(context);
+    final openerPaddingInsets = MediaQuery.paddingOf(context);
+    final homeIndicatorBottom = openerViewPadding.bottom > 0
+        ? openerViewPadding.bottom
+        : openerPaddingInsets.bottom;
+    final openerKeyboard = MediaQuery.viewInsetsOf(context).bottom;
     return showModalBottomSheet<T>(
       context: context,
       useRootNavigator: useRootNavigator,
@@ -58,8 +71,13 @@ abstract final class AppModalSheet {
       shape: const RoundedRectangleBorder(),
       builder: (ctx) {
         final media = MediaQuery.of(ctx);
-        final viewPad = media.viewPadding;
-        final keyboard = media.viewInsets.bottom;
+        final viewPad = media.viewPadding.copyWith(
+          top: openerViewPadding.top > 0 ? openerViewPadding.top : media.viewPadding.top,
+          bottom: homeIndicatorBottom > 0 ? homeIndicatorBottom : media.viewPadding.bottom,
+          left: openerViewPadding.left > 0 ? openerViewPadding.left : media.viewPadding.left,
+          right: openerViewPadding.right > 0 ? openerViewPadding.right : media.viewPadding.right,
+        );
+        final keyboard = media.viewInsets.bottom > 0 ? media.viewInsets.bottom : openerKeyboard;
         final maxHeight = SheetContentBounds.viewportCap(media);
         final isMobile = ctx.isMobileLayout;
         final maxWidth = isMobile ? media.size.width : ctx.formMaxWidth;
@@ -75,6 +93,7 @@ abstract final class AppModalSheet {
           scrollable: scrollable,
           maxHeight: maxHeight,
           keyboardBottom: keyboard,
+          homeIndicatorBottom: homeIndicatorBottom,
         );
 
         sheet = Material(
@@ -136,6 +155,7 @@ class _ModalSheetSlots extends StatefulWidget {
     required this.scrollable,
     required this.maxHeight,
     required this.keyboardBottom,
+    required this.homeIndicatorBottom,
   });
 
   final Widget? header;
@@ -144,6 +164,7 @@ class _ModalSheetSlots extends StatefulWidget {
   final bool scrollable;
   final double maxHeight;
   final double keyboardBottom;
+  final double homeIndicatorBottom;
 
   @override
   State<_ModalSheetSlots> createState() => _ModalSheetSlotsState();
@@ -174,22 +195,25 @@ class _ModalSheetSlotsState extends State<_ModalSheetSlots> {
   }
 
   double get _footerChromeBottom {
-    final viewPad = MediaQuery.viewPaddingOf(context).bottom;
-    final homeIndicator = widget.keyboardBottom > 0 ? 0.0 : viewPad;
+    final homeIndicator =
+        widget.keyboardBottom > 0 ? 0.0 : widget.homeIndicatorBottom;
     return AppSize.spaceMD + homeIndicator;
   }
 
   Widget _padFooter(Widget? footer) {
     if (footer == null) return const SizedBox.shrink();
-  return Padding(
-      key: _footerKey,
-      padding: EdgeInsets.fromLTRB(
-        AppSize.screenPadding,
-        AppSize.spaceMD,
-        AppSize.screenPadding,
-        _footerChromeBottom,
+    return KeyedSubtree(
+      key: AppModalSheet.footerChromeKey,
+      child: Padding(
+        key: _footerKey,
+        padding: EdgeInsets.fromLTRB(
+          AppSize.screenPadding,
+          AppSize.spaceMD,
+          AppSize.screenPadding,
+          _footerChromeBottom,
+        ),
+        child: footer,
       ),
-      child: footer,
     );
   }
 
@@ -197,6 +221,7 @@ class _ModalSheetSlotsState extends State<_ModalSheetSlots> {
     final scrollPad = _footerHeight + AppSize.spaceMD;
     body = AppModalSheetScope(
       footerScrollPadding: scrollPad,
+      homeIndicatorBottom: widget.homeIndicatorBottom,
       child: body,
     );
     if (!widget.scrollable) return body;

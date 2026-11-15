@@ -14,12 +14,11 @@ import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/pagination.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
-import '../../core/widgets/custom_bottom_sheet.dart';
+import 'client_create_sheet.dart';
 import '../../core/widgets/directory_search_field.dart';
 import '../../app/shell_tab_scaffold.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../home/home_foundation_scope.dart';
-import '../vouchers/inline_create_routes.dart';
 import 'clients_list_paging.dart';
 import 'widgets/client_balance_card.dart';
 import '../subscription/subscription_gates.dart';
@@ -57,12 +56,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
   Future<void> _addClient(BuildContext context, WidgetRef ref) async {
     FocusManager.instance.primaryFocus?.unfocus();
     if (!await guardCreateActiveProject(context, ref)) return;
-    final createdId = await CustomBottomSheet.show<String?>(
-      context: context,
-      builder: (_) => const InlineCreateClientPage(padForSystemChrome: false),
-      nestedNavigator: false,
-      showDragHandle: false,
-    );
+    final createdId = await showClientCreateSheet(context);
     if (createdId != null) {
       refreshAfterClientMutation(ref, clientId: createdId);
     }

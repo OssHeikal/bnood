@@ -13,7 +13,8 @@ import '../../core/providers_api/app_provider_record.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/custom_text_field.dart';
-import '../../core/widgets/sheet_drag_handle.dart';
+import '../../core/widgets/sheet_footer_refresh.dart';
+import '../../core/widgets/sheet_form_header.dart';
 import '../home/home_foundation_scope.dart';
 import 'provider_mutation_actions.dart';
 
@@ -21,18 +22,57 @@ Future<void> showProviderEditSheet(
   BuildContext context, {
   required AppProvider provider,
 }) {
+  final formKey = GlobalKey<_ProviderEditSheetState>();
+  final footerRefresh = SheetFooterRefresh();
+  final l10n = AppLocalizations.of(context);
   return AppModalSheet.show<void>(
     context: context,
+    scrollable: false,
+    header: SheetFormHeader(title: l10n.edit),
     body: HomeFoundationScope(
-      child: ProviderEditSheet(provider: provider),
+      child: ProviderEditSheet(
+        key: formKey,
+        provider: provider,
+        footerRefresh: footerRefresh,
+      ),
+    ),
+    footer: ListenableBuilder(
+      listenable: footerRefresh,
+      builder: (context, _) {
+        final state = formKey.currentState;
+        if (state == null) return const SizedBox.shrink();
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AppButton.primary(
+              text: l10n.save,
+              isLoading: state._saving,
+              onPressed: state._saving ? null : state._save,
+            ),
+            AppSize.spaceSM.gap,
+            AppButton.outlined(
+              text: l10n.delete,
+              foregroundColor: context.colors.onSurface,
+              borderColor: context.colors.outline,
+              onPressed: state._saving ? null : state._delete,
+            ),
+          ],
+        );
+      },
     ),
   );
 }
 
 class ProviderEditSheet extends ConsumerStatefulWidget {
-  const ProviderEditSheet({super.key, required this.provider});
+  const ProviderEditSheet({
+    super.key,
+    required this.provider,
+    required this.footerRefresh,
+  });
 
   final AppProvider provider;
+  final SheetFooterRefresh footerRefresh;
 
   @override
   ConsumerState<ProviderEditSheet> createState() => _ProviderEditSheetState();
@@ -54,15 +94,19 @@ class _ProviderEditSheetState extends ConsumerState<ProviderEditSheet> {
     super.dispose();
   }
 
+  void _bumpFooter() => widget.footerRefresh.bump();
+
   Future<void> _save() async {
     setState(() {
       _attemptedSubmit = true;
       _nameError = null;
       _phoneError = null;
     });
+    _bumpFooter();
     if (_formKey.currentState?.validate() != true) return;
     if (_saving) return;
     setState(() => _saving = true);
+    _bumpFooter();
     try {
       final updated = await saveProviderUpdate(
         ref: ref,
@@ -85,7 +129,10 @@ class _ProviderEditSheetState extends ConsumerState<ProviderEditSheet> {
         _phoneError = duplicateProviderPhoneFieldError(l10n, e) ?? lookup.textFor('phone');
       });
     } finally {
-      if (mounted) setState(() => _saving = false);
+      if (mounted) {
+        setState(() => _saving = false);
+        _bumpFooter();
+      }
     }
   }
 
@@ -107,20 +154,11 @@ class _ProviderEditSheetState extends ConsumerState<ProviderEditSheet> {
         : l10n.directoryCraftsmanKindMeta;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSize.screenPadding,
-        AppSize.spaceSM,
-        AppSize.screenPadding,
-        0,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SheetDragHandle(),
-          AppSize.spaceMD.gap,
-          Text(l10n.edit, style: context.text.title),
-          AppSize.spaceSM.gap,
           Text(kindMeta, style: context.text.caption.copyWith(color: context.colors.onSurfaceMuted)),
           AppSize.spaceMD.gap,
           Form(
@@ -148,10 +186,10 @@ class _ProviderEditSheetState extends ConsumerState<ProviderEditSheet> {
                 AppSize.spaceMD.gap,
                 CustomTextField(
                   controller: _phoneCtrl,
-                    label: l10n.phoneOptional,
-                    placeholder: l10n.clientPhoneHint,
+                  label: l10n.phoneOptional,
+                  placeholder: l10n.clientPhoneHint,
                   fieldHeight: AppSize.fieldHeightComfortable,
-                    type: AppInputType.phone,
+                  type: AppInputType.phone,
                   ltrValue: true,
                   textInputAction: TextInputAction.done,
                   errorMessage: _phoneError,
@@ -162,19 +200,6 @@ class _ProviderEditSheetState extends ConsumerState<ProviderEditSheet> {
                 ),
               ],
             ),
-          ),
-          AppSize.spaceLG.gap,
-          AppButton.primary(
-            text: l10n.save,
-            isLoading: _saving,
-            onPressed: _saving ? null : _save,
-          ),
-          AppSize.spaceSM.gap,
-          AppButton.outlined(
-            text: l10n.delete,
-            foregroundColor: context.colors.onSurface,
-            borderColor: context.colors.outline,
-            onPressed: _saving ? null : _delete,
           ),
         ],
       ),

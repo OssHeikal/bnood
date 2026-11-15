@@ -15,7 +15,6 @@ import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/pagination.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
-import '../../core/widgets/custom_bottom_sheet.dart';
 import '../../core/widgets/directory_search_field.dart';
 import '../home/home_foundation_scope.dart';
 import 'provider_create_sheet.dart';
@@ -65,12 +64,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
       ProvidersListTypeFilter.supplier => AppProviderType.supplier,
       ProvidersListTypeFilter.all => AppProviderType.supplier,
     };
-    return CustomBottomSheet.show<void>(
-      context: context,
-      builder: (_) => ProviderCreateSheet(initialType: initialType),
-      nestedNavigator: false,
-      showDragHandle: false,
-    );
+    return showProviderCreateSheet(context, initialType: initialType);
   }
 
   void _cacheCollapsingHeaderHeight() {

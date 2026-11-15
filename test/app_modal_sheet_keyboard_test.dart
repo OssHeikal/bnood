@@ -1,7 +1,7 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
-import 'package:bnood/features/providers/provider_create_sheet.dart';
+import 'package:bnood/features/providers/provider_create_sheet.dart' show showProviderCreateSheet;
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,10 +31,7 @@ void main() {
               builder: (context) => Scaffold(
                 body: Center(
                   child: FilledButton(
-                    onPressed: () => AppModalSheet.show<void>(
-                      context: context,
-                      body: const ProviderCreateSheet(),
-                    ),
+                    onPressed: () => showProviderCreateSheet(context),
                     child: const Text('open'),
                   ),
                 ),
@@ -51,6 +48,6 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text('حفظ'), findsOneWidget);
-    expect(find.byType(SingleChildScrollView), findsWidgets);
+    expect(find.byType(SingleChildScrollView), findsNothing);
   });
 }

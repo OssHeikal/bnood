@@ -1,6 +1,6 @@
 import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/buttons/app_button.dart';
+import 'package:bnood/core/widgets/buttons/app_button.dart' show AppButton;
 import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
@@ -25,10 +25,18 @@ void _setPhoneSurface(WidgetTester tester, {double keyboard = 0}) {
 Future<void> _openChromeSheet(
   WidgetTester tester, {
   required bool scrollable,
+  required double keyboard,
   bool autofocusLast = false,
 }) async {
   await tester.pumpWidget(
-    MaterialApp(
+    MediaQuery(
+      data: MediaQueryData(
+        size: const Size(_width, _height),
+        padding: const EdgeInsets.only(top: _topPad, bottom: _bottomPad),
+        viewPadding: const EdgeInsets.only(top: _topPad, bottom: _bottomPad),
+        viewInsets: EdgeInsets.only(bottom: keyboard),
+      ),
+      child: MaterialApp(
       theme: AppFoundationTheme.light(),
       locale: const Locale('ar'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -79,6 +87,7 @@ Future<void> _openChromeSheet(
         ),
       ),
     ),
+    ),
   );
   await tester.pumpAndSettle();
   await tester.tap(find.text('open'));
@@ -92,19 +101,33 @@ void main() {
         'chrome scrollable=$scrollable keyboard=$keyboard',
         (tester) async {
           _setPhoneSurface(tester, keyboard: keyboard);
-          await _openChromeSheet(tester, scrollable: scrollable, autofocusLast: keyboard > 0);
+          await _openChromeSheet(
+            tester,
+            scrollable: scrollable,
+            keyboard: keyboard,
+            autofocusLast: keyboard > 0,
+          );
 
           expect(tester.takeException(), isNull);
 
           final sheetBounds = tester.getTopLeft(find.byKey(AppModalSheet.sheetBoundsKey));
           expect(sheetBounds.dy, greaterThanOrEqualTo(_topPad - 1));
 
-          final saveBottom = tester.getBottomLeft(find.text('حفظ')).dy;
+          final saveBottom = tester.getRect(find.byType(AppButton)).bottom;
           if (keyboard > 0) {
+            final liftedChrome =
+                tester.getBottomLeft(find.byKey(AppModalSheet.footerChromeKey)).dy;
+            expect(liftedChrome, closeTo(_height - keyboard, 2));
             expect(saveBottom, lessThanOrEqualTo(_height - keyboard - AppSize.spaceMD + 2));
             expect(saveBottom, greaterThan(_height - keyboard - AppSize.spaceMD - 80));
           } else {
-            expect(saveBottom, lessThanOrEqualTo(_height - _bottomPad - AppSize.spaceMD + 2));
+            final footerChromeBottom =
+                tester.getBottomLeft(find.byKey(AppModalSheet.footerChromeKey)).dy;
+            expect(footerChromeBottom, closeTo(_height, 1.5));
+            expect(
+              saveBottom,
+              closeTo(_height - _bottomPad - AppSize.spaceMD, 2),
+            );
           }
 
           if (keyboard > 0 && scrollable) {
