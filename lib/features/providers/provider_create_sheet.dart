@@ -15,6 +15,7 @@ import '../../core/providers_api/app_provider_record.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
+import '../../core/widgets/sheet_form_scaffold.dart';
 import 'provider_mutation_actions.dart';
 
 class ProviderCreateSheet extends ConsumerStatefulWidget {
@@ -88,23 +89,26 @@ class _ProviderCreateSheetState extends ConsumerState<ProviderCreateSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSize.screenPadding,
-        AppSize.spaceSM,
-        AppSize.screenPadding,
-        AppSize.spaceMD,
+    const padding = EdgeInsets.fromLTRB(
+      AppSize.screenPadding,
+      0,
+      AppSize.screenPadding,
+      AppSize.spaceMD,
+    );
+    return SheetFormScaffold(
+      padding: padding,
+      header: const Padding(
+        padding: EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, 0),
+        child: SheetDragHandle(),
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SheetDragHandle(),
-            AppSize.spaceMD.gap,
-            Text(l10n.providerCreateSheetTitle, style: context.text.title),
-            AppSize.spaceMD.gap,
-            Form(
+      scrollChild: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppSize.spaceMD.gap,
+          Text(l10n.providerCreateSheetTitle, style: context.text.title),
+          AppSize.spaceMD.gap,
+          Form(
               key: _formKey,
               autovalidateMode:
                   _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
@@ -166,14 +170,12 @@ class _ProviderCreateSheetState extends ConsumerState<ProviderCreateSheet> {
                 ],
               ),
             ),
-            AppSize.spaceLG.gap,
-            AppButton.primary(
-              text: l10n.save,
-              isLoading: _saving,
-              onPressed: _saving ? null : _save,
-            ),
-          ],
-        ),
+        ],
+      ),
+      footer: AppButton.primary(
+        text: l10n.save,
+        isLoading: _saving,
+        onPressed: _saving ? null : _save,
       ),
     );
   }

@@ -11,6 +11,7 @@ import '../core/api/api_accept_language.dart';
 import '../core/providers/settings_provider.dart';
 import '../core/session/user_session_lifecycle.dart';
 import '../core/theme/app_theme.dart';
+import '../core/widgets/app_keyboard_scope.dart';
 import 'app_gate_lifecycle.dart';
 import 'router.dart';
 
@@ -33,7 +34,9 @@ class BnoodApp extends ConsumerWidget {
             breakpoints: BnoodBreakpoints.all,
             child: child ?? const SizedBox.shrink(),
           );
-          return appToastBuilder(context, responsive);
+          return AppKeyboardScope(
+            child: appToastBuilder(context, responsive),
+          );
         },
         onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,
         theme: AppTheme.light(),

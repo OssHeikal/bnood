@@ -37,10 +37,11 @@ import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/entity_picker_page.dart';
 import '../../core/widgets/overlay_form_presentation.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
-import '../../core/widgets/app_card.dart';
+import '../../core/widgets/dashed_border_frame.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_pressable.dart';
+import '../../core/widgets/sheet/app_sheet.dart';
 import '../../core/widgets/toast/app_tone.dart';
 import 'inline_create_routes.dart';
 import 'receipt_image_codec.dart';
@@ -845,6 +846,68 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     }
   }
 
+  Future<void> _attachFromFiles() async {
+    final l10n = AppLocalizations.of(context);
+    try {
+      final files = await _receiptPicker.pickFiles();
+      if (files.isEmpty) {
+        return;
+      }
+      final saved = <String>[];
+      for (final file in files) {
+        final path = await _persistPick(file);
+        if (path != null) {
+          saved.add(path);
+        }
+      }
+      await _appendPaths(saved);
+    } on VoucherReceiptPickException catch (e) {
+      if (!mounted) {
+        return;
+      }
+      AppToaster.show(voucherReceiptPickUserMessage(l10n, e), kind: ToastKind.warning);
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      AppToaster.show(l10n.voucherReceiptAttachFailed, kind: ToastKind.warning);
+    }
+  }
+
+  Future<void> _openAttachChooser() async {
+    final l10n = AppLocalizations.of(context);
+    final choice = await AppSheet.choices<String>(
+      context,
+      title: l10n.voucherAttachSourceTitle,
+      choices: [
+        SheetChoice(
+          value: 'camera',
+          label: l10n.voucherAttachCamera,
+          leading: const Icon(Icons.photo_camera_outlined),
+        ),
+        SheetChoice(
+          value: 'gallery',
+          label: l10n.voucherAttachGallery,
+          leading: const Icon(Icons.photo_library_outlined),
+        ),
+        SheetChoice(
+          value: 'files',
+          label: l10n.voucherAttachFiles,
+          leading: const Icon(Icons.insert_drive_file_outlined),
+        ),
+      ],
+    );
+    if (!mounted || choice == null) return;
+    switch (choice) {
+      case 'camera':
+        await _attachFromCamera();
+      case 'gallery':
+        await _attachFromGallery();
+      case 'files':
+        await _attachFromFiles();
+    }
+  }
+
   Future<void> _attachFromGallery() async {
     final l10n = AppLocalizations.of(context);
     try {
@@ -1101,48 +1164,27 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
                             ),
                           ),
                         ),
-                      Row(
-                        spacing: AppSize.spaceSM,
-                        children: [
-                          Expanded(
-                            child: AppPressable(
-                              onPressed: _attachFromCamera,
-                              child: AppCard(
-                                padding: const EdgeInsets.all(AppSize.spaceMD),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  spacing: AppSize.spaceSM,
-                                  children: [
-                                    Icon(Icons.photo_camera_outlined, color: context.colors.primary),
-                                    Text(
-                                      l10n.voucherAttachCamera,
-                                      style: context.text.caption.semiBold.setColor(context.colors.primaryDark),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                      AppPressable(
+                        onPressed: _openAttachChooser,
+                        child: DashedBorderFrame(
+                          color: context.colors.outline,
+                          radius: AppSize.radius,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppSize.spaceLG,
+                            horizontal: AppSize.spaceMD,
                           ),
-                          Expanded(
-                            child: AppPressable(
-                              onPressed: _attachFromGallery,
-                              child: AppCard(
-                                padding: const EdgeInsets.all(AppSize.spaceMD),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  spacing: AppSize.spaceSM,
-                                  children: [
-                                    Icon(Icons.photo_library_outlined, color: context.colors.primary),
-                                    Text(
-                                      l10n.voucherAttachGallery,
-                                      style: context.text.caption.semiBold.setColor(context.colors.primaryDark),
-                                    ),
-                                  ],
-                                ),
+                          child: Column(
+                            spacing: AppSize.spaceSM,
+                            children: [
+                              Icon(Icons.cloud_upload_outlined, color: context.colors.primary, size: 28),
+                              Text(
+                                l10n.voucherAttachUploadPrompt,
+                                style: context.text.caption.copyWith(color: context.colors.onSurfaceMuted),
+                                textAlign: TextAlign.center,
                               ),
-                            ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),

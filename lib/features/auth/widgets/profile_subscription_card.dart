@@ -27,19 +27,17 @@ class ProfileSubscriptionCard extends ConsumerWidget {
 
     final ent = snap.entitlements;
     final isActivePremium = ent.isPremium && !ent.isExpiredPremium;
+    final colors = context.colors;
     final text = context.text;
-    final muted = context.colors.onSurfaceMuted;
+    final muted = colors.onSurfaceMuted;
+    final accent = SubscriptionColors.violet;
+    final cardFill = Color.alphaBlend(colors.primaryTint, colors.surface);
 
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppSize.radiusSM),
-        border: Border.all(color: SubscriptionColors.violet.withValues(alpha: 0.22)),
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [SubscriptionColors.paywallGradientTop, SubscriptionColors.violetSoft],
-          stops: [0, 1],
-        ),
+        border: Border.all(color: colors.outlineSubtle),
+        color: cardFill,
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSize.spaceMD),
@@ -52,19 +50,22 @@ class ProfileSubscriptionCard extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(4),
                   decoration: ShapeDecoration(
-                    color: SubscriptionColors.violet,
+                    color: isActivePremium ? accent : colors.primary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.radiusSM)),
                   ),
-                  child: Assets.icons.crownOutline.svg(width: 24, height: 24),
+                  child: Assets.icons.crownOutline.svg(
+                    width: 24,
+                    height: 24,
+                    colorFilter: const ColorFilter.mode(SubscriptionColors.onViolet, BlendMode.srcIn),
+                  ),
                 ),
-
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(l10n.profileSubscriptionSection, style: text.body, textAlign: TextAlign.start),
                       if (isActivePremium)
-                        Text(ent.packageName, style: text.bodyEmphasis.copyWith(color: SubscriptionColors.violetDark))
+                        Text(ent.packageName, style: text.bodyEmphasis.copyWith(color: colors.primaryDark))
                       else
                         Text(l10n.profileSubscriptionFreeBlurb, style: text.body.copyWith(color: muted)),
                     ],
@@ -78,7 +79,7 @@ class ProfileSubscriptionCard extends ConsumerWidget {
               ],
             ),
             AppSize.spaceSM.gap,
-            if (!isActivePremium) ..._freeBody(context, l10n, snap, text, muted),
+            if (!isActivePremium) ..._freeBody(context, l10n, snap, text, muted, colors, accent),
           ],
         ),
       ),
@@ -107,6 +108,8 @@ class ProfileSubscriptionCard extends ConsumerWidget {
     AppSubscriptionSnapshot snap,
     AppText text,
     Color muted,
+    AppColors colors,
+    Color accent,
   ) {
     final benefits = snap.paywall?.benefits ?? const <String>[];
     return [
@@ -121,7 +124,7 @@ class ProfileSubscriptionCard extends ConsumerWidget {
       AppSize.spaceMD.gap,
       AppButton.primary(
         text: l10n.profileSubscriptionSubscribeCta,
-        backgroundColor: SubscriptionColors.violet,
+        backgroundColor: accent,
         onPressed: () => PaywallLauncher.present(context),
       ),
     ];

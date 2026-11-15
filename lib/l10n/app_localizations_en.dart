@@ -209,6 +209,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pickFromContacts => 'Choose from contacts';
 
   @override
+  String get contactsPermissionDeniedBody =>
+      'Contacts access is needed to fill name and phone from your address book.';
+
+  @override
+  String get contactsPermissionRestrictedBody =>
+      'Contacts access is restricted on this device.';
+
+  @override
+  String get contactsPermissionSettingsTitle => 'Allow contacts access';
+
+  @override
+  String get contactsPermissionSettingsBody =>
+      'Open Settings to allow contacts access, then try import again.';
+
+  @override
+  String get contactsPermissionOpenSettings => 'Open Settings';
+
+  @override
   String get contactPickFailed =>
       'Could not open contacts. You can still enter details manually.';
 
@@ -528,6 +546,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voucherAttachGallery => 'Gallery';
+
+  @override
+  String get voucherAttachFiles => 'Files';
+
+  @override
+  String get voucherAttachUploadPrompt =>
+      'Tap to add a receipt photo or document';
+
+  @override
+  String get voucherAttachSourceTitle => 'Attach receipt';
 
   @override
   String get voucherReceiptCameraDenied =>

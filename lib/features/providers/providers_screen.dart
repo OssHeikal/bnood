@@ -15,7 +15,7 @@ import '../../core/shared/pagination/pagination.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
-import '../../core/widgets/custom_text_field.dart';
+import '../../core/widgets/directory_search_field.dart';
 import '../home/home_foundation_scope.dart';
 import 'provider_create_sheet.dart';
 import 'provider_edit_sheet.dart';
@@ -57,6 +57,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
   void _refreshPaging() => _pagingController.refresh();
 
   Future<void> _addProvider(BuildContext context) {
+    FocusManager.instance.primaryFocus?.unfocus();
     final filter = ref.read(providersListTypeFilterProvider);
     final initialType = switch (filter) {
       ProvidersListTypeFilter.craftsman => AppProviderType.craftsman,
@@ -133,7 +134,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(gutter, 0, gutter, AppSize.spaceSM),
-                        child: CustomTextField.search(
+                        child: DirectorySearchField(
                           controller: _searchController,
                           placeholder: l10n.providersSearchHint,
                           onChanged: (value) {

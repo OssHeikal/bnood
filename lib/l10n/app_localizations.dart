@@ -464,6 +464,36 @@ abstract class AppLocalizations {
   /// **'Choose from contacts'**
   String get pickFromContacts;
 
+  /// No description provided for @contactsPermissionDeniedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts access is needed to fill name and phone from your address book.'**
+  String get contactsPermissionDeniedBody;
+
+  /// No description provided for @contactsPermissionRestrictedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts access is restricted on this device.'**
+  String get contactsPermissionRestrictedBody;
+
+  /// No description provided for @contactsPermissionSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow contacts access'**
+  String get contactsPermissionSettingsTitle;
+
+  /// No description provided for @contactsPermissionSettingsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings to allow contacts access, then try import again.'**
+  String get contactsPermissionSettingsBody;
+
+  /// No description provided for @contactsPermissionOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get contactsPermissionOpenSettings;
+
   /// No description provided for @contactPickFailed.
   ///
   /// In en, this message translates to:
@@ -1063,6 +1093,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Gallery'**
   String get voucherAttachGallery;
+
+  /// No description provided for @voucherAttachFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Files'**
+  String get voucherAttachFiles;
+
+  /// No description provided for @voucherAttachUploadPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to add a receipt photo or document'**
+  String get voucherAttachUploadPrompt;
+
+  /// No description provided for @voucherAttachSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach receipt'**
+  String get voucherAttachSourceTitle;
 
   /// No description provided for @voucherReceiptCameraDenied.
   ///

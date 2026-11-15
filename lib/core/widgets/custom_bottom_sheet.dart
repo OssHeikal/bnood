@@ -63,10 +63,7 @@ class CustomBottomSheet extends StatelessWidget {
                         child: Text(title!, style: context.text.titleLarge),
                       ),
                     ],
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: child,
-                    ),
+                    child,
                   ],
                 ),
               );
@@ -95,6 +92,7 @@ class _BoundedStandaloneChild extends StatelessWidget {
           ),
           child: Align(
             alignment: Alignment.topCenter,
+            heightFactor: 1,
             child: Builder(builder: builder),
           ),
         );

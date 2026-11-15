@@ -8,12 +8,15 @@ import 'bounded_sheet_navigator.dart';
 
 /// Shared Bnood modal bottom sheet: content-sized up to [SheetContentBounds.viewportCap].
 abstract final class BnoodModalSheet {
+  static const sheetBoundsKey = Key('bnood_modal_sheet_bounds');
+
   static Future<T?> show<T>({
     required BuildContext context,
     required WidgetBuilder builder,
     bool useRootNavigator = true,
     Color? backgroundColor,
     ShapeBorder? shape,
+    bool fitContent = true,
   }) {
     final brightness = Theme.of(context).brightness;
     final colors = brightness == Brightness.dark ? AppColors.dark : AppColors.light;
@@ -23,29 +26,46 @@ abstract final class BnoodModalSheet {
       isScrollControlled: true,
       showDragHandle: false,
       useSafeArea: false,
-      backgroundColor: backgroundColor ?? colors.surface,
-      shape: shape ?? AppShape.superellipse(radius: AppSize.radiusLG),
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(),
       builder: (ctx) {
         final media = MediaQuery.of(ctx);
         final bottomPad = SheetChromeInsets.modalBottomPadding(media);
-        Widget sheet = SafeArea(
-          top: true,
-          left: true,
-          right: true,
-          bottom: false,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: bottomPad),
-            child: frame(context: ctx, child: Builder(builder: builder)),
+        final viewPad = media.viewPadding;
+        final cap = SheetContentBounds.viewportCap(media);
+        final maxWidth = ctx.isBnoodMobile ? media.size.width : ctx.formMaxWidth;
+
+        Widget body = fitContent
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [Builder(builder: builder)],
+              )
+            : frame(context: ctx, child: Builder(builder: builder));
+
+        Widget sheet = Material(
+          color: backgroundColor ?? colors.surface,
+          shape: shape ?? AppShape.superellipse(radius: AppSize.radiusLG),
+          clipBehavior: Clip.antiAlias,
+          child: ConstrainedBox(
+            key: sheetBoundsKey,
+            constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: cap),
+            child: body,
           ),
         );
+
+        sheet = Padding(
+          padding: EdgeInsets.only(
+            top: viewPad.top,
+            left: viewPad.left,
+            right: viewPad.right,
+            bottom: bottomPad,
+          ),
+          child: sheet,
+        );
+
         if (!ctx.isBnoodMobile) {
-          sheet = Align(
-            alignment: Alignment.bottomCenter,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: ctx.formMaxWidth),
-              child: sheet,
-            ),
-          );
+          sheet = Align(alignment: Alignment.bottomCenter, child: sheet);
         }
         return sheet;
       },
