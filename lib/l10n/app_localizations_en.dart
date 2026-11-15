@@ -548,11 +548,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voucherAttachGallery => 'Gallery';
 
   @override
-  String get voucherAttachFiles => 'Files';
+  String get voucherAttachCameraSubtitle => 'Take a photo of the receipt';
 
   @override
-  String get voucherAttachUploadPrompt =>
-      'Tap to add a receipt photo or document';
+  String get voucherAttachGallerySubtitle => 'Choose from your photos';
+
+  @override
+  String get voucherAttachUploadPrompt => 'Tap to add a receipt photo';
 
   @override
   String get voucherAttachSourceTitle => 'Attach receipt';

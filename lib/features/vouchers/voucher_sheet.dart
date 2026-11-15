@@ -41,7 +41,6 @@ import '../../core/widgets/dashed_border_frame.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_pressable.dart';
-import '../../core/widgets/sheet/app_sheet.dart';
 import '../../core/widgets/toast/app_tone.dart';
 import 'inline_create_routes.dart';
 import 'receipt_image_codec.dart';
@@ -55,6 +54,7 @@ import 'voucher_launcher.dart';
 import 'voucher_picker_cards.dart';
 import 'voucher_selector_field.dart';
 import 'voucher_camera_pick_route.dart';
+import 'voucher_receipt_source_sheet.dart';
 import 'voucher_picker_resolution.dart';
 import 'voucher_receipt_picker.dart';
 import 'voucher_transaction_date_bounds.dart';
@@ -846,65 +846,14 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     }
   }
 
-  Future<void> _attachFromFiles() async {
-    final l10n = AppLocalizations.of(context);
-    try {
-      final files = await _receiptPicker.pickFiles();
-      if (files.isEmpty) {
-        return;
-      }
-      final saved = <String>[];
-      for (final file in files) {
-        final path = await _persistPick(file);
-        if (path != null) {
-          saved.add(path);
-        }
-      }
-      await _appendPaths(saved);
-    } on VoucherReceiptPickException catch (e) {
-      if (!mounted) {
-        return;
-      }
-      AppToaster.show(voucherReceiptPickUserMessage(l10n, e), kind: ToastKind.warning);
-    } catch (_) {
-      if (!mounted) {
-        return;
-      }
-      AppToaster.show(l10n.voucherReceiptAttachFailed, kind: ToastKind.warning);
-    }
-  }
-
   Future<void> _openAttachChooser() async {
-    final l10n = AppLocalizations.of(context);
-    final choice = await AppSheet.choices<String>(
-      context,
-      title: l10n.voucherAttachSourceTitle,
-      choices: [
-        SheetChoice(
-          value: 'camera',
-          label: l10n.voucherAttachCamera,
-          leading: const Icon(Icons.photo_camera_outlined),
-        ),
-        SheetChoice(
-          value: 'gallery',
-          label: l10n.voucherAttachGallery,
-          leading: const Icon(Icons.photo_library_outlined),
-        ),
-        SheetChoice(
-          value: 'files',
-          label: l10n.voucherAttachFiles,
-          leading: const Icon(Icons.insert_drive_file_outlined),
-        ),
-      ],
-    );
+    final choice = await showVoucherReceiptSourceSheet(context);
     if (!mounted || choice == null) return;
     switch (choice) {
-      case 'camera':
+      case VoucherReceiptSource.camera:
         await _attachFromCamera();
-      case 'gallery':
+      case VoucherReceiptSource.gallery:
         await _attachFromGallery();
-      case 'files':
-        await _attachFromFiles();
     }
   }
 

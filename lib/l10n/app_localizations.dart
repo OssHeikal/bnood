@@ -1094,16 +1094,22 @@ abstract class AppLocalizations {
   /// **'Gallery'**
   String get voucherAttachGallery;
 
-  /// No description provided for @voucherAttachFiles.
+  /// No description provided for @voucherAttachCameraSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Files'**
-  String get voucherAttachFiles;
+  /// **'Take a photo of the receipt'**
+  String get voucherAttachCameraSubtitle;
+
+  /// No description provided for @voucherAttachGallerySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from your photos'**
+  String get voucherAttachGallerySubtitle;
 
   /// No description provided for @voucherAttachUploadPrompt.
   ///
   /// In en, this message translates to:
-  /// **'Tap to add a receipt photo or document'**
+  /// **'Tap to add a receipt photo'**
   String get voucherAttachUploadPrompt;
 
   /// No description provided for @voucherAttachSourceTitle.

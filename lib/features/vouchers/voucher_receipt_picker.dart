@@ -1,4 +1,3 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_android/image_picker_android.dart';
@@ -45,31 +44,6 @@ class VoucherReceiptPicker {
         imageQuality: imageQuality,
         requestFullMetadata: false,
       );
-    } on PlatformException catch (e) {
-      throw VoucherReceiptPickException(e);
-    }
-  }
-
-  /// Document or image via system file picker (PDF, JPEG, PNG, WebP).
-  Future<List<XFile>> pickFiles() async {
-    try {
-      final result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        type: FileType.custom,
-        allowedExtensions: const ['jpg', 'jpeg', 'png', 'webp', 'pdf'],
-        withReadStream: false,
-      );
-      if (result == null || result.files.isEmpty) {
-        return const [];
-      }
-      final out = <XFile>[];
-      for (final file in result.files) {
-        final path = file.path;
-        if (path != null && path.isNotEmpty) {
-          out.add(XFile(path, name: file.name));
-        }
-      }
-      return out;
     } on PlatformException catch (e) {
       throw VoucherReceiptPickException(e);
     }
