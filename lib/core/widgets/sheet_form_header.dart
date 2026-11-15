@@ -14,18 +14,14 @@ class SheetFormHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSize.screenPadding,
-        AppSize.spaceSM,
-        AppSize.screenPadding,
-        0,
-      ),
+      padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SheetDragHandle(),
           AppSize.spaceMD.gap,
           Text(title, style: context.text.title),
+          AppSize.spaceMD.gap,
         ],
       ),
     );
@@ -39,12 +35,7 @@ class SheetDragHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.fromLTRB(
-        AppSize.screenPadding,
-        AppSize.spaceSM,
-        AppSize.screenPadding,
-        0,
-      ),
+      padding: EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, 0),
       child: SheetDragHandle(),
     );
   }

@@ -1,21 +1,20 @@
-import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/config/extensions/num_extensions.dart';
-import '../../core/config/theme/app_colors.dart';
-import '../../core/config/theme/app_size.dart';
 import '../../core/api/api_field_errors.dart';
 import '../../core/api/auth_api_exception.dart';
+import '../../core/config/extensions/num_extensions.dart';
+import '../../core/config/theme/app_size.dart';
 import '../../core/validation/egypt_mobile_phone_validation.dart';
+import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/app_toaster.dart';
-import 'client_mutation_actions.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
-import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/sheet_footer_refresh.dart';
 import '../../core/widgets/sheet_form_header.dart';
 import '../home/home_foundation_scope.dart';
+import 'client_mutation_actions.dart';
 
 Future<void> showClientEditSheet({
   required BuildContext context,
@@ -137,8 +136,7 @@ class _ClientEditSheetState extends ConsumerState<ClientEditSheet> {
       padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
       child: Form(
         key: _formKey,
-        autovalidateMode:
-            _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
