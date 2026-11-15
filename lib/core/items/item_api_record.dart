@@ -8,6 +8,7 @@ class CatalogItem {
     required this.sortOrder,
     required this.createdAt,
     required this.updatedAt,
+    this.archivedAt,
   });
 
   final String id;
@@ -18,8 +19,12 @@ class CatalogItem {
   final int sortOrder;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final DateTime? archivedAt;
+
+  bool get isArchived => archivedAt != null;
 
   static CatalogItem fromDataJson(Map<String, dynamic> json) {
+    final archivedRaw = json['archived_at'];
     return CatalogItem(
       id: json['id'] as String,
       name: json['name'] as String,
@@ -29,6 +34,7 @@ class CatalogItem {
       sortOrder: (json['sort_order'] as num?)?.toInt() ?? 0,
       createdAt: DateTime.parse(json['created_at'] as String).toUtc(),
       updatedAt: DateTime.parse(json['updated_at'] as String).toUtc(),
+      archivedAt: archivedRaw == null ? null : DateTime.parse(archivedRaw as String).toUtc(),
     );
   }
 }

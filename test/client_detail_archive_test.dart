@@ -69,8 +69,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(Dialog), findsNothing);
 
-    await tester.tap(find.byKey(const Key('client_detail_edit')));
+    await tester.tap(find.byKey(const Key('client_detail_overflow')));
     await tester.pumpAndSettle();
+    expect(find.text('Edit'), findsNothing);
     expect(find.text('Archived Tower'), findsWidgets);
   });
 

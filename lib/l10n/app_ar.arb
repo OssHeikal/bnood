@@ -152,7 +152,7 @@
   "clientDuplicateNameConfirm": "متابعة",
   "clientDuplicatePhoneError": "رقم الهاتف مستخدم لعميل آخر.",
   "clientDeleteTitle": "حذف العميل؟",
-  "clientDeleteDescription": "حذف {name}؟ سيُحذف العميل والمشروع.",
+  "clientDeleteDescription": "حذف {name}؟ كل الإيصالات والمصروفات الخاصة بهذا العميل ستُحذف نهائيًا.",
   "@clientDeleteDescription": {
     "placeholders": {
       "name": { "type": "String" }
@@ -309,6 +309,18 @@
   "directoryAddCraftsmanToRoster": "إضافة صنايعي للدليل",
   "crewAssignmentsSaved": "حُفظت اختيارات الصنايعية لهذا العميل",
   "itemsCatalogCaption": "البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك",
+  "itemsFilterActive": "النشطة",
+  "itemsFilterArchived": "المؤرشفة",
+  "itemsArchivedEmptyTitle": "لا بنود مؤرشفة",
+  "itemsArchivedEmptyDescription": "البنود المؤرشفة لا تظهر في القوائم لكنها تبقى في الإيصالات السابقة.",
+  "itemInUseTitle": "البند مستخدم",
+  "itemInUseArchiveDescription": "{name} مرتبط بمصروفات ولا يمكن حذفه. أرشفته بدلًا من ذلك؟",
+  "@itemInUseArchiveDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "overflowMenuTooltip": "المزيد",
   "addItem": "إضافة بند",
   "itemCreateSheetTitle": "بند جديد",
   "itemEditSheetTitle": "تعديل البند",
@@ -551,12 +563,15 @@
   "toastClientCreated": "اتضاف العميل.",
   "toastClientUpdated": "اتحدّث العميل.",
   "toastClientArchived": "اتأرشف العميل.",
+  "toastClientDeleted": "اتمسح العميل.",
   "toastSupplierCreated": "اتضاف المورد.",
   "toastCraftsmanCreated": "اتضاف الصنايعي.",
   "toastProviderUpdated": "اتحدّثت البيانات.",
   "toastItemCreated": "اتضاف البند.",
   "toastItemUpdated": "اتحدّث البند.",
   "toastItemDeleted": "اتمسح البند.",
+  "toastItemArchived": "اتأرشف البند.",
+  "toastItemUnarchived": "اترجع البند.",
   "toastVoucherCreated": "اتسجّل السند.",
   "toastVoucherUpdated": "اتحدّث السند.",
   "toastVoucherDeleted": "اتمسح السند.",

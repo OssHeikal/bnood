@@ -857,7 +857,7 @@ abstract class AppLocalizations {
   /// No description provided for @clientDeleteDescription.
   ///
   /// In en, this message translates to:
-  /// **'Delete {name}? This removes the client and project.'**
+  /// **'Delete {name}? All receipts and expenses for this client will be permanently deleted.'**
   String clientDeleteDescription(String name);
 
   /// No description provided for @clientDeleteHasActivityTitle.
@@ -1561,6 +1561,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Default items are read-only — add your own items below'**
   String get itemsCatalogCaption;
+
+  /// No description provided for @itemsFilterActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get itemsFilterActive;
+
+  /// No description provided for @itemsFilterArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get itemsFilterArchived;
+
+  /// No description provided for @itemsArchivedEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No archived items'**
+  String get itemsArchivedEmptyTitle;
+
+  /// No description provided for @itemsArchivedEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived items are hidden from pickers but stay in past vouchers.'**
+  String get itemsArchivedEmptyDescription;
+
+  /// No description provided for @itemInUseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Item is in use'**
+  String get itemInUseTitle;
+
+  /// No description provided for @itemInUseArchiveDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is linked to expenses and cannot be deleted. Archive it instead?'**
+  String itemInUseArchiveDescription(String name);
+
+  /// No description provided for @overflowMenuTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get overflowMenuTooltip;
 
   /// No description provided for @addItem.
   ///
@@ -2461,6 +2503,12 @@ abstract class AppLocalizations {
   /// **'Client archived.'**
   String get toastClientArchived;
 
+  /// No description provided for @toastClientDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Client deleted.'**
+  String get toastClientDeleted;
+
   /// No description provided for @toastSupplierCreated.
   ///
   /// In en, this message translates to:
@@ -2496,6 +2544,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Item removed.'**
   String get toastItemDeleted;
+
+  /// No description provided for @toastItemArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Item archived.'**
+  String get toastItemArchived;
+
+  /// No description provided for @toastItemUnarchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Item restored.'**
+  String get toastItemUnarchived;
 
   /// No description provided for @toastVoucherCreated.
   ///

@@ -422,7 +422,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String clientDeleteDescription(String name) {
-    return 'Delete $name? This removes the client and project.';
+    return 'Delete $name? All receipts and expenses for this client will be permanently deleted.';
   }
 
   @override
@@ -814,6 +814,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get itemsCatalogCaption =>
       'Default items are read-only — add your own items below';
+
+  @override
+  String get itemsFilterActive => 'Active';
+
+  @override
+  String get itemsFilterArchived => 'Archived';
+
+  @override
+  String get itemsArchivedEmptyTitle => 'No archived items';
+
+  @override
+  String get itemsArchivedEmptyDescription =>
+      'Archived items are hidden from pickers but stay in past vouchers.';
+
+  @override
+  String get itemInUseTitle => 'Item is in use';
+
+  @override
+  String itemInUseArchiveDescription(String name) {
+    return '$name is linked to expenses and cannot be deleted. Archive it instead?';
+  }
+
+  @override
+  String get overflowMenuTooltip => 'More options';
 
   @override
   String get addItem => 'Add item';
@@ -1343,6 +1367,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toastClientArchived => 'Client archived.';
 
   @override
+  String get toastClientDeleted => 'Client deleted.';
+
+  @override
   String get toastSupplierCreated => 'Supplier added.';
 
   @override
@@ -1359,6 +1386,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toastItemDeleted => 'Item removed.';
+
+  @override
+  String get toastItemArchived => 'Item archived.';
+
+  @override
+  String get toastItemUnarchived => 'Item restored.';
 
   @override
   String get toastVoucherCreated => 'Voucher saved.';

@@ -152,7 +152,7 @@
   "clientDuplicateNameConfirm": "Continue",
   "clientDuplicatePhoneError": "This phone number is already used for another client.",
   "clientDeleteTitle": "Delete client?",
-  "clientDeleteDescription": "Delete {name}? This removes the client and project.",
+  "clientDeleteDescription": "Delete {name}? All receipts and expenses for this client will be permanently deleted.",
   "@clientDeleteDescription": {
     "placeholders": {
       "name": { "type": "String" }
@@ -309,6 +309,18 @@
   "directoryAddCraftsmanToRoster": "Add craftsman to directory",
   "crewAssignmentsSaved": "Craftsman choices saved for this client",
   "itemsCatalogCaption": "Default items are read-only — add your own items below",
+  "itemsFilterActive": "Active",
+  "itemsFilterArchived": "Archived",
+  "itemsArchivedEmptyTitle": "No archived items",
+  "itemsArchivedEmptyDescription": "Archived items are hidden from pickers but stay in past vouchers.",
+  "itemInUseTitle": "Item is in use",
+  "itemInUseArchiveDescription": "{name} is linked to expenses and cannot be deleted. Archive it instead?",
+  "@itemInUseArchiveDescription": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "overflowMenuTooltip": "More options",
   "addItem": "Add item",
   "itemCreateSheetTitle": "New item",
   "itemEditSheetTitle": "Edit item",
@@ -567,12 +579,15 @@
   "toastClientCreated": "Client added.",
   "toastClientUpdated": "Client updated.",
   "toastClientArchived": "Client archived.",
+  "toastClientDeleted": "Client deleted.",
   "toastSupplierCreated": "Supplier added.",
   "toastCraftsmanCreated": "Craftsman added.",
   "toastProviderUpdated": "Details updated.",
   "toastItemCreated": "Item added.",
   "toastItemUpdated": "Item updated.",
   "toastItemDeleted": "Item removed.",
+  "toastItemArchived": "Item archived.",
+  "toastItemUnarchived": "Item restored.",
   "toastVoucherCreated": "Voucher saved.",
   "toastVoucherUpdated": "Voucher updated.",
   "toastVoucherDeleted": "Voucher deleted.",

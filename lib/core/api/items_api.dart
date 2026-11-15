@@ -70,11 +70,21 @@ class ItemsApi {
     });
   }
 
-  Future<ItemsListPage> listItems({String? q, int page = 1, int perPage = 50}) {
+  Future<ItemsListPage> listItems({
+    String? q,
+    int page = 1,
+    int perPage = 50,
+    String? status,
+  }) {
     return _guard(() async {
       final response = await _dio.get<Map<String, dynamic>>(
         _prefix,
-        queryParameters: {if (q != null && q.trim().isNotEmpty) 'q': q.trim(), 'page': page, 'per_page': perPage},
+        queryParameters: {
+          if (q != null && q.trim().isNotEmpty) 'q': q.trim(),
+          if (status != null && status.isNotEmpty) 'status': status,
+          'page': page,
+          'per_page': perPage,
+        },
         options: Options(extra: _authenticatedExtra),
       );
       final json = ApiResponseParser.decodeJson(response);
@@ -136,6 +146,26 @@ class ItemsApi {
         options: Options(extra: _authenticatedExtra),
       );
       ApiResponseParser.expectSuccess(response);
+    });
+  }
+
+  Future<CatalogItem> archiveItem(String id) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_prefix/$id/archive',
+        options: Options(extra: _authenticatedExtra),
+      );
+      return ApiResponseParser.expectData(response, (json) => CatalogItem.fromDataJson(json ?? const {}));
+    });
+  }
+
+  Future<CatalogItem> unarchiveItem(String id) {
+    return _guard(() async {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '$_prefix/$id/unarchive',
+        options: Options(extra: _authenticatedExtra),
+      );
+      return ApiResponseParser.expectData(response, (json) => CatalogItem.fromDataJson(json ?? const {}));
     });
   }
 

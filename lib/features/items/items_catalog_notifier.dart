@@ -19,6 +19,11 @@ class ItemsCatalogNotifier extends Notifier<AsyncValue<List<CatalogItem>>> {
         Future.microtask(reload);
       }
     });
+    ref.listen(itemsCatalogFilterProvider, (previous, next) {
+      if (previous != next) {
+        Future.microtask(reload);
+      }
+    });
     Future.microtask(reload);
     return const AsyncValue.loading();
   }
@@ -34,7 +39,11 @@ class ItemsCatalogNotifier extends Notifier<AsyncValue<List<CatalogItem>>> {
     }
     state = await AsyncValue.guard(() async {
       final repo = ref.read(itemsRepositoryProvider);
-      return fetchAllCatalogItems(repo);
+      final filter = ref.read(itemsCatalogFilterProvider);
+      final status = filter == ItemsCatalogFilter.archived
+          ? ItemCatalogListStatus.archived
+          : ItemCatalogListStatus.active;
+      return fetchAllCatalogItems(repo, status: status);
     });
   }
 

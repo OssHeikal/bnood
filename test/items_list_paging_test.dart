@@ -20,6 +20,7 @@ class _FakeItemsRepository extends ItemsRepository {
     String? q,
     int page = 1,
     int perPage = 50,
+    ItemCatalogListStatus status = ItemCatalogListStatus.active,
   }) async {
     lastPage = page;
     final now = DateTime.utc(2026, 11, 9);

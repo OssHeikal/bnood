@@ -3,7 +3,7 @@ import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/items/item_api_record.dart';
 import 'package:bnood/core/items/items_providers.dart';
-import 'package:bnood/core/items/items_repository.dart';
+import 'package:bnood/core/items/items_repository.dart' show ItemCatalogListStatus, ItemsRepository;
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
@@ -148,6 +148,19 @@ void main() {
     expect(find.text('تعديل البند'), findsOneWidget);
   });
 
+  testWidgets('default item does not open edit sheet', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        child: const ItemsScreen(),
+        overrides: remoteOverrides(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ItemCatalogTile).at(1));
+    await tester.pumpAndSettle();
+    expect(find.text('تعديل البند'), findsNothing);
+  });
+
   testWidgets('user and default tiles are long-press draggable', (tester) async {
     await tester.pumpWidget(
       wrap(
@@ -183,7 +196,12 @@ class _FakeCatalogRepository extends ItemsRepository {
   final Duration? catalogDelay;
 
   @override
-  Future<ItemsListPage> listItems({String? q, int page = 1, int perPage = 50}) async {
+  Future<ItemsListPage> listItems({
+    String? q,
+    int page = 1,
+    int perPage = 50,
+    ItemCatalogListStatus status = ItemCatalogListStatus.active,
+  }) async {
     if (catalogDelay != null) {
       await Future<void>.delayed(catalogDelay!);
     }

@@ -89,7 +89,7 @@ void main() {
     expect(find.textContaining('−'), findsWidgets);
     expect(find.byKey(const Key('client_detail_action_receive')), findsOneWidget);
     expect(find.byKey(const Key('client_detail_action_statement')), findsOneWidget);
-    expect(find.byKey(const Key('client_detail_edit')), findsOneWidget);
+    expect(find.byKey(const Key('client_detail_overflow')), findsOneWidget);
     expect(find.byType(Skeleton), findsNothing);
   });
 

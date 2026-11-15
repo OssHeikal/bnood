@@ -358,7 +358,10 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   Future<void> _pickItem() async {
     final List<({String id, String name, String colorKey, String iconKey})> items;
     if (ref.read(remoteItemsEnabledProvider)) {
-      final catalogItems = await fetchAllCatalogItems(ref.read(itemsRepositoryProvider));
+      final catalogItems = await fetchAllCatalogItems(
+        ref.read(itemsRepositoryProvider),
+        status: ItemCatalogListStatus.active,
+      );
       items = catalogItems.map((i) => (id: i.id, name: i.name, colorKey: i.colorKey, iconKey: i.iconKey)).toList();
     } else {
       final local = await ref.read(repositoryProvider).watchActiveItems().first;

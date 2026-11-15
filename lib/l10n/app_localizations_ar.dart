@@ -421,7 +421,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String clientDeleteDescription(String name) {
-    return 'حذف $name؟ سيُحذف العميل والمشروع.';
+    return 'حذف $name؟ كل الإيصالات والمصروفات الخاصة بهذا العميل ستُحذف نهائيًا.';
   }
 
   @override
@@ -809,6 +809,30 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get itemsCatalogCaption =>
       'البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك';
+
+  @override
+  String get itemsFilterActive => 'النشطة';
+
+  @override
+  String get itemsFilterArchived => 'المؤرشفة';
+
+  @override
+  String get itemsArchivedEmptyTitle => 'لا بنود مؤرشفة';
+
+  @override
+  String get itemsArchivedEmptyDescription =>
+      'البنود المؤرشفة لا تظهر في القوائم لكنها تبقى في الإيصالات السابقة.';
+
+  @override
+  String get itemInUseTitle => 'البند مستخدم';
+
+  @override
+  String itemInUseArchiveDescription(String name) {
+    return '$name مرتبط بمصروفات ولا يمكن حذفه. أرشفته بدلًا من ذلك؟';
+  }
+
+  @override
+  String get overflowMenuTooltip => 'المزيد';
 
   @override
   String get addItem => 'إضافة بند';
@@ -1329,6 +1353,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get toastClientArchived => 'اتأرشف العميل.';
 
   @override
+  String get toastClientDeleted => 'اتمسح العميل.';
+
+  @override
   String get toastSupplierCreated => 'اتضاف المورد.';
 
   @override
@@ -1345,6 +1372,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get toastItemDeleted => 'اتمسح البند.';
+
+  @override
+  String get toastItemArchived => 'اتأرشف البند.';
+
+  @override
+  String get toastItemUnarchived => 'اترجع البند.';
 
   @override
   String get toastVoucherCreated => 'اتسجّل السند.';

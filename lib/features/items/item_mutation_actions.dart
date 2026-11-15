@@ -15,6 +15,7 @@ import '../../core/widgets/toast/app_tone.dart';
 void refreshAfterItemMutation(WidgetRef ref) {
   bumpPagingListRefresh(ref, PagingListIds.items);
   ref.invalidate(itemIconsCatalogProvider);
+  ref.invalidate(itemsCatalogByIdProvider);
 }
 
 Future<CatalogItem?> saveItemCreate({
@@ -91,6 +92,81 @@ Future<bool> confirmDeleteItem(
   try {
     await repo.deleteItem(itemId);
     refreshAfterItemMutation(ref);
+    return true;
+  } on AuthApiException catch (e) {
+    if (!context.mounted) return false;
+    if (await handleItemsApiAuthError(context: context, ref: ref, error: e)) {
+      return false;
+    }
+    if (e.isDefaultItemReadonly) {
+      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
+      return false;
+    }
+    if (e.isItemInUse) {
+      return _offerArchiveInUseItem(context, ref, l10n, itemId: itemId, name: name);
+    }
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
+    return false;
+  }
+}
+
+Future<bool> _offerArchiveInUseItem(
+  BuildContext context,
+  WidgetRef ref,
+  AppLocalizations l10n, {
+  required String itemId,
+  required String name,
+}) async {
+  final archive = await AppDecision.show(
+    context,
+    title: l10n.itemInUseTitle,
+    description: l10n.itemInUseArchiveDescription(name),
+    confirmLabel: l10n.archive,
+    cancelLabel: l10n.cancel,
+    tone: AppTone.danger,
+    iconWidget: AppDecision.archiveDangerIcon(context),
+  );
+  if (archive != OverlayAnswer.confirmed || !context.mounted) return false;
+  return performItemArchive(context: context, ref: ref, itemId: itemId);
+}
+
+Future<bool> performItemArchive({
+  required BuildContext context,
+  required WidgetRef ref,
+  required String itemId,
+}) async {
+  final l10n = AppLocalizations.of(context);
+  final repo = ref.read(itemsRepositoryProvider);
+  try {
+    await repo.archiveItem(itemId);
+    refreshAfterItemMutation(ref);
+    if (context.mounted) {
+      AppToaster.show(l10n.toastItemArchived, kind: ToastKind.success);
+    }
+    return true;
+  } on AuthApiException catch (e) {
+    if (!context.mounted) return false;
+    if (await handleItemsApiAuthError(context: context, ref: ref, error: e)) {
+      return false;
+    }
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
+    return false;
+  }
+}
+
+Future<bool> performItemUnarchive({
+  required BuildContext context,
+  required WidgetRef ref,
+  required String itemId,
+}) async {
+  final l10n = AppLocalizations.of(context);
+  final repo = ref.read(itemsRepositoryProvider);
+  try {
+    await repo.unarchiveItem(itemId);
+    refreshAfterItemMutation(ref);
+    if (context.mounted) {
+      AppToaster.show(l10n.toastItemUnarchived, kind: ToastKind.success);
+    }
     return true;
   } on AuthApiException catch (e) {
     if (!context.mounted) return false;

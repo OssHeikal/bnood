@@ -18,6 +18,10 @@ final itemsRepositoryProvider = Provider<ItemsRepository>((ref) {
 });
 
 /// Whether catalog CRUD should use the online API (not Drift).
+enum ItemsCatalogFilter { active, archived }
+
+final itemsCatalogFilterProvider = StateProvider<ItemsCatalogFilter>((ref) => ItemsCatalogFilter.active);
+
 final remoteItemsEnabledProvider = Provider<bool>((ref) {
   final auth = ref.watch(authControllerProvider);
   final user = auth.user;
@@ -38,7 +42,10 @@ final itemsCatalogByIdProvider = FutureProvider<Map<String, CatalogItem>>((ref) 
     return const {};
   }
   try {
-    final items = await fetchAllCatalogItems(ref.read(itemsRepositoryProvider));
+    final items = await fetchAllCatalogItems(
+      ref.read(itemsRepositoryProvider),
+      status: ItemCatalogListStatus.all,
+    );
     return {for (final item in items) item.id: item};
   } catch (_) {
     return const {};
