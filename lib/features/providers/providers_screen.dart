@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../app/widgets/floating_shell_dock.dart';
+import '../../app/shell_bottom_inset.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
@@ -194,8 +194,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
               sliverFooters: [
                 SliverPadding(
                   padding: EdgeInsets.only(
-                    bottom:
-                        FloatingShellDock.clearanceHeight + MediaQuery.viewPaddingOf(context).bottom + AppSize.spaceLG,
+                    bottom: ShellBottomInset.listScrollBottomPadding(context),
                   ),
                 ),
               ],

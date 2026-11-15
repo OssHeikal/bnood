@@ -1,4 +1,5 @@
 import 'package:bnood/app/shell_scaffold.dart';
+import 'package:bnood/app/widgets/floating_shell_dock.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -58,5 +59,58 @@ void main() {
       matching: find.byWidgetPredicate((w) => w is IgnorePointer && w.ignoring),
     );
     expect(fadeIgnores, findsWidgets);
+  });
+
+  testWidgets('hides floating dock while keyboard is open', (tester) async {
+    final router = GoRouter(
+      initialLocation: '/home',
+      routes: [
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) => ShellScaffold(navigationShell: navigationShell),
+          branches: [
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/home',
+                  builder: (context, state) => const Scaffold(body: TextField()),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [GoRoute(path: '/clients', builder: (_, _) => const SizedBox())],
+            ),
+            StatefulShellBranch(
+              routes: [GoRoute(path: '/directory', builder: (_, _) => const SizedBox())],
+            ),
+            StatefulShellBranch(
+              routes: [GoRoute(path: '/items', builder: (_, _) => const SizedBox())],
+            ),
+          ],
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      MaterialApp.router(
+        routerConfig: router,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(FloatingShellDock), findsOneWidget);
+
+    tester.view.viewInsets = const FakeViewPadding(bottom: 336);
+    addTearDown(tester.view.reset);
+    await tester.pump();
+    expect(find.byType(FloatingShellDock), findsNothing);
+
+    final padded = tester.widgetList<MediaQuery>(
+      find.descendant(of: find.byType(ShellScaffold), matching: find.byType(MediaQuery)),
+    );
+    expect(
+      padded.any((mq) => mq.data.padding.bottom < FloatingShellDock.clearanceHeight),
+      isTrue,
+    );
   });
 }
