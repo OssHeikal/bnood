@@ -1,5 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/layout/bnood_layout.dart';
+import 'package:bnood/core/layout/app_layout.dart';
 import 'package:bnood/core/widgets/app_toaster.dart';
 import 'package:bnood/core/widgets/toast/app_toast.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
@@ -157,10 +157,10 @@ void main() {
     final box = tester.renderObject<RenderBox>(
       find.ancestor(of: find.byType(AppToast), matching: find.byType(ConstrainedBox)).first,
     );
-    expect(box.size.width, BnoodLayout.toastMaxWidth);
+    expect(box.size.width, AppLayout.toastMaxWidth);
     final screen = tester.renderObject<RenderBox>(find.byType(Scaffold));
     final toastGlobal = tester.getTopLeft(find.byType(AppToast));
-    final expectedStart = (screen.size.width - BnoodLayout.toastMaxWidth) / 2;
+    final expectedStart = (screen.size.width - AppLayout.toastMaxWidth) / 2;
     expect(toastGlobal.dx, closeTo(expectedStart, 2));
   });
 

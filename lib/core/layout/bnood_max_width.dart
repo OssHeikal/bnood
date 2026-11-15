@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'bnood_layout.dart';
+import 'app_layout.dart';
 
 /// Centers child and caps width; on phone only applies [padding] (no max width cap).
 class BnoodMaxWidth extends StatelessWidget {
   const BnoodMaxWidth({
     super.key,
     required this.child,
-    this.maxWidth = BnoodLayout.pageMaxWidth,
+    this.maxWidth = AppLayout.pageMaxWidth,
     this.padding,
     this.alignment = AlignmentDirectional.topCenter,
   });
@@ -21,7 +21,7 @@ class BnoodMaxWidth extends StatelessWidget {
   Widget build(BuildContext context) {
     final pad = padding ?? context.pagePadding;
     Widget content = child;
-    if (!context.isBnoodMobile) {
+    if (!context.isMobileLayout) {
       content = Align(
         alignment: alignment,
         child: ConstrainedBox(

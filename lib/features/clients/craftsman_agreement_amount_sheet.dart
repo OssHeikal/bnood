@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/money/money_format.dart';
@@ -38,9 +38,9 @@ Future<void> showRemoteAgreementAmountEditSheet({
   required String craftsmanName,
   int? initialAmountPiastres,
 }) {
-  return BnoodModalSheet.show<void>(
+  return AppModalSheet.show<void>(
     context: context,
-    builder: (_) => HomeFoundationScope(
+    body: HomeFoundationScope(
       child: CraftsmanAgreementAmountPage(
         entry: CraftsmanAgreementAmountEntry.craftsmanDetailEdit,
         projectId: clientId,
@@ -70,9 +70,9 @@ Future<void> showCraftsmanProjectAgreementEditSheet({
   required String clientId,
   int? initialAmountPiastres,
 }) {
-  return BnoodModalSheet.show<void>(
+  return AppModalSheet.show<void>(
     context: context,
-    builder: (_) => HomeFoundationScope(
+    body: HomeFoundationScope(
       child: CraftsmanAgreementAmountPage(
               entry: CraftsmanAgreementAmountEntry.craftsmanDetailEdit,
               projectId: projectId,
@@ -291,10 +291,7 @@ class _CraftsmanAgreementAmountPageState extends ConsumerState<CraftsmanAgreemen
             AppSize.screenPadding,
             AppSize.spaceLG,
             AppSize.screenPadding,
-            SheetChromeInsets.sheetFooterBottomPadding(
-              media: MediaQuery.of(context),
-              outerModalChromeApplied: true,
-            ),
+            AppSize.spaceMD,
           ),
           child: AppButton.primary(
             text: l10n.save,

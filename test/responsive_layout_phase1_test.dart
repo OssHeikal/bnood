@@ -1,9 +1,9 @@
 import 'package:bnood/core/database/connection.dart';
-import 'package:bnood/core/layout/bnood_breakpoints.dart';
-import 'package:bnood/core/layout/bnood_layout.dart';
+import 'package:bnood/core/layout/app_breakpoints.dart';
+import 'package:bnood/core/layout/app_layout.dart';
 import 'package:bnood/core/providers/app_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
-import 'package:bnood/core/widgets/bnood_modal_sheet.dart';
+import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/core/widgets/custom_text_field.dart';
 import 'package:bnood/features/auth/login_screen.dart';
 import 'package:bnood/features/auth/widgets/auth_flow_scaffold.dart';
@@ -36,7 +36,7 @@ Widget _wrap({required Widget child, Locale locale = const Locale('ar'), double 
         final media = MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScale));
         return MediaQuery(
           data: media,
-          child: ResponsiveBreakpoints.builder(breakpoints: BnoodBreakpoints.all, child: appChild!),
+          child: ResponsiveBreakpoints.builder(breakpoints: AppBreakpoints.all, child: appChild!),
         );
       },
       home: child,
@@ -69,7 +69,7 @@ Future<void> _openVoucher(WidgetTester tester, BnoodRepository repo) async {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         builder: (context, child) {
-          return ResponsiveBreakpoints.builder(breakpoints: BnoodBreakpoints.all, child: child!);
+          return ResponsiveBreakpoints.builder(breakpoints: AppBreakpoints.all, child: child!);
         },
         routerConfig: router,
       ),
@@ -96,7 +96,7 @@ void main() {
       MaterialApp(
         home: Builder(
           builder: (context) {
-            mobile = context.isBnoodMobile;
+            mobile = context.isMobileLayout;
             return const SizedBox();
           },
         ),
@@ -115,9 +115,9 @@ void main() {
               body: Center(
                 child: FilledButton(
                   onPressed: () {
-                    BnoodModalSheet.show(
+                    AppModalSheet.show(
                       context: context,
-                      builder: (_) => const SizedBox(height: 120, child: Text('sheet-body')),
+                      body: const SizedBox(height: 120, child: Text('sheet-body')),
                     );
                   },
                   child: const Text('open'),
@@ -129,16 +129,16 @@ void main() {
       );
       await tester.tap(find.text('open'));
       await tester.pumpAndSettle();
-      if (width <= BnoodBreakpoints.mobileMax) {
+      if (width <= AppBreakpoints.mobileMax) {
         expect(find.byType(ConstrainedBox), findsWidgets);
       } else {
         final boxes = tester.widgetList<ConstrainedBox>(find.byType(ConstrainedBox));
-        expect(boxes.any((b) => b.constraints.maxWidth == BnoodLayout.formMaxWidth), isTrue);
+        expect(boxes.any((b) => b.constraints.maxWidth == AppLayout.formMaxWidth), isTrue);
         final panel = find.byWidgetPredicate(
-          (w) => w is ConstrainedBox && w.constraints.maxWidth == BnoodLayout.formMaxWidth,
+          (w) => w is ConstrainedBox && w.constraints.maxWidth == AppLayout.formMaxWidth,
         );
         final size = tester.getSize(panel.first);
-        expect(size.width, lessThanOrEqualTo(BnoodLayout.formMaxWidth));
+        expect(size.width, lessThanOrEqualTo(AppLayout.formMaxWidth));
       }
     });
   }
@@ -146,9 +146,9 @@ void main() {
   testWidgets('voucher body capped at 1024', (tester) async {
     _setSurface(tester, 1024);
     await _openVoucher(tester, repo);
-    final panel = find.byWidgetPredicate((w) => w is SizedBox && w.width == BnoodLayout.formMaxWidth);
+    final panel = find.byWidgetPredicate((w) => w is SizedBox && w.width == AppLayout.formMaxWidth);
     expect(panel, findsOneWidget);
-    expect(tester.getSize(panel).width, lessThanOrEqualTo(BnoodLayout.formMaxWidth));
+    expect(tester.getSize(panel).width, lessThanOrEqualTo(AppLayout.formMaxWidth));
   });
 
   testWidgets('voucher calendar day cell under 80px at 1024', (tester) async {

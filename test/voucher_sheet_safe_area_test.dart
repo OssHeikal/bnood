@@ -254,7 +254,7 @@ void main() {
     final createAction = find.text('إنشاء جديد');
     if (createAction.evaluate().isNotEmpty) {
       final createBottom = tester.getBottomLeft(createAction).dy;
-      expect(createBottom, lessThanOrEqualTo(844 - _bottomInset + 1));
+      expect(createBottom, lessThanOrEqualTo(844 - _bottomInset - AppSize.spaceMD + 1));
     }
     expect(tester.takeException(), isNull);
   });

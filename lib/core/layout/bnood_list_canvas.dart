@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'bnood_layout.dart';
+import 'app_layout.dart';
 import 'bnood_max_width.dart';
 
-/// Centers menu / settings-style screens at [BnoodLayout.listMaxWidth] on tablet+.
+/// Centers menu / settings-style screens at [AppLayout.listMaxWidth] on tablet+.
 class BnoodListCanvas extends StatelessWidget {
   const BnoodListCanvas({
     super.key,
@@ -17,7 +17,7 @@ class BnoodListCanvas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BnoodMaxWidth(
-      maxWidth: BnoodLayout.listMaxWidth,
+      maxWidth: AppLayout.listMaxWidth,
       padding: padding,
       child: child,
     );

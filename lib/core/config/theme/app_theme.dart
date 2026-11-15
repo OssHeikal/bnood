@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
+import 'app_overlay.dart';
 
 /// Foundation theme for preview and new widgets. Production [BnoodApp] keeps legacy theme unchanged.
 abstract final class AppFoundationTheme {
@@ -27,6 +28,10 @@ abstract final class AppFoundationTheme {
       ),
       extensions: [colors, text],
       dividerColor: colors.outline,
+    ).copyWith(
+      dialogTheme: DialogThemeData(
+        barrierColor: AppOverlay.barrierColorForBrightness(brightness),
+      ),
     );
   }
 }

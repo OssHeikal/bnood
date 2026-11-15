@@ -11,11 +11,15 @@ void main() {
       MaterialApp(
         home: AppKeyboardScope(
           child: Scaffold(
-            body: Column(
-              children: [
-                TextField(focusNode: focusNode),
-                const Text('outside'),
-              ],
+            body: SizedBox(
+              width: 400,
+              height: 400,
+              child: Column(
+                children: [
+                  TextField(focusNode: focusNode),
+                  const Spacer(),
+                ],
+              ),
             ),
           ),
         ),
@@ -26,7 +30,7 @@ void main() {
     await tester.pump();
     expect(focusNode.hasFocus, isTrue);
 
-    await tester.tap(find.text('outside'));
+    await tester.tapAt(const Offset(200, 350));
     await tester.pump();
     expect(focusNode.hasFocus, isFalse);
   });

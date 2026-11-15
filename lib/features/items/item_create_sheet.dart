@@ -85,16 +85,12 @@ class _ItemCreateSheetState extends ConsumerState<ItemCreateSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final catalog = ref.watch(itemIconsCatalogProvider);
-    final bottomPad = SheetChromeInsets.sheetFooterBottomPadding(
-      media: MediaQuery.of(context),
-      outerModalChromeApplied: widget.showSheetChrome,
-    );
     return Padding(
       padding: EdgeInsets.fromLTRB(
         AppSize.screenPadding,
         widget.showSheetChrome ? AppSize.spaceSM : AppSize.spaceMD,
         AppSize.screenPadding,
-        bottomPad,
+        0,
       ),
       child: SingleChildScrollView(
         child: Column(

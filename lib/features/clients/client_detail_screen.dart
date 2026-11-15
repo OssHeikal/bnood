@@ -8,7 +8,7 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
 import '../../core/layout/bnood_two_column.dart';
 import '../../core/api/api_error_user_message.dart';
@@ -125,7 +125,7 @@ class ClientDetailScreen extends ConsumerWidget {
                   : null,
             ),
             body: BnoodMaxWidth(
-              maxWidth: BnoodLayout.pageMaxWidth,
+              maxWidth: AppLayout.pageMaxWidth,
               child: ListView(
                 padding: EdgeInsets.fromLTRB(
                   0,
@@ -492,7 +492,7 @@ class _ClientDetailBody extends ConsumerWidget {
 }
 
 Widget _clientDetailColumns(BuildContext context, {required List<Widget> summary, required List<Widget> ledger}) {
-  if (context.isBnoodMobile) {
+  if (context.isMobileLayout) {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [...summary, ...ledger]);
   }
   final lead = HomeSectionHeader.columnLeadBeforeContent(context);

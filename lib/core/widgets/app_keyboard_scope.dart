@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Dismisses the primary focus when the user taps outside editable fields,
-/// without blocking buttons and other tappable widgets.
+/// App-wide: dismisses primary focus on tap outside editables (shell, sheets,
+/// full-screen routes). Does not use pointer-down, so modal autofocus and
+/// drag-to-dismiss stay stable; barrier taps still reach [ModalBarrier].
 class AppKeyboardScope extends StatelessWidget {
   const AppKeyboardScope({super.key, required this.child});
 
@@ -14,16 +15,19 @@ class AppKeyboardScope extends StatelessWidget {
     return ctx.findAncestorWidgetOfExactType<EditableText>() != null;
   }
 
+  static void _onTap() {
+    final focus = FocusManager.instance.primaryFocus;
+    if (!_shouldDismissFocus(focus)) return;
+    focus?.unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // [onTap] + deferToChild: taps on text fields and buttons stay with the child;
+    // pointer-down on sheet drag does not unfocus; barrier taps stay on the barrier.
     return GestureDetector(
       behavior: HitTestBehavior.deferToChild,
-      onTap: () {
-        final focus = FocusManager.instance.primaryFocus;
-        if (_shouldDismissFocus(focus)) {
-          focus?.unfocus();
-        }
-      },
+      onTap: _onTap,
       child: child,
     );
   }

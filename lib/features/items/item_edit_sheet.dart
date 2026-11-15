@@ -12,7 +12,7 @@ import '../../core/items/item_api_record.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
-import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
 import '../home/home_foundation_scope.dart';
@@ -23,9 +23,9 @@ Future<void> showItemEditSheet(
   BuildContext context, {
   required CatalogItem item,
 }) {
-  return BnoodModalSheet.show<void>(
+  return AppModalSheet.show<void>(
     context: context,
-    builder: (_) => HomeFoundationScope(
+    body: HomeFoundationScope(
       child: ItemEditSheet(item: item),
     ),
   );

@@ -7,7 +7,7 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
@@ -18,9 +18,9 @@ import 'auth_messages.dart';
 import 'auth_paths.dart';
 
 Future<void> showDeleteAccountConfirmSheet(BuildContext context) {
-  return BnoodModalSheet.show<void>(
+  return AppModalSheet.show<void>(
     context: context,
-    builder: (_) => const HomeFoundationScope(child: DeleteAccountConfirmSheet()),
+    body: const HomeFoundationScope(child: DeleteAccountConfirmSheet()),
   );
 }
 

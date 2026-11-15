@@ -9,7 +9,7 @@ import '../../core/clients/clients_providers.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/layout/bnood_column_grid.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/database/database.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/repositories/bnood_repository.dart';
@@ -278,10 +278,10 @@ class _RemoteMovementsListState extends ConsumerState<_RemoteMovementsList> {
               child: AppPagedView<ClientDetailMovementLine>(
                 controller: _pagingController,
                 pullToRefresh: true,
-                layout: context.isBnoodMobile
+                layout: context.isMobileLayout
                     ? AppPagedLayout.listSeparated
                     : AppPagedLayout.sliverTwoColumn,
-                gridPadding: context.isBnoodMobile
+                gridPadding: context.isMobileLayout
                     ? null
                     : EdgeInsets.fromLTRB(
                         context.pageGutter,
@@ -289,7 +289,7 @@ class _RemoteMovementsListState extends ConsumerState<_RemoteMovementsList> {
                         context.pageGutter,
                         0,
                       ),
-                itemPadding: context.isBnoodMobile
+                itemPadding: context.isMobileLayout
                     ? (_) => EdgeInsets.fromLTRB(
                           AppSize.screenPadding,
                           AppSize.spaceSM,

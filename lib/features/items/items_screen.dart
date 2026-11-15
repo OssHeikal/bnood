@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../app/widgets/floating_shell_dock.dart';
+import '../../app/shell_bottom_inset.dart';
+import '../../app/shell_tab_scaffold.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
@@ -68,10 +69,9 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
       child: Builder(
         builder: (context) {
           final colors = context.colors;
-          final bottomClearance =
-              FloatingShellDock.clearanceHeight + MediaQuery.viewPaddingOf(context).bottom + AppSize.spaceLG;
+          final bottomClearance = ShellBottomInset.listScrollBottomPadding(context);
 
-          return Scaffold(
+          return ShellTabScaffold(
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
               title: l10n.navItems,
@@ -91,7 +91,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
               ],
             ),
             body: BnoodMaxWidth(
-              maxWidth: BnoodLayout.pageMaxWidth,
+              maxWidth: AppLayout.pageMaxWidth,
               child: MediaQuery.removePadding(
               context: context,
               removeBottom: true,
@@ -214,5 +214,5 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
 /// Scroll clearance matching [ShellScaffold] dock fade for tests without the shell.
 EdgeInsets itemsScreenMediaQueryForTests(BuildContext context) {
   final base = MediaQuery.paddingOf(context);
-  return base.copyWith(bottom: base.bottom + FloatingShellDock.clearanceHeight);
+  return base.copyWith(bottom: base.bottom + ShellBottomInset.mediaQueryDockClearance(context));
 }

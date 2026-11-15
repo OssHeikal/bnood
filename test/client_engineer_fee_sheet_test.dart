@@ -13,14 +13,29 @@ void main() {
         locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const Scaffold(
-          body: HomeFoundationScope(
-            child: EngineerFeeSheet(clientId: 'c1', projectId: 'p1', clientName: 'Tower', engineerBasisPoints: null),
+        home: HomeFoundationScope(
+          child: Builder(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: FilledButton(
+                  onPressed: () => showEngineerFeeSheet(
+                    context: context,
+                    clientId: 'c1',
+                    projectId: 'p1',
+                    clientName: 'Tower',
+                  ),
+                  child: const Text('open'),
+                ),
+              ),
+            ),
           ),
         ),
       ),
     );
-    await tester.pump();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
     expect(find.text('Profit percentage'), findsWidgets);
     expect(find.text('Tower'), findsOneWidget);
     expect(find.textContaining('Estimated internal profit'), findsOneWidget);

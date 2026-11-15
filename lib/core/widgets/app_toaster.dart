@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../config/navigation/root_navigator_key.dart';
 import '../config/theme/app_size.dart';
-import '../layout/bnood_layout.dart';
+import '../layout/app_layout.dart';
 import '../../features/home/home_foundation_scope.dart';
 import 'toast/app_toast.dart';
 import 'toast/app_tone.dart';
@@ -56,7 +56,7 @@ abstract final class AppToaster {
       AppToastLayoutHint.statementExportFooter =>
         AppSize.buttonHeight + AppSize.spaceMD + AppSize.spaceSM + bottomInset + AppSize.spaceMD,
     };
-    final wide = !ctx.isBnoodMobile;
+    final wide = !ctx.isMobileLayout;
     return EdgeInsetsDirectional.only(
       start: wide ? 0 : AppSize.spaceMD,
       end: wide ? 0 : AppSize.spaceMD,
@@ -79,14 +79,14 @@ abstract final class AppToaster {
       action: action,
       isLoading: isLoading,
     );
-    if (layoutCtx.isBnoodMobile) {
+    if (layoutCtx.isMobileLayout) {
       return toast;
     }
     return Align(
       alignment: Alignment.bottomCenter,
       widthFactor: 1,
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: BnoodLayout.toastMaxWidth),
+        constraints: const BoxConstraints(maxWidth: AppLayout.toastMaxWidth),
         child: toast,
       ),
     );

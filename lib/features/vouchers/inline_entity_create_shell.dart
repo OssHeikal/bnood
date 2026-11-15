@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
-import '../../core/layout/bnood_form_route_canvas.dart';
+import '../../core/layout/app_form_route_canvas.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/custom_app_bar.dart';
@@ -29,47 +29,47 @@ class InlineEntityCreateShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewPad = MediaQuery.viewPaddingOf(context);
+    final footerBottom = presentation == OverlayFormPresentation.fullScreen
+        ? AppSize.spaceMD + viewPad.bottom
+        : 0.0;
+
     if (presentation == OverlayFormPresentation.fullScreen) {
-      return BnoodFormRouteCanvas(
+      return AppFormRouteCanvas(
         child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: CustomAppBar(title: title),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSize.screenPadding,
-                  AppSize.spaceMD,
-                  AppSize.screenPadding,
-                  AppSize.spaceMD,
+          resizeToAvoidBottomInset: true,
+          appBar: CustomAppBar(title: title),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSize.screenPadding,
+                    AppSize.spaceMD,
+                    AppSize.screenPadding,
+                    AppSize.spaceMD,
+                  ),
+                  child: body,
                 ),
-                child: body,
               ),
-            ),
-            SafeArea(
-              top: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
+              Padding(
+                padding: EdgeInsets.fromLTRB(
                   AppSize.screenPadding,
                   AppSize.spaceMD,
                   AppSize.screenPadding,
-                  AppSize.spaceMD,
+                  footerBottom,
                 ),
                 child: footer,
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         ),
       );
     }
 
     final colors = context.colors;
-    final media = MediaQuery.of(context);
-    final viewPadding = media.viewPadding;
-    final viewInsets = media.viewInsets;
 
     return Material(
       color: colors.surface,
@@ -106,12 +106,10 @@ class InlineEntityCreateShell extends StatelessWidget {
           );
           final scrollBody = SingleChildScrollView(
             padding: EdgeInsets.zero,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: paddedBody,
           );
 
-          final chromeBottom = padForSystemChrome ? viewPadding.bottom : 0.0;
-          final keyboardLift = viewInsets.bottom;
-          final footerBottom = keyboardLift > 0 ? keyboardLift + AppSize.spaceMD : AppSize.spaceMD + chromeBottom;
           final footerPad = Padding(
             padding: EdgeInsets.fromLTRB(
               AppSize.screenPadding,
@@ -135,9 +133,8 @@ class InlineEntityCreateShell extends StatelessWidget {
             );
           }
 
-          // Single scroll surface so the keyboard-lifted footer never
-          // overflows a sheet whose max height ignores the keyboard.
           return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Column(

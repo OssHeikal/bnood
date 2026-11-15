@@ -546,10 +546,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get voucherAttachGallery => 'المعرض';
 
   @override
-  String get voucherAttachFiles => 'الملفات';
+  String get voucherAttachCameraSubtitle => 'التقط صورة للإيصال';
 
   @override
-  String get voucherAttachUploadPrompt => 'اضغط لإرفاق صورة أو مستند للإيصال';
+  String get voucherAttachGallerySubtitle => 'اختر من صورك';
+
+  @override
+  String get voucherAttachUploadPrompt => 'اضغط لإرفاق صورة للإيصال';
 
   @override
   String get voucherAttachSourceTitle => 'إرفاق إيصال';

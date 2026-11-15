@@ -2,7 +2,7 @@ import 'package:bnood/app/shell_scaffold.dart';
 import 'package:bnood/app/widgets/floating_shell_dock.dart';
 import 'package:bnood/app/widgets/shell_navigation_rail.dart';
 import 'package:bnood/core/database/connection.dart';
-import 'package:bnood/core/layout/bnood_breakpoints.dart';
+import 'package:bnood/core/layout/app_breakpoints.dart';
 import 'package:bnood/core/providers/app_providers.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/features/vouchers/voucher_screen.dart';
@@ -34,7 +34,7 @@ Widget _shellApp({
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(size: Size(width, 900)),
           child: ResponsiveBreakpoints.builder(
-            breakpoints: BnoodBreakpoints.all,
+            breakpoints: AppBreakpoints.all,
             child: child!,
           ),
         );

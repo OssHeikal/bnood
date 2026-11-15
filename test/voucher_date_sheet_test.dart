@@ -1,3 +1,4 @@
+import 'package:bnood/core/config/theme/app_overlay.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/theme/app_theme.dart';
 import 'package:bnood/features/vouchers/voucher_date_sheet.dart';
@@ -167,6 +168,43 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('voucher-date-confirm')));
     await tester.pumpAndSettle();
     expect(result, DateTime(2026, 3, 10));
+    });
+  });
+
+  testWidgets('month year wheel uses dark scrim overlay in dark mode', (tester) async {
+    await tallSurface(tester, () async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark(),
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push<void>(
+                  MaterialPageRoute(
+                    builder: (_) => VoucherDateSheetPage(
+                      initial: DateTime(2026, 3, 10),
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2100),
+                    ),
+                  ),
+                );
+              },
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('voucher-calendar-title')));
+      await tester.pumpAndSettle();
+      expect(
+        find.byWidgetPredicate((w) => w is ColoredBox && w.color == AppOverlay.darkScrim),
+        findsOneWidget,
+      );
     });
   });
 }

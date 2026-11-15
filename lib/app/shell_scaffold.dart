@@ -3,9 +3,10 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/config/theme/app_size.dart';
-import '../core/layout/bnood_layout.dart';
+import '../core/layout/app_layout.dart';
 import '../core/theme/app_colors.dart';
 import '../features/vouchers/voucher_launcher.dart';
+import 'shell_chrome_scope.dart';
 import 'widgets/floating_shell_dock.dart';
 import 'widgets/shell_nav_destination.dart';
 import 'widgets/shell_nav_icons.dart';
@@ -45,7 +46,7 @@ class ShellScaffold extends StatelessWidget {
     final destinations = _destinations(l10n);
     final voucherLabel = l10n.navAdd;
 
-    if (context.isBnoodDesktop) {
+    if (context.isDesktopLayout) {
       return Scaffold(
         body: Row(
           children: [
@@ -63,54 +64,65 @@ class ShellScaffold extends StatelessWidget {
     }
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final clearance = FloatingShellDock.clearanceHeight + MediaQuery.viewPaddingOf(context).bottom;
+    final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
+    final showShellDock = !keyboardOpen;
+    final dockClearance = keyboardOpen ? 0.0 : FloatingShellDock.clearanceHeight;
+    final safeBottom = MediaQuery.viewPaddingOf(context).bottom;
+    final fadeHeight = dockClearance + safeBottom + AppSize.spaceXL;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Stack(
         fit: StackFit.expand,
         children: [
           MediaQuery(
             data: MediaQuery.of(context).copyWith(
+              viewInsets: EdgeInsets.zero,
               padding: MediaQuery.paddingOf(context).copyWith(
-                bottom: MediaQuery.paddingOf(context).bottom + clearance,
+                bottom: MediaQuery.paddingOf(context).bottom + dockClearance,
               ),
             ),
-            child: navigationShell,
+            child: ShellChromeScope(
+              keyboardOpen: keyboardOpen,
+              child: navigationShell,
+            ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: clearance + AppSize.spaceXL,
-            child: IgnorePointer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: const [0, 0.55, 1],
-                    colors: [
-                      (isDark ? AppColors.darkBg : AppColors.lightSurface).withValues(alpha: 0),
-                      (isDark ? AppColors.darkBg : AppColors.lightSurface).withValues(alpha: 0.65),
-                      isDark ? AppColors.darkBg : AppColors.lightSurface,
-                    ],
+          if (showShellDock) ...[
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: fadeHeight,
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: const [0, 0.55, 1],
+                      colors: [
+                        (isDark ? AppColors.darkBg : AppColors.lightSurface).withValues(alpha: 0),
+                        (isDark ? AppColors.darkBg : AppColors.lightSurface).withValues(alpha: 0.65),
+                        isDark ? AppColors.darkBg : AppColors.lightSurface,
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: FloatingShellDock(
-              selectedIndex: navigationShell.currentIndex,
-              destinations: destinations,
-              onDestinationSelected: navigationShell.goBranch,
-              onVoucher: () => VoucherLauncher.openFresh(context),
-              voucherSemanticsLabel: voucherLabel,
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: FloatingShellDock(
+                selectedIndex: navigationShell.currentIndex,
+                destinations: destinations,
+                onDestinationSelected: navigationShell.goBranch,
+                onVoucher: () => VoucherLauncher.openFresh(context),
+                voucherSemanticsLabel: voucherLabel,
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
