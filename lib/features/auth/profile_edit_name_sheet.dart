@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
@@ -18,9 +18,9 @@ Future<bool?> showProfileEditNameSheet(
   BuildContext context, {
   required String initialName,
 }) {
-  return BnoodModalSheet.show<bool>(
+  return AppModalSheet.show<bool>(
     context: context,
-    builder: (_) => HomeFoundationScope(
+    body: HomeFoundationScope(
       child: ProfileEditNameSheet(initialName: initialName),
     ),
   );

@@ -8,7 +8,7 @@ import '../../app/shell_tab_scaffold.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/resources/gen/assets.gen.dart';
@@ -103,7 +103,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
         builder: (context) {
           final colors = context.colors;
           final gutter = context.pageGutter;
-          final useGrid = !context.isBnoodMobile;
+          final useGrid = !context.isMobileLayout;
           return ShellTabScaffold(
             backgroundColor: colors.canvas,
             body: AppPagedView<AppProvider>(

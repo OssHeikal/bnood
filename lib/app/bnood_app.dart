@@ -2,7 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../core/layout/bnood_breakpoints.dart';
+import '../core/layout/app_breakpoints.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,7 +31,7 @@ class BnoodApp extends ConsumerWidget {
       child: MaterialApp.router(
         builder: (context, child) {
           final responsive = ResponsiveBreakpoints.builder(
-            breakpoints: BnoodBreakpoints.all,
+            breakpoints: AppBreakpoints.all,
             child: child ?? const SizedBox.shrink(),
           );
           return AppKeyboardScope(

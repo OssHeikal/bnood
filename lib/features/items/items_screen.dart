@@ -9,7 +9,7 @@ import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
@@ -91,7 +91,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
               ],
             ),
             body: BnoodMaxWidth(
-              maxWidth: BnoodLayout.pageMaxWidth,
+              maxWidth: AppLayout.pageMaxWidth,
               child: MediaQuery.removePadding(
               context: context,
               removeBottom: true,

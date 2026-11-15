@@ -12,7 +12,7 @@ import '../../core/widgets/app_toaster.dart';
 import 'client_mutation_actions.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
-import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../home/home_foundation_scope.dart';
 
@@ -22,9 +22,9 @@ Future<void> showClientEditSheet({
   required String clientName,
   String? phone,
 }) {
-  return BnoodModalSheet.show<void>(
+  return AppModalSheet.show<void>(
     context: context,
-    builder: (_) => HomeFoundationScope(
+    body: HomeFoundationScope(
       child: ClientEditSheet(
         clientId: clientId,
         clientName: clientName,

@@ -1,6 +1,6 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_keyboard_scope.dart';
-import 'package:bnood/core/widgets/bnood_modal_sheet.dart';
+import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/providers/provider_create_sheet.dart';
@@ -33,9 +33,9 @@ void main() {
                 builder: (context) => Scaffold(
                   body: Center(
                     child: FilledButton(
-                      onPressed: () => BnoodModalSheet.show<void>(
+                      onPressed: () => AppModalSheet.show<void>(
                         context: context,
-                        builder: (_) => const ProviderCreateSheet(),
+                        body: const ProviderCreateSheet(),
                       ),
                       child: const Text('open'),
                     ),
@@ -75,9 +75,9 @@ void main() {
               builder: (context) => Scaffold(
                 body: Center(
                   child: FilledButton(
-                    onPressed: () => BnoodModalSheet.show<void>(
+                    onPressed: () => AppModalSheet.show<void>(
                       context: context,
-                      builder: (_) => const ProviderCreateSheet(),
+                      body: const ProviderCreateSheet(),
                     ),
                     child: const Text('open'),
                   ),

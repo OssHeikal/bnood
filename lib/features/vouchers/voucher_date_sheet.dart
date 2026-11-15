@@ -4,7 +4,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
 import '../../core/config/extensions/num_extensions.dart';
-import '../../core/layout/bnood_form_route_canvas.dart';
+import '../../core/layout/app_form_route_canvas.dart';
 import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
@@ -12,7 +12,6 @@ import '../../core/formatting/display_digits.dart';
 import '../../core/widgets/app_chevron.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_app_bar.dart';
-import '../../core/widgets/overlay_form_keyboard_chrome.dart';
 import '../../core/widgets/overlay_form_presentation.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../home/home_foundation_scope.dart';
@@ -180,7 +179,7 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
         : null;
 
     if (widget.presentation == OverlayFormPresentation.fullScreen) {
-      return BnoodFormRouteCanvas(
+      return AppFormRouteCanvas(
         child: HomeFoundationScope(
           child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -206,7 +205,7 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
                     AppSize.screenPadding,
                     AppSize.spaceMD,
                     AppSize.screenPadding,
-                    OverlayFormKeyboardChrome.pinnedFooterBottom(MediaQuery.of(context)),
+                    AppSize.spaceMD + MediaQuery.viewPaddingOf(context).bottom,
                   ),
                   child: confirmButton,
                 ),

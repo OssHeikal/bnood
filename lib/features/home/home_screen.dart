@@ -10,7 +10,7 @@ import '../../core/clients/clients_providers.dart';
 import '../../core/craftsmen/craftsman_snapshot_limit.dart';
 import '../../core/repositories/bnood_repository.dart';
 import '../../core/money/remote_money_units.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
 import '../../core/layout/bnood_two_column.dart';
 import '../../core/formatting/see_all_label.dart';
@@ -387,7 +387,7 @@ class HomeScreen extends ConsumerWidget {
             body: RefreshIndicator.adaptive(
               onRefresh: () => refreshHomeDashboard(ref),
               child: BnoodMaxWidth(
-                maxWidth: BnoodLayout.pageMaxWidth,
+                maxWidth: AppLayout.pageMaxWidth,
                 child: ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.fromLTRB(
@@ -397,7 +397,7 @@ class HomeScreen extends ConsumerWidget {
                     bottomInset + AppSize.spaceMD,
                   ),
                   children: [
-                    if (context.isBnoodMobile) ...[
+                    if (context.isMobileLayout) ...[
                       ...summaryChildren,
                       AppSize.spaceXL.gap,
                       ...snapshotChildren,

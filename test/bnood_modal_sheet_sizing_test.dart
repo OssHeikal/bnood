@@ -1,5 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/bnood_modal_sheet.dart';
+import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/core/widgets/bounded_sheet_navigator.dart';
 import 'package:bnood/core/widgets/custom_bottom_sheet.dart';
 import 'package:bnood/core/widgets/sheet_drag_handle.dart';
@@ -53,7 +53,7 @@ void main() {
       of: find.byType(BottomSheet),
       matching: find.byType(SheetDragHandle),
     );
-    final bounds = find.byKey(BnoodModalSheet.sheetBoundsKey);
+    final bounds = find.byKey(AppModalSheet.sheetBoundsKey);
     expect(tester.getSize(bounds).height, lessThan(cap * 0.75));
     final handleTop = tester.getTopLeft(handle).dy;
     expect(handleTop, greaterThan(_tallPhone.height * 0.35));
@@ -82,7 +82,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final cap = SheetContentBounds.viewportCap(MediaQueryData(size: _tallPhone));
-    final bounds = find.byKey(BnoodModalSheet.sheetBoundsKey);
+    final bounds = find.byKey(AppModalSheet.sheetBoundsKey);
     expect(tester.getSize(bounds).height, lessThan(cap * 0.5));
   });
 

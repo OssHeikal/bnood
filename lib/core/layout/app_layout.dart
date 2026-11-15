@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import 'bnood_breakpoints.dart';
+import 'app_breakpoints.dart';
 
 /// Layout tokens and [BuildContext] helpers. Without a [ResponsiveBreakpoints]
 /// ancestor, helpers assume mobile so default test surfaces (e.g. 800px) stay phone.
-abstract final class BnoodLayout {
+abstract final class AppLayout {
   static const formMaxWidth = 600.0;
   static const toastMaxWidth = 520.0;
   static const listMaxWidth = 720.0;
@@ -16,7 +16,7 @@ abstract final class BnoodLayout {
   static const gutterDesktop = 40.0;
 }
 
-extension BnoodLayoutContext on BuildContext {
+extension AppLayoutContext on BuildContext {
   ResponsiveBreakpointsData? get _breakpoints {
     final inherited = getInheritedWidgetOfExactType<InheritedResponsiveBreakpoints>();
     return inherited?.data;
@@ -29,37 +29,35 @@ extension BnoodLayoutContext on BuildContext {
     return MediaQuery.sizeOf(this).width;
   }
 
-  bool get isBnoodMobile {
+  bool get isMobileLayout {
     if (_breakpoints == null) return true;
-    return _layoutWidth <= BnoodBreakpoints.mobileMax;
+    return _layoutWidth <= AppBreakpoints.mobileMax;
   }
 
-  bool get isBnoodTablet {
+  bool get isTabletLayout {
     if (_breakpoints == null) return false;
     final w = _layoutWidth;
-    return w > BnoodBreakpoints.mobileMax && w <= BnoodBreakpoints.tabletMax;
+    return w > AppBreakpoints.mobileMax && w <= AppBreakpoints.tabletMax;
   }
 
-  bool get isBnoodDesktop {
+  bool get isDesktopLayout {
     if (_breakpoints == null) return false;
-    return _layoutWidth > BnoodBreakpoints.tabletMax;
+    return _layoutWidth > AppBreakpoints.tabletMax;
   }
 
-  /// Shorthand used by layout widgets.
-  bool get isTablet => isBnoodTablet;
-  bool get isDesktop => isBnoodDesktop;
+  bool get isTablet => isTabletLayout;
+  bool get isDesktop => isDesktopLayout;
 
   double get pageGutter {
-    if (isBnoodMobile) return BnoodLayout.gutterMobile;
-    return BnoodLayout.gutterTablet;
+    if (isMobileLayout) return AppLayout.gutterMobile;
+    return AppLayout.gutterTablet;
   }
 
   EdgeInsetsDirectional get pagePadding => EdgeInsetsDirectional.fromSTEB(pageGutter, 0, pageGutter, 0);
 
-  /// Max content width for modal sheets and full-screen form routes on tablet+.
-  double get formMaxWidth => BnoodLayout.formMaxWidth;
+  double get formMaxWidth => AppLayout.formMaxWidth;
 
-  double get listMaxWidth => BnoodLayout.listMaxWidth;
+  double get listMaxWidth => AppLayout.listMaxWidth;
 
-  double get pageMaxWidth => BnoodLayout.pageMaxWidth;
+  double get pageMaxWidth => AppLayout.pageMaxWidth;
 }

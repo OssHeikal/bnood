@@ -931,7 +931,8 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ],
     );
 
-    final footerBottom = SheetChromeInsets.modalInnerBottomPadding(MediaQuery.of(context));
+    final footerBottom =
+        AppSize.spaceMD + MediaQuery.viewPaddingOf(context).bottom;
     final fullScreen = widget.presentation == VoucherSheetPresentation.fullScreen;
     final showLinkAmount =
         isSpend &&

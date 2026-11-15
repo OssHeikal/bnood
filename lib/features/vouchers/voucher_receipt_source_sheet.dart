@@ -6,16 +6,16 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_pressable.dart';
-import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../home/home_foundation_scope.dart';
 
 enum VoucherReceiptSource { camera, gallery }
 
 Future<VoucherReceiptSource?> showVoucherReceiptSourceSheet(BuildContext context) {
-  return BnoodModalSheet.show<VoucherReceiptSource>(
+  return AppModalSheet.show<VoucherReceiptSource>(
     context: context,
-    builder: (_) => const HomeFoundationScope(child: VoucherReceiptSourceSheet()),
+    body: const HomeFoundationScope(child: VoucherReceiptSourceSheet()),
   );
 }
 

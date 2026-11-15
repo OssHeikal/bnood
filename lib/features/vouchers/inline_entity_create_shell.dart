@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
-import '../../core/layout/bnood_form_route_canvas.dart';
+import '../../core/layout/app_form_route_canvas.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../../core/widgets/custom_app_bar.dart';
-import '../../core/widgets/overlay_form_keyboard_chrome.dart';
 import '../../core/widgets/overlay_form_presentation.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 
@@ -31,17 +29,13 @@ class InlineEntityCreateShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final media = MediaQuery.of(context);
+    final viewPad = MediaQuery.viewPaddingOf(context);
     final footerBottom = presentation == OverlayFormPresentation.fullScreen
-        ? OverlayFormKeyboardChrome.pinnedFooterBottom(media)
-        : SheetChromeInsets.sheetFooterBottomPadding(
-            media: media,
-            // In-sheet inline create always sits under [BnoodModalSheet] chrome.
-            outerModalChromeApplied: true,
-          );
+        ? AppSize.spaceMD + viewPad.bottom
+        : 0.0;
 
     if (presentation == OverlayFormPresentation.fullScreen) {
-      return BnoodFormRouteCanvas(
+      return AppFormRouteCanvas(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: CustomAppBar(title: title),

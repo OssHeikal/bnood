@@ -8,7 +8,7 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_shape.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/layout/bnood_column_grid.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_card.dart';

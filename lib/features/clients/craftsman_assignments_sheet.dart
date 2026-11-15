@@ -24,7 +24,7 @@ import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
@@ -66,9 +66,9 @@ Future<void> showProviderAssignmentsSheet({
   String? clientId,
   required AppProviderType providerKind,
 }) {
-  return BnoodModalSheet.show<void>(
+  return AppModalSheet.show<void>(
     context: context,
-    builder: (_) => HomeFoundationScope(
+    body: HomeFoundationScope(
       child: _CraftsmanAssignmentsModalHost(
         projectId: projectId,
         clientId: clientId,
@@ -623,10 +623,9 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
         AppSize.screenPadding,
         AppSize.spaceLG,
         AppSize.screenPadding,
-        SheetChromeInsets.sheetFooterBottomPadding(
-          media: MediaQuery.of(context),
-          outerModalChromeApplied: widget.embedInModalChrome,
-        ),
+        widget.embedInModalChrome
+            ? AppSize.spaceMD
+            : AppSize.spaceMD + MediaQuery.viewPaddingOf(context).bottom,
       ),
       child: AppButton.primary(
         key: const Key('craftsman_assignments_save'),

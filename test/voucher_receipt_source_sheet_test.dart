@@ -1,5 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/bnood_modal_sheet.dart';
+import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/core/widgets/sheet_drag_handle.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/vouchers/voucher_receipt_source_sheet.dart';
@@ -56,7 +56,7 @@ void main() {
     expect(find.text('الكاميرا'), findsOneWidget);
     expect(find.text('المعرض'), findsOneWidget);
     expect(find.text('الملفات'), findsNothing);
-    expect(find.byKey(BnoodModalSheet.sheetBoundsKey), findsOneWidget);
+    expect(find.byKey(AppModalSheet.sheetBoundsKey), findsOneWidget);
 
     await tester.tap(find.text('الكاميرا'));
     await tester.pumpAndSettle();
@@ -68,7 +68,7 @@ void main() {
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
 
-    final bounds = tester.renderObject<RenderBox>(find.byKey(BnoodModalSheet.sheetBoundsKey));
+    final bounds = tester.renderObject<RenderBox>(find.byKey(AppModalSheet.sheetBoundsKey));
     expect(bounds.size.width, lessThanOrEqualTo(600));
   });
 }

@@ -1,5 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/bnood_modal_sheet.dart';
+import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/core/widgets/bounded_sheet_navigator.dart';
 import 'package:bnood/core/widgets/sheet_drag_handle.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
@@ -8,12 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import 'bnood_modal_sheet_safe_area_test.dart' show _applyDeviceInsets;
+import 'app_modal_sheet_safe_area_test.dart' show _applyDeviceInsets;
 
 const _tabletSize = Size(820, 1180);
 
 void main() {
-  testWidgets('BnoodModalSheet hugs short content on tablet width', (tester) async {
+  testWidgets('AppModalSheet hugs short content on tablet width', (tester) async {
     tester.view.physicalSize = _tabletSize;
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -37,9 +37,9 @@ void main() {
             builder: (context) => Scaffold(
               body: Center(
                 child: FilledButton(
-                  onPressed: () => BnoodModalSheet.show<void>(
+                  onPressed: () => AppModalSheet.show<void>(
                     context: context,
-                    builder: (_) => const Padding(
+                    body: const Padding(
                       padding: EdgeInsets.all(24),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -63,7 +63,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final cap = SheetContentBounds.viewportCap(MediaQueryData(size: _tabletSize));
-    final bounds = find.byKey(BnoodModalSheet.sheetBoundsKey);
+    final bounds = find.byKey(AppModalSheet.sheetBoundsKey);
     expect(tester.getSize(bounds).height, lessThan(cap * 0.35));
   });
 }

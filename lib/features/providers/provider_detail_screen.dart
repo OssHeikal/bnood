@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
 import '../../core/layout/bnood_two_column.dart';
 import '../../core/agreements/agreements_riverpod.dart';
@@ -119,7 +119,7 @@ class _ProviderDetailScreenState extends ConsumerState<ProviderDetailScreen> {
               onRefresh: () =>
                   ref.read(providerDetailProvider(widget.providerId).notifier).refetchOnOpen(),
               child: BnoodMaxWidth(
-                maxWidth: BnoodLayout.pageMaxWidth,
+                maxWidth: AppLayout.pageMaxWidth,
                 child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: EdgeInsets.fromLTRB(
@@ -302,7 +302,7 @@ class _ProviderDetailBody extends ConsumerWidget {
           ],
         ],
     ];
-    if (context.isBnoodMobile) {
+    if (context.isMobileLayout) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [...summary, ...ledger],

@@ -3,7 +3,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 
 import '../config/extensions/num_extensions.dart';
 import '../utils/arabic_search_normalizer.dart';
-import '../layout/bnood_form_route_canvas.dart';
+import '../layout/app_form_route_canvas.dart';
 import '../config/extensions/text_style_extensions.dart';
 import '../config/theme/app_colors.dart';
 import '../config/theme/app_size.dart';
@@ -12,8 +12,6 @@ import 'app_pressable.dart';
 import 'custom_app_bar.dart';
 import 'custom_text_field.dart';
 import 'entity_picker_row.dart';
-import 'bounded_sheet_navigator.dart';
-import 'overlay_form_keyboard_chrome.dart';
 import 'overlay_form_presentation.dart';
 import 'sheet_drag_handle.dart';
 
@@ -144,13 +142,9 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
   ) {
     if (!showCreateRow) return null;
     final colors = context.colors;
-    final inModal = widget.presentation != OverlayFormPresentation.fullScreen;
     final bottomPad = widget.presentation == OverlayFormPresentation.fullScreen
-        ? OverlayFormKeyboardChrome.pinnedFooterBottom(media)
-        : SheetChromeInsets.sheetFooterBottomPadding(
-            media: media,
-            outerModalChromeApplied: inModal,
-          );
+        ? AppSize.spaceMD + media.viewPadding.bottom
+        : 0.0;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, bottomPad),
@@ -180,7 +174,7 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
     final footer = _createFooter(l10n, showCreateRow, media);
 
     if (widget.presentation == OverlayFormPresentation.fullScreen) {
-      return BnoodFormRouteCanvas(
+      return AppFormRouteCanvas(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: CustomAppBar(title: widget.title),

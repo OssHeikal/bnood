@@ -3,7 +3,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/config/theme/app_size.dart';
-import '../core/layout/bnood_layout.dart';
+import '../core/layout/app_layout.dart';
 import '../core/theme/app_colors.dart';
 import '../features/vouchers/voucher_launcher.dart';
 import 'shell_chrome_scope.dart';
@@ -46,7 +46,7 @@ class ShellScaffold extends StatelessWidget {
     final destinations = _destinations(l10n);
     final voucherLabel = l10n.navAdd;
 
-    if (context.isBnoodDesktop) {
+    if (context.isDesktopLayout) {
       return Scaffold(
         body: Row(
           children: [

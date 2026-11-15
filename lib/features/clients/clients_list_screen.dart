@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/providers/dashboard_providers.dart';
@@ -135,7 +135,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
         builder: (context) {
           final colors = context.colors;
           final gutter = context.pageGutter;
-          final useGrid = !context.isBnoodMobile;
+          final useGrid = !context.isMobileLayout;
           return ShellTabScaffold(
             backgroundColor: colors.canvas,
             body: AppPagedView<HomeClientBalanceRow>(

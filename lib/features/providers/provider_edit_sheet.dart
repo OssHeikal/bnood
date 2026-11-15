@@ -11,7 +11,7 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/widgets/buttons/app_button.dart';
-import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../home/home_foundation_scope.dart';
@@ -21,9 +21,9 @@ Future<void> showProviderEditSheet(
   BuildContext context, {
   required AppProvider provider,
 }) {
-  return BnoodModalSheet.show<void>(
+  return AppModalSheet.show<void>(
     context: context,
-    builder: (_) => HomeFoundationScope(
+    body: HomeFoundationScope(
       child: ProviderEditSheet(provider: provider),
     ),
   );

@@ -11,7 +11,7 @@ import 'foundation_icon.dart';
 import 'sheet_drag_handle.dart';
 import 'buttons/app_button.dart';
 import 'custom_text_field.dart';
-import 'bnood_modal_sheet.dart';
+import 'app_modal_sheet.dart';
 import 'toast/app_tone.dart';
 
 /// Safe (cancel) action on decision surfaces: neutral outline, not brand secondary.
@@ -74,13 +74,13 @@ abstract final class AppDecision {
   }) {
     final useSheet = typedConfirmation != null && typedConfirmation.isNotEmpty;
     if (useSheet) {
-      return BnoodModalSheet.show<OverlayAnswer>(
+      return AppModalSheet.show<OverlayAnswer>(
         context: context,
         backgroundColor: context.colors.surface,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.cardRadius)),
         ),
-        builder: (sheetContext) => _AppDecisionSheet(
+        body: _AppDecisionSheet(
           title: title,
           description: description,
           confirmLabel: confirmLabel,

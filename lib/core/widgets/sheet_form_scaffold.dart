@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../config/theme/app_size.dart';
 import 'bounded_sheet_navigator.dart';
 
-/// Scrollable sheet body with an optional pinned footer that stays above the keyboard.
+/// Scrollable form body with optional pinned footer (use [AppModalSheet] slots when possible).
+@Deprecated('Prefer AppModalSheet.show header/body/footer slots.')
 class SheetFormScaffold extends StatelessWidget {
   const SheetFormScaffold({
     super.key,
@@ -24,10 +25,6 @@ class SheetFormScaffold extends StatelessWidget {
       builder: (context, constraints) {
         final media = MediaQuery.of(context);
         final maxHeight = SheetContentBounds.maxHeight(constraints, media);
-        final footerBottom = SheetChromeInsets.sheetFooterBottomPadding(
-          media: media,
-          outerModalChromeApplied: true,
-        );
 
         return ConstrainedBox(
           constraints: BoxConstraints(maxHeight: maxHeight),
@@ -50,7 +47,7 @@ class SheetFormScaffold extends StatelessWidget {
                     padding.left,
                     AppSize.spaceMD,
                     padding.right,
-                    footerBottom,
+                    AppSize.spaceMD,
                   ),
                   child: footer,
                 ),

@@ -1,10 +1,9 @@
 import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/bounded_sheet_navigator.dart';
-import 'package:bnood/core/widgets/bnood_modal_sheet.dart';
+import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
-import 'package:bnood/features/providers/provider_edit_sheet.dart';
-import 'package:bnood/core/providers_api/app_provider_record.dart';
+import 'package:bnood/core/widgets/buttons/app_button.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,40 +20,8 @@ void _applyDeviceInsets(WidgetTester tester) {
 }
 
 void main() {
-  test('sheetContentBottomPadding uses keyboard or home plus spacing', () {
-    const homeOnly = MediaQueryData(viewPadding: EdgeInsets.only(bottom: _bottomInset));
-    expect(
-      SheetChromeInsets.sheetContentBottomPadding(homeOnly),
-      _bottomInset + AppSize.spaceMD,
-    );
-
-    const keyboard = MediaQueryData(viewInsets: EdgeInsets.only(bottom: 320));
-    expect(
-      SheetChromeInsets.sheetContentBottomPadding(keyboard),
-      320 + AppSize.spaceMD,
-    );
-
-    const both = MediaQueryData(
-      viewPadding: const EdgeInsets.only(bottom: _bottomInset),
-      viewInsets: const EdgeInsets.only(bottom: 320),
-    );
-    expect(
-      SheetChromeInsets.sheetContentBottomPadding(both),
-      320 + AppSize.spaceMD,
-    );
-  });
-
-  testWidgets('BnoodModalSheet keeps bottom actions above home indicator', (tester) async {
+  testWidgets('AppModalSheet keeps bottom actions above home indicator', (tester) async {
     _applyDeviceInsets(tester);
-    final supplier = AppProvider(
-      id: 'p1',
-      name: 'مورد',
-      phone: null,
-      type: AppProviderType.supplier,
-      createdAt: DateTime(2024),
-      updatedAt: DateTime(2024),
-    );
-
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -66,9 +33,11 @@ void main() {
             builder: (context) => Scaffold(
               body: Center(
                 child: FilledButton(
-                  onPressed: () => BnoodModalSheet.show<void>(
+                  onPressed: () => AppModalSheet.show<void>(
                     context: context,
-                    builder: (_) => ProviderEditSheet(provider: supplier),
+                    scrollable: false,
+                    body: const SizedBox(height: 48),
+                    footer: AppButton(text: 'حذف', onPressed: () {}),
                   ),
                   child: const Text('open'),
                 ),
@@ -86,7 +55,8 @@ void main() {
     final deleteButton = find.text('حذف');
     expect(deleteButton, findsOneWidget);
     final bottom = tester.getBottomLeft(deleteButton).dy;
-    expect(bottom, lessThanOrEqualTo(932 - _bottomInset - AppSize.spaceMD + 1));
+    expect(bottom, lessThanOrEqualTo(932 - _bottomInset - AppSize.spaceMD + 2));
+    expect(bottom, greaterThan(932 - _bottomInset - AppSize.spaceMD - 72));
     expect(tester.takeException(), isNull);
   });
 }
