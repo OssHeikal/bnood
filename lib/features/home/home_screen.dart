@@ -19,6 +19,7 @@ import '../../core/providers/dashboard_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_amount.dart';
 import '../../core/widgets/app_fallback.dart';
+import '../../app/shell_tab_scaffold.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../auth/auth_controller.dart';
@@ -364,7 +365,7 @@ class HomeScreen extends ConsumerWidget {
             ...providerSnapshotChildren,
           ];
 
-          return Scaffold(
+          return ShellTabScaffold(
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
               automaticallyImplyLeading: false,

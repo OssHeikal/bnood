@@ -4,6 +4,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/shell_bottom_inset.dart';
+import '../../app/shell_tab_scaffold.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
@@ -103,7 +104,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
           final colors = context.colors;
           final gutter = context.pageGutter;
           final useGrid = !context.isBnoodMobile;
-          return Scaffold(
+          return ShellTabScaffold(
             backgroundColor: colors.canvas,
             body: AppPagedView<AppProvider>(
               controller: _pagingController,

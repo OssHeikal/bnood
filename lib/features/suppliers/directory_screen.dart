@@ -18,6 +18,7 @@ import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
 import '../../core/widgets/toast/app_tone.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
+import '../../app/shell_tab_scaffold.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../home/home_foundation_scope.dart';
 import 'widgets/directory_list_loading_skeleton.dart';
@@ -78,7 +79,7 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen> with SingleTi
           final colors = context.colors;
           final text = context.text;
           final gutter = context.pageGutter;
-          return Scaffold(
+          return ShellTabScaffold(
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
               title: l10n.directoryTitle,

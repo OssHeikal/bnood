@@ -16,6 +16,7 @@ import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
 import '../../core/widgets/directory_search_field.dart';
+import '../../app/shell_tab_scaffold.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../home/home_foundation_scope.dart';
 import '../vouchers/inline_create_routes.dart';
@@ -135,7 +136,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
           final colors = context.colors;
           final gutter = context.pageGutter;
           final useGrid = !context.isBnoodMobile;
-          return Scaffold(
+          return ShellTabScaffold(
             backgroundColor: colors.canvas,
             body: AppPagedView<HomeClientBalanceRow>(
               controller: _pagingController,
