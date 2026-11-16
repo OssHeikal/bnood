@@ -14,7 +14,7 @@ import '../../core/layout/bnood_max_width.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/paging_refresh.dart';
-import '../../core/widgets/app_card.dart';
+import '../../core/widgets/app_empty_state.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
@@ -72,6 +72,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
       child: Builder(
         builder: (context) {
           final colors = context.colors;
+          final gutter = context.pageGutter;
           final bottomClearance = ShellBottomInset.listScrollBottomPadding(context);
 
           return ShellTabScaffold(
@@ -137,36 +138,55 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                 ),
                 data: (items) {
                   if (items.isEmpty) {
-                    return CustomScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      slivers: [
-                        _captionSliver(context, l10n),
-                        const SliverToBoxAdapter(child: ItemsListFilterChips()),
-                        const SliverToBoxAdapter(child: SizedBox(height: AppSize.spaceMD)),
-                        SliverFillRemaining(
-                          hasScrollBody: false,
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            0,
+                            AppSize.spaceSM,
+                            0,
+                            AppSize.spaceMD,
+                          ),
+                          child: Text(
+                            l10n.itemsCatalogCaption,
+                            style: context.text.caption.copyWith(color: colors.onSurfaceMuted),
+                          ),
+                        ),
+                        const ItemsListFilterChips(),
+                        const SizedBox(height: AppSize.spaceMD),
+                        Expanded(
                           child: Padding(
-                            padding: EdgeInsets.zero,
-                            child: AppCard(
-                              child: AppFallback.section(
-                                leading: ShellNavIcon(
-                                  asset: Assets.icons.itemsLayersOutline,
-                                  color: colors.muted,
-                                  size: AppSize.icon,
-                                ),
-                                title: showArchived ? l10n.itemsArchivedEmptyTitle : l10n.itemsEmptyTitle,
-                                description:
-                                    showArchived ? l10n.itemsArchivedEmptyDescription : l10n.itemsEmptyDescription,
-                                actions: showArchived
-                                    ? null
-                                    : [
-                                        AppFallbackAction(
-                                          label: l10n.addItem,
-                                          onPressed: () => _addItem(context),
-                                          role: AppFallbackActionRole.primary,
+                            padding: EdgeInsets.fromLTRB(gutter, 0, gutter, bottomClearance),
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                return SingleChildScrollView(
+                                  physics: const ClampingScrollPhysics(),
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        AppEmptyState(
+                                          key: const Key('items_empty_state'),
+                                          leading: ShellNavIcon(
+                                            asset: Assets.icons.itemsLayersOutline,
+                                            color: colors.primary,
+                                            size: AppSize.iconExtraLarge,
+                                            semanticsLabel: l10n.navItems,
+                                          ),
+                                          title: showArchived ? l10n.itemsArchivedEmptyTitle : l10n.itemsEmptyTitle,
+                                          description: showArchived
+                                              ? l10n.itemsArchivedEmptyDescription
+                                              : l10n.itemsEmptyDescription,
+                                          primaryActionLabel: showArchived ? null : l10n.addItem,
+                                          onPrimaryAction: showArchived ? null : () => _addItem(context),
                                         ),
                                       ],
-                              ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),

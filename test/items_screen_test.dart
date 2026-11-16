@@ -8,6 +8,9 @@ import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/core/widgets/app_card.dart';
+import 'package:bnood/core/widgets/app_empty_state.dart';
+import 'package:bnood/core/widgets/buttons/app_button.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton_box.dart';
 import 'package:bnood/features/items/widgets/items_loading_skeleton.dart';
@@ -171,6 +174,45 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(LongPressDraggable<int>), findsNWidgets(2));
     expect(find.byType(ItemCatalogTile), findsNWidgets(2));
+  });
+
+  testWidgets('active catalog empty state is centered without list card', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        child: const ItemsScreen(),
+        overrides: remoteOverrides(items: []),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AppCard), findsNothing);
+    expect(find.byType(AppEmptyState), findsOneWidget);
+    expect(find.byKey(const Key('items_empty_state')), findsOneWidget);
+    expect(find.text('لا توجد بنود بعد'), findsOneWidget);
+    expect(find.widgetWithText(AppButton, 'إضافة بند'), findsOneWidget);
+
+    final hasCenteredEmptyColumn = tester.widgetList<Column>(find.byType(Column)).any(
+      (column) =>
+          column.mainAxisAlignment == MainAxisAlignment.center &&
+          column.children.any((child) => child is AppEmptyState),
+    );
+    expect(hasCenteredEmptyColumn, isTrue);
+  });
+
+  testWidgets('archived filter empty state has no add button', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        child: const ItemsScreen(),
+        overrides: remoteOverrides(items: []),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('items_filter_archived')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('لا بنود مؤرشفة'), findsOneWidget);
+    expect(find.widgetWithText(AppButton, 'إضافة بند'), findsNothing);
+    expect(find.byType(AppEmptyState), findsOneWidget);
   });
 
   testWidgets('create sheet rejects empty name', (tester) async {
