@@ -139,43 +139,18 @@ class ItemsApi {
     });
   }
 
-  Future<void> deleteItem(String id) {
+  /// `DELETE /items/{id}`: unused own items are removed; linked or default items are
+  /// hidden for this user. A body without `result` is treated as [ItemDeleteResult.deleted].
+  Future<ItemDeleteResult> deleteItem(String id) {
     return _guard(() async {
       final response = await _dio.delete<Map<String, dynamic>>(
         '$_prefix/$id',
         options: Options(extra: _authenticatedExtra),
       );
       ApiResponseParser.expectSuccess(response);
-    });
-  }
-
-  Future<CatalogItem> clearCustomization(String id) {
-    return _guard(() async {
-      final response = await _dio.delete<Map<String, dynamic>>(
-        '$_prefix/$id/customization',
-        options: Options(extra: _authenticatedExtra),
-      );
-      return ApiResponseParser.expectData(response, (json) => CatalogItem.fromDataJson(json ?? const {}));
-    });
-  }
-
-  Future<CatalogItem> archiveItem(String id) {
-    return _guard(() async {
-      final response = await _dio.post<Map<String, dynamic>>(
-        '$_prefix/$id/archive',
-        options: Options(extra: _authenticatedExtra),
-      );
-      return ApiResponseParser.expectData(response, (json) => CatalogItem.fromDataJson(json ?? const {}));
-    });
-  }
-
-  Future<CatalogItem> unarchiveItem(String id) {
-    return _guard(() async {
-      final response = await _dio.post<Map<String, dynamic>>(
-        '$_prefix/$id/unarchive',
-        options: Options(extra: _authenticatedExtra),
-      );
-      return ApiResponseParser.expectData(response, (json) => CatalogItem.fromDataJson(json ?? const {}));
+      final data = ApiResponseParser.decodeJson(response)['data'];
+      final result = data is Map<String, dynamic> ? data['result'] : null;
+      return ItemDeleteResult.fromWire(result is String ? result : null);
     });
   }
 

@@ -173,7 +173,6 @@
   "sharePdf": "Share PDF",
   "createNew": "Create new",
   "archive": "Archive",
-  "unarchive": "Unarchive",
   "clientsFilterAll": "All",
   "clientsFilterActive": "Active",
   "clientsFilterArchived": "Archived",
@@ -308,20 +307,7 @@
   "craftsmanAgreementHasPayments": "Has recorded payments",
   "directoryAddCraftsmanToRoster": "Add craftsman to directory",
   "crewAssignmentsSaved": "Craftsman choices saved for this client",
-  "itemsCatalogCaption": "Customize default items for your account, or add your own.",
-  "itemResetToOriginal": "Reset to original",
-  "toastItemCustomizationReset": "Item reset to catalog defaults.",
-  "itemsFilterActive": "Active",
-  "itemsFilterArchived": "Archived",
-  "itemsArchivedEmptyTitle": "No archived items",
-  "itemsArchivedEmptyDescription": "Archived items are hidden from pickers but stay in past vouchers.",
-  "itemInUseTitle": "Item is in use",
-  "itemInUseArchiveDescription": "{name} is linked to expenses and cannot be deleted. Archive it instead?",
-  "@itemInUseArchiveDescription": {
-    "placeholders": {
-      "name": { "type": "String" }
-    }
-  },
+  "itemsCatalogCaption": "Add your own items or edit existing ones.",
   "overflowMenuTooltip": "More options",
   "addItem": "Add item",
   "itemCreateSheetTitle": "New item",
@@ -396,7 +382,6 @@
       "name": { "type": "String" }
     }
   },
-  "itemDefaultBadge": "Default",
   "itemPickIconLabel": "Icon",
   "itemPickColorLabel": "Color",
   "statementClientHeading": "Fund / client statement",
@@ -588,8 +573,6 @@
   "toastItemCreated": "Item added.",
   "toastItemUpdated": "Item updated.",
   "toastItemDeleted": "Item removed.",
-  "toastItemArchived": "Item archived.",
-  "toastItemUnarchived": "Item restored.",
   "toastVoucherCreated": "Voucher saved.",
   "toastVoucherUpdated": "Voucher updated.",
   "toastVoucherDeleted": "Voucher deleted.",

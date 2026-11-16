@@ -950,12 +950,6 @@ abstract class AppLocalizations {
   /// **'Archive'**
   String get archive;
 
-  /// No description provided for @unarchive.
-  ///
-  /// In en, this message translates to:
-  /// **'Unarchive'**
-  String get unarchive;
-
   /// No description provided for @clientsFilterAll.
   ///
   /// In en, this message translates to:
@@ -1559,56 +1553,8 @@ abstract class AppLocalizations {
   /// No description provided for @itemsCatalogCaption.
   ///
   /// In en, this message translates to:
-  /// **'Customize default items for your account, or add your own.'**
+  /// **'Add your own items or edit existing ones.'**
   String get itemsCatalogCaption;
-
-  /// No description provided for @itemResetToOriginal.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset to original'**
-  String get itemResetToOriginal;
-
-  /// No description provided for @toastItemCustomizationReset.
-  ///
-  /// In en, this message translates to:
-  /// **'Item reset to catalog defaults.'**
-  String get toastItemCustomizationReset;
-
-  /// No description provided for @itemsFilterActive.
-  ///
-  /// In en, this message translates to:
-  /// **'Active'**
-  String get itemsFilterActive;
-
-  /// No description provided for @itemsFilterArchived.
-  ///
-  /// In en, this message translates to:
-  /// **'Archived'**
-  String get itemsFilterArchived;
-
-  /// No description provided for @itemsArchivedEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No archived items'**
-  String get itemsArchivedEmptyTitle;
-
-  /// No description provided for @itemsArchivedEmptyDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Archived items are hidden from pickers but stay in past vouchers.'**
-  String get itemsArchivedEmptyDescription;
-
-  /// No description provided for @itemInUseTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Item is in use'**
-  String get itemInUseTitle;
-
-  /// No description provided for @itemInUseArchiveDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'{name} is linked to expenses and cannot be deleted. Archive it instead?'**
-  String itemInUseArchiveDescription(String name);
 
   /// No description provided for @overflowMenuTooltip.
   ///
@@ -1873,12 +1819,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} will be removed from your directory list.'**
   String deleteProviderDescription(String name);
-
-  /// No description provided for @itemDefaultBadge.
-  ///
-  /// In en, this message translates to:
-  /// **'Default'**
-  String get itemDefaultBadge;
 
   /// No description provided for @itemPickIconLabel.
   ///
@@ -2556,18 +2496,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Item removed.'**
   String get toastItemDeleted;
-
-  /// No description provided for @toastItemArchived.
-  ///
-  /// In en, this message translates to:
-  /// **'Item archived.'**
-  String get toastItemArchived;
-
-  /// No description provided for @toastItemUnarchived.
-  ///
-  /// In en, this message translates to:
-  /// **'Item restored.'**
-  String get toastItemUnarchived;
 
   /// No description provided for @toastVoucherCreated.
   ///

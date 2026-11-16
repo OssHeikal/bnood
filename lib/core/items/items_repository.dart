@@ -37,24 +37,20 @@ class ItemsRepository {
   }) =>
       _api.updateItem(id: id, name: name, iconKey: iconKey, colorKey: colorKey);
 
-  Future<void> deleteItem(String id) => _api.deleteItem(id);
-
-  Future<CatalogItem> clearCustomization(String id) => _api.clearCustomization(id);
-
-  Future<CatalogItem> archiveItem(String id) => _api.archiveItem(id);
-
-  Future<CatalogItem> unarchiveItem(String id) => _api.unarchiveItem(id);
+  /// Unified delete: the server hard-deletes unused own items and hides the rest.
+  Future<ItemDeleteResult> deleteItem(String id) => _api.deleteItem(id);
 
   Future<void> reorderItems(List<String> ids) => _api.reorderItems(ids);
 }
 
-enum ItemCatalogListStatus { active, archived, all }
+/// List filter sent to the API. The Items screen only shows [active]; [archived]
+/// resolves names/icons of deleted items that still appear on past vouchers.
+enum ItemCatalogListStatus { active, archived }
 
 extension ItemCatalogListStatusQuery on ItemCatalogListStatus {
-  String? get queryValue => switch (this) {
+  String get queryValue => switch (this) {
         ItemCatalogListStatus.active => 'active',
         ItemCatalogListStatus.archived => 'archived',
-        ItemCatalogListStatus.all => 'all',
       };
 }
 
@@ -72,7 +68,6 @@ Future<List<CatalogItem>> fetchAllCatalogItems(
     if (!result.hasMore) break;
     page++;
   }
-  if (status == ItemCatalogListStatus.all) return all;
   return all.where((item) {
     final archived = item.isArchived;
     return status == ItemCatalogListStatus.archived ? archived : !archived;

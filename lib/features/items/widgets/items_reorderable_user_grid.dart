@@ -13,13 +13,11 @@ class ItemsReorderableUserGrid extends StatelessWidget {
     required this.items,
     required this.onReorder,
     required this.onOpenEdit,
-    this.reorderEnabled = true,
   });
 
   final List<CatalogItem> items;
   final Future<void> Function(int oldIndex, int newIndex) onReorder;
   final void Function(CatalogItem item) onOpenEdit;
-  final bool reorderEnabled;
 
   static const _mainAxisExtent = 116.0;
 
@@ -52,16 +50,6 @@ class ItemsReorderableUserGrid extends StatelessWidget {
           itemBuilder: (context, index) {
             final item = items[index];
             void openEdit() => onOpenEdit(item);
-            if (!reorderEnabled) {
-              return ItemCatalogTile(
-                key: ValueKey(item.id),
-                name: item.name,
-                colorKey: item.colorKey,
-                iconKey: item.iconKey,
-                isDefault: item.isDefault,
-                onOpenEdit: openEdit,
-              );
-            }
             return DragTarget<int>(
               onWillAcceptWithDetails: (details) => details.data != index,
               onAcceptWithDetails: (details) => onReorder(details.data, index),
@@ -78,7 +66,6 @@ class ItemsReorderableUserGrid extends StatelessWidget {
                         name: item.name,
                         colorKey: item.colorKey,
                         iconKey: item.iconKey,
-                        isDefault: item.isDefault,
                         onOpenEdit: openEdit,
                       ),
                     ),
@@ -89,7 +76,6 @@ class ItemsReorderableUserGrid extends StatelessWidget {
                       name: item.name,
                       colorKey: item.colorKey,
                       iconKey: item.iconKey,
-                      isDefault: item.isDefault,
                       onOpenEdit: openEdit,
                     ),
                   ),
@@ -98,7 +84,6 @@ class ItemsReorderableUserGrid extends StatelessWidget {
                     name: item.name,
                     colorKey: item.colorKey,
                     iconKey: item.iconKey,
-                    isDefault: item.isDefault,
                     onOpenEdit: openEdit,
                   ),
                 );

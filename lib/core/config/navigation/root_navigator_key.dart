@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Root navigator for foundation Toaster and future shell. Separate from production go_router key.
+/// Root navigator key: production GoRouter `navigatorKey` and the context AppToaster uses
+/// for toast layout (safe area, keyboard, shell dock clearance).
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'bnoodRoot');

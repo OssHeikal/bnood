@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../core/config/theme/app_size.dart';
 import '../core/layout/app_layout.dart';
 import '../core/theme/app_colors.dart';
+import '../core/widgets/toast/shell_dock_presence.dart';
 import '../features/vouchers/voucher_launcher.dart';
 import 'shell_chrome_scope.dart';
 import 'widgets/floating_shell_dock.dart';
@@ -18,27 +19,11 @@ class ShellScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   List<ShellNavDestination> _destinations(AppLocalizations l10n) => [
-        ShellNavDestination(
-          icon: ShellNavIcons.home,
-          label: l10n.navHome,
-          semanticsLabel: l10n.navHome,
-        ),
-        ShellNavDestination(
-          icon: ShellNavIcons.clients,
-          label: l10n.navClients,
-          semanticsLabel: l10n.navClients,
-        ),
-        ShellNavDestination(
-          icon: ShellNavIcons.directory,
-          label: l10n.navDirectory,
-          semanticsLabel: l10n.navDirectory,
-        ),
-        ShellNavDestination(
-          icon: ShellNavIcons.items,
-          label: l10n.navItems,
-          semanticsLabel: l10n.navItems,
-        ),
-      ];
+    ShellNavDestination(icon: ShellNavIcons.home, label: l10n.navHome, semanticsLabel: l10n.navHome),
+    ShellNavDestination(icon: ShellNavIcons.clients, label: l10n.navClients, semanticsLabel: l10n.navClients),
+    ShellNavDestination(icon: ShellNavIcons.directory, label: l10n.navDirectory, semanticsLabel: l10n.navDirectory),
+    ShellNavDestination(icon: ShellNavIcons.items, label: l10n.navItems, semanticsLabel: l10n.navItems),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +32,7 @@ class ShellScaffold extends StatelessWidget {
     final voucherLabel = l10n.navAdd;
 
     if (context.isDesktopLayout) {
+      ShellDockPresence.register(context, hasDock: false);
       return Scaffold(
         body: Row(
           children: [
@@ -66,6 +52,8 @@ class ShellScaffold extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
     final showShellDock = !keyboardOpen;
+    // Toasts resolve dock visibility at show time (sheets/dialogs above the shell keep it).
+    ShellDockPresence.register(context, hasDock: true);
     final dockClearance = keyboardOpen ? 0.0 : FloatingShellDock.clearanceHeight;
     final safeBottom = MediaQuery.viewPaddingOf(context).bottom;
     final fadeHeight = dockClearance + safeBottom + AppSize.spaceXL;
@@ -78,14 +66,11 @@ class ShellScaffold extends StatelessWidget {
           MediaQuery(
             data: MediaQuery.of(context).copyWith(
               viewInsets: EdgeInsets.zero,
-              padding: MediaQuery.paddingOf(context).copyWith(
-                bottom: MediaQuery.paddingOf(context).bottom + dockClearance,
-              ),
+              padding: MediaQuery.paddingOf(
+                context,
+              ).copyWith(bottom: MediaQuery.paddingOf(context).bottom + dockClearance),
             ),
-            child: ShellChromeScope(
-              keyboardOpen: keyboardOpen,
-              child: navigationShell,
-            ),
+            child: ShellChromeScope(keyboardOpen: keyboardOpen, child: navigationShell),
           ),
           if (showShellDock) ...[
             Positioned(

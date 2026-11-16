@@ -29,7 +29,6 @@ Future<void> showItemEditSheet(
   final l10n = AppLocalizations.of(context);
   return AppModalSheet.show<void>(
     context: context,
-    scrollable: false,
     header: SheetFormHeader(title: l10n.itemEditSheetTitle),
     body: HomeFoundationScope(
       child: ItemEditSheet(
@@ -76,8 +75,6 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
   late String _iconKey = widget.item.iconKey;
   late String _colorKey = widget.item.colorKey;
 
-  bool get _isDefault => widget.item.isDefault;
-
   @override
   void dispose() {
     _nameCtrl.dispose();
@@ -87,63 +84,21 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
   void _bumpFooter() => widget.footerRefresh.bump();
 
   List<Widget> _footerActions(BuildContext context, AppLocalizations l10n) {
-    final archived = widget.item.isArchived;
-    final children = <Widget>[
+    return [
       AppButton.primary(
         text: l10n.save,
         isLoading: _saving,
         onPressed: _saving ? null : _save,
       ),
+      AppSize.spaceSM.gap,
+      AppButton.outlined(
+        key: const Key('item_edit_delete'),
+        text: l10n.delete,
+        foregroundColor: context.colors.error,
+        borderColor: context.colors.outline,
+        onPressed: _saving ? null : _delete,
+      ),
     ];
-
-    if (_isDefault && widget.item.isCustomized) {
-      children
-        ..add(AppSize.spaceSM.gap)
-        ..add(
-          AppButton.outlined(
-            text: l10n.itemResetToOriginal,
-            foregroundColor: context.colors.onSurface,
-            borderColor: context.colors.outline,
-            onPressed: _saving ? null : _resetCustomization,
-          ),
-        );
-    }
-
-    if (archived) {
-      children
-        ..add(AppSize.spaceSM.gap)
-        ..add(
-          AppButton.outlined(
-            text: l10n.unarchive,
-            foregroundColor: context.colors.onSurface,
-            borderColor: context.colors.outline,
-            onPressed: _saving ? null : _unarchive,
-          ),
-        );
-    } else if (_isDefault) {
-      children
-        ..add(AppSize.spaceSM.gap)
-        ..add(
-          AppButton.outlined(
-            text: l10n.archive,
-            foregroundColor: context.colors.onSurface,
-            borderColor: context.colors.outline,
-            onPressed: _saving ? null : _archive,
-          ),
-        );
-    } else {
-      children
-        ..add(AppSize.spaceSM.gap)
-        ..add(
-          AppButton.outlined(
-            text: l10n.delete,
-            foregroundColor: context.colors.onSurface,
-            borderColor: context.colors.outline,
-            onPressed: _saving ? null : _delete,
-          ),
-        );
-    }
-    return children;
   }
 
   Future<void> _save() async {
@@ -185,34 +140,6 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
     }
   }
 
-  Future<void> _resetCustomization() async {
-    if (_saving) return;
-    setState(() => _saving = true);
-    _bumpFooter();
-    final restored = await resetDefaultItemCustomization(
-      context: context,
-      ref: ref,
-      itemId: widget.item.id,
-    );
-    if (!mounted) return;
-    setState(() => _saving = false);
-    _bumpFooter();
-    if (restored != null) {
-      Navigator.pop(context);
-    }
-  }
-
-  Future<void> _archive() async {
-    final archived = await performItemArchive(
-      context: context,
-      ref: ref,
-      itemId: widget.item.id,
-    );
-    if (archived && mounted) {
-      Navigator.pop(context);
-    }
-  }
-
   Future<void> _delete() async {
     final deleted = await confirmDeleteItem(
       context,
@@ -227,58 +154,49 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
     }
   }
 
-  Future<void> _unarchive() async {
-    final restored = await performItemUnarchive(
-      context: context,
-      ref: ref,
-      itemId: widget.item.id,
-    );
-    if (restored && mounted) {
-      Navigator.pop(context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final catalog = ref.watch(itemIconsCatalogProvider);
-    return Form(
-      key: _formKey,
-      autovalidateMode: _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          CustomTextField(
-            controller: _nameCtrl,
-            label: l10n.itemNameLabel,
-            placeholder: l10n.itemNameHint,
-            fieldHeight: AppSize.fieldHeightComfortable,
-            textCapitalization: TextCapitalization.words,
-            textInputAction: TextInputAction.done,
-            errorMessage: _nameError,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return l10n.itemNameRequired;
-              }
-              return null;
-            },
-          ),
-          AppSize.spaceMD.gap,
-          AsyncValueBody(
-            value: catalog,
-            loadingPlaceholder: const SizedBox(height: 120),
-            error: (e, _) => Text(e.toString()),
-            data: (data) => ItemVisualPickers(
-              catalog: data,
-              selectedIconKey: _iconKey,
-              selectedColorKey: _colorKey,
-              showColorPicker: !_isDefault,
-              onIconKey: (v) => setState(() => _iconKey = v),
-              onColorKey: (v) => setState(() => _colorKey = v),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, 0),
+      child: Form(
+        key: _formKey,
+        autovalidateMode: _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            CustomTextField(
+              controller: _nameCtrl,
+              label: l10n.itemNameLabel,
+              placeholder: l10n.itemNameHint,
+              fieldHeight: AppSize.fieldHeightComfortable,
+              textCapitalization: TextCapitalization.words,
+              textInputAction: TextInputAction.done,
+              errorMessage: _nameError,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return l10n.itemNameRequired;
+                }
+                return null;
+              },
             ),
-          ),
-        ],
+            AppSize.spaceLG.gap,
+            AsyncValueBody(
+              value: catalog,
+              loadingPlaceholder: const SizedBox(height: 120),
+              error: (e, _) => Text(e.toString()),
+              data: (data) => ItemVisualPickers(
+                catalog: data,
+                selectedIconKey: _iconKey,
+                selectedColorKey: _colorKey,
+                onIconKey: (v) => setState(() => _iconKey = v),
+                onColorKey: (v) => setState(() => _colorKey = v),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

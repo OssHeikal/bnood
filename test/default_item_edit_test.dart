@@ -26,114 +26,116 @@ void main() {
         updatedAt: now,
       );
 
-  testWidgets('customized default edit sheet shows reset to original', (tester) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          itemIconsCatalogProvider.overrideWith(
-            (ref) async => const ItemIconsCatalog(
-              colors: [ItemColorOption(key: 'gold', hex: '#000000')],
-              iconKeys: ['category', 'layers'],
-            ),
+  Widget harness({required ItemsRepository repo, required Locale locale, required CatalogItem item}) {
+    return ProviderScope(
+      overrides: [
+        itemsRepositoryProvider.overrideWithValue(repo),
+        itemIconsCatalogProvider.overrideWith(
+          (ref) async => const ItemIconsCatalog(
+            colors: [
+              ItemColorOption(key: 'gold', hex: '#C9A227'),
+              ItemColorOption(key: 'pink', hex: '#D4569C'),
+            ],
+            iconKeys: ['category', 'layers'],
           ),
-        ],
-        child: MaterialApp(
-          theme: AppFoundationTheme.light(),
-          locale: const Locale('ar'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: HomeFoundationScope(
-            child: Builder(
-              builder: (context) {
-                return Scaffold(
-                  body: Center(
-                    child: TextButton(
-                      onPressed: () => showItemEditSheet(context, item: defaultItem(customized: true)),
-                      child: const Text('open'),
-                    ),
+        ),
+      ],
+      child: MaterialApp(
+        theme: AppFoundationTheme.light(),
+        locale: locale,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        builder: BotToastInit(),
+        navigatorObservers: [BotToastNavigatorObserver()],
+        home: HomeFoundationScope(
+          child: Builder(
+            builder: (context) {
+              return Scaffold(
+                body: Center(
+                  child: TextButton(
+                    onPressed: () => showItemEditSheet(context, item: item),
+                    child: const Text('open'),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),
+    );
+  }
+
+  testWidgets('default item edit sheet shows only save + delete and a color picker', (tester) async {
+    await tester.pumpWidget(
+      harness(repo: _TrackingRepo(), locale: const Locale('ar'), item: defaultItem(customized: true)),
     );
     await tester.pumpAndSettle();
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
 
-    expect(find.text('رجوع للأصلي'), findsOneWidget);
-    expect(find.text('أرشفة'), findsOneWidget);
-    expect(find.text('حذف'), findsNothing);
+    expect(find.text('حذف'), findsOneWidget);
+    expect(find.text('أرشفة'), findsNothing);
+    expect(find.text('رجوع للأصلي'), findsNothing);
+    expect(find.byKey(const ValueKey('item_color_pink')), findsOneWidget);
+    expect(find.byKey(const ValueKey('item_icon_layers')), findsOneWidget);
   });
 
-  testWidgets('resetDefaultItemCustomization calls repository', (tester) async {
-    var cleared = false;
-    final repo = _ResetTrackingRepo(onClear: () => cleared = true);
-    final botToastBuilder = BotToastInit();
-
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          itemsRepositoryProvider.overrideWithValue(repo),
-          itemIconsCatalogProvider.overrideWith(
-            (ref) async => const ItemIconsCatalog(
-              colors: [ItemColorOption(key: 'gold', hex: '#000000')],
-              iconKeys: ['category'],
-            ),
-          ),
-        ],
-        child: MaterialApp(
-          theme: AppFoundationTheme.light(),
-          locale: const Locale('en'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          builder: botToastBuilder,
-          navigatorObservers: [BotToastNavigatorObserver()],
-          home: HomeFoundationScope(
-            child: Builder(
-              builder: (context) {
-                return Scaffold(
-                  body: Center(
-                    child: TextButton(
-                      onPressed: () => showItemEditSheet(context, item: defaultItem(customized: true)),
-                      child: const Text('open'),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ),
-    );
+  testWidgets('editing a default item sends the chosen color', (tester) async {
+    final repo = _TrackingRepo();
+    await tester.pumpWidget(harness(repo: repo, locale: const Locale('en'), item: defaultItem()));
     await tester.pumpAndSettle();
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Reset to original'));
+
+    await tester.tap(find.byKey(const ValueKey('item_color_pink')));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 
-    expect(cleared, isTrue);
+    expect(repo.updatedColorKey, 'pink');
+  });
+
+  testWidgets('delete on a default item runs the unified delete', (tester) async {
+    final repo = _TrackingRepo();
+    await tester.pumpWidget(harness(repo: repo, locale: const Locale('en'), item: defaultItem()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('item_edit_delete')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete').last);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(repo.deletedIds, ['def-1']);
   });
 }
 
-class _ResetTrackingRepo extends ItemsRepository {
-  _ResetTrackingRepo({required this.onClear}) : super(ItemsApi());
+class _TrackingRepo extends ItemsRepository {
+  _TrackingRepo() : super(ItemsApi());
 
-  final VoidCallback onClear;
+  final deletedIds = <String>[];
+  String? updatedColorKey;
 
   @override
-  Future<CatalogItem> clearCustomization(String id) async {
-    onClear();
+  Future<ItemDeleteResult> deleteItem(String id) async {
+    deletedIds.add(id);
+    return ItemDeleteResult.archived;
+  }
+
+  @override
+  Future<CatalogItem> updateItem({required String id, String? name, String? iconKey, String? colorKey}) async {
+    updatedColorKey = colorKey;
     final now = DateTime.utc(2026, 11, 9);
     return CatalogItem(
       id: id,
-      name: 'Default',
-      iconKey: 'category',
-      colorKey: 'gold',
+      name: name ?? 'Default',
+      iconKey: iconKey ?? 'category',
+      colorKey: colorKey ?? 'gold',
       isDefault: true,
+      isCustomized: true,
       sortOrder: 0,
       createdAt: now,
       updatedAt: now,

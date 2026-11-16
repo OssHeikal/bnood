@@ -472,9 +472,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get archive => 'أرشفة';
 
   @override
-  String get unarchive => 'إلغاء الأرشفة';
-
-  @override
   String get clientsFilterAll => 'الكل';
 
   @override
@@ -807,36 +804,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get crewAssignmentsSaved => 'حُفظت اختيارات الصنايعية لهذا العميل';
 
   @override
-  String get itemsCatalogCaption =>
-      'يمكنك تخصيص البنود الافتراضية لحسابك أو إضافة بنودك.';
-
-  @override
-  String get itemResetToOriginal => 'رجوع للأصلي';
-
-  @override
-  String get toastItemCustomizationReset =>
-      'تمت إعادة البند إلى الإعداد الافتراضي.';
-
-  @override
-  String get itemsFilterActive => 'النشطة';
-
-  @override
-  String get itemsFilterArchived => 'المؤرشفة';
-
-  @override
-  String get itemsArchivedEmptyTitle => 'لا بنود مؤرشفة';
-
-  @override
-  String get itemsArchivedEmptyDescription =>
-      'البنود المؤرشفة لا تظهر في القوائم لكنها تبقى في الإيصالات السابقة.';
-
-  @override
-  String get itemInUseTitle => 'البند مستخدم';
-
-  @override
-  String itemInUseArchiveDescription(String name) {
-    return '$name مرتبط بمصروفات ولا يمكن حذفه. أرشفته بدلًا من ذلك؟';
-  }
+  String get itemsCatalogCaption => 'أضف بنودك أو عدّل البنود الموجودة.';
 
   @override
   String get overflowMenuTooltip => 'المزيد';
@@ -986,9 +954,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String deleteProviderDescription(String name) {
     return 'سيُزال $name من قائمة الدليل.';
   }
-
-  @override
-  String get itemDefaultBadge => 'افتراضي';
 
   @override
   String get itemPickIconLabel => 'الأيقونة';
@@ -1379,12 +1344,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get toastItemDeleted => 'اتمسح البند.';
-
-  @override
-  String get toastItemArchived => 'اتأرشف البند.';
-
-  @override
-  String get toastItemUnarchived => 'اترجع البند.';
 
   @override
   String get toastVoucherCreated => 'اتسجّل السند.';

@@ -124,7 +124,7 @@ class _ItemCreateSheetState extends ConsumerState<ItemCreateSheet> {
                 },
               ),
             ),
-            AppSize.spaceMD.gap,
+            AppSize.spaceLG.gap,
             AsyncValueBody(
               value: catalog,
               loadingPlaceholder: const SizedBox(height: 120),
@@ -147,7 +147,7 @@ class _ItemCreateSheetState extends ConsumerState<ItemCreateSheet> {
                 );
               },
             ),
-            AppSize.spaceMD.gap,
+            AppSize.spaceXL.gap,
             AppButton.primary(
               text: l10n.save,
               isLoading: _saving,

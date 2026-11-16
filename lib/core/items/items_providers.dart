@@ -18,10 +18,6 @@ final itemsRepositoryProvider = Provider<ItemsRepository>((ref) {
 });
 
 /// Whether catalog CRUD should use the online API (not Drift).
-enum ItemsCatalogFilter { active, archived }
-
-final itemsCatalogFilterProvider = StateProvider<ItemsCatalogFilter>((ref) => ItemsCatalogFilter.active);
-
 final remoteItemsEnabledProvider = Provider<bool>((ref) {
   final auth = ref.watch(authControllerProvider);
   final user = auth.user;
@@ -42,11 +38,11 @@ final itemsCatalogByIdProvider = FutureProvider<Map<String, CatalogItem>>((ref) 
     return const {};
   }
   try {
-    final items = await fetchAllCatalogItems(
-      ref.read(itemsRepositoryProvider),
-      status: ItemCatalogListStatus.all,
-    );
-    return {for (final item in items) item.id: item};
+    final repo = ref.read(itemsRepositoryProvider);
+    // Deleted (archived) items still appear on past vouchers/statements, so resolve them too.
+    final active = await fetchAllCatalogItems(repo);
+    final archived = await fetchAllCatalogItems(repo, status: ItemCatalogListStatus.archived);
+    return {for (final item in [...archived, ...active]) item.id: item};
   } catch (_) {
     return const {};
   }

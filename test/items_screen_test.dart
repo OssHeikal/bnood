@@ -39,7 +39,7 @@ void main() {
     ),
     CatalogItem(
       id: '01K',
-      name: 'افتراضي',
+      name: 'سباكة',
       iconKey: 'category',
       colorKey: 'gold',
       isDefault: true,
@@ -113,7 +113,7 @@ void main() {
     expect(card.top, grid.top);
     expect(screen.right - card.right, gridInset);
     expect(
-      tester.getRect(find.text('يمكنك تخصيص البنود الافتراضية لحسابك أو إضافة بنودك.')).right,
+      tester.getRect(find.text('أضف بنودك أو عدّل البنود الموجودة.')).right,
       screen.right - gridInset,
     );
     await tester.pump(const Duration(milliseconds: 250));
@@ -137,7 +137,7 @@ void main() {
     expect(icons.every((icon) => icon.width == AppSize.icon && icon.height == AppSize.icon), isTrue);
   });
 
-  testWidgets('default item shows badge and custom item is tappable', (tester) async {
+  testWidgets('tiles show no default badge and custom item is tappable', (tester) async {
     await tester.pumpWidget(
       wrap(
         child: const ItemsScreen(),
@@ -145,13 +145,14 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('افتراضي'), findsWidgets);
+    expect(find.text('سباكة'), findsOneWidget);
+    expect(find.text('افتراضي'), findsNothing);
     await tester.tap(find.text('بند اختبار'));
     await tester.pumpAndSettle();
     expect(find.text('تعديل البند'), findsOneWidget);
   });
 
-  testWidgets('default item opens edit sheet with archive not delete', (tester) async {
+  testWidgets('default item edit sheet has a single delete action', (tester) async {
     await tester.pumpWidget(
       wrap(
         child: const ItemsScreen(),
@@ -162,8 +163,8 @@ void main() {
     await tester.tap(find.byType(ItemCatalogTile).at(1));
     await tester.pumpAndSettle();
     expect(find.text('تعديل البند'), findsOneWidget);
-    expect(find.text('أرشفة'), findsOneWidget);
-    expect(find.text('حذف'), findsNothing);
+    expect(find.text('حذف'), findsOneWidget);
+    expect(find.text('أرشفة'), findsNothing);
   });
 
   testWidgets('user and default tiles are long-press draggable', (tester) async {
@@ -201,20 +202,18 @@ void main() {
     expect(hasCenteredEmptyColumn, isTrue);
   });
 
-  testWidgets('archived filter empty state has no add button', (tester) async {
+  testWidgets('items screen has no active/archived filter bar', (tester) async {
     await tester.pumpWidget(
       wrap(
         child: const ItemsScreen(),
-        overrides: remoteOverrides(items: []),
+        overrides: remoteOverrides(),
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('items_filter_archived')));
-    await tester.pumpAndSettle();
 
-    expect(find.text('لا بنود مؤرشفة'), findsOneWidget);
-    expect(find.widgetWithText(AppButton, 'إضافة بند'), findsNothing);
-    expect(find.byType(AppEmptyState), findsOneWidget);
+    expect(find.byKey(const Key('items_filter_active')), findsNothing);
+    expect(find.byKey(const Key('items_filter_archived')), findsNothing);
+    expect(find.text('المؤرشفة'), findsNothing);
   });
 
   testWidgets('create sheet rejects empty name', (tester) async {

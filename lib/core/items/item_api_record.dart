@@ -94,3 +94,15 @@ class ItemIconsCatalog {
     return ItemIconsCatalog(colors: colors, iconKeys: icons);
   }
 }
+
+/// Outcome of the unified item delete action.
+enum ItemDeleteResult {
+  /// Removed permanently (own item with no linked expenses).
+  deleted,
+
+  /// Hidden for this user (linked own item or a default item).
+  archived;
+
+  static ItemDeleteResult fromWire(String? value) =>
+      value == 'archived' ? ItemDeleteResult.archived : ItemDeleteResult.deleted;
+}

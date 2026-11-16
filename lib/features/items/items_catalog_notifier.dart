@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/items/item_api_record.dart';
 import '../../core/items/items_providers.dart';
-import '../../core/items/items_repository.dart';
+import '../../core/items/items_repository.dart' show fetchAllCatalogItems;
 import '../../core/shared/pagination/paging_refresh.dart';
 import 'items_catalog_order.dart';
 
@@ -15,11 +15,6 @@ class ItemsCatalogNotifier extends Notifier<AsyncValue<List<CatalogItem>>> {
       }
     });
     ref.listen(remoteItemsEnabledProvider, (previous, next) {
-      if (previous != next) {
-        Future.microtask(reload);
-      }
-    });
-    ref.listen(itemsCatalogFilterProvider, (previous, next) {
       if (previous != next) {
         Future.microtask(reload);
       }
@@ -38,12 +33,7 @@ class ItemsCatalogNotifier extends Notifier<AsyncValue<List<CatalogItem>>> {
       state = const AsyncValue.loading();
     }
     state = await AsyncValue.guard(() async {
-      final repo = ref.read(itemsRepositoryProvider);
-      final filter = ref.read(itemsCatalogFilterProvider);
-      final status = filter == ItemsCatalogFilter.archived
-          ? ItemCatalogListStatus.archived
-          : ItemCatalogListStatus.active;
-      return fetchAllCatalogItems(repo, status: status);
+      return fetchAllCatalogItems(ref.read(itemsRepositoryProvider));
     });
   }
 

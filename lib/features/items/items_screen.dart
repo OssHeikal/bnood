@@ -23,7 +23,6 @@ import '../home/home_foundation_scope.dart';
 import 'item_create_sheet.dart';
 import 'item_edit_sheet.dart';
 import 'items_catalog_notifier.dart';
-import 'widgets/items_list_filter_chips.dart';
 import 'widgets/items_loading_skeleton.dart';
 import 'widgets/items_reorderable_user_grid.dart';
 
@@ -60,8 +59,6 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final catalog = ref.watch(itemsCatalogProvider);
-    final catalogFilter = ref.watch(itemsCatalogFilterProvider);
-    final showArchived = catalogFilter == ItemsCatalogFilter.archived;
 
     ref.listen(remoteItemsEnabledProvider, (previous, next) {
       if (previous != next) _refreshCatalog();
@@ -104,8 +101,6 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                   physics: const AlwaysScrollableScrollPhysics(),
                   slivers: [
                     _captionSliver(context, l10n),
-                    const SliverToBoxAdapter(child: ItemsListFilterChips()),
-                    const SliverToBoxAdapter(child: SizedBox(height: AppSize.spaceMD)),
                     const SliverPadding(
                       padding: EdgeInsets.zero,
                       sliver: SliverToBoxAdapter(child: ItemsLoadingSkeleton()),
@@ -153,8 +148,6 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                             style: context.text.caption.copyWith(color: colors.onSurfaceMuted),
                           ),
                         ),
-                        const ItemsListFilterChips(),
-                        const SizedBox(height: AppSize.spaceMD),
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(gutter, 0, gutter, bottomClearance),
@@ -175,12 +168,10 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                                             size: AppSize.iconExtraLarge,
                                             semanticsLabel: l10n.navItems,
                                           ),
-                                          title: showArchived ? l10n.itemsArchivedEmptyTitle : l10n.itemsEmptyTitle,
-                                          description: showArchived
-                                              ? l10n.itemsArchivedEmptyDescription
-                                              : l10n.itemsEmptyDescription,
-                                          primaryActionLabel: showArchived ? null : l10n.addItem,
-                                          onPrimaryAction: showArchived ? null : () => _addItem(context),
+                                          title: l10n.itemsEmptyTitle,
+                                          description: l10n.itemsEmptyDescription,
+                                          primaryActionLabel: l10n.addItem,
+                                          onPrimaryAction: () => _addItem(context),
                                         ),
                                       ],
                                     ),
@@ -200,14 +191,11 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                       physics: const AlwaysScrollableScrollPhysics(),
                       slivers: [
                         _captionSliver(context, l10n),
-                        const SliverToBoxAdapter(child: ItemsListFilterChips()),
-                        const SliverToBoxAdapter(child: SizedBox(height: AppSize.spaceMD)),
                         SliverPadding(
                           padding: EdgeInsets.zero,
                           sliver: SliverToBoxAdapter(
                             child: ItemsReorderableUserGrid(
                               items: items,
-                              reorderEnabled: !showArchived,
                               onReorder: _handleReorder,
                               onOpenEdit: (item) => showItemEditSheet(context, item: item),
                             ),

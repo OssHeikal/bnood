@@ -473,9 +473,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get archive => 'Archive';
 
   @override
-  String get unarchive => 'Unarchive';
-
-  @override
   String get clientsFilterAll => 'All';
 
   @override
@@ -812,35 +809,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get crewAssignmentsSaved => 'Craftsman choices saved for this client';
 
   @override
-  String get itemsCatalogCaption =>
-      'Customize default items for your account, or add your own.';
-
-  @override
-  String get itemResetToOriginal => 'Reset to original';
-
-  @override
-  String get toastItemCustomizationReset => 'Item reset to catalog defaults.';
-
-  @override
-  String get itemsFilterActive => 'Active';
-
-  @override
-  String get itemsFilterArchived => 'Archived';
-
-  @override
-  String get itemsArchivedEmptyTitle => 'No archived items';
-
-  @override
-  String get itemsArchivedEmptyDescription =>
-      'Archived items are hidden from pickers but stay in past vouchers.';
-
-  @override
-  String get itemInUseTitle => 'Item is in use';
-
-  @override
-  String itemInUseArchiveDescription(String name) {
-    return '$name is linked to expenses and cannot be deleted. Archive it instead?';
-  }
+  String get itemsCatalogCaption => 'Add your own items or edit existing ones.';
 
   @override
   String get overflowMenuTooltip => 'More options';
@@ -993,9 +962,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String deleteProviderDescription(String name) {
     return '$name will be removed from your directory list.';
   }
-
-  @override
-  String get itemDefaultBadge => 'Default';
 
   @override
   String get itemPickIconLabel => 'Icon';
@@ -1392,12 +1358,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toastItemDeleted => 'Item removed.';
-
-  @override
-  String get toastItemArchived => 'Item archived.';
-
-  @override
-  String get toastItemUnarchived => 'Item restored.';
 
   @override
   String get toastVoucherCreated => 'Voucher saved.';

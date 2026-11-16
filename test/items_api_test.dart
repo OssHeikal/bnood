@@ -110,41 +110,32 @@ void main() {
       api.close();
     });
 
-    test('delete succeeds when item is unused', () async {
+    test('delete parses deleted result for unused item', () async {
+      late RequestOptions captured;
+      final api = _itemsApi((options) async {
+        captured = options;
+        return jsonResponse('{"success":true,"message":"ok","data":{"id":"01J","result":"deleted"}}');
+      });
+      final result = await api.deleteItem('01J');
+      expect(captured.method, 'DELETE');
+      expect(captured.path, endsWith('/v1/items/01J'));
+      expect(result, ItemDeleteResult.deleted);
+      api.close();
+    });
+
+    test('delete parses archived result for linked or default item', () async {
+      final api = _itemsApi(
+        (_) async => jsonResponse('{"success":true,"message":"ok","data":{"id":"01J","result":"archived"}}'),
+      );
+      expect(await api.deleteItem('01J'), ItemDeleteResult.archived);
+      api.close();
+    });
+
+    test('delete without result payload is treated as deleted', () async {
       final api = _itemsApi(
         (_) async => jsonResponse('{"success":true,"message":"ok"}'),
       );
-      await api.deleteItem('01J');
-      api.close();
-    });
-
-    test('clearCustomization deletes customization endpoint', () async {
-      late RequestOptions captured;
-      final api = _itemsApi((options) async {
-        captured = options;
-        return jsonResponse(
-          '{"success":true,"data":{"id":"01J","name":"Default","icon_key":"category","color_key":"teal","is_default":true,"is_customized":false,"sort_order":0,"created_at":"2026-11-09T10:00:00Z","updated_at":"2026-11-09T10:00:00Z"}}',
-        );
-      });
-      final item = await api.clearCustomization('01J');
-      expect(captured.method, 'DELETE');
-      expect(captured.path, endsWith('/v1/items/01J/customization'));
-      expect(item.isCustomized, isFalse);
-      api.close();
-    });
-
-    test('archive posts to archive endpoint', () async {
-      late RequestOptions captured;
-      final api = _itemsApi((options) async {
-        captured = options;
-        return jsonResponse(
-          '{"success":true,"data":{"id":"01J","name":"X","icon_key":"layers","color_key":"teal","is_default":false,"sort_order":1,"created_at":"2026-11-09T10:00:00Z","updated_at":"2026-11-09T10:00:00Z","archived_at":"2026-11-10T10:00:00Z"}}',
-        );
-      });
-      final item = await api.archiveItem('01J');
-      expect(captured.method, 'POST');
-      expect(captured.path, endsWith('/v1/items/01J/archive'));
-      expect(item.isArchived, isTrue);
+      expect(await api.deleteItem('01J'), ItemDeleteResult.deleted);
       api.close();
     });
   });
