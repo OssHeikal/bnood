@@ -664,5 +664,14 @@
   "contentPageErrorTitle": "تعذّر تحميل الصفحة",
   "contentPageErrorDescription": "تحقق من الاتصال ثم أعد المحاولة.",
   "authRegisterLegalPrefix": "بإنشاء حساب فإنك توافق على",
-  "authRegisterLegalMiddle": "و"
+  "authRegisterLegalMiddle": "و",
+  "notificationSettingsTitle": "الإشعارات",
+  "notificationSettingsDescription": "حدّد متى يرسل بنود تنبيهات فورية إلى هذا الجهاز.",
+  "notificationSettingsAlertsSection": "التنبيهات",
+  "notificationSettingsLowBalanceToggle": "انخفاض رصيد العميل",
+  "notificationSettingsLowBalanceAmountLabel": "تنبيه عندما يقل الرصيد عن",
+  "notificationSettingsLowBalanceAmountHint": "مبلغ ثابت بالجنيه لكل عميل نشط.",
+  "notificationSettingsAmountInvalid": "أدخل مبلغاً صحيحاً بالجنيه.",
+  "notificationSettingsSaved": "تم تحديث إعدادات الإشعارات.",
+  "pushNotificationOpenAction": "فتح"
 }

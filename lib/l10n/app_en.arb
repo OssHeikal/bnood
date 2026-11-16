@@ -680,5 +680,14 @@
   "contentPageErrorTitle": "Could not load page",
   "contentPageErrorDescription": "Check your connection and try again.",
   "authRegisterLegalPrefix": "By creating an account you agree to our",
-  "authRegisterLegalMiddle": "and"
+  "authRegisterLegalMiddle": "and",
+  "notificationSettingsTitle": "Notifications",
+  "notificationSettingsDescription": "Choose when Bnood sends push alerts to this device.",
+  "notificationSettingsAlertsSection": "Alerts",
+  "notificationSettingsLowBalanceToggle": "Low client balance",
+  "notificationSettingsLowBalanceAmountLabel": "Alert when balance is below",
+  "notificationSettingsLowBalanceAmountHint": "Fixed amount in EGP for each active client.",
+  "notificationSettingsAmountInvalid": "Enter a valid amount in EGP.",
+  "notificationSettingsSaved": "Notification settings updated.",
+  "pushNotificationOpenAction": "Open"
 }

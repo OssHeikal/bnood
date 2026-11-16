@@ -1626,4 +1626,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authRegisterLegalMiddle => 'و';
+
+  @override
+  String get notificationSettingsTitle => 'الإشعارات';
+
+  @override
+  String get notificationSettingsDescription =>
+      'حدّد متى يرسل بنود تنبيهات فورية إلى هذا الجهاز.';
+
+  @override
+  String get notificationSettingsAlertsSection => 'التنبيهات';
+
+  @override
+  String get notificationSettingsLowBalanceToggle => 'انخفاض رصيد العميل';
+
+  @override
+  String get notificationSettingsLowBalanceAmountLabel =>
+      'تنبيه عندما يقل الرصيد عن';
+
+  @override
+  String get notificationSettingsLowBalanceAmountHint =>
+      'مبلغ ثابت بالجنيه لكل عميل نشط.';
+
+  @override
+  String get notificationSettingsAmountInvalid => 'أدخل مبلغاً صحيحاً بالجنيه.';
+
+  @override
+  String get notificationSettingsSaved => 'تم تحديث إعدادات الإشعارات.';
+
+  @override
+  String get pushNotificationOpenAction => 'فتح';
 }

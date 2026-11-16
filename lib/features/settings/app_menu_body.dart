@@ -58,6 +58,14 @@ class AppMenuBody extends ConsumerWidget {
         iconColor: colors.primary,
         onTap: () => context.push(AuthPaths.preferences),
       ),
+      if (isAuthenticated)
+        SettingsNavRow(
+          label: l10n.notificationSettingsTitle,
+          icon: Assets.icons.mobilePhoneOutline,
+          chipBackground: brandChip,
+          iconColor: colors.primary,
+          onTap: () => context.push(AuthPaths.notifications),
+        ),
     ];
 
     return Column(

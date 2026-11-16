@@ -14,6 +14,7 @@ abstract final class AuthPaths {
   static const profile = '/profile';
   static const settings = '/settings';
   static const preferences = '/settings/preferences';
+  static const notifications = '/settings/notifications';
 }
 
 bool userNeedsProfileCompletion(User? user) {
