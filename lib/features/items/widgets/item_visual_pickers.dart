@@ -15,6 +15,7 @@ class ItemVisualPickers extends StatelessWidget {
     required this.selectedColorKey,
     required this.onIconKey,
     required this.onColorKey,
+    this.showColorPicker = true,
   });
 
   final ItemIconsCatalog catalog;
@@ -22,6 +23,7 @@ class ItemVisualPickers extends StatelessWidget {
   final String selectedColorKey;
   final ValueChanged<String> onIconKey;
   final ValueChanged<String> onColorKey;
+  final bool showColorPicker;
 
   @override
   Widget build(BuildContext context) {
@@ -45,22 +47,24 @@ class ItemVisualPickers extends StatelessWidget {
               ),
           ],
         ),
-        const SizedBox(height: AppSize.spaceMD),
-        Text(l10n.itemPickColorLabel, style: text.caption.copyWith(fontWeight: FontWeight.w600)),
-        const SizedBox(height: AppSize.spaceSM),
-        Wrap(
-          spacing: AppSize.spaceSM,
-          runSpacing: AppSize.spaceSM,
-          children: [
-            for (final option in catalog.colors)
-              _ColorChip(
-                colorKey: option.key,
-                color: itemSemanticAccentColor(option.key),
-                selected: option.key == selectedColorKey,
-                onTap: () => onColorKey(option.key),
-              ),
-          ],
-        ),
+        if (showColorPicker) ...[
+          const SizedBox(height: AppSize.spaceMD),
+          Text(l10n.itemPickColorLabel, style: text.caption.copyWith(fontWeight: FontWeight.w600)),
+          const SizedBox(height: AppSize.spaceSM),
+          Wrap(
+            spacing: AppSize.spaceSM,
+            runSpacing: AppSize.spaceSM,
+            children: [
+              for (final option in catalog.colors)
+                _ColorChip(
+                  colorKey: option.key,
+                  color: itemSemanticAccentColor(option.key),
+                  selected: option.key == selectedColorKey,
+                  onTap: () => onColorKey(option.key),
+                ),
+            ],
+          ),
+        ],
       ],
     );
   }

@@ -808,7 +808,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get itemsCatalogCaption =>
-      'البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك';
+      'يمكنك تخصيص البنود الافتراضية لحسابك أو إضافة بنودك.';
+
+  @override
+  String get itemResetToOriginal => 'رجوع للأصلي';
+
+  @override
+  String get toastItemCustomizationReset =>
+      'تمت إعادة البند إلى الإعداد الافتراضي.';
 
   @override
   String get itemsFilterActive => 'النشطة';

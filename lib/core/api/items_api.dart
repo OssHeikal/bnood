@@ -149,6 +149,16 @@ class ItemsApi {
     });
   }
 
+  Future<CatalogItem> clearCustomization(String id) {
+    return _guard(() async {
+      final response = await _dio.delete<Map<String, dynamic>>(
+        '$_prefix/$id/customization',
+        options: Options(extra: _authenticatedExtra),
+      );
+      return ApiResponseParser.expectData(response, (json) => CatalogItem.fromDataJson(json ?? const {}));
+    });
+  }
+
   Future<CatalogItem> archiveItem(String id) {
     return _guard(() async {
       final response = await _dio.post<Map<String, dynamic>>(

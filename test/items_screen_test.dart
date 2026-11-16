@@ -113,7 +113,7 @@ void main() {
     expect(card.top, grid.top);
     expect(screen.right - card.right, gridInset);
     expect(
-      tester.getRect(find.text('البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك')).right,
+      tester.getRect(find.text('يمكنك تخصيص البنود الافتراضية لحسابك أو إضافة بنودك.')).right,
       screen.right - gridInset,
     );
     await tester.pump(const Duration(milliseconds: 250));
@@ -151,7 +151,7 @@ void main() {
     expect(find.text('تعديل البند'), findsOneWidget);
   });
 
-  testWidgets('default item does not open edit sheet', (tester) async {
+  testWidgets('default item opens edit sheet with archive not delete', (tester) async {
     await tester.pumpWidget(
       wrap(
         child: const ItemsScreen(),
@@ -161,7 +161,9 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byType(ItemCatalogTile).at(1));
     await tester.pumpAndSettle();
-    expect(find.text('تعديل البند'), findsNothing);
+    expect(find.text('تعديل البند'), findsOneWidget);
+    expect(find.text('أرشفة'), findsOneWidget);
+    expect(find.text('حذف'), findsNothing);
   });
 
   testWidgets('user and default tiles are long-press draggable', (tester) async {

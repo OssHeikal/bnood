@@ -813,7 +813,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get itemsCatalogCaption =>
-      'Default items are read-only — add your own items below';
+      'Customize default items for your account, or add your own.';
+
+  @override
+  String get itemResetToOriginal => 'Reset to original';
+
+  @override
+  String get toastItemCustomizationReset => 'Item reset to catalog defaults.';
 
   @override
   String get itemsFilterActive => 'Active';

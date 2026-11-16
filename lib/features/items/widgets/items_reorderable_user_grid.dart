@@ -51,7 +51,7 @@ class ItemsReorderableUserGrid extends StatelessWidget {
           itemCount: items.length,
           itemBuilder: (context, index) {
             final item = items[index];
-            final openEdit = item.isDefault ? null : () => onOpenEdit(item);
+            void openEdit() => onOpenEdit(item);
             if (!reorderEnabled) {
               return ItemCatalogTile(
                 key: ValueKey(item.id),

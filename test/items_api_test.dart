@@ -30,6 +30,22 @@ void main() {
       expect(item.iconKey, 'layers');
       expect(item.colorKey, 'teal');
       expect(item.isDefault, isTrue);
+      expect(item.isCustomized, isFalse);
+    });
+
+    test('fromDataJson maps is_customized', () {
+      final item = CatalogItem.fromDataJson({
+        'id': '01JITEM',
+        'name': 'Insulation',
+        'icon_key': 'layers',
+        'color_key': 'teal',
+        'is_default': true,
+        'is_customized': true,
+        'sort_order': 1,
+        'created_at': '2026-11-09T10:00:00Z',
+        'updated_at': '2026-11-09T10:00:00Z',
+      });
+      expect(item.isCustomized, isTrue);
     });
   });
 
@@ -99,6 +115,21 @@ void main() {
         (_) async => jsonResponse('{"success":true,"message":"ok"}'),
       );
       await api.deleteItem('01J');
+      api.close();
+    });
+
+    test('clearCustomization deletes customization endpoint', () async {
+      late RequestOptions captured;
+      final api = _itemsApi((options) async {
+        captured = options;
+        return jsonResponse(
+          '{"success":true,"data":{"id":"01J","name":"Default","icon_key":"category","color_key":"teal","is_default":true,"is_customized":false,"sort_order":0,"created_at":"2026-11-09T10:00:00Z","updated_at":"2026-11-09T10:00:00Z"}}',
+        );
+      });
+      final item = await api.clearCustomization('01J');
+      expect(captured.method, 'DELETE');
+      expect(captured.path, endsWith('/v1/items/01J/customization'));
+      expect(item.isCustomized, isFalse);
       api.close();
     });
 

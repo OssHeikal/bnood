@@ -39,6 +39,8 @@ class ItemsRepository {
 
   Future<void> deleteItem(String id) => _api.deleteItem(id);
 
+  Future<CatalogItem> clearCustomization(String id) => _api.clearCustomization(id);
+
   Future<CatalogItem> archiveItem(String id) => _api.archiveItem(id);
 
   Future<CatalogItem> unarchiveItem(String id) => _api.unarchiveItem(id);

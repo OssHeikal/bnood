@@ -62,10 +62,6 @@ Future<CatalogItem?> saveItemUpdate({
     }
     if (e.isDuplicateName) rethrow;
     final l10n = AppLocalizations.of(context);
-    if (e.isDefaultItemReadonly) {
-      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
-      return null;
-    }
     AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }
@@ -151,6 +147,30 @@ Future<bool> performItemArchive({
     }
     AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return false;
+  }
+}
+
+Future<CatalogItem?> resetDefaultItemCustomization({
+  required BuildContext context,
+  required WidgetRef ref,
+  required String itemId,
+}) async {
+  final l10n = AppLocalizations.of(context);
+  final repo = ref.read(itemsRepositoryProvider);
+  try {
+    final item = await repo.clearCustomization(itemId);
+    refreshAfterItemMutation(ref);
+    if (context.mounted) {
+      AppToaster.show(l10n.toastItemCustomizationReset, kind: ToastKind.success);
+    }
+    return item;
+  } on AuthApiException catch (e) {
+    if (!context.mounted) return null;
+    if (await handleItemsApiAuthError(context: context, ref: ref, error: e)) {
+      return null;
+    }
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
+    return null;
   }
 }
 

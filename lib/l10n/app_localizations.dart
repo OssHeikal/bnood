@@ -1559,8 +1559,20 @@ abstract class AppLocalizations {
   /// No description provided for @itemsCatalogCaption.
   ///
   /// In en, this message translates to:
-  /// **'Default items are read-only — add your own items below'**
+  /// **'Customize default items for your account, or add your own.'**
   String get itemsCatalogCaption;
+
+  /// No description provided for @itemResetToOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to original'**
+  String get itemResetToOriginal;
+
+  /// No description provided for @toastItemCustomizationReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Item reset to catalog defaults.'**
+  String get toastItemCustomizationReset;
 
   /// No description provided for @itemsFilterActive.
   ///

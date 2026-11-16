@@ -5,6 +5,7 @@ class CatalogItem {
     required this.iconKey,
     required this.colorKey,
     required this.isDefault,
+    this.isCustomized = false,
     required this.sortOrder,
     required this.createdAt,
     required this.updatedAt,
@@ -16,6 +17,7 @@ class CatalogItem {
   final String iconKey;
   final String colorKey;
   final bool isDefault;
+  final bool isCustomized;
   final int sortOrder;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -31,6 +33,7 @@ class CatalogItem {
       iconKey: (json['icon_key'] as String?) ?? 'layers',
       colorKey: (json['color_key'] as String?) ?? 'teal',
       isDefault: json['is_default'] == true,
+      isCustomized: json['is_customized'] == true,
       sortOrder: (json['sort_order'] as num?)?.toInt() ?? 0,
       createdAt: DateTime.parse(json['created_at'] as String).toUtc(),
       updatedAt: DateTime.parse(json['updated_at'] as String).toUtc(),

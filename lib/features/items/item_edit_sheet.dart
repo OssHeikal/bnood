@@ -76,6 +76,8 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
   late String _iconKey = widget.item.iconKey;
   late String _colorKey = widget.item.colorKey;
 
+  bool get _isDefault => widget.item.isDefault;
+
   @override
   void dispose() {
     _nameCtrl.dispose();
@@ -93,6 +95,20 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
         onPressed: _saving ? null : _save,
       ),
     ];
+
+    if (_isDefault && widget.item.isCustomized) {
+      children
+        ..add(AppSize.spaceSM.gap)
+        ..add(
+          AppButton.outlined(
+            text: l10n.itemResetToOriginal,
+            foregroundColor: context.colors.onSurface,
+            borderColor: context.colors.outline,
+            onPressed: _saving ? null : _resetCustomization,
+          ),
+        );
+    }
+
     if (archived) {
       children
         ..add(AppSize.spaceSM.gap)
@@ -102,6 +118,17 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
             foregroundColor: context.colors.onSurface,
             borderColor: context.colors.outline,
             onPressed: _saving ? null : _unarchive,
+          ),
+        );
+    } else if (_isDefault) {
+      children
+        ..add(AppSize.spaceSM.gap)
+        ..add(
+          AppButton.outlined(
+            text: l10n.archive,
+            foregroundColor: context.colors.onSurface,
+            borderColor: context.colors.outline,
+            onPressed: _saving ? null : _archive,
           ),
         );
     } else {
@@ -155,6 +182,34 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
         setState(() => _saving = false);
         _bumpFooter();
       }
+    }
+  }
+
+  Future<void> _resetCustomization() async {
+    if (_saving) return;
+    setState(() => _saving = true);
+    _bumpFooter();
+    final restored = await resetDefaultItemCustomization(
+      context: context,
+      ref: ref,
+      itemId: widget.item.id,
+    );
+    if (!mounted) return;
+    setState(() => _saving = false);
+    _bumpFooter();
+    if (restored != null) {
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> _archive() async {
+    final archived = await performItemArchive(
+      context: context,
+      ref: ref,
+      itemId: widget.item.id,
+    );
+    if (archived && mounted) {
+      Navigator.pop(context);
     }
   }
 
@@ -218,6 +273,7 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
               catalog: data,
               selectedIconKey: _iconKey,
               selectedColorKey: _colorKey,
+              showColorPicker: !_isDefault,
               onIconKey: (v) => setState(() => _iconKey = v),
               onColorKey: (v) => setState(() => _colorKey = v),
             ),
