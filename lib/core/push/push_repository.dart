@@ -11,19 +11,16 @@ class PushRepository {
   Future<NotificationSettingsRecord> fetchSettings() => _settingsApi.getSettings();
 
   Future<NotificationSettingsRecord> updateSettings({
+    bool? pushEnabled,
     bool? lowBalanceEnabled,
     int? lowBalanceAmountMinor,
-  }) =>
-      _settingsApi.patchSettings(
-        lowBalanceEnabled: lowBalanceEnabled,
-        lowBalanceAmountMinor: lowBalanceAmountMinor,
-      );
+  }) => _settingsApi.patchSettings(
+    pushEnabled: pushEnabled,
+    lowBalanceEnabled: lowBalanceEnabled,
+    lowBalanceAmountMinor: lowBalanceAmountMinor,
+  );
 
-  Future<void> registerDeviceToken({
-    required String token,
-    required String platform,
-    required String locale,
-  }) =>
+  Future<void> registerDeviceToken({required String token, required String platform, required String locale}) =>
       _deviceTokensApi.registerToken(token: token, platform: platform, locale: locale);
 
   Future<void> deleteDeviceToken(String token) => _deviceTokensApi.deleteToken(token: token);

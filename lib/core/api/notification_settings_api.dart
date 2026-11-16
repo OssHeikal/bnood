@@ -42,10 +42,7 @@ class NotificationSettingsApi {
 
   Future<NotificationSettingsRecord> getSettings() {
     return _guard(() async {
-      final response = await _dio.get<Map<String, dynamic>>(
-        _prefix,
-        options: Options(extra: _authenticatedExtra),
-      );
+      final response = await _dio.get<Map<String, dynamic>>(_prefix, options: Options(extra: _authenticatedExtra));
       return ApiResponseParser.expectData(
         response,
         (json) => NotificationSettingsRecord.fromDataJson(json ?? const {}),
@@ -54,16 +51,19 @@ class NotificationSettingsApi {
   }
 
   Future<NotificationSettingsRecord> patchSettings({
+    bool? pushEnabled,
     bool? lowBalanceEnabled,
     int? lowBalanceAmountMinor,
   }) {
-    final body = NotificationSettingsRecord(
-      lowBalanceEnabled: lowBalanceEnabled ?? true,
-      lowBalanceAmountMinor: lowBalanceAmountMinor ?? kDefaultLowBalanceAmountMinor,
-    ).toPatchJson(
-      lowBalanceEnabled: lowBalanceEnabled,
-      lowBalanceAmountMinor: lowBalanceAmountMinor,
-    );
+    final body =
+        NotificationSettingsRecord(
+          lowBalanceEnabled: lowBalanceEnabled ?? true,
+          lowBalanceAmountMinor: lowBalanceAmountMinor ?? kDefaultLowBalanceAmountMinor,
+        ).toPatchJson(
+          pushEnabled: pushEnabled,
+          lowBalanceEnabled: lowBalanceEnabled,
+          lowBalanceAmountMinor: lowBalanceAmountMinor,
+        );
     return _guard(() async {
       final response = await _dio.patch<Map<String, dynamic>>(
         _prefix,

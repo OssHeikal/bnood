@@ -9,10 +9,7 @@ import '../../core/widgets/sheet_drag_handle.dart';
 import 'app_menu_body.dart';
 
 Future<void> showAppSettingsSheet(BuildContext context) {
-  return AppModalSheet.show<void>(
-    context: context,
-    body: const AppSettingsSheet(),
-  );
+  return AppModalSheet.show<void>(context: context, body: const AppSettingsSheet());
 }
 
 class AppSettingsSheet extends ConsumerWidget {

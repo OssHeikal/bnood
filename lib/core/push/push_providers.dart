@@ -21,10 +21,7 @@ final deviceTokensApiProvider = Provider<DeviceTokensApi>((ref) {
 });
 
 final pushRepositoryProvider = Provider<PushRepository>((ref) {
-  return PushRepository(
-    ref.watch(notificationSettingsApiProvider),
-    ref.watch(deviceTokensApiProvider),
-  );
+  return PushRepository(ref.watch(notificationSettingsApiProvider), ref.watch(deviceTokensApiProvider));
 });
 
 final pushPermissionStoreProvider = Provider<PushPermissionStore>((ref) => PushPermissionStore());

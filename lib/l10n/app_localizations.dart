@@ -3031,6 +3031,18 @@ abstract class AppLocalizations {
   /// **'Alerts'**
   String get notificationSettingsAlertsSection;
 
+  /// No description provided for @notificationSettingsMasterToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'All notifications'**
+  String get notificationSettingsMasterToggle;
+
+  /// No description provided for @notificationSettingsMasterCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off every Bnood notification on all your devices.'**
+  String get notificationSettingsMasterCaption;
+
   /// No description provided for @notificationSettingsLowBalanceToggle.
   ///
   /// In en, this message translates to:
@@ -3046,7 +3058,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationSettingsLowBalanceAmountHint.
   ///
   /// In en, this message translates to:
-  /// **'Fixed amount in EGP for each active client.'**
+  /// **'We\'ll notify you when any active client\'s balance drops below this amount.'**
   String get notificationSettingsLowBalanceAmountHint;
 
   /// No description provided for @notificationSettingsAmountInvalid.

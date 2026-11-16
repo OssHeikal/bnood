@@ -684,9 +684,11 @@
   "notificationSettingsTitle": "Notifications",
   "notificationSettingsDescription": "Choose when Bnood sends push alerts to this device.",
   "notificationSettingsAlertsSection": "Alerts",
+  "notificationSettingsMasterToggle": "All notifications",
+  "notificationSettingsMasterCaption": "Turn off every Bnood notification on all your devices.",
   "notificationSettingsLowBalanceToggle": "Low client balance",
   "notificationSettingsLowBalanceAmountLabel": "Alert when balance is below",
-  "notificationSettingsLowBalanceAmountHint": "Fixed amount in EGP for each active client.",
+  "notificationSettingsLowBalanceAmountHint": "We'll notify you when any active client's balance drops below this amount.",
   "notificationSettingsAmountInvalid": "Enter a valid amount in EGP.",
   "notificationSettingsSaved": "Notification settings updated.",
   "pushNotificationOpenAction": "Open"

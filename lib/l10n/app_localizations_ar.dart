@@ -1637,6 +1637,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notificationSettingsAlertsSection => 'التنبيهات';
 
   @override
+  String get notificationSettingsMasterToggle => 'كل الإشعارات';
+
+  @override
+  String get notificationSettingsMasterCaption =>
+      'إيقاف كل إشعارات بنود على كل أجهزتك.';
+
+  @override
   String get notificationSettingsLowBalanceToggle => 'انخفاض رصيد العميل';
 
   @override
@@ -1645,7 +1652,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get notificationSettingsLowBalanceAmountHint =>
-      'مبلغ ثابت بالجنيه لكل عميل نشط.';
+      'هنرسل لك إشعارًا لما رصيد أي عميل نشط يقل عن المبلغ ده.';
 
   @override
   String get notificationSettingsAmountInvalid => 'أدخل مبلغاً صحيحاً بالجنيه.';

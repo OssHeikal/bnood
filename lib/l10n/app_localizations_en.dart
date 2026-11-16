@@ -1656,6 +1656,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationSettingsAlertsSection => 'Alerts';
 
   @override
+  String get notificationSettingsMasterToggle => 'All notifications';
+
+  @override
+  String get notificationSettingsMasterCaption =>
+      'Turn off every Bnood notification on all your devices.';
+
+  @override
   String get notificationSettingsLowBalanceToggle => 'Low client balance';
 
   @override
@@ -1664,7 +1671,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationSettingsLowBalanceAmountHint =>
-      'Fixed amount in EGP for each active client.';
+      'We\'ll notify you when any active client\'s balance drops below this amount.';
 
   @override
   String get notificationSettingsAmountInvalid =>

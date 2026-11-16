@@ -71,11 +71,7 @@ class AppMenuBody extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SettingsListSection(
-          title: null,
-          dividerKind: GroupedListDividerKind.insetStart,
-          children: topRows,
-        ),
+        SettingsListSection(title: null, dividerKind: GroupedListDividerKind.insetStart, children: topRows),
         AppSize.spaceXL.gap,
         SettingsListSection(
           title: l10n.settingsContentSection,

@@ -32,8 +32,9 @@ void main() {
 
     expect(find.text('Notifications'), findsOneWidget);
     expect(find.text('Low client balance'), findsOneWidget);
-    expect(find.text('10000'), findsOneWidget);
-    expect(find.byType(Switch), findsOneWidget);
+    expect(find.text('10,000 EGP'), findsOneWidget);
+    expect(find.byType(Switch), findsNWidgets(2));
+    expect(find.text('All notifications'), findsOneWidget);
   });
 }
 
