@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../config/theme/app_colors.dart' as foundation;
+import '../config/theme/app_overlay.dart';
 import 'app_colors.dart';
 
 abstract final class AppTheme {
@@ -28,6 +29,9 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
     );
     return base.copyWith(
+      dialogTheme: DialogThemeData(
+        barrierColor: AppOverlay.barrierColorForBrightness(brightness),
+      ),
       extensions: [colors, text],
       textTheme: base.textTheme.apply(fontFamily: 'Cairo'),
       appBarTheme: AppBarTheme(

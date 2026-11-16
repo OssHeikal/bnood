@@ -66,7 +66,7 @@ void main() {
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(body: AppMenuBody()),
+          home: const Scaffold(body: SingleChildScrollView(child: AppMenuBody())),
         ),
       ),
     );
@@ -93,7 +93,7 @@ void main() {
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(body: AppMenuBody()),
+          home: const Scaffold(body: SingleChildScrollView(child: AppMenuBody())),
         ),
       ),
     );
@@ -115,7 +115,7 @@ void main() {
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(body: AppMenuBody()),
+          home: const Scaffold(body: SingleChildScrollView(child: AppMenuBody())),
         ),
       ),
     );
@@ -144,7 +144,7 @@ void main() {
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(body: AppMenuBody()),
+          home: const Scaffold(body: SingleChildScrollView(child: AppMenuBody())),
         ),
       ),
     );
@@ -204,7 +204,7 @@ void main() {
     final snap = await bootstrap();
     final router = GoRouter(
       routes: [
-        GoRoute(path: '/', builder: (_, _) => const Scaffold(body: AppMenuBody())),
+        GoRoute(path: '/', builder: (_, _) => const Scaffold(body: SingleChildScrollView(child: AppMenuBody()))),
         GoRoute(path: AuthPaths.preferences, builder: (_, _) => const AppPreferencesScreen()),
       ],
     );

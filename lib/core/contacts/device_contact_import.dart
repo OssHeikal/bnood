@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 import 'package:flutter_native_contact_picker/model/contact.dart';
 
+import 'android_contacts_permission.dart';
 import '../formatting/display_digits.dart';
-import '../layout/bnood_layout.dart';
-import '../widgets/bnood_modal_sheet.dart';
+import '../layout/app_layout.dart';
+import '../widgets/app_modal_sheet.dart';
 import '../widgets/app_toaster.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -59,6 +60,8 @@ abstract final class DeviceContactPicker {
     _picking = true;
     try {
       final l10n = AppLocalizations.of(context);
+      if (!await ensureAndroidContactsPermission(context)) return null;
+      if (!context.mounted) return null;
       final Contact? contact = await (pickOverride ?? () => _native.selectPhoneNumber())();
       if (contact == null) return null;
 
@@ -90,35 +93,24 @@ abstract final class DeviceContactPicker {
   }
 
   static Future<String?> _choosePhone(BuildContext context, List<String> phones, AppLocalizations l10n) {
-    return BnoodModalSheet.show<String>(
+    return AppModalSheet.show<String>(
       context: context,
-      builder: (ctx) {
-        Widget sheet = Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              child: Text(l10n.contactPickChoosePhone, textAlign: TextAlign.start),
+      scrollable: false,
+      header: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+        child: Text(l10n.contactPickChoosePhone, textAlign: TextAlign.start),
+      ),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final p in phones)
+            ListTile(
+              title: Text(DisplayDigits.toWesternDigits(p), textDirection: TextDirection.ltr),
+              onTap: () => Navigator.pop(context, p),
             ),
-            for (final p in phones)
-              ListTile(
-                title: Text(DisplayDigits.toWesternDigits(p), textDirection: TextDirection.ltr),
-                onTap: () => Navigator.pop(ctx, p),
-              ),
-          ],
-        );
-        if (!ctx.isBnoodMobile) {
-          sheet = Align(
-            alignment: Alignment.bottomCenter,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: ctx.formMaxWidth),
-              child: sheet,
-            ),
-          );
-        }
-        return sheet;
-      },
+        ],
+      ),
     );
   }
 }

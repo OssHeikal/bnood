@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1079487261588",
+    "project_id": "bnood-app-eg",
+    "storage_bucket": "bnood-app-eg.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079487261588:android:111e8e00fc635ad8483d81",
+        "android_client_info": {
+          "package_name": "com.bnood.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADPES3DvyPvx0cH-WlAP40LJHqO0titdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

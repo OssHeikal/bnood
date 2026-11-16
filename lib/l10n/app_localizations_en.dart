@@ -209,6 +209,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pickFromContacts => 'Choose from contacts';
 
   @override
+  String get contactsPermissionDeniedBody =>
+      'Contacts access is needed to fill name and phone from your address book.';
+
+  @override
+  String get contactsPermissionRestrictedBody =>
+      'Contacts access is restricted on this device.';
+
+  @override
+  String get contactsPermissionSettingsTitle => 'Allow contacts access';
+
+  @override
+  String get contactsPermissionSettingsBody =>
+      'Open Settings to allow contacts access, then try import again.';
+
+  @override
+  String get contactsPermissionOpenSettings => 'Open Settings';
+
+  @override
   String get contactPickFailed =>
       'Could not open contacts. You can still enter details manually.';
 
@@ -404,7 +422,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String clientDeleteDescription(String name) {
-    return 'Delete $name? This removes the client and project.';
+    return 'Delete $name? All receipts and expenses for this client will be permanently deleted.';
   }
 
   @override
@@ -453,9 +471,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get archive => 'Archive';
-
-  @override
-  String get unarchive => 'Unarchive';
 
   @override
   String get clientsFilterAll => 'All';
@@ -528,6 +543,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voucherAttachGallery => 'Gallery';
+
+  @override
+  String get voucherAttachCameraSubtitle => 'Take a photo of the receipt';
+
+  @override
+  String get voucherAttachGallerySubtitle => 'Choose from your photos';
+
+  @override
+  String get voucherAttachUploadPrompt => 'Tap to add a receipt photo';
+
+  @override
+  String get voucherAttachSourceTitle => 'Attach receipt';
 
   @override
   String get voucherReceiptCameraDenied =>
@@ -782,8 +809,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get crewAssignmentsSaved => 'Craftsman choices saved for this client';
 
   @override
-  String get itemsCatalogCaption =>
-      'Default items are read-only — add your own items below';
+  String get itemsCatalogCaption => 'Add your own items or edit existing ones.';
+
+  @override
+  String get overflowMenuTooltip => 'More options';
 
   @override
   String get addItem => 'Add item';
@@ -933,9 +962,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String deleteProviderDescription(String name) {
     return '$name will be removed from your directory list.';
   }
-
-  @override
-  String get itemDefaultBadge => 'Default';
 
   @override
   String get itemPickIconLabel => 'Icon';
@@ -1313,6 +1339,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toastClientArchived => 'Client archived.';
 
   @override
+  String get toastClientDeleted => 'Client deleted.';
+
+  @override
   String get toastSupplierCreated => 'Supplier added.';
 
   @override
@@ -1615,4 +1644,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authRegisterLegalMiddle => 'and';
+
+  @override
+  String get notificationSettingsTitle => 'Notifications';
+
+  @override
+  String get notificationSettingsDescription =>
+      'Choose when Bnood sends push alerts to this device.';
+
+  @override
+  String get notificationSettingsAlertsSection => 'Alerts';
+
+  @override
+  String get notificationSettingsMasterToggle => 'All notifications';
+
+  @override
+  String get notificationSettingsMasterCaption =>
+      'Turn off every Bnood notification on all your devices.';
+
+  @override
+  String get notificationSettingsLowBalanceToggle => 'Low client balance';
+
+  @override
+  String get notificationSettingsLowBalanceAmountLabel =>
+      'Alert when balance is below';
+
+  @override
+  String get notificationSettingsLowBalanceAmountHint =>
+      'We\'ll notify you when any active client\'s balance drops below this amount.';
+
+  @override
+  String get notificationSettingsAmountInvalid =>
+      'Enter a valid amount in EGP.';
+
+  @override
+  String get notificationSettingsSaved => 'Notification settings updated.';
+
+  @override
+  String get pushNotificationOpenAction => 'Open';
 }

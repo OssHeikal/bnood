@@ -10,12 +10,7 @@ import '../../app/widgets/shell_nav_icon.dart';
 import 'widgets/menu_icon_chip.dart';
 
 class SettingsListSection extends StatelessWidget {
-  const SettingsListSection({
-    super.key,
-    required this.title,
-    required this.children,
-    required this.dividerKind,
-  });
+  const SettingsListSection({super.key, required this.title, required this.children, required this.dividerKind});
 
   final String? title;
   final List<Widget> children;
@@ -30,11 +25,7 @@ class SettingsListSection extends StatelessWidget {
         if (title != null) ...[
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(AppSize.spaceLG, 0, AppSize.spaceLG, AppSize.spaceSM),
-            child: Text(
-              title!,
-              style: context.text.groupTitle,
-              textAlign: TextAlign.start,
-            ),
+            child: Text(title!, style: context.text.groupTitle, textAlign: TextAlign.start),
           ),
         ],
         Padding(
@@ -62,12 +53,7 @@ class SettingsListSection extends StatelessWidget {
 }
 
 class SettingsDestructiveRow extends StatelessWidget {
-  const SettingsDestructiveRow({
-    super.key,
-    required this.label,
-    required this.onTap,
-    this.icon,
-  });
+  const SettingsDestructiveRow({super.key, required this.label, required this.onTap, this.icon});
 
   final String label;
   final VoidCallback onTap;
@@ -119,12 +105,7 @@ class SettingsDestructiveRow extends StatelessWidget {
 }
 
 class SettingsOptionRow extends StatelessWidget {
-  const SettingsOptionRow({
-    super.key,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
+  const SettingsOptionRow({super.key, required this.label, required this.selected, required this.onTap});
 
   final String label;
   final bool selected;
@@ -156,11 +137,7 @@ class SettingsOptionRow extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    label,
-                    style: titleStyle,
-                    textAlign: TextAlign.start,
-                  ),
+                  child: Text(label, style: titleStyle, textAlign: TextAlign.start),
                 ),
                 SizedBox(
                   width: _trailingSlot,
@@ -230,11 +207,7 @@ class SettingsNavRow extends StatelessWidget {
                   const SizedBox(width: AppSize.spaceMD),
                 ],
                 Expanded(
-                  child: Text(
-                    label,
-                    style: text.body,
-                    textAlign: TextAlign.start,
-                  ),
+                  child: Text(label, style: text.body, textAlign: TextAlign.start),
                 ),
                 if (showChevron) const AppChevron.forward(),
               ],

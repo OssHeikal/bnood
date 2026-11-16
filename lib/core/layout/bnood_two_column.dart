@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'bnood_layout.dart';
+import 'app_layout.dart';
 
 /// Side-by-side on tablet+; stacked on phone (for later list/detail phases).
 class BnoodTwoColumn extends StatelessWidget {
@@ -23,7 +23,7 @@ class BnoodTwoColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (context.isBnoodMobile) {
+    if (context.isMobileLayout) {
       return Column(
         crossAxisAlignment: crossAxisAlignment,
         children: [

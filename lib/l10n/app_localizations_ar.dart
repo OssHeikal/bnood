@@ -210,6 +210,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pickFromContacts => 'اختيار من جهات الاتصال';
 
   @override
+  String get contactsPermissionDeniedBody =>
+      'يلزم الوصول لجهات الاتصال لاستيراد الاسم ورقم الهاتف.';
+
+  @override
+  String get contactsPermissionRestrictedBody =>
+      'الوصول لجهات الاتصال مقيّد على هذا الجهاز.';
+
+  @override
+  String get contactsPermissionSettingsTitle => 'السماح بالوصول لجهات الاتصال';
+
+  @override
+  String get contactsPermissionSettingsBody =>
+      'افتح الإعدادات للسماح بالوصول، ثم أعد المحاولة.';
+
+  @override
+  String get contactsPermissionOpenSettings => 'فتح الإعدادات';
+
+  @override
   String get contactPickFailed =>
       'تعذّر فتح جهات الاتصال. يمكنك الإدخال يدوياً.';
 
@@ -403,7 +421,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String clientDeleteDescription(String name) {
-    return 'حذف $name؟ سيُحذف العميل والمشروع.';
+    return 'حذف $name؟ كل الإيصالات والمصروفات الخاصة بهذا العميل ستُحذف نهائيًا.';
   }
 
   @override
@@ -452,9 +470,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get archive => 'أرشفة';
-
-  @override
-  String get unarchive => 'إلغاء الأرشفة';
 
   @override
   String get clientsFilterAll => 'الكل';
@@ -526,6 +541,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get voucherAttachGallery => 'المعرض';
+
+  @override
+  String get voucherAttachCameraSubtitle => 'التقط صورة للإيصال';
+
+  @override
+  String get voucherAttachGallerySubtitle => 'اختر من صورك';
+
+  @override
+  String get voucherAttachUploadPrompt => 'اضغط لإرفاق صورة للإيصال';
+
+  @override
+  String get voucherAttachSourceTitle => 'إرفاق إيصال';
 
   @override
   String get voucherReceiptCameraDenied =>
@@ -777,8 +804,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get crewAssignmentsSaved => 'حُفظت اختيارات الصنايعية لهذا العميل';
 
   @override
-  String get itemsCatalogCaption =>
-      'البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك';
+  String get itemsCatalogCaption => 'أضف بنودك أو عدّل البنود الموجودة.';
+
+  @override
+  String get overflowMenuTooltip => 'المزيد';
 
   @override
   String get addItem => 'إضافة بند';
@@ -925,9 +954,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String deleteProviderDescription(String name) {
     return 'سيُزال $name من قائمة الدليل.';
   }
-
-  @override
-  String get itemDefaultBadge => 'افتراضي';
 
   @override
   String get itemPickIconLabel => 'الأيقونة';
@@ -1299,6 +1325,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get toastClientArchived => 'اتأرشف العميل.';
 
   @override
+  String get toastClientDeleted => 'اتمسح العميل.';
+
+  @override
   String get toastSupplierCreated => 'اتضاف المورد.';
 
   @override
@@ -1596,4 +1625,41 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authRegisterLegalMiddle => 'و';
+
+  @override
+  String get notificationSettingsTitle => 'الإشعارات';
+
+  @override
+  String get notificationSettingsDescription =>
+      'حدّد متى يرسل بنود تنبيهات فورية إلى هذا الجهاز.';
+
+  @override
+  String get notificationSettingsAlertsSection => 'التنبيهات';
+
+  @override
+  String get notificationSettingsMasterToggle => 'كل الإشعارات';
+
+  @override
+  String get notificationSettingsMasterCaption =>
+      'إيقاف كل إشعارات بنود على كل أجهزتك.';
+
+  @override
+  String get notificationSettingsLowBalanceToggle => 'انخفاض رصيد العميل';
+
+  @override
+  String get notificationSettingsLowBalanceAmountLabel =>
+      'تنبيه عندما يقل الرصيد عن';
+
+  @override
+  String get notificationSettingsLowBalanceAmountHint =>
+      'هنرسل لك إشعارًا لما رصيد أي عميل نشط يقل عن المبلغ ده.';
+
+  @override
+  String get notificationSettingsAmountInvalid => 'أدخل مبلغاً صحيحاً بالجنيه.';
+
+  @override
+  String get notificationSettingsSaved => 'تم تحديث إعدادات الإشعارات.';
+
+  @override
+  String get pushNotificationOpenAction => 'فتح';
 }

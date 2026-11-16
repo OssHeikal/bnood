@@ -87,6 +87,7 @@ class AppPagedView<T> extends StatelessWidget {
           ),
           AppPagedLayout.sliverList => CustomScrollView(
             physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               ...sliverHeaders,
               PagedSliverList<int, T>(
@@ -100,6 +101,7 @@ class AppPagedView<T> extends StatelessWidget {
           ),
           AppPagedLayout.sliverListSeparated => CustomScrollView(
             physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               ...sliverHeaders,
               PagedSliverList<int, T>.separated(
@@ -114,6 +116,7 @@ class AppPagedView<T> extends StatelessWidget {
           ),
           AppPagedLayout.sliverGrid => CustomScrollView(
             physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               ...sliverHeaders,
               if (gridPadding != null)
@@ -140,6 +143,7 @@ class AppPagedView<T> extends StatelessWidget {
           ),
           AppPagedLayout.sliverTwoColumn => CustomScrollView(
             physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               ...sliverHeaders,
               if (gridPadding != null)

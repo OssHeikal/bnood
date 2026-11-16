@@ -1,7 +1,7 @@
 import 'package:responsive_framework/responsive_framework.dart';
 
-/// Bnood responsive width bands: phone 0–450, tablet 451–1023, desktop 1024+.
-abstract final class BnoodBreakpoints {
+/// Responsive width bands: phone 0–450, tablet 451–1023, desktop 1024+.
+abstract final class AppBreakpoints {
   static const mobileMax = 450.0;
   static const tabletMax = 1023.0;
 

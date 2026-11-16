@@ -14,16 +14,54 @@ import '../../core/contacts/contact_import_action.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
-import '../../core/widgets/sheet_drag_handle.dart';
+import '../../core/widgets/app_modal_sheet.dart';
+import '../../core/widgets/sheet_footer_refresh.dart';
+import '../../core/widgets/sheet_form_header.dart';
+import '../home/home_foundation_scope.dart';
 import 'provider_mutation_actions.dart';
+
+Future<void> showProviderCreateSheet(
+  BuildContext context, {
+  AppProviderType initialType = AppProviderType.supplier,
+}) {
+  final formKey = GlobalKey<_ProviderCreateSheetState>();
+  final footerRefresh = SheetFooterRefresh();
+  final l10n = AppLocalizations.of(context);
+  return AppModalSheet.show<void>(
+    context: context,
+    scrollable: false,
+    header: const SheetDragHeader(),
+    body: HomeFoundationScope(
+      child: ProviderCreateSheet(
+        key: formKey,
+        initialType: initialType,
+        footerRefresh: footerRefresh,
+      ),
+    ),
+    footer: ListenableBuilder(
+      listenable: footerRefresh,
+      builder: (context, _) {
+        final state = formKey.currentState;
+        if (state == null) return const SizedBox.shrink();
+        return AppButton.primary(
+          text: l10n.save,
+          isLoading: state._saving,
+          onPressed: state._saving ? null : state._save,
+        );
+      },
+    ),
+  );
+}
 
 class ProviderCreateSheet extends ConsumerStatefulWidget {
   const ProviderCreateSheet({
     super.key,
     this.initialType = AppProviderType.supplier,
+    required this.footerRefresh,
   });
 
   final AppProviderType initialType;
+  final SheetFooterRefresh footerRefresh;
 
   @override
   ConsumerState<ProviderCreateSheet> createState() => _ProviderCreateSheetState();
@@ -46,15 +84,19 @@ class _ProviderCreateSheetState extends ConsumerState<ProviderCreateSheet> {
     super.dispose();
   }
 
+  void _bumpFooter() => widget.footerRefresh.bump();
+
   Future<void> _save() async {
     setState(() {
       _attemptedSubmit = true;
       _nameError = null;
       _phoneError = null;
     });
+    _bumpFooter();
     if (_formKey.currentState?.validate() != true) return;
     if (_saving) return;
     setState(() => _saving = true);
+    _bumpFooter();
     final l10n = AppLocalizations.of(context);
     final phoneRaw = _phone.text.trim();
     try {
@@ -74,14 +116,16 @@ class _ProviderCreateSheetState extends ConsumerState<ProviderCreateSheet> {
       }
     } on AuthApiException catch (e) {
       if (!mounted) return;
-      final l10n = AppLocalizations.of(context);
       final lookup = ApiFieldErrorLookup(e);
       setState(() {
         _nameError = duplicateProviderNameFieldError(l10n, e) ?? lookup.textFor('name');
         _phoneError = duplicateProviderPhoneFieldError(l10n, e) ?? lookup.textFor('phone');
       });
     } finally {
-      if (mounted) setState(() => _saving = false);
+      if (mounted) {
+        setState(() => _saving = false);
+        _bumpFooter();
+      }
     }
   }
 
@@ -91,89 +135,79 @@ class _ProviderCreateSheetState extends ConsumerState<ProviderCreateSheet> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSize.screenPadding,
-        AppSize.spaceSM,
+        0,
         AppSize.screenPadding,
-        AppSize.spaceMD,
+        0,
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SheetDragHandle(),
-            AppSize.spaceMD.gap,
-            Text(l10n.providerCreateSheetTitle, style: context.text.title),
-            AppSize.spaceMD.gap,
-            Form(
-              key: _formKey,
-              autovalidateMode:
-                  _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(l10n.providerTypeLabel, style: context.text.label),
-                  AppSize.spaceSM.gap,
-                  _ProviderTypeTabs(
-                    supplierLabel: l10n.supplier,
-                    craftsmanLabel: l10n.craftsman,
-                    selected: _type,
-                    enabled: !_saving,
-                    onChanged: (type) => setState(() => _type = type),
-                  ),
-                  AppSize.spaceMD.gap,
-                  ContactImportAction(
-                    nameController: _name,
-                    phoneController: _phone,
-                    enabled: !_saving,
-                  ),
-                  AppSize.spaceMD.gap,
-                  CustomTextField(
-                    controller: _name,
-                    label: l10n.providerNameLabel,
-                    placeholder: l10n.providerNameHint,
-                    fieldHeight: AppSize.fieldHeightComfortable,
-                    autofocus: true,
-                    textCapitalization: TextCapitalization.words,
-                    textInputAction: TextInputAction.next,
-                    autofillHints: const [AutofillHints.name],
-                    errorMessage: _nameError,
-                    onChanged: (_) {
-                      if (_nameError != null) setState(() => _nameError = null);
-                    },
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return l10n.providerNameRequired;
-                      }
-                      return null;
-                    },
-                  ),
-                  AppSize.spaceMD.gap,
-                  CustomTextField(
-                    controller: _phone,
-                    label: l10n.phoneOptional,
-                    placeholder: l10n.clientPhoneHint,
-                    fieldHeight: AppSize.fieldHeightComfortable,
-                    type: AppInputType.phone,
-                    ltrValue: true,
-                    textInputAction: TextInputAction.done,
-                    autofillHints: const [AutofillHints.telephoneNumber],
-                    errorMessage: _phoneError,
-                    onChanged: (_) {
-                      if (_phoneError != null) setState(() => _phoneError = null);
-                    },
-                    validator: (value) => validateOptionalEgyptMobile(l10n, value),
-                  ),
-                ],
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(l10n.providerCreateSheetTitle, style: context.text.title),
+          AppSize.spaceMD.gap,
+          Form(
+            key: _formKey,
+            autovalidateMode:
+                _attemptedSubmit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(l10n.providerTypeLabel, style: context.text.label),
+                AppSize.spaceSM.gap,
+                _ProviderTypeTabs(
+                  supplierLabel: l10n.supplier,
+                  craftsmanLabel: l10n.craftsman,
+                  selected: _type,
+                  enabled: !_saving,
+                  onChanged: (type) => setState(() => _type = type),
+                ),
+                AppSize.spaceMD.gap,
+                ContactImportAction(
+                  nameController: _name,
+                  phoneController: _phone,
+                  enabled: !_saving,
+                ),
+                AppSize.spaceMD.gap,
+                CustomTextField(
+                  controller: _name,
+                  label: l10n.providerNameLabel,
+                  placeholder: l10n.providerNameHint,
+                  fieldHeight: AppSize.fieldHeightComfortable,
+                  autofocus: true,
+                  textCapitalization: TextCapitalization.words,
+                  textInputAction: TextInputAction.next,
+                  autofillHints: const [AutofillHints.name],
+                  errorMessage: _nameError,
+                  onChanged: (_) {
+                    if (_nameError != null) setState(() => _nameError = null);
+                  },
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return l10n.providerNameRequired;
+                    }
+                    return null;
+                  },
+                ),
+                AppSize.spaceMD.gap,
+                CustomTextField(
+                  controller: _phone,
+                  label: l10n.phoneOptional,
+                  placeholder: l10n.clientPhoneHint,
+                  fieldHeight: AppSize.fieldHeightComfortable,
+                  type: AppInputType.phone,
+                  ltrValue: true,
+                  textInputAction: TextInputAction.done,
+                  autofillHints: const [AutofillHints.telephoneNumber],
+                  errorMessage: _phoneError,
+                  onChanged: (_) {
+                    if (_phoneError != null) setState(() => _phoneError = null);
+                  },
+                  validator: (value) => validateOptionalEgyptMobile(l10n, value),
+                ),
+              ],
             ),
-            AppSize.spaceLG.gap,
-            AppButton.primary(
-              text: l10n.save,
-              isLoading: _saving,
-              onPressed: _saving ? null : _save,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

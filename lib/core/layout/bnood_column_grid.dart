@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../config/theme/app_size.dart';
 import 'bnood_grid_count.dart';
-import 'bnood_layout.dart';
+import 'app_layout.dart';
 
 /// Stacks on phone; fixed column count on tablet+ (directory-style lists).
 class BnoodColumnGrid extends StatelessWidget {
@@ -21,7 +21,7 @@ class BnoodColumnGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final columns = context.isBnoodMobile
+    final columns = context.isMobileLayout
         ? 1
         : bnoodGridCount(
             context,

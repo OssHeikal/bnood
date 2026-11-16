@@ -8,7 +8,7 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
 import '../../core/layout/bnood_two_column.dart';
 import '../../core/api/api_error_user_message.dart';
@@ -27,10 +27,10 @@ import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/utils/whatsapp_phone.dart';
 import '../../core/widgets/app_toaster.dart';
+import '../../core/widgets/app_overflow_menu.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
 import '../../core/widgets/toast/app_tone.dart';
-import '../../app/widgets/shell_nav_icon.dart';
 import '../home/home_foundation_scope.dart';
 import '../home/widgets/home_section_header.dart';
 import '../vouchers/voucher_launcher.dart';
@@ -38,6 +38,7 @@ import 'client_movements_navigation.dart';
 import 'client_detail_provider.dart';
 import 'client_detail_snapshot.dart';
 import 'client_edit_sheet.dart';
+import 'client_mutation_actions.dart';
 import 'craftsman_assignments_sheet.dart';
 import 'engineer_edit_sheet.dart';
 import 'widgets/client_detail_action_grid.dart';
@@ -60,6 +61,8 @@ class ClientDetailScreen extends ConsumerWidget {
     final detail = ref.watch(clientDetailProvider(clientId));
     final snapshot = detail.valueOrNull;
 
+    final remoteClients = ref.watch(remoteClientsEnabledProvider);
+
     return HomeFoundationScope(
       child: Builder(
         builder: (context) {
@@ -77,24 +80,33 @@ class ClientDetailScreen extends ConsumerWidget {
               subtitleLtr: true,
               actions: client != null
                   ? [
-                      CustomAppBarAction(
-                        key: const Key('client_detail_edit'),
-                        tooltip: l10n.edit,
-                        enabled: mutationsEnabled,
-                        onPressed: mutationsEnabled
-                            ? () => showClientEditSheet(
+                      AppOverflowMenu(
+                        buttonKey: const Key('client_detail_overflow'),
+                        actions: [
+                          if (mutationsEnabled)
+                            AppOverflowMenuAction(
+                              label: l10n.edit,
+                              icon: Assets.icons.documentEditOutline,
+                              onSelected: () => showClientEditSheet(
                                 context: context,
                                 clientId: clientId,
                                 clientName: client.name,
                                 phone: client.phone,
-                              )
-                            : null,
-                        child: ShellNavIcon(
-                          asset: Assets.icons.documentEditOutline,
-                          color: colors.onSurface,
-                          size: AppSize.icon,
-                          semanticsLabel: l10n.edit,
-                        ),
+                              ),
+                            ),
+                          if (remoteClients)
+                            AppOverflowMenuAction(
+                              label: l10n.delete,
+                              icon: Assets.icons.deleteSquareOutline,
+                              destructive: true,
+                              onSelected: () => confirmDeleteClient(
+                                context: context,
+                                ref: ref,
+                                clientId: clientId,
+                                clientName: client.name,
+                              ),
+                            ),
+                        ],
                       ),
                       if (hasPhone)
                         Builder(
@@ -125,7 +137,7 @@ class ClientDetailScreen extends ConsumerWidget {
                   : null,
             ),
             body: BnoodMaxWidth(
-              maxWidth: BnoodLayout.pageMaxWidth,
+              maxWidth: AppLayout.pageMaxWidth,
               child: ListView(
                 padding: EdgeInsets.fromLTRB(
                   0,
@@ -231,39 +243,12 @@ class _ClientDetailBody extends ConsumerWidget {
   }
 
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context);
-    final answer = await AppDecision.show(
-      context,
-      title: l10n.clientDeleteTitle,
-      description: l10n.clientDeleteDescription(data.client.name),
-      confirmLabel: l10n.delete,
-      cancelLabel: l10n.cancel,
-      tone: AppTone.danger,
+    await confirmDeleteClient(
+      context: context,
+      ref: ref,
+      clientId: clientId,
+      clientName: data.client.name,
     );
-    if (answer != OverlayAnswer.confirmed || !context.mounted) return;
-    try {
-      await ref.read(clientsRepositoryProvider).deleteClient(clientId);
-      refreshAfterClientMutation(ref, clientId: clientId);
-      if (context.mounted) context.pop();
-    } on AuthApiException catch (e) {
-      if (!context.mounted) return;
-      if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) return;
-      if (e.isClientHasActivity) {
-        final archiveInstead = await AppDecision.show(
-          context,
-          title: l10n.clientDeleteHasActivityTitle,
-          description: l10n.clientDeleteHasActivityDescription,
-          confirmLabel: l10n.clientDeleteArchiveInstead,
-          cancelLabel: l10n.cancel,
-          tone: AppTone.danger,
-        );
-        if (archiveInstead == OverlayAnswer.confirmed && context.mounted) {
-          await _confirmArchive(context, ref);
-        }
-        return;
-      }
-      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
-    }
   }
 
   @override
@@ -492,7 +477,7 @@ class _ClientDetailBody extends ConsumerWidget {
 }
 
 Widget _clientDetailColumns(BuildContext context, {required List<Widget> summary, required List<Widget> ledger}) {
-  if (context.isBnoodMobile) {
+  if (context.isMobileLayout) {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [...summary, ...ledger]);
   }
   final lead = HomeSectionHeader.columnLeadBeforeContent(context);

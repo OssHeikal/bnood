@@ -70,11 +70,21 @@ class ItemsApi {
     });
   }
 
-  Future<ItemsListPage> listItems({String? q, int page = 1, int perPage = 50}) {
+  Future<ItemsListPage> listItems({
+    String? q,
+    int page = 1,
+    int perPage = 50,
+    String? status,
+  }) {
     return _guard(() async {
       final response = await _dio.get<Map<String, dynamic>>(
         _prefix,
-        queryParameters: {if (q != null && q.trim().isNotEmpty) 'q': q.trim(), 'page': page, 'per_page': perPage},
+        queryParameters: {
+          if (q != null && q.trim().isNotEmpty) 'q': q.trim(),
+          if (status != null && status.isNotEmpty) 'status': status,
+          'page': page,
+          'per_page': perPage,
+        },
         options: Options(extra: _authenticatedExtra),
       );
       final json = ApiResponseParser.decodeJson(response);
@@ -129,13 +139,18 @@ class ItemsApi {
     });
   }
 
-  Future<void> deleteItem(String id) {
+  /// `DELETE /items/{id}`: unused own items are removed; linked or default items are
+  /// hidden for this user. A body without `result` is treated as [ItemDeleteResult.deleted].
+  Future<ItemDeleteResult> deleteItem(String id) {
     return _guard(() async {
       final response = await _dio.delete<Map<String, dynamic>>(
         '$_prefix/$id',
         options: Options(extra: _authenticatedExtra),
       );
       ApiResponseParser.expectSuccess(response);
+      final data = ApiResponseParser.decodeJson(response)['data'];
+      final result = data is Map<String, dynamic> ? data['result'] : null;
+      return ItemDeleteResult.fromWire(result is String ? result : null);
     });
   }
 

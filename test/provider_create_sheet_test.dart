@@ -1,6 +1,7 @@
 import 'package:bnood/core/config/theme/app_colors.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/core/widgets/sheet_footer_refresh.dart';
 import 'package:bnood/features/providers/provider_create_sheet.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,10 @@ void main() {
           locale: const Locale('ar'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const HomeFoundationScope(
-            child: Scaffold(body: ProviderCreateSheet()),
+          home: HomeFoundationScope(
+            child: Scaffold(
+              body: ProviderCreateSheet(footerRefresh: SheetFooterRefresh()),
+            ),
           ),
         ),
       ),

@@ -4,9 +4,10 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
 import '../../core/config/extensions/num_extensions.dart';
-import '../../core/layout/bnood_form_route_canvas.dart';
+import '../../core/layout/app_form_route_canvas.dart';
 import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
+import '../../core/config/theme/app_overlay.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/formatting/display_digits.dart';
 import '../../core/widgets/app_chevron.dart';
@@ -179,7 +180,7 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
         : null;
 
     if (widget.presentation == OverlayFormPresentation.fullScreen) {
-      return BnoodFormRouteCanvas(
+      return AppFormRouteCanvas(
         child: HomeFoundationScope(
           child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -200,17 +201,14 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
                     child: calendarBody,
                   ),
                 ),
-                SafeArea(
-                  top: false,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSize.screenPadding,
-                      AppSize.spaceMD,
-                      AppSize.screenPadding,
-                      AppSize.spaceMD,
-                    ),
-                    child: confirmButton,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    AppSize.screenPadding,
+                    AppSize.spaceMD,
+                    AppSize.screenPadding,
+                    AppSize.spaceMD + MediaQuery.viewPaddingOf(context).bottom,
                   ),
+                  child: confirmButton,
                 ),
               ],
             ),
@@ -467,8 +465,8 @@ class _MonthYearWheelsOverlay extends StatelessWidget {
         .toList();
 
     return Positioned.fill(
-      child: Material(
-        color: colors.onSurface.withValues(alpha: 0.35),
+      child: ColoredBox(
+        color: AppOverlay.barrierColor(context),
         child: SafeArea(
           child: Align(
             alignment: Alignment.bottomCenter,
@@ -476,7 +474,13 @@ class _MonthYearWheelsOverlay extends StatelessWidget {
               padding: const EdgeInsets.all(AppSize.screenPadding),
               child: Material(
                 color: colors.surface,
-                borderRadius: BorderRadius.circular(AppSize.cardRadius),
+                elevation: 0,
+                shadowColor: Colors.transparent,
+                surfaceTintColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSize.cardRadius),
+                ),
+                clipBehavior: Clip.antiAlias,
                 child: Padding(
                   padding: const EdgeInsets.all(AppSize.spaceMD),
                   child: Column(

@@ -2,7 +2,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
-import '../../core/layout/bnood_form_route_canvas.dart';
+import '../../core/layout/app_form_route_canvas.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/money/remote_money_format.dart';
 import '../../core/subscription/app_subscription.dart';
@@ -47,7 +47,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
     final yearly = content.planById('yearly');
     final monthly = content.planById('monthly');
     final hasOffer = content.offer != null;
-    return BnoodFormRouteCanvas(
+    return AppFormRouteCanvas(
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(

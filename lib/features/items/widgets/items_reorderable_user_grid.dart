@@ -49,7 +49,7 @@ class ItemsReorderableUserGrid extends StatelessWidget {
           itemCount: items.length,
           itemBuilder: (context, index) {
             final item = items[index];
-            final openEdit = item.isDefault ? null : () => onOpenEdit(item);
+            void openEdit() => onOpenEdit(item);
             return DragTarget<int>(
               onWillAcceptWithDetails: (details) => details.data != index,
               onAcceptWithDetails: (details) => onReorder(details.data, index),
@@ -66,7 +66,6 @@ class ItemsReorderableUserGrid extends StatelessWidget {
                         name: item.name,
                         colorKey: item.colorKey,
                         iconKey: item.iconKey,
-                        isDefault: item.isDefault,
                         onOpenEdit: openEdit,
                       ),
                     ),
@@ -77,7 +76,6 @@ class ItemsReorderableUserGrid extends StatelessWidget {
                       name: item.name,
                       colorKey: item.colorKey,
                       iconKey: item.iconKey,
-                      isDefault: item.isDefault,
                       onOpenEdit: openEdit,
                     ),
                   ),
@@ -86,7 +84,6 @@ class ItemsReorderableUserGrid extends StatelessWidget {
                     name: item.name,
                     colorKey: item.colorKey,
                     iconKey: item.iconKey,
-                    isDefault: item.isDefault,
                     onOpenEdit: openEdit,
                   ),
                 );

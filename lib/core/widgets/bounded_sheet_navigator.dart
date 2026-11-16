@@ -1,8 +1,4 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
-
-import '../config/theme/app_size.dart';
 
 /// Nested [Navigator] for in-sheet flows (inline create, roster amount, etc.).
 class BoundedSheetNavigator extends StatelessWidget {
@@ -29,34 +25,12 @@ class BoundedSheetNavigator extends StatelessWidget {
   }
 }
 
-/// Viewport cap (80% of screen) and content max-height helpers for modal sheets.
-/// Home indicator, keyboard lift, and content spacing for modal sheets.
-abstract final class SheetChromeInsets {
-  /// Bottom inset for [BnoodModalSheet] chrome: `max(home, keyboard) + [spacing]`.
-  static double modalBottomPadding(
-    MediaQueryData media, {
-    double spacing = AppSize.spaceMD,
-  }) {
-    return math.max(media.viewPadding.bottom, media.viewInsets.bottom) + spacing;
-  }
-
-  /// Footer padding inside a sheet when outer modal chrome already applied.
-  static double sheetFooterBottomPadding({
-    required MediaQueryData media,
-    required bool outerModalChromeApplied,
-    double spacing = AppSize.spaceMD,
-  }) {
-    if (outerModalChromeApplied) return spacing;
-    return math.max(media.viewPadding.bottom, media.viewInsets.bottom) + spacing;
-  }
-}
-
+/// Content max-height for modal sheets ([AppModalSheet]).
 abstract final class SheetContentBounds {
-  static const viewportFraction = 0.8;
+  static const viewportFraction = 0.9;
 
-  /// Maximum sheet body height for the current viewport (keyboard subtracted).
   static double viewportCap(MediaQueryData media) {
-    final available = media.size.height - media.viewInsets.bottom;
+    final available = media.size.height - media.viewInsets.bottom - media.viewPadding.top;
     return (available * viewportFraction).clamp(0, double.infinity);
   }
 

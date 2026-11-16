@@ -19,7 +19,12 @@ class _RecordingItemsRepository extends ItemsRepository {
   Object? reorderError;
 
   @override
-  Future<ItemsListPage> listItems({String? q, int page = 1, int perPage = 50}) async {
+  Future<ItemsListPage> listItems({
+    String? q,
+    int page = 1,
+    int perPage = 50,
+    ItemCatalogListStatus status = ItemCatalogListStatus.active,
+  }) async {
     return ItemsListPage(items: _items, page: 1, perPage: perPage, total: _items.length);
   }
 

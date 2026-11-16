@@ -34,10 +34,11 @@ import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_list_tile.dart';
 import '../../core/widgets/custom_text_field.dart';
+import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../../core/widgets/entity_picker_page.dart';
 import '../../core/widgets/overlay_form_presentation.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
-import '../../core/widgets/app_card.dart';
+import '../../core/widgets/dashed_border_frame.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_pressable.dart';
@@ -54,6 +55,7 @@ import 'voucher_launcher.dart';
 import 'voucher_picker_cards.dart';
 import 'voucher_selector_field.dart';
 import 'voucher_camera_pick_route.dart';
+import 'voucher_receipt_source_sheet.dart';
 import 'voucher_picker_resolution.dart';
 import 'voucher_receipt_picker.dart';
 import 'voucher_transaction_date_bounds.dart';
@@ -356,7 +358,10 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   Future<void> _pickItem() async {
     final List<({String id, String name, String colorKey, String iconKey})> items;
     if (ref.read(remoteItemsEnabledProvider)) {
-      final catalogItems = await fetchAllCatalogItems(ref.read(itemsRepositoryProvider));
+      final catalogItems = await fetchAllCatalogItems(
+        ref.read(itemsRepositoryProvider),
+        status: ItemCatalogListStatus.active,
+      );
       items = catalogItems.map((i) => (id: i.id, name: i.name, colorKey: i.colorKey, iconKey: i.iconKey)).toList();
     } else {
       final local = await ref.read(repositoryProvider).watchActiveItems().first;
@@ -845,6 +850,17 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     }
   }
 
+  Future<void> _openAttachChooser() async {
+    final choice = await showVoucherReceiptSourceSheet(context);
+    if (!mounted || choice == null) return;
+    switch (choice) {
+      case VoucherReceiptSource.camera:
+        await _attachFromCamera();
+      case VoucherReceiptSource.gallery:
+        await _attachFromGallery();
+    }
+  }
+
   Future<void> _attachFromGallery() async {
     final l10n = AppLocalizations.of(context);
     try {
@@ -918,10 +934,8 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ],
     );
 
-    final viewPadding = MediaQuery.viewPaddingOf(context);
-    final viewInsets = MediaQuery.viewInsetsOf(context);
-    final safeBottom = viewPadding.bottom > 0 ? viewPadding.bottom : AppSize.spaceMD;
-    final footerBottom = viewInsets.bottom > 0 ? AppSize.spaceMD : safeBottom;
+    final footerBottom =
+        AppSize.spaceMD + MediaQuery.viewPaddingOf(context).bottom;
     final fullScreen = widget.presentation == VoucherSheetPresentation.fullScreen;
     final showLinkAmount =
         isSpend &&
@@ -1101,48 +1115,27 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
                             ),
                           ),
                         ),
-                      Row(
-                        spacing: AppSize.spaceSM,
-                        children: [
-                          Expanded(
-                            child: AppPressable(
-                              onPressed: _attachFromCamera,
-                              child: AppCard(
-                                padding: const EdgeInsets.all(AppSize.spaceMD),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  spacing: AppSize.spaceSM,
-                                  children: [
-                                    Icon(Icons.photo_camera_outlined, color: context.colors.primary),
-                                    Text(
-                                      l10n.voucherAttachCamera,
-                                      style: context.text.caption.semiBold.setColor(context.colors.primaryDark),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                      AppPressable(
+                        onPressed: _openAttachChooser,
+                        child: DashedBorderFrame(
+                          color: context.colors.outline,
+                          radius: AppSize.radius,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppSize.spaceLG,
+                            horizontal: AppSize.spaceMD,
                           ),
-                          Expanded(
-                            child: AppPressable(
-                              onPressed: _attachFromGallery,
-                              child: AppCard(
-                                padding: const EdgeInsets.all(AppSize.spaceMD),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  spacing: AppSize.spaceSM,
-                                  children: [
-                                    Icon(Icons.photo_library_outlined, color: context.colors.primary),
-                                    Text(
-                                      l10n.voucherAttachGallery,
-                                      style: context.text.caption.semiBold.setColor(context.colors.primaryDark),
-                                    ),
-                                  ],
-                                ),
+                          child: Column(
+                            spacing: AppSize.spaceSM,
+                            children: [
+                              Icon(Icons.cloud_upload_outlined, color: context.colors.primary, size: 28),
+                              Text(
+                                l10n.voucherAttachUploadPrompt,
+                                style: context.text.caption.copyWith(color: context.colors.onSurfaceMuted),
+                                textAlign: TextAlign.center,
                               ),
-                            ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),

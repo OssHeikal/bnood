@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../app/widgets/floating_shell_dock.dart';
+import '../../app/shell_bottom_inset.dart';
+import '../../app/shell_tab_scaffold.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/paging_refresh.dart';
-import '../../core/widgets/app_card.dart';
+import '../../core/widgets/app_empty_state.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/custom_bottom_sheet.dart';
@@ -68,10 +69,10 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
       child: Builder(
         builder: (context) {
           final colors = context.colors;
-          final bottomClearance =
-              FloatingShellDock.clearanceHeight + MediaQuery.viewPaddingOf(context).bottom + AppSize.spaceLG;
+          final gutter = context.pageGutter;
+          final bottomClearance = ShellBottomInset.listScrollBottomPadding(context);
 
-          return Scaffold(
+          return ShellTabScaffold(
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
               title: l10n.navItems,
@@ -91,7 +92,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
               ],
             ),
             body: BnoodMaxWidth(
-              maxWidth: BnoodLayout.pageMaxWidth,
+              maxWidth: AppLayout.pageMaxWidth,
               child: MediaQuery.removePadding(
               context: context,
               removeBottom: true,
@@ -132,31 +133,51 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                 ),
                 data: (items) {
                   if (items.isEmpty) {
-                    return CustomScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      slivers: [
-                        _captionSliver(context, l10n),
-                        SliverFillRemaining(
-                          hasScrollBody: false,
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            0,
+                            AppSize.spaceSM,
+                            0,
+                            AppSize.spaceMD,
+                          ),
+                          child: Text(
+                            l10n.itemsCatalogCaption,
+                            style: context.text.caption.copyWith(color: colors.onSurfaceMuted),
+                          ),
+                        ),
+                        Expanded(
                           child: Padding(
-                            padding: EdgeInsets.zero,
-                            child: AppCard(
-                              child: AppFallback.section(
-                                leading: ShellNavIcon(
-                                  asset: Assets.icons.itemsLayersOutline,
-                                  color: colors.muted,
-                                  size: AppSize.icon,
-                                ),
-                                title: l10n.itemsEmptyTitle,
-                                description: l10n.itemsEmptyDescription,
-                                actions: [
-                                  AppFallbackAction(
-                                    label: l10n.addItem,
-                                    onPressed: () => _addItem(context),
-                                    role: AppFallbackActionRole.primary,
+                            padding: EdgeInsets.fromLTRB(gutter, 0, gutter, bottomClearance),
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                return SingleChildScrollView(
+                                  physics: const ClampingScrollPhysics(),
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        AppEmptyState(
+                                          key: const Key('items_empty_state'),
+                                          leading: ShellNavIcon(
+                                            asset: Assets.icons.itemsLayersOutline,
+                                            color: colors.primary,
+                                            size: AppSize.iconExtraLarge,
+                                            semanticsLabel: l10n.navItems,
+                                          ),
+                                          title: l10n.itemsEmptyTitle,
+                                          description: l10n.itemsEmptyDescription,
+                                          primaryActionLabel: l10n.addItem,
+                                          onPrimaryAction: () => _addItem(context),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -214,5 +235,5 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
 /// Scroll clearance matching [ShellScaffold] dock fade for tests without the shell.
 EdgeInsets itemsScreenMediaQueryForTests(BuildContext context) {
   final base = MediaQuery.paddingOf(context);
-  return base.copyWith(bottom: base.bottom + FloatingShellDock.clearanceHeight);
+  return base.copyWith(bottom: base.bottom + ShellBottomInset.mediaQueryDockClearance(context));
 }

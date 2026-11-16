@@ -1,4 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/core/widgets/bounded_sheet_navigator.dart';
 import 'package:bnood/core/widgets/custom_bottom_sheet.dart';
 import 'package:bnood/core/widgets/sheet_drag_handle.dart';
@@ -52,9 +53,10 @@ void main() {
       of: find.byType(BottomSheet),
       matching: find.byType(SheetDragHandle),
     );
-    final material = find.ancestor(of: handle, matching: find.byType(Material));
-    expect(tester.getSize(material.first).height, lessThan(cap * 0.75));
-    expect(tester.getTopLeft(handle).dy, lessThan(160));
+    final bounds = find.byKey(AppModalSheet.sheetBoundsKey);
+    expect(tester.getSize(bounds).height, lessThan(cap * 0.75));
+    final handleTop = tester.getTopLeft(handle).dy;
+    expect(handleTop, greaterThan(_tallPhone.height * 0.35));
   });
 
   testWidgets('custom bottom sheet inline create respects viewport cap', (tester) async {
@@ -80,9 +82,8 @@ void main() {
     await tester.pumpAndSettle();
 
     final cap = SheetContentBounds.viewportCap(MediaQueryData(size: _tallPhone));
-    final text = find.descendant(of: find.byType(BottomSheet), matching: find.text('Short body'));
-    final material = find.ancestor(of: text, matching: find.byType(Material));
-    expect(tester.getSize(material.first).height, lessThan(cap * 0.5));
+    final bounds = find.byKey(AppModalSheet.sheetBoundsKey);
+    expect(tester.getSize(bounds).height, lessThan(cap * 0.5));
   });
 
   test('viewportCap is eighty percent of screen', () {

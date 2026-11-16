@@ -10,6 +10,7 @@ import '../config/theme/app_size.dart';
 import '../config/theme/app_colors.dart';
 import '../l10n/field_placeholders.dart';
 import '../utils/extensions/bidi_isolate.dart';
+import 'app_modal_sheet.dart';
 import 'foundation_icon.dart';
 import 'text_field/app_input_direction.dart';
 import 'text_field/app_input_formatters.dart';
@@ -77,6 +78,7 @@ class CustomTextField extends StatefulWidget {
     required TextEditingController this.controller,
     this.placeholder,
     this.onChanged,
+    this.focusNode,
   }) : initialValue = null,
        label = null,
        type = AppInputType.search,
@@ -97,7 +99,6 @@ class CustomTextField extends StatefulWidget {
        reserveSupportingSpace = false,
        width = null,
        variant = AppInputVariant.field,
-       focusNode = null,
        validator = null,
        autovalidateMode = null,
        onTap = null,
@@ -577,6 +578,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         onChanged: _changed,
         onTap: widget.enableFocus ? _handleTap : null,
         onTapOutside: widget.enableFocus && !_picker ? _unfocusOnTapOutside : null,
+        scrollPadding: EdgeInsets.only(
+          bottom: AppModalSheetScope.footerPaddingOf(context) + MediaQuery.viewInsetsOf(context).bottom,
+        ),
         contextMenuBuilder: widget.readOnly ? _contextMenu : null,
         decoration: InputDecoration(
           isCollapsed: true,

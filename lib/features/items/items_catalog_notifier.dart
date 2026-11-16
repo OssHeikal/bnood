@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/items/item_api_record.dart';
 import '../../core/items/items_providers.dart';
-import '../../core/items/items_repository.dart';
+import '../../core/items/items_repository.dart' show fetchAllCatalogItems;
 import '../../core/shared/pagination/paging_refresh.dart';
 import 'items_catalog_order.dart';
 
@@ -33,8 +33,7 @@ class ItemsCatalogNotifier extends Notifier<AsyncValue<List<CatalogItem>>> {
       state = const AsyncValue.loading();
     }
     state = await AsyncValue.guard(() async {
-      final repo = ref.read(itemsRepositoryProvider);
-      return fetchAllCatalogItems(repo);
+      return fetchAllCatalogItems(ref.read(itemsRepositoryProvider));
     });
   }
 

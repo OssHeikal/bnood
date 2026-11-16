@@ -8,7 +8,7 @@ import '../buttons/app_button.dart';
 import '../custom_list_tile.dart';
 import '../grouped_list_divider.dart';
 import '../sheet_drag_handle.dart';
-import '../bnood_modal_sheet.dart';
+import '../app_modal_sheet.dart';
 import '../bounded_sheet_navigator.dart';
 import '../toast/app_tone.dart';
 
@@ -43,24 +43,24 @@ class SheetAction {
 
 abstract final class AppSheet {
   static Future<void> actions(BuildContext context, {required String title, required List<SheetAction> actions}) {
-    return BnoodModalSheet.show<void>(
+    return AppModalSheet.show<void>(
       context: context,
       backgroundColor: context.colors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.cardRadius)),
       ),
-      builder: (sheetContext) => _ActionSheetBody(title: title, actions: actions, hostContext: context),
+      body: _ActionSheetBody(title: title, actions: actions, hostContext: context),
     );
   }
 
   static Future<T?> choices<T>(BuildContext context, {required String title, required List<SheetChoice<T>> choices}) {
-    return BnoodModalSheet.show<T>(
+    return AppModalSheet.show<T>(
       context: context,
       backgroundColor: context.colors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.cardRadius)),
       ),
-      builder: (sheetContext) => _ChoiceSheetBody(title: title, choices: choices),
+      body: _ChoiceSheetBody(title: title, choices: choices),
     );
   }
 }
@@ -152,7 +152,7 @@ class _ActionSheetBody extends StatelessWidget {
         AppSize.screenPadding,
         AppSize.spaceMD,
         AppSize.screenPadding,
-        AppSize.screenPadding,
+        0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

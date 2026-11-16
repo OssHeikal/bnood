@@ -104,7 +104,7 @@ class FloatingShellDock extends StatelessWidget {
       padding: EdgeInsets.only(
         left: horizontalInset,
         right: horizontalInset,
-        bottom: bottom + AppSize.spaceSM,
+        bottom: bottom + AppSize.shellDockBottomGap,
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {

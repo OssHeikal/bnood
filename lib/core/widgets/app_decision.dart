@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../config/extensions/num_extensions.dart';
 import '../config/extensions/text_style_extensions.dart';
+import '../config/theme/app_overlay.dart';
 import '../config/theme/app_size.dart';
 import '../config/theme/app_colors.dart';
 import '../resources/gen/assets.gen.dart';
@@ -11,7 +12,7 @@ import 'foundation_icon.dart';
 import 'sheet_drag_handle.dart';
 import 'buttons/app_button.dart';
 import 'custom_text_field.dart';
-import 'bnood_modal_sheet.dart';
+import 'app_modal_sheet.dart';
 import 'toast/app_tone.dart';
 
 /// Safe (cancel) action on decision surfaces: neutral outline, not brand secondary.
@@ -74,13 +75,13 @@ abstract final class AppDecision {
   }) {
     final useSheet = typedConfirmation != null && typedConfirmation.isNotEmpty;
     if (useSheet) {
-      return BnoodModalSheet.show<OverlayAnswer>(
+      return AppModalSheet.show<OverlayAnswer>(
         context: context,
         backgroundColor: context.colors.surface,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.cardRadius)),
         ),
-        builder: (sheetContext) => _AppDecisionSheet(
+        body: _AppDecisionSheet(
           title: title,
           description: description,
           confirmLabel: confirmLabel,
@@ -100,6 +101,7 @@ abstract final class AppDecision {
 
     return showDialog<OverlayAnswer>(
       context: context,
+      barrierColor: AppOverlay.barrierColor(context),
       barrierDismissible: barrierDismiss,
       builder: (dialogContext) => _AppDecisionDialog(
         title: title,

@@ -14,4 +14,15 @@ abstract final class AppShape {
 
   static const ShapeBorder stadium = StadiumBorder();
   static const ShapeBorder circle = CircleBorder();
+
+  /// Phone modal sheets: rounded top only; bottom edge is flush with the screen.
+  static ShapeBorder sheetMobileTop({
+    double radius = AppSize.radiusLG,
+    BorderSide side = BorderSide.none,
+  }) {
+    return RoundedSuperellipseBorder(
+      side: side,
+      borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
+    );
+  }
 }

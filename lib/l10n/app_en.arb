@@ -72,6 +72,11 @@
   "clientNameRequired": "Enter client name",
   "clientNameHint": "e.g. Tower North",
   "pickFromContacts": "Choose from contacts",
+  "contactsPermissionDeniedBody": "Contacts access is needed to fill name and phone from your address book.",
+  "contactsPermissionRestrictedBody": "Contacts access is restricted on this device.",
+  "contactsPermissionSettingsTitle": "Allow contacts access",
+  "contactsPermissionSettingsBody": "Open Settings to allow contacts access, then try import again.",
+  "contactsPermissionOpenSettings": "Open Settings",
   "contactPickFailed": "Could not open contacts. You can still enter details manually.",
   "contactPickChoosePhone": "Choose a phone number",
   "phoneOptional": "Phone (optional)",
@@ -147,7 +152,7 @@
   "clientDuplicateNameConfirm": "Continue",
   "clientDuplicatePhoneError": "This phone number is already used for another client.",
   "clientDeleteTitle": "Delete client?",
-  "clientDeleteDescription": "Delete {name}? This removes the client and project.",
+  "clientDeleteDescription": "Delete {name}? All receipts and expenses for this client will be permanently deleted.",
   "@clientDeleteDescription": {
     "placeholders": {
       "name": { "type": "String" }
@@ -168,7 +173,6 @@
   "sharePdf": "Share PDF",
   "createNew": "Create new",
   "archive": "Archive",
-  "unarchive": "Unarchive",
   "clientsFilterAll": "All",
   "clientsFilterActive": "Active",
   "clientsFilterArchived": "Archived",
@@ -192,6 +196,10 @@
   "voucherReceiptPhoto": "Receipt photo",
   "voucherAttachCamera": "Camera",
   "voucherAttachGallery": "Gallery",
+  "voucherAttachCameraSubtitle": "Take a photo of the receipt",
+  "voucherAttachGallerySubtitle": "Choose from your photos",
+  "voucherAttachUploadPrompt": "Tap to add a receipt photo",
+  "voucherAttachSourceTitle": "Attach receipt",
   "voucherReceiptCameraDenied": "Camera access was denied. You can enable it in Settings to photograph receipts.",
   "voucherReceiptCameraRestricted": "Camera access is restricted on this device.",
   "voucherReceiptGalleryDenied": "Photo access was denied. You can enable it in Settings to attach gallery receipts.",
@@ -299,7 +307,8 @@
   "craftsmanAgreementHasPayments": "Has recorded payments",
   "directoryAddCraftsmanToRoster": "Add craftsman to directory",
   "crewAssignmentsSaved": "Craftsman choices saved for this client",
-  "itemsCatalogCaption": "Default items are read-only — add your own items below",
+  "itemsCatalogCaption": "Add your own items or edit existing ones.",
+  "overflowMenuTooltip": "More options",
   "addItem": "Add item",
   "itemCreateSheetTitle": "New item",
   "itemEditSheetTitle": "Edit item",
@@ -373,7 +382,6 @@
       "name": { "type": "String" }
     }
   },
-  "itemDefaultBadge": "Default",
   "itemPickIconLabel": "Icon",
   "itemPickColorLabel": "Color",
   "statementClientHeading": "Fund / client statement",
@@ -558,6 +566,7 @@
   "toastClientCreated": "Client added.",
   "toastClientUpdated": "Client updated.",
   "toastClientArchived": "Client archived.",
+  "toastClientDeleted": "Client deleted.",
   "toastSupplierCreated": "Supplier added.",
   "toastCraftsmanCreated": "Craftsman added.",
   "toastProviderUpdated": "Details updated.",
@@ -671,5 +680,16 @@
   "contentPageErrorTitle": "Could not load page",
   "contentPageErrorDescription": "Check your connection and try again.",
   "authRegisterLegalPrefix": "By creating an account you agree to our",
-  "authRegisterLegalMiddle": "and"
+  "authRegisterLegalMiddle": "and",
+  "notificationSettingsTitle": "Notifications",
+  "notificationSettingsDescription": "Choose when Bnood sends push alerts to this device.",
+  "notificationSettingsAlertsSection": "Alerts",
+  "notificationSettingsMasterToggle": "All notifications",
+  "notificationSettingsMasterCaption": "Turn off every Bnood notification on all your devices.",
+  "notificationSettingsLowBalanceToggle": "Low client balance",
+  "notificationSettingsLowBalanceAmountLabel": "Alert when balance is below",
+  "notificationSettingsLowBalanceAmountHint": "We'll notify you when any active client's balance drops below this amount.",
+  "notificationSettingsAmountInvalid": "Enter a valid amount in EGP.",
+  "notificationSettingsSaved": "Notification settings updated.",
+  "pushNotificationOpenAction": "Open"
 }

@@ -3,19 +3,19 @@ import 'package:go_router/go_router.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../app/widgets/floating_shell_dock.dart';
+import '../../app/shell_bottom_inset.dart';
+import '../../app/shell_tab_scaffold.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/layout/bnood_layout.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/pagination.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
-import '../../core/widgets/custom_bottom_sheet.dart';
-import '../../core/widgets/custom_text_field.dart';
+import '../../core/widgets/directory_search_field.dart';
 import '../home/home_foundation_scope.dart';
 import 'provider_create_sheet.dart';
 import 'provider_edit_sheet.dart';
@@ -57,18 +57,14 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
   void _refreshPaging() => _pagingController.refresh();
 
   Future<void> _addProvider(BuildContext context) {
+    FocusManager.instance.primaryFocus?.unfocus();
     final filter = ref.read(providersListTypeFilterProvider);
     final initialType = switch (filter) {
       ProvidersListTypeFilter.craftsman => AppProviderType.craftsman,
       ProvidersListTypeFilter.supplier => AppProviderType.supplier,
       ProvidersListTypeFilter.all => AppProviderType.supplier,
     };
-    return CustomBottomSheet.show<void>(
-      context: context,
-      builder: (_) => ProviderCreateSheet(initialType: initialType),
-      nestedNavigator: false,
-      showDragHandle: false,
-    );
+    return showProviderCreateSheet(context, initialType: initialType);
   }
 
   void _cacheCollapsingHeaderHeight() {
@@ -101,8 +97,8 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
         builder: (context) {
           final colors = context.colors;
           final gutter = context.pageGutter;
-          final useGrid = !context.isBnoodMobile;
-          return Scaffold(
+          final useGrid = !context.isMobileLayout;
+          return ShellTabScaffold(
             backgroundColor: colors.canvas,
             body: AppPagedView<AppProvider>(
               controller: _pagingController,
@@ -133,7 +129,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(gutter, 0, gutter, AppSize.spaceSM),
-                        child: CustomTextField.search(
+                        child: DirectorySearchField(
                           controller: _searchController,
                           placeholder: l10n.providersSearchHint,
                           onChanged: (value) {
@@ -193,8 +189,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
               sliverFooters: [
                 SliverPadding(
                   padding: EdgeInsets.only(
-                    bottom:
-                        FloatingShellDock.clearanceHeight + MediaQuery.viewPaddingOf(context).bottom + AppSize.spaceLG,
+                    bottom: ShellBottomInset.listScrollBottomPadding(context),
                   ),
                 ),
               ],

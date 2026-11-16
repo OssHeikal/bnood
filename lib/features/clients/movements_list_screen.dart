@@ -6,9 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/clients/client_statement_record.dart';
 import '../../core/clients/clients_providers.dart';
-import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
+import '../../core/layout/bnood_column_grid.dart';
+import '../../core/layout/app_layout.dart';
 import '../../core/database/database.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/repositories/bnood_repository.dart';
@@ -277,10 +278,26 @@ class _RemoteMovementsListState extends ConsumerState<_RemoteMovementsList> {
               child: AppPagedView<ClientDetailMovementLine>(
                 controller: _pagingController,
                 pullToRefresh: true,
-                layout: AppPagedLayout.listSeparated,
+                layout: context.isMobileLayout
+                    ? AppPagedLayout.listSeparated
+                    : AppPagedLayout.sliverTwoColumn,
+                gridPadding: context.isMobileLayout
+                    ? null
+                    : EdgeInsets.fromLTRB(
+                        context.pageGutter,
+                        AppSize.spaceSM,
+                        context.pageGutter,
+                        0,
+                      ),
+                itemPadding: context.isMobileLayout
+                    ? (_) => EdgeInsets.fromLTRB(
+                          AppSize.screenPadding,
+                          AppSize.spaceSM,
+                          AppSize.screenPadding,
+                          0,
+                        )
+                    : (_) => EdgeInsets.zero,
                 builders: pagedBuilders,
-                itemPadding: (_) =>
-                    EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, 0),
                 itemBuilder: (context, line, index) => InteractiveMovementCard(
                   line: line,
                   localeCode: localeCode,
@@ -574,17 +591,25 @@ class _LocalMovementsListState extends ConsumerState<_LocalMovementsList> {
                       );
                     }
 
-                    return ListView.separated(
+                    final cards = [
+                      for (final line in lines)
+                        InteractiveMovementCard(
+                          line: line,
+                          localeCode: localeCode,
+                          mutationsEnabled: true,
+                        ),
+                    ];
+                    return ListView(
+                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                       padding: EdgeInsets.fromLTRB(
-                        AppSize.screenPadding,
+                        context.pageGutter,
                         AppSize.spaceSM,
-                        AppSize.screenPadding,
+                        context.pageGutter,
                         AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
                       ),
-                      itemCount: lines.length,
-                      separatorBuilder: (_, _) => AppSize.spaceMD.gap,
-                      itemBuilder: (context, index) =>
-                          InteractiveMovementCard(line: lines[index], localeCode: localeCode, mutationsEnabled: true),
+                      children: [
+                        BnoodColumnGrid(children: cards),
+                      ],
                     );
                   },
                 ),

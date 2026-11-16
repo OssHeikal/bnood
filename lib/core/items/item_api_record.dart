@@ -5,9 +5,11 @@ class CatalogItem {
     required this.iconKey,
     required this.colorKey,
     required this.isDefault,
+    this.isCustomized = false,
     required this.sortOrder,
     required this.createdAt,
     required this.updatedAt,
+    this.archivedAt,
   });
 
   final String id;
@@ -15,20 +17,27 @@ class CatalogItem {
   final String iconKey;
   final String colorKey;
   final bool isDefault;
+  final bool isCustomized;
   final int sortOrder;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final DateTime? archivedAt;
+
+  bool get isArchived => archivedAt != null;
 
   static CatalogItem fromDataJson(Map<String, dynamic> json) {
+    final archivedRaw = json['archived_at'];
     return CatalogItem(
       id: json['id'] as String,
       name: json['name'] as String,
       iconKey: (json['icon_key'] as String?) ?? 'layers',
       colorKey: (json['color_key'] as String?) ?? 'teal',
       isDefault: json['is_default'] == true,
+      isCustomized: json['is_customized'] == true,
       sortOrder: (json['sort_order'] as num?)?.toInt() ?? 0,
       createdAt: DateTime.parse(json['created_at'] as String).toUtc(),
       updatedAt: DateTime.parse(json['updated_at'] as String).toUtc(),
+      archivedAt: archivedRaw == null ? null : DateTime.parse(archivedRaw as String).toUtc(),
     );
   }
 }
@@ -84,4 +93,16 @@ class ItemIconsCatalog {
     final icons = iconsRaw is List ? iconsRaw.map((e) => e.toString()).toList() : <String>[];
     return ItemIconsCatalog(colors: colors, iconKeys: icons);
   }
+}
+
+/// Outcome of the unified item delete action.
+enum ItemDeleteResult {
+  /// Removed permanently (own item with no linked expenses).
+  deleted,
+
+  /// Hidden for this user (linked own item or a default item).
+  archived;
+
+  static ItemDeleteResult fromWire(String? value) =>
+      value == 'archived' ? ItemDeleteResult.archived : ItemDeleteResult.deleted;
 }

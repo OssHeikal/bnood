@@ -18,7 +18,7 @@ import '../../core/providers_api/app_provider_record.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../clients/agreement_mutation_actions.dart';
 import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/bnood_modal_sheet.dart';
+import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
@@ -33,9 +33,9 @@ Future<void> showProviderClientAssignmentsSheet({
   required String providerName,
   required AppProviderType providerType,
 }) {
-  return BnoodModalSheet.show<void>(
+  return AppModalSheet.show<void>(
     context: context,
-    builder: (_) => HomeFoundationScope(
+    body: HomeFoundationScope(
       child: _ProviderClientAssignmentsHost(
         providerId: providerId,
         providerName: providerName,
@@ -372,10 +372,9 @@ class _ProviderClientAssignmentsSheetState extends ConsumerState<ProviderClientA
         AppSize.screenPadding,
         AppSize.spaceLG,
         AppSize.screenPadding,
-        SheetChromeInsets.sheetFooterBottomPadding(
-          media: MediaQuery.of(context),
-          outerModalChromeApplied: widget.embedInModalChrome,
-        ),
+        widget.embedInModalChrome
+            ? AppSize.spaceMD
+            : AppSize.spaceMD + MediaQuery.viewPaddingOf(context).bottom,
       ),
       child: AppButton.primary(
         key: const Key('provider_client_assignments_save'),

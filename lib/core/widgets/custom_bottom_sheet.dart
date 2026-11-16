@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../config/theme/app_colors.dart';
 import '../config/theme/app_size.dart';
 import '../../features/home/home_foundation_scope.dart';
-import 'bnood_modal_sheet.dart';
+import 'app_modal_sheet.dart';
 import 'bounded_sheet_navigator.dart';
 
 /// Root bottom sheet with nested [Navigator] for inline-create flows.
@@ -25,10 +25,11 @@ class CustomBottomSheet extends StatelessWidget {
     bool nestedNavigator = true,
     bool showDragHandle = true,
   }) {
-    return BnoodModalSheet.show<T>(
+    return AppModalSheet.show<T>(
       context: context,
       useRootNavigator: useRootNavigator,
-      builder: (ctx) => CustomBottomSheet(
+      scrollable: true,
+      body: CustomBottomSheet(
         title: title,
         child: nestedNavigator
             ? BoundedSheetNavigator(builder: builder)
@@ -60,13 +61,10 @@ class CustomBottomSheet extends StatelessWidget {
                           AppSize.screenPadding,
                           AppSize.spaceSM,
                         ),
-                        child: Text(title!, style: context.text.titleLarge),
+                        child: Text(title!, style: context.text.sectionTitle),
                       ),
                     ],
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: child,
-                    ),
+                    child,
                   ],
                 ),
               );
@@ -95,6 +93,7 @@ class _BoundedStandaloneChild extends StatelessWidget {
           ),
           child: Align(
             alignment: Alignment.topCenter,
+            heightFactor: 1,
             child: Builder(builder: builder),
           ),
         );

@@ -14,6 +14,10 @@ abstract final class AppSize {
   /// Voucher satellite painted disc; aligned to pill track (tap slot stays [shellDockPillExtent]).
   static const shellDockVoucherDiameter = shellDockPillExtent - spaceXS;
   static const shellDockClearance = 112.0;
+  /// Gap between the dock row and the bottom safe area (see FloatingShellDock padding).
+  static const shellDockBottomGap = spaceSM;
+  /// Dock top measured from the safe-area bottom: bottom gap + pill row height.
+  static const shellDockTopFromSafeBottom = shellDockBottomGap + shellDockPillExtent;
   static const shellBarHeight = 86.0;
   static const iconExtraLarge = 48.0;
   static const icon = 24.0;

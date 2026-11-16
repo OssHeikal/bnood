@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/l10n/app_localizations.dart';
-
 import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/validation/egypt_mobile_phone_validation.dart';
@@ -12,6 +11,7 @@ import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_toaster.dart';
+import '../../core/widgets/toast/app_tone.dart';
 import '../subscription/subscription_error_handler.dart';
 import '../subscription/subscription_gates.dart';
 
@@ -176,4 +176,42 @@ Future<Client?> _saveRemoteUpdate(
 String? duplicatePhoneFieldError(AppLocalizations l10n, AuthApiException error) {
   if (error.isDuplicatePhone) return l10n.clientDuplicatePhoneError;
   return null;
+}
+
+/// Confirms and deletes an online client (purge). Pops the current route on success.
+Future<bool> confirmDeleteClient({
+  required BuildContext context,
+  required WidgetRef ref,
+  required String clientId,
+  required String clientName,
+}) async {
+  if (!ref.read(remoteClientsEnabledProvider)) return false;
+  final l10n = AppLocalizations.of(context);
+  final answer = await AppDecision.show(
+    context,
+    title: l10n.clientDeleteTitle,
+    description: l10n.clientDeleteDescription(clientName),
+    confirmLabel: l10n.delete,
+    cancelLabel: l10n.cancel,
+    tone: AppTone.danger,
+  );
+  if (answer != OverlayAnswer.confirmed || !context.mounted) return false;
+  try {
+    await ref.read(clientsRepositoryProvider).deleteClient(clientId);
+    refreshAfterClientMutation(ref, clientId: clientId);
+    if (context.mounted) {
+      AppToaster.show(l10n.toastClientDeleted, kind: ToastKind.success);
+      final navigator = Navigator.of(context);
+      if (navigator.canPop()) {
+        navigator.pop();
+      }
+    }
+    return true;
+  } on AuthApiException catch (e) {
+    if (!context.mounted) return false;
+    if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) return false;
+    if (await handleClientsApiSubscriptionError(context: context, ref: ref, error: e)) return false;
+    AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
+    return false;
+  }
 }

@@ -58,16 +58,20 @@ class AppMenuBody extends ConsumerWidget {
         iconColor: colors.primary,
         onTap: () => context.push(AuthPaths.preferences),
       ),
+      if (isAuthenticated)
+        SettingsNavRow(
+          label: l10n.notificationSettingsTitle,
+          icon: Assets.icons.mobilePhoneOutline,
+          chipBackground: brandChip,
+          iconColor: colors.primary,
+          onTap: () => context.push(AuthPaths.notifications),
+        ),
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SettingsListSection(
-          title: null,
-          dividerKind: GroupedListDividerKind.insetStart,
-          children: topRows,
-        ),
+        SettingsListSection(title: null, dividerKind: GroupedListDividerKind.insetStart, children: topRows),
         AppSize.spaceXL.gap,
         SettingsListSection(
           title: l10n.settingsContentSection,

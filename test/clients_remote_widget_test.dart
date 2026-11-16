@@ -94,10 +94,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final pressable = tester.widget<AppPressable>(
-      find.ancestor(of: find.byKey(const Key('client_detail_edit')), matching: find.byType(AppPressable)),
-    );
-    expect(pressable.enabled, isFalse);
+    await tester.tap(find.byKey(const Key('client_detail_overflow')));
+    await tester.pumpAndSettle();
+    expect(find.text('Edit'), findsNothing);
     expect(find.text('Archived'), findsWidgets);
   });
 }

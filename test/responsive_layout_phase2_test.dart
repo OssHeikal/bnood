@@ -10,8 +10,8 @@ import 'package:bnood/core/providers/settings_provider.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
 import 'package:bnood/core/items/items_providers.dart';
 import 'package:bnood/core/items/items_repository.dart';
-import 'package:bnood/core/layout/bnood_breakpoints.dart';
-import 'package:bnood/core/layout/bnood_layout.dart';
+import 'package:bnood/core/layout/app_breakpoints.dart';
+import 'package:bnood/core/layout/app_layout.dart';
 import 'package:bnood/core/layout/bnood_column_grid.dart';
 import 'package:bnood/core/layout/bnood_list_canvas.dart';
 import 'package:bnood/core/database/connection.dart';
@@ -86,7 +86,7 @@ Widget _wrap({
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(size: Size(width, 900)),
           child: ResponsiveBreakpoints.builder(
-            breakpoints: BnoodBreakpoints.all,
+            breakpoints: AppBreakpoints.all,
             child: HomeFoundationScope(child: appChild!),
           ),
         );
@@ -100,10 +100,10 @@ bool _hasTabletGutter(WidgetTester tester) {
   return tester.widgetList<Padding>(find.byType(Padding)).any((widget) {
     final pad = widget.padding;
     if (pad is EdgeInsets) {
-      return pad.left == BnoodLayout.gutterTablet || pad.right == BnoodLayout.gutterTablet;
+      return pad.left == AppLayout.gutterTablet || pad.right == AppLayout.gutterTablet;
     }
   if (pad is EdgeInsetsDirectional) {
-      return pad.start == BnoodLayout.gutterTablet || pad.end == BnoodLayout.gutterTablet;
+      return pad.start == AppLayout.gutterTablet || pad.end == AppLayout.gutterTablet;
     }
     return false;
   });
@@ -118,7 +118,7 @@ bool _hasMaxWidth(WidgetTester tester, double maxWidth) {
 bool _hasFormCanvasWidth(WidgetTester tester) {
   return tester
       .widgetList<SizedBox>(find.byType(SizedBox))
-      .any((box) => box.width == BnoodLayout.formMaxWidth);
+      .any((box) => box.width == AppLayout.formMaxWidth);
 }
 
 class _AuthStub extends AuthController {
@@ -216,7 +216,12 @@ class _FakeCatalogRepository extends ItemsRepository {
   final List<CatalogItem> items;
 
   @override
-  Future<ItemsListPage> listItems({String? q, int page = 1, int perPage = 50}) async {
+  Future<ItemsListPage> listItems({
+    String? q,
+    int page = 1,
+    int perPage = 50,
+    ItemCatalogListStatus status = ItemCatalogListStatus.active,
+  }) async {
     return ItemsListPage(items: items, page: 1, perPage: perPage, total: items.length);
   }
 }
@@ -228,8 +233,8 @@ void main() {
   final now = DateTime.utc(2026, 1, 1);
 
   for (final width in widths) {
-    final isMobile = width <= BnoodBreakpoints.mobileMax;
-    final isTabletPlus = width > BnoodBreakpoints.mobileMax;
+    final isMobile = width <= AppBreakpoints.mobileMax;
+    final isTabletPlus = width > AppBreakpoints.mobileMax;
 
     testWidgets('home layout at $width', (tester) async {
       _setSurface(tester, width);
@@ -238,7 +243,7 @@ void main() {
         expect(find.byType(BnoodTwoColumn), findsNothing);
       } else {
         expect(find.byType(BnoodTwoColumn), findsOneWidget);
-        expect(_hasMaxWidth(tester, BnoodLayout.pageMaxWidth), isTrue);
+        expect(_hasMaxWidth(tester, AppLayout.pageMaxWidth), isTrue);
         expect(find.byKey(HomeScreen.primaryColumnKey), findsOneWidget);
         expect(find.byKey(HomeScreen.providersColumnKey), findsOneWidget);
         expect(
@@ -271,7 +276,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(BnoodListCanvas), findsOneWidget);
       if (isTabletPlus) {
-        expect(_hasMaxWidth(tester, BnoodLayout.listMaxWidth), isTrue);
+        expect(_hasMaxWidth(tester, AppLayout.listMaxWidth), isTrue);
       }
     });
 
@@ -505,7 +510,7 @@ void main() {
       await tester.pumpAndSettle();
       final grid = tester.widget<GridView>(find.byType(GridView));
       final delegate = grid.gridDelegate as SliverGridDelegateWithFixedCrossAxisCount;
-      final expectedColumns = isMobile ? 2 : (width <= BnoodBreakpoints.tabletMax ? 3 : 4);
+      final expectedColumns = isMobile ? 2 : (width <= AppBreakpoints.tabletMax ? 3 : 4);
       expect(delegate.crossAxisCount, expectedColumns);
     });
 

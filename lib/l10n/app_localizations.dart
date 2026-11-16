@@ -464,6 +464,36 @@ abstract class AppLocalizations {
   /// **'Choose from contacts'**
   String get pickFromContacts;
 
+  /// No description provided for @contactsPermissionDeniedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts access is needed to fill name and phone from your address book.'**
+  String get contactsPermissionDeniedBody;
+
+  /// No description provided for @contactsPermissionRestrictedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts access is restricted on this device.'**
+  String get contactsPermissionRestrictedBody;
+
+  /// No description provided for @contactsPermissionSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow contacts access'**
+  String get contactsPermissionSettingsTitle;
+
+  /// No description provided for @contactsPermissionSettingsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings to allow contacts access, then try import again.'**
+  String get contactsPermissionSettingsBody;
+
+  /// No description provided for @contactsPermissionOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get contactsPermissionOpenSettings;
+
   /// No description provided for @contactPickFailed.
   ///
   /// In en, this message translates to:
@@ -827,7 +857,7 @@ abstract class AppLocalizations {
   /// No description provided for @clientDeleteDescription.
   ///
   /// In en, this message translates to:
-  /// **'Delete {name}? This removes the client and project.'**
+  /// **'Delete {name}? All receipts and expenses for this client will be permanently deleted.'**
   String clientDeleteDescription(String name);
 
   /// No description provided for @clientDeleteHasActivityTitle.
@@ -919,12 +949,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Archive'**
   String get archive;
-
-  /// No description provided for @unarchive.
-  ///
-  /// In en, this message translates to:
-  /// **'Unarchive'**
-  String get unarchive;
 
   /// No description provided for @clientsFilterAll.
   ///
@@ -1063,6 +1087,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Gallery'**
   String get voucherAttachGallery;
+
+  /// No description provided for @voucherAttachCameraSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of the receipt'**
+  String get voucherAttachCameraSubtitle;
+
+  /// No description provided for @voucherAttachGallerySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from your photos'**
+  String get voucherAttachGallerySubtitle;
+
+  /// No description provided for @voucherAttachUploadPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to add a receipt photo'**
+  String get voucherAttachUploadPrompt;
+
+  /// No description provided for @voucherAttachSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach receipt'**
+  String get voucherAttachSourceTitle;
 
   /// No description provided for @voucherReceiptCameraDenied.
   ///
@@ -1505,8 +1553,14 @@ abstract class AppLocalizations {
   /// No description provided for @itemsCatalogCaption.
   ///
   /// In en, this message translates to:
-  /// **'Default items are read-only — add your own items below'**
+  /// **'Add your own items or edit existing ones.'**
   String get itemsCatalogCaption;
+
+  /// No description provided for @overflowMenuTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get overflowMenuTooltip;
 
   /// No description provided for @addItem.
   ///
@@ -1765,12 +1819,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} will be removed from your directory list.'**
   String deleteProviderDescription(String name);
-
-  /// No description provided for @itemDefaultBadge.
-  ///
-  /// In en, this message translates to:
-  /// **'Default'**
-  String get itemDefaultBadge;
 
   /// No description provided for @itemPickIconLabel.
   ///
@@ -2407,6 +2455,12 @@ abstract class AppLocalizations {
   /// **'Client archived.'**
   String get toastClientArchived;
 
+  /// No description provided for @toastClientDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Client deleted.'**
+  String get toastClientDeleted;
+
   /// No description provided for @toastSupplierCreated.
   ///
   /// In en, this message translates to:
@@ -2958,6 +3012,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'and'**
   String get authRegisterLegalMiddle;
+
+  /// No description provided for @notificationSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationSettingsTitle;
+
+  /// No description provided for @notificationSettingsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose when Bnood sends push alerts to this device.'**
+  String get notificationSettingsDescription;
+
+  /// No description provided for @notificationSettingsAlertsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get notificationSettingsAlertsSection;
+
+  /// No description provided for @notificationSettingsMasterToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'All notifications'**
+  String get notificationSettingsMasterToggle;
+
+  /// No description provided for @notificationSettingsMasterCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off every Bnood notification on all your devices.'**
+  String get notificationSettingsMasterCaption;
+
+  /// No description provided for @notificationSettingsLowBalanceToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Low client balance'**
+  String get notificationSettingsLowBalanceToggle;
+
+  /// No description provided for @notificationSettingsLowBalanceAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert when balance is below'**
+  String get notificationSettingsLowBalanceAmountLabel;
+
+  /// No description provided for @notificationSettingsLowBalanceAmountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll notify you when any active client\'s balance drops below this amount.'**
+  String get notificationSettingsLowBalanceAmountHint;
+
+  /// No description provided for @notificationSettingsAmountInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid amount in EGP.'**
+  String get notificationSettingsAmountInvalid;
+
+  /// No description provided for @notificationSettingsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification settings updated.'**
+  String get notificationSettingsSaved;
+
+  /// No description provided for @pushNotificationOpenAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get pushNotificationOpenAction;
 }
 
 class _AppLocalizationsDelegate
