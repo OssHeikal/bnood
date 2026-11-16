@@ -1,5 +1,4 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -46,8 +45,8 @@ import 'app_shell_items_body.dart';
 import 'app_shell_online_tabs.dart';
 import 'app_shell_tab_gate.dart';
 import 'shell_scaffold.dart';
-
-final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+import '../core/config/navigation/root_navigator_key.dart';
+import '../core/widgets/toast/shell_dock_presence.dart';
 
 const _localHome = '/home';
 
@@ -113,8 +112,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   final refresh = ref.watch(authRouterRefreshProvider);
   return GoRouter(
     debugLogDiagnostics: true,
-    navigatorKey: _rootKey,
-    observers: [BotToastNavigatorObserver()],
+    // AppToaster resolves layout/margins from this key; it must be the real root navigator.
+    navigatorKey: rootNavigatorKey,
+    observers: [BotToastNavigatorObserver(), ShellDockPresence.createObserver()],
     refreshListenable: refresh,
     initialLocation: AppSplashSession.completed ? AuthPaths.login : AppStartupSplashPage.path,
     redirect: (_, state) => _authRedirect(ref, state),

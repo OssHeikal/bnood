@@ -216,7 +216,12 @@ class _FakeCatalogRepository extends ItemsRepository {
   final List<CatalogItem> items;
 
   @override
-  Future<ItemsListPage> listItems({String? q, int page = 1, int perPage = 50}) async {
+  Future<ItemsListPage> listItems({
+    String? q,
+    int page = 1,
+    int perPage = 50,
+    ItemCatalogListStatus status = ItemCatalogListStatus.active,
+  }) async {
     return ItemsListPage(items: items, page: 1, perPage: perPage, total: items.length);
   }
 }

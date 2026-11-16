@@ -30,6 +30,22 @@ void main() {
       expect(item.iconKey, 'layers');
       expect(item.colorKey, 'teal');
       expect(item.isDefault, isTrue);
+      expect(item.isCustomized, isFalse);
+    });
+
+    test('fromDataJson maps is_customized', () {
+      final item = CatalogItem.fromDataJson({
+        'id': '01JITEM',
+        'name': 'Insulation',
+        'icon_key': 'layers',
+        'color_key': 'teal',
+        'is_default': true,
+        'is_customized': true,
+        'sort_order': 1,
+        'created_at': '2026-11-09T10:00:00Z',
+        'updated_at': '2026-11-09T10:00:00Z',
+      });
+      expect(item.isCustomized, isTrue);
     });
   });
 
@@ -94,11 +110,32 @@ void main() {
       api.close();
     });
 
-    test('delete succeeds for soft delete even when item is in use', () async {
+    test('delete parses deleted result for unused item', () async {
+      late RequestOptions captured;
+      final api = _itemsApi((options) async {
+        captured = options;
+        return jsonResponse('{"success":true,"message":"ok","data":{"id":"01J","result":"deleted"}}');
+      });
+      final result = await api.deleteItem('01J');
+      expect(captured.method, 'DELETE');
+      expect(captured.path, endsWith('/v1/items/01J'));
+      expect(result, ItemDeleteResult.deleted);
+      api.close();
+    });
+
+    test('delete parses archived result for linked or default item', () async {
+      final api = _itemsApi(
+        (_) async => jsonResponse('{"success":true,"message":"ok","data":{"id":"01J","result":"archived"}}'),
+      );
+      expect(await api.deleteItem('01J'), ItemDeleteResult.archived);
+      api.close();
+    });
+
+    test('delete without result payload is treated as deleted', () async {
       final api = _itemsApi(
         (_) async => jsonResponse('{"success":true,"message":"ok"}'),
       );
-      await api.deleteItem('01J');
+      expect(await api.deleteItem('01J'), ItemDeleteResult.deleted);
       api.close();
     });
   });

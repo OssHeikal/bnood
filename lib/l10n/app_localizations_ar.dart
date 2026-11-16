@@ -421,7 +421,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String clientDeleteDescription(String name) {
-    return 'حذف $name؟ سيُحذف العميل والمشروع.';
+    return 'حذف $name؟ كل الإيصالات والمصروفات الخاصة بهذا العميل ستُحذف نهائيًا.';
   }
 
   @override
@@ -470,9 +470,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get archive => 'أرشفة';
-
-  @override
-  String get unarchive => 'إلغاء الأرشفة';
 
   @override
   String get clientsFilterAll => 'الكل';
@@ -807,8 +804,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get crewAssignmentsSaved => 'حُفظت اختيارات الصنايعية لهذا العميل';
 
   @override
-  String get itemsCatalogCaption =>
-      'البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك';
+  String get itemsCatalogCaption => 'أضف بنودك أو عدّل البنود الموجودة.';
+
+  @override
+  String get overflowMenuTooltip => 'المزيد';
 
   @override
   String get addItem => 'إضافة بند';
@@ -955,9 +954,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String deleteProviderDescription(String name) {
     return 'سيُزال $name من قائمة الدليل.';
   }
-
-  @override
-  String get itemDefaultBadge => 'افتراضي';
 
   @override
   String get itemPickIconLabel => 'الأيقونة';
@@ -1327,6 +1323,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get toastClientArchived => 'اتأرشف العميل.';
+
+  @override
+  String get toastClientDeleted => 'اتمسح العميل.';
 
   @override
   String get toastSupplierCreated => 'اتضاف المورد.';

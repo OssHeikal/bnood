@@ -15,6 +15,7 @@ import '../../core/widgets/toast/app_tone.dart';
 void refreshAfterItemMutation(WidgetRef ref) {
   bumpPagingListRefresh(ref, PagingListIds.items);
   ref.invalidate(itemIconsCatalogProvider);
+  ref.invalidate(itemsCatalogByIdProvider);
 }
 
 Future<CatalogItem?> saveItemCreate({
@@ -61,15 +62,13 @@ Future<CatalogItem?> saveItemUpdate({
     }
     if (e.isDuplicateName) rethrow;
     final l10n = AppLocalizations.of(context);
-    if (e.isDefaultItemReadonly) {
-      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
-      return null;
-    }
     AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return null;
   }
 }
 
+/// Confirms, then runs the unified delete. The server decides whether the item is
+/// removed permanently (unused own item) or hidden for this user (linked or default).
 Future<bool> confirmDeleteItem(
   BuildContext context,
   WidgetRef ref, {

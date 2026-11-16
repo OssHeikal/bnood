@@ -3,11 +3,14 @@ import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/items/item_api_record.dart';
 import 'package:bnood/core/items/items_providers.dart';
-import 'package:bnood/core/items/items_repository.dart';
+import 'package:bnood/core/items/items_repository.dart' show ItemCatalogListStatus, ItemsRepository;
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/core/widgets/app_card.dart';
+import 'package:bnood/core/widgets/app_empty_state.dart';
+import 'package:bnood/core/widgets/buttons/app_button.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton_box.dart';
 import 'package:bnood/features/items/widgets/items_loading_skeleton.dart';
@@ -36,7 +39,7 @@ void main() {
     ),
     CatalogItem(
       id: '01K',
-      name: 'افتراضي',
+      name: 'سباكة',
       iconKey: 'category',
       colorKey: 'gold',
       isDefault: true,
@@ -110,7 +113,7 @@ void main() {
     expect(card.top, grid.top);
     expect(screen.right - card.right, gridInset);
     expect(
-      tester.getRect(find.text('البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك')).right,
+      tester.getRect(find.text('أضف بنودك أو عدّل البنود الموجودة.')).right,
       screen.right - gridInset,
     );
     await tester.pump(const Duration(milliseconds: 250));
@@ -134,7 +137,7 @@ void main() {
     expect(icons.every((icon) => icon.width == AppSize.icon && icon.height == AppSize.icon), isTrue);
   });
 
-  testWidgets('default item shows badge and custom item is tappable', (tester) async {
+  testWidgets('tiles show no default badge and custom item is tappable', (tester) async {
     await tester.pumpWidget(
       wrap(
         child: const ItemsScreen(),
@@ -142,10 +145,26 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('افتراضي'), findsWidgets);
+    expect(find.text('سباكة'), findsOneWidget);
+    expect(find.text('افتراضي'), findsNothing);
     await tester.tap(find.text('بند اختبار'));
     await tester.pumpAndSettle();
     expect(find.text('تعديل البند'), findsOneWidget);
+  });
+
+  testWidgets('default item edit sheet has a single delete action', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        child: const ItemsScreen(),
+        overrides: remoteOverrides(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ItemCatalogTile).at(1));
+    await tester.pumpAndSettle();
+    expect(find.text('تعديل البند'), findsOneWidget);
+    expect(find.text('حذف'), findsOneWidget);
+    expect(find.text('أرشفة'), findsNothing);
   });
 
   testWidgets('user and default tiles are long-press draggable', (tester) async {
@@ -158,6 +177,43 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(LongPressDraggable<int>), findsNWidgets(2));
     expect(find.byType(ItemCatalogTile), findsNWidgets(2));
+  });
+
+  testWidgets('active catalog empty state is centered without list card', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        child: const ItemsScreen(),
+        overrides: remoteOverrides(items: []),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AppCard), findsNothing);
+    expect(find.byType(AppEmptyState), findsOneWidget);
+    expect(find.byKey(const Key('items_empty_state')), findsOneWidget);
+    expect(find.text('لا توجد بنود بعد'), findsOneWidget);
+    expect(find.widgetWithText(AppButton, 'إضافة بند'), findsOneWidget);
+
+    final hasCenteredEmptyColumn = tester.widgetList<Column>(find.byType(Column)).any(
+      (column) =>
+          column.mainAxisAlignment == MainAxisAlignment.center &&
+          column.children.any((child) => child is AppEmptyState),
+    );
+    expect(hasCenteredEmptyColumn, isTrue);
+  });
+
+  testWidgets('items screen has no active/archived filter bar', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        child: const ItemsScreen(),
+        overrides: remoteOverrides(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('items_filter_active')), findsNothing);
+    expect(find.byKey(const Key('items_filter_archived')), findsNothing);
+    expect(find.text('المؤرشفة'), findsNothing);
   });
 
   testWidgets('create sheet rejects empty name', (tester) async {
@@ -183,7 +239,12 @@ class _FakeCatalogRepository extends ItemsRepository {
   final Duration? catalogDelay;
 
   @override
-  Future<ItemsListPage> listItems({String? q, int page = 1, int perPage = 50}) async {
+  Future<ItemsListPage> listItems({
+    String? q,
+    int page = 1,
+    int perPage = 50,
+    ItemCatalogListStatus status = ItemCatalogListStatus.active,
+  }) async {
     if (catalogDelay != null) {
       await Future<void>.delayed(catalogDelay!);
     }

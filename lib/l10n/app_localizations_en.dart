@@ -422,7 +422,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String clientDeleteDescription(String name) {
-    return 'Delete $name? This removes the client and project.';
+    return 'Delete $name? All receipts and expenses for this client will be permanently deleted.';
   }
 
   @override
@@ -471,9 +471,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get archive => 'Archive';
-
-  @override
-  String get unarchive => 'Unarchive';
 
   @override
   String get clientsFilterAll => 'All';
@@ -812,8 +809,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get crewAssignmentsSaved => 'Craftsman choices saved for this client';
 
   @override
-  String get itemsCatalogCaption =>
-      'Default items are read-only — add your own items below';
+  String get itemsCatalogCaption => 'Add your own items or edit existing ones.';
+
+  @override
+  String get overflowMenuTooltip => 'More options';
 
   @override
   String get addItem => 'Add item';
@@ -963,9 +962,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String deleteProviderDescription(String name) {
     return '$name will be removed from your directory list.';
   }
-
-  @override
-  String get itemDefaultBadge => 'Default';
 
   @override
   String get itemPickIconLabel => 'Icon';
@@ -1341,6 +1337,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toastClientArchived => 'Client archived.';
+
+  @override
+  String get toastClientDeleted => 'Client deleted.';
 
   @override
   String get toastSupplierCreated => 'Supplier added.';

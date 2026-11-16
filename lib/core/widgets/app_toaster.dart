@@ -7,6 +7,7 @@ import '../layout/app_layout.dart';
 import '../../features/home/home_foundation_scope.dart';
 import 'toast/app_toast.dart';
 import 'toast/app_tone.dart';
+import 'toast/shell_dock_presence.dart';
 
 export 'toast/app_toast.dart' show ToastAction;
 
@@ -52,7 +53,12 @@ abstract final class AppToaster {
     final keyboard = mq?.viewInsets.bottom ?? 0;
     final bottomInset = keyboard > safeBottom ? keyboard : safeBottom;
     final chromeBottom = switch (layout) {
-      AppToastLayoutHint.standard => AppSize.spaceMD + bottomInset + AppSize.shellDockClearance,
+      // Keyboard open: sit above the keyboard once. Dock visible: just above the dock top
+      // (safe area + dock bottom gap + pill row) with a small gap. Otherwise: safe area + gap.
+      AppToastLayoutHint.standard =>
+        keyboard == 0 && ShellDockPresence.visible
+            ? safeBottom + AppSize.shellDockTopFromSafeBottom + AppSize.spaceSM
+            : AppSize.spaceMD + bottomInset,
       AppToastLayoutHint.statementExportFooter =>
         AppSize.buttonHeight + AppSize.spaceMD + AppSize.spaceSM + bottomInset + AppSize.spaceMD,
     };
@@ -72,13 +78,7 @@ abstract final class AppToaster {
     ToastAction? action,
     required bool isLoading,
   }) {
-    final toast = AppToast(
-      tone: tone,
-      message: message,
-      title: title,
-      action: action,
-      isLoading: isLoading,
-    );
+    final toast = AppToast(tone: tone, message: message, title: title, action: action, isLoading: isLoading);
     if (layoutCtx.isMobileLayout) {
       return toast;
     }
@@ -105,7 +105,9 @@ abstract final class AppToaster {
     bool replace = true,
   }) {
     final tone = _toneFor(kind, isLoading: isLoading);
-    final resolvedDuration = persistent ? _persistentDuration : (duration ?? _defaultDuration(kind, isLoading: isLoading));
+    final resolvedDuration = persistent
+        ? _persistentDuration
+        : (duration ?? _defaultDuration(kind, isLoading: isLoading));
 
     BotToast.showCustomText(
       onlyOne: replace,
@@ -116,7 +118,8 @@ abstract final class AppToaster {
       ignoreContentClick: false,
       crossPage: true,
       useSafeArea: false,
-      enableKeyboardSafeArea: true,
+      // Keyboard inset is applied in [_margin]; avoid lifting twice.
+      enableKeyboardSafeArea: false,
       toastBuilder: (cancel) {
         final layoutCtx = _layoutContext(layoutContext);
         ToastAction? resolvedAction;
@@ -130,31 +133,26 @@ abstract final class AppToaster {
           );
         }
 
-        if (layoutCtx == null) {
-          return HomeFoundationScope(
-            child: AppToast(
-              tone: tone,
-              message: message,
-              title: title,
-              action: resolvedAction,
-              isLoading: isLoading,
+        Widget build(BuildContext ctx) {
+          return Padding(
+            padding: _margin(ctx, layout),
+            child: HomeFoundationScope(
+              child: _toastShell(
+                layoutCtx: ctx,
+                tone: tone,
+                message: message,
+                title: title,
+                action: resolvedAction,
+                isLoading: isLoading,
+              ),
             ),
           );
         }
 
-        return Padding(
-          padding: _margin(layoutCtx, layout),
-          child: HomeFoundationScope(
-            child: _toastShell(
-              layoutCtx: layoutCtx,
-              tone: tone,
-              message: message,
-              title: title,
-              action: resolvedAction,
-              isLoading: isLoading,
-            ),
-          ),
-        );
+        // Without a navigator context, still apply margins (safe area + dock) from the
+        // toast overlay's own context instead of pinning the toast to the screen edge.
+        if (layoutCtx == null) return Builder(builder: build);
+        return build(layoutCtx);
       },
     );
   }
@@ -243,14 +241,7 @@ abstract final class AppToaster {
     AppToastLayoutHint layout = AppToastLayoutHint.standard,
     Duration? duration,
   }) {
-    show(
-      message,
-      layoutContext: layoutContext,
-      layout: layout,
-      duration: duration,
-      isLoading: true,
-      replace: true,
-    );
+    show(message, layoutContext: layoutContext, layout: layout, duration: duration, isLoading: true, replace: true);
   }
 
   static void clear() {

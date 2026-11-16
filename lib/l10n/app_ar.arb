@@ -152,7 +152,7 @@
   "clientDuplicateNameConfirm": "متابعة",
   "clientDuplicatePhoneError": "رقم الهاتف مستخدم لعميل آخر.",
   "clientDeleteTitle": "حذف العميل؟",
-  "clientDeleteDescription": "حذف {name}؟ سيُحذف العميل والمشروع.",
+  "clientDeleteDescription": "حذف {name}؟ كل الإيصالات والمصروفات الخاصة بهذا العميل ستُحذف نهائيًا.",
   "@clientDeleteDescription": {
     "placeholders": {
       "name": { "type": "String" }
@@ -173,7 +173,6 @@
   "sharePdf": "مشاركة PDF",
   "createNew": "إنشاء جديد",
   "archive": "أرشفة",
-  "unarchive": "إلغاء الأرشفة",
   "clientsFilterAll": "الكل",
   "clientsFilterActive": "نشط",
   "clientsFilterArchived": "مؤرشف",
@@ -308,7 +307,8 @@
   "craftsmanAgreementHasPayments": "له مدفوعات مسجلة",
   "directoryAddCraftsmanToRoster": "إضافة صنايعي للدليل",
   "crewAssignmentsSaved": "حُفظت اختيارات الصنايعية لهذا العميل",
-  "itemsCatalogCaption": "البنود الافتراضية للقراءة فقط — يمكنك إضافة بنودك",
+  "itemsCatalogCaption": "أضف بنودك أو عدّل البنود الموجودة.",
+  "overflowMenuTooltip": "المزيد",
   "addItem": "إضافة بند",
   "itemCreateSheetTitle": "بند جديد",
   "itemEditSheetTitle": "تعديل البند",
@@ -367,7 +367,6 @@
   "unlink": "إلغاء الربط",
   "deleteProviderTitle": "حذف من الدليل؟",
   "deleteProviderDescription": "سيُزال {name} من قائمة الدليل.",
-  "itemDefaultBadge": "افتراضي",
   "itemPickIconLabel": "الأيقونة",
   "itemPickColorLabel": "اللون",
   "statementClientHeading": "عهدة / كشف حساب العميل",
@@ -551,6 +550,7 @@
   "toastClientCreated": "اتضاف العميل.",
   "toastClientUpdated": "اتحدّث العميل.",
   "toastClientArchived": "اتأرشف العميل.",
+  "toastClientDeleted": "اتمسح العميل.",
   "toastSupplierCreated": "اتضاف المورد.",
   "toastCraftsmanCreated": "اتضاف الصنايعي.",
   "toastProviderUpdated": "اتحدّثت البيانات.",

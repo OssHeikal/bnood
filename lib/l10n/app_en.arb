@@ -152,7 +152,7 @@
   "clientDuplicateNameConfirm": "Continue",
   "clientDuplicatePhoneError": "This phone number is already used for another client.",
   "clientDeleteTitle": "Delete client?",
-  "clientDeleteDescription": "Delete {name}? This removes the client and project.",
+  "clientDeleteDescription": "Delete {name}? All receipts and expenses for this client will be permanently deleted.",
   "@clientDeleteDescription": {
     "placeholders": {
       "name": { "type": "String" }
@@ -173,7 +173,6 @@
   "sharePdf": "Share PDF",
   "createNew": "Create new",
   "archive": "Archive",
-  "unarchive": "Unarchive",
   "clientsFilterAll": "All",
   "clientsFilterActive": "Active",
   "clientsFilterArchived": "Archived",
@@ -308,7 +307,8 @@
   "craftsmanAgreementHasPayments": "Has recorded payments",
   "directoryAddCraftsmanToRoster": "Add craftsman to directory",
   "crewAssignmentsSaved": "Craftsman choices saved for this client",
-  "itemsCatalogCaption": "Default items are read-only — add your own items below",
+  "itemsCatalogCaption": "Add your own items or edit existing ones.",
+  "overflowMenuTooltip": "More options",
   "addItem": "Add item",
   "itemCreateSheetTitle": "New item",
   "itemEditSheetTitle": "Edit item",
@@ -382,7 +382,6 @@
       "name": { "type": "String" }
     }
   },
-  "itemDefaultBadge": "Default",
   "itemPickIconLabel": "Icon",
   "itemPickColorLabel": "Color",
   "statementClientHeading": "Fund / client statement",
@@ -567,6 +566,7 @@
   "toastClientCreated": "Client added.",
   "toastClientUpdated": "Client updated.",
   "toastClientArchived": "Client archived.",
+  "toastClientDeleted": "Client deleted.",
   "toastSupplierCreated": "Supplier added.",
   "toastCraftsmanCreated": "Craftsman added.",
   "toastProviderUpdated": "Details updated.",
