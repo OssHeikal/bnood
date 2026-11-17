@@ -31,7 +31,7 @@ Map<String, Object?>? _flutterDetailsContext(FlutterErrorDetails details) {
   final contextDescription = details.context?.toDescription();
   if (library == null && contextDescription == null) return null;
   return {
-    ?'library': library,
-    ?'context': contextDescription,
+    'library': ?library,
+    'context': ?contextDescription,
   };
 }
