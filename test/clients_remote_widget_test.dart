@@ -1,7 +1,6 @@
 import 'package:bnood/core/clients/clients_providers.dart';
 import 'package:bnood/core/database/database.dart';
 import 'package:bnood/core/repositories/bnood_repository.dart';
-import 'package:bnood/core/widgets/app_pressable.dart';
 import 'package:bnood/features/clients/client_detail_provider.dart';
 import 'package:bnood/features/clients/client_detail_screen.dart';
 import 'package:bnood/features/clients/client_detail_snapshot.dart';

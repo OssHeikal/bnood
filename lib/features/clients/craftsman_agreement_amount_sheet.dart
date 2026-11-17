@@ -6,7 +6,6 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_modal_sheet.dart';
-import '../../core/widgets/bounded_sheet_navigator.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/money/money_format.dart';
 import '../../core/money/remote_money_format.dart';

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import 'app_modal_sheet_safe_area_test.dart' show _applyDeviceInsets;
 
 const _tabletSize = Size(820, 1180);
 

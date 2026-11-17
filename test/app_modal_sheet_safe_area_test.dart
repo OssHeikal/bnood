@@ -1,6 +1,5 @@
 import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/bounded_sheet_navigator.dart';
 import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/core/widgets/buttons/app_button.dart';

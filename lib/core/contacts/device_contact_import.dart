@@ -5,7 +5,6 @@ import 'package:flutter_native_contact_picker/model/contact.dart';
 
 import 'android_contacts_permission.dart';
 import '../formatting/display_digits.dart';
-import '../layout/app_layout.dart';
 import '../widgets/app_modal_sheet.dart';
 import '../widgets/app_toaster.dart';
 import '../../l10n/app_localizations.dart';
