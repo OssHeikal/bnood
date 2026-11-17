@@ -10,6 +10,7 @@ import '../../core/database/database.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/widgets/app_decision.dart';
+import '../../core/analytics/analytics_feature_hooks.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/toast/app_tone.dart';
 import '../subscription/subscription_error_handler.dart';
@@ -66,6 +67,7 @@ Future<Client?> _saveRemoteCreate(
   try {
     final record = await repo.createClient(name: name, phone: egyptMobileForApi(phone));
     refreshAfterClientMutation(ref, clientId: record.client.id);
+    trackClientCreatedAfterApi(ref);
     return record.client;
   } on AuthApiException catch (e) {
     if (!context.mounted) return null;
@@ -91,6 +93,7 @@ Future<Client?> _saveRemoteCreate(
           confirmDuplicateName: true,
         );
         refreshAfterClientMutation(ref, clientId: record.client.id);
+        trackClientCreatedAfterApi(ref);
         return record.client;
       } on AuthApiException catch (retry) {
         if (!context.mounted) return null;

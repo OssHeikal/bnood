@@ -4,7 +4,11 @@ import '../../features/auth/auth_controller.dart';
 import '../../features/auth/auth_state.dart';
 import '../push/push_platform.dart';
 import 'analytics_config.dart';
+import 'analytics_event.dart';
+import 'analytics_route_observer.dart';
+import 'analytics_screen_view_tracker.dart';
 import 'analytics_service.dart';
+import 'analytics_track.dart';
 import 'analytics_sink.dart';
 import 'analytics_user.dart';
 import 'composite_analytics.dart';
@@ -12,6 +16,12 @@ import 'firebase_analytics_gateway.dart';
 import 'firebase_analytics_gateway_impl.dart';
 import 'noop_analytics_service.dart';
 import 'remote_firebase_analytics_sink.dart';
+
+final analyticsScreenViewTrackerProvider = Provider<AnalyticsScreenViewTracker>((ref) {
+  return AnalyticsScreenViewTracker((screenName) {
+    trackAnalyticsEvent(ref, ScreenViewed(screenName: screenName));
+  });
+});
 
 /// Null when Firebase is not initialized on this platform (web, desktop, tests).
 final firebaseAnalyticsGatewayProvider = Provider<FirebaseAnalyticsGateway?>((ref) {

@@ -45,6 +45,8 @@ import 'app_shell_items_body.dart';
 import 'app_shell_online_tabs.dart';
 import 'app_shell_tab_gate.dart';
 import 'shell_scaffold.dart';
+import '../core/analytics/analytics_providers.dart';
+import '../core/analytics/analytics_route_observer.dart';
 import '../core/config/navigation/root_navigator_key.dart';
 import '../core/widgets/toast/shell_dock_presence.dart';
 
@@ -110,11 +112,17 @@ String? _authRedirect(Ref ref, GoRouterState state) {
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final refresh = ref.watch(authRouterRefreshProvider);
+  final screenViewTracker = ref.watch(analyticsScreenViewTrackerProvider);
+  final shellAnalyticsObservers = AnalyticsRouteObservers.forShellBranch(screenViewTracker);
   return GoRouter(
     debugLogDiagnostics: true,
     // AppToaster resolves layout/margins from this key; it must be the real root navigator.
     navigatorKey: rootNavigatorKey,
-    observers: [BotToastNavigatorObserver(), ShellDockPresence.createObserver()],
+    observers: [
+      BotToastNavigatorObserver(),
+      ShellDockPresence.createObserver(),
+      ...AnalyticsRouteObservers.forRoot(screenViewTracker),
+    ],
     refreshListenable: refresh,
     initialLocation: AppSplashSession.completed ? AuthPaths.login : AppStartupSplashPage.path,
     redirect: (_, state) => _authRedirect(ref, state),
@@ -171,6 +179,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
         branches: [
           StatefulShellBranch(
+            observers: shellAnalyticsObservers,
             routes: [
               GoRoute(
                 path: _localHome,
@@ -179,6 +188,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           StatefulShellBranch(
+            observers: shellAnalyticsObservers,
             routes: [
               GoRoute(
                 path: '/clients',
@@ -187,6 +197,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           StatefulShellBranch(
+            observers: shellAnalyticsObservers,
             routes: [
               GoRoute(
                 path: '/directory',
@@ -201,6 +212,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           StatefulShellBranch(
+            observers: shellAnalyticsObservers,
             routes: [
               GoRoute(
                 path: '/items',
