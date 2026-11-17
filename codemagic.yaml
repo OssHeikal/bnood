@@ -19,7 +19,7 @@ workflows:
         - bnood_release_config
       vars:
         BUNDLE_ID: com.bnood.app
-        BNOOD_API_BASE_URL: https://bnood.etbaaly.com/api
+        BNOOD_API_BASE_URL: https://bnoodapp.com/api
         XCODE_WORKSPACE: ios/Runner.xcworkspace
         XCODE_SCHEME: Runner
       flutter: 3.41.1
@@ -107,7 +107,7 @@ workflows:
         - bnood_google_play
       vars:
         PACKAGE_NAME: com.bnood.app
-        BNOOD_API_BASE_URL: https://bnood.etbaaly.com/api
+        BNOOD_API_BASE_URL: https://bnoodapp.com/api
         GOOGLE_PLAY_TRACK: internal
       flutter: 3.41.1
     triggering:
