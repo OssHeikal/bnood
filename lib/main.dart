@@ -9,6 +9,7 @@ import 'core/error_reporting/error_reporting_providers.dart';
 import 'core/error_reporting/install_error_handlers.dart';
 import 'core/error_reporting/crashlytics_bootstrap.dart';
 import 'core/error_reporting/sentry_bootstrap.dart';
+import 'core/error_reporting/sentry_release_name.dart';
 import 'core/prefs/app_settings_store.dart';
 import 'core/providers/settings_provider.dart';
 import 'core/push/push_background.dart';
@@ -23,7 +24,10 @@ Future<void> main() async {
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
   final packageInfo = await PackageInfo.fromPlatform();
-  final release = '${packageInfo.version}+${packageInfo.buildNumber}';
+  final release = sentryReleaseName(
+    version: packageInfo.version,
+    buildNumber: packageInfo.buildNumber,
+  );
   await bootstrapSentry(release: release);
 
   final bootstrap = await AppSettingsStore.load();
