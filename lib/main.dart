@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app/bnood_app.dart';
+import 'core/error_reporting/error_reporting_providers.dart';
+import 'core/error_reporting/install_error_handlers.dart';
 import 'core/prefs/app_settings_store.dart';
 import 'core/providers/settings_provider.dart';
 import 'core/push/push_background.dart';
@@ -17,9 +19,13 @@ Future<void> main() async {
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
   final bootstrap = await AppSettingsStore.load();
+  final container = ProviderContainer(
+    overrides: [appSettingsBootstrapProvider.overrideWithValue(bootstrap)],
+  );
+  installErrorHandlers(container.read(errorReporterProvider));
   runApp(
-    ProviderScope(
-      overrides: [appSettingsBootstrapProvider.overrideWithValue(bootstrap)],
+    UncontrolledProviderScope(
+      container: container,
       child: const BnoodApp(),
     ),
   );
