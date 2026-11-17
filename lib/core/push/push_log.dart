@@ -17,9 +17,8 @@ abstract final class PushLog {
     developer.log(message, name: _name, level: 1000, error: error, stackTrace: stackTrace);
   }
 
-  /// Shortens an installation ID so logs stay readable.
-  static String id(String value) =>
-      value.length <= 12 ? value : '${value.substring(0, 6)}…${value.substring(value.length - 6)}';
+  /// Full token/ID (logs are debug-only, so it's safe to copy for testing).
+  static String id(String value) => value;
 
   static String message(RemoteMessage message) {
     final n = message.notification;
