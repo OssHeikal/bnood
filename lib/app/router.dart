@@ -46,6 +46,7 @@ import 'app_shell_online_tabs.dart';
 import 'app_shell_tab_gate.dart';
 import 'shell_scaffold.dart';
 import '../core/config/navigation/root_navigator_key.dart';
+import '../core/error_reporting/sentry_navigation_observers.dart';
 import '../core/widgets/toast/shell_dock_presence.dart';
 
 const _localHome = '/home';
@@ -114,7 +115,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     debugLogDiagnostics: true,
     // AppToaster resolves layout/margins from this key; it must be the real root navigator.
     navigatorKey: rootNavigatorKey,
-    observers: [BotToastNavigatorObserver(), ShellDockPresence.createObserver()],
+    observers: [
+      BotToastNavigatorObserver(),
+      ShellDockPresence.createObserver(),
+      ...sentryNavigationObservers(),
+    ],
     refreshListenable: refresh,
     initialLocation: AppSplashSession.completed ? AuthPaths.login : AppStartupSplashPage.path,
     redirect: (_, state) => _authRedirect(ref, state),

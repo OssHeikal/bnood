@@ -8,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/api/api_accept_language.dart';
+import '../core/error_reporting/error_reporting_lifecycle.dart';
 import '../core/providers/settings_provider.dart';
 import '../core/push/push_coordinator.dart';
 import '../core/session/user_session_lifecycle.dart';
@@ -24,6 +25,7 @@ class BnoodApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(userSessionLifecycleProvider);
+    ref.watch(errorReportingLifecycleProvider);
     ref.watch(pushLifecycleProvider);
     final router = ref.watch(goRouterProvider);
     final themeMode = ref.watch(themeModeProvider);
