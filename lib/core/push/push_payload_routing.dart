@@ -1,5 +1,3 @@
-import '../../features/auth/auth_paths.dart';
-
 /// Backend FCM data payload `type` values (see bnood-admin `PushNotificationType`).
 abstract final class PushPayloadType {
   static const lowBalance = 'low_balance';
@@ -14,6 +12,11 @@ abstract final class PushBroadcastTarget {
   static const subscription = 'subscription';
 }
 
+/// Pseudo-route consumed by [PushCoordinator] to present the paywall (menu subscription).
+const pushSubscriptionLocation = '/subscription';
+
+bool isPushSubscriptionLocation(String location) => location == pushSubscriptionLocation;
+
 /// Maps FCM data to a go_router location. Unknown shapes fall back to home.
 String resolvePushNavigationLocation(Map<String, String> data) {
   final type = data['type']?.trim();
@@ -25,7 +28,7 @@ String resolvePushNavigationLocation(Map<String, String> data) {
     return authenticatedHomeForPath();
   }
   if (type == PushPayloadType.subscriptionExpiry) {
-    return AuthPaths.profile;
+    return pushSubscriptionLocation;
   }
   if (type == PushPayloadType.broadcast || type == PushPayloadType.adminBroadcast) {
     return _targetLocation(data['target']?.trim());
@@ -38,7 +41,7 @@ String resolvePushNavigationLocation(Map<String, String> data) {
 }
 
 String _targetLocation(String? target) {
-  if (target == PushBroadcastTarget.subscription) return AuthPaths.profile;
+  if (target == PushBroadcastTarget.subscription) return pushSubscriptionLocation;
   return authenticatedHomeForPath();
 }
 

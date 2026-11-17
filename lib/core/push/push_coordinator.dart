@@ -5,11 +5,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../app/app_splash_session.dart';
+import '../../app/app_startup_splash.dart';
 import '../../app/router.dart';
 import '../../features/auth/auth_controller.dart';
+import '../../features/auth/auth_paths.dart';
 import '../../features/auth/auth_state.dart';
+import '../../features/subscription/paywall_launcher.dart';
+import '../config/navigation/root_navigator_key.dart';
 import '../providers/settings_provider.dart';
+import '../subscription/subscription_riverpod.dart';
 import 'local_notifications.dart';
+import 'push_cold_start_navigation.dart';
 import 'push_payload_routing.dart';
 import 'push_log.dart';
 import 'push_permission_store.dart';
@@ -33,13 +40,18 @@ class PushCoordinator {
   String? _registeredToken;
   bool _fcmRegistered = false;
 
+  final PushColdStartNavigation _coldStart = PushColdStartNavigation();
+  Map<String, String>? _deferredUntilReady;
+  Future<void>? _flushInFlight;
+
   Future<void> bindAuthenticated(AuthState auth) async {
     if (!pushMessagingSupported || !auth.isAuthenticated) return;
     PushLog.info('bind: user=${auth.user?.id}');
     await _requestOsPermissionOnce();
     await _listen();
+    await _stageColdStartTap();
     await _register();
-    await _handleInitialMessage();
+    _scheduleFlushPending();
   }
 
   Future<void> unbind() async {
@@ -51,6 +63,7 @@ class PushCoordinator {
     _openedSub = null;
     _registeredSub = null;
     await _unregisterToken();
+    _deferredUntilReady = null;
   }
 
   Future<void> _requestOsPermissionOnce() async {
@@ -161,12 +174,51 @@ class PushCoordinator {
     PushLog.info('listening: onMessage, onMessageOpenedApp, onRegistered');
   }
 
-  Future<void> _handleInitialMessage() async {
+  Future<void> _stageColdStartTap() async {
     final message = await FirebaseMessaging.instance.getInitialMessage();
+    final fcm = message?.data.map((k, v) => MapEntry(k, v.toString()));
     PushLog.info(message == null ? 'initial message: none' : 'initial message: ${PushLog.message(message)}');
-    if (message != null) {
-      _navigateForMessage(message);
+    final local = await LocalNotifications.instance.readLaunchTapData();
+    if (local != null) {
+      PushLog.info('local launch tap: $local');
     }
+    _coldStart.stage(fcm: fcm, local: local);
+  }
+
+  void _scheduleFlushPending() {
+    _flushInFlight ??= _flushPendingWhenReady().whenComplete(() => _flushInFlight = null);
+  }
+
+  Future<void> _flushPendingWhenReady() async {
+    for (var attempt = 0; attempt < 80; attempt++) {
+      if (!_isNavigationReady()) {
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+        continue;
+      }
+      final coldStart = _coldStart.takePending();
+      final deferred = _deferredUntilReady;
+      _deferredUntilReady = null;
+      final data = coldStart ?? deferred;
+      if (data == null) return;
+      await _performNavigation(data);
+      return;
+    }
+    PushLog.info('pending push navigation: timed out waiting for navigator');
+  }
+
+  bool _isNavigationReady() {
+    if (!AppSplashSession.completed) return false;
+    final auth = _ref.read(authControllerProvider);
+    if (!auth.isAuthenticated) return false;
+    final context = rootNavigatorKey.currentContext;
+    if (context == null) return false;
+    final router = _ref.read(goRouterProvider);
+    final loc = router.routerDelegate.currentConfiguration.uri.path;
+    if (loc == AppStartupSplashPage.path || loc == AuthPaths.bootstrap) return false;
+    if (isAuthFlowLocation(loc) && loc != AuthPaths.changePassword && loc != AuthPaths.completeProfile) {
+      return false;
+    }
+    return true;
   }
 
   void _onForegroundMessage(RemoteMessage message) {
@@ -176,18 +228,57 @@ class PushCoordinator {
 
   void _onOpenedMessage(RemoteMessage message) {
     PushLog.info('opened from notification: ${PushLog.message(message)}');
-    _navigateForMessage(message);
-  }
-
-  void _navigateForMessage(RemoteMessage message) {
-    _navigateForData(message.data.map((k, v) => MapEntry(k, v.toString())));
+    final data = message.data.map((k, v) => MapEntry(k, v.toString()));
+    if (_coldStart.shouldIgnoreOpenedApp(data)) {
+      PushLog.info('opened from notification: skipped (cold start already handled)');
+      return;
+    }
+    _navigateForData(data);
   }
 
   void _navigateForData(Map<String, String> data) {
+    if (!_isNavigationReady()) {
+      _deferredUntilReady = Map<String, String>.from(data);
+      PushLog.info('navigate deferred until app ready');
+      _scheduleFlushPending();
+      return;
+    }
+    unawaited(_performNavigation(data));
+  }
+
+  Future<void> _performNavigation(Map<String, String> data) async {
     final location = resolvePushNavigationLocation(data);
     PushLog.info('navigate: type=${data['type']} -> $location');
+    if (isPushSubscriptionLocation(location)) {
+      await _presentSubscriptionPaywall();
+      return;
+    }
+    _ref.read(goRouterProvider).go(location);
+  }
+
+  Future<void> _presentSubscriptionPaywall() async {
     final router = _ref.read(goRouterProvider);
-    router.go(location);
+    final shellHome = authenticatedHomeForPath();
+    if (router.routerDelegate.currentConfiguration.uri.path != shellHome) {
+      router.go(shellHome);
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    }
+    final context = rootNavigatorKey.currentContext;
+    if (context == null) return;
+    for (var attempt = 0; attempt < 40; attempt++) {
+      final snap = _ref.read(subscriptionProvider).valueOrNull;
+      if (snap != null && snap.showSurfaces && snap.paywall != null) {
+        if (!context.mounted) return;
+        await PaywallLauncher.present(context);
+        return;
+      }
+      if (_ref.read(subscriptionProvider).hasError) {
+        PushLog.info('subscription paywall: load failed, skipping present');
+        return;
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+    PushLog.info('subscription paywall: subscription data not ready');
   }
 }
 

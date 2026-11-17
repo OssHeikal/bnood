@@ -15,6 +15,7 @@ class LocalNotifications {
 
   final _plugin = FlutterLocalNotificationsPlugin();
   bool _initialized = false;
+  bool _launchDetailsRead = false;
   void Function(Map<String, String> data)? _onTap;
 
   Future<void> init({required void Function(Map<String, String> data) onTap}) async {
@@ -68,17 +69,33 @@ class LocalNotifications {
     PushLog.info('local notification shown');
   }
 
-  void _handleResponse(NotificationResponse response) {
-    final raw = response.payload;
-    var data = <String, String>{};
-    if (raw != null && raw.isNotEmpty) {
-      try {
-        final decoded = jsonDecode(raw) as Map<String, dynamic>;
-        data = decoded.map((k, v) => MapEntry(k, v.toString()));
-      } catch (e, st) {
-        PushLog.error('local notification payload invalid', e, st);
-      }
+  /// Cold-start tap from a foreground-shown local notification (read once per process).
+  Future<Map<String, String>?> readLaunchTapData() async {
+    if (_launchDetailsRead) return null;
+    _launchDetailsRead = true;
+    try {
+      final details = await _plugin.getNotificationAppLaunchDetails();
+      if (details?.didNotificationLaunchApp != true) return null;
+      return _parsePayload(details!.notificationResponse?.payload);
+    } catch (e, st) {
+      PushLog.error('local notification launch details failed', e, st);
+      return null;
     }
+  }
+
+  Map<String, String>? _parsePayload(String? raw) {
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      final decoded = jsonDecode(raw) as Map<String, dynamic>;
+      return decoded.map((k, v) => MapEntry(k, v.toString()));
+    } catch (e, st) {
+      PushLog.error('local notification payload invalid', e, st);
+      return null;
+    }
+  }
+
+  void _handleResponse(NotificationResponse response) {
+    final data = _parsePayload(response.payload) ?? <String, String>{};
     PushLog.info('local notification tapped: $data');
     _onTap?.call(data);
   }

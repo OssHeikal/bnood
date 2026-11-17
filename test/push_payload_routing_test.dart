@@ -1,5 +1,4 @@
 import 'package:bnood/core/push/push_payload_routing.dart';
-import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -14,14 +13,14 @@ void main() {
     expect(resolvePushNavigationLocation({'type': 'low_balance'}), '/home');
   });
 
-  test('subscription_expiry routes to profile', () {
-    expect(resolvePushNavigationLocation({'type': 'subscription_expiry'}), AuthPaths.profile);
+  test('subscription_expiry routes to paywall', () {
+    expect(resolvePushNavigationLocation({'type': 'subscription_expiry'}), pushSubscriptionLocation);
   });
 
-  test('broadcast target subscription routes to profile', () {
+  test('broadcast target subscription routes to paywall', () {
     expect(
       resolvePushNavigationLocation({'type': 'admin_broadcast', 'target': 'subscription'}),
-      AuthPaths.profile,
+      pushSubscriptionLocation,
     );
   });
 
