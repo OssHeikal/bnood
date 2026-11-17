@@ -8,9 +8,8 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../app/router.dart';
 import '../../features/auth/auth_controller.dart';
 import '../../features/auth/auth_state.dart';
-import '../../l10n/app_localizations.dart';
 import '../providers/settings_provider.dart';
-import '../widgets/app_toaster.dart';
+import 'local_notifications.dart';
 import 'push_payload_routing.dart';
 import 'push_log.dart';
 import 'push_permission_store.dart';
@@ -93,7 +92,7 @@ class PushCoordinator {
 
   /// FCM on iOS needs the APNs token first; it can arrive a moment after launch.
   Future<bool> _waitForApnsToken() async {
-    for (var attempt = 0; attempt < 5; attempt++) {
+    for (var attempt = 0; attempt < 15; attempt++) {
       final apns = await FirebaseMessaging.instance.getAPNSToken();
       if (apns != null && apns.isNotEmpty) {
         PushLog.info('APNs token: ${PushLog.id(apns)}');
@@ -155,6 +154,7 @@ class PushCoordinator {
     await _openedSub?.cancel();
     await _registeredSub?.cancel();
 
+    await LocalNotifications.instance.init(onTap: _navigateForData);
     _foregroundSub = FirebaseMessaging.onMessage.listen(_onForegroundMessage);
     _openedSub = FirebaseMessaging.onMessageOpenedApp.listen(_onOpenedMessage);
     _registeredSub = FirebaseMessaging.instance.onRegistered.listen(_onRegistered);
@@ -171,21 +171,7 @@ class PushCoordinator {
 
   void _onForegroundMessage(RemoteMessage message) {
     PushLog.info('foreground message: ${PushLog.message(message)}');
-    final notification = message.notification;
-    final title = notification?.title;
-    final body = notification?.body ?? '';
-    if (body.isEmpty && (title == null || title.isEmpty)) return;
-
-    final router = _ref.read(goRouterProvider);
-    final ctx = router.routerDelegate.navigatorKey.currentContext;
-    final openLabel = ctx != null ? AppLocalizations.of(ctx).pushNotificationOpenAction : 'Open';
-
-    AppToaster.show(
-      body.isEmpty ? (title ?? '') : body,
-      title: body.isEmpty ? null : title,
-      kind: ToastKind.info,
-      action: ToastAction(label: openLabel, onPressed: () => _navigateForMessage(message)),
-    );
+    LocalNotifications.instance.showRemote(message);
   }
 
   void _onOpenedMessage(RemoteMessage message) {
@@ -194,7 +180,10 @@ class PushCoordinator {
   }
 
   void _navigateForMessage(RemoteMessage message) {
-    final data = message.data.map((k, v) => MapEntry(k, v.toString()));
+    _navigateForData(message.data.map((k, v) => MapEntry(k, v.toString())));
+  }
+
+  void _navigateForData(Map<String, String> data) {
     final location = resolvePushNavigationLocation(data);
     PushLog.info('navigate: type=${data['type']} -> $location');
     final router = _ref.read(goRouterProvider);
