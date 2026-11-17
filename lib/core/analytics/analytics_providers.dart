@@ -2,14 +2,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/auth/auth_controller.dart';
 import '../../features/auth/auth_state.dart';
+import '../push/push_platform.dart';
 import 'analytics_config.dart';
 import 'analytics_service.dart';
 import 'analytics_sink.dart';
 import 'analytics_user.dart';
 import 'composite_analytics.dart';
+import 'firebase_analytics_gateway.dart';
+import 'firebase_analytics_gateway_impl.dart';
 import 'noop_analytics_service.dart';
+import 'remote_firebase_analytics_sink.dart';
 
-final analyticsSinksProvider = Provider<List<AnalyticsSink>>((ref) => const []);
+/// Null when Firebase is not initialized on this platform (web, desktop, tests).
+final firebaseAnalyticsGatewayProvider = Provider<FirebaseAnalyticsGateway?>((ref) {
+  if (!pushMessagingSupported) return null;
+  return FirebaseAnalyticsGatewayImpl();
+});
+
+final analyticsSinksProvider = Provider<List<AnalyticsSink>>((ref) {
+  final gateway = ref.watch(firebaseAnalyticsGatewayProvider);
+  if (gateway == null) return const [];
+  return [RemoteFirebaseAnalyticsSink(gateway: gateway)];
+});
 
 final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
   if (!AnalyticsConfig.enabled) {
