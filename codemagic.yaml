@@ -78,10 +78,13 @@ workflows:
           fi
           BUILD_NUMBER=$((LATEST_BUILD + 1))
           echo "Building $VERSION_NAME ($BUILD_NUMBER)"
+          # SENTRY_DSN: set in Codemagic (e.g. bnood_release_config group); never commit the secret value here.
           flutter build ipa --release \
             --build-name="$VERSION_NAME" \
             --build-number="$BUILD_NUMBER" \
             --dart-define=BNOOD_API_BASE_URL="$BNOOD_API_BASE_URL" \
+            --dart-define=BNOOD_APP_ENV=production \
+            --dart-define=SENTRY_DSN="$SENTRY_DSN" \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
@@ -155,10 +158,13 @@ workflows:
           fi
           BUILD_NUMBER=$((LATEST_BUILD + 1))
           echo "Building $VERSION_NAME ($BUILD_NUMBER)"
+          # SENTRY_DSN: set in Codemagic (e.g. bnood_release_config group); never commit the secret value here.
           flutter build appbundle --release \
             --build-name="$VERSION_NAME" \
             --build-number="$BUILD_NUMBER" \
-            --dart-define=BNOOD_API_BASE_URL="$BNOOD_API_BASE_URL"
+            --dart-define=BNOOD_API_BASE_URL="$BNOOD_API_BASE_URL" \
+            --dart-define=BNOOD_APP_ENV=production \
+            --dart-define=SENTRY_DSN="$SENTRY_DSN"
     artifacts:
       - build/**/outputs/**/*.aab
       - build/**/outputs/**/mapping.txt

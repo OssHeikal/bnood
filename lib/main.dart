@@ -2,10 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'app/bnood_app.dart';
 import 'core/error_reporting/error_reporting_providers.dart';
 import 'core/error_reporting/install_error_handlers.dart';
+import 'core/error_reporting/sentry_bootstrap.dart';
 import 'core/prefs/app_settings_store.dart';
 import 'core/providers/settings_provider.dart';
 import 'core/push/push_background.dart';
@@ -18,6 +20,10 @@ Future<void> main() async {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
+  final packageInfo = await PackageInfo.fromPlatform();
+  final release = '${packageInfo.version}+${packageInfo.buildNumber}';
+  await bootstrapSentry(release: release);
+
   final bootstrap = await AppSettingsStore.load();
   final container = ProviderContainer(
     overrides: [appSettingsBootstrapProvider.overrideWithValue(bootstrap)],
