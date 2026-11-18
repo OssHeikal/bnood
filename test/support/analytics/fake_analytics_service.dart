@@ -1,6 +1,6 @@
-import 'package:bnood/core/analytics/analytics_event.dart';
-import 'package:bnood/core/analytics/analytics_service.dart';
-import 'package:bnood/core/analytics/analytics_user.dart';
+import 'package:bnood/core/analytics/domain/analytics_event.dart';
+import 'package:bnood/core/analytics/domain/analytics_service.dart';
+import 'package:bnood/core/analytics/domain/analytics_user.dart';
 
 class FakeAnalyticsService implements AnalyticsService {
   final List<AnalyticsEvent> events = [];

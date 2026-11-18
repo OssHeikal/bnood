@@ -1,10 +1,10 @@
-import 'package:bnood/core/analytics/analytics_event.dart';
-import 'package:bnood/core/analytics/analytics_user.dart';
-import 'package:bnood/core/analytics/ga_user_properties.dart';
-import 'package:bnood/core/analytics/remote_firebase_analytics_sink.dart';
+import 'package:bnood/core/analytics/domain/analytics_event.dart';
+import 'package:bnood/core/analytics/domain/analytics_user.dart';
+import 'package:bnood/core/analytics/firebase/ga_user_properties.dart';
+import 'package:bnood/core/analytics/firebase/remote_firebase_analytics_sink.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../support/fake_firebase_analytics_gateway.dart';
+import '../../../support/analytics/fake_firebase_analytics_gateway.dart';
 
 void main() {
   late FakeFirebaseAnalyticsGateway gateway;

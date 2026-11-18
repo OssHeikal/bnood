@@ -1,4 +1,4 @@
-import 'analytics_event.dart';
+import '../domain/analytics_event.dart';
 
 const int _gaMaxEventNameLength = 40;
 const int _gaMaxParamNameLength = 40;

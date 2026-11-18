@@ -1,6 +1,6 @@
-import 'package:bnood/core/analytics/analytics_route_observer.dart';
-import 'package:bnood/core/analytics/analytics_screen_name.dart';
-import 'package:bnood/core/analytics/analytics_screen_view_tracker.dart';
+import 'package:bnood/core/analytics/routing/analytics_route_observer.dart';
+import 'package:bnood/core/analytics/routing/analytics_screen_name.dart';
+import 'package:bnood/core/analytics/routing/analytics_screen_view_tracker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

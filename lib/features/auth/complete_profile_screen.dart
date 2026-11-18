@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/analytics/analytics_feature_hooks.dart';
+import '../../core/analytics/providers/analytics_feature_hooks.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_toaster.dart';

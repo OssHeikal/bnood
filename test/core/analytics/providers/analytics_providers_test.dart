@@ -1,15 +1,15 @@
-import 'package:bnood/core/analytics/analytics_config.dart';
-import 'package:bnood/core/analytics/analytics_providers.dart';
-import 'package:bnood/core/analytics/analytics_user.dart';
-import 'package:bnood/core/analytics/noop_analytics_service.dart';
+import 'package:bnood/core/analytics/domain/analytics_config.dart';
+import 'package:bnood/core/analytics/domain/analytics_user.dart';
+import 'package:bnood/core/analytics/domain/noop_analytics_service.dart';
+import 'package:bnood/core/analytics/providers/analytics_providers.dart';
 import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../fake_analytics_service.dart';
-import '../../support/fake_session_store.dart';
+import '../../../support/analytics/fake_analytics_service.dart';
+import '../../../support/fake_session_store.dart';
 
 User _user(String id) => User(
       id: id,

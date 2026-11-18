@@ -1,10 +1,10 @@
-import 'package:bnood/core/analytics/analytics_event.dart';
-import 'package:bnood/core/analytics/analytics_feature_hooks.dart';
-import 'package:bnood/core/analytics/analytics_providers.dart';
+import 'package:bnood/core/analytics/domain/analytics_event.dart';
+import 'package:bnood/core/analytics/providers/analytics_feature_hooks.dart';
+import 'package:bnood/core/analytics/providers/analytics_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../fake_analytics_service.dart';
+import '../../../support/analytics/fake_analytics_service.dart';
 
 void main() {
   late FakeAnalyticsService fake;

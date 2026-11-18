@@ -1,4 +1,4 @@
-import 'package:bnood/core/analytics/ga_user_properties.dart';
+import 'package:bnood/core/analytics/firebase/ga_user_properties.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

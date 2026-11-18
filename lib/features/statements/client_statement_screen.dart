@@ -10,7 +10,7 @@ import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart' show LedgerMath, StatementPeriodTotals;
 import '../../core/money/period_bounds.dart';
 import '../../core/clients/client_statement_record.dart';
-import '../../core/analytics/analytics_feature_hooks.dart';
+import '../../core/analytics/providers/analytics_feature_hooks.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_error_handler.dart';
 import '../../core/clients/clients_providers.dart';

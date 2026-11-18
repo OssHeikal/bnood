@@ -1,6 +1,6 @@
-import 'package:bnood/core/analytics/analytics_event.dart';
-import 'package:bnood/core/analytics/analytics_sink.dart';
-import 'package:bnood/core/analytics/analytics_user.dart';
+import 'package:bnood/core/analytics/domain/analytics_event.dart';
+import 'package:bnood/core/analytics/domain/analytics_sink.dart';
+import 'package:bnood/core/analytics/domain/analytics_user.dart';
 
 class PolicyRecordingAnalyticsSink implements AnalyticsSink {
   PolicyRecordingAnalyticsSink(this.acceptPolicy);
