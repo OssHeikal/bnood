@@ -121,6 +121,7 @@ workflows:
         - bnood_android_release
       groups:
         - bnood_google_play
+        - bnood_release_config
       vars:
         PACKAGE_NAME: com.bnood.app
         BNOOD_API_BASE_URL: https://bnoodapp.com/api
