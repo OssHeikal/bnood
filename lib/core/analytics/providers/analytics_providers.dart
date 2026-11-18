@@ -9,6 +9,7 @@ import '../appsflyer/appsflyer_gateway_impl.dart';
 import '../appsflyer/remote_appsflyer_analytics_sink.dart';
 import '../domain/analytics_config.dart';
 import '../domain/analytics_event.dart';
+import '../domain/analytics_log.dart';
 import '../domain/analytics_service.dart';
 import '../domain/analytics_sink.dart';
 import '../domain/analytics_user.dart';
@@ -54,10 +55,12 @@ final analyticsSinksProvider = Provider<List<AnalyticsSink>>((ref) {
 
 final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
   if (!AnalyticsConfig.enabled) {
+    AnalyticsLog.info('off (pass --dart-define=ANALYTICS_ENABLED=true)');
     return const NoopAnalyticsService();
   }
   final sinks = ref.watch(analyticsSinksProvider);
   if (sinks.isEmpty) {
+    AnalyticsLog.info('no sinks');
     return const NoopAnalyticsService();
   }
   return CompositeAnalytics(sinks: sinks);
