@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sentry_dio/sentry_dio.dart';
 
 import '../config/api_config.dart';
+import '../error_reporting/sentry_config.dart';
 import '../storage/session_store.dart';
 import 'accept_language_interceptor.dart';
 import 'api_log_interceptor.dart';
@@ -25,6 +27,9 @@ Dio createAppDio(SessionStore store) {
   dio.interceptors.add(AuthInterceptor(store));
   if (kDebugMode) {
     dio.interceptors.add(ApiLogInterceptor());
+  }
+  if (SentryConfig.isEnabled) {
+    dio.addSentry(captureFailedRequests: false);
   }
   return dio;
 }

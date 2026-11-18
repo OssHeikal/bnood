@@ -1,5 +1,13 @@
 # Bnood — store releases: auto on v* tags, or manual Start build (see docs/codemagic-setup.md).
 
+definitions:
+  scripts:
+    - &sentry_symbol_upload
+      name: Upload Sentry debug symbols
+      script: |
+        set -euo pipefail
+        bash tool/codemagic/sentry_upload_symbols.sh
+
 workflows:
   ios-release:
     name: iOS Release (TestFlight)
@@ -19,7 +27,7 @@ workflows:
         - bnood_release_config
       vars:
         BUNDLE_ID: com.bnood.app
-        BNOOD_API_BASE_URL: https://bnood.etbaaly.com/api
+        BNOOD_API_BASE_URL: https://bnoodapp.com/api
         XCODE_WORKSPACE: ios/Runner.xcworkspace
         XCODE_SCHEME: Runner
       flutter: 3.41.1
@@ -77,12 +85,20 @@ workflows:
             LATEST_BUILD=0
           fi
           BUILD_NUMBER=$((LATEST_BUILD + 1))
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> "$CM_ENV"
           echo "Building $VERSION_NAME ($BUILD_NUMBER)"
+          # SENTRY_DSN, APPSFLYER_DEV_KEY: bnood_release_config group. SENTRY_AUTH_TOKEN: same group (symbol upload only on v* tags).
+          source tool/codemagic/release_build_env.sh
           flutter build ipa --release \
             --build-name="$VERSION_NAME" \
             --build-number="$BUILD_NUMBER" \
+            "${FLUTTER_SENTRY_SYMBOL_FLAGS[@]}" \
             --dart-define=BNOOD_API_BASE_URL="$BNOOD_API_BASE_URL" \
+            --dart-define=BNOOD_APP_ENV=production \
+            --dart-define=SENTRY_DSN="$SENTRY_DSN" \
+            --dart-define=APPSFLYER_DEV_KEY="$APPSFLYER_DEV_KEY" \
             --export-options-plist=/Users/builder/export_options.plist
+      - *sentry_symbol_upload
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
@@ -107,7 +123,7 @@ workflows:
         - bnood_google_play
       vars:
         PACKAGE_NAME: com.bnood.app
-        BNOOD_API_BASE_URL: https://bnood.etbaaly.com/api
+        BNOOD_API_BASE_URL: https://bnoodapp.com/api
         GOOGLE_PLAY_TRACK: internal
       flutter: 3.41.1
     triggering:
@@ -154,11 +170,19 @@ workflows:
             LATEST_BUILD=0
           fi
           BUILD_NUMBER=$((LATEST_BUILD + 1))
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> "$CM_ENV"
           echo "Building $VERSION_NAME ($BUILD_NUMBER)"
+          # SENTRY_DSN, APPSFLYER_DEV_KEY: bnood_release_config group. SENTRY_AUTH_TOKEN: same group (symbol upload only on v* tags).
+          source tool/codemagic/release_build_env.sh
           flutter build appbundle --release \
             --build-name="$VERSION_NAME" \
             --build-number="$BUILD_NUMBER" \
-            --dart-define=BNOOD_API_BASE_URL="$BNOOD_API_BASE_URL"
+            "${FLUTTER_SENTRY_SYMBOL_FLAGS[@]}" \
+            --dart-define=BNOOD_API_BASE_URL="$BNOOD_API_BASE_URL" \
+            --dart-define=BNOOD_APP_ENV=production \
+            --dart-define=SENTRY_DSN="$SENTRY_DSN" \
+            --dart-define=APPSFLYER_DEV_KEY="$APPSFLYER_DEV_KEY"
+      - *sentry_symbol_upload
     artifacts:
       - build/**/outputs/**/*.aab
       - build/**/outputs/**/mapping.txt

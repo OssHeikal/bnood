@@ -45,6 +45,11 @@ dependencies:
   firebase_messaging: ^17.0.1
   flutter_local_notifications: ^22.3.3
   firebase_analytics: ^13.0.1
+  sentry_flutter: ^8.14.2
+  sentry_dio: ^8.14.2
+  firebase_crashlytics: ^6.0.1
+  appsflyer_sdk: ^7.0.4
+  app_tracking_transparency: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +59,7 @@ dev_dependencies:
   build_runner: ^2.4.13
   flutter_gen: ^5.15.0
   flutter_gen_runner: ^5.15.0
+  sentry_dart_plugin: ^3.5.0
 
 flutter_gen:
   output: lib/core/resources/gen/
@@ -62,6 +68,17 @@ flutter_gen:
     flutter_svg: true
   assets:
     enabled: true
+
+# Sentry symbol upload (Codemagic): auth via SENTRY_AUTH_TOKEN only — never commit a token.
+sentry:
+  project: bnood-flutter
+  org: etbaaly
+  url: https://de.sentry.io/
+  upload_debug_symbols: true
+  upload_source_maps: false
+  symbols_path: build/app/symbols
+  dart_symbol_map_path: build/app/obfuscation.map.json
+  commits: false
 
 flutter:
   uses-material-design: true

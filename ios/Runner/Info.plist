@@ -34,6 +34,8 @@
 	<string>Bnood needs the camera to photograph receipt images for vouchers.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Bnood needs photo library access so you can attach receipt images from your gallery to vouchers.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Allowing this helps us measure how people discover Bnood and improve our marketing. We do not sell your data.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

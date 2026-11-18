@@ -12,9 +12,13 @@ import 'analytics_track.dart';
 import 'analytics_sink.dart';
 import 'analytics_user.dart';
 import 'composite_analytics.dart';
+import 'appsflyer_bootstrap.dart';
+import 'appsflyer_gateway.dart';
+import 'appsflyer_gateway_impl.dart';
 import 'firebase_analytics_gateway.dart';
 import 'firebase_analytics_gateway_impl.dart';
 import 'noop_analytics_service.dart';
+import 'remote_appsflyer_analytics_sink.dart';
 import 'remote_firebase_analytics_sink.dart';
 
 final analyticsScreenViewTrackerProvider = Provider<AnalyticsScreenViewTracker>((ref) {
@@ -29,10 +33,24 @@ final firebaseAnalyticsGatewayProvider = Provider<FirebaseAnalyticsGateway?>((re
   return FirebaseAnalyticsGatewayImpl();
 });
 
+final appsFlyerGatewayProvider = Provider<AppsFlyerGateway?>((ref) {
+  if (!pushMessagingSupported) return null;
+  if (AnalyticsConfig.appsFlyerDevKey.isEmpty) return null;
+  if (!AppsFlyerBootstrap.ready) return null;
+  return AppsFlyerGatewayImpl();
+});
+
 final analyticsSinksProvider = Provider<List<AnalyticsSink>>((ref) {
-  final gateway = ref.watch(firebaseAnalyticsGatewayProvider);
-  if (gateway == null) return const [];
-  return [RemoteFirebaseAnalyticsSink(gateway: gateway)];
+  final sinks = <AnalyticsSink>[];
+  final firebase = ref.watch(firebaseAnalyticsGatewayProvider);
+  if (firebase != null) {
+    sinks.add(RemoteFirebaseAnalyticsSink(gateway: firebase));
+  }
+  final appsFlyer = ref.watch(appsFlyerGatewayProvider);
+  if (appsFlyer != null) {
+    sinks.add(RemoteAppsFlyerAnalyticsSink(gateway: appsFlyer));
+  }
+  return sinks;
 });
 
 final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
