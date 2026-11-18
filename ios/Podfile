@@ -1,6 +1,10 @@
 # Uncomment this line to define a global platform for your project
 platform :ios, '15.0'
 
+# firebase_core pins 12.19.3. That build is not on CocoaPods trunk.
+# Last published FirebaseAnalytics is 12.19.0 (publishing stopped October 2026).
+$FirebaseSDKVersion = '12.19.0'
+
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -48,5 +52,15 @@ post_install do |installer|
   end
   installer.pods_project.build_configurations.each do |config|
     config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+  end
+
+  # Plugin invokes this via a shell string. The space in "flutter projects"
+  # truncates the path, so the upload-symbols phase never lands.
+  crashlytics_script = File.expand_path(
+    '.symlinks/plugins/firebase_crashlytics/ios/crashlytics_add_upload_symbols',
+    __dir__,
+  )
+  if File.exist?(crashlytics_script)
+    system('ruby', crashlytics_script, '-f', '-p', __dir__, '-n', 'Runner.xcodeproj')
   end
 end
