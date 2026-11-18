@@ -4,8 +4,8 @@ import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:flutter/foundation.dart';
 
-import 'analytics_config.dart';
-import '../push/push_platform.dart';
+import '../../push/push_platform.dart';
+import '../domain/analytics_config.dart';
 
 abstract final class AppsFlyerBootstrap {
   static bool ready = false;

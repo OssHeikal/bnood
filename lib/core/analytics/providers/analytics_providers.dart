@@ -1,25 +1,24 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../features/auth/auth_controller.dart';
-import '../../features/auth/auth_state.dart';
-import '../push/push_platform.dart';
-import 'analytics_config.dart';
-import 'analytics_event.dart';
-import 'analytics_route_observer.dart';
-import 'analytics_screen_view_tracker.dart';
-import 'analytics_service.dart';
+import '../../../features/auth/auth_controller.dart';
+import '../../../features/auth/auth_state.dart';
+import '../../push/push_platform.dart';
+import '../appsflyer/appsflyer_bootstrap.dart';
+import '../appsflyer/appsflyer_gateway.dart';
+import '../appsflyer/appsflyer_gateway_impl.dart';
+import '../appsflyer/remote_appsflyer_analytics_sink.dart';
+import '../domain/analytics_config.dart';
+import '../domain/analytics_event.dart';
+import '../domain/analytics_service.dart';
+import '../domain/analytics_sink.dart';
+import '../domain/analytics_user.dart';
+import '../domain/composite_analytics.dart';
+import '../domain/noop_analytics_service.dart';
+import '../firebase/firebase_analytics_gateway.dart';
+import '../firebase/firebase_analytics_gateway_impl.dart';
+import '../firebase/remote_firebase_analytics_sink.dart';
+import '../routing/analytics_screen_view_tracker.dart';
 import 'analytics_track.dart';
-import 'analytics_sink.dart';
-import 'analytics_user.dart';
-import 'composite_analytics.dart';
-import 'appsflyer_bootstrap.dart';
-import 'appsflyer_gateway.dart';
-import 'appsflyer_gateway_impl.dart';
-import 'firebase_analytics_gateway.dart';
-import 'firebase_analytics_gateway_impl.dart';
-import 'noop_analytics_service.dart';
-import 'remote_appsflyer_analytics_sink.dart';
-import 'remote_firebase_analytics_sink.dart';
 
 final analyticsScreenViewTrackerProvider = Provider<AnalyticsScreenViewTracker>((ref) {
   return AnalyticsScreenViewTracker((screenName) {

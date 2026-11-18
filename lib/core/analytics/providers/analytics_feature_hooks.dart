@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'analytics_event.dart';
+import '../domain/analytics_event.dart';
 import 'analytics_track.dart';
 
 /// After a successful remote client create API response.

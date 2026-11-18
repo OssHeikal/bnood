@@ -1,4 +1,4 @@
-import 'package:bnood/core/analytics/firebase_analytics_gateway.dart';
+import 'package:bnood/core/analytics/firebase/firebase_analytics_gateway.dart';
 
 class LoggedGaEvent {
   const LoggedGaEvent({required this.name, this.parameters});

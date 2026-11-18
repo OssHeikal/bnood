@@ -1,4 +1,4 @@
-import 'analytics_event.dart';
+import '../domain/analytics_event.dart';
 
 /// AppsFlyer standard event name for registration complete.
 const String appsFlyerCompleteRegistrationEvent = 'af_complete_registration';

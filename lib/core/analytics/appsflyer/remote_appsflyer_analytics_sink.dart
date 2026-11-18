@@ -1,7 +1,7 @@
-import 'analytics_event.dart';
-import 'analytics_sink.dart';
-import 'analytics_user.dart';
-import 'analytics_user_vendor_data.dart';
+import '../domain/analytics_event.dart';
+import '../domain/analytics_sink.dart';
+import '../domain/analytics_user.dart';
+import '../domain/analytics_user_vendor_data.dart';
 import 'appsflyer_event_mapping.dart';
 import 'appsflyer_gateway.dart';
 

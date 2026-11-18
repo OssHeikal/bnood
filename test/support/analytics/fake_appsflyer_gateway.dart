@@ -1,4 +1,4 @@
-import 'package:bnood/core/analytics/appsflyer_gateway.dart';
+import 'package:bnood/core/analytics/appsflyer/appsflyer_gateway.dart';
 
 class FakeAppsFlyerGateway implements AppsFlyerGateway {
   final List<({String name, Map<String, dynamic>? parameters})> events = [];

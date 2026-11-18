@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'app/bnood_app.dart';
-import 'core/analytics/appsflyer_bootstrap.dart';
+import 'core/analytics/appsflyer/appsflyer_bootstrap.dart';
 import 'core/error_reporting/error_reporting_providers.dart';
 import 'core/error_reporting/install_error_handlers.dart';
 import 'core/error_reporting/crashlytics_bootstrap.dart';

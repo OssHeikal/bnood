@@ -1,9 +1,9 @@
-import 'package:bnood/core/analytics/analytics_accept_policies.dart';
-import 'package:bnood/core/analytics/analytics_event.dart';
-import 'package:bnood/core/analytics/composite_analytics.dart';
+import 'package:bnood/core/analytics/domain/analytics_accept_policies.dart';
+import 'package:bnood/core/analytics/domain/analytics_event.dart';
+import 'package:bnood/core/analytics/domain/composite_analytics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../support/policy_recording_analytics_sink.dart';
+import '../../../support/analytics/policy_recording_analytics_sink.dart';
 
 void main() {
   late PolicyRecordingAnalyticsSink firebaseSink;

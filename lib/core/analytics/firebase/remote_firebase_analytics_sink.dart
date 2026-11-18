@@ -1,7 +1,7 @@
-import 'analytics_event.dart';
-import 'analytics_sink.dart';
-import 'analytics_user.dart';
-import 'analytics_user_vendor_data.dart';
+import '../domain/analytics_event.dart';
+import '../domain/analytics_sink.dart';
+import '../domain/analytics_user.dart';
+import '../domain/analytics_user_vendor_data.dart';
 import 'firebase_analytics_gateway.dart';
 import 'firebase_ga_event_mapping.dart';
 import 'ga_user_properties.dart';

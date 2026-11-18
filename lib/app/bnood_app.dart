@@ -7,7 +7,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/analytics/analytics_providers.dart';
+import '../core/analytics/providers/analytics_providers.dart';
 import '../core/api/api_accept_language.dart';
 import '../core/error_reporting/error_reporting_lifecycle.dart';
 import '../core/providers/settings_provider.dart';

@@ -1,15 +1,15 @@
-import 'package:bnood/core/analytics/analytics_config.dart';
-import 'package:bnood/core/analytics/analytics_event.dart';
-import 'package:bnood/core/analytics/analytics_providers.dart';
-import 'package:bnood/core/analytics/analytics_user.dart';
-import 'package:bnood/core/analytics/appsflyer_bootstrap.dart';
-import 'package:bnood/core/analytics/appsflyer_event_mapping.dart';
-import 'package:bnood/core/analytics/ga_user_properties.dart';
-import 'package:bnood/core/analytics/remote_appsflyer_analytics_sink.dart';
+import 'package:bnood/core/analytics/appsflyer/appsflyer_bootstrap.dart';
+import 'package:bnood/core/analytics/appsflyer/appsflyer_event_mapping.dart';
+import 'package:bnood/core/analytics/appsflyer/remote_appsflyer_analytics_sink.dart';
+import 'package:bnood/core/analytics/domain/analytics_config.dart';
+import 'package:bnood/core/analytics/domain/analytics_event.dart';
+import 'package:bnood/core/analytics/domain/analytics_user.dart';
+import 'package:bnood/core/analytics/firebase/ga_user_properties.dart';
+import 'package:bnood/core/analytics/providers/analytics_providers.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../support/fake_appsflyer_gateway.dart';
+import '../../../support/analytics/fake_appsflyer_gateway.dart';
 
 void main() {
   late FakeAppsFlyerGateway gateway;
