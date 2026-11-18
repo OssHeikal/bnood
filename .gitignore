@@ -25,6 +25,8 @@ build/
 coverage/
 
 # Secrets
+.env.local
+.env.*.local
 *.jks
 *.keystore
 test/failures/
