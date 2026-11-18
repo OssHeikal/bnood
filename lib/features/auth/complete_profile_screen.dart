@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics/providers/analytics_feature_hooks.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_toaster.dart';
@@ -27,6 +28,7 @@ Future<void> _submitCompleteProfile(BuildContext context, WidgetRef ref) async {
   final error = await ref.read(authControllerProvider.notifier).saveProfileName(fields.name.text);
   if (!context.mounted) return;
   if (error == null) {
+    trackSignupCompletedAfterRegistration(ref);
     context.go(authenticatedHomeFor(ref.read(authControllerProvider).user!));
     return;
   }

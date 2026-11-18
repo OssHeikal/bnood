@@ -1,0 +1,42 @@
+---
+description: Git branching and promotion flow for Bnood — use for feature/fix/hotfix branches and develop/staging/main merges
+alwaysApply: false
+---
+
+# Git workflow (Bnood)
+
+## Branches
+
+| Branch | Role |
+|--------|------|
+| **`develop`** | Daily integration. `feature/*` and `fix/*` land here. |
+| **`staging`** | QA / test builds. Receives merges from `develop` only. |
+| **`main`** | Production. Receives merges from `staging` only. Release tags `v*` are created on `main` only. |
+| **`feature/<name>`** | Branch from `develop` → merge back to `develop` (`--no-ff`). |
+| **`fix/<name>`** | Branch from `develop` → merge back to `develop` (`--no-ff`). |
+| **`hotfix/<name>`** | Branch from `main` → merge to **`main`**, **`staging`**, and **`develop`** (in that order). |
+
+Retired: `migration/remote` — do not use.
+
+## Promotion
+
+```
+feature/*, fix/*  →  develop  →  staging  →  main  →  tag vX.Y.Z
+```
+
+- **No direct commits** on `main` or `staging` (merge commits only).
+- **QA builds:** merge `develop` → `staging` when a test build is needed.
+- **Production:** merge `staging` → `main`, then tag on `main` when the owner approves (tags trigger Codemagic — see `release-ci.mdc`).
+
+## Hotfix
+
+1. Branch `hotfix/<name>` from `main`.
+2. Merge to `main` (production fix).
+3. Merge `main` into `staging` (or merge hotfix branch to `staging` with same commit).
+4. Merge into `develop` so integration branch stays current.
+
+## Agent / automation constraints
+
+- Do not `git push --force` or `reset --hard` on shared branches.
+- Do not push `v*` tags unless the owner explicitly asks.
+- Never commit secrets — see `release-ci.mdc` safety section.

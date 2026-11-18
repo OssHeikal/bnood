@@ -10,6 +10,7 @@ import '../../core/database/database.dart';
 import '../../core/money/ledger_math.dart' show LedgerMath, StatementPeriodTotals;
 import '../../core/money/period_bounds.dart';
 import '../../core/clients/client_statement_record.dart';
+import '../../core/analytics/providers/analytics_feature_hooks.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_error_handler.dart';
 import '../../core/clients/clients_providers.dart';
@@ -47,6 +48,8 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
   late PeriodBounds _bounds = StatementPeriodLogic.wholePeriodBounds();
   StatementExportRecord? _lastExport;
   bool _exporting = false;
+  int _exportGeneration = 0;
+  int? _statementShareTrackedGeneration;
   bool _prefsAvailable = true;
   List<Transaction> _allRows = const [];
   DateTime? _remoteNaturalStart;
@@ -176,8 +179,15 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
       setState(() {
         _prefsAvailable = true;
         _lastExport = store.read(workspaceId: ws, kind: StatementEntityKind.client, entityId: widget.clientId);
+        _exportGeneration++;
       });
     }
+  }
+
+  void _trackStatementShareWhenSheetClosed() {
+    if (_statementShareTrackedGeneration == _exportGeneration) return;
+    _statementShareTrackedGeneration = _exportGeneration;
+    trackClientStatementShared(ref);
   }
 
   @override
@@ -475,6 +485,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
     final shareOrigin = StatementPdfExport.sharePositionOriginFor(_sharePdfButtonKey.currentContext ?? context);
     try {
       await StatementPdfExport.shareFromFile(path, fileName, sharePositionOrigin: shareOrigin);
+      _trackStatementShareWhenSheetClosed();
     } catch (e, st) {
       FlutterError.reportError(FlutterErrorDetails(exception: e, stack: st, library: 'statement_share'));
       if (mounted) {
@@ -532,6 +543,7 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
     try {
       final shareOrigin = StatementPdfExport.sharePositionOriginFor(_sharePdfButtonKey.currentContext ?? context);
       await StatementPdfExport.shareFromFile(path, fileName, sharePositionOrigin: shareOrigin);
+      _trackStatementShareWhenSheetClosed();
     } catch (e, st) {
       FlutterError.reportError(FlutterErrorDetails(exception: e, stack: st, library: 'statement_share'));
       if (mounted) {
