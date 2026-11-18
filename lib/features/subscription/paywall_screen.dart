@@ -1,5 +1,6 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/layout/app_form_route_canvas.dart';
@@ -70,7 +71,14 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   child: Align(
                     alignment: AlignmentDirectional.centerStart,
                     child: IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () {
+                        final navigator = Navigator.of(context);
+                        if (navigator.canPop()) {
+                          navigator.pop();
+                        } else {
+                          context.go('/home');
+                        }
+                      },
                       icon: const Icon(Icons.close, size: 22),
                       color: const Color(0xFF17141C),
                     ),
