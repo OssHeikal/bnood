@@ -7,17 +7,19 @@ alwaysApply: false
 
 ## Branching
 
-- **`main`** — what ships to App Store / Play. Release tags are created only from `main`.
-- **`develop`** — daily integration work.
-- **`feature/<name>`** — branch from `develop`, merge back to `develop`.
-- **`hotfix/<name>`** — branch from `main`, merge to **`main`** and **`develop`**.
-- **`migration/remote`** — retired; do not use for new work.
+Full promotion flow: [git-workflow.mdc](git-workflow.mdc).
+
+- **`develop`** — integration; `feature/*` and `fix/*` merge here.
+- **`staging`** — QA / test builds; merges from `develop` only.
+- **`main`** — production; merges from `staging` only. Release tags `v*` are created on `main` only.
+- **`hotfix/<name>`** — branch from `main`, merge to **`main`**, **`staging`**, and **`develop`**.
 
 ## Release flow
 
-1. Merge `develop` → `main` (owner approves push).
-2. On `main`: `git tag vX.Y.Z` (semver: patch = fix, minor = feature, major = breaking/product shift).
-3. `git push origin vX.Y.Z` only when the owner asks — tags trigger CI.
+1. Merge `develop` → `staging` for QA when ready.
+2. Merge `staging` → `main` (owner approves push).
+3. On `main`: `git tag vX.Y.Z` (semver: patch = fix, minor = feature, major = breaking/product shift).
+4. `git push origin vX.Y.Z` only when the owner asks — tags trigger CI.
 
 ## Codemagic (`codemagic.yaml`)
 
