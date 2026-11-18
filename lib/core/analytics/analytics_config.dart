@@ -5,8 +5,5 @@ abstract final class AnalyticsConfig {
 
   static const appsFlyerDevKey = String.fromEnvironment('APPSFLYER_DEV_KEY');
 
-  static const appsFlyerIosAppId = String.fromEnvironment(
-    'APPSFLYER_IOS_APP_ID',
-    defaultValue: '6832033457',
-  );
+  static const appsFlyerIosAppId = String.fromEnvironment('APPSFLYER_IOS_APP_ID', defaultValue: '6832033457');
 }

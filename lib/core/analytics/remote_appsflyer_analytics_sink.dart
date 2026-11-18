@@ -4,7 +4,6 @@ import 'analytics_user.dart';
 import 'analytics_user_vendor_data.dart';
 import 'appsflyer_event_mapping.dart';
 import 'appsflyer_gateway.dart';
-import 'ga_user_properties.dart';
 
 final class RemoteAppsFlyerAnalyticsSink extends AppsFlyerAnalyticsSink {
   RemoteAppsFlyerAnalyticsSink({required AppsFlyerGateway gateway}) : _gateway = gateway;
