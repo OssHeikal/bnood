@@ -61,9 +61,9 @@ void main() {
     expect(container.read(appsFlyerGatewayProvider), isNull);
   });
 
-  test('appsFlyerGatewayProvider is null when bootstrap not ready', () {
-    AppsFlyerBootstrap.ready = false;
-    addTearDown(() => AppsFlyerBootstrap.ready = false);
+  test('appsFlyerGatewayProvider is null when bootstrap session not started', () {
+    AppsFlyerBootstrap.sessionStarted = false;
+    addTearDown(() => AppsFlyerBootstrap.sessionStarted = false);
 
     final container = ProviderContainer();
     addTearDown(container.dispose);

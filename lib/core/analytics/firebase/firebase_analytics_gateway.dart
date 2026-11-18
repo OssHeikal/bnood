@@ -4,6 +4,8 @@ abstract interface class FirebaseAnalyticsGateway {
     Map<String, Object>? parameters,
   });
 
+  Future<void> logScreenView({required String screenName});
+
   Future<void> setUserId(String? id);
 
   Future<void> setUserProperty({

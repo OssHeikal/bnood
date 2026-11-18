@@ -36,7 +36,7 @@ final firebaseAnalyticsGatewayProvider = Provider<FirebaseAnalyticsGateway?>((re
 final appsFlyerGatewayProvider = Provider<AppsFlyerGateway?>((ref) {
   if (!pushMessagingSupported) return null;
   if (AnalyticsConfig.appsFlyerDevKey.isEmpty) return null;
-  if (!AppsFlyerBootstrap.ready) return null;
+  if (!AppsFlyerBootstrap.sessionStarted) return null;
   return AppsFlyerGatewayImpl();
 });
 
@@ -45,10 +45,18 @@ final analyticsSinksProvider = Provider<List<AnalyticsSink>>((ref) {
   final firebase = ref.watch(firebaseAnalyticsGatewayProvider);
   if (firebase != null) {
     sinks.add(RemoteFirebaseAnalyticsSink(gateway: firebase));
+    AnalyticsLog.info('firebase sink ready');
+  } else {
+    AnalyticsLog.info('firebase sink unavailable');
   }
   final appsFlyer = ref.watch(appsFlyerGatewayProvider);
   if (appsFlyer != null) {
     sinks.add(RemoteAppsFlyerAnalyticsSink(gateway: appsFlyer));
+    AnalyticsLog.info('appsflyer sink ready');
+  } else if (AnalyticsConfig.appsFlyerDevKey.isNotEmpty) {
+    AnalyticsLog.info(
+      'appsflyer sink unavailable (sessionStarted=${AppsFlyerBootstrap.sessionStarted})',
+    );
   }
   return sinks;
 });
@@ -63,6 +71,7 @@ final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
     AnalyticsLog.info('no sinks');
     return const NoopAnalyticsService();
   }
+  AnalyticsLog.info('active sinks: ${sinks.length}');
   return CompositeAnalytics(sinks: sinks);
 });
 

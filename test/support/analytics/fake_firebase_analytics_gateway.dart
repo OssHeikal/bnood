@@ -9,6 +9,7 @@ class LoggedGaEvent {
 
 class FakeFirebaseAnalyticsGateway implements FirebaseAnalyticsGateway {
   final List<LoggedGaEvent> events = [];
+  final List<String> screenViews = [];
   final List<String?> userIds = [];
   final List<MapEntry<String, String?>> userProperties = [];
 
@@ -18,6 +19,11 @@ class FakeFirebaseAnalyticsGateway implements FirebaseAnalyticsGateway {
     Map<String, Object>? parameters,
   }) async {
     events.add(LoggedGaEvent(name: name, parameters: parameters));
+  }
+
+  @override
+  Future<void> logScreenView({required String screenName}) async {
+    screenViews.add(screenName);
   }
 
   @override

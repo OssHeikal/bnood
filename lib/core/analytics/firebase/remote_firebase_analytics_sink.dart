@@ -13,6 +13,10 @@ final class RemoteFirebaseAnalyticsSink extends FirebaseAnalyticsSink {
 
   @override
   Future<void> track(AnalyticsEvent event) async {
+    if (event is ScreenViewed) {
+      await _gateway.logScreenView(screenName: event.screenName);
+      return;
+    }
     await _gateway.logEvent(
       name: firebaseGaEventName(event),
       parameters: firebaseGaEventParameters(event),

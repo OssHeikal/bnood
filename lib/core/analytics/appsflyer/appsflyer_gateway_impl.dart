@@ -14,6 +14,7 @@ class AppsFlyerGatewayImpl implements AppsFlyerGateway {
     Map<String, dynamic>? parameters,
   }) async {
     try {
+      AnalyticsLog.info('appsflyer logEvent $name $parameters');
       await _sdk.logEvent(name, eventValues: parameters);
     } catch (error, stackTrace) {
       AnalyticsLog.error('appsflyer logEvent failed', error, stackTrace);
