@@ -114,7 +114,7 @@ String? _authRedirect(Ref ref, GoRouterState state) {
 final goRouterProvider = Provider<GoRouter>((ref) {
   final refresh = ref.watch(authRouterRefreshProvider);
   final screenViewTracker = ref.watch(analyticsScreenViewTrackerProvider);
-  final shellAnalyticsObservers = AnalyticsRouteObservers.forShellBranch(screenViewTracker);
+  // Each shell branch has its own Navigator; an observer instance can attach to only one.
   return GoRouter(
     debugLogDiagnostics: true,
     // AppToaster resolves layout/margins from this key; it must be the real root navigator.
@@ -181,7 +181,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
         branches: [
           StatefulShellBranch(
-            observers: shellAnalyticsObservers,
+            observers: AnalyticsRouteObservers.forShellBranch(screenViewTracker),
             routes: [
               GoRoute(
                 path: _localHome,
@@ -190,7 +190,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           StatefulShellBranch(
-            observers: shellAnalyticsObservers,
+            observers: AnalyticsRouteObservers.forShellBranch(screenViewTracker),
             routes: [
               GoRoute(
                 path: '/clients',
@@ -199,7 +199,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           StatefulShellBranch(
-            observers: shellAnalyticsObservers,
+            observers: AnalyticsRouteObservers.forShellBranch(screenViewTracker),
             routes: [
               GoRoute(
                 path: '/directory',
@@ -214,7 +214,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           StatefulShellBranch(
-            observers: shellAnalyticsObservers,
+            observers: AnalyticsRouteObservers.forShellBranch(screenViewTracker),
             routes: [
               GoRoute(
                 path: '/items',

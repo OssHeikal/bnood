@@ -1,6 +1,6 @@
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
-import 'package:flutter/foundation.dart';
 
+import '../domain/analytics_log.dart';
 import 'appsflyer_gateway.dart';
 
 class AppsFlyerGatewayImpl implements AppsFlyerGateway {
@@ -16,7 +16,7 @@ class AppsFlyerGatewayImpl implements AppsFlyerGateway {
     try {
       await _sdk.logEvent(name, eventValues: parameters);
     } catch (error, stackTrace) {
-      debugPrint('AppsFlyer logEvent failed: $error\n$stackTrace');
+      AnalyticsLog.error('appsflyer logEvent failed', error, stackTrace);
     }
   }
 
@@ -29,7 +29,7 @@ class AppsFlyerGatewayImpl implements AppsFlyerGateway {
       }
       await _sdk.setCustomerUserId(customerId);
     } catch (error, stackTrace) {
-      debugPrint('AppsFlyer setCustomerUserId failed: $error\n$stackTrace');
+      AnalyticsLog.error('appsflyer setCustomerUserId failed', error, stackTrace);
     }
   }
 
@@ -38,7 +38,7 @@ class AppsFlyerGatewayImpl implements AppsFlyerGateway {
     try {
       await _sdk.setAdditionalData(data);
     } catch (error, stackTrace) {
-      debugPrint('AppsFlyer setAdditionalData failed: $error\n$stackTrace');
+      AnalyticsLog.error('appsflyer setAdditionalData failed', error, stackTrace);
     }
   }
 }
