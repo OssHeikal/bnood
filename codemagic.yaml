@@ -133,12 +133,14 @@ workflows:
       tag_patterns:
         - pattern: "v*"
           include: true
+        - pattern: "android-v*"  # android-only release
+          include: true
     scripts:
       - name: Resolve release version name
         script: |
           set -euo pipefail
           if [ -n "${CM_TAG:-}" ]; then
-            RESOLVED="${CM_TAG#v}"
+            RESOLVED="${CM_TAG#android-}"; RESOLVED="${RESOLVED#v}"
           elif [ -n "${VERSION_NAME:-}" ]; then
             RESOLVED="${VERSION_NAME}"
           else
