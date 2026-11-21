@@ -29,6 +29,8 @@ class PaywallTheme {
     required this.compareHeader,
     required this.compareRow,
     required this.compareCell,
+    required this.compareCheck,
+    required this.compareCheckSelected,
     required this.footerReassure,
     required this.footerLegal,
     required this.offerBanner,
@@ -57,6 +59,10 @@ class PaywallTheme {
   final TextStyle compareHeader;
   final TextStyle compareRow;
   final TextStyle compareCell;
+  /// Checkmarks in non-selected plan columns (brand teal).
+  final Color compareCheck;
+  /// Checkmarks in the selected plan column (brand purple).
+  final Color compareCheckSelected;
   final TextStyle footerReassure;
   final TextStyle footerLegal;
   final TextStyle offerBanner;
@@ -170,6 +176,8 @@ class PaywallTheme {
         fontWeight: FontWeight.w600,
         color: muted,
       ),
+      compareCheck: isDark ? const Color(0xFF3ED9C6) : const Color(0xFF0F9D8E),
+      compareCheckSelected: isDark ? const Color(0xFFE4D4FF) : SubscriptionColors.violetDark,
       footerReassure: text.caption.copyWith(
         fontSize: 11,
         height: 1.35,

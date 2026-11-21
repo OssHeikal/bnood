@@ -67,6 +67,9 @@ class PaywallComparisonTable extends StatelessWidget {
                     theme: theme,
                     highlightText: highlightText,
                     highlightBg: highlightBg,
+                    checkColor: col.slug == selectedPackageSlug
+                        ? theme.compareCheckSelected
+                        : theme.compareCheck,
                   ),
               ],
             ),
