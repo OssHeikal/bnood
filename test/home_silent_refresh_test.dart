@@ -1,5 +1,5 @@
 import 'package:bnood/core/providers/dashboard_providers.dart';
-import 'package:bnood/core/repositories/bnood_repository.dart';
+import 'package:bnood/core/home/home_row_models.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/home/home_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
@@ -21,6 +21,8 @@ void main() {
           homeTotalsProvider.overrideWith(() => totalsNotifier),
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
+          emptyHomeCraftsmenOverride(),
+          emptyHomeSuppliersOverride(),
         ],
         child: const MaterialApp(
           locale: Locale('en'),
@@ -58,6 +60,8 @@ void main() {
           homeTotalsProvider.overrideWith(() => totalsNotifier),
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
+          emptyHomeCraftsmenOverride(),
+          emptyHomeSuppliersOverride(),
         ],
         child: const MaterialApp(
           locale: Locale('en'),
@@ -91,6 +95,7 @@ void main() {
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),
+          emptyHomeSuppliersOverride(),
         ],
         child: const MaterialApp(
           locale: Locale('en'),

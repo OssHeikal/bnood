@@ -1,7 +1,7 @@
 import 'package:bnood/core/money/ledger_math.dart';
 import 'package:bnood/core/money/period_bounds.dart';
 import 'package:bnood/core/money/supplier_period_math.dart';
-import 'package:bnood/core/database/database.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Transaction _spend(int amount, DateTime d) => Transaction(

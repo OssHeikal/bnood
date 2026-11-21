@@ -3,7 +3,7 @@ import 'package:bnood/core/api/clients_api.dart';
 import 'package:bnood/core/clients/client_api_record.dart';
 import 'package:bnood/core/clients/clients_providers.dart';
 import 'package:bnood/core/clients/clients_repository.dart';
-import 'package:bnood/core/database/database.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/features/clients/client_mutation_actions.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +76,6 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          remoteClientsEnabledProvider.overrideWithValue(true),
           clientsRepositoryProvider.overrideWithValue(repo),
         ],
         child: MaterialApp(

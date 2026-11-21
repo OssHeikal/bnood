@@ -126,8 +126,6 @@ void main() {
       ProviderScope(
         overrides: [
           providerDetailProvider.overrideWith(() => _StubProviderDetailNotifier(snapshot)),
-          remoteVouchersEnabledProvider.overrideWithValue(true),
-          remoteAgreementsEnabledProvider.overrideWithValue(true),
           authControllerProvider.overrideWith(_AuthOk.new),
         ],
         child: MaterialApp(
@@ -183,8 +181,6 @@ void main() {
       ProviderScope(
         overrides: [
           providerDetailProvider.overrideWith(() => _StubProviderDetailNotifier(snapshot)),
-          remoteVouchersEnabledProvider.overrideWithValue(true),
-          remoteAgreementsEnabledProvider.overrideWithValue(false),
           authControllerProvider.overrideWith(_AuthOk.new),
         ],
         child: MaterialApp(
@@ -237,8 +233,6 @@ void main() {
       ProviderScope(
         overrides: [
           providerDetailProvider.overrideWith(() => notifier),
-          remoteVouchersEnabledProvider.overrideWithValue(false),
-          remoteAgreementsEnabledProvider.overrideWithValue(false),
           authControllerProvider.overrideWith(_AuthOk.new),
         ],
         child: MaterialApp(
@@ -300,8 +294,6 @@ Future<void> _pumpCraftsmanDetail(
     ProviderScope(
       overrides: [
         providerDetailProvider.overrideWith(() => _StubProviderDetailNotifier(snapshot)),
-        remoteVouchersEnabledProvider.overrideWithValue(false),
-        remoteAgreementsEnabledProvider.overrideWithValue(true),
         authControllerProvider.overrideWith(_AuthOk.new),
       ],
       child: MaterialApp(

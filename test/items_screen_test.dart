@@ -81,7 +81,6 @@ void main() {
   List<Override> remoteOverrides({List<CatalogItem>? items, Duration? catalogDelay}) {
     return [
       authControllerProvider.overrideWith(() => _AuthStub()),
-      remoteItemsEnabledProvider.overrideWith((ref) => true),
       itemsRepositoryProvider.overrideWithValue(
         _FakeCatalogRepository(items: items ?? sampleItems, catalogDelay: catalogDelay),
       ),

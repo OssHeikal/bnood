@@ -26,7 +26,7 @@ void main() {
         'label': 'Yearly',
         'total_minor': 299000,
       });
-      expect(plan.monthlyEquivalentMinor, 299000 ~/ 12);
+      expect(plan.monthlyEquivalentMinor, (299000 / 12).round());
     });
   });
 

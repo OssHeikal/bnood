@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bnood/core/repositories/bnood_repository.dart';
+import 'package:bnood/core/home/home_row_models.dart';
 import 'package:bnood/core/providers/dashboard_providers.dart';
 
 import 'support/home_notifier_stubs.dart';
@@ -29,6 +29,8 @@ void main() {
           homeTotalsProvider.overrideWith(() => PendingHomeTotalsNotifier(gate.future)),
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
+          emptyHomeCraftsmenOverride(),
+          emptyHomeSuppliersOverride(),
         ],
         child: MaterialApp(
           locale: const Locale('en'),

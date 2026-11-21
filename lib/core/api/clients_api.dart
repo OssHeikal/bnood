@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 
 import '../clients/client_api_record.dart';
+import '../clients/client_list_archive_filter.dart';
 import '../clients/client_statement_pdf.dart';
 import '../clients/client_statement_record.dart';
 import 'api_response_parser.dart';

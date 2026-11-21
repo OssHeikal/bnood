@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:bnood/core/database/database.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/money/ledger_math.dart';
 import 'package:bnood/core/money/period_bounds.dart';
 import 'package:bnood/features/statements/pdf_statement_service.dart';

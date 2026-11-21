@@ -8,6 +8,10 @@ import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/clients/clients_list_screen.dart';
+import 'package:bnood/core/items/item_api_record.dart';
+import 'package:bnood/core/items/items_providers.dart';
+import 'package:bnood/core/api/items_api.dart';
+import 'package:bnood/core/items/items_repository.dart';
 import 'package:bnood/features/items/items_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,12 +52,27 @@ void main() {
   });
 
   testWidgets('items tab loads catalog for remote session', (tester) async {
+    final now = DateTime.utc(2026, 11, 9);
     AppSplashSession.completed = true;
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           appSettingsBootstrapProvider.overrideWithValue(_bootstrap()),
           sessionStoreProvider.overrideWithValue(FakeSessionStore()),
+          itemsRepositoryProvider.overrideWithValue(
+            _StubItemsRepository([
+              CatalogItem(
+                id: '01J',
+                name: 'Tile',
+                iconKey: 'layers',
+                colorKey: 'teal',
+                isDefault: false,
+                sortOrder: 0,
+                createdAt: now,
+                updatedAt: now,
+              ),
+            ]),
+          ),
         ],
         child: const BnoodApp(),
       ),
@@ -70,4 +89,19 @@ void main() {
     expect(find.byType(ShellScaffold), findsOneWidget);
     expect(find.byType(ItemsScreen), findsOneWidget);
   }, timeout: const Timeout(Duration(seconds: 20)));
+}
+
+class _StubItemsRepository extends ItemsRepository {
+  _StubItemsRepository(this._items) : super(ItemsApi());
+
+  final List<CatalogItem> _items;
+
+  @override
+  Future<ItemsListPage> listItems({
+    String? q,
+    int page = 1,
+    int perPage = 50,
+    ItemCatalogListStatus status = ItemCatalogListStatus.active,
+  }) async =>
+      ItemsListPage(items: _items, page: 1, perPage: perPage, total: _items.length);
 }

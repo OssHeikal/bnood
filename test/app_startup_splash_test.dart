@@ -3,9 +3,12 @@ import 'package:bnood/app/bnood_app.dart';
 import 'package:bnood/core/brand/app_brand_lockup.dart';
 import 'package:bnood/app/app_splash_session.dart';
 import 'package:bnood/app/app_startup_splash.dart';
+import 'package:bnood/core/api/app_config_api.dart';
 import 'package:bnood/core/api/app_dio.dart';
 import 'package:bnood/core/api/auth_api.dart';
 import 'package:bnood/core/api/auth_api_providers.dart';
+import 'package:bnood/core/app_gate/app_config_record.dart';
+import 'package:bnood/features/app_gate/app_gate_provider.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/providers/settings_provider.dart';
 import 'package:bnood/core/storage/session_store.dart';
@@ -39,6 +42,28 @@ AuthApi _authApiWithDelayedMe(
     return jsonResponse('{"success":false}', statusCode: 404);
   });
   return AuthApi(dio: dio);
+}
+
+class _FastAppGate extends AppGateNotifier {
+  @override
+  Future<AppConfigData> fetchConfig({bool failOpen = true}) async {
+  final open = AppConfigData.failOpen();
+    state = AsyncData(open);
+    ref.read(appGateMemoryProvider).lastSuccess = open;
+    return open;
+  }
+}
+
+class _FakeAppConfigApi extends AppConfigApi {
+  _FakeAppConfigApi() : super(dio: createAppDio(FakeSessionStore()));
+
+  @override
+  Future<AppConfigData> fetchConfig({
+    required String platform,
+    required String version,
+    required String locale,
+  }) async =>
+      AppConfigData.failOpen();
 }
 
 AuthApi _hangingMeApi(FakeSessionStore store) {
@@ -107,6 +132,8 @@ void main() {
       overrides: [
         sessionStoreProvider.overrideWithValue(store),
         authApiProvider.overrideWithValue(_authApiWithDelayedMe(store, gate: gate)),
+        appConfigApiProvider.overrideWithValue(_FakeAppConfigApi()),
+        appGateProvider.overrideWith(_FastAppGate.new),
       ],
     );
     await tester.pump(const Duration(milliseconds: 700));

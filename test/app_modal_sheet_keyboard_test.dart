@@ -86,8 +86,7 @@ void main() {
     tester.view.viewInsets = const FakeViewPadding(bottom: _keyboard);
     await tester.pump();
 
-    final field = find.byType(CustomTextField);
-    await tester.tap(field);
+    await tester.tap(find.widgetWithText(CustomTextField, 'الاسم'));
     await tester.pump();
 
     await tester.binding.handlePopRoute();

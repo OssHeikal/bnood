@@ -26,7 +26,6 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          remoteProvidersEnabledProvider.overrideWith((ref) => true),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
@@ -57,7 +56,6 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          remoteProvidersEnabledProvider.overrideWith((ref) => false),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),

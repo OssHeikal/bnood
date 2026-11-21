@@ -2,7 +2,7 @@ import 'package:bnood/core/api/clients_api.dart';
 import 'package:bnood/core/clients/clients_providers.dart';
 import 'package:bnood/core/clients/clients_repository.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/database/database.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/features/clients/client_detail_provider.dart';
 import 'package:bnood/features/clients/client_detail_screen.dart';
 import 'package:bnood/features/clients/client_detail_snapshot.dart';
@@ -51,7 +51,6 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          remoteClientsEnabledProvider.overrideWithValue(true),
           clientsRepositoryProvider.overrideWithValue(_FakeClientsRepo(onDelete: () => deleteCalled = true)),
           clientDetailProvider.overrideWith(() => _StubDetail(snapshot())),
         ],

@@ -1,5 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/repositories/bnood_repository.dart';
+import 'package:bnood/core/home/home_row_models.dart';
 import 'package:bnood/features/home/home_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +23,7 @@ void main() {
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),
+          emptyHomeSuppliersOverride(),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),

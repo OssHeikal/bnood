@@ -1,6 +1,6 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/money/remote_money_units.dart';
-import 'package:bnood/core/database/database.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/widgets/custom_text_field.dart';
 import 'package:bnood/core/widgets/entity_picker_row.dart';
 import 'package:bnood/features/clients/widgets/craftsman_roster_choice_row.dart';

@@ -56,8 +56,6 @@ void main() {
       ProviderScope(
         overrides: [
           providerDetailProvider.overrideWith(() => _Stub(snapshot)),
-          remoteVouchersEnabledProvider.overrideWithValue(false),
-          remoteAgreementsEnabledProvider.overrideWithValue(true),
           authControllerProvider.overrideWith(_AuthOk.new),
         ],
         child: MaterialApp(
@@ -99,8 +97,6 @@ void main() {
       ProviderScope(
         overrides: [
           providerDetailProvider.overrideWith(() => _Stub(snapshot)),
-          remoteVouchersEnabledProvider.overrideWithValue(false),
-          remoteAgreementsEnabledProvider.overrideWithValue(false),
           authControllerProvider.overrideWith(_AuthOk.new),
         ],
         child: MaterialApp(

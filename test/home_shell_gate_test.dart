@@ -57,7 +57,6 @@ void main() {
       ProviderScope(
         overrides: [
           authControllerProvider.overrideWith(_AuthComplete.new),
-          remoteClientsEnabledProvider.overrideWithValue(true),
           homeRepositoryProvider.overrideWithValue(CountingHomeRepository()),
         ],
         child: MaterialApp(

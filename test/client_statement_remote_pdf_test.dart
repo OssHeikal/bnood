@@ -1,6 +1,12 @@
 import 'package:bnood/core/api/app_dio.dart';
 import 'package:bnood/core/api/clients_api.dart';
 import 'package:bnood/core/clients/clients_providers.dart';
+import 'package:bnood/core/clients/clients_repository.dart';
+import 'package:bnood/core/items/item_api_record.dart';
+import 'package:bnood/core/items/items_providers.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_state.dart';
+import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/statements/client_statement_screen.dart';
@@ -35,8 +41,12 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          remoteClientsEnabledProvider.overrideWith((ref) => true),
           clientsApiProvider.overrideWith((ref) => api),
+          clientsRepositoryProvider.overrideWith((ref) => ClientsRepository(api)),
+          itemsCatalogByIdProvider.overrideWith((ref) async => const <String, CatalogItem>{}),
+          authControllerProvider.overrideWith(
+            () => _AuthStub(),
+          ),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
@@ -49,11 +59,22 @@ void main() {
         ),
       ),
     );
-    await tester.pump();
-    await tester.pumpAndSettle();
+    for (var i = 0; i < 40; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+      if (find.text('Share PDF').evaluate().isNotEmpty) break;
+    }
 
     expect(find.text('Share PDF'), findsOneWidget);
     expect(tester.takeException(), isNull);
     api.close();
   });
+}
+
+class _AuthStub extends AuthController {
+  @override
+  AuthState build() => AuthState(
+        bootstrapStatus: AuthBootstrapStatus.authenticated,
+        user: const User(id: 'usr', phone: '+201012345678', name: 'Eng'),
+        bootstrapStarted: true,
+      );
 }
