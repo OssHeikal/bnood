@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../core/agreements/app_agreement_record.dart';
-import '../../../core/agreements/agreements_error_handler.dart';
-import '../../../core/agreements/agreement_amount_api.dart';
-import '../../../core/agreements/agreements_riverpod.dart';
+import '../../../features/providers/data/app_agreement_record.dart';
+import '../../../features/providers/data/agreements_error_handler.dart';
+import '../../../features/providers/data/agreement_amount_api.dart';
+import '../../../features/providers/data/agreements_riverpod.dart';
 import '../../../core/api/api_error_user_message.dart';
 import '../../../core/api/auth_api_exception.dart';
-import '../../../core/providers_api/app_provider_record.dart';
+import '../../../features/providers/data/app_provider_record.dart';
 import '../../../core/widgets/app_decision.dart';
 import '../../../core/widgets/app_toaster.dart';
 import '../../../core/widgets/toast/app_tone.dart';
 import '../../../core/providers/dashboard_providers.dart';
-import '../../providers/provider_detail_provider.dart';
+import '../../providers/presentation/provider_detail_provider.dart';
 
 /// Which unlink confirmation surface to show before delete (never both).
 enum AgreementUnlinkConfirmVariant { paymentsGuard, plain }

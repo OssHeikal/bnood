@@ -11,7 +11,7 @@ import '../../features/clients/presentation/client_craftsmen_list_provider.dart'
 import '../../features/clients/presentation/client_detail_provider.dart';
 import '../../features/clients/presentation/client_items_stats_provider.dart';
 import '../../features/clients/presentation/client_suppliers_list_provider.dart';
-import '../../features/providers/provider_detail_provider.dart';
+import '../../features/providers/presentation/provider_detail_provider.dart';
 import '../shared/pagination/paging_refresh.dart';
 import '../subscription/subscription_riverpod.dart';
 import 'silent_async_notifier.dart';

@@ -12,7 +12,7 @@ import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/home/home_screen.dart';
 import 'package:bnood/features/home/widgets/home_identity_title.dart';
 import 'package:bnood/features/auth/widgets/user_identity_avatar.dart';
-import 'package:bnood/features/providers/widgets/remote_craftsman_summary_card.dart';
+import 'package:bnood/features/providers/presentation/widgets/remote_craftsman_summary_card.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/providers/settings_provider.dart';
 import 'package:bnood/features/settings/app_settings_screen.dart';

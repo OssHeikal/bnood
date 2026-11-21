@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/clients/presentation/client_detail_provider.dart';
 import '../../features/clients/presentation/client_items_stats_provider.dart';
-import '../../features/providers/provider_detail_provider.dart';
+import '../../features/providers/presentation/provider_detail_provider.dart';
 import 'dashboard_providers.dart';
 
 /// Silent refresh after voucher edit/delete (no pull-to-refresh).

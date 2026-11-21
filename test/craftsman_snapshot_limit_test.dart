@@ -9,7 +9,7 @@ import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/home/home_screen.dart';
-import 'package:bnood/features/providers/widgets/remote_craftsman_summary_card.dart';
+import 'package:bnood/features/providers/presentation/widgets/remote_craftsman_summary_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

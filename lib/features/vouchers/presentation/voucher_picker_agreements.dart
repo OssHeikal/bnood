@@ -1,5 +1,5 @@
-import '../../../core/agreements/app_agreement_record.dart';
-import '../../../core/providers_api/app_provider_record.dart';
+import '../../../features/providers/data/app_agreement_record.dart';
+import '../../../features/providers/data/app_provider_record.dart';
 
 class VoucherPickerAgreementContext {
   const VoucherPickerAgreementContext({

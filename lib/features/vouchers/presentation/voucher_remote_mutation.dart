@@ -13,7 +13,7 @@ import '../../../core/money/remote_money_format.dart';
 import '../../../core/providers/dashboard_providers.dart';
 import '../../../core/shared/pagination/paging_refresh.dart';
 import '../../../core/widgets/app_toaster.dart';
-import '../../providers/provider_detail_provider.dart';
+import '../../providers/presentation/provider_detail_provider.dart';
 import 'voucher_draft.dart';
 import 'voucher_remote_receipts.dart';
 import 'voucher_remote_save_result.dart';

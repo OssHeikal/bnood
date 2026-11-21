@@ -11,7 +11,7 @@ import '../../../../core/widgets/app_amount.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_chevron.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../core/providers_api/app_provider_record.dart';
+import '../../../../features/providers/data/app_provider_record.dart';
 import '../client_detail_snapshot.dart';
 
 class ClientDetailCraftsmanRow extends StatelessWidget {

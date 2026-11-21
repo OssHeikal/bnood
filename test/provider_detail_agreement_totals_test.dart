@@ -1,6 +1,6 @@
-import 'package:bnood/core/agreements/app_agreement_record.dart';
-import 'package:bnood/features/providers/provider_detail_agreement_totals.dart';
-import 'package:bnood/features/providers/provider_detail_snapshot.dart';
+import 'package:bnood/features/providers/data/app_agreement_record.dart';
+import 'package:bnood/features/providers/presentation/provider_detail_agreement_totals.dart';
+import 'package:bnood/features/providers/presentation/provider_detail_snapshot.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

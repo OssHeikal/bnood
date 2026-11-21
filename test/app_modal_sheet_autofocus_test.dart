@@ -2,7 +2,7 @@ import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_keyboard_scope.dart';
 import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
-import 'package:bnood/features/providers/provider_create_sheet.dart' show showProviderCreateSheet;
+import 'package:bnood/features/providers/presentation/provider_create_sheet.dart' show showProviderCreateSheet;
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
