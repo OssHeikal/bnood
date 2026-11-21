@@ -21,6 +21,7 @@ class PaywallTheme {
     required this.proof,
     required this.planName,
     required this.planMeta,
+    required this.planBenefit,
     required this.planBilled,
     required this.priceAmount,
     required this.priceStrike,
@@ -51,6 +52,7 @@ class PaywallTheme {
   final TextStyle proof;
   final TextStyle planName;
   final TextStyle planMeta;
+  final TextStyle planBenefit;
   final TextStyle planBilled;
   final TextStyle priceAmount;
   final TextStyle priceStrike;
@@ -123,6 +125,12 @@ class PaywallTheme {
       planMeta: text.caption.copyWith(
         fontSize: 11.5,
         height: 1.25,
+        fontWeight: FontWeight.w600,
+        color: muted,
+      ),
+      planBenefit: text.caption.copyWith(
+        fontSize: 11,
+        height: 1.3,
         fontWeight: FontWeight.w600,
         color: muted,
       ),

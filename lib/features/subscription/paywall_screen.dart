@@ -12,9 +12,8 @@ import '../../core/subscription/subscription_colors.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import 'paywall_theme.dart';
-import 'widgets/paywall_benefit_row.dart';
 import 'widgets/paywall_billing_toggle.dart';
-import 'widgets/paywall_comparison_table.dart';
+import 'widgets/paywall_comparison_sheet.dart';
 import 'widgets/paywall_footer_dock.dart';
 import 'widgets/paywall_offer_banner.dart';
 import 'widgets/paywall_package_card.dart';
@@ -99,7 +98,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
     final theme = PaywallTheme.of(context);
-    final benefits = _v3.benefitItems;
     final anyYearly = _v3.packages.any((p) => p.yearlyEnabled);
     final anyMonthly = _v3.packages.any((p) => p.monthlyEnabled);
     final showBillingToggle = anyYearly && anyMonthly;
@@ -193,16 +191,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                         const SizedBox(height: PaywallTheme.blockGap),
                         PaywallOfferBanner(banner: _v3.offerBanner!),
                       ],
-                      if (benefits.isNotEmpty) ...[
-                        const SizedBox(height: PaywallTheme.blockGap),
-                        for (var i = 0; i < benefits.length; i++)
-                          PaywallBenefitRow(
-                            text: benefits[i].text,
-                            iconKey: benefits[i].icon,
-                            textStyle: theme.benefit,
-                            isLast: i == benefits.length - 1,
-                          ),
-                      ],
                       if (_v3.socialProof != null) ...[
                         const SizedBox(height: PaywallTheme.blockGap),
                         Text(
@@ -232,10 +220,22 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                         if (i < _v3.packages.length - 1) const SizedBox(height: PaywallTheme.betweenPlans),
                       ],
                       if (_v3.comparisonTable != null) ...[
-                        const SizedBox(height: PaywallTheme.beforeComparison),
-                        PaywallComparisonTable(
-                          table: _v3.comparisonTable!,
-                          selectedPackageSlug: _selectedPackageSlug,
+                        const SizedBox(height: PaywallTheme.blockGap),
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: TextButton(
+                            onPressed: () => PaywallComparisonSheet.show(
+                              context,
+                              table: _v3.comparisonTable!,
+                              selectedPackageSlug: _selectedPackageSlug,
+                            ),
+                            style: TextButton.styleFrom(
+                              foregroundColor: SubscriptionColors.violet,
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 4, 4),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: Text(l10n.paywallComparePlans, style: theme.subheadline),
+                          ),
                         ),
                       ],
                     ],

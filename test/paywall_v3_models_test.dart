@@ -9,9 +9,6 @@ void main() {
     final raw = {
       'trigger': 'limit_reached',
       'header': {'title': 'Unlock more', 'subtitle': 'Upgrade plan'},
-      'benefit_items': [
-        {'icon': 'projects_grid', 'text': '4 active projects'},
-      ],
       'billing': {
         'monthly_label': 'Monthly',
         'yearly_label': 'Yearly',
@@ -44,6 +41,7 @@ void main() {
           'cta_labels': {'yearly': 'Start Pro at 250 EGP/mo'},
           'highlight_benefits': [
             {'icon': 'spark', 'text': 'Team included'},
+            {'icon': 'projects_grid', 'text': '4 active projects'},
           ],
         },
         {
@@ -83,7 +81,7 @@ void main() {
     expect(content.v3!.trigger, 'limit_reached');
     expect(content.v3!.packages, hasLength(2));
     expect(content.v3!.comparisonTable?.columns.length, 2);
-    expect(content.v3!.benefitItems.first.text, '4 active projects');
+    expect(content.v3!.packages.first.highlightBenefits.first.text, 'Team included');
     expect(content.v3!.packages.last.isContact, isTrue);
     expect(content.v3!.packages.last.tagline, 'For larger offices, unlimited projects');
     expect(content.v3!.packages.last.resolveCta('yearly'), 'Contact us');

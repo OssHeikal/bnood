@@ -757,10 +757,7 @@ class AppPaywallV3Data {
     return candidates.isEmpty ? null : candidates.first;
   }
 
-  List<AppPaywallBenefitItem> benefitsForPackage(AppPaywallPackage pkg) {
-    if (pkg.highlightBenefits.isNotEmpty) return pkg.highlightBenefits;
-    return benefitItems;
-  }
+  List<AppPaywallBenefitItem> benefitsForPackage(AppPaywallPackage pkg) => pkg.highlightBenefits;
 
   static AppPaywallV3Data? parse(Map<String, dynamic> raw, {String localeCode = 'ar'}) {
     final offer = AppPaywallOffer.fromJson(raw['offer']);

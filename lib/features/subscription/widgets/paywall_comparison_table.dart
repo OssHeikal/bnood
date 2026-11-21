@@ -6,11 +6,7 @@ import '../../../core/subscription/subscription_colors.dart';
 import '../paywall_theme.dart';
 
 class PaywallComparisonTable extends StatelessWidget {
-  const PaywallComparisonTable({
-    super.key,
-    required this.table,
-    required this.selectedPackageSlug,
-  });
+  const PaywallComparisonTable({super.key, required this.table, required this.selectedPackageSlug});
 
   final AppPaywallComparisonTable table;
   final String selectedPackageSlug;
@@ -67,9 +63,7 @@ class PaywallComparisonTable extends StatelessWidget {
                     theme: theme,
                     highlightText: highlightText,
                     highlightBg: highlightBg,
-                    checkColor: col.slug == selectedPackageSlug
-                        ? theme.compareCheckSelected
-                        : theme.compareCheck,
+                    checkColor: col.slug == selectedPackageSlug ? theme.compareCheckSelected : theme.compareCheck,
                   ),
               ],
             ),
@@ -118,6 +112,7 @@ class _ValueCell extends StatelessWidget {
     required this.theme,
     required this.highlightText,
     required this.highlightBg,
+    required this.checkColor,
   });
 
   final String value;
@@ -125,6 +120,7 @@ class _ValueCell extends StatelessWidget {
   final PaywallTheme theme;
   final Color highlightText;
   final Color highlightBg;
+  final Color checkColor;
 
   @override
   Widget build(BuildContext context) {
@@ -134,11 +130,7 @@ class _ValueCell extends StatelessWidget {
 
     Widget child;
     if (isCheck) {
-      child = Icon(
-        Icons.check_rounded,
-        size: 13,
-        color: highlighted ? highlightText : SubscriptionColors.violet.withValues(alpha: 0.85),
-      );
+      child = Icon(Icons.check_rounded, size: 13, color: checkColor);
     } else if (isDash) {
       child = Text('—', textAlign: TextAlign.center, style: theme.compareCell);
     } else {
@@ -173,10 +165,7 @@ class _CellFrame extends StatelessWidget {
           color: highlighted ? highlightBg : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-          child: child,
-        ),
+        child: Padding(padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2), child: child),
       ),
     );
   }

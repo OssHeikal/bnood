@@ -11,29 +11,32 @@ class PaywallBenefitRow extends StatelessWidget {
     this.iconKey,
     this.textStyle,
     this.isLast = false,
+    this.dense = false,
   });
 
   final String text;
   final String? iconKey;
   final TextStyle? textStyle;
   final bool isLast;
+  final bool dense;
 
   @override
   Widget build(BuildContext context) {
     final style = textStyle ?? PaywallTheme.of(context).benefit;
+    final rowGap = dense ? AppSize.spaceXS : AppSize.spaceSM;
     return Padding(
-      padding: EdgeInsets.only(bottom: isLast ? 0 : AppSize.spaceSM),
+      padding: EdgeInsets.only(bottom: isLast ? 0 : rowGap),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (iconKey != null)
             Padding(
-              padding: const EdgeInsets.only(top: 1),
-              child: paywallBenefitIcon(iconKey!),
+              padding: EdgeInsets.only(top: dense ? 0 : 1),
+              child: paywallBenefitIcon(iconKey!, size: dense ? 15 : 18),
             )
           else
-            const _CheckGlyph(),
-          const SizedBox(width: AppSize.spaceSM),
+            _CheckGlyph(compact: dense),
+          SizedBox(width: rowGap),
           Expanded(
             child: Text(
               text,
@@ -50,18 +53,21 @@ class PaywallBenefitRow extends StatelessWidget {
 }
 
 class _CheckGlyph extends StatelessWidget {
-  const _CheckGlyph();
+  const _CheckGlyph({this.compact = false});
+
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
+    final size = compact ? 15.0 : 18.0;
     return SizedBox(
-      width: 18,
-      height: 18,
+      width: size,
+      height: size,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Icon(Icons.circle, size: 18, color: const Color(0xFF0F9D8E).withValues(alpha: 0.12)),
-          const Icon(Icons.check, size: 12, color: Color(0xFF0F9D8E)),
+          Icon(Icons.circle, size: size, color: const Color(0xFF0F9D8E).withValues(alpha: 0.12)),
+          Icon(Icons.check, size: compact ? 10 : 12, color: const Color(0xFF0F9D8E)),
         ],
       ),
     );

@@ -7,6 +7,7 @@ import '../../../core/subscription/paywall_money_display.dart';
 import '../../../core/subscription/paywall_v3_models.dart';
 import '../../../core/subscription/subscription_colors.dart';
 import '../paywall_theme.dart';
+import 'paywall_benefit_row.dart';
 
 class PaywallPackageCard extends StatelessWidget {
   const PaywallPackageCard({
@@ -104,6 +105,17 @@ class PaywallPackageCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                    if (package.highlightBenefits.isNotEmpty) ...[
+                      const SizedBox(height: AppSize.spaceSM),
+                      for (var i = 0; i < package.highlightBenefits.length; i++)
+                        PaywallBenefitRow(
+                          text: package.highlightBenefits[i].text,
+                          iconKey: package.highlightBenefits[i].icon,
+                          textStyle: theme.planBenefit,
+                          dense: true,
+                          isLast: i == package.highlightBenefits.length - 1,
+                        ),
+                    ],
                   ],
                 ),
               ),

@@ -271,8 +271,13 @@ class AppPaywallContent {
 
     final subtitle = v3?.header.subtitle ?? raw['subtitle'] as String? ?? '';
     final benefitsRaw = raw['benefits'];
-    final benefits = v3 != null && v3.benefitItems.isNotEmpty
-        ? v3.benefitItems.map((e) => e.text).toList()
+    AppPaywallPackage? legacyBenefitPackage;
+    if (v3 != null && v3.packages.isNotEmpty) {
+      final slug = v3.recommendedPackageSlug;
+      legacyBenefitPackage = slug != null ? v3.packageBySlug(slug) : v3.packages.first;
+    }
+    final benefits = legacyBenefitPackage != null && legacyBenefitPackage.highlightBenefits.isNotEmpty
+        ? legacyBenefitPackage.highlightBenefits.map((e) => e.text).toList()
         : benefitsRaw is List
         ? benefitsRaw.map((e) => e.toString()).where((s) => s.isNotEmpty).toList()
         : const <String>[];

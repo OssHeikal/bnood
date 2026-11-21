@@ -2893,6 +2893,12 @@ abstract class AppLocalizations {
   /// **'EGP/yr'**
   String get paywallPerYearUnit;
 
+  /// No description provided for @paywallComparePlans.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare plans'**
+  String get paywallComparePlans;
+
   /// No description provided for @paywallCurrentPlanChip.
   ///
   /// In en, this message translates to:

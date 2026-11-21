@@ -25,6 +25,9 @@ void main() {
       ),
     ),
     ctaLabels: AppPaywallPackageCtaLabels(yearly: 'Go'),
+    highlightBenefits: const [
+      AppPaywallBenefitItem(icon: 'projects_grid', text: '10 active projects'),
+    ],
   );
 
   const enterpriseContact = AppPaywallPackage(
@@ -103,6 +106,7 @@ void main() {
 
     expect(find.text('Yearly only'), findsOneWidget);
     expect(find.text('583'), findsNothing);
+    expect(find.text('10 active projects'), findsOneWidget);
     final business = tester.getRect(find.text('Business'));
     final badge = tester.getRect(find.text('Yearly only'));
     expect(business.center.dx, greaterThan(badge.center.dx));
