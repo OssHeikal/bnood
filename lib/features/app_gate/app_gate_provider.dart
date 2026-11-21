@@ -7,7 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../core/api/app_config_api.dart';
 import '../../core/api/auth_api_exception.dart';
-import '../../core/app_gate/app_config_record.dart';
+import 'data/app_config_record.dart';
 import '../../core/app_state/settings_provider.dart';
 import 'app_gate_cold_start.dart';
 import 'app_gate_paths.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../core/app_gate/app_config_record.dart';
+import 'data/app_config_record.dart';
 import '../../core/utils/safe_external_url.dart';
 import 'app_gate_provider.dart';
 import 'widgets/gate_blocking_scaffold.dart';

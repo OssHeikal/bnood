@@ -2,7 +2,7 @@ import 'package:bnood/app/app_splash_session.dart';
 import 'package:bnood/app/app_startup_splash.dart';
 import 'package:bnood/app/bnood_app.dart';
 import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/app_gate/app_config_record.dart';
+import 'package:bnood/features/app_gate/data/app_config_record.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/core/storage/session_store.dart';
