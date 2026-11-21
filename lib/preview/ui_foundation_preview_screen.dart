@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../core/config/extensions/num_extensions.dart';
-import '../core/config/theme/app_size.dart';
-import '../core/config/theme/app_colors.dart';
-import '../core/config/theme/app_theme.dart';
-import '../core/l10n/field_placeholders.dart';
-import '../core/widgets/app_amount.dart';
-import '../core/widgets/app_card.dart';
-import '../core/widgets/app_fallback.dart';
-import '../core/widgets/app_decision.dart';
-import '../core/widgets/toast/app_tone.dart';
-import '../core/widgets/custom_text_field.dart';
-import '../core/widgets/foundation_toaster.dart';
-import '../core/widgets/buttons/app_button.dart';
-import '../core/widgets/custom_app_bar.dart';
-import '../core/widgets/sheet/app_sheet.dart';
+import '../core/services/config/extensions/num_extensions.dart';
+import '../core/services/config/theme/app_size.dart';
+import '../core/services/config/theme/app_colors.dart';
+import '../core/services/config/theme/app_theme.dart';
+import '../core/ui/l10n/field_placeholders.dart';
+import '../core/ui/widgets/app_amount.dart';
+import '../core/ui/widgets/app_card.dart';
+import '../core/ui/widgets/app_fallback.dart';
+import '../core/ui/widgets/app_decision.dart';
+import '../core/ui/widgets/toast/app_tone.dart';
+import '../core/ui/widgets/custom_text_field.dart';
+import '../core/ui/widgets/foundation_toaster.dart';
+import '../core/ui/widgets/buttons/app_button.dart';
+import '../core/ui/widgets/custom_app_bar.dart';
+import '../core/ui/widgets/sheet/app_sheet.dart';
 
 /// In-memory demo only — no database.
 class UiFoundationPreviewScreen extends StatefulWidget {

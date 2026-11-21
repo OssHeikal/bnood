@@ -1,4 +1,4 @@
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/features/providers/presentation/widgets/remote_craftsman_summary_card.dart';

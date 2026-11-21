@@ -1,7 +1,7 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/layout/app_layout.dart';
-import 'package:bnood/core/widgets/app_toaster.dart';
-import 'package:bnood/core/widgets/toast/app_toast.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/layout/app_layout.dart';
+import 'package:bnood/core/ui/widgets/app_toaster.dart';
+import 'package:bnood/core/ui/widgets/toast/app_toast.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/statements/presentation/actions/statement_screen_toast.dart';
 import 'package:bnood/l10n/app_localizations.dart';

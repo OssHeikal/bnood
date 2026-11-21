@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/money/ledger_math.dart';
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_pressable.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/money/ledger_math.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'package:bnood/features/items/presentation/widgets/item_semantic_icon.dart';
 

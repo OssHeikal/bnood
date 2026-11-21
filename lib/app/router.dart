@@ -42,11 +42,11 @@ import 'app_shell_items_body.dart';
 import 'app_shell_online_tabs.dart';
 import 'app_shell_tab_gate.dart';
 import 'shell_scaffold.dart';
-import '../core/analytics/providers/analytics_providers.dart';
-import '../core/analytics/routing/analytics_route_observer.dart';
-import '../core/config/navigation/root_navigator_key.dart';
-import '../core/error_reporting/sentry_navigation_observers.dart';
-import '../core/widgets/toast/shell_dock_presence.dart';
+import '../core/services/analytics/providers/analytics_providers.dart';
+import '../core/services/analytics/routing/analytics_route_observer.dart';
+import '../core/services/config/navigation/root_navigator_key.dart';
+import '../core/services/error_reporting/sentry_navigation_observers.dart';
+import '../core/ui/widgets/toast/shell_dock_presence.dart';
 
 const _localHome = '/home';
 

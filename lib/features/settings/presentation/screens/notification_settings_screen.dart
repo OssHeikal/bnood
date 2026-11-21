@@ -2,11 +2,11 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/layout/bnood_list_canvas.dart';
-import '../../../../core/widgets/app_fallback.dart';
-import '../../../../core/widgets/custom_app_bar.dart';
-import '../../../../core/widgets/skeleton/async_value_body.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/layout/bnood_list_canvas.dart';
+import '../../../../core/ui/widgets/app_fallback.dart';
+import '../../../../core/ui/widgets/custom_app_bar.dart';
+import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/settings/presentation/widgets/notification_settings_body.dart';
 import 'package:bnood/features/settings/data/notification_settings_provider.dart';

@@ -1,4 +1,4 @@
-import 'package:bnood/core/contacts/device_contact_import.dart';
+import 'package:bnood/core/data/contacts/device_contact_import.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/model/contact.dart';
 import 'package:flutter_test/flutter_test.dart';

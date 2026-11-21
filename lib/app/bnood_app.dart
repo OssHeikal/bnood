@@ -2,19 +2,19 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../core/layout/app_breakpoints.dart';
+import '../core/ui/layout/app_breakpoints.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/analytics/providers/analytics_providers.dart';
-import '../core/api/api_accept_language.dart';
-import '../core/error_reporting/error_reporting_lifecycle.dart';
+import '../core/services/analytics/providers/analytics_providers.dart';
+import '../core/network/api/api_accept_language.dart';
+import '../core/services/error_reporting/error_reporting_lifecycle.dart';
 import '../core/app_state/settings_provider.dart';
-import '../core/push/push_coordinator.dart';
-import '../core/session/user_session_lifecycle.dart';
-import '../core/theme/app_theme.dart';
-import '../core/widgets/app_keyboard_scope.dart';
+import '../core/network/push/push_coordinator.dart';
+import '../core/network/session/user_session_lifecycle.dart';
+import '../core/ui/theme/app_theme.dart';
+import '../core/ui/widgets/app_keyboard_scope.dart';
 import 'app_gate_lifecycle.dart';
 import 'router.dart';
 

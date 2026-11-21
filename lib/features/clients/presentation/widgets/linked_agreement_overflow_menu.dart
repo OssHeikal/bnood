@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/resources/gen/assets.gen.dart';
-import '../../../../core/widgets/app_overflow_menu.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/ui/widgets/app_overflow_menu.dart';
 import '../../../../l10n/app_localizations.dart';
 
 List<AppOverflowMenuAction> linkedAgreementOverflowActions({

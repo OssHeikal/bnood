@@ -1,4 +1,4 @@
-import 'package:bnood/core/resources/gen/assets.gen.dart';
+import 'package:bnood/core/ui/resources/gen/assets.gen.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

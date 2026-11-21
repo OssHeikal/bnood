@@ -1,6 +1,6 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/app_keyboard_scope.dart';
-import 'package:bnood/core/config/theme/app_size.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/app_keyboard_scope.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/providers/presentation/sheets/provider_create_sheet.dart'
     show showProviderCreateSheet;

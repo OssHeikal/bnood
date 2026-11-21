@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_pressable.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
 
 class HomeSectionHeader extends StatelessWidget {
   const HomeSectionHeader({

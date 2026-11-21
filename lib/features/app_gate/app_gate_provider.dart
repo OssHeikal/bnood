@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../core/api/app_config_api.dart';
-import '../../core/api/auth_api_exception.dart';
+import '../../core/network/api/app_config_api.dart';
+import '../../core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/app_gate/data/app_config_record.dart';
 import '../../core/app_state/settings_provider.dart';
 import 'package:bnood/features/app_gate/app_gate_cold_start.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/services/config/theme/app_size.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_theme.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_icon_mapper.dart';
 

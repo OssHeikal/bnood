@@ -1,4 +1,4 @@
-import 'package:bnood/core/money/money_format.dart';
+import 'package:bnood/core/domain/money/money_format.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

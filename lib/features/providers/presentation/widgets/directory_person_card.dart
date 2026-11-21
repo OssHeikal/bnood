@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/theme/app_colors.dart' as legacy;
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/resources/gen/assets.gen.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_overflow_menu.dart';
-import '../../../../core/widgets/app_pressable.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/theme/app_colors.dart' as legacy;
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_overflow_menu.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_balance_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 

@@ -2,7 +2,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bnood/features/content/data/content_page_record.dart';
-import '../../../../core/widgets/app_pressable.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
 import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
 
 /// Terms, privacy, and cancellation links under the paywall purchase actions.

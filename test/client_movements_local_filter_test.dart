@@ -1,4 +1,4 @@
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/clients/presentation/models/client_movements_filters.dart';
 import 'package:bnood/features/clients/presentation/models/client_movements_local_filter.dart';
 import 'package:flutter_test/flutter_test.dart';

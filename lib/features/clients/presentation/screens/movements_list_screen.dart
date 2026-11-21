@@ -6,12 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:bnood/features/clients/data/client_statement_record.dart';
 import 'package:bnood/features/clients/data/clients_providers.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/layout/app_layout.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/layout/app_layout.dart';
 import '../../../../core/shared/pagination/pagination.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_fallback.dart';
-import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_fallback.dart';
+import '../../../../core/ui/widgets/custom_app_bar.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';

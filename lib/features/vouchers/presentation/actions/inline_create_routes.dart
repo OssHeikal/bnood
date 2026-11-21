@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/api/api_error_user_message.dart';
-import '../../../../core/api/api_field_errors.dart';
-import '../../../../core/api/auth_api_exception.dart';
-import '../../../../core/validation/egypt_mobile_phone_validation.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/network/api/api_error_user_message.dart';
+import '../../../../core/network/api/api_field_errors.dart';
+import '../../../../core/network/api/auth_api_exception.dart';
+import '../../../../core/domain/validation/egypt_mobile_phone_validation.dart';
 import 'package:bnood/features/items/presentation/actions/item_mutation_actions.dart';
-import '../../../../core/widgets/app_toaster.dart';
+import '../../../../core/ui/widgets/app_toaster.dart';
 import 'package:bnood/features/clients/presentation/actions/client_mutation_actions.dart';
 import 'package:bnood/features/providers/presentation/actions/provider_mutation_actions.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
-import '../../../../core/widgets/buttons/app_button.dart';
-import '../../../../core/contacts/contact_import_action.dart';
-import '../../../../core/widgets/custom_text_field.dart';
-import '../../../../core/widgets/overlay_form_presentation.dart';
+import '../../../../core/ui/widgets/buttons/app_button.dart';
+import '../../../../core/data/contacts/contact_import_action.dart';
+import '../../../../core/ui/widgets/custom_text_field.dart';
+import '../../../../core/ui/widgets/overlay_form_presentation.dart';
 import 'package:bnood/features/vouchers/presentation/widgets/inline_entity_create_shell.dart';
 
 class InlineCreateClientPage extends ConsumerStatefulWidget {

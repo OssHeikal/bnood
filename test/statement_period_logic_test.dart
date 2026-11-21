@@ -1,4 +1,4 @@
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/statements/presentation/models/statement_export_store.dart';
 import 'package:bnood/features/statements/presentation/models/statement_period_logic.dart';
 import 'package:flutter_test/flutter_test.dart';

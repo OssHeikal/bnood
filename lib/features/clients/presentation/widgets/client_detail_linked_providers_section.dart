@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/formatting/see_all_label.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_fallback.dart';
-import '../../../../core/widgets/app_pressable.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/formatting/see_all_label.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_fallback.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_detail_craftsman_row.dart';

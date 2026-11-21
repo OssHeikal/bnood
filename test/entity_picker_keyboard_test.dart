@@ -1,7 +1,7 @@
-import 'package:bnood/core/config/theme/app_size.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/entity_picker_page.dart';
-import 'package:bnood/core/widgets/overlay_form_presentation.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/entity_picker_page.dart';
+import 'package:bnood/core/ui/widgets/overlay_form_presentation.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

@@ -1,4 +1,4 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';

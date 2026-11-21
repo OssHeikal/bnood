@@ -3,9 +3,9 @@ import 'package:bnood/app/bnood_app.dart';
 import 'package:bnood/app/router.dart';
 import 'package:bnood/features/content/data/content_page_record.dart'
     show ContentPage, ContentPaths;
-import 'package:bnood/core/prefs/app_settings_store.dart';
+import 'package:bnood/core/data/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/app_gate/app_maintenance_screen.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/login_screen.dart';

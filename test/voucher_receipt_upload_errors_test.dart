@@ -1,4 +1,4 @@
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/vouchers/presentation/widgets/receipt_image_compress.dart';
 import 'package:bnood/features/vouchers/presentation/models/voucher_receipt_upload_errors.dart';
 import 'package:bnood/l10n/app_localizations.dart';

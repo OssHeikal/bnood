@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:bnood/features/subscription/data/subscription_api.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';

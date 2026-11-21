@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../config/theme/app_size.dart';
-import '../../widgets/app_card.dart';
-import '../../widgets/app_fallback.dart';
-import '../../widgets/skeleton/paged_list_skeleton.dart';
+import '../../services/config/theme/app_size.dart';
+import '../../ui/widgets/app_card.dart';
+import '../../ui/widgets/app_fallback.dart';
+import '../../ui/widgets/skeleton/paged_list_skeleton.dart';
 import '../../../l10n/app_localizations.dart';
 
 /// Optional overrides for indicator builders on [AppPagedView].

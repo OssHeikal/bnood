@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_pressable.dart';
-import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
+import '../../../../core/ui/widgets/custom_text_field.dart';
 import 'package:bnood/features/clients/presentation/models/client_movements_filters.dart';
 
 class ClientMovementsFilterBar extends StatelessWidget {

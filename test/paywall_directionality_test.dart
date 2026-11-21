@@ -1,4 +1,4 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_comparison_table.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_package_card.dart';

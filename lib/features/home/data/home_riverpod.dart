@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:bnood/features/home/data/home_api.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/home/data/home_repository.dart';
 
 final homeApiProvider = Provider<HomeApi>((ref) {

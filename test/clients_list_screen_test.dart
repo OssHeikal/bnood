@@ -1,7 +1,7 @@
-import 'package:bnood/core/config/theme/app_colors.dart';
-import 'package:bnood/core/config/theme/app_shape.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/services/config/theme/app_colors.dart';
+import 'package:bnood/core/services/config/theme/app_shape.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/features/clients/presentation/providers/clients_list_paging.dart';
 import 'package:bnood/features/clients/presentation/screens/clients_list_screen.dart';
@@ -9,7 +9,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'dart:async';
 
 import 'package:bnood/core/shared/pagination/pagination.dart';
-import 'package:bnood/core/widgets/skeleton/paged_list_skeleton.dart';
+import 'package:bnood/core/ui/widgets/skeleton/paged_list_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

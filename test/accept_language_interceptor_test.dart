@@ -1,5 +1,5 @@
-import 'package:bnood/core/api/api_accept_language.dart';
-import 'package:bnood/core/api/app_dio.dart';
+import 'package:bnood/core/network/api/api_accept_language.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

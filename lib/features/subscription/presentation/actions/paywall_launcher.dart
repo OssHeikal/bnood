@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/theme/app_motion.dart';
+import '../../../../core/services/config/theme/app_motion.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';

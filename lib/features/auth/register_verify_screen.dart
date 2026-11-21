@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/config/extensions/num_extensions.dart';
-import '../../core/config/theme/app_size.dart';
+import '../../core/services/config/extensions/num_extensions.dart';
+import '../../core/services/config/theme/app_size.dart';
 import '../../core/utils/extensions/bidi_isolate.dart';
-import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/buttons/app_button.dart';
+import '../../core/ui/widgets/app_toaster.dart';
+import '../../core/ui/widgets/buttons/app_button.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_form_ui.dart';
 import 'package:bnood/features/auth/auth_messages.dart';

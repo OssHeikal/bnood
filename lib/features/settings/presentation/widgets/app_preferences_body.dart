@@ -2,11 +2,11 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
 import '../../../../core/app_state/settings_provider.dart';
-import '../../../../core/widgets/grouped_list_divider.dart';
+import '../../../../core/ui/widgets/grouped_list_divider.dart';
 import 'package:bnood/features/settings/presentation/widgets/settings_list_widgets.dart';
 
 /// Theme and language only (menu sub-screen).

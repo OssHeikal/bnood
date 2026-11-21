@@ -1,7 +1,7 @@
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../../core/api/api_error_user_message.dart';
-import '../../../../core/api/auth_api_exception.dart';
+import '../../../../core/network/api/api_error_user_message.dart';
+import '../../../../core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/vouchers/presentation/widgets/receipt_image_compress.dart';
 
 String voucherReceiptUploadErrorMessage(AppLocalizations l10n, Object? error) {

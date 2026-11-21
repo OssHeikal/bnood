@@ -1,5 +1,5 @@
-import '../../../../core/ledger/ledger_entities.dart';
-import '../../../../core/money/ledger_math.dart';
+import '../../../../core/domain/ledger/ledger_entities.dart';
+import '../../../../core/domain/money/ledger_math.dart';
 
 class ItemStatementGroup {
   const ItemStatementGroup({

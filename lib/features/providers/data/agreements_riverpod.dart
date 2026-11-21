@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:bnood/features/providers/data/agreements_api.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/providers/data/agreements_repository.dart';
 
 final appAgreementsApiProvider = Provider<AgreementsApi>((ref) {

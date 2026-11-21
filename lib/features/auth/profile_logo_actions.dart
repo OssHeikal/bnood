@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/sheet/app_sheet.dart';
+import '../../core/ui/widgets/app_toaster.dart';
+import '../../core/ui/widgets/sheet/app_sheet.dart';
 import 'package:bnood/features/vouchers/presentation/widgets/voucher_receipt_picker.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_messages.dart';

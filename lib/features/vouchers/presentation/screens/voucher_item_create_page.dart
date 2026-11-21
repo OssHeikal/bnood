@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/ui/widgets/custom_app_bar.dart';
 import 'package:bnood/features/items/presentation/sheets/item_create_sheet.dart';
 
 /// Full-screen item create for voucher pickers — pops with new item id.

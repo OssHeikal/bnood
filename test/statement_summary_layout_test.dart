@@ -1,7 +1,7 @@
-import 'package:bnood/core/config/theme/app_size.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/app_amount.dart';
-import 'package:bnood/core/widgets/app_card.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/app_amount.dart';
+import 'package:bnood/core/ui/widgets/app_card.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/statements/presentation/widgets/statement_summary_widgets.dart';
 import 'package:flutter/material.dart';

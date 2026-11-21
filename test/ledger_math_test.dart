@@ -1,5 +1,5 @@
-import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/core/money/ledger_math.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
+import 'package:bnood/core/domain/money/ledger_math.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Transaction _tx({

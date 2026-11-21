@@ -1,4 +1,4 @@
-import 'package:bnood/core/money/period_bounds.dart';
+import 'package:bnood/core/domain/money/period_bounds.dart';
 import 'package:bnood/features/statements/presentation/models/statement_period_logic.dart';
 import 'package:flutter_test/flutter_test.dart';
 

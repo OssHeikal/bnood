@@ -2,12 +2,12 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/formatting/display_digits.dart';
+import '../../../../core/domain/formatting/display_digits.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
-import '../../../../core/widgets/app_decision.dart';
-import '../../../../core/widgets/toast/app_tone.dart';
+import '../../../../core/ui/widgets/app_decision.dart';
+import '../../../../core/ui/widgets/toast/app_tone.dart';
 import 'package:bnood/features/subscription/presentation/actions/paywall_launcher.dart';
 
 /// Subscription cap kinds surfaced when entitlements block an action.

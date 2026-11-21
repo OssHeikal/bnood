@@ -1,9 +1,9 @@
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/clients/data/clients_api.dart';
 import 'package:bnood/features/clients/data/client_api_record.dart';
 import 'package:bnood/features/clients/data/clients_providers.dart';
 import 'package:bnood/features/clients/data/clients_repository.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/clients/presentation/actions/client_mutation_actions.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';

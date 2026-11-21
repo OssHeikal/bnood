@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Corner geometry
 
-Use [`lib/core/config/theme/app_shape.dart`](../../lib/core/config/theme/app_shape.dart) — **no ad-hoc `BorderRadius.circular` on product cards, fields, dialogs, or rounded buttons** unless migrating that widget in the same change.
+Use [`lib/core/services/config/theme/app_shape.dart`](../../lib/core/services/config/theme/app_shape.dart) — **no ad-hoc `BorderRadius.circular` on product cards, fields, dialogs, or rounded buttons** unless migrating that widget in the same change.
 
 ## Default — superellipse
 

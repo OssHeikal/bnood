@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../../core/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
 import 'package:bnood/features/content/data/content_page_record.dart';
 
 class RegisterLegalLinks extends StatelessWidget {

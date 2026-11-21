@@ -1,5 +1,5 @@
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/items/data/items_api.dart';
 import 'package:bnood/features/items/data/item_api_record.dart';
 import 'package:dio/dio.dart';

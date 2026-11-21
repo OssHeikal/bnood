@@ -1,7 +1,7 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/contacts/contact_import_action.dart';
-import 'package:bnood/core/contacts/device_contact_import.dart';
-import 'package:bnood/core/widgets/buttons/pressable_scale.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/data/contacts/contact_import_action.dart';
+import 'package:bnood/core/data/contacts/device_contact_import.dart';
+import 'package:bnood/core/ui/widgets/buttons/pressable_scale.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/vouchers/presentation/actions/inline_create_routes.dart';
 import 'package:bnood/l10n/app_localizations.dart';

@@ -5,7 +5,7 @@ import 'package:bnood/features/clients/data/client_provider_agreement_preview.da
 import 'package:bnood/features/home/data/craftsman_snapshot_limit.dart';
 import 'package:bnood/features/clients/data/clients_providers.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
-import '../../../../core/money/money_format.dart';
+import '../../../../core/domain/money/money_format.dart';
 import 'package:bnood/features/vouchers/data/vouchers_riverpod.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 import 'package:bnood/features/clients/presentation/models/client_item_spend_rows.dart';

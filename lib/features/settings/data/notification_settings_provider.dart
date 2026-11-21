@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:bnood/core/push/notification_settings_record.dart';
-import 'package:bnood/core/push/push_providers.dart';
+import 'package:bnood/core/network/push/notification_settings_record.dart';
+import 'package:bnood/core/network/push/push_providers.dart';
 
 final notificationSettingsProvider =
     AsyncNotifierProvider<

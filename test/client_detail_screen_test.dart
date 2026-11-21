@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
 import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';

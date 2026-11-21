@@ -1,6 +1,6 @@
 import 'package:bnood/features/items/data/items_api.dart';
-import 'package:bnood/core/config/theme/app_size.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/items/data/item_api_record.dart';
 import 'package:bnood/features/items/data/items_providers.dart';
 import 'package:bnood/features/items/data/items_repository.dart'
@@ -9,11 +9,11 @@ import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
-import 'package:bnood/core/widgets/app_card.dart';
-import 'package:bnood/core/widgets/app_empty_state.dart';
-import 'package:bnood/core/widgets/buttons/app_button.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton_box.dart';
+import 'package:bnood/core/ui/widgets/app_card.dart';
+import 'package:bnood/core/ui/widgets/app_empty_state.dart';
+import 'package:bnood/core/ui/widgets/buttons/app_button.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton_box.dart';
 import 'package:bnood/features/items/presentation/widgets/items_loading_skeleton.dart';
 import 'package:bnood/features/items/presentation/screens/items_screen.dart';
 import 'package:bnood/features/items/presentation/widgets/item_catalog_tile.dart';

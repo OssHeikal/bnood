@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_chevron.dart';
-import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_chevron.dart';
+import '../../../../core/ui/widgets/custom_text_field.dart';
 
 /// Bordered in-label control matching [CustomTextField]; opens picker on tap.
 class VoucherSelectorField extends StatelessWidget {

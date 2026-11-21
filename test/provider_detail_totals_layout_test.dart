@@ -1,5 +1,5 @@
 import 'package:bnood/features/providers/data/app_agreement_record.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';

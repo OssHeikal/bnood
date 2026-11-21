@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/skeleton/skeleton.dart';
-import '../../../../core/widgets/skeleton/skeleton_box.dart';
-import '../../../../core/widgets/skeleton/skeleton_text.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_box.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_text.dart';
 
 /// First-page placeholder for directory-style person rows (remote providers + local directory).
 class DirectoryListLoadingSkeleton extends StatelessWidget {

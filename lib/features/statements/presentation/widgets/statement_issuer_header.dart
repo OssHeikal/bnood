@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:bnood/features/clients/data/client_statement_record.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
 import '../../../../core/utils/extensions/bidi_isolate.dart';
 import 'package:bnood/features/auth/widgets/user_identity_avatar.dart';
 

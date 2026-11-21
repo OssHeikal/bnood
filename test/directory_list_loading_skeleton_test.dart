@@ -1,7 +1,7 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton_box.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton_text.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton_box.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton_text.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/providers/presentation/widgets/directory_list_loading_skeleton.dart';
 import 'package:bnood/l10n/app_localizations.dart';

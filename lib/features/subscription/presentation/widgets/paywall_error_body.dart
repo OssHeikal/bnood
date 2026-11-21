@@ -2,7 +2,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bnood/features/subscription/data/subscription_colors.dart';
-import '../../../../core/widgets/buttons/app_button.dart';
+import '../../../../core/ui/widgets/buttons/app_button.dart';
 
 class PaywallErrorBody extends StatelessWidget {
   const PaywallErrorBody({super.key, required this.onRetry});

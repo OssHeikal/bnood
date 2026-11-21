@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/config/theme/app_colors.dart';
-import '../core/config/theme/app_size.dart';
-import '../core/resources/gen/assets.gen.dart';
-import '../core/widgets/app_fallback.dart';
-import '../core/widgets/custom_app_bar.dart';
+import '../core/services/config/theme/app_colors.dart';
+import '../core/services/config/theme/app_size.dart';
+import '../core/ui/resources/gen/assets.gen.dart';
+import '../core/ui/widgets/app_fallback.dart';
+import '../core/ui/widgets/custom_app_bar.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'app_shell_online_tabs.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../config/theme/app_size.dart';
+import '../../services/config/theme/app_size.dart';
 import 'app_paged_builders.dart';
 import 'app_paging_controller.dart';
 import 'paged_sliver_two_column.dart';

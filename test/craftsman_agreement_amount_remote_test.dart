@@ -1,6 +1,6 @@
 import 'package:bnood/features/providers/data/agreement_amount_api.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/money/remote_money_units.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
 import 'package:bnood/features/clients/presentation/sheets/craftsman_agreement_amount_sheet.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';

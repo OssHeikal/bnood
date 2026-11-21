@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:bnood/core/api/api_log_interceptor.dart';
+import 'package:bnood/core/network/api/api_log_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

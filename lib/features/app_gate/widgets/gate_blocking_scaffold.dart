@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../core/brand/app_brand_lockup.dart';
-import '../../../core/config/extensions/num_extensions.dart';
-import '../../../core/config/theme/app_colors.dart';
-import '../../../core/config/theme/app_size.dart';
-import '../../../core/widgets/buttons/app_button.dart';
-import '../../../core/widgets/custom_app_bar.dart';
+import '../../../core/ui/brand/app_brand_lockup.dart';
+import '../../../core/services/config/extensions/num_extensions.dart';
+import '../../../core/services/config/theme/app_colors.dart';
+import '../../../core/services/config/theme/app_size.dart';
+import '../../../core/ui/widgets/buttons/app_button.dart';
+import '../../../core/ui/widgets/custom_app_bar.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 
 class GateBlockingScaffold extends StatelessWidget {

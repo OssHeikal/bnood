@@ -1,5 +1,5 @@
-import 'package:bnood/core/validation/egypt_mobile_phone.dart';
-import 'package:bnood/core/validation/egypt_mobile_phone_validation.dart';
+import 'package:bnood/core/domain/validation/egypt_mobile_phone.dart';
+import 'package:bnood/core/domain/validation/egypt_mobile_phone_validation.dart';
 import 'package:bnood/l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:bnood/core/money/remote_money_units.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
 import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/data/subscription_colors.dart';
 export 'paywall_v3_models.dart';

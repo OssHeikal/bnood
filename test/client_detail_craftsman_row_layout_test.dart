@@ -1,4 +1,4 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_detail_craftsman_row.dart';
 import 'package:bnood/l10n/app_localizations.dart';

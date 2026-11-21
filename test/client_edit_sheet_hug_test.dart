@@ -1,5 +1,5 @@
-import 'package:bnood/core/theme/app_theme.dart';
-import 'package:bnood/core/widgets/app_modal_sheet.dart';
+import 'package:bnood/core/ui/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/app_modal_sheet.dart';
 import 'package:bnood/features/clients/presentation/sheets/client_edit_sheet.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/config/theme/app_size.dart';
-import '../core/layout/app_layout.dart';
-import '../core/theme/app_colors.dart';
-import '../core/widgets/toast/shell_dock_presence.dart';
+import '../core/services/config/theme/app_size.dart';
+import '../core/ui/layout/app_layout.dart';
+import '../core/ui/theme/app_colors.dart';
+import '../core/ui/widgets/toast/shell_dock_presence.dart';
 import 'package:bnood/features/vouchers/presentation/actions/voucher_launcher.dart';
 import 'shell_chrome_scope.dart';
 import 'widgets/floating_shell_dock.dart';

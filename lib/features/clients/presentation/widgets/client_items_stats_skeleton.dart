@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/skeleton/skeleton_box.dart';
-import '../../../../core/widgets/skeleton/skeleton_text.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_box.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_text.dart';
 
 class ClientItemsStatsSkeleton extends StatelessWidget {
   const ClientItemsStatsSkeleton({super.key});

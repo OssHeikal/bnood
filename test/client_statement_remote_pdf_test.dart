@@ -1,4 +1,4 @@
-import 'package:bnood/core/api/app_dio.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
 import 'package:bnood/features/clients/data/clients_api.dart';
 import 'package:bnood/features/clients/data/clients_providers.dart';
 import 'package:bnood/features/clients/data/clients_repository.dart';
@@ -7,7 +7,7 @@ import 'package:bnood/features/items/data/items_providers.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/statements/presentation/screens/client_statement_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';

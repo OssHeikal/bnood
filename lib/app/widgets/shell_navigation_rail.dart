@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../core/config/theme/app_size.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/widgets/app_pressable.dart';
+import '../../core/services/config/theme/app_size.dart';
+import '../../core/ui/theme/app_colors.dart';
+import '../../core/ui/widgets/app_pressable.dart';
 import 'shell_nav_destination.dart';
 import 'shell_nav_icon.dart';
 import 'shell_nav_icons.dart';

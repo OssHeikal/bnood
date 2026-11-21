@@ -1,6 +1,6 @@
-import 'package:bnood/core/api/app_dio.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
 import 'package:bnood/features/settings/data/notification_settings_api.dart';
-import 'package:bnood/core/push/notification_settings_record.dart';
+import 'package:bnood/core/network/push/notification_settings_record.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

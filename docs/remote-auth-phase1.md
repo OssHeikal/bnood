@@ -4,7 +4,7 @@ Flutter client talks to Laravel `POST/GET /api/v1/auth/*` (no `/mobile`). Domain
 
 ## API base URL
 
-Configured at compile time via `BNOOD_API_BASE_URL` (`lib/core/config/api_config.dart`).
+Configured at compile time via `BNOOD_API_BASE_URL` (`lib/core/services/config/api_config.dart`).
 
 | Target | Example |
 |--------|---------|

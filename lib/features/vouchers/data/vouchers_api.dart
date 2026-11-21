@@ -2,11 +2,11 @@ import 'package:dio/dio.dart';
 
 import 'package:bnood/features/vouchers/data/app_voucher_receipt.dart';
 import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
-import 'package:bnood/core/api/api_response_parser.dart';
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/api/auth_interceptor.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/network/api/api_response_parser.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_interceptor.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 
 class VouchersApi {
   VouchersApi({Dio? dio, SessionStore? sessionStore})

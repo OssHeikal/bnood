@@ -1,4 +1,4 @@
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/providers/presentation/actions/provider_mutation_actions.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';

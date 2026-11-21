@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/text_style_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/theme/app_colors.dart' as legacy;
+import '../../../../core/services/config/extensions/text_style_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/theme/app_colors.dart' as legacy;
 import '../../../../core/utils/extensions/bidi_isolate.dart';
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/widgets/entity_picker_row.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/entity_picker_row.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_balance_card.dart';
 import 'package:bnood/features/items/presentation/widgets/item_semantic_icon.dart';
 import 'package:bnood/l10n/app_localizations.dart';

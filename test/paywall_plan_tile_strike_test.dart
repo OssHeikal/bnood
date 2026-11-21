@@ -1,4 +1,4 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_plan_tile.dart';

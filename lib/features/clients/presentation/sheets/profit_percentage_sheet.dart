@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/money/basis_points.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/money/basis_points.dart';
 import 'package:bnood/features/clients/data/clients_providers.dart';
-import '../../../../core/widgets/buttons/app_button.dart';
-import '../../../../core/widgets/custom_text_field.dart';
-import '../../../../core/widgets/app_modal_sheet.dart';
-import '../../../../core/widgets/sheet_footer_refresh.dart';
-import '../../../../core/widgets/sheet_form_header.dart';
+import '../../../../core/ui/widgets/buttons/app_button.dart';
+import '../../../../core/ui/widgets/custom_text_field.dart';
+import '../../../../core/ui/widgets/app_modal_sheet.dart';
+import '../../../../core/ui/widgets/sheet_footer_refresh.dart';
+import '../../../../core/ui/widgets/sheet_form_header.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import '../../../../core/app_state/client_mutation_refresh.dart';
 

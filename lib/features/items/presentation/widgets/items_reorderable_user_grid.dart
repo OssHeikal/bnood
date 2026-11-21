@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/services/config/theme/app_size.dart';
 import 'package:bnood/features/items/data/item_api_record.dart';
-import '../../../../core/layout/bnood_grid_count.dart';
+import '../../../../core/ui/layout/bnood_grid_count.dart';
 import 'package:bnood/features/items/presentation/widgets/item_catalog_tile.dart';
 
 /// Two-column catalog grid with long-press drag reorder for every item (defaults included).

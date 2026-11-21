@@ -7,8 +7,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bnood/core/theme/app_theme.dart';
-import 'package:bnood/core/widgets/buttons/app_button.dart';
+import 'package:bnood/core/ui/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/buttons/app_button.dart';
 
 Widget _wrap(Widget child, Locale locale) {
   return ProviderScope(

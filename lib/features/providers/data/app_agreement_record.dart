@@ -1,4 +1,4 @@
-import 'package:bnood/core/money/remote_money_units.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
 
 class AppAgreement {

@@ -1,8 +1,8 @@
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../core/api/api_error_user_message.dart';
-import '../../core/api/api_field_errors.dart';
-import '../../core/api/auth_api_exception.dart';
+import '../../core/network/api/api_error_user_message.dart';
+import '../../core/network/api/api_field_errors.dart';
+import '../../core/network/api/auth_api_exception.dart';
 
 String authApiMessage(AppLocalizations l10n, AuthApiException error) {
   if (error.isAccountExists) return l10n.authAccountExistsMessage;

@@ -1,4 +1,4 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/providers/presentation/widgets/directory_person_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';

@@ -1,4 +1,4 @@
-import '../../../../core/ledger/ledger_entities.dart';
+import '../../../../core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 
 typedef MovementEntityMaps = ({

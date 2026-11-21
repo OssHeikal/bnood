@@ -1,7 +1,7 @@
 import 'package:bnood/app/widgets/floating_shell_dock.dart';
 import 'package:bnood/app/widgets/shell_nav_destination.dart';
 import 'package:bnood/app/widgets/shell_nav_icons.dart';
-import 'package:bnood/core/theme/app_colors.dart';
+import 'package:bnood/core/ui/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -1,6 +1,6 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/app_modal_sheet.dart';
-import 'package:bnood/core/widgets/sheet_drag_handle.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/app_modal_sheet.dart';
+import 'package:bnood/core/ui/widgets/sheet_drag_handle.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/vouchers/presentation/sheets/voucher_receipt_source_sheet.dart';
 import 'package:bnood/l10n/app_localizations.dart';

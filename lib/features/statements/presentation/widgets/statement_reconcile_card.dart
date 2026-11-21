@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/money/ledger_math.dart';
-import '../../../../core/money/supplier_period_math.dart';
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/widgets/app_card.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/money/ledger_math.dart';
+import '../../../../core/domain/money/supplier_period_math.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/app_card.dart';
 
 class ClientStatementReconcileCard extends StatelessWidget {
   const ClientStatementReconcileCard({

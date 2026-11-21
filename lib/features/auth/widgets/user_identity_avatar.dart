@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/config/theme/app_colors.dart';
-import '../../../core/config/theme/app_shape.dart';
-import '../../../core/formatting/person_initials.dart';
+import '../../../core/services/config/theme/app_colors.dart';
+import '../../../core/services/config/theme/app_shape.dart';
+import '../../../core/domain/formatting/person_initials.dart';
 
 /// Subscriber identity circle: primary fill, onPrimary initials (Home, Profile, etc.).
 class UserIdentityAvatar extends StatelessWidget {

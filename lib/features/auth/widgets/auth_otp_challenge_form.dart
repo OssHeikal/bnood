@@ -2,9 +2,9 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../core/config/extensions/num_extensions.dart';
-import '../../../core/config/theme/app_size.dart';
-import '../../../core/widgets/buttons/app_button.dart';
+import '../../../core/services/config/extensions/num_extensions.dart';
+import '../../../core/services/config/theme/app_size.dart';
+import '../../../core/ui/widgets/buttons/app_button.dart';
 import 'package:bnood/features/auth/widgets/auth_otp_pin_field.dart';
 
 /// Registration / recovery OTP body: phone label, PIN field, verify + optional resend in scroll.

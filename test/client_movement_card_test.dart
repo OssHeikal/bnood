@@ -1,6 +1,6 @@
-import 'package:bnood/core/config/theme/app_colors.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/services/config/theme/app_colors.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_movement_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_theme.dart';
 import '../../../../core/utils/safe_external_url.dart';
-import '../../../../core/widgets/app_pressable.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
 import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
 import 'package:bnood/features/content/data/content_page_record.dart';
 

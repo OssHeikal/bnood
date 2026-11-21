@@ -1,5 +1,5 @@
 import 'package:bnood/features/items/data/items_api.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/items/data/item_api_record.dart';
 import 'package:bnood/features/items/data/items_providers.dart';
 import 'package:bnood/features/items/data/items_repository.dart';

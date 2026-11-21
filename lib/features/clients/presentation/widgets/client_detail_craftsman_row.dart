@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/theme/app_colors.dart' as legacy;
-import '../../../../core/money/remote_money_units.dart';
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_chevron.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/theme/app_colors.dart' as legacy;
+import '../../../../core/domain/money/remote_money_units.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_chevron.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';

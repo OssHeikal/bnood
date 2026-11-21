@@ -1,6 +1,7 @@
-import 'package:bnood/core/config/theme/app_colors.dart';
-import 'package:bnood/core/config/theme/app_theme.dart' show AppFoundationTheme;
-import 'package:bnood/core/money/period_bounds.dart';
+import 'package:bnood/core/services/config/theme/app_colors.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart'
+    show AppFoundationTheme;
+import 'package:bnood/core/domain/money/period_bounds.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/statements/presentation/widgets/statement_period_controls.dart';
 import 'package:bnood/features/statements/presentation/models/statement_period_logic.dart';

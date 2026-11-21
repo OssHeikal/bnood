@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/resources/gen/assets.gen.dart';
-import '../../../../core/widgets/app_chevron.dart';
-import '../../../../core/widgets/app_pressable.dart';
-import '../../../../core/widgets/grouped_list_divider.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/ui/widgets/app_chevron.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
+import '../../../../core/ui/widgets/grouped_list_divider.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
 import 'package:bnood/features/settings/presentation/widgets/menu_icon_chip.dart';
 

@@ -1,6 +1,6 @@
 import 'package:bnood/features/home/data/craftsman_snapshot_limit.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';

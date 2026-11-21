@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/widgets/skeleton/skeleton.dart';
-import '../../../../core/widgets/skeleton/skeleton_box.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_box.dart';
 
 class PaywallLoadingSkeleton extends StatelessWidget {
   const PaywallLoadingSkeleton({super.key});

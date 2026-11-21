@@ -1,4 +1,4 @@
-import 'package:bnood/core/push/push_cold_start_navigation.dart';
+import 'package:bnood/core/network/push/push_cold_start_navigation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

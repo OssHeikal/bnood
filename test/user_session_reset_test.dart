@@ -1,9 +1,9 @@
 import 'package:bnood/features/home/data/home_api.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/home/data/app_home_dashboard.dart';
 import 'package:bnood/features/home/data/home_riverpod.dart';
 import 'package:bnood/features/home/data/home_repository.dart';
-import 'package:bnood/core/session/user_session_lifecycle.dart';
+import 'package:bnood/core/network/session/user_session_lifecycle.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:flutter_test/flutter_test.dart';

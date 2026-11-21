@@ -1,4 +1,4 @@
-import '../../core/resources/gen/assets.gen.dart';
+import '../../core/ui/resources/gen/assets.gen.dart';
 
 /// Owner SVG mapping for shell navigation (see [docs/assets/nav-icon-mapping.md]).
 abstract final class ShellNavIcons {

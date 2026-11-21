@@ -6,7 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/services/config/theme/app_size.dart';
 
 /// Writes PDF bytes to a temp file before share — `XFile.fromData` is unreliable on some iOS builds.
 typedef StatementShareFromFile =

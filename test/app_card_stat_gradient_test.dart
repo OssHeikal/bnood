@@ -1,5 +1,5 @@
-import 'package:bnood/core/config/theme/app_colors.dart';
-import 'package:bnood/core/widgets/app_card.dart';
+import 'package:bnood/core/services/config/theme/app_colors.dart';
+import 'package:bnood/core/ui/widgets/app_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

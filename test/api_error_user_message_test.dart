@@ -1,5 +1,5 @@
-import 'package:bnood/core/api/api_error_user_message.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/api_error_user_message.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 

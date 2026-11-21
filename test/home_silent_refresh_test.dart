@@ -1,5 +1,5 @@
 import 'package:bnood/features/home/data/home_row_models.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'support/home_notifier_stubs.dart';

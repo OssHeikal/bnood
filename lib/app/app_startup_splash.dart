@@ -6,8 +6,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/brand/app_brand_lockup.dart';
-import '../core/config/theme/app_colors.dart';
+import '../core/ui/brand/app_brand_lockup.dart';
+import '../core/services/config/theme/app_colors.dart';
 import 'package:bnood/features/app_gate/data/app_config_record.dart';
 import 'package:bnood/features/app_gate/app_gate_cold_start.dart';
 import 'package:bnood/features/app_gate/app_gate_provider.dart';

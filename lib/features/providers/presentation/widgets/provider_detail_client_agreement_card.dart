@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/money/remote_money_units.dart';
-import '../../../../core/widgets/app_pressable.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/money/remote_money_units.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bnood/features/providers/presentation/models/provider_detail_snapshot.dart';
 import 'package:bnood/features/providers/presentation/widgets/provider_detail_metrics_row.dart';

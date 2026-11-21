@@ -1,7 +1,7 @@
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api.dart';
-import 'package:bnood/core/api/auth_api_providers.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api.dart';
+import 'package:bnood/core/network/api/auth_api_providers.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_login_outcome.dart';
 import 'package:bnood/features/auth/auth_state.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../core/resources/gen/assets.gen.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
 
 /// Maps backend benefit icon keys to bundled SVG assets.
 Widget paywallBenefitIcon(

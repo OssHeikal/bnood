@@ -3,15 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/layout/bnood_list_canvas.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/layout/bnood_list_canvas.dart';
 import '../../../../core/utils/safe_external_url.dart';
-import '../../../../core/widgets/app_fallback.dart';
-import '../../../../core/widgets/custom_app_bar.dart';
-import '../../../../core/widgets/skeleton/skeleton.dart';
-import '../../../../core/widgets/skeleton/skeleton_box.dart';
-import '../../../../core/widgets/skeleton/skeleton_text.dart'
+import '../../../../core/ui/widgets/app_fallback.dart';
+import '../../../../core/ui/widgets/custom_app_bar.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_box.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_text.dart'
     show SkeletonText, SkeletonTextRole;
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/content/data/content_page_provider.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_card.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_card.dart';
 import 'package:bnood/features/vouchers/presentation/actions/voucher_launcher.dart';
 import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
 import 'package:bnood/features/vouchers/presentation/models/voucher_draft_from_app_voucher.dart';

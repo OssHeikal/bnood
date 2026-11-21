@@ -1,4 +1,4 @@
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 
 /// Parsed client payload from `/api/v1/clients` including the hidden project.
 class ClientApiRecord {

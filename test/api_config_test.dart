@@ -1,4 +1,4 @@
-import 'package:bnood/core/config/api_config.dart';
+import 'package:bnood/core/services/config/api_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

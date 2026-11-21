@@ -1,4 +1,4 @@
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 
 class FakeSessionStore extends SessionStore {
   FakeSessionStore({this.token});

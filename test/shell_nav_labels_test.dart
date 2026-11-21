@@ -1,5 +1,5 @@
 import 'package:bnood/app/widgets/floating_shell_dock.dart';
-import 'package:bnood/core/config/theme/app_size.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
 import 'package:bnood/l10n/app_localizations_ar.dart';
 import 'package:bnood/l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';

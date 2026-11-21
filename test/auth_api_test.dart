@@ -1,10 +1,10 @@
-import 'package:bnood/core/api/api_log_interceptor.dart';
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/api/auth_login_result.dart';
-import 'package:bnood/core/api/auth_interceptor.dart';
-import 'package:bnood/core/config/api_config.dart';
+import 'package:bnood/core/network/api/api_log_interceptor.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_login_result.dart';
+import 'package:bnood/core/network/api/auth_interceptor.dart';
+import 'package:bnood/core/services/config/api_config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

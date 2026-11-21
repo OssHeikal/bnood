@@ -1,4 +1,4 @@
-import 'package:bnood/core/api/api_response_parser.dart';
+import 'package:bnood/core/network/api/api_response_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

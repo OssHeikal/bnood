@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../prefs/app_settings_store.dart';
+import '../data/prefs/app_settings_store.dart';
 
 /// Bootstrap snapshot from [main] after disk load (or defaults when prefs unavailable).
 final appSettingsBootstrapProvider = Provider<AppSettingsSnapshot>(

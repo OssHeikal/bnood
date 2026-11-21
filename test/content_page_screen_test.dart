@@ -1,11 +1,11 @@
 import 'package:bnood/app/app_splash_session.dart';
 import 'package:bnood/app/bnood_app.dart';
 import 'package:bnood/app/router.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/content/data/content_page_record.dart';
-import 'package:bnood/core/prefs/app_settings_store.dart';
+import 'package:bnood/core/data/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/content/data/content_page_provider.dart';
 import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';

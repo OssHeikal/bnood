@@ -1,5 +1,5 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/prefs/app_settings_store.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/data/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';

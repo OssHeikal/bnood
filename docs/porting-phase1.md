@@ -13,10 +13,10 @@
 | Sheet drag handle, grouped divider | `FieldPlaceholders` instead of `LocaleKeys` |
 | Toaster layout / `AppToast` | `FoundationToaster` + `rootNavigatorKey` |
 | AppDecision flows | `BnoodFailure` instead of `Failure` |
-| | Legacy `lib/core/widgets/app_button.dart` (enum) for production features |
+| | Legacy `lib/core/ui/widgets/app_button.dart` (enum) for production features |
 | | Legacy `CustomBottomSheet` + nested navigator untouched |
 | | Production `main.dart` / `BnoodApp` theme unchanged |
-| | `core/pdf/pdf_fonts.dart` unchanged |
+| | `core/domain/pdf/pdf_fonts.dart` unchanged |
 
 ## Preview (debug only)
 

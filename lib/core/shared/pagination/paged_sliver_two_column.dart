@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../config/theme/app_size.dart';
+import '../../services/config/theme/app_size.dart';
 
 /// Paged list with two items per row; row height follows the taller card.
 class PagedSliverTwoColumn<PageKeyType, ItemType> extends StatelessWidget {

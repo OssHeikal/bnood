@@ -1,8 +1,8 @@
-import 'package:bnood/core/config/theme/app_size.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/app_modal_sheet.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/app_modal_sheet.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
-import 'package:bnood/core/widgets/buttons/app_button.dart';
+import 'package:bnood/core/ui/widgets/buttons/app_button.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

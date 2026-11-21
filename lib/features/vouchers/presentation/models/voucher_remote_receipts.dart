@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-import '../../../../core/api/auth_api_exception.dart';
+import '../../../../core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/vouchers/data/app_voucher_receipt.dart';
 import 'package:bnood/features/vouchers/data/vouchers_repository.dart';
 import 'package:bnood/features/vouchers/presentation/widgets/receipt_image_compress.dart';

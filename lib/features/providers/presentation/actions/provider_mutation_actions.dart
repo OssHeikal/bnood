@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../../core/api/api_error_user_message.dart';
-import '../../../../core/api/auth_api_exception.dart';
-import '../../../../core/validation/egypt_mobile_phone_validation.dart';
+import '../../../../core/network/api/api_error_user_message.dart';
+import '../../../../core/network/api/auth_api_exception.dart';
+import '../../../../core/domain/validation/egypt_mobile_phone_validation.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
 import 'package:bnood/features/providers/data/providers_error_handler.dart';
 import 'package:bnood/features/providers/data/providers_riverpod.dart';
 import '../../../../core/shared/pagination/paging_refresh.dart';
-import '../../../../core/widgets/app_decision.dart';
-import '../../../../core/widgets/app_toaster.dart';
-import '../../../../core/widgets/toast/app_tone.dart';
+import '../../../../core/ui/widgets/app_decision.dart';
+import '../../../../core/ui/widgets/app_toaster.dart';
+import '../../../../core/ui/widgets/toast/app_tone.dart';
 
 void refreshAfterProviderMutation(WidgetRef ref) {
   bumpPagingListRefresh(ref, PagingListIds.providers);

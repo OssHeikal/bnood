@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_pressable.dart';
-import '../../../../core/widgets/app_modal_sheet.dart';
-import '../../../../core/widgets/sheet_drag_handle.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
+import '../../../../core/ui/widgets/app_modal_sheet.dart';
+import '../../../../core/ui/widgets/sheet_drag_handle.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 
 enum VoucherReceiptSource { camera, gallery }

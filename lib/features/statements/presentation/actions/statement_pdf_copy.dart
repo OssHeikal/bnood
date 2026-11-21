@@ -1,6 +1,6 @@
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../../core/money/period_bounds.dart';
+import '../../../../core/domain/money/period_bounds.dart';
 import 'package:bnood/features/statements/presentation/models/statement_movement_text.dart';
 
 /// Localized strings for statement PDF layout (AR/EN).

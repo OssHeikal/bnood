@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/api/api_field_errors.dart';
-import '../../../../core/api/auth_api_exception.dart';
-import '../../../../core/widgets/app_toaster.dart';
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/network/api/api_field_errors.dart';
+import '../../../../core/network/api/auth_api_exception.dart';
+import '../../../../core/ui/widgets/app_toaster.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
 import 'package:bnood/features/items/data/items_providers.dart';
-import '../../../../core/widgets/buttons/app_button.dart';
-import '../../../../core/widgets/custom_text_field.dart';
-import '../../../../core/widgets/sheet_drag_handle.dart';
-import '../../../../core/widgets/skeleton/async_value_body.dart';
+import '../../../../core/ui/widgets/buttons/app_button.dart';
+import '../../../../core/ui/widgets/custom_text_field.dart';
+import '../../../../core/ui/widgets/sheet_drag_handle.dart';
+import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
 import 'package:bnood/features/items/presentation/actions/item_mutation_actions.dart';
 import 'package:bnood/features/items/presentation/widgets/item_visual_pickers.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/api/auth_api_exception.dart';
+import '../../../../core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/subscription/presentation/actions/subscription_limit_handler.dart';
 
 /// Maps subscription 403 codes to paywall or limit info when surfaces are enabled.

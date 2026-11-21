@@ -1,4 +1,4 @@
-import '../../../../core/prefs/bnood_prefs_access.dart';
+import '../../../../core/data/prefs/bnood_prefs_access.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Statement export cursors reuse shared [BnoodPrefsAccess].

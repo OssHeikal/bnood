@@ -1,6 +1,6 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/buttons/app_button.dart';
-import 'package:bnood/core/widgets/text_field/app_input_direction.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/buttons/app_button.dart';
+import 'package:bnood/core/ui/widgets/text_field/app_input_direction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 
 /// Maps providers API auth failures to navigation; returns true when handled.
 Future<bool> handleProvidersApiAuthError({

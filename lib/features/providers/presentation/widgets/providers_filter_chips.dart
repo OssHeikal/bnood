@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
 import 'package:bnood/l10n/app_localizations.dart';
-import '../../../../core/widgets/app_pressable.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
 import 'package:bnood/features/providers/presentation/providers/providers_list_paging.dart';
 
 class ProvidersListFilterChips extends ConsumerWidget {

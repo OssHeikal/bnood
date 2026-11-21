@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/api/auth_api_exception.dart';
+import '../../../../core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/providers/data/agreement_amount_api.dart';
 import 'package:bnood/features/providers/data/agreements_riverpod.dart';
 import 'package:bnood/features/vouchers/presentation/models/voucher_draft.dart';

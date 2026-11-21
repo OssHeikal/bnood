@@ -1,4 +1,4 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/clients/presentation/models/client_movements_filters.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_movements_filter_bar.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';

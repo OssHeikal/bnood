@@ -1,4 +1,4 @@
-import 'package:bnood/core/widgets/text_field/app_input_formatters.dart';
+import 'package:bnood/core/ui/widgets/text_field/app_input_formatters.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 

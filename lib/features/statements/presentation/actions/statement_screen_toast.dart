@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/widgets/app_toaster.dart';
+import '../../../../core/ui/widgets/app_toaster.dart';
 
 /// Statement export failures — same [AppToaster] with export-footer clearance.
 abstract final class StatementScreenToast {

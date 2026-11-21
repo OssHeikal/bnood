@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/formatting/display_digits.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/formatting/display_digits.dart';
 import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/data/subscription_colors.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_theme.dart';

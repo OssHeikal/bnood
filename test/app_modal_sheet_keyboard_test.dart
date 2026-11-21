@@ -1,5 +1,5 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/custom_text_field.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/custom_text_field.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/providers/presentation/sheets/provider_create_sheet.dart'
     show showProviderCreateSheet;

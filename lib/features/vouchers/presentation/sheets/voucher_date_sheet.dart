@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/layout/app_form_route_canvas.dart';
-import '../../../../core/config/extensions/text_style_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_overlay.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/formatting/display_digits.dart';
-import '../../../../core/widgets/app_chevron.dart';
-import '../../../../core/widgets/buttons/app_button.dart';
-import '../../../../core/widgets/custom_app_bar.dart';
-import '../../../../core/widgets/overlay_form_presentation.dart';
-import '../../../../core/widgets/sheet_drag_handle.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/ui/layout/app_form_route_canvas.dart';
+import '../../../../core/services/config/extensions/text_style_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_overlay.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/formatting/display_digits.dart';
+import '../../../../core/ui/widgets/app_chevron.dart';
+import '../../../../core/ui/widgets/buttons/app_button.dart';
+import '../../../../core/ui/widgets/custom_app_bar.dart';
+import '../../../../core/ui/widgets/overlay_form_presentation.dart';
+import '../../../../core/ui/widgets/sheet_drag_handle.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 
 /// Opens the app calendar date sheet; returns the confirmed day or null.

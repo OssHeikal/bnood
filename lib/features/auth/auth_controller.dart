@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/api/auth_api_exception.dart';
-import '../../core/api/auth_api.dart';
-import '../../core/api/auth_login_result.dart';
+import '../../core/network/api/auth_api_exception.dart';
+import '../../core/network/api/auth_api.dart';
+import '../../core/network/api/auth_login_result.dart';
 import 'package:bnood/features/auth/auth_login_outcome.dart';
-import '../../core/api/auth_api_providers.dart';
-import '../../core/storage/session_store.dart';
+import '../../core/network/api/auth_api_providers.dart';
+import '../../core/data/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
 

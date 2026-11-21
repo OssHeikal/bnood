@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/layout/app_form_route_canvas.dart';
-import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/ui/layout/app_form_route_canvas.dart';
+import '../../../../core/services/config/theme/app_size.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:bnood/features/subscription/data/paywall_contact.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/subscription/data/subscription_colors.dart';
-import '../../../../core/widgets/app_toaster.dart';
-import '../../../../core/widgets/buttons/app_button.dart';
+import '../../../../core/ui/widgets/app_toaster.dart';
+import '../../../../core/ui/widgets/buttons/app_button.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_theme.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_billing_toggle.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_comparison_sheet.dart';

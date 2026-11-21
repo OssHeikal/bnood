@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_modal_sheet.dart';
-import '../../../../core/widgets/bounded_sheet_navigator.dart';
-import '../../../../core/widgets/sheet_drag_handle.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_modal_sheet.dart';
+import '../../../../core/ui/widgets/bounded_sheet_navigator.dart';
+import '../../../../core/ui/widgets/sheet_drag_handle.dart';
 import 'package:bnood/features/settings/presentation/widgets/app_menu_body.dart';
 
 Future<void> showAppSettingsSheet(BuildContext context) {

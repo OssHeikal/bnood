@@ -1,5 +1,5 @@
 import 'package:bnood/features/providers/data/app_agreement_record.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
 import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
 import 'package:bnood/features/auth/models/user.dart';
@@ -7,7 +7,7 @@ import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/providers/presentation/providers/provider_detail_provider.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/providers/presentation/screens/provider_detail_screen.dart';
 import 'package:bnood/features/providers/presentation/models/provider_detail_snapshot.dart';
 import 'package:bnood/features/providers/presentation/widgets/provider_detail_loading_skeleton.dart';

@@ -3,10 +3,10 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/layout/app_form_route_canvas.dart';
-import '../../../../core/widgets/app_decision.dart';
-import '../../../../core/widgets/custom_app_bar.dart';
-import '../../../../core/widgets/toast/app_tone.dart';
+import '../../../../core/ui/layout/app_form_route_canvas.dart';
+import '../../../../core/ui/widgets/app_decision.dart';
+import '../../../../core/ui/widgets/custom_app_bar.dart';
+import '../../../../core/ui/widgets/toast/app_tone.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/vouchers/presentation/models/voucher_draft.dart';
 import 'package:bnood/features/vouchers/presentation/actions/voucher_launcher.dart';

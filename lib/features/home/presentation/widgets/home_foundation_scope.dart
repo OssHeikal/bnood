@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
 
 /// Merges foundation [AppColors]/[AppText] onto the current theme for home only.
 class HomeFoundationScope extends StatelessWidget {

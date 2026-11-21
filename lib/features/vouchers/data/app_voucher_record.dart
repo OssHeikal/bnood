@@ -1,5 +1,5 @@
 import 'package:bnood/features/clients/data/client_api_record.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/vouchers/data/app_voucher_receipt.dart';
 
 class AppVoucher {

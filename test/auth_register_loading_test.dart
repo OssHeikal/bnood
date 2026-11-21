@@ -1,8 +1,8 @@
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api.dart';
-import 'package:bnood/core/api/auth_api_providers.dart';
-import 'package:bnood/core/storage/session_store.dart';
-import 'package:bnood/core/theme/app_theme.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api.dart';
+import 'package:bnood/core/network/api/auth_api_providers.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
+import 'package:bnood/core/ui/theme/app_theme.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/register_screen.dart';
 import 'package:bnood/features/auth/register_verify_screen.dart';
@@ -14,7 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:bnood/core/widgets/buttons/app_button.dart';
+import 'package:bnood/core/ui/widgets/buttons/app_button.dart';
 
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';

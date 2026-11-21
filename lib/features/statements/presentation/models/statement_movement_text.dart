@@ -1,7 +1,7 @@
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../../core/ledger/ledger_entities.dart';
-import '../../../../core/formatting/display_digits.dart';
+import '../../../../core/domain/ledger/ledger_entities.dart';
+import '../../../../core/domain/formatting/display_digits.dart';
 
 abstract final class StatementMovementText {
   static String formatMovementDate(DateTime date) {

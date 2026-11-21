@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/skeleton/paged_list_skeleton.dart';
-import '../../../../core/widgets/skeleton/skeleton_box.dart';
-import '../../../../core/widgets/skeleton/skeleton_text.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/skeleton/paged_list_skeleton.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_box.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_text.dart';
 
 /// Home data zones only — headers/settings/nav stay live outside [Skeleton].
 class HomeStatGridSkeleton extends StatelessWidget {

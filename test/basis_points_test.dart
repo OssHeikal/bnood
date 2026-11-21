@@ -1,4 +1,4 @@
-import 'package:bnood/core/money/basis_points.dart';
+import 'package:bnood/core/domain/money/basis_points.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

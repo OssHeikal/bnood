@@ -2,7 +2,7 @@ import 'package:bnood/app/widgets/shell_navigation_rail.dart';
 import 'package:bnood/app/widgets/shell_nav_destination.dart';
 import 'package:bnood/app/widgets/shell_nav_icon.dart';
 import 'package:bnood/app/widgets/shell_nav_icons.dart';
-import 'package:bnood/core/theme/app_theme.dart';
+import 'package:bnood/core/ui/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

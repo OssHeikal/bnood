@@ -1,9 +1,9 @@
-import 'package:bnood/core/api/app_dio.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
 import 'package:bnood/features/home/data/home_api.dart';
 import 'package:bnood/features/home/data/app_home_dashboard.dart';
 import 'package:bnood/features/home/data/app_home_totals.dart';
-import 'package:bnood/core/money/remote_money_format.dart';
-import 'package:bnood/core/money/remote_money_units.dart';
+import 'package:bnood/core/domain/money/remote_money_format.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

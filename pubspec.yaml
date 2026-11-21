@@ -59,7 +59,7 @@ dev_dependencies:
   sentry_dart_plugin: ^3.5.0
 
 flutter_gen:
-  output: lib/core/resources/gen/
+  output: lib/core/ui/resources/gen/
   line_length: 120
   integrations:
     flutter_svg: true

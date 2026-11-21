@@ -1,4 +1,4 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
 import 'package:bnood/core/shared/pagination/pagination.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
@@ -6,7 +6,7 @@ import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/core/shared/pagination/paged_fetch_page.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/providers/presentation/providers/providers_list_paging.dart';
 import 'package:bnood/features/providers/presentation/screens/providers_screen.dart';
 import 'package:bnood/features/providers/presentation/widgets/providers_loading_skeleton.dart';

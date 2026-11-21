@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/widgets/shell_nav_icon.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/resources/gen/assets.gen.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
 
 /// Small rounded chip for menu row leading icons (theme-tinted).
 class MenuIconChip extends StatelessWidget {

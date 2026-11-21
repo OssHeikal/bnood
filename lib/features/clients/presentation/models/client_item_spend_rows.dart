@@ -1,7 +1,7 @@
 import 'package:bnood/features/clients/data/client_statement_record.dart';
 import 'package:bnood/features/clients/data/statement_item_visual.dart';
 import 'package:bnood/features/items/data/item_api_record.dart';
-import '../../../../core/money/ledger_math.dart';
+import '../../../../core/domain/money/ledger_math.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 
 ClientDetailItemRowData clientItemRowFromItemSpend(

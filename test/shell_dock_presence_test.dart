@@ -1,11 +1,11 @@
 import 'package:bnood/app/widgets/floating_shell_dock.dart';
 import 'package:bnood/app/widgets/shell_nav_destination.dart';
 import 'package:bnood/app/widgets/shell_nav_icons.dart';
-import 'package:bnood/core/config/navigation/root_navigator_key.dart';
-import 'package:bnood/core/config/theme/app_size.dart';
-import 'package:bnood/core/widgets/app_toaster.dart';
-import 'package:bnood/core/widgets/toast/app_toast.dart';
-import 'package:bnood/core/widgets/toast/shell_dock_presence.dart';
+import 'package:bnood/core/services/config/navigation/root_navigator_key.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
+import 'package:bnood/core/ui/widgets/app_toaster.dart';
+import 'package:bnood/core/ui/widgets/toast/app_toast.dart';
+import 'package:bnood/core/ui/widgets/toast/shell_dock_presence.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';

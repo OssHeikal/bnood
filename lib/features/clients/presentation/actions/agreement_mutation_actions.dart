@@ -6,12 +6,12 @@ import 'package:bnood/features/providers/data/app_agreement_record.dart';
 import 'package:bnood/features/providers/data/agreements_error_handler.dart';
 import 'package:bnood/features/providers/data/agreement_amount_api.dart';
 import 'package:bnood/features/providers/data/agreements_riverpod.dart';
-import '../../../../core/api/api_error_user_message.dart';
-import '../../../../core/api/auth_api_exception.dart';
+import '../../../../core/network/api/api_error_user_message.dart';
+import '../../../../core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
-import '../../../../core/widgets/app_decision.dart';
-import '../../../../core/widgets/app_toaster.dart';
-import '../../../../core/widgets/toast/app_tone.dart';
+import '../../../../core/ui/widgets/app_decision.dart';
+import '../../../../core/ui/widgets/app_toaster.dart';
+import '../../../../core/ui/widgets/toast/app_tone.dart';
 import 'package:bnood/features/providers/presentation/providers/provider_detail_provider.dart';
 import '../../../../core/app_state/client_mutation_refresh.dart';
 

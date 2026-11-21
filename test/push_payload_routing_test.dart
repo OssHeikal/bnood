@@ -1,4 +1,4 @@
-import 'package:bnood/core/push/push_payload_routing.dart';
+import 'package:bnood/core/network/push/push_payload_routing.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

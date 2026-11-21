@@ -7,7 +7,7 @@ import 'package:bnood/features/vouchers/presentation/widgets/voucher_sheet_recei
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bnood/core/api/app_dio.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
 
 import 'support/fake_session_store.dart';
 import 'support/receipt_test_image.dart';
