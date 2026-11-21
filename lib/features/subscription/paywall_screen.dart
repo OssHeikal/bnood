@@ -223,28 +223,24 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                         const SizedBox(height: PaywallTheme.blockGap),
                         Align(
                           alignment: AlignmentDirectional.centerStart,
-                          child: TextButton.icon(
+                          child: AppButton(
+                            text: l10n.paywallComparePlans,
+                            style: AppButtonStyle.text,
+                            icon: Icons.table_rows_rounded,
+                            size: AppButtonSize.small,
+                            isExpanded: false,
+                            foregroundColor: SubscriptionColors.violet,
+                            textStyle: theme.subheadline.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                              color: SubscriptionColors.violet,
+                            ),
+                            padding: const EdgeInsets.fromLTRB(0, 6, AppSize.spaceSM, 6),
                             onPressed: () => PaywallComparisonSheet.show(
                               context,
                               table: _v3.comparisonTable!,
                               selectedPackageSlug: _selectedPackageSlug,
                             ),
-                            style: TextButton.styleFrom(
-                              foregroundColor: SubscriptionColors.violet,
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 6, AppSize.spaceSM, 6),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              textStyle: theme.subheadline.copyWith(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: SubscriptionColors.violet,
-                              ),
-                            ),
-                            icon: Icon(
-                              Icons.table_rows_rounded,
-                              size: 18,
-                              color: SubscriptionColors.violet,
-                            ),
-                            label: Text(l10n.paywallComparePlans),
                           ),
                         ),
                       ],

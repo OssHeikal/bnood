@@ -655,6 +655,27 @@
   "paywallPerMonthUnit": "EGP/mo",
   "paywallPerYearUnit": "EGP/yr",
   "paywallComparePlans": "Compare plans",
+  "subscriptionLimitDismiss": "Got it",
+  "subscriptionLimitProjectsTitle": "You've reached the project limit",
+  "subscriptionLimitProjectsMessage": "Maximum allowed: {limit}",
+  "@subscriptionLimitProjectsMessage": {
+    "placeholders": {
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionLimitClientsTitle": "You've reached the client limit",
+  "subscriptionLimitClientsMessage": "Maximum allowed: {limit}",
+  "@subscriptionLimitClientsMessage": {
+    "placeholders": {
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionLimitFinancialTitle": "You've reached the limit for financial transactions",
+  "subscriptionLimitArchiveClientTitle": "Client archiving isn't available",
   "paywallCurrentPlanChip": "Current plan",
   "paywallYearlyOnlyHint": "Available on yearly billing only",
   "paywallBilledYearlyAt": "Billed {amount} yearly",

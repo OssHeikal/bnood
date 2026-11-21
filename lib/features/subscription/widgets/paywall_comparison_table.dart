@@ -88,8 +88,7 @@ class PaywallComparisonTable extends StatelessWidget {
                           theme: theme,
                           highlightText: highlightText,
                           highlightBg: highlightBg,
-                          checkColor:
-                              col.slug == selectedPackageSlug ? theme.compareCheckSelected : theme.compareCheck,
+                          checkColor: col.slug == selectedPackageSlug ? theme.compareCheckSelected : theme.compareCheck,
                           textStyle: cellStyle,
                           minHeight: _sheetRowMinHeight,
                           comfortable: true,
@@ -177,13 +176,7 @@ class _RowLabelCell extends StatelessWidget {
         padding: const EdgeInsetsDirectional.fromSTEB(AppSize.spaceSM, 10, AppSize.spaceMD, 10),
         child: Align(
           alignment: AlignmentDirectional.centerStart,
-          child: Text(
-            label,
-            style: style,
-            textAlign: TextAlign.start,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
+          child: Text(label, style: style, textAlign: TextAlign.start, maxLines: 2, overflow: TextOverflow.ellipsis),
         ),
       ),
     );
@@ -304,10 +297,7 @@ class _CellFrame extends StatelessWidget {
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: minHeight),
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: comfortable ? 6 : 2,
-          horizontal: comfortable ? AppSize.spaceXS : 1,
-        ),
+        padding: EdgeInsets.symmetric(vertical: comfortable ? 6 : 2, horizontal: comfortable ? AppSize.spaceXS : 1),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: highlighted ? highlightBg : Colors.transparent,

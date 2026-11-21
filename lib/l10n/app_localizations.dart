@@ -2899,6 +2899,48 @@ abstract class AppLocalizations {
   /// **'Compare plans'**
   String get paywallComparePlans;
 
+  /// No description provided for @subscriptionLimitDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get subscriptionLimitDismiss;
+
+  /// No description provided for @subscriptionLimitProjectsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the project limit'**
+  String get subscriptionLimitProjectsTitle;
+
+  /// No description provided for @subscriptionLimitProjectsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum allowed: {limit}'**
+  String subscriptionLimitProjectsMessage(String limit);
+
+  /// No description provided for @subscriptionLimitClientsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the client limit'**
+  String get subscriptionLimitClientsTitle;
+
+  /// No description provided for @subscriptionLimitClientsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum allowed: {limit}'**
+  String subscriptionLimitClientsMessage(String limit);
+
+  /// No description provided for @subscriptionLimitFinancialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the limit for financial transactions'**
+  String get subscriptionLimitFinancialTitle;
+
+  /// No description provided for @subscriptionLimitArchiveClientTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Client archiving isn\'t available'**
+  String get subscriptionLimitArchiveClientTitle;
+
   /// No description provided for @paywallCurrentPlanChip.
   ///
   /// In en, this message translates to:

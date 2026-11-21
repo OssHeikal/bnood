@@ -1,35 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/subscription/app_subscription.dart';
 import '../../core/subscription/subscription_riverpod.dart';
-import 'paywall_launcher.dart';
+import 'subscription_limit_handler.dart';
 
-bool _allowsWithoutSurfaces(AppSubscriptionSnapshot? snap) {
-  if (snap == null) return true;
-  return !snap.showSurfaces;
-}
-
-/// Returns true when the action may proceed; false when paywall was shown.
-Future<bool> guardCreateActiveProject(BuildContext context, WidgetRef ref) async {
+Future<bool> guardCreateActiveProject(
+  BuildContext context,
+  WidgetRef ref, {
+  SubscriptionLimitKind limitKind = SubscriptionLimitKind.activeProjects,
+}) async {
   final snap = ref.read(subscriptionProvider).valueOrNull;
-  if (_allowsWithoutSurfaces(snap) || snap!.entitlements.mayCreateActiveProject) {
-    return true;
-  }
-  await PaywallLauncher.present(context, ref, PaywallFetchTrigger.limitReached);
-  return false;
-}
-
-bool _mayMutateFinancial(AppSubscriptionSnapshot? snap) {
-  if (_allowsWithoutSurfaces(snap)) return true;
-  return snap!.entitlements.canMutateFinancialTransactions;
+  if (snap == null) return true;
+  return SubscriptionLimitHandler.gate(
+    context: context,
+    ref: ref,
+    kind: limitKind,
+    allowed: snap.entitlements.mayCreateActiveProject,
+    cap: snap.entitlements.activeProjectCap,
+  );
 }
 
 Future<bool> guardFinancialMutation(BuildContext context, WidgetRef ref) async {
   final snap = ref.read(subscriptionProvider).valueOrNull;
-  if (_mayMutateFinancial(snap)) return true;
-  await PaywallLauncher.present(context);
-  return false;
+  if (snap == null) return true;
+  return SubscriptionLimitHandler.gate(
+    context: context,
+    ref: ref,
+    kind: SubscriptionLimitKind.financialTransactions,
+    allowed: snap.entitlements.canMutateFinancialTransactions,
+  );
 }
 
 Future<bool> guardFinancialMutationFromContainer(
@@ -37,16 +36,21 @@ Future<bool> guardFinancialMutationFromContainer(
   ProviderContainer container,
 ) async {
   final snap = container.read(subscriptionProvider).valueOrNull;
-  if (_mayMutateFinancial(snap)) return true;
-  await PaywallLauncher.present(context);
-  return false;
+  if (snap == null) return true;
+  return SubscriptionLimitHandler.gate(
+    context: context,
+    kind: SubscriptionLimitKind.financialTransactions,
+    allowed: snap.entitlements.canMutateFinancialTransactions,
+  );
 }
 
 Future<bool> guardArchiveClient(BuildContext context, WidgetRef ref) async {
   final snap = ref.read(subscriptionProvider).valueOrNull;
-  if (_allowsWithoutSurfaces(snap) || snap!.entitlements.canArchiveClient) {
-    return true;
-  }
-  await PaywallLauncher.present(context);
-  return false;
+  if (snap == null) return true;
+  return SubscriptionLimitHandler.gate(
+    context: context,
+    ref: ref,
+    kind: SubscriptionLimitKind.archiveClient,
+    allowed: snap.entitlements.canArchiveClient,
+  );
 }
