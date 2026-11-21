@@ -1,6 +1,6 @@
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../core/database/database.dart';
+import '../../core/ledger/ledger_entities.dart';
 import '../../core/formatting/display_digits.dart';
 
 abstract final class StatementMovementText {

@@ -14,20 +14,11 @@ class ItemsCatalogNotifier extends Notifier<AsyncValue<List<CatalogItem>>> {
         Future.microtask(reload);
       }
     });
-    ref.listen(remoteItemsEnabledProvider, (previous, next) {
-      if (previous != next) {
-        Future.microtask(reload);
-      }
-    });
     Future.microtask(reload);
     return const AsyncValue.loading();
   }
 
   Future<void> reload() async {
-    if (!ref.read(remoteItemsEnabledProvider)) {
-      state = const AsyncValue.data([]);
-      return;
-    }
     final previous = state.valueOrNull;
     if (previous == null) {
       state = const AsyncValue.loading();
@@ -37,7 +28,6 @@ class ItemsCatalogNotifier extends Notifier<AsyncValue<List<CatalogItem>>> {
     });
   }
 
-  /// Optimistic reorder of the full catalog; reverts and rethrows when the API call fails.
   Future<void> reorderCatalogItem({required int oldIndex, required int newIndex}) async {
     final current = state.valueOrNull;
     if (current == null) return;

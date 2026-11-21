@@ -7,7 +7,6 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/money/basis_points.dart';
 import '../../core/clients/clients_providers.dart';
-import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
@@ -105,19 +104,11 @@ class _ProfitPercentageSheetState extends ConsumerState<ProfitPercentageSheet> {
       final raw = _percentCtrl.text.trim();
       final bp = raw.isEmpty ? null : BasisPoints.parsePercentInput(raw);
       if (raw.isNotEmpty && bp == null) return;
-      if (ref.read(remoteClientsEnabledProvider)) {
-        await ref.read(clientsRepositoryProvider).updateClient(
-              id: widget.clientId,
-              engineerBasisPoints: bp?.value,
-              clearEngineerBasisPoints: raw.isEmpty,
-            );
-      } else {
-        await ref.read(repositoryProvider).updateProject(
-              projectId: widget.projectId,
-              clearEngineerRate: raw.isEmpty,
-              engineerBasisPoints: bp?.value,
-            );
-      }
+      await ref.read(clientsRepositoryProvider).updateClient(
+            id: widget.clientId,
+            engineerBasisPoints: bp?.value,
+            clearEngineerBasisPoints: raw.isEmpty,
+          );
       refreshAfterClientMutation(ref, clientId: widget.clientId);
       if (mounted) Navigator.pop(context);
     } finally {

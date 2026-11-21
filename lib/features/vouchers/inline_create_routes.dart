@@ -9,7 +9,6 @@ import '../../core/api/api_field_errors.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/validation/egypt_mobile_phone_validation.dart';
 import '../../core/items/items_providers.dart';
-import '../../core/providers/app_providers.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
 import '../items/item_mutation_actions.dart';
 import '../../core/widgets/app_toaster.dart';
@@ -184,8 +183,7 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
     if (_name.text.trim().isEmpty || _saving) return;
     setState(() => _saving = true);
     try {
-      if (ref.read(remoteItemsEnabledProvider)) {
-        final item = await saveItemCreate(
+      final item = await saveItemCreate(
           ref: ref,
           context: context,
           name: _name.text.trim(),
@@ -194,15 +192,6 @@ class _InlineCreateItemPageState extends ConsumerState<InlineCreateItemPage> {
         );
         if (!mounted || item == null) return;
         Navigator.pop(context, item.id);
-        return;
-      }
-      final item = await ref.read(repositoryProvider).createItem(
-            name: _name.text.trim(),
-            colorKey: 'teal',
-            iconName: 'category',
-          );
-      if (!mounted) return;
-      Navigator.pop(context, item.id);
     } on AuthApiException {
       if (mounted) setState(() => _saving = false);
     } finally {
@@ -276,8 +265,7 @@ class _InlineCreateSupplierPageState
     final l10n = AppLocalizations.of(context);
     try {
       final phoneText = _phone.text.trim();
-      if (ref.read(remoteProvidersEnabledProvider) || ref.read(remoteVouchersEnabledProvider)) {
-        final provider = await saveProviderCreate(
+      final provider = await saveProviderCreate(
           ref: ref,
           context: context,
           name: _name.text.trim(),
@@ -290,14 +278,6 @@ class _InlineCreateSupplierPageState
         }
         AppToaster.show(l10n.toastSupplierCreated, kind: ToastKind.success);
         Navigator.pop(context, provider.id);
-        return;
-      }
-      final s = await ref.read(repositoryProvider).createSupplier(
-            name: _name.text.trim(),
-            phone: phoneText.isEmpty ? null : phoneText,
-          );
-      if (!mounted) return;
-      Navigator.pop(context, s.id);
     } on AuthApiException catch (e) {
       if (!mounted) return;
       final lookup = ApiFieldErrorLookup(e);
@@ -420,8 +400,7 @@ class _InlineCreateCraftsmanPageState
     final l10n = AppLocalizations.of(context);
     try {
       final phoneText = _phone.text.trim();
-      if (ref.read(remoteProvidersEnabledProvider)) {
-        final provider = await saveProviderCreate(
+      final provider = await saveProviderCreate(
           ref: ref,
           context: context,
           name: _name.text.trim(),
@@ -434,14 +413,6 @@ class _InlineCreateCraftsmanPageState
         }
         AppToaster.show(l10n.toastCraftsmanCreated, kind: ToastKind.success);
         Navigator.pop(context, provider.id);
-        return;
-      }
-      final c = await ref.read(repositoryProvider).createCraftsman(
-            name: _name.text.trim(),
-            phone: phoneText.isEmpty ? null : phoneText,
-          );
-      if (!mounted) return;
-      Navigator.pop(context, c.id);
     } on AuthApiException catch (e) {
       if (!mounted) return;
       final lookup = ApiFieldErrorLookup(e);

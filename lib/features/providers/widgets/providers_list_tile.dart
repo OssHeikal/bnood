@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/money/remote_money_units.dart';
 import '../../../core/providers_api/app_provider_record.dart';
-import '../../../features/suppliers/widgets/directory_person_card.dart';
+import 'directory_person_card.dart';
 import '../../../l10n/app_localizations.dart';
 import 'remote_craftsman_summary_card.dart';
 

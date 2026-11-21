@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/config/theme/app_size.dart';
-import '../../../core/providers/app_providers.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../vouchers/voucher_launcher.dart';
 import '../../../core/vouchers/app_voucher_record.dart';
 import '../../../core/vouchers/vouchers_riverpod.dart';
 import '../../vouchers/voucher_draft_from_app_voucher.dart';
 import '../client_detail_snapshot.dart';
-import '../voucher_draft_from_transaction.dart';
 import 'client_movement_card.dart';
 
 /// Tap opens edit voucher sheet (delete lives in that sheet only).
@@ -44,18 +42,11 @@ class _InteractiveMovementCardState extends ConsumerState<InteractiveMovementCar
 
   Future<void> _openEdit() async {
     if (_busy || !widget.mutationsEnabled) return;
-    if (ref.read(remoteVouchersEnabledProvider)) {
-      final draft = voucherDraftFromAppVoucher(
-        _voucherFromLine(),
-        projectId: widget.line.transaction.projectId,
-        clientId: widget.ledgerClientId,
-      );
-      await VoucherLauncher.openEdit(context, draft);
-      return;
-    }
-    final repo = ref.read(repositoryProvider);
-    final draft = await voucherDraftFromTransaction(repo, widget.line.transaction);
-    if (!mounted || draft == null) return;
+    final draft = voucherDraftFromAppVoucher(
+      _voucherFromLine(),
+      projectId: widget.line.transaction.projectId,
+      clientId: widget.ledgerClientId,
+    );
     await VoucherLauncher.openEdit(context, draft);
   }
 

@@ -193,7 +193,7 @@ class _ProviderDetailBody extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final provider = data.provider;
     final isCraftsman = provider.type == AppProviderType.craftsman;
-    final linkClientsEnabled = ref.watch(remoteAgreementsEnabledProvider);
+    const linkClientsEnabled = true;
 
     Future<void> openLinkClients() async {
       await showProviderClientAssignmentsSheet(
@@ -214,7 +214,7 @@ class _ProviderDetailBody extends ConsumerWidget {
     final agreementTotals = data.clientAgreements.isNotEmpty
         ? aggregateProviderAgreements(data.clientAgreements)
         : null;
-    final mutationsEnabled = ref.watch(remoteVouchersEnabledProvider);
+    const mutationsEnabled = true;
 
     final summary = <Widget>[
         if (agreementTotals != null) ...[

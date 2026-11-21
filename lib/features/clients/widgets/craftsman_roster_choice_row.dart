@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_shape.dart';
 import '../../../core/config/theme/app_size.dart';
-import '../../../core/database/database.dart';
+import '../../../core/ledger/ledger_entities.dart';
 import '../../../core/theme/app_colors.dart' as legacy;
 import '../../../core/widgets/app_amount.dart';
 import '../../../core/widgets/entity_picker_row.dart';

@@ -15,9 +15,8 @@ import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/client_api_record.dart';
 import '../../core/clients/client_provider_agreement_preview.dart';
 import '../../core/clients/clients_providers.dart';
-import '../../core/database/database.dart';
+import '../../core/ledger/ledger_entities.dart';
 import '../../core/money/ledger_math.dart';
-import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/providers_api/providers_riverpod.dart';
@@ -158,64 +157,14 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       _loading = true;
       _error = null;
     });
-    if (ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null) {
-      await _bootstrapRemote();
+    if (widget.clientId == null) {
+      setState(() {
+        _loading = false;
+        _error = StateError('clientId required');
+      });
       return;
     }
-    try {
-      final repo = ref.read(repositoryProvider);
-      final roster = await repo.listActiveCraftsmen();
-      final agreements = await repo.agreementsForProject(widget.projectId);
-      final transactions = await repo.transactionsForProject(widget.projectId);
-      final project = await repo.projectById(widget.projectId);
-      var clientName = project?.name ?? '—';
-      if (widget.clientId != null) {
-        final client = await repo.getClient(widget.clientId!);
-        clientName = client.name;
-      } else if (project != null) {
-        final info = await repo.clientInfoForProjectIds([project.id]);
-        clientName = info[project.id]?.clientName ?? clientName;
-      }
-
-      final selected = <String>{};
-      final locked = <String>{};
-      final baseline = <String, int?>{};
-      final agreementByCraftsman = {for (final a in agreements) a.craftsmanId: a};
-      for (final c in roster) {
-        final ag = agreementByCraftsman[c.id];
-        if (ag == null) continue;
-        selected.add(c.id);
-        baseline[c.id] = ag.initialAmountPiastres;
-        final paid = LedgerMath.craftsmanPaidPiastres(rows: transactions, craftsmanId: c.id);
-        if (paid > 0) locked.add(c.id);
-      }
-
-      if (mounted) {
-        setState(() {
-          _roster = roster;
-          _clientName = clientName;
-          _selected
-            ..clear()
-            ..addAll(selected);
-          _selectionLocked
-            ..clear()
-            ..addAll(locked);
-          _baselineAmountPiastres
-            ..clear()
-            ..addAll(baseline);
-          _draftAmountPiastres.clear();
-          _loading = false;
-        });
-      }
-    } catch (e, st) {
-      if (mounted) {
-        setState(() {
-          _error = e;
-          _loading = false;
-        });
-        debugPrintStack(stackTrace: st, label: 'craftsman roster load failed');
-      }
-    }
+    await _bootstrapRemote();
   }
 
   Future<void> _bootstrapRemote() async {
@@ -309,27 +258,19 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
       ),
     );
     if (id == null || !mounted) return;
-    if (ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null) {
-      try {
-        final provider = await ref.read(appProvidersRepositoryProvider).getProvider(id);
-        final craftsman = _craftsmanFromProvider(provider);
-        setState(() {
-          if (!_roster.any((c) => c.id == id)) {
-            _roster = [..._roster, craftsman];
-          }
-          _selected.add(id);
-        });
-      } catch (_) {
-        await _bootstrapRemote();
-        if (mounted) setState(() => _selected.add(id));
-      }
-      return;
+    try {
+      final provider = await ref.read(appProvidersRepositoryProvider).getProvider(id);
+      final craftsman = _craftsmanFromProvider(provider);
+      setState(() {
+        if (!_roster.any((c) => c.id == id)) {
+          _roster = [..._roster, craftsman];
+        }
+        _selected.add(id);
+      });
+    } catch (_) {
+      await _bootstrapRemote();
+      if (mounted) setState(() => _selected.add(id));
     }
-    final roster = await ref.read(repositoryProvider).listActiveCraftsmen();
-    setState(() {
-      _roster = roster;
-      _selected.add(id);
-    });
   }
 
   Future<void> _openAmountSheet(CraftsmenData craftsman) async {
@@ -370,55 +311,7 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
   Future<void> _save() async {
     if (_saving || _roster.isEmpty) return;
     setState(() => _saving = true);
-    if (ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null) {
-      await _saveRemote();
-      return;
-    }
-    try {
-      final repo = ref.read(repositoryProvider);
-      final agreements = await repo.agreementsForProject(widget.projectId);
-
-      for (final ag in agreements) {
-        if (_selected.contains(ag.craftsmanId)) continue;
-        if (_selectionLocked.contains(ag.craftsmanId)) continue;
-        await repo.removeCraftsmanFromProject(
-          projectId: widget.projectId,
-          craftsmanId: ag.craftsmanId,
-        );
-      }
-
-      for (final craftsmanId in _selected) {
-        final amount = _amountForPersist(craftsmanId);
-        if (amount == null) {
-          await repo.upsertAgreement(
-            projectId: widget.projectId,
-            craftsmanId: craftsmanId,
-            clearInitial: true,
-          );
-        } else {
-          await repo.upsertAgreement(
-            projectId: widget.projectId,
-            craftsmanId: craftsmanId,
-            initialAmountPiastres: amount,
-          );
-        }
-      }
-
-      refreshAfterClientMutation(ref, clientId: widget.clientId);
-      if (!mounted) return;
-      _closeHostModal();
-      AppToaster.show(
-        AppLocalizations.of(context).crewAssignmentsSaved,
-        kind: ToastKind.success,
-      );
-    } catch (e) {
-      if (mounted) {
-        final l10n = AppLocalizations.of(context);
-        AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
-      }
-    } finally {
-      if (mounted) setState(() => _saving = false);
-    }
+    await _saveRemote();
   }
 
   Future<void> _saveRemote() async {
@@ -518,7 +411,7 @@ class _CraftsmanAssignmentsSheetState extends ConsumerState<CraftsmanAssignments
 
   Widget _buildRosterBody(AppLocalizations l10n, AppColors colors, String localeCode) {
     final remoteAmountScale =
-        ref.read(remoteAgreementsEnabledProvider) && widget.clientId != null;
+        widget.clientId != null;
 
     if (_loading) {
       return const _RosterSkeleton();

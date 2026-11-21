@@ -1,4 +1,4 @@
-import '../database/database.dart';
+import '../ledger/ledger_entities.dart';
 
 /// Parsed client payload from `/api/v1/clients` including the hidden project.
 class ClientApiRecord {

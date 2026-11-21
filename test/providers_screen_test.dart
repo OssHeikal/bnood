@@ -12,7 +12,7 @@ import 'package:bnood/features/providers/providers_list_paging.dart';
 import 'package:bnood/features/providers/providers_screen.dart';
 import 'package:bnood/features/providers/widgets/providers_loading_skeleton.dart';
 import 'package:bnood/features/providers/widgets/remote_craftsman_summary_card.dart';
-import 'package:bnood/features/suppliers/widgets/directory_list_loading_skeleton.dart';
+import 'package:bnood/features/providers/widgets/directory_list_loading_skeleton.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

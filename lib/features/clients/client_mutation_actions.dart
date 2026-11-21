@@ -6,8 +6,7 @@ import '../../core/api/auth_api_exception.dart';
 import '../../core/validation/egypt_mobile_phone_validation.dart';
 import '../../core/clients/clients_error_handler.dart';
 import '../../core/clients/clients_providers.dart';
-import '../../core/database/database.dart';
-import '../../core/providers/app_providers.dart';
+import '../../core/ledger/ledger_entities.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/analytics/providers/analytics_feature_hooks.dart';
@@ -23,10 +22,7 @@ Future<Client?> saveClientCreate({
   String? phone,
 }) async {
   final l10n = AppLocalizations.of(context);
-  if (ref.read(remoteClientsEnabledProvider)) {
-    return _saveRemoteCreate(ref, context, l10n, name: name, phone: phone);
-  }
-  return ref.read(repositoryProvider).createClient(name: name, phone: egyptMobileForApi(phone));
+  return _saveRemoteCreate(ref, context, l10n, name: name, phone: phone);
 }
 
 Future<Client?> saveClientUpdate({
@@ -37,21 +33,14 @@ Future<Client?> saveClientUpdate({
   required String phoneField,
 }) async {
   final l10n = AppLocalizations.of(context);
-  if (ref.read(remoteClientsEnabledProvider)) {
-    return _saveRemoteUpdate(
-      ref,
-      context,
-      l10n,
-      clientId: clientId,
-      name: name,
-      phoneField: phoneField,
-    );
-  }
-  return ref.read(repositoryProvider).updateClient(
-        clientId: clientId,
-        name: name,
-        phone: egyptMobileForApi(phoneField) ?? '',
-      );
+  return _saveRemoteUpdate(
+    ref,
+    context,
+    l10n,
+    clientId: clientId,
+    name: name,
+    phoneField: phoneField,
+  );
 }
 
 Future<Client?> _saveRemoteCreate(
@@ -188,7 +177,6 @@ Future<bool> confirmDeleteClient({
   required String clientId,
   required String clientName,
 }) async {
-  if (!ref.read(remoteClientsEnabledProvider)) return false;
   final l10n = AppLocalizations.of(context);
   final answer = await AppDecision.show(
     context,

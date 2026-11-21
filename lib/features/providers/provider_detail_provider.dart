@@ -66,35 +66,28 @@ class ProviderDetailNotifier extends AutoDisposeFamilyAsyncNotifier<ProviderDeta
       rethrow;
     }
 
-    var clientAgreements = <ProviderDetailClientRow>[];
-    if (ref.read(remoteAgreementsEnabledProvider)) {
-      final agreementsRepo = ref.read(appAgreementsRepositoryProvider);
-      final agreements = await agreementsRepo.listAllProviderAgreements(providerId);
-      clientAgreements = agreements
-          .map(
-            (a) => ProviderDetailClientRow(
-              agreement: a,
-              clientName: a.clientName ?? '—',
-            ),
-          )
-          .toList()
-        ..sort((a, b) => a.clientName.compareTo(b.clientName));
-    }
+    final agreementsRepo = ref.read(appAgreementsRepositoryProvider);
+    final agreements = await agreementsRepo.listAllProviderAgreements(providerId);
+    final clientAgreements = agreements
+        .map(
+          (a) => ProviderDetailClientRow(
+            agreement: a,
+            clientName: a.clientName ?? '—',
+          ),
+        )
+        .toList()
+      ..sort((a, b) => a.clientName.compareTo(b.clientName));
 
-    var voucherHistory = <ProviderDetailVoucherRow>[];
-    var totalVoucherMinor = 0;
-    if (ref.read(remoteVouchersEnabledProvider)) {
-      final vouchers = await ref.read(vouchersRepositoryProvider).listAllProviderVouchers(providerId);
-      voucherHistory = vouchers
-          .map(
-            (v) => ProviderDetailVoucherRow(
-              voucher: v,
-              clientName: v.clientName ?? '—',
-            ),
-          )
-          .toList();
-      totalVoucherMinor = vouchers.fold<int>(0, (sum, v) => sum + v.amountMinor);
-    }
+    final vouchers = await ref.read(vouchersRepositoryProvider).listAllProviderVouchers(providerId);
+    final voucherHistory = vouchers
+        .map(
+          (v) => ProviderDetailVoucherRow(
+            voucher: v,
+            clientName: v.clientName ?? '—',
+          ),
+        )
+        .toList();
+    final totalVoucherMinor = vouchers.fold<int>(0, (sum, v) => sum + v.amountMinor);
 
     return ProviderDetailSnapshot(
       provider: provider,

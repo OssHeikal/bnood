@@ -5,13 +5,10 @@ import '../../core/clients/client_provider_agreement_preview.dart';
 import '../../core/craftsmen/craftsman_snapshot_limit.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/providers_api/app_provider_record.dart';
-import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
-import '../../core/providers/app_providers.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
 import 'client_detail_snapshot.dart';
 import 'client_item_spend_rows.dart';
-import 'client_movement_lines.dart';
 import 'client_voucher_movement_lines.dart';
 import 'widgets/client_balance_card.dart';
 
@@ -51,50 +48,31 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
   }
 
   Future<ClientDetailSnapshot> loadSnapshot(String clientId) async {
-    if (ref.read(remoteClientsEnabledProvider)) {
-      return _loadRemoteSnapshot(clientId);
-    }
-    return _loadLocalSnapshot(clientId);
-  }
-
-  Future<ClientDetailSnapshot> _loadRemoteSnapshot(String clientId) async {
     final record = await ref.read(clientsRepositoryProvider).getClient(clientId);
     final balances = record.balances;
-    var craftsmanPreviews = <ClientCraftsmanPreviewRow>[];
-    var supplierPreviews = <ClientCraftsmanPreviewRow>[];
-    int? craftsmenCount;
-    int? suppliersCount;
-    if (ref.read(remoteAgreementsEnabledProvider)) {
-      final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
-      craftsmanPreviews = craftsmanSnapshotRows(
-        clientAgreementPreviews(agreements, AppProviderType.craftsman),
-      );
-      supplierPreviews = craftsmanSnapshotRows(
-        clientAgreementPreviews(agreements, AppProviderType.supplier),
-      );
-      craftsmenCount = record.craftsmenCount ?? craftsmanPreviews.length;
-      suppliersCount = record.suppliersCount ?? supplierPreviews.length;
-    }
+    final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
+    final craftsmanPreviews = craftsmanSnapshotRows(
+      clientAgreementPreviews(agreements, AppProviderType.craftsman),
+    );
+    final supplierPreviews = craftsmanSnapshotRows(
+      clientAgreementPreviews(agreements, AppProviderType.supplier),
+    );
+    final craftsmenCount = record.craftsmenCount ?? craftsmanPreviews.length;
+    final suppliersCount = record.suppliersCount ?? supplierPreviews.length;
 
     final itemSpend = await ref.read(clientsRepositoryProvider).getClientItemSpend(clientId);
     final itemsCount = itemSpend.items.length;
     final topItems = clientItemRowsFromItemSpend(itemSpend.items.take(3));
 
-    var latestMovements = <ClientDetailMovementLine>[];
-    int? movementsCount;
-    final vouchersOnline = ref.read(remoteVouchersEnabledProvider);
-    if (vouchersOnline) {
-      final vouchers = await ref.read(vouchersRepositoryProvider).listClientVouchers(
-            clientId: clientId,
-            page: 1,
-            perPage: 5,
-          );
-      movementsCount = vouchers.total;
-      latestMovements = movementLinesFromVouchers(
-        vouchers.items,
-        projectId: record.project.id,
-      );
-    }
+    final vouchers = await ref.read(vouchersRepositoryProvider).listClientVouchers(
+          clientId: clientId,
+          page: 1,
+          perPage: 5,
+        );
+    final latestMovements = movementLinesFromVouchers(
+      vouchers.items,
+      projectId: record.project.id,
+    );
 
     final spentMinor = balances?.spentPiastres;
     final profit = record.project.engineerBasisPoints == null || spentMinor == null
@@ -115,89 +93,12 @@ class ClientDetailNotifier extends FamilyAsyncNotifier<ClientDetailSnapshot, Str
       craftsmenCount: craftsmenCount,
       suppliersCount: suppliersCount,
       itemsCount: itemsCount,
-      movementsCount: movementsCount,
+      movementsCount: vouchers.total,
       topItems: topItems,
       latestMovements: latestMovements,
-      onlineIdentityOnly: !vouchersOnline,
+      onlineIdentityOnly: false,
       usesRemoteMoney: true,
       remainingFromServer: balances?.remainingPiastres,
-    );
-  }
-
-  Future<ClientDetailSnapshot> _loadLocalSnapshot(String clientId) async {
-    final repo = ref.read(repositoryProvider);
-    final client = await repo.getClient(clientId);
-    final project = await repo.primaryProjectForClient(clientId);
-    if (project == null) throw StateError('Project missing');
-    final tx = await repo.transactionsForProject(project.id);
-    final balance = LedgerMath.projectBalance(tx);
-    final profit = project.engineerBasisPoints == null
-        ? null
-        : MoneyFormat.estimatedProfitPiastres(
-            totalSpendPiastres: balance.spentPiastres,
-            engineerBasisPoints: project.engineerBasisPoints!,
-          );
-    final agreements = await repo.agreementsForProject(project.id);
-    final craftsmen = await repo.watchActiveCraftsmen().first;
-    final suppliers = await repo.watchActiveSuppliers().first;
-    final items = await repo.watchActiveItems().first;
-    final itemById = {for (final i in items) i.id: i};
-    final supplierById = {for (final s in suppliers) s.id: s};
-    final craftsmanById = {for (final c in craftsmen) c.id: c};
-
-    final previews = <ClientCraftsmanPreviewRow>[];
-    for (final a in agreements.take(craftsmanSnapshotLimit)) {
-      final c = craftsmanById[a.craftsmanId];
-      if (c == null) continue;
-      final paid = LedgerMath.craftsmanPaidPiastres(rows: tx, craftsmanId: a.craftsmanId);
-      previews.add(
-        ClientCraftsmanPreviewRow(
-          craftsmanId: c.id,
-          name: c.name,
-          trade: c.trade,
-          paidPiastres: paid,
-          agreedPiastres: a.initialAmountPiastres,
-          remainingPiastres: LedgerMath.craftsmanRemainingPiastres(
-            initialAmountPiastres: a.initialAmountPiastres,
-            paidPiastres: paid,
-          ),
-          accentKey: clientAccentKeyFor(c.id),
-        ),
-      );
-    }
-
-    final spend = tx.where((t) => t.kind == 'spend').toList();
-    final breakdown = LedgerMath.itemBreakdown(spend);
-    final topItems = breakdown.entries.toList()..sort((a, b) => b.value.totalPiastres.compareTo(a.value.totalPiastres));
-    final topItemsNamed = topItems.take(3).map((e) {
-      final item = itemById[e.key];
-      return ClientDetailItemRowData(
-        itemId: e.key,
-        name: item?.name ?? e.key,
-        colorKey: item?.colorKey ?? 'teal',
-        iconName: item?.iconName ?? 'layers',
-        breakdown: e.value,
-      );
-    }).toList();
-
-    final latest = [...tx]..sort((a, b) => b.date.compareTo(a.date));
-    final movementLines = movementLinesFromTransactions(
-      latest.take(5).toList(),
-      itemById: itemById,
-      supplierById: supplierById,
-      craftsmanById: craftsmanById,
-    );
-
-    return ClientDetailSnapshot(
-      client: client,
-      project: project,
-      receivedPiastres: balance.receivedPiastres,
-      spentPiastres: balance.spentPiastres,
-      estimatedProfitPiastres: profit,
-      craftsmanPreviews: previews,
-      supplierPreviews: const [],
-      topItems: topItemsNamed,
-      latestMovements: movementLines,
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +14,7 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/database/database.dart' show TransactionsCompanion;
+import '../../core/ledger/ledger_entities.dart';
 import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_providers.dart';
@@ -23,9 +22,9 @@ import '../../core/money/money_format.dart';
 import '../../core/money/remote_money_format.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/items/items_repository.dart';
-import '../../core/providers/app_providers.dart';
 import '../../core/providers_api/providers_riverpod.dart';
-import '../../core/repositories/bnood_repository.dart';
+import '../../core/clients/client_list_archive_filter.dart';
+import '../../core/home/home_row_models.dart';
 import '../../core/vouchers/vouchers_error_handler.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
 import '../subscription/subscription_error_handler.dart';
@@ -138,11 +137,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   Future<int?> _inlineAgreementAmountPiastres() async {
     final raw = _linkAmountCtrl.text.trim();
     if (raw.isEmpty) return null;
-    final remote = ref.read(remoteVouchersEnabledProvider);
-    if (remote) {
-      return RemoteMoneyFormat.parseMajorInput(raw);
-    }
-    return MoneyFormat.parseEgpInput(raw);
+    return RemoteMoneyFormat.parseMajorInput(raw);
   }
 
   @override
@@ -151,10 +146,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final draft = ref.read(voucherDraftProvider);
     _baselineDraft = draft;
     if (draft.amountPiastres != null) {
-      final remote = ref.read(remoteVouchersEnabledProvider);
-      final raw = remote
-          ? RemoteMoneyFormat.majorInputTextFromMinor(draft.amountPiastres!)
-          : _localAmountFieldText(draft.amountPiastres!);
+      final raw = RemoteMoneyFormat.majorInputTextFromMinor(draft.amountPiastres!);
       _amountCtrl.text = ThousandsGroupingFormatter.formatDisplay(raw, allowDecimal: true);
     }
     _descCtrl.text = draft.description ?? '';
@@ -164,8 +156,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ReceiptImageCodec.decode(draft.receiptImagePath).map((path) => VoucherSheetReceipt(localPath: path)),
     );
     _baselineReceiptPaths = _receiptRows.map((r) => r.localPath).toList();
-    final remote = ref.read(remoteVouchersEnabledProvider);
-    if (remote && draft.editingTransactionId != null) {
+    if (draft.editingTransactionId != null) {
       _hydrateRemoteReceipts(draft.editingTransactionId!);
     }
     if (Platform.isAndroid) {
@@ -243,71 +234,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
 
   Future<void> _pickClient() async {
     if (_isEditing) return;
-    if (ref.read(remoteVouchersEnabledProvider)) {
-      await _pickClientRemote();
-      return;
-    }
-    final repo = ref.read(repositoryProvider);
-    final draft = ref.read(voucherDraftProvider);
-    final l10n = AppLocalizations.of(context);
-    final picked = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
-        builder: (_) => EntityPickerLoadPage(
-          title: l10n.navClients,
-          presentation: _nestedPresentation,
-          selectedId: draft.clientId,
-          onBeforeCreate: (ctx) => guardCreateActiveProject(ctx, ref),
-          onCreateRoute: () => InlineCreateClientPage(presentation: _nestedPresentation),
-          load: () async {
-            final clients = await repo.watchActiveClients();
-            final balances = <String, int>{};
-            for (final c in clients) {
-              final project = await repo.primaryActiveProject(c.id);
-              if (project == null) {
-                balances[c.id] = 0;
-              } else {
-                final balance = await repo.projectBalance(project.id);
-                balances[c.id] = balance.balancePiastres;
-              }
-            }
-            return EntityPickerLoadedBundle(
-              entries: clients.map((c) => (c.id, c.name)).toList(),
-              emptyTitle: l10n.homeNoActiveClientsTitle,
-              emptyDescription: l10n.homeNoActiveClientsDescription,
-              tileBuilder: (ctx, id, selected, onSelect, showDivider) {
-                final localeCode = Localizations.localeOf(ctx).languageCode;
-                return VoucherPickerClientCard(
-                  name: clients.firstWhere((c) => c.id == id).name,
-                  clientId: id,
-                  remainingPiastres: balances[id] ?? 0,
-                  localeCode: localeCode,
-                  selected: selected,
-                  onTap: onSelect,
-                  showDivider: showDivider,
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
-    if (picked == null || !mounted) return;
-    final client = await resolveLocalClient(ref.read, picked);
-    final project = await repo.primaryActiveProject(picked);
-    ref.read(voucherDraftProvider.notifier).state = ref
-        .read(voucherDraftProvider)
-        .copyWith(
-          clientId: picked,
-          clientLabel: client.name,
-          projectId: project?.id,
-          clearCraftsman: true,
-          clearSupplier: true,
-          clearProviderLink: true,
-        );
-    setState(() {
-      _clientPickerError = null;
-      _linkAmountCtrl.clear();
-    });
+    await _pickClientRemote();
   }
 
   Future<void> _pickClientRemote() async {
@@ -370,7 +297,6 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   Future<void> _pickItem() async {
     final draft = ref.read(voucherDraftProvider);
     final l10n = AppLocalizations.of(context);
-    final remoteItems = ref.read(remoteItemsEnabledProvider);
     final picked = await Navigator.of(context).push<String>(
       MaterialPageRoute(
         builder: (_) => EntityPickerLoadPage(
@@ -380,18 +306,13 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
           onCreateRoute: () => const VoucherItemCreatePage(),
           load: () async {
             final List<({String id, String name, String colorKey, String iconKey})> items;
-            if (remoteItems) {
-              final catalogItems = await fetchAllCatalogItems(
+            final catalogItems = await fetchAllCatalogItems(
                 ref.read(itemsRepositoryProvider),
                 status: ItemCatalogListStatus.active,
               );
               items = catalogItems
                   .map((i) => (id: i.id, name: i.name, colorKey: i.colorKey, iconKey: i.iconKey))
                   .toList();
-            } else {
-              final local = await ref.read(repositoryProvider).watchActiveItems().first;
-              items = local.map((i) => (id: i.id, name: i.name, colorKey: i.colorKey, iconKey: i.iconName)).toList();
-            }
             return EntityPickerLoadedBundle(
               entries: items.map((i) => (i.id, i.name)).toList(),
               tileBuilder: (ctx, id, selected, onSelect, showDivider) {
@@ -411,58 +332,13 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       ),
     );
     if (picked == null || !mounted) return;
-    final label = await resolveItemLabel(ref.read, picked, remote: remoteItems);
+    final label = await resolveItemLabel(ref.read, picked);
     ref.read(voucherDraftProvider.notifier).state = ref.read(voucherDraftProvider).copyWith(itemId: picked, itemLabel: label);
     setState(() => _itemPickerError = null);
   }
 
   Future<void> _pickSupplier() async {
-    if (ref.read(remoteVouchersEnabledProvider)) {
-      await _pickSupplierRemote();
-      return;
-    }
-    final draft = ref.read(voucherDraftProvider);
-    final l10n = AppLocalizations.of(context);
-    var linkedForPick = const <String>{};
-    final picked = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
-        builder: (_) => EntityPickerLoadPage(
-          title: l10n.supplier,
-          presentation: _nestedPresentation,
-          selectedId: draft.supplierId,
-          onCreateRoute: () => InlineCreateSupplierPage(presentation: _nestedPresentation),
-          load: () async {
-            final suppliers = await ref.read(repositoryProvider).watchActiveSuppliers().first;
-            linkedForPick = const {};
-            return EntityPickerLoadedBundle(
-              entries: suppliers.map((s) => (s.id, s.name)).toList(),
-              searchKeys: suppliers.map((s) => s.phone ?? '').toList(),
-              tileBuilder: (ctx, id, selected, onSelect, showDivider) {
-                final s = suppliers.firstWhere((e) => e.id == id);
-                final localeCode = Localizations.localeOf(ctx).languageCode;
-                return VoucherPickerSupplierCard(
-                  providerId: id,
-                  name: s.name,
-                  phone: s.phone,
-                  localeCode: localeCode,
-                  linkedToClient: false,
-                  selected: selected,
-                  onTap: onSelect,
-                  showDivider: showDivider,
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
-    if (picked == null || !mounted) return;
-    final suppliers = await ref.read(repositoryProvider).watchActiveSuppliers().first;
-    final label = await resolveLocalSupplierLabel(ref.read, picked, cached: suppliers);
-    ref.read(voucherDraftProvider.notifier).state = ref
-        .read(voucherDraftProvider)
-        .copyWith(supplierId: picked, supplierLabel: label, providerLinkedToClient: linkedForPick.contains(picked));
-    setState(() => _linkAmountCtrl.clear());
+    await _pickSupplierRemote();
   }
 
   Future<void> _pickSupplierRemote() async {
@@ -524,68 +400,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   }
 
   Future<void> _pickCraftsman() async {
-    if (ref.read(remoteVouchersEnabledProvider)) {
-      await _pickCraftsmanRemote();
-      return;
-    }
-    final draft = ref.read(voucherDraftProvider);
-    final projectId = draft.projectId;
-    final l10n = AppLocalizations.of(context);
-    var linkedForPick = const <String>{};
-    final remainingForPick = <String, int>{};
-    final picked = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
-        builder: (_) => EntityPickerLoadPage(
-          title: l10n.craftsman,
-          presentation: _nestedPresentation,
-          selectedId: draft.craftsmanId,
-          onCreateRoute: () => InlineCreateCraftsmanPage(presentation: _nestedPresentation),
-          load: () async {
-            final repo = ref.read(repositoryProvider);
-            final craftsmen = await repo.watchActiveCraftsmen().first;
-            if (projectId != null) {
-              final agreementCtx = await localCraftsmanAgreementContext(repo, projectId);
-              linkedForPick = agreementCtx.linkedIds;
-              remainingForPick
-                ..clear()
-                ..addAll(agreementCtx.remainingByProviderId);
-            } else {
-              linkedForPick = const {};
-              remainingForPick.clear();
-            }
-            return EntityPickerLoadedBundle(
-              entries: craftsmen.map((c) => (c.id, c.name)).toList(),
-              searchKeys: craftsmen.map((c) => c.trade ?? '').toList(),
-              tileBuilder: (ctx, id, selected, onSelect, showDivider) {
-                final c = craftsmen.firstWhere((e) => e.id == id);
-                final localeCode = Localizations.localeOf(ctx).languageCode;
-                return VoucherPickerCraftsmanCard(
-                  providerId: id,
-                  name: c.name,
-                  trade: c.trade,
-                  localeCode: localeCode,
-                  linkedToClient: linkedForPick.contains(c.id),
-                  remainingPiastres: remainingForPick[id],
-                  selected: selected,
-                  onTap: onSelect,
-                  showDivider: showDivider,
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
-    if (picked == null || !mounted) return;
-    final craftsmen = await ref.read(repositoryProvider).watchActiveCraftsmen().first;
-    final label = await resolveLocalCraftsmanLabel(ref.read, picked, cached: craftsmen);
-    ref.read(voucherDraftProvider.notifier).state = ref
-        .read(voucherDraftProvider)
-        .copyWith(craftsmanId: picked, craftsmanLabel: label, providerLinkedToClient: linkedForPick.contains(picked));
-    setState(() {
-      _craftsmanPickerError = null;
-      _linkAmountCtrl.clear();
-    });
+    await _pickCraftsmanRemote();
   }
 
   Future<void> _pickCraftsmanRemote() async {
@@ -671,8 +486,6 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     final draft = ref.read(voucherDraftProvider);
     final txId = draft.editingTransactionId;
     if (txId == null) return;
-    final remote = ref.read(remoteVouchersEnabledProvider);
-
     final l10n = AppLocalizations.of(context);
     final answer = await AppDecision.show(
       context,
@@ -687,22 +500,8 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
 
     setState(() => _deleting = true);
     try {
-      if (remote) {
-        final ok = await deleteRemoteVoucher(context: context, ref: ref, draft: draft);
-        if (!ok) return;
-      } else {
-        final repo = ref.read(repositoryProvider);
-        final tx = await repo.getTransaction(txId);
-        if (tx == null) return;
-        await repo.deleteTransaction(txId);
-        final project = await repo.projectById(tx.projectId);
-        refreshAfterTransactionMutation(
-          ref,
-          clientId: draft.clientId ?? project?.clientId,
-          supplierId: tx.supplierId,
-          craftsmanId: tx.craftsmanId,
-        );
-      }
+      final ok = await deleteRemoteVoucher(context: context, ref: ref, draft: draft);
+      if (!ok) return;
       AppToaster.show(l10n.toastVoucherDeleted, kind: ToastKind.success);
       if (mounted) _closeVoucherRoute();
     } on AuthApiException catch (e) {
@@ -728,15 +527,11 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       setState(() {});
       return;
     }
-    final remote = ref.read(remoteVouchersEnabledProvider);
-    if (remote && !await guardFinancialMutation(context, ref)) return;
-    final amount = remote
-        ? RemoteMoneyFormat.parseMajorInput(_amountCtrl.text)
-        : MoneyFormat.parseEgpInput(_amountCtrl.text);
+    if (!await guardFinancialMutation(context, ref)) return;
+    final amount = RemoteMoneyFormat.parseMajorInput(_amountCtrl.text);
     if (amount == null || amount <= 0) return;
 
     setState(() => _saving = true);
-    final repo = ref.read(repositoryProvider);
     final date = draft.date ?? DateTime.now();
     final needsProviderLink = draft.kind == 'spend' && draft.providerLinkedToClient != true;
     final linkAmount = needsProviderLink ? await _inlineAgreementAmountPiastres() : null;
@@ -744,8 +539,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       if (needsProviderLink) {
         await ensureVoucherProviderAgreementBeforeSave(ref: ref, draft: draft, agreementAmountPiastres: linkAmount);
       }
-      if (remote) {
-        final result = await saveRemoteVoucher(
+      final result = await saveRemoteVoucher(
           context: context,
           ref: ref,
           draft: draft,
@@ -791,49 +585,6 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
         AppToaster.show(successMessage, kind: ToastKind.success);
         if (mounted) _closeVoucherRoute();
         return;
-      }
-      if (draft.editingTransactionId != null) {
-        await repo.updateTransaction(
-          draft.editingTransactionId!,
-          TransactionsCompanion(
-            kind: Value(draft.kind),
-            amountPiastres: Value(amount),
-            date: Value(date),
-            method: Value(draft.method),
-            description: Value(_descCtrl.text.isEmpty ? null : _descCtrl.text),
-            receiptImagePath: Value(ReceiptImageCodec.encode(_receiptRows.map((e) => e.localPath).toList())),
-            itemId: Value(draft.kind == 'spend' ? draft.itemId : null),
-            expenseType: Value(draft.kind == 'spend' ? draft.expenseType : null),
-            supplierId: Value(draft.expenseType == 'materials' ? draft.supplierId : null),
-            craftsmanId: Value(draft.expenseType == 'labor' ? draft.craftsmanId : null),
-          ),
-        );
-      } else {
-        await repo.insertTransaction(
-          projectId: draft.projectId!,
-          kind: draft.kind,
-          amountPiastres: amount,
-          date: date,
-          method: draft.method,
-          description: _descCtrl.text.isEmpty ? null : _descCtrl.text,
-          receiptImagePath: ReceiptImageCodec.encode(_receiptRows.map((e) => e.localPath).toList()),
-          itemId: draft.kind == 'spend' ? draft.itemId : null,
-          expenseType: draft.kind == 'spend' ? draft.expenseType : null,
-          supplierId: draft.expenseType == 'materials' ? draft.supplierId : null,
-          craftsmanId: draft.expenseType == 'labor' ? draft.craftsmanId : null,
-        );
-      }
-      refreshAfterTransactionMutation(
-        ref,
-        clientId: draft.clientId,
-        supplierId: draft.expenseType == 'materials' ? draft.supplierId : null,
-        craftsmanId: draft.expenseType == 'labor' ? draft.craftsmanId : null,
-      );
-      final successMessage = draft.editingTransactionId != null
-          ? l10n.toastVoucherUpdated
-          : l10n.toastVoucherCreated;
-      AppToaster.show(successMessage, kind: ToastKind.success);
-      if (mounted) _closeVoucherRoute();
     } on AuthApiException catch (e) {
       if (!mounted) return;
       if (await handleVouchersApiAuthError(context: context, ref: ref, error: e)) return;
@@ -879,7 +630,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
 
   Future<void> _appendPaths(List<String> paths) async {
     if (paths.isEmpty) return;
-    final remote = ref.read(remoteVouchersEnabledProvider);
+    const remote = true;
     setState(() {
       _receiptRows.addAll(paths.map((path) => VoucherSheetReceipt(localPath: path, needsUpload: remote)));
     });
@@ -959,7 +710,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
 
   Future<void> _removeReceiptAt(int index) async {
     final row = _receiptRows[index];
-    final remote = ref.read(remoteVouchersEnabledProvider);
+    const remote = true;
     if (remote && _isEditing && row.serverId != null) {
       setState(() {
         _pendingReceiptDeletes.add(row.serverId!);

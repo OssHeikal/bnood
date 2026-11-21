@@ -27,11 +27,6 @@ String authenticatedHomeFor(User user) {
   return '/home';
 }
 
-const _localLedgerRoots = {
-  '/home',
-  '/directory',
-};
-
 bool isRemoteClientsLocation(String location) {
   if (location == '/clients') return true;
   return location.startsWith('/clients/');
@@ -49,16 +44,7 @@ bool isRemoteProviderDetailLocation(String location) {
   return location.startsWith('/providers/');
 }
 
-bool isRemoteVouchersSessionEnabled({required bool remoteClientsEnabled}) => remoteClientsEnabled;
-
 bool isLocalLedgerLocation(String location) {
-  if (isRemoteClientsLocation(location)) return false;
-  if (isRemoteItemsLocation(location)) return false;
-  if (isRemoteDirectoryLocation(location)) return false;
-  if (isRemoteProviderDetailLocation(location)) return false;
-  if (_localLedgerRoots.contains(location)) return true;
-  if (location.startsWith('/suppliers/')) return true;
-  if (location.startsWith('/craftsmen/')) return true;
   return false;
 }
 

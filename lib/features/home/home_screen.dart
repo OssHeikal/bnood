@@ -8,7 +8,8 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/craftsmen/craftsman_snapshot_limit.dart';
-import '../../core/repositories/bnood_repository.dart';
+import '../../core/clients/client_list_archive_filter.dart';
+import '../../core/home/home_row_models.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
@@ -34,7 +35,7 @@ import 'widgets/home_loading_skeleton.dart';
 import 'widgets/home_section_header.dart';
 import 'widgets/home_stat_grid.dart';
 import 'widgets/home_identity_title.dart';
-import '../suppliers/widgets/directory_person_card.dart';
+import '../providers/widgets/directory_person_card.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -47,8 +48,8 @@ class HomeScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
     final user = ref.watch(authControllerProvider).user;
-    final remoteMoney = ref.watch(remoteClientsEnabledProvider);
-    final moneyScale = remoteMoney ? RemoteMoneyUnits.minorPerMajor : 100;
+    const remoteMoney = true;
+    const moneyScale = RemoteMoneyUnits.minorPerMajor;
     final displayName = user?.name?.trim();
     final showIdentityHeader = remoteMoney && displayName != null && displayName.isNotEmpty;
     final bottomInset = MediaQuery.paddingOf(context).bottom;
@@ -349,7 +350,7 @@ class HomeScreen extends ConsumerWidget {
                           showAmountCaption: false,
                           accentKey: homeAccentKeyFor(rows[i].supplier.id),
                           localeCode: localeCode,
-                          onTap: () => context.push('/suppliers/${rows[i].supplier.id}'),
+                          onTap: () => context.push('/providers/${rows[i].supplier.id}'),
                         ),
                       ],
                     ],
