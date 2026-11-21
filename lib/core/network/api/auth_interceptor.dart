@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../../account/api_office_header.dart';
 import '../../data/storage/session_store.dart';
 import 'api_response_parser.dart';
 import 'auth_api_exception.dart';
@@ -33,6 +34,12 @@ class AuthInterceptor extends QueuedInterceptor {
         );
       }
       options.headers['Authorization'] = 'Bearer $token';
+      final officeId = ApiOfficeHeader.headerValue();
+      if (officeId != null) {
+        options.headers[ApiOfficeHeader.headerName] = officeId;
+      } else {
+        options.headers.remove(ApiOfficeHeader.headerName);
+      }
     }
     handler.next(options);
   }

@@ -8,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/services/analytics/providers/analytics_providers.dart';
+import '../core/account/account_context_providers.dart';
 import '../core/network/api/api_accept_language.dart';
 import '../core/services/error_reporting/error_reporting_lifecycle.dart';
 import '../core/app_state/settings_provider.dart';
@@ -26,6 +27,7 @@ class BnoodApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(userSessionLifecycleProvider);
+    ref.watch(accountContextLifecycleProvider);
     ref.watch(errorReportingLifecycleProvider);
     ref.watch(pushLifecycleProvider);
     ref.watch(analyticsLifecycleProvider);
@@ -33,6 +35,8 @@ class BnoodApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
     ApiAcceptLanguage.syncLocale(locale);
+    final accountContext = ref.watch(accountContextProvider);
+    ApiOfficeHeader.syncOfficeId(accountContext.officeId);
     return AppGateLifecycle(
       child: MaterialApp.router(
         builder: (context, child) {
