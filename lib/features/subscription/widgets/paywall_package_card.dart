@@ -54,7 +54,7 @@ class PaywallPackageCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 2),
+                padding: const EdgeInsetsDirectional.only(top: 2),
                 child: _RadioDot(selected: selected),
               ),
               const SizedBox(width: AppSize.spaceMD),
@@ -99,30 +99,24 @@ class PaywallPackageCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSize.spaceMD),
               if (package.isContact)
-                Flexible(
-                  flex: 0,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 120),
-                    child: Text(
-                      package.contactCtaText ?? package.name,
-                      textAlign: TextAlign.end,
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 120),
+                  child: Text(
+                    package.contactCtaText ?? package.name,
+                    textAlign: TextAlign.end,
                       style: theme.contactPrice,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                    ),
                   ),
                 )
               else if (pricing != null)
-                Flexible(
-                  flex: 0,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(minWidth: 84, maxWidth: 132),
-                    child: _PriceBlock(
-                      pricing: pricing,
-                      perMonthUnit: l10n.paywallPerMonthUnit,
-                      yearlyPeriod: effectivePeriod == 'yearly',
-                      theme: theme,
-                    ),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: 84, maxWidth: 132),
+                  child: _PriceBlock(
+                    pricing: pricing,
+                    perMonthUnit: l10n.paywallPerMonthUnit,
+                    yearlyPeriod: effectivePeriod == 'yearly',
+                    theme: theme,
                   ),
                 ),
             ],
@@ -197,14 +191,17 @@ class _PlanTitleRow extends StatelessWidget {
     }
 
     return Row(
+      mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
+        Flexible(
+          fit: FlexFit.loose,
           child: Text(
             package.name,
             style: planNameStyle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.start,
           ),
         ),
         if (chips.isNotEmpty) ...[
@@ -299,36 +296,46 @@ class _PriceBlock extends StatelessWidget {
     final perMonthMajor = pricing.resolvedPerMonthMajor(arabic: arabic);
     final originalPerMonth = pricing.resolvedOriginalPerMonthMajor(yearlyPeriod: yearlyPeriod);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (originalPerMonth != null && originalPerMonth > perMonthMajor)
-          Text(
-            DisplayDigits.formatInteger(originalPerMonth),
-            style: theme.priceStrike,
-            maxLines: 1,
-          ),
-        Row(
+    return Align(
+      alignment: AlignmentDirectional.centerEnd,
+      child: IntrinsicWidth(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic,
           children: [
-            Text(
-              DisplayDigits.formatInteger(perMonthMajor),
-              style: theme.priceAmount,
-              maxLines: 1,
-            ),
-            const SizedBox(width: 3),
-            Text(
-              perMonthUnit,
-              style: theme.priceUnit,
-              maxLines: 1,
-              softWrap: false,
+            if (originalPerMonth != null && originalPerMonth > perMonthMajor)
+              Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: Text(
+                  DisplayDigits.formatInteger(originalPerMonth),
+                  style: theme.priceStrike,
+                  maxLines: 1,
+                  textAlign: TextAlign.end,
+                ),
+              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text(
+                  DisplayDigits.formatInteger(perMonthMajor),
+                  style: theme.priceAmount,
+                  maxLines: 1,
+                ),
+                const SizedBox(width: 3),
+                Text(
+                  perMonthUnit,
+                  style: theme.priceUnit,
+                  maxLines: 1,
+                  softWrap: false,
+                ),
+              ],
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }

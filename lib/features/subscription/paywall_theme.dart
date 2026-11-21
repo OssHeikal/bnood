@@ -159,8 +159,8 @@ class PaywallTheme {
         color: ink,
       ),
       compareRow: text.groupTitle.copyWith(
-        fontSize: 11,
-        height: 1.25,
+        fontSize: 10,
+        height: 1.2,
         fontWeight: FontWeight.w700,
         color: muted,
       ),
