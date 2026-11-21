@@ -1,7 +1,7 @@
 import '../clients/client_api_record.dart';
-import '../database/database.dart';
-import '../repositories/bnood_repository.dart';
+import '../ledger/ledger_entities.dart';
 import 'app_home_dashboard.dart';
+import 'home_row_models.dart';
 
 HomeClientBalanceRow homeClientBalanceRowFromPreview(AppHomeClientPreview preview) {
   final stamp = DateTime.utc(2026, 1, 1);

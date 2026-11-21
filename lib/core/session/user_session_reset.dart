@@ -14,9 +14,6 @@ import '../../features/clients/client_craftsmen_list_provider.dart';
 import '../../features/clients/client_detail_provider.dart';
 import '../../features/clients/client_items_stats_provider.dart';
 import '../../features/clients/client_suppliers_list_provider.dart';
-import '../../features/suppliers/craftsman_detail_provider.dart';
-import '../../features/suppliers/directory_providers.dart';
-import '../../features/suppliers/supplier_detail_provider.dart';
 import '../../features/providers/provider_detail_provider.dart';
 
 /// Clears in-memory HTTP caches and Riverpod user data when the signed-in identity changes.
@@ -53,15 +50,11 @@ void _resetUserScopedState({
   invalidate(homeSuppliersProvider);
   invalidate(homeSectionCountsProvider);
   invalidate(clientsListProvider);
-  invalidate(activeClientsProvider);
 
   invalidate(subscriptionProvider);
 
   invalidate(itemsCatalogByIdProvider);
   invalidate(itemIconsCatalogProvider);
-
-  invalidate(directorySuppliersProvider);
-  invalidate(directoryCraftsmenProvider);
 
   invalidate(clientDetailProvider);
   invalidate(clientCraftsmenListProvider);
@@ -69,8 +62,6 @@ void _resetUserScopedState({
   invalidate(clientItemsStatsProvider);
 
   invalidate(providerDetailProvider);
-  invalidate(supplierDetailProvider);
-  invalidate(craftsmanDetailProvider);
 
   invalidate(appProvidersRepositoryProvider);
   invalidate(clientsRepositoryProvider);

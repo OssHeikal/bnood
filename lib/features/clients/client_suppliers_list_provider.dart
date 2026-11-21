@@ -54,13 +54,6 @@ class ClientSuppliersListNotifier extends FamilyAsyncNotifier<ClientSuppliersLis
   }
 
   Future<ClientSuppliersListSnapshot> loadSnapshot(String clientId) async {
-    if (ref.read(remoteClientsEnabledProvider)) {
-      return _loadRemoteSnapshot(clientId);
-    }
-    return const ClientSuppliersListSnapshot(projectId: null, rows: []);
-  }
-
-  Future<ClientSuppliersListSnapshot> _loadRemoteSnapshot(String clientId) async {
     final record = await ref.read(clientsRepositoryProvider).getClient(clientId);
     final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
     final rows = clientAgreementPreviews(agreements, AppProviderType.supplier);

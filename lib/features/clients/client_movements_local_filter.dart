@@ -1,4 +1,4 @@
-import '../../core/database/database.dart' show Transaction, Item, Supplier, CraftsmenData;
+import '../../core/ledger/ledger_entities.dart';
 import '../../core/utils/arabic_search_normalizer.dart';
 import 'client_detail_snapshot.dart';
 import 'client_movement_lines.dart';

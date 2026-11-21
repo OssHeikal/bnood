@@ -25,12 +25,6 @@ AppProviderType? _apiTypeFor(ProvidersListTypeFilter filter) => switch (filter) 
 
 final providersListPagingProvider = Provider<PagedFetchCallback<AppProvider>>((ref) {
   return ({required int page, required int pageSize}) async {
-    if (!ref.read(remoteProvidersEnabledProvider)) {
-      if (page > 1) {
-        return const PagedFetchPage(items: [], hasMore: false);
-      }
-      return const PagedFetchPage(items: [], hasMore: false);
-    }
     final repo = ref.read(appProvidersRepositoryProvider);
     final typeFilter = ref.read(providersListTypeFilterProvider);
     final q = ref.read(providersListSearchQueryProvider);

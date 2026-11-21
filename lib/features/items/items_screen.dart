@@ -60,9 +60,6 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     final l10n = AppLocalizations.of(context);
     final catalog = ref.watch(itemsCatalogProvider);
 
-    ref.listen(remoteItemsEnabledProvider, (previous, next) {
-      if (previous != next) _refreshCatalog();
-    });
     bindPagingListRefreshEpoch(ref, PagingListIds.items, _refreshCatalog);
 
     return HomeFoundationScope(

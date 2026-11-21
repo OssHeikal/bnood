@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/providers/app_providers.dart';
-import '../../core/vouchers/vouchers_riverpod.dart';
 import '../subscription/subscription_gates.dart';
 import 'voucher_draft.dart';
-import 'voucher_draft_enrich.dart';
 import 'voucher_draft_enrich_remote.dart';
 import 'voucher_screen.dart';
 
@@ -49,13 +46,7 @@ class VoucherLauncher {
 
   static Future<void> openEdit(BuildContext context, VoucherDraft draft) async {
     final container = ProviderScope.containerOf(context);
-    final VoucherDraft enriched;
-    if (container.read(remoteVouchersEnabledProvider)) {
-      enriched = await enrichVoucherDraftRemote(ProviderScope.containerOf(context), draft);
-    } else {
-      final repo = container.read(repositoryProvider);
-      enriched = await enrichVoucherDraft(repo, draft);
-    }
+    final enriched = await enrichVoucherDraftRemote(ProviderScope.containerOf(context), draft);
     if (!context.mounted) return;
     container.read(voucherDraftProvider.notifier).state = enriched;
     await _show(context);
@@ -63,9 +54,7 @@ class VoucherLauncher {
 
   static Future<void> _show(BuildContext context) async {
     final container = ProviderScope.containerOf(context);
-    if (container.read(remoteVouchersEnabledProvider)) {
-      if (!await guardFinancialMutationFromContainer(context, container)) return;
-    }
+    if (!await guardFinancialMutationFromContainer(context, container)) return;
     if (!context.mounted) return;
     await context.push(VoucherScreen.path);
   }

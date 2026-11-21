@@ -29,7 +29,7 @@ class ClientItemsStatsScreen extends ConsumerWidget {
     final localeCode = Localizations.localeOf(context).languageCode;
     final items = ref.watch(clientItemsStatsProvider(clientId));
     final clientName = ref.watch(clientDetailProvider(clientId)).valueOrNull?.client.name;
-    final remoteMoney = ref.watch(remoteClientsEnabledProvider);
+    const remoteMoney = true;
 
     return HomeFoundationScope(
       child: Builder(

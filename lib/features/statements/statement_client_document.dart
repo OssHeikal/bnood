@@ -3,7 +3,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/database/database.dart';
+import '../../core/ledger/ledger_entities.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';
 import '../../core/widgets/app_amount.dart';

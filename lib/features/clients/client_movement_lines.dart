@@ -1,4 +1,4 @@
-import '../../core/database/database.dart';
+import '../../core/ledger/ledger_entities.dart';
 import 'client_detail_snapshot.dart';
 
 typedef MovementEntityMaps = ({

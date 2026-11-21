@@ -39,7 +39,7 @@ class ClientDetailCraftsmanRow extends StatelessWidget {
     final detailRoute = onlineOnly
         ? '/providers/${preview.craftsmanId}'
         : isSupplier
-            ? '/suppliers/${preview.craftsmanId}'
+            ? '/providers/${preview.craftsmanId}'
             : '/craftsmen/${preview.craftsmanId}';
 
     return AppCard(

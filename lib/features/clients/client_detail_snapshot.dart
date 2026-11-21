@@ -1,4 +1,4 @@
-import '../../core/database/database.dart';
+import '../../core/ledger/ledger_entities.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/providers_api/app_provider_record.dart';
 

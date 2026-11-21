@@ -1,4 +1,4 @@
-import '../database/database.dart' show Transaction;
+import '../ledger/ledger_entities.dart';
 import 'period_bounds.dart';
 
 class SupplierPeriodTotals {

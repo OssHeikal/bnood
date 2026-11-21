@@ -1,4 +1,4 @@
-import '../database/database.dart';
+import '../ledger/ledger_entities.dart';
 
 class ProjectBalance {
   const ProjectBalance({

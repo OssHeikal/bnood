@@ -19,7 +19,6 @@ import '../subscription/subscription_gates.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/formatting/see_all_label.dart';
-import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_card.dart';
@@ -61,7 +60,7 @@ class ClientDetailScreen extends ConsumerWidget {
     final detail = ref.watch(clientDetailProvider(clientId));
     final snapshot = detail.valueOrNull;
 
-    final remoteClients = ref.watch(remoteClientsEnabledProvider);
+    const remoteClients = true;
 
     return HomeFoundationScope(
       child: Builder(
@@ -220,15 +219,9 @@ class _ClientDetailBody extends ConsumerWidget {
       iconWidget: AppDecision.archiveDangerIcon(context),
     );
     if (answer != OverlayAnswer.confirmed || !context.mounted) return;
-    if (ref.read(remoteClientsEnabledProvider)) {
-      if (!await guardArchiveClient(context, ref)) return;
-    }
+    if (!await guardArchiveClient(context, ref)) return;
     try {
-      if (ref.read(remoteClientsEnabledProvider)) {
-        await ref.read(clientsRepositoryProvider).archiveClient(clientId);
-      } else {
-        await ref.read(repositoryProvider).archiveClient(clientId);
-      }
+      await ref.read(clientsRepositoryProvider).archiveClient(clientId);
       refreshAfterClientMutation(ref, clientId: clientId);
       if (context.mounted) {
         AppToaster.show(l10n.toastClientArchived, kind: ToastKind.success);
@@ -308,7 +301,7 @@ class _ClientDetailBody extends ConsumerWidget {
           onArchive: () => _confirmArchive(context, ref),
           onDelete: () => _confirmDelete(context, ref),
         ),
-        if (ref.read(remoteAgreementsEnabledProvider)) ...[
+        ...[
           AppSize.spaceXL.gap,
           ClientDetailLinkedProvidersSection(
             title: l10n.craftsmen,
@@ -322,7 +315,7 @@ class _ClientDetailBody extends ConsumerWidget {
             onAssign: openAssignments,
             totalCount: data.craftsmenCount,
           ),
-          if (ref.read(remoteAgreementsEnabledProvider)) ...[
+          ...[
             AppSize.spaceXL.gap,
             ClientDetailLinkedProvidersSection(
               title: l10n.suppliers,
@@ -402,7 +395,7 @@ class _ClientDetailBody extends ConsumerWidget {
         onAssign: openAssignments,
         totalCount: data.craftsmenCount,
       ),
-      if (ref.read(remoteAgreementsEnabledProvider)) ...[
+          ...[
         AppSize.spaceXL.gap,
         ClientDetailLinkedProvidersSection(
           title: l10n.suppliers,

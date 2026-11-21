@@ -88,10 +88,6 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
       if (previous != next) _refreshPaging();
     });
     bindPagingListRefreshEpoch(ref, PagingListIds.providers, _refreshPaging);
-    ref.listen(remoteProvidersEnabledProvider, (previous, next) {
-      if (previous != next) _refreshPaging();
-    });
-
     return HomeFoundationScope(
       child: Builder(
         builder: (context) {

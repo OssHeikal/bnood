@@ -9,13 +9,12 @@ import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/money/money_format.dart';
 import '../../core/money/remote_money_format.dart';
-import '../../core/providers/app_providers.dart';
 import '../../core/providers/dashboard_providers.dart';
+import '../providers/provider_detail_provider.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../home/home_foundation_scope.dart';
-import '../suppliers/craftsman_detail_provider.dart';
 import 'agreement_mutation_actions.dart';
 
 /// Draft save payload from the roster amount sub-sheet (`null` amount = no agreed amount).
@@ -80,21 +79,18 @@ Future<void> showCraftsmanProjectAgreementEditSheet({
               clientName: clientName,
               initialAmountPiastres: initialAmountPiastres,
               onPersist: (amount) async {
-                final repo = ref.read(repositoryProvider);
-                if (amount == null) {
-                  await repo.upsertAgreement(
-                    projectId: projectId,
-                    craftsmanId: craftsmanId,
-                    clearInitial: true,
-                  );
-                } else {
-                  await repo.upsertAgreement(
-                    projectId: projectId,
-                    craftsmanId: craftsmanId,
-                    initialAmountPiastres: amount,
-                  );
-                }
-                await ref.read(craftsmanDetailProvider(craftsmanId).notifier).refreshSilently();
+                final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
+                final agreement = agreements.where((a) => a.providerId == craftsmanId).firstOrNull;
+                if (agreement == null) return;
+                await saveRemoteAgreementAmount(
+                  context: context,
+                  ref: ref,
+                  agreementId: agreement.id,
+                  amountPiastres: amount,
+                  clientId: clientId,
+                  providerId: craftsmanId,
+                );
+                await ref.read(providerDetailProvider(craftsmanId).notifier).refreshSilently();
                 refreshAfterClientMutation(ref, clientId: clientId);
               },
             ),
@@ -133,7 +129,7 @@ class _CraftsmanAgreementAmountPageState extends ConsumerState<CraftsmanAgreemen
   var _attemptedSubmit = false;
   var _saving = false;
 
-  bool get _useRemoteMoneyScale => ref.read(remoteAgreementsEnabledProvider);
+  bool get _useRemoteMoneyScale => true;
 
   @override
   void didChangeDependencies() {

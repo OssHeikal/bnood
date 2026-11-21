@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import '../clients/client_api_record.dart';
 import '../clients/client_statement_pdf.dart';
 import '../clients/client_statement_record.dart';
-import '../repositories/bnood_repository.dart';
 import 'api_response_parser.dart';
 import 'app_dio.dart';
 import 'auth_api_exception.dart';

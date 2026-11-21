@@ -2,9 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/clients/client_detail_provider.dart';
 import '../../features/clients/client_items_stats_provider.dart';
-import '../../features/suppliers/craftsman_detail_provider.dart';
-import '../../features/suppliers/directory_providers.dart';
-import '../../features/suppliers/supplier_detail_provider.dart';
+import '../../features/providers/provider_detail_provider.dart';
 import 'dashboard_providers.dart';
 
 /// Silent refresh after voucher edit/delete (no pull-to-refresh).
@@ -20,12 +18,8 @@ void refreshAfterTransactionMutation(
     refreshClientDetail(ref, clientId);
     ref.read(clientItemsStatsProvider(clientId).notifier).refreshSilently();
   }
-  if (supplierId != null) {
-    ref.read(supplierDetailProvider(supplierId).notifier).refreshSilently();
+  final providerId = supplierId ?? craftsmanId;
+  if (providerId != null) {
+    ref.read(providerDetailProvider(providerId).notifier).refreshSilently();
   }
-  if (craftsmanId != null) {
-    ref.read(craftsmanDetailProvider(craftsmanId).notifier).refreshSilently();
-  }
-  ref.invalidate(directorySuppliersProvider);
-  ref.invalidate(directoryCraftsmenProvider);
 }

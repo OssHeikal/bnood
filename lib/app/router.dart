@@ -30,14 +30,11 @@ import '../features/clients/client_craftsmen_list_screen.dart';
 import '../features/clients/client_suppliers_list_screen.dart';
 import '../features/clients/client_items_stats_screen.dart';
 import '../features/clients/movements_list_screen.dart';
-import '../features/statements/supplier_statement_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/statements/client_statement_screen.dart';
 import '../features/vouchers/voucher_screen.dart';
 import '../features/providers/provider_detail_screen.dart';
-import '../features/suppliers/craftsman_detail_screen.dart';
 import 'app_shell_directory_body.dart';
-import '../features/suppliers/supplier_detail_screen.dart';
 import 'auth_router_refresh.dart';
 import 'app_splash_session.dart';
 import 'app_startup_splash.dart';
@@ -257,15 +254,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/suppliers/:supplierId',
-        builder: (_, state) => SupplierDetailScreen(supplierId: state.pathParameters['supplierId']!),
-      ),
-      GoRoute(
-        path: '/suppliers/:supplierId/statement',
-        builder: (_, state) => SupplierStatementScreen(supplierId: state.pathParameters['supplierId']!),
+        redirect: (_, state) => '/providers/${state.pathParameters['supplierId']}',
       ),
       GoRoute(
         path: '/craftsmen/:craftsmanId',
-        builder: (_, state) => CraftsmanDetailScreen(craftsmanId: state.pathParameters['craftsmanId']!),
+        redirect: (_, state) => '/providers/${state.pathParameters['craftsmanId']}',
       ),
       GoRoute(path: VoucherScreen.path, builder: (_, _) => const VoucherScreen()),
     ],

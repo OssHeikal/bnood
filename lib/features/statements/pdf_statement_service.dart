@@ -4,7 +4,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../../core/brand/app_brand_lockup.dart';
-import '../../core/database/database.dart';
+import '../../core/ledger/ledger_entities.dart';
 import '../../core/formatting/display_digits.dart';
 import '../../core/money/ledger_math.dart';
 import '../../core/money/money_format.dart';

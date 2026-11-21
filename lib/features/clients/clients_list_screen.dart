@@ -9,7 +9,8 @@ import '../../core/layout/app_layout.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/providers/dashboard_providers.dart';
-import '../../core/repositories/bnood_repository.dart';
+import '../../core/clients/client_list_archive_filter.dart';
+import '../../core/home/home_row_models.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/pagination.dart';
 import '../../core/widgets/app_fallback.dart';
@@ -120,10 +121,6 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
       if (previous != next) _refreshPaging();
     });
     bindPagingListRefreshEpoch(ref, PagingListIds.clients, _refreshPaging);
-    ref.listen(remoteClientsEnabledProvider, (previous, next) {
-      if (previous != next) _refreshPaging();
-    });
-
     return HomeFoundationScope(
       child: Builder(
         builder: (context) {
@@ -195,7 +192,6 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                   ? EdgeInsets.fromLTRB(gutter, AppSize.spaceSM, gutter, 0)
                   : null,
               itemBuilder: (context, row, index) {
-                final remoteMoney = ref.watch(remoteClientsEnabledProvider);
                 return ClientBalanceCard(
                   name: row.client.name,
                   meta: row.client.phone,
@@ -204,7 +200,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                   amountPiastres: row.remainingPiastres,
                   accentKey: clientAccentKeyFor(row.client.id),
                   localeCode: localeCode,
-                  minorPerMajor: remoteMoney ? RemoteMoneyUnits.minorPerMajor : 100,
+                  minorPerMajor: RemoteMoneyUnits.minorPerMajor,
                   onTap: () => context.push('/clients/${row.client.id}'),
                 );
               },

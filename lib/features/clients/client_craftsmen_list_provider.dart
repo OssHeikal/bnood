@@ -4,15 +4,8 @@ import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/clients/client_provider_agreement_preview.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/providers_api/app_provider_record.dart';
-import '../../core/money/ledger_math.dart';
-import '../../core/providers/app_providers.dart';
 import 'client_detail_snapshot.dart';
 import 'widgets/client_balance_card.dart';
-
-final clientProjectCraftsmenWatchProvider =
-    StreamProvider.family<void, String>((ref, projectId) {
-  return ref.watch(repositoryProvider).watchProjectCraftsmenSignals(projectId);
-});
 
 final clientCraftsmenListProvider =
     AsyncNotifierProvider.family<ClientCraftsmenListNotifier, ClientCraftsmenListSnapshot, String>(
@@ -35,17 +28,7 @@ class ClientCraftsmenListNotifier extends FamilyAsyncNotifier<ClientCraftsmenLis
   int _reloadSeq = 0;
 
   @override
-  Future<ClientCraftsmenListSnapshot> build(String clientId) async {
-    final snap = await loadSnapshot(clientId);
-    final projectId = snap.projectId;
-    if (projectId != null) {
-      ref.listen(clientProjectCraftsmenWatchProvider(projectId), (previous, next) {
-        if (previous == null) return;
-        next.whenData((_) => refreshSilently());
-      });
-    }
-    return snap;
-  }
+  Future<ClientCraftsmenListSnapshot> build(String clientId) => loadSnapshot(clientId);
 
   Future<void> refreshSilently() async {
     final previous = state.valueOrNull;
@@ -72,44 +55,6 @@ class ClientCraftsmenListNotifier extends FamilyAsyncNotifier<ClientCraftsmenLis
   }
 
   Future<ClientCraftsmenListSnapshot> loadSnapshot(String clientId) async {
-    if (ref.read(remoteClientsEnabledProvider)) {
-      return _loadRemoteSnapshot(clientId);
-    }
-    final repo = ref.read(repositoryProvider);
-    final project = await repo.primaryActiveProject(clientId);
-    if (project == null) {
-      return const ClientCraftsmenListSnapshot(projectId: null, rows: []);
-    }
-    final agreements = await repo.agreementsForProject(project.id);
-    final tx = await repo.transactionsForProject(project.id);
-    final craftsmen = await repo.listActiveCraftsmen();
-    final byId = {for (final c in craftsmen) c.id: c};
-
-    final rows = <ClientCraftsmanPreviewRow>[];
-    for (final a in agreements) {
-      final c = byId[a.craftsmanId];
-      if (c == null) continue;
-      final paid = LedgerMath.craftsmanPaidPiastres(rows: tx, craftsmanId: c.id);
-      rows.add(
-        ClientCraftsmanPreviewRow(
-          craftsmanId: c.id,
-          name: c.name,
-          trade: c.trade,
-          paidPiastres: paid,
-          agreedPiastres: a.initialAmountPiastres,
-          remainingPiastres: LedgerMath.craftsmanRemainingPiastres(
-            initialAmountPiastres: a.initialAmountPiastres,
-            paidPiastres: paid,
-          ),
-          accentKey: clientAccentKeyFor(c.id),
-        ),
-      );
-    }
-    rows.sort((a, b) => a.name.compareTo(b.name));
-    return ClientCraftsmenListSnapshot(projectId: project.id, rows: rows);
-  }
-
-  Future<ClientCraftsmenListSnapshot> _loadRemoteSnapshot(String clientId) async {
     final record = await ref.read(clientsRepositoryProvider).getClient(clientId);
     final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
     final rows = clientAgreementPreviews(agreements, AppProviderType.craftsman);
