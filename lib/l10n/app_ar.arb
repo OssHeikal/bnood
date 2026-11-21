@@ -637,6 +637,17 @@
   "paywallLoadFailedBody": "تحقق من الاتصال وحاول مرة أخرى.",
   "paywallRestorePurchase": "استعادة الشراء",
   "paywallPerMonthUnit": "ج.م/شهر",
+  "paywallCurrentPlanChip": "باقتك الحالية",
+  "paywallBilledYearlyAt": "يتحسب {amount} سنويًا",
+  "@paywallBilledYearlyAt": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallBilledYearlyIntro": "يتحسب",
+  "paywallBilledYearlySuffix": "سنويًا",
   "subscriptionPaymentNotConnectedYet": "الدفع داخل التطبيق غير متصل بعد.",
   "profileSubscriptionSection": "الاشتراك",
   "profileSubscriptionFreeBlurb": "ترقية Premium لفتح مشاريع نشطة بلا حد ومزايا إضافية.",

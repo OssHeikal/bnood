@@ -1557,6 +1557,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paywallPerMonthUnit => 'ج.م/شهر';
 
   @override
+  String get paywallCurrentPlanChip => 'باقتك الحالية';
+
+  @override
+  String paywallBilledYearlyAt(String amount) {
+    return 'يتحسب $amount سنويًا';
+  }
+
+  @override
+  String get paywallBilledYearlyIntro => 'يتحسب';
+
+  @override
+  String get paywallBilledYearlySuffix => 'سنويًا';
+
+  @override
   String get subscriptionPaymentNotConnectedYet =>
       'الدفع داخل التطبيق غير متصل بعد.';
 

@@ -653,6 +653,17 @@
   "paywallLoadFailedBody": "Check your connection and try again.",
   "paywallRestorePurchase": "Restore purchase",
   "paywallPerMonthUnit": "EGP/mo",
+  "paywallCurrentPlanChip": "Current plan",
+  "paywallBilledYearlyAt": "Billed {amount} yearly",
+  "@paywallBilledYearlyAt": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallBilledYearlyIntro": "Billed",
+  "paywallBilledYearlySuffix": "yearly",
   "subscriptionPaymentNotConnectedYet": "In-app payment is not connected yet.",
   "profileSubscriptionSection": "Subscription",
   "profileSubscriptionFreeBlurb": "Upgrade to Premium for unlimited active projects and more.",

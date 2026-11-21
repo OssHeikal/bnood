@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/formatting/display_digits.dart';
 import '../../../core/subscription/paywall_v3_models.dart';
 import '../../../core/subscription/subscription_colors.dart';
 
@@ -19,35 +20,37 @@ class PaywallComparisonTable extends StatelessWidget {
     final ink = isDark ? const Color(0xFFF3EEF8) : const Color(0xFF1C1722);
     final muted = isDark ? const Color(0xFFA59EAF) : const Color(0xFF6F6878);
     final highlightText = isDark ? const Color(0xFFE4D4FF) : SubscriptionColors.violetDark;
-    final highlightBg = isDark ? const Color(0xFF2A1D40) : SubscriptionColors.violetSoft;
+    final highlightBg = isDark ? const Color(0xFF2A1D40) : SubscriptionColors.violetSoft.withValues(alpha: 0.55);
 
     return Table(
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       columnWidths: {
-        0: const FlexColumnWidth(1.6),
+        0: const FlexColumnWidth(1.55),
         for (var i = 0; i < table.columns.length; i++) i + 1: const FlexColumnWidth(),
       },
       children: [
         TableRow(
           children: [
             const SizedBox.shrink(),
-            for (final col in table.columns) _HeaderCell(
-              label: col.name,
-              highlighted: col.slug == selectedPackageSlug,
-              ink: ink,
-              highlightText: highlightText,
-              highlightBg: highlightBg,
-            ),
+            for (final col in table.columns)
+              _HeaderCell(
+                label: col.name,
+                highlighted: col.slug == selectedPackageSlug,
+                ink: ink,
+                highlightText: highlightText,
+                highlightBg: highlightBg,
+                muted: muted,
+              ),
           ],
         ),
         for (final row in table.rows)
           TableRow(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
                   row.label,
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: muted),
+                  style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: muted, height: 1.25),
                   textAlign: TextAlign.start,
                 ),
               ),
@@ -73,6 +76,7 @@ class _HeaderCell extends StatelessWidget {
     required this.ink,
     required this.highlightText,
     required this.highlightBg,
+    required this.muted,
   });
 
   final String label;
@@ -80,6 +84,7 @@ class _HeaderCell extends StatelessWidget {
   final Color ink;
   final Color highlightText;
   final Color highlightBg;
+  final Color muted;
 
   @override
   Widget build(BuildContext context) {
@@ -116,18 +121,39 @@ class _ValueCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _CellFrame(
-      highlighted: highlighted,
-      highlightBg: highlightBg,
-      child: Text(
-        value,
+    final trimmed = value.trim();
+    final isCheck = trimmed == '✓' || trimmed.toLowerCase() == 'yes';
+    final isDash = trimmed == '—' || trimmed == '-' || trimmed.isEmpty;
+
+    Widget child;
+    if (isCheck) {
+      child = Icon(
+        Icons.check_rounded,
+        size: 14,
+        color: highlighted ? highlightText : SubscriptionColors.violet,
+      );
+    } else if (isDash) {
+      child = Text(
+        '—',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: muted),
+      );
+    } else {
+      child = Text(
+        DisplayDigits.toWesternDigits(trimmed),
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,
           color: highlighted ? highlightText : muted,
         ),
-      ),
+      );
+    }
+
+    return _CellFrame(
+      highlighted: highlighted,
+      highlightBg: highlightBg,
+      child: Center(child: child),
     );
   }
 }
@@ -149,7 +175,7 @@ class _CellFrame extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 3),
           child: child,
         ),
       ),

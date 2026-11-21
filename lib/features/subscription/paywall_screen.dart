@@ -58,17 +58,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
     AppToaster.show(l10n.subscriptionPaymentNotConnectedYet, kind: ToastKind.info);
   }
 
-  String? _contextLine(AppLocalizations l10n) {
-    final ctx = _v3.context;
-    if (ctx == null) return null;
-    final cap = widget.content.v3 == null ? null : _contextDetailFromEntitlements();
-    return ctx.formattedContextLine(detailOverride: cap);
-  }
-
-  String? _contextDetailFromEntitlements() {
-    // Detail text typically comes from API context; keep null unless template needs it.
-    return _v3.context?.detailText;
-  }
+  String? _contextLine() => _v3.context?.resolvedLine();
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +72,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
     final canvas = isDark ? const Color(0xFF16121C) : SubscriptionColors.paywallCanvas;
     final gradientTop = isDark ? const Color(0xFF221833) : SubscriptionColors.paywallGradientTop;
 
-    final benefits = _v3.benefitsForPackage(_selectedPackage);
+    final benefits = _v3.benefitItems;
     final anyYearly = _v3.packages.any((p) => p.yearlyEnabled);
     final anyMonthly = _v3.packages.any((p) => p.monthlyEnabled);
     final showBillingToggle = anyYearly && anyMonthly;
@@ -135,7 +125,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                         style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: muted, height: 1.5),
                         textAlign: TextAlign.start,
                       ),
-                      if (_contextLine(l10n) != null) ...[
+                      if (_contextLine() != null) ...[
                         const SizedBox(height: 10),
                         DecoratedBox(
                           decoration: BoxDecoration(
@@ -146,7 +136,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             child: Text(
-                              _contextLine(l10n)!,
+                              _contextLine()!,
                               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: muted),
                               textAlign: TextAlign.start,
                             ),

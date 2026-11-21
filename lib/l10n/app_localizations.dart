@@ -2887,6 +2887,30 @@ abstract class AppLocalizations {
   /// **'EGP/mo'**
   String get paywallPerMonthUnit;
 
+  /// No description provided for @paywallCurrentPlanChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Current plan'**
+  String get paywallCurrentPlanChip;
+
+  /// No description provided for @paywallBilledYearlyAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Billed {amount} yearly'**
+  String paywallBilledYearlyAt(String amount);
+
+  /// No description provided for @paywallBilledYearlyIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Billed'**
+  String get paywallBilledYearlyIntro;
+
+  /// No description provided for @paywallBilledYearlySuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'yearly'**
+  String get paywallBilledYearlySuffix;
+
   /// No description provided for @subscriptionPaymentNotConnectedYet.
   ///
   /// In en, this message translates to:

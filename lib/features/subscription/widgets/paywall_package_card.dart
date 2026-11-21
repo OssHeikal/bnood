@@ -1,7 +1,8 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/money/remote_money_format.dart';
+import '../../../core/formatting/display_digits.dart';
+import '../../../core/subscription/paywall_money_display.dart';
 import '../../../core/subscription/paywall_v3_models.dart';
 import '../../../core/subscription/subscription_colors.dart';
 
@@ -30,7 +31,6 @@ class PaywallPackageCard extends StatelessWidget {
     final ink = isDark ? const Color(0xFFF3EEF8) : const Color(0xFF1C1722);
     final muted = isDark ? const Color(0xFFA59EAF) : const Color(0xFF6F6878);
     final l10n = AppLocalizations.of(context);
-    final locale = localeCode == 'ar' ? 'ar_EG' : 'en_US';
 
     final effectivePeriod = package.effectivePeriodWhen(billingPeriod);
     final showYearlyOnlyHint = billingPeriod == 'monthly' && package.yearlyOnly;
@@ -64,32 +64,28 @@ class PaywallPackageCard extends StatelessWidget {
                       spacing: 6,
                       runSpacing: 4,
                       children: [
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: package.name,
-                                style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800, color: ink),
-                              ),
-                              if (package.slugShort != null && package.slugShort!.isNotEmpty)
-                                TextSpan(
-                                  text: ' ${package.slugShort}',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
-                                    color: muted,
-                                    letterSpacing: 0.04 * 10,
-                                  ),
-                                ),
-                            ],
-                          ),
+                        Text(
+                          package.name,
+                          style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800, color: ink),
                         ),
-                        if (package.isRecommended && package.badgeType == 'recommended')
-                          _Tag(label: package.badgeLabel ?? '', style: _TagStyle.recommended),
                         if (package.isCurrentPlan)
-                          _Tag(label: package.badgeLabel ?? 'Current', style: _TagStyle.current, isDark: isDark),
-                        if (showYearlyOnlyHint)
-                          _Tag(label: package.yearlyOnlyLabel ?? '', style: _TagStyle.yearlyOnly, isDark: isDark),
+                          _Tag(
+                            label: l10n.paywallCurrentPlanChip,
+                            background: isDark ? const Color(0xFF2A1D40) : SubscriptionColors.violetSoft,
+                            foreground: isDark ? const Color(0xFFD8C6FF) : SubscriptionColors.violetDark,
+                          )
+                        else if (package.badgeLabel != null && package.badgeLabel!.isNotEmpty)
+                          _Tag(
+                            label: package.badgeLabel!,
+                            background: _badgeBackground(package.badgeType, isDark),
+                            foreground: _badgeForeground(package.badgeType, isDark),
+                          ),
+                        if (showYearlyOnlyHint && (package.yearlyOnlyLabel ?? '').isNotEmpty)
+                          _Tag(
+                            label: package.yearlyOnlyLabel!,
+                            background: isDark ? const Color(0xFF3A2F4E) : const Color(0xFFECE8F2),
+                            foreground: isDark ? const Color(0xFFD8C6FF) : const Color(0xFF5B21B6),
+                          ),
                       ],
                     ),
                     if (package.tagline != null && package.tagline!.isNotEmpty) ...[
@@ -100,13 +96,10 @@ class PaywallPackageCard extends StatelessWidget {
                         textAlign: TextAlign.start,
                       ),
                     ],
-                    if (!package.isContact && pricing != null && effectivePeriod == 'yearly' && pricing.billedTotalMinor != null)
+                    if (!package.isContact && pricing != null && effectivePeriod == 'yearly')
                       Padding(
                         padding: const EdgeInsets.only(top: 2),
-                        child: Text(
-                          _billedYearlyCaption(l10n, pricing, locale),
-                          style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: muted, height: 1.3),
-                        ),
+                        child: _BilledYearlyLine(pricing: pricing, l10n: l10n, muted: muted),
                       )
                     else if (!package.isContact && effectivePeriod == 'monthly')
                       Padding(
@@ -134,8 +127,8 @@ class PaywallPackageCard extends StatelessWidget {
               else if (pricing != null)
                 _PriceColumn(
                   pricing: pricing,
-                  locale: locale,
                   perMonthUnit: l10n.paywallPerMonthUnit,
+                  yearlyPeriod: effectivePeriod == 'yearly',
                   muted: muted,
                   ink: ink,
                 ),
@@ -146,50 +139,104 @@ class PaywallPackageCard extends StatelessWidget {
     );
   }
 
-  String _billedYearlyCaption(AppLocalizations l10n, AppPaywallPeriodPricing pricing, String locale) {
-    final amount = RemoteMoneyFormat.formatMinor(pricing.billedTotalMinor ?? pricing.discountedMinor, locale: locale);
-    final display = pricing.hasDiscount && pricing.originalMinor > pricing.discountedMinor
-        ? '${RemoteMoneyFormat.formatMinor(pricing.originalMinor, locale: locale)} → $amount'
-        : amount;
-    return l10n.paywallBilledYearly(display);
+  static Color _badgeBackground(String? badgeType, bool isDark) {
+    return switch (badgeType) {
+      'recommended' || 'most_popular' => SubscriptionColors.violet,
+      'for_offices' => isDark ? const Color(0xFF3A3220) : const Color(0xFFF3EEE3),
+      _ => isDark ? const Color(0xFF2A2433) : const Color(0xFFECE8F2),
+    };
+  }
+
+  static Color _badgeForeground(String? badgeType, bool isDark) {
+    return switch (badgeType) {
+      'recommended' || 'most_popular' => Colors.white,
+      'for_offices' => isDark ? const Color(0xFFE6C98A) : const Color(0xFF7A5A1E),
+      _ => isDark ? const Color(0xFFD8C6FF) : SubscriptionColors.violetDark,
+    };
+  }
+}
+
+class _BilledYearlyLine extends StatelessWidget {
+  const _BilledYearlyLine({
+    required this.pricing,
+    required this.l10n,
+    required this.muted,
+  });
+
+  final AppPaywallPeriodPricing pricing;
+  final AppLocalizations l10n;
+  final Color muted;
+
+  @override
+  Widget build(BuildContext context) {
+    final arabic = Localizations.localeOf(context).languageCode == 'ar';
+    final billed = pricing.resolvedBilledYearlyMajor();
+    if (billed == null) return const SizedBox.shrink();
+    final billedText = DisplayDigits.toWesternDigits(
+      PaywallMoneyDisplay.formatMajorAmount(billed, arabic: arabic),
+    );
+    final originalBilled = pricing.resolvedOriginalBilledYearlyMajor();
+    final baseStyle = TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: muted, height: 1.3);
+
+    if (originalBilled != null && originalBilled > billed) {
+      final originalText = DisplayDigits.toWesternDigits(
+        PaywallMoneyDisplay.formatMajorAmount(originalBilled, arabic: arabic),
+      );
+      return Text.rich(
+        TextSpan(
+          style: baseStyle,
+          children: [
+            TextSpan(text: '${l10n.paywallBilledYearlyIntro} '),
+            TextSpan(
+              text: originalText,
+              style: baseStyle.copyWith(
+                decoration: TextDecoration.lineThrough,
+                color: const Color(0xFF9B96A3),
+              ),
+            ),
+            const TextSpan(text: ' '),
+            TextSpan(text: billedText),
+            TextSpan(text: ' ${l10n.paywallBilledYearlySuffix}'),
+          ],
+        ),
+      );
+    }
+
+    return Text(
+      l10n.paywallBilledYearlyAt(billedText),
+      style: baseStyle,
+    );
   }
 }
 
 class _PriceColumn extends StatelessWidget {
   const _PriceColumn({
     required this.pricing,
-    required this.locale,
     required this.perMonthUnit,
+    required this.yearlyPeriod,
     required this.muted,
     required this.ink,
   });
 
   final AppPaywallPeriodPricing pricing;
-  final String locale;
   final String perMonthUnit;
+  final bool yearlyPeriod;
   final Color muted;
   final Color ink;
 
   @override
   Widget build(BuildContext context) {
-    final perMonth = RemoteMoneyFormat.withoutCurrencySuffix(
-      RemoteMoneyFormat.formatMinor(pricing.perMonthEquivalentMinor, locale: locale),
-    );
-    final original = pricing.hasDiscount
-        ? RemoteMoneyFormat.withoutCurrencySuffix(
-            RemoteMoneyFormat.formatMinor(
-              (pricing.originalMinor / 12).round(),
-              locale: locale,
-            ),
-          )
-        : null;
+    final arabic = Localizations.localeOf(context).languageCode == 'ar';
+    final perMonthMajor = pricing.resolvedPerMonthMajor(arabic: arabic);
+    final originalPerMonth = pricing.resolvedOriginalPerMonthMajor(yearlyPeriod: yearlyPeriod);
+    final perMonthDigits = DisplayDigits.formatInteger(perMonthMajor);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        if (original != null)
+        if (originalPerMonth != null && originalPerMonth > perMonthMajor)
           Text(
-            original,
+            DisplayDigits.formatInteger(originalPerMonth),
             style: const TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
@@ -199,7 +246,7 @@ class _PriceColumn extends StatelessWidget {
             ),
           ),
         Text(
-          perMonth,
+          perMonthDigits,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: -0.03 * 18, color: ink, height: 1),
         ),
         Text(
@@ -230,25 +277,18 @@ class _RadioDot extends StatelessWidget {
   }
 }
 
-enum _TagStyle { recommended, current, yearlyOnly }
-
 class _Tag extends StatelessWidget {
-  const _Tag({required this.label, required this.style, this.isDark = false});
+  const _Tag({required this.label, required this.background, required this.foreground});
 
   final String label;
-  final _TagStyle style;
-  final bool isDark;
+  final Color background;
+  final Color foreground;
 
   @override
   Widget build(BuildContext context) {
     if (label.isEmpty) return const SizedBox.shrink();
-    final colors = switch (style) {
-      _TagStyle.recommended => (SubscriptionColors.violet, Colors.white),
-      _TagStyle.current => isDark ? (const Color(0xFFF3EEF8), const Color(0xFF16121C)) : (const Color(0xFF1C1722), const Color(0xFFF6F3F9)),
-      _TagStyle.yearlyOnly => isDark ? (const Color(0xFF3A2F4E), const Color(0xFFD8C6FF)) : (const Color(0xFFECE8F2), const Color(0xFF5B21B6)),
-    };
     return DecoratedBox(
-      decoration: BoxDecoration(color: colors.$1, borderRadius: BorderRadius.circular(999)),
+      decoration: BoxDecoration(color: background, borderRadius: BorderRadius.circular(999)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6),
         child: SizedBox(
@@ -256,7 +296,7 @@ class _Tag extends StatelessWidget {
           child: Center(
             child: Text(
               label,
-              style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: colors.$2),
+              style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: foreground),
             ),
           ),
         ),

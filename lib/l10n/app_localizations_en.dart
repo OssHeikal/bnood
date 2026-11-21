@@ -1573,6 +1573,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallPerMonthUnit => 'EGP/mo';
 
   @override
+  String get paywallCurrentPlanChip => 'Current plan';
+
+  @override
+  String paywallBilledYearlyAt(String amount) {
+    return 'Billed $amount yearly';
+  }
+
+  @override
+  String get paywallBilledYearlyIntro => 'Billed';
+
+  @override
+  String get paywallBilledYearlySuffix => 'yearly';
+
+  @override
   String get subscriptionPaymentNotConnectedYet =>
       'In-app payment is not connected yet.';
 

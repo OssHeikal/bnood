@@ -82,7 +82,7 @@ void main() {
     expect(content.v3!.trigger, 'limit_reached');
     expect(content.v3!.packages, hasLength(2));
     expect(content.v3!.comparisonTable?.columns.length, 2);
-    expect(content.v3!.benefitsForPackage(content.v3!.packages.first).first.text, 'Team included');
+    expect(content.v3!.benefitItems.first.text, '4 active projects');
     expect(content.v3!.packages.last.isContact, isTrue);
     expect(content.v3!.packages.last.resolveCta('yearly'), 'Contact us');
   });

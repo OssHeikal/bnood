@@ -1,4 +1,5 @@
 import 'app_subscription.dart';
+import 'paywall_money_display.dart';
 
 /// Query values for `GET /v1/subscription?paywall_trigger=…`.
 enum PaywallFetchTrigger {
@@ -174,6 +175,9 @@ class AppPaywallPeriodPricing {
     this.billedTotalMinor,
     this.hasDiscount = false,
     this.offer,
+    this.displayPerMonthMajor,
+    this.displayBilledYearlyMajor,
+    this.displayOriginalBilledYearlyMajor,
   });
 
   final int originalMinor;
@@ -182,6 +186,9 @@ class AppPaywallPeriodPricing {
   final int? billedTotalMinor;
   final bool hasDiscount;
   final AppPaywallPeriodOffer? offer;
+  final int? displayPerMonthMajor;
+  final int? displayBilledYearlyMajor;
+  final int? displayOriginalBilledYearlyMajor;
 
   static AppPaywallPeriodPricing? fromJson(Object? raw) {
     if (raw is! Map<String, dynamic>) return null;
@@ -196,7 +203,30 @@ class AppPaywallPeriodPricing {
       billedTotalMinor: _readOptionalInt(raw['billed_total_minor']),
       hasDiscount: raw['has_discount'] == true || discounted < original,
       offer: AppPaywallPeriodOffer.fromJson(raw['offer']),
+      displayPerMonthMajor: _readOptionalInt(raw['display_per_month_major']),
+      displayBilledYearlyMajor: _readOptionalInt(raw['display_billed_yearly_major']),
+      displayOriginalBilledYearlyMajor: _readOptionalInt(raw['display_original_billed_yearly_major']),
     );
+  }
+
+  int resolvedPerMonthMajor({required bool arabic}) =>
+      displayPerMonthMajor ?? PaywallMoneyDisplay.wholeMajorFromMinor(perMonthEquivalentMinor);
+
+  int? resolvedBilledYearlyMajor() =>
+      displayBilledYearlyMajor ??
+      (billedTotalMinor != null ? PaywallMoneyDisplay.wholeMajorFromMinor(billedTotalMinor!) : null);
+
+  int? resolvedOriginalBilledYearlyMajor() {
+    if (!hasDiscount || originalMinor <= discountedMinor) return null;
+    return displayOriginalBilledYearlyMajor ?? PaywallMoneyDisplay.wholeMajorFromMinor(originalMinor);
+  }
+
+  int? resolvedOriginalPerMonthMajor({required bool yearlyPeriod}) {
+    if (!hasDiscount || originalMinor <= discountedMinor) return null;
+    if (yearlyPeriod) {
+      return PaywallMoneyDisplay.wholeMajorPerMonthFromYearly(originalMinor);
+    }
+    return PaywallMoneyDisplay.wholeMajorFromMinor(originalMinor);
   }
 }
 
@@ -534,20 +564,38 @@ class AppPaywallContext {
     required this.currentPackageName,
     this.freeContextTemplate,
     this.detailText,
+    this.contextLine,
   });
 
   final String currentPackageSlug;
   final String currentPackageName;
   final String? freeContextTemplate;
   final String? detailText;
+  final String? contextLine;
 
-  String formattedContextLine({String? detailOverride}) {
+  String? resolvedLine() {
+    final direct = contextLine?.trim();
+    if (direct != null && direct.isNotEmpty) return direct;
+    return formattedContextLine();
+  }
+
+  String? formattedContextLine({String? detailOverride}) {
+    final detail = (detailOverride ?? detailText ?? '').trim();
     final template = freeContextTemplate;
-    final detail = detailOverride ?? detailText ?? '';
     if (template == null || template.isEmpty) {
-      return '$currentPackageName${detail.isEmpty ? '' : ' · $detail'}';
+      if (detail.isEmpty) return currentPackageName;
+      return '$currentPackageName · $detail';
     }
-    return template.replaceAll('{plan}', currentPackageName).replaceAll('{detail}', detail);
+    var line = template.replaceAll('{plan}', currentPackageName);
+    if (detail.isEmpty) {
+      line = line
+          .replaceAll('· {detail}', '')
+          .replaceAll('{detail}', '')
+          .replaceAll(RegExp(r'\s*·\s*$'), '')
+          .trim();
+      return line.isEmpty ? null : line;
+    }
+    return line.replaceAll('{detail}', detail);
   }
 
   static AppPaywallContext? fromJson(Object? raw) {
@@ -557,6 +605,7 @@ class AppPaywallContext {
       currentPackageName: raw['current_package_name'] as String? ?? 'Free',
       freeContextTemplate: raw['free_context_template'] as String?,
       detailText: raw['detail_text'] as String?,
+      contextLine: raw['context_line'] as String?,
     );
   }
 }
