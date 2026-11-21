@@ -3,7 +3,7 @@ import 'package:bnood/core/money/remote_money_units.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/widgets/custom_text_field.dart';
 import 'package:bnood/core/widgets/entity_picker_row.dart';
-import 'package:bnood/features/clients/widgets/craftsman_roster_choice_row.dart';
+import 'package:bnood/features/clients/presentation/widgets/craftsman_roster_choice_row.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

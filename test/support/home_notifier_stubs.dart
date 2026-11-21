@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:bnood/core/providers/dashboard_providers.dart';
-import 'package:bnood/core/home/home_row_models.dart';
+import 'package:bnood/core/app_state/dashboard_providers.dart';
+import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/core/shared/pagination/pagination.dart';
-import 'package:bnood/features/clients/clients_list_paging.dart';
+import 'package:bnood/features/clients/presentation/clients_list_paging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class StubHomeTotalsNotifier extends HomeTotalsNotifier {

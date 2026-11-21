@@ -1,4 +1,4 @@
-import 'package:bnood/core/clients/client_statement_record.dart';
+import 'package:bnood/features/clients/data/client_statement_record.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

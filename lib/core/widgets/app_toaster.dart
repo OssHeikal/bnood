@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../config/navigation/root_navigator_key.dart';
 import '../config/theme/app_size.dart';
 import '../layout/app_layout.dart';
-import '../../features/home/home_foundation_scope.dart';
+import '../../features/home/presentation/home_foundation_scope.dart';
 import 'toast/app_toast.dart';
 import 'toast/app_tone.dart';
 import 'toast/shell_dock_presence.dart';

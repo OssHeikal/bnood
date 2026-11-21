@@ -7,11 +7,11 @@ import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/formatting/display_digits.dart';
 import '../../../core/resources/gen/assets.gen.dart';
-import '../../../core/subscription/app_subscription.dart';
-import '../../../core/subscription/subscription_colors.dart';
-import '../../../core/subscription/subscription_riverpod.dart';
+import '../../subscription/data/app_subscription.dart';
+import '../../subscription/data/subscription_colors.dart';
+import '../../subscription/data/subscription_riverpod.dart';
 import '../../../core/widgets/buttons/app_button.dart';
-import '../../subscription/paywall_launcher.dart';
+import '../../subscription/presentation/paywall_launcher.dart';
 
 class ProfileSubscriptionCard extends ConsumerWidget {
   const ProfileSubscriptionCard({super.key});

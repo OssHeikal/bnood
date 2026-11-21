@@ -2,7 +2,7 @@ import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/entity_picker_page.dart';
 import 'package:bnood/core/widgets/entity_picker_row.dart';
-import 'package:bnood/features/vouchers/voucher_picker_cards.dart';
+import 'package:bnood/features/vouchers/presentation/voucher_picker_cards.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'dart:ui' show Tristate;
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../features/providers/providers_screen.dart';
+import '../features/providers/presentation/providers_screen.dart';
 
 /// Directory shell branch — online providers catalog.
 class AppShellDirectoryBody extends StatelessWidget {

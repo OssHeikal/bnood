@@ -1,8 +1,8 @@
-import 'package:bnood/core/clients/client_statement_record.dart';
+import 'package:bnood/features/clients/data/client_statement_record.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/items/item_api_record.dart';
-import 'package:bnood/features/home/home_foundation_scope.dart';
-import 'package:bnood/features/statements/statement_api_client_document.dart';
+import 'package:bnood/features/items/data/item_api_record.dart';
+import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/statements/presentation/statement_api_client_document.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

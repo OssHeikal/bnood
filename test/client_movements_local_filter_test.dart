@@ -1,6 +1,6 @@
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/features/clients/client_movements_filters.dart';
-import 'package:bnood/features/clients/client_movements_local_filter.dart';
+import 'package:bnood/features/clients/presentation/client_movements_filters.dart';
+import 'package:bnood/features/clients/presentation/client_movements_local_filter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Transaction _tx({

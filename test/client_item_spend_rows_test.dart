@@ -1,5 +1,5 @@
-import 'package:bnood/core/clients/client_statement_record.dart';
-import 'package:bnood/features/clients/client_item_spend_rows.dart';
+import 'package:bnood/features/clients/data/client_statement_record.dart';
+import 'package:bnood/features/clients/presentation/client_item_spend_rows.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

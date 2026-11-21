@@ -1,5 +1,5 @@
-import 'package:bnood/core/items/item_api_record.dart';
-import 'package:bnood/core/items/item_icon_catalog.dart';
+import 'package:bnood/features/items/data/item_api_record.dart';
+import 'package:bnood/features/items/data/item_icon_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -6,7 +6,7 @@ import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/widgets/custom_app_bar.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 
 /// Body-only auth shell: empty app bar, keyboard-safe scroll, no pinned footer chrome.
 enum AuthFlowAlignment { start, center }

@@ -1,5 +1,5 @@
-import 'package:bnood/core/agreements/app_agreement_record.dart';
-import 'package:bnood/core/api/agreements_api.dart';
+import 'package:bnood/features/providers/data/app_agreement_record.dart';
+import 'package:bnood/features/providers/data/agreements_api.dart';
 import 'package:bnood/core/api/app_dio.dart';
 import 'package:bnood/core/api/auth_api_exception.dart';
 import 'package:dio/dio.dart';

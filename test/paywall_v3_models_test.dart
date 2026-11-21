@@ -1,5 +1,5 @@
-import 'package:bnood/core/subscription/app_subscription.dart';
-import 'package:bnood/core/subscription/paywall_v3_models.dart';
+import 'package:bnood/features/subscription/data/app_subscription.dart';
+import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'app_subscription_live_payload_test.dart';

@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/analytics/providers/analytics_providers.dart';
 import '../core/api/api_accept_language.dart';
 import '../core/error_reporting/error_reporting_lifecycle.dart';
-import '../core/providers/settings_provider.dart';
+import '../core/app_state/settings_provider.dart';
 import '../core/push/push_coordinator.dart';
 import '../core/session/user_session_lifecycle.dart';
 import '../core/theme/app_theme.dart';

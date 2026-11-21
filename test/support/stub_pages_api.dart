@@ -1,5 +1,5 @@
 import 'package:bnood/core/api/pages_api.dart';
-import 'package:bnood/core/content/content_page_record.dart';
+import 'package:bnood/features/content/data/content_page_record.dart';
 
 class StubPagesApi extends PagesApi {
   StubPagesApi(this._handler) : super();

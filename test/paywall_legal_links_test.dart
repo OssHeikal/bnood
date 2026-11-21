@@ -1,10 +1,10 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/content/content_page_record.dart';
-import 'package:bnood/core/subscription/app_subscription.dart';
-import 'package:bnood/core/subscription/paywall_v3_models.dart';
-import 'package:bnood/features/content/content_page_provider.dart';
-import 'package:bnood/features/content/content_page_screen.dart';
-import 'package:bnood/features/subscription/paywall_screen.dart';
+import 'package:bnood/features/content/data/content_page_record.dart';
+import 'package:bnood/features/subscription/data/app_subscription.dart';
+import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
+import 'package:bnood/features/content/data/content_page_provider.dart';
+import 'package:bnood/features/content/presentation/content_page_screen.dart';
+import 'package:bnood/features/subscription/presentation/paywall_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:bnood/core/api/vouchers_api.dart';
-import 'package:bnood/core/vouchers/vouchers_repository.dart';
-import 'package:bnood/features/vouchers/voucher_remote_receipts.dart';
-import 'package:bnood/features/vouchers/voucher_sheet_receipt.dart';
+import 'package:bnood/features/vouchers/data/vouchers_api.dart';
+import 'package:bnood/features/vouchers/data/vouchers_repository.dart';
+import 'package:bnood/features/vouchers/presentation/voucher_remote_receipts.dart';
+import 'package:bnood/features/vouchers/presentation/voucher_sheet_receipt.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

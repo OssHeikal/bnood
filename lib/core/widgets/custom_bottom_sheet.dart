@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../config/theme/app_colors.dart';
 import '../config/theme/app_size.dart';
-import '../../features/home/home_foundation_scope.dart';
+import '../../features/home/presentation/home_foundation_scope.dart';
 import 'app_modal_sheet.dart';
 import 'bounded_sheet_navigator.dart';
 

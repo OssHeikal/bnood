@@ -1,0 +1,16 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'agreements_api.dart';
+import 'package:bnood/core/storage/session_store.dart';
+import 'agreements_repository.dart';
+
+final appAgreementsApiProvider = Provider<AgreementsApi>((ref) {
+  final store = ref.watch(sessionStoreProvider);
+  final api = AgreementsApi(sessionStore: store);
+  ref.onDispose(api.close);
+  return api;
+});
+
+final appAgreementsRepositoryProvider = Provider<AgreementsRepository>((ref) {
+  return AgreementsRepository(ref.watch(appAgreementsApiProvider));
+});

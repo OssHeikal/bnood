@@ -1,11 +1,11 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
-import 'package:bnood/core/providers/settings_provider.dart';
+import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/settings/app_preferences_body.dart';
-import 'package:bnood/features/settings/app_settings_sheet.dart';
+import 'package:bnood/features/settings/presentation/app_preferences_body.dart';
+import 'package:bnood/features/settings/presentation/app_settings_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';

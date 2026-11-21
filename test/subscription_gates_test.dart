@@ -1,5 +1,5 @@
 import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/subscription/app_subscription.dart';
+import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 AppSubscriptionSnapshot _cappedSnapshot() {

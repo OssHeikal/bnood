@@ -1,6 +1,6 @@
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/features/statements/statement_export_store.dart';
-import 'package:bnood/features/statements/statement_period_logic.dart';
+import 'package:bnood/features/statements/presentation/statement_export_store.dart';
+import 'package:bnood/features/statements/presentation/statement_period_logic.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/features/vouchers/receipt_image_compress.dart';
-import 'package:bnood/features/vouchers/voucher_receipt_upload_errors.dart';
+import 'package:bnood/features/vouchers/presentation/receipt_image_compress.dart';
+import 'package:bnood/features/vouchers/presentation/voucher_receipt_upload_errors.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

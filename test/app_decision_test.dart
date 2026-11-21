@@ -4,7 +4,7 @@ import 'package:bnood/core/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_decision.dart';
 import 'package:bnood/core/widgets/buttons/app_button.dart';
 import 'package:bnood/core/widgets/toast/app_tone.dart';
-import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';

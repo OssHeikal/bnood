@@ -1,6 +1,6 @@
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/core/providers/dashboard_providers.dart';
-import 'package:bnood/core/home/home_row_models.dart';
+import 'package:bnood/core/app_state/dashboard_providers.dart';
+import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

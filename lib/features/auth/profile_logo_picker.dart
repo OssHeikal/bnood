@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../vouchers/voucher_receipt_picker.dart';
+import '../vouchers/presentation/voucher_receipt_picker.dart';
 
 enum ProfileLogoPickSource { camera, gallery }
 

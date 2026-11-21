@@ -8,7 +8,7 @@ import '../core/config/theme/app_size.dart';
 import '../core/resources/gen/assets.gen.dart';
 import '../core/widgets/app_fallback.dart';
 import '../core/widgets/custom_app_bar.dart';
-import '../features/home/home_foundation_scope.dart';
+import '../features/home/presentation/home_foundation_scope.dart';
 import '../features/auth/auth_paths.dart';
 import 'app_shell_online_tabs.dart';
 import 'widgets/shell_nav_icon.dart';

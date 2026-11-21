@@ -1,11 +1,11 @@
-import 'package:bnood/core/api/providers_api.dart';
-import 'package:bnood/core/providers_api/app_provider_record.dart';
-import 'package:bnood/core/providers_api/providers_repository.dart';
-import 'package:bnood/core/providers_api/providers_riverpod.dart';
+import 'package:bnood/features/providers/data/providers_api.dart';
+import 'package:bnood/features/providers/data/app_provider_record.dart';
+import 'package:bnood/features/providers/data/providers_repository.dart';
+import 'package:bnood/features/providers/data/providers_riverpod.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/providers/providers_list_paging.dart';
+import 'package:bnood/features/providers/presentation/providers_list_paging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

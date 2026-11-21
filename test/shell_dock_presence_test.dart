@@ -6,7 +6,7 @@ import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/widgets/app_toaster.dart';
 import 'package:bnood/core/widgets/toast/app_toast.dart';
 import 'package:bnood/core/widgets/toast/shell_dock_presence.dart';
-import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';

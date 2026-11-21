@@ -2,7 +2,7 @@ import 'package:bnood/app/app_splash_session.dart';
 import 'package:bnood/app/bnood_app.dart';
 import 'package:bnood/app/router.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
-import 'package:bnood/core/providers/settings_provider.dart';
+import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/register_screen.dart';

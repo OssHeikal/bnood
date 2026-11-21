@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:bnood/features/vouchers/voucher_camera_pick_route.dart';
-import 'package:bnood/features/vouchers/voucher_receipt_picker.dart';
+import 'package:bnood/features/vouchers/presentation/voucher_camera_pick_route.dart';
+import 'package:bnood/features/vouchers/presentation/voucher_receipt_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image_picker/image_picker.dart';

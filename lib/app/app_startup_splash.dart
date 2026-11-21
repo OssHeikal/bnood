@@ -14,7 +14,7 @@ import '../features/app_gate/app_gate_provider.dart';
 import '../features/app_gate/app_gate_session.dart';
 import '../features/auth/auth_controller.dart';
 import '../features/auth/auth_state.dart';
-import '../features/home/home_foundation_scope.dart';
+import '../features/home/presentation/home_foundation_scope.dart';
 import 'app_splash_routing.dart';
 import 'app_splash_session.dart';
 

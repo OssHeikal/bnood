@@ -1,6 +1,6 @@
 import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/api/vouchers_api.dart';
-import 'package:bnood/core/vouchers/app_voucher_record.dart';
+import 'package:bnood/features/vouchers/data/vouchers_api.dart';
+import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
 import 'package:bnood/core/money/remote_money_units.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';

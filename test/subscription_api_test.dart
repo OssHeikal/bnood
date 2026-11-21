@@ -1,7 +1,7 @@
 import 'package:bnood/core/api/api_accept_language.dart';
 import 'package:bnood/core/api/app_dio.dart';
 import 'package:flutter/material.dart';
-import 'package:bnood/core/api/subscription_api.dart';
+import 'package:bnood/features/subscription/data/subscription_api.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

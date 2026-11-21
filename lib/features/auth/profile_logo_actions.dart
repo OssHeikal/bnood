@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/sheet/app_sheet.dart';
-import '../vouchers/voucher_receipt_picker.dart';
+import '../vouchers/presentation/voucher_receipt_picker.dart';
 import 'auth_controller.dart';
 import 'auth_messages.dart';
 import 'profile_logo_picker.dart';
