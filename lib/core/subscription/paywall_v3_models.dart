@@ -465,33 +465,83 @@ class AppPaywallPackage {
   }
 }
 
+int? _parseSortOrder(Object? raw) {
+  if (raw is int) return raw;
+  if (raw is num) return raw.toInt();
+  return null;
+}
+
+int _compareBySortOrder<T extends Object>(T a, T b) {
+  final orderA = switch (a) {
+    AppPaywallComparisonColumn c => c.sortOrder ?? 999,
+    AppPaywallComparisonRow r => r.sortOrder ?? 999,
+    _ => 999,
+  };
+  final orderB = switch (b) {
+    AppPaywallComparisonColumn c => c.sortOrder ?? 999,
+    AppPaywallComparisonRow r => r.sortOrder ?? 999,
+    _ => 999,
+  };
+  final byOrder = orderA.compareTo(orderB);
+  if (byOrder != 0) return byOrder;
+  final keyA = switch (a) {
+    AppPaywallComparisonColumn c => c.slug,
+    AppPaywallComparisonRow r => r.key,
+    _ => '',
+  };
+  final keyB = switch (b) {
+    AppPaywallComparisonColumn c => c.slug,
+    AppPaywallComparisonRow r => r.key,
+    _ => '',
+  };
+  return keyA.compareTo(keyB);
+}
+
 class AppPaywallComparisonColumn {
-  const AppPaywallComparisonColumn({required this.slug, required this.name});
+  const AppPaywallComparisonColumn({
+    required this.slug,
+    required this.name,
+    this.sortOrder,
+  });
 
   final String slug;
   final String name;
+  final int? sortOrder;
 
   static AppPaywallComparisonColumn? fromJson(Object? raw) {
     if (raw is! Map<String, dynamic>) return null;
     final slug = raw['slug'] as String?;
     final name = raw['name'] as String?;
     if (slug == null || name == null) return null;
-    return AppPaywallComparisonColumn(slug: slug, name: name);
+    return AppPaywallComparisonColumn(
+      slug: slug,
+      name: name,
+      sortOrder: _parseSortOrder(raw['sort_order']),
+    );
   }
 }
 
 class AppPaywallComparisonRow {
-  const AppPaywallComparisonRow({required this.key, required this.label});
+  const AppPaywallComparisonRow({
+    required this.key,
+    required this.label,
+    this.sortOrder,
+  });
 
   final String key;
   final String label;
+  final int? sortOrder;
 
   static AppPaywallComparisonRow? fromJson(Object? raw) {
     if (raw is! Map<String, dynamic>) return null;
     final key = raw['key'] as String?;
     final label = raw['label'] as String?;
     if (key == null || label == null) return null;
-    return AppPaywallComparisonRow(key: key, label: label);
+    return AppPaywallComparisonRow(
+      key: key,
+      label: label,
+      sortOrder: _parseSortOrder(raw['sort_order']),
+    );
   }
 }
 
@@ -513,7 +563,13 @@ class AppPaywallComparisonTable {
   if (columnsRaw is! List || rowsRaw is! List) return null;
 
     final columns = columnsRaw.map(AppPaywallComparisonColumn.fromJson).whereType<AppPaywallComparisonColumn>().toList();
+    if (columns.any((c) => c.sortOrder != null)) {
+      columns.sort(_compareBySortOrder);
+    }
     final rows = rowsRaw.map(AppPaywallComparisonRow.fromJson).whereType<AppPaywallComparisonRow>().toList();
+    if (rows.any((r) => r.sortOrder != null)) {
+      rows.sort(_compareBySortOrder);
+    }
     if (columns.isEmpty || rows.isEmpty) return null;
 
     final cells = <String, Map<String, String>>{};

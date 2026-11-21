@@ -87,6 +87,27 @@ void main() {
     expect(content.v3!.packages.last.resolveCta('yearly'), 'Contact us');
   });
 
+  test('comparison table sorts columns and rows by sort_order', () {
+    final table = AppPaywallComparisonTable.fromJson({
+      'columns': [
+        {'slug': 'enterprise', 'name': 'Enterprise', 'sort_order': 30},
+        {'slug': 'pro', 'name': 'Pro', 'sort_order': 10},
+      ],
+      'rows': [
+        {'key': 'pdf_export', 'label': 'PDF', 'sort_order': 20},
+        {'key': 'active_projects', 'label': 'Active', 'sort_order': 0},
+      ],
+      'cells': {
+        'pro': {'active_projects': '4', 'pdf_export': '✓'},
+        'enterprise': {'active_projects': '∞', 'pdf_export': '✓'},
+      },
+    });
+
+    expect(table, isNotNull);
+    expect(table!.columns.map((c) => c.slug).toList(), ['pro', 'enterprise']);
+    expect(table.rows.map((r) => r.key).toList(), ['active_projects', 'pdf_export']);
+  });
+
   test('legacy premium object synthesizes v3 packages', () {
     final snap = AppSubscriptionSnapshot.fromDataJson(liveShapePayload(), localeCode: 'ar');
     expect(snap.paywall?.usesV3Layout, isTrue);
