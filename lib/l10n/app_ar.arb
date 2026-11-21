@@ -638,6 +638,7 @@
   "paywallRestorePurchase": "استعادة الشراء",
   "paywallPerMonthUnit": "ج.م/شهر",
   "paywallCurrentPlanChip": "باقتك الحالية",
+  "paywallYearlyOnlyHint": "متاحة سنويًا فقط",
   "paywallBilledYearlyAt": "يتحسب {amount} سنويًا",
   "@paywallBilledYearlyAt": {
     "placeholders": {

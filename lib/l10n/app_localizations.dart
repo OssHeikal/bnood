@@ -2893,6 +2893,12 @@ abstract class AppLocalizations {
   /// **'Current plan'**
   String get paywallCurrentPlanChip;
 
+  /// No description provided for @paywallYearlyOnlyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Available on yearly billing only'**
+  String get paywallYearlyOnlyHint;
+
   /// No description provided for @paywallBilledYearlyAt.
   ///
   /// In en, this message translates to:

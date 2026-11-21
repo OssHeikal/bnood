@@ -309,6 +309,16 @@ class AppPaywallPackage {
 
   bool periodEnabled(String period) => period == 'yearly' ? yearlyEnabled : monthlyEnabled;
 
+  /// Whether this package can be chosen while [billingPeriod] is selected on the paywall.
+  bool selectableForBillingPeriod(String billingPeriod) {
+    if (isContact) return true;
+    return switch (billingPeriod) {
+      'monthly' => monthlyEnabled,
+      'yearly' => yearlyEnabled,
+      _ => yearlyEnabled || monthlyEnabled,
+    };
+  }
+
   String? effectivePeriodWhen(String period) {
     if (isContact) return null;
     if (period == 'monthly' && !monthlyEnabled && yearlyEnabled) return 'yearly';
@@ -721,6 +731,24 @@ class AppPaywallV3Data {
       if (pkg.monthlyEnabled) return 'monthly';
     }
     return 'yearly';
+  }
+
+  /// First package slug selectable for [billingPeriod], preferring [recommendedPackageSlug].
+  String? firstSelectablePackageSlugForPeriod(String billingPeriod) {
+    final candidates = <String>[];
+    final rec = recommendedPackageSlug;
+    if (rec != null) {
+      final pkg = packageBySlug(rec);
+      if (pkg != null && pkg.selectableForBillingPeriod(billingPeriod)) {
+        candidates.add(rec);
+      }
+    }
+    for (final pkg in packages) {
+      if (pkg.selectableForBillingPeriod(billingPeriod) && !candidates.contains(pkg.slug)) {
+        candidates.add(pkg.slug);
+      }
+    }
+    return candidates.isEmpty ? null : candidates.first;
   }
 
   List<AppPaywallBenefitItem> benefitsForPackage(AppPaywallPackage pkg) {

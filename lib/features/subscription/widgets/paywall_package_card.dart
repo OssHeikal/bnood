@@ -32,31 +32,36 @@ class PaywallPackageCard extends StatelessWidget {
     final selectedFill = isDark ? const Color(0xFF2A1D40) : SubscriptionColors.violetSoft;
     final l10n = AppLocalizations.of(context);
 
+    final monthlyBlocked = billingPeriod == 'monthly' && !package.selectableForBillingPeriod('monthly');
+    final effectiveSelected = selected && !monthlyBlocked;
     final effectivePeriod = package.effectivePeriodWhen(billingPeriod);
-    final showYearlyOnlyHint = billingPeriod == 'monthly' && package.yearlyOnly;
+    final showYearlyOnlyHint =
+        billingPeriod == 'monthly' && (!package.monthlyEnabled && package.yearlyEnabled);
     final pricing = effectivePeriod == 'yearly' ? package.pricing.yearly : package.pricing.monthly;
 
-    return Material(
-      color: selected ? selectedFill : idleFill,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: selected ? SubscriptionColors.violet : theme.line,
-          width: selected ? 1.5 : 1,
+    return Opacity(
+      opacity: monthlyBlocked ? 0.45 : 1,
+      child: Material(
+        color: effectiveSelected ? selectedFill : idleFill,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: effectiveSelected ? SubscriptionColors.violet : theme.line,
+            width: effectiveSelected ? 1.5 : 1,
+          ),
         ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: PaywallTheme.planCardPadding,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(top: 2),
-                child: _RadioDot(selected: selected),
-              ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: PaywallTheme.planCardPadding,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(top: 2),
+                  child: _RadioDot(selected: effectiveSelected, enabled: !monthlyBlocked),
+                ),
               const SizedBox(width: AppSize.spaceMD),
               Expanded(
                 child: Column(
@@ -122,6 +127,7 @@ class PaywallPackageCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }
@@ -341,12 +347,18 @@ class _PriceBlock extends StatelessWidget {
 }
 
 class _RadioDot extends StatelessWidget {
-  const _RadioDot({required this.selected});
+  const _RadioDot({required this.selected, this.enabled = true});
 
   final bool selected;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final idleBorder = enabled
+        ? const Color(0xFFB9B3C3)
+        : (isDark ? const Color(0xFF4A4355) : const Color(0xFFD8D2DC));
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 160),
       width: 18,
@@ -354,8 +366,8 @@ class _RadioDot extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: selected ? SubscriptionColors.violet : const Color(0xFFB9B3C3),
-          width: selected ? 5 : 1.5,
+          color: selected && enabled ? SubscriptionColors.violet : idleBorder,
+          width: selected && enabled ? 5 : 1.5,
         ),
       ),
     );

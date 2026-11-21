@@ -87,6 +87,41 @@ void main() {
     expect(content.v3!.packages.last.resolveCta('yearly'), 'Contact us');
   });
 
+  test('firstSelectablePackageSlugForPeriod prefers recommended monthly package', () {
+    final v3 = AppPaywallV3Data(
+      trigger: 'default',
+      header: const AppPaywallHeader(title: 't', subtitle: 's'),
+      benefitItems: const [],
+      billing: const AppPaywallBilling(monthlyLabel: 'M', yearlyLabel: 'Y'),
+      packages: [
+        const AppPaywallPackage(
+          slug: 'business',
+          name: 'Business',
+          purchaseMode: 'checkout',
+          monthlyEnabled: false,
+          yearlyEnabled: true,
+          isRecommended: true,
+          pricing: AppPaywallPackagePricing(),
+          ctaLabels: AppPaywallPackageCtaLabels(yearly: 'Go'),
+        ),
+        const AppPaywallPackage(
+          slug: 'pro',
+          name: 'Pro',
+          purchaseMode: 'checkout',
+          monthlyEnabled: true,
+          yearlyEnabled: true,
+          pricing: AppPaywallPackagePricing(),
+          ctaLabels: AppPaywallPackageCtaLabels(yearly: 'Go'),
+        ),
+      ],
+      footer: const AppPaywallFooter(),
+      recommendedPackageSlug: 'business',
+    );
+
+    expect(v3.firstSelectablePackageSlugForPeriod('monthly'), 'pro');
+    expect(v3.firstSelectablePackageSlugForPeriod('yearly'), 'business');
+  });
+
   test('comparison table sorts columns and rows by sort_order', () {
     final table = AppPaywallComparisonTable.fromJson({
       'columns': [

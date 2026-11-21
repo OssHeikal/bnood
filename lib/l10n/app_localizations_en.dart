@@ -1576,6 +1576,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallCurrentPlanChip => 'Current plan';
 
   @override
+  String get paywallYearlyOnlyHint => 'Available on yearly billing only';
+
+  @override
   String paywallBilledYearlyAt(String amount) {
     return 'Billed $amount yearly';
   }

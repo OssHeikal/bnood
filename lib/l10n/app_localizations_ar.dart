@@ -1560,6 +1560,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paywallCurrentPlanChip => 'باقتك الحالية';
 
   @override
+  String get paywallYearlyOnlyHint => 'متاحة سنويًا فقط';
+
+  @override
   String paywallBilledYearlyAt(String amount) {
     return 'يتحسب $amount سنويًا';
   }

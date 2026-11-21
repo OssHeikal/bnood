@@ -44,6 +44,29 @@ class _PaywallScreenState extends State<PaywallScreen> {
 
   String _resolveCta() => _selectedPackage.resolveCta(_billingPeriod);
 
+  void _onBillingPeriodChanged(String period) {
+    setState(() {
+      _billingPeriod = period;
+      if (period == 'monthly') {
+        final current = _v3.packageBySlug(_selectedPackageSlug);
+        if (current == null || !current.selectableForBillingPeriod('monthly')) {
+          final next = _v3.firstSelectablePackageSlugForPeriod('monthly');
+          if (next != null) {
+            _selectedPackageSlug = next;
+          }
+        }
+      }
+    });
+  }
+
+  void _onPackageTap(AppPaywallPackage package) {
+    if (_billingPeriod == 'monthly' && !package.selectableForBillingPeriod('monthly')) {
+      AppToaster.show(AppLocalizations.of(context).paywallYearlyOnlyHint, kind: ToastKind.info);
+      return;
+    }
+    setState(() => _selectedPackageSlug = package.slug);
+  }
+
   void _onPrimaryPressed() {
     final pkg = _selectedPackage;
     final l10n = AppLocalizations.of(context);
@@ -183,7 +206,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                         PaywallBillingToggle(
                           billing: _v3.billing,
                           selectedPeriod: _billingPeriod,
-                          onPeriodChanged: (p) => setState(() => _billingPeriod = p),
+                          onPeriodChanged: _onBillingPeriodChanged,
                           showYearlySavingsBadge: true,
                         ),
                         const SizedBox(height: PaywallTheme.blockGap),
@@ -194,7 +217,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                           selected: _v3.packages[i].slug == _selectedPackageSlug,
                           billingPeriod: _billingPeriod,
                           localeCode: localeCode,
-                          onTap: () => setState(() => _selectedPackageSlug = _v3.packages[i].slug),
+                          onTap: () => _onPackageTap(_v3.packages[i]),
                         ),
                         if (i < _v3.packages.length - 1) const SizedBox(height: PaywallTheme.betweenPlans),
                       ],
