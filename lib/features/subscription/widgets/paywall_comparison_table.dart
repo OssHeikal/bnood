@@ -93,7 +93,13 @@ class PaywallComparisonTable extends StatelessWidget {
   }) {
     final label = Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Text(row.label, style: theme.compareRow, textAlign: TextAlign.start),
+      child: Text(
+        row.label,
+        style: theme.compareRow,
+        textAlign: TextAlign.start,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
     );
 
     final planCells = planColumns

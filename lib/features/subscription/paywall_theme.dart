@@ -108,9 +108,10 @@ class PaywallTheme {
         color: muted,
       ),
       planName: text.cardTitle.copyWith(
-        fontSize: 14.5,
+        fontSize: 16.5,
         height: 1.2,
         fontWeight: FontWeight.w800,
+        letterSpacing: -0.02 * 16.5,
         color: ink,
       ),
       planMeta: text.caption.copyWith(
@@ -126,23 +127,23 @@ class PaywallTheme {
         color: muted,
       ),
       priceAmount: text.moneyMd.copyWith(
-        fontSize: 18,
-        height: 1,
+        fontSize: 22,
+        height: 1.05,
         fontWeight: FontWeight.w800,
-        letterSpacing: -0.03 * 18,
+        letterSpacing: -0.03 * 22,
         color: ink,
       ),
       priceStrike: text.caption.copyWith(
-        fontSize: 11,
+        fontSize: 10.5,
         height: 1.1,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         color: const Color(0xFF9B96A3),
         decoration: TextDecoration.lineThrough,
       ),
       priceUnit: text.caption.copyWith(
-        fontSize: 10.5,
-        height: 1.2,
-        fontWeight: FontWeight.w700,
+        fontSize: 10,
+        height: 1.15,
+        fontWeight: FontWeight.w600,
         color: muted,
       ),
       contactPrice: text.cardTitle.copyWith(
@@ -195,7 +196,8 @@ class PaywallTheme {
   static const sectionGap = AppSize.spaceMD;
   static const blockGap = AppSize.spaceSM;
   static const heroAfterSubtitle = AppSize.spaceXS;
-  static const betweenPlans = AppSize.spaceSM;
+  static const betweenPlans = AppSize.spaceLG;
+  static const planCardPadding = EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: 14);
   static const beforePlans = sectionGap;
   static const beforeComparison = sectionGap;
   static const dockTopPadding = AppSize.spaceSM;

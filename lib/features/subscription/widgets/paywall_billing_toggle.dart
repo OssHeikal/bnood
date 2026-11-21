@@ -97,25 +97,46 @@ class _Option extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(label, style: labelStyle),
+              Flexible(
+                child: Text(
+                  label,
+                  style: labelStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
+              ),
               if (suffix != null) ...[
                 const SizedBox(width: 6),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: SubscriptionColors.violet,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    child: Text(
-                      suffix!,
-                      style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w800),
-                    ),
-                  ),
-                ),
+                _SavingsPill(label: suffix!),
               ],
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SavingsPill extends StatelessWidget {
+  const _SavingsPill({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: SubscriptionColors.violet,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+        child: Text(
+          label,
+          maxLines: 1,
+          softWrap: false,
+          style: const TextStyle(color: Colors.white, fontSize: 9.5, fontWeight: FontWeight.w800, height: 1.1),
         ),
       ),
     );

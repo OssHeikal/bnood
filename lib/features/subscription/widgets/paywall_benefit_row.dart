@@ -39,6 +39,8 @@ class PaywallBenefitRow extends StatelessWidget {
               text,
               style: style,
               textAlign: TextAlign.start,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
