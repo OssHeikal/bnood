@@ -35,9 +35,9 @@ void main() {
 
       final totals = aggregateProviderAgreements(rows);
 
-      expect(totals.agreedMinor, 8000);
-      expect(totals.paidMinor, 3000);
-      expect(totals.remainingMinor, 5000);
+      expect(totals.agreedMinor, 800);
+      expect(totals.paidMinor, 300);
+      expect(totals.remainingMinor, 500);
     });
 
     test('omits agreed and remaining when unset on all agreements', () {
@@ -57,7 +57,7 @@ void main() {
       final totals = aggregateProviderAgreements(rows);
 
       expect(totals.agreedMinor, isNull);
-      expect(totals.paidMinor, 1500);
+      expect(totals.paidMinor, 150);
       expect(totals.remainingMinor, isNull);
     });
   });

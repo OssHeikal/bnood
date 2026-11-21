@@ -86,8 +86,8 @@ void main() {
     expect(tester.getSize(bounds).height, lessThan(cap * 0.5));
   });
 
-  test('viewportCap is eighty percent of screen', () {
+  test('viewportCap is ninety percent of available height', () {
     const media = MediaQueryData(size: Size(400, 800));
-    expect(SheetContentBounds.viewportCap(media), 640);
+    expect(SheetContentBounds.viewportCap(media), 720);
   });
 }

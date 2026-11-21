@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('icons bundle lists all SVGs', () {
-    expect(Assets.icons.values.length, 73);
+    expect(Assets.icons.values.length, 79);
   });
 
   test('home outline path matches file name', () {

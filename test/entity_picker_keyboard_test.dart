@@ -52,7 +52,10 @@ void main() {
     expect(listHeight, greaterThan(280));
 
     final createBottom = tester.getBottomLeft(create).dy;
-    expect(createBottom, closeTo(_screenH - _keyboard - AppSize.spaceMD, 4));
+    expect(
+      createBottom,
+      closeTo(_screenH - _keyboard - AppSize.spaceMD - _bottomInset, 4),
+    );
     expect(tester.takeException(), isNull);
   });
 }

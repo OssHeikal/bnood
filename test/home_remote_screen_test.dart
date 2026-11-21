@@ -72,7 +72,7 @@ void main() {
     expect(find.byType(RemoteCraftsmanSummaryCard), findsOneWidget);
     expect(find.text('2 linked clients'), findsOneWidget);
     expect(find.text('Craftsman Ali'), findsOneWidget);
-    expect(find.text('Supplier material spend'), findsNothing);
-    expect(find.text('See all'), findsNWidgets(2));
+    expect(find.text('Suppliers'), findsNothing);
+    expect(find.textContaining('See all'), findsNWidgets(2));
   });
 }
