@@ -21,11 +21,10 @@ void main() {
       const ScreenViewed(screenName: '/clients/:id'),
     );
 
-    expect(gateway.events.length, 2);
+    expect(gateway.events.length, 1);
     expect(gateway.events[0].name, 'client_created');
     expect(gateway.events[0].parameters, {'source': 'remote'});
-    expect(gateway.events[1].name, 'screen_viewed');
-    expect(gateway.events[1].parameters, {'screen_name': '/clients/:id'});
+    expect(gateway.screenViews, ['/clients/:id']);
   });
 
   test('track maps subscription revenue as num', () async {

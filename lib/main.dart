@@ -6,6 +6,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import 'app/bnood_app.dart';
 import 'core/analytics/appsflyer/appsflyer_bootstrap.dart';
+import 'core/analytics/domain/analytics_config.dart';
+import 'core/analytics/domain/analytics_log.dart';
+import 'core/analytics/firebase/firebase_analytics_bootstrap.dart';
+import 'core/analytics/providers/analytics_providers.dart';
 import 'core/error_reporting/error_reporting_providers.dart';
 import 'core/error_reporting/install_error_handlers.dart';
 import 'core/error_reporting/crashlytics_bootstrap.dart';
@@ -22,7 +26,7 @@ Future<void> main() async {
   if (pushMessagingSupported) {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
     await bootstrapCrashlytics();
-    await bootstrapAppsFlyer();
+    await bootstrapFirebaseAnalytics();
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
   final packageInfo = await PackageInfo.fromPlatform();
@@ -35,6 +39,19 @@ Future<void> main() async {
   final bootstrap = await AppSettingsStore.load();
   final container = ProviderContainer(
     overrides: [appSettingsBootstrapProvider.overrideWithValue(bootstrap)],
+  );
+  if (pushMessagingSupported) {
+    AppsFlyerBootstrap.onSessionStarted = () {
+      container.invalidate(appsFlyerGatewayProvider);
+      container.invalidate(analyticsSinksProvider);
+      container.invalidate(analyticsServiceProvider);
+    };
+    await bootstrapAppsFlyer();
+  }
+  AnalyticsLog.info(
+    'analytics compile-time enabled=${AnalyticsConfig.enabled} '
+    'appsflyerKeySet=${AnalyticsConfig.appsFlyerDevKey.isNotEmpty} '
+    'appsflyerSession=${AppsFlyerBootstrap.sessionStarted}',
   );
   installErrorHandlers(container.read(errorReporterProvider));
   runApp(
