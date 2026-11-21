@@ -1,5 +1,5 @@
-import 'package:bnood/core/subscription/app_subscription.dart';
-import 'package:bnood/core/subscription/subscription_colors.dart';
+import 'package:bnood/features/subscription/data/app_subscription.dart';
+import 'package:bnood/features/subscription/data/subscription_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

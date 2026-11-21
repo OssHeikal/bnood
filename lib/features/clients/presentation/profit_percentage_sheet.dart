@@ -7,7 +7,7 @@ import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/money/basis_points.dart';
 import '../data/clients_providers.dart';
-import '../../../core/providers/dashboard_providers.dart';
+import '../../../core/app_state/dashboard_providers.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/app_modal_sheet.dart';

@@ -12,7 +12,7 @@ import '../../../features/providers/data/app_provider_record.dart';
 import '../../../core/widgets/app_decision.dart';
 import '../../../core/widgets/app_toaster.dart';
 import '../../../core/widgets/toast/app_tone.dart';
-import '../../../core/providers/dashboard_providers.dart';
+import '../../../core/app_state/dashboard_providers.dart';
 import '../../providers/presentation/provider_detail_provider.dart';
 
 /// Which unlink confirmation surface to show before delete (never both).

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bnood/features/home/data/home_row_models.dart';
-import 'package:bnood/core/providers/dashboard_providers.dart';
+import 'package:bnood/core/app_state/dashboard_providers.dart';
 
 import 'support/home_notifier_stubs.dart';
 import 'package:bnood/features/home/presentation/home_screen.dart';

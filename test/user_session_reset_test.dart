@@ -3,7 +3,7 @@ import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/home/data/app_home_dashboard.dart';
 import 'package:bnood/features/home/data/home_riverpod.dart';
 import 'package:bnood/features/home/data/home_repository.dart';
-import 'package:bnood/core/providers/dashboard_providers.dart';
+import 'package:bnood/core/app_state/dashboard_providers.dart';
 import 'package:bnood/core/session/user_session_lifecycle.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/models/user.dart';

@@ -1,5 +1,5 @@
 import 'package:bnood/core/money/period_bounds.dart';
-import 'package:bnood/features/statements/statement_period_logic.dart';
+import 'package:bnood/features/statements/presentation/statement_period_logic.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

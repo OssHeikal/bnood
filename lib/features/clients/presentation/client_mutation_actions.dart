@@ -7,14 +7,14 @@ import '../../../core/validation/egypt_mobile_phone_validation.dart';
 import '../data/clients_error_handler.dart';
 import '../data/clients_providers.dart';
 import '../../../core/ledger/ledger_entities.dart';
-import '../../../core/providers/dashboard_providers.dart';
+import '../../../core/app_state/dashboard_providers.dart';
 import '../../../core/widgets/app_decision.dart';
 import '../../../core/analytics/providers/analytics_feature_hooks.dart';
 import '../../../core/widgets/app_toaster.dart';
 import '../../../core/widgets/toast/app_tone.dart';
-import '../../subscription/subscription_error_handler.dart';
-import '../../subscription/subscription_gates.dart';
-import '../../subscription/subscription_limit_handler.dart';
+import '../../subscription/presentation/subscription_error_handler.dart';
+import '../../subscription/presentation/subscription_gates.dart';
+import '../../subscription/presentation/subscription_limit_handler.dart';
 
 Future<Client?> saveClientCreate({
   required WidgetRef ref,

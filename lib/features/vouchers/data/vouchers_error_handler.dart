@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../auth/auth_controller.dart';
 import '../../auth/auth_paths.dart';
-import '../../subscription/subscription_error_handler.dart';
+import '../../subscription/presentation/subscription_error_handler.dart';
 import 'package:bnood/core/api/auth_api_exception.dart';
 
 Future<bool> handleVouchersApiAuthError({

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../content/content_page_record.dart';
+import 'package:bnood/features/content/data/content_page_record.dart';
 import 'api_response_parser.dart';
 import 'app_dio.dart';
 import 'auth_api_exception.dart';

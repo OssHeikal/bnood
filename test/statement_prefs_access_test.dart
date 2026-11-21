@@ -1,4 +1,4 @@
-import 'package:bnood/features/statements/statement_prefs_access.dart';
+import 'package:bnood/features/statements/presentation/statement_prefs_access.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 

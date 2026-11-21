@@ -14,7 +14,7 @@ import '../../../core/layout/bnood_max_width.dart';
 import '../../../core/layout/bnood_two_column.dart';
 import '../../../core/formatting/see_all_label.dart';
 import '../data/home_section_counts.dart';
-import '../../../core/providers/dashboard_providers.dart';
+import '../../../core/app_state/dashboard_providers.dart';
 import '../../../core/resources/gen/assets.gen.dart';
 import '../../../core/widgets/app_fallback.dart';
 import '../../../app/shell_tab_scaffold.dart';

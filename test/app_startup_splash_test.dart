@@ -10,7 +10,7 @@ import 'package:bnood/core/api/auth_api_providers.dart';
 import 'package:bnood/core/app_gate/app_config_record.dart';
 import 'package:bnood/features/app_gate/app_gate_provider.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
-import 'package:bnood/core/providers/settings_provider.dart';
+import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/auth/complete_profile_screen.dart';
 import 'package:bnood/features/auth/login_screen.dart';

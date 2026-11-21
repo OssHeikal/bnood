@@ -1,6 +1,6 @@
 import 'package:bnood/core/push/notification_settings_record.dart';
-import 'package:bnood/features/settings/notification_settings_provider.dart';
-import 'package:bnood/features/settings/notification_settings_screen.dart';
+import 'package:bnood/features/settings/data/notification_settings_provider.dart';
+import 'package:bnood/features/settings/presentation/notification_settings_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -7,7 +7,7 @@ import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/layout/app_layout.dart';
 import '../../../core/money/remote_money_units.dart';
-import '../../../core/providers/dashboard_providers.dart';
+import '../../../core/app_state/dashboard_providers.dart';
 import '../data/client_list_archive_filter.dart';
 import '../../../features/home/data/home_row_models.dart';
 import '../../../core/resources/gen/assets.gen.dart';
@@ -21,8 +21,8 @@ import '../../../app/widgets/shell_nav_icon.dart';
 import '../../home/presentation/home_foundation_scope.dart';
 import 'clients_list_paging.dart';
 import 'widgets/client_balance_card.dart';
-import '../../subscription/subscription_gates.dart';
-import '../../subscription/subscription_limit_handler.dart';
+import '../../subscription/presentation/subscription_gates.dart';
+import '../../subscription/presentation/subscription_limit_handler.dart';
 import 'widgets/clients_list_filter_chips.dart';
 
 class ClientsListScreen extends ConsumerStatefulWidget {

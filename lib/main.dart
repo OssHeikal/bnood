@@ -16,7 +16,7 @@ import 'core/error_reporting/crashlytics_bootstrap.dart';
 import 'core/error_reporting/sentry_bootstrap.dart';
 import 'core/error_reporting/sentry_release_name.dart';
 import 'core/prefs/app_settings_store.dart';
-import 'core/providers/settings_provider.dart';
+import 'core/app_state/settings_provider.dart';
 import 'core/push/push_background.dart';
 import 'core/push/push_platform.dart';
 import 'firebase_options.dart';

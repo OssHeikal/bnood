@@ -1,5 +1,5 @@
 import 'package:bnood/core/prefs/app_settings_store.dart';
-import 'package:bnood/core/providers/settings_provider.dart';
+import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

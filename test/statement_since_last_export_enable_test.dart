@@ -1,8 +1,8 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/features/statements/statement_export_store.dart';
-import 'package:bnood/features/statements/statement_period_controls.dart';
-import 'package:bnood/features/statements/statement_period_logic.dart';
+import 'package:bnood/features/statements/presentation/statement_export_store.dart';
+import 'package:bnood/features/statements/presentation/statement_period_controls.dart';
+import 'package:bnood/features/statements/presentation/statement_period_logic.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

@@ -1,8 +1,8 @@
-import 'package:bnood/core/subscription/app_subscription.dart';
-import 'package:bnood/core/subscription/subscription_riverpod.dart';
+import 'package:bnood/features/subscription/data/app_subscription.dart';
+import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/core/providers/dashboard_providers.dart';
+import 'package:bnood/core/app_state/dashboard_providers.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
@@ -14,8 +14,8 @@ import 'package:bnood/features/home/presentation/widgets/home_identity_title.dar
 import 'package:bnood/features/auth/widgets/user_identity_avatar.dart';
 import 'package:bnood/features/providers/presentation/widgets/remote_craftsman_summary_card.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
-import 'package:bnood/core/providers/settings_provider.dart';
-import 'package:bnood/features/settings/app_settings_screen.dart';
+import 'package:bnood/core/app_state/settings_provider.dart';
+import 'package:bnood/features/settings/presentation/app_settings_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';

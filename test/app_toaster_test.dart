@@ -3,7 +3,7 @@ import 'package:bnood/core/layout/app_layout.dart';
 import 'package:bnood/core/widgets/app_toaster.dart';
 import 'package:bnood/core/widgets/toast/app_toast.dart';
 import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/features/statements/statement_screen_toast.dart';
+import 'package:bnood/features/statements/presentation/statement_screen_toast.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';

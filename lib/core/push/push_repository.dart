@@ -1,5 +1,5 @@
 import '../api/device_tokens_api.dart';
-import '../api/notification_settings_api.dart';
+import 'package:bnood/features/settings/data/notification_settings_api.dart';
 import 'notification_settings_record.dart';
 
 class PushRepository {

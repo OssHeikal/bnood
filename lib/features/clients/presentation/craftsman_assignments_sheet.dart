@@ -16,7 +16,7 @@ import '../data/client_api_record.dart';
 import '../data/client_provider_agreement_preview.dart';
 import '../data/clients_providers.dart';
 import '../../../core/ledger/ledger_entities.dart';
-import '../../../core/providers/dashboard_providers.dart';
+import '../../../core/app_state/dashboard_providers.dart';
 import '../../../features/providers/data/app_provider_record.dart';
 import '../../../features/providers/data/providers_riverpod.dart';
 import '../../../core/widgets/app_fallback.dart';

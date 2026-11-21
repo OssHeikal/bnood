@@ -15,7 +15,7 @@ import 'auth_form_ui.dart';
 import 'auth_form_utils.dart';
 import 'auth_messages.dart';
 import 'auth_paths.dart';
-import '../content/register_legal_links.dart';
+import '../content/presentation/register_legal_links.dart';
 import 'widgets/auth_flow_scaffold.dart';
 
 Future<void> _submitRegister(BuildContext context, WidgetRef ref) async {

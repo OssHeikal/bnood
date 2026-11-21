@@ -1,4 +1,4 @@
-import 'package:bnood/core/subscription/paywall_contact.dart';
+import 'package:bnood/features/subscription/data/paywall_contact.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
