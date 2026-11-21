@@ -91,15 +91,7 @@ class PaywallPackageCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    if (!monthlyBlocked &&
-                        !package.isContact &&
-                        pricing != null &&
-                        effectivePeriod == 'yearly')
-                      Padding(
-                        padding: const EdgeInsets.only(top: AppSize.spaceXS),
-                        child: _BilledYearlyLine(pricing: pricing, l10n: l10n, billedStyle: theme.planBilled),
-                      )
-                    else if (!monthlyBlocked && !package.isContact && effectivePeriod == 'monthly')
+                    if (!monthlyBlocked && !package.isContact && effectivePeriod == 'monthly')
                       Padding(
                         padding: const EdgeInsets.only(top: AppSize.spaceXS),
                         child: Text(
@@ -147,12 +139,11 @@ class PaywallPackageCard extends StatelessWidget {
                 )
               else if (showPriceTrailing && pricing != null)
                 ConstrainedBox(
-                  constraints: const BoxConstraints(minWidth: 84, maxWidth: 132),
+                  constraints: const BoxConstraints(minWidth: 84, maxWidth: 152),
                   child: _PriceBlock(
                     pricing: pricing,
-                    perMonthUnit: l10n.paywallPerMonthUnit,
+                    unitLabel: effectivePeriod == 'yearly' ? l10n.paywallPerYearUnit : l10n.paywallPerMonthUnit,
                     yearlyPeriod: effectivePeriod == 'yearly',
-                    showYearlyTotal: false,
                     theme: theme,
                   ),
                 ),
@@ -247,75 +238,17 @@ class _PlanTitleRow extends StatelessWidget {
   }
 }
 
-class _BilledYearlyLine extends StatelessWidget {
-  const _BilledYearlyLine({
-    required this.pricing,
-    required this.l10n,
-    required this.billedStyle,
-  });
-
-  final AppPaywallPeriodPricing pricing;
-  final AppLocalizations l10n;
-  final TextStyle billedStyle;
-
-  @override
-  Widget build(BuildContext context) {
-    final arabic = Localizations.localeOf(context).languageCode == 'ar';
-    final billed = pricing.resolvedBilledYearlyMajor();
-    if (billed == null) return const SizedBox.shrink();
-    final billedText = DisplayDigits.toWesternDigits(
-      PaywallMoneyDisplay.formatMajorAmount(billed, arabic: arabic),
-    );
-    final originalBilled = pricing.resolvedOriginalBilledYearlyMajor();
-    final strikeStyle = billedStyle.copyWith(
-      decoration: TextDecoration.lineThrough,
-      color: const Color(0xFF9B96A3),
-      fontSize: 10,
-      fontWeight: FontWeight.w600,
-    );
-
-    if (originalBilled != null && originalBilled > billed) {
-      final originalText = DisplayDigits.toWesternDigits(
-        PaywallMoneyDisplay.formatMajorAmount(originalBilled, arabic: arabic),
-      );
-      return Text.rich(
-        TextSpan(
-          style: billedStyle,
-          children: [
-            TextSpan(text: '${l10n.paywallBilledYearlyIntro} '),
-            TextSpan(text: originalText, style: strikeStyle),
-            const TextSpan(text: ' '),
-            TextSpan(text: billedText),
-            TextSpan(text: ' ${l10n.paywallBilledYearlySuffix}'),
-          ],
-        ),
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      );
-    }
-
-    return Text(
-      l10n.paywallBilledYearlyAt(billedText),
-      style: billedStyle,
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-    );
-  }
-}
-
 class _PriceBlock extends StatelessWidget {
   const _PriceBlock({
     required this.pricing,
-    required this.perMonthUnit,
+    required this.unitLabel,
     required this.yearlyPeriod,
-    required this.showYearlyTotal,
     required this.theme,
   });
 
   final AppPaywallPeriodPricing pricing;
-  final String perMonthUnit;
+  final String unitLabel;
   final bool yearlyPeriod;
-  final bool showYearlyTotal;
   final PaywallTheme theme;
 
   @override
@@ -325,10 +258,10 @@ class _PriceBlock extends StatelessWidget {
         PaywallMoneyDisplay.wholeMajorFromMinor(pricing.discountedMinor);
     final originalYearly = pricing.resolvedOriginalBilledYearlyMajor();
     final perMonthMajor = pricing.resolvedPerMonthMajor(arabic: arabic);
-    final originalPerMonth = pricing.resolvedOriginalPerMonthMajor(yearlyPeriod: yearlyPeriod);
+    final originalPerMonth = pricing.resolvedOriginalPerMonthMajor(yearlyPeriod: false);
 
-    final amountMajor = showYearlyTotal ? yearlyMajor : perMonthMajor;
-    final strikeMajor = showYearlyTotal
+    final amountMajor = yearlyPeriod ? yearlyMajor : perMonthMajor;
+    final strikeMajor = yearlyPeriod
         ? (originalYearly != null && originalYearly > yearlyMajor ? originalYearly : null)
         : originalPerMonth;
 
@@ -349,25 +282,29 @@ class _PriceBlock extends StatelessWidget {
                   textAlign: TextAlign.end,
                 ),
               ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  DisplayDigits.formatInteger(amountMajor),
-                  style: theme.priceAmount,
-                  maxLines: 1,
-                ),
-                const SizedBox(width: 3),
-                Text(
-                  perMonthUnit,
-                  style: theme.priceUnit,
-                  maxLines: 1,
-                  softWrap: false,
-                ),
-              ],
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: AlignmentDirectional.centerEnd,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    DisplayDigits.formatInteger(amountMajor),
+                    style: theme.priceAmount,
+                    maxLines: 1,
+                  ),
+                  const SizedBox(width: 3),
+                  Text(
+                    unitLabel,
+                    style: theme.priceUnit,
+                    maxLines: 1,
+                    softWrap: false,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

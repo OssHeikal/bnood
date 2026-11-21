@@ -119,6 +119,48 @@ void main() {
     expect(business.center.dx, greaterThan(badge.center.dx));
   });
 
+  testWidgets('yearly tab shows annual price without billed-yearly caption', (tester) async {
+    const yearlyPro = AppPaywallPackage(
+      slug: 'pro',
+      name: 'Pro',
+      purchaseMode: 'checkout',
+      monthlyEnabled: true,
+      yearlyEnabled: true,
+      pricing: AppPaywallPackagePricing(
+        yearly: AppPaywallPeriodPricing(
+          originalMinor: 350_000,
+          discountedMinor: 299_900,
+          perMonthEquivalentMinor: 24_992,
+          billedTotalMinor: 299_900,
+          displayBilledYearlyMajor: 2999,
+          displayOriginalBilledYearlyMajor: 3500,
+          hasDiscount: true,
+        ),
+      ),
+      ctaLabels: const AppPaywallPackageCtaLabels(yearly: 'Start Pro at 2,999 EGP/yr'),
+    );
+
+    await tester.pumpWidget(
+      wrap(
+        child: PaywallPackageCard(
+          package: yearlyPro,
+          selected: true,
+          billingPeriod: 'yearly',
+          localeCode: 'ar',
+          onTap: () {},
+        ),
+        locale: const Locale('ar'),
+        textDirection: TextDirection.rtl,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('2,999'), findsOneWidget);
+    expect(find.text('ج.م/سنة'), findsOneWidget);
+    expect(find.textContaining('يتحسب'), findsNothing);
+    expect(find.textContaining('3,500'), findsOneWidget);
+  });
+
   testWidgets('billing toggle yearly savings chip has breathable horizontal padding', (tester) async {
     await tester.pumpWidget(
       wrap(

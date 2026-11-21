@@ -38,7 +38,7 @@ void main() {
               'billed_total_minor': 300000,
             },
           },
-          'cta_labels': {'yearly': 'Start Pro at 250 EGP/mo'},
+          'cta_labels': {'yearly': 'Start Pro at 3,000 EGP/yr'},
           'highlight_benefits': [
             {'icon': 'spark', 'text': 'Team included'},
             {'icon': 'projects_grid', 'text': '4 active projects'},
