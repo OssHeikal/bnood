@@ -26,6 +26,7 @@ coverage/
 
 # Secrets
 .env.local
+.env.prod
 .env.*.local
 *.jks
 *.keystore
