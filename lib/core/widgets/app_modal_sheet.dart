@@ -6,6 +6,7 @@ import '../config/theme/app_overlay.dart';
 import '../config/theme/app_shape.dart';
 import '../config/theme/app_size.dart';
 import 'bounded_sheet_navigator.dart';
+import 'sheet_keyboard_back_scope.dart';
 
 /// Max scroll padding above a pinned footer for focused fields in the sheet body.
 class AppModalSheetScope extends InheritedWidget {
@@ -126,7 +127,7 @@ abstract final class AppModalSheet {
             child: Align(alignment: Alignment.bottomCenter, child: sheet),
           );
         }
-        return sheet;
+        return SheetKeyboardBackScope(child: sheet);
       },
     );
   }

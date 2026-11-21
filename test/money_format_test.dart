@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('parse egp input to piastres', () {
     expect(MoneyFormat.parseEgpInput('20000'), 2000000);
+    expect(MoneyFormat.parseEgpInput('1,000,000'), 100000000);
     expect(MoneyFormat.parseEgpInput('20.5'), 2050);
     expect(MoneyFormat.parseEgpInput('٢٠.٥'), 2050);
   });

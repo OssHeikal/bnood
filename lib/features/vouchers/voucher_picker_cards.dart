@@ -107,17 +107,23 @@ class VoucherPickerItemCard extends StatelessWidget {
 class VoucherPickerCraftsmanCard extends StatelessWidget {
   const VoucherPickerCraftsmanCard({
     super.key,
+    required this.providerId,
     required this.name,
     required this.trade,
+    required this.localeCode,
     required this.selected,
     required this.onTap,
     this.linkedToClient = false,
+    this.remainingPiastres,
     this.showDivider = true,
   });
 
+  final String providerId;
   final String name;
   final String? trade;
+  final String localeCode;
   final bool linkedToClient;
+  final int? remainingPiastres;
   final bool selected;
   final VoidCallback onTap;
   final bool showDivider;
@@ -126,20 +132,34 @@ class VoucherPickerCraftsmanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
+    final accent = legacy.AppColors.accent(clientAccentKeyFor(providerId));
     final subtitleText = trade?.trim();
     final l10n = AppLocalizations.of(context);
+    final Widget? subtitle = remainingPiastres != null
+        ? Row(
+            children: [
+              Text(l10n.remaining),
+              const SizedBox(width: AppSize.spaceXS),
+              AppAmount(
+                piastres: remainingPiastres!,
+                role: AppAmountRole.remaining,
+                size: AppAmountSize.small,
+                localeCode: localeCode,
+              ),
+            ],
+          )
+        : (subtitleText != null && subtitleText.isNotEmpty
+            ? Text(subtitleText, maxLines: 1, overflow: TextOverflow.ellipsis)
+            : null);
     return EntityPickerOptionRow(
       selected: selected,
       onSelect: onTap,
       leadingWidth: _leadingWidth,
       showDivider: showDivider,
       semanticLabel: name,
-      leading: _InitialAvatar(initial: name.isNotEmpty ? name.characters.first : '?', accent: colors.primary),
+      leading: _InitialAvatar(initial: name.isNotEmpty ? name.characters.first : '?', accent: accent),
       title: name,
-      subtitle: subtitleText != null && subtitleText.isNotEmpty
-          ? Text(subtitleText, maxLines: 1, overflow: TextOverflow.ellipsis)
-          : null,
+      subtitle: subtitle,
       trailing: linkedToClient ? _LinkedToClientBadge(label: l10n.voucherProviderLinkedBadge) : null,
     );
   }
@@ -148,17 +168,23 @@ class VoucherPickerCraftsmanCard extends StatelessWidget {
 class VoucherPickerSupplierCard extends StatelessWidget {
   const VoucherPickerSupplierCard({
     super.key,
+    required this.providerId,
     required this.name,
     required this.phone,
+    required this.localeCode,
     required this.selected,
     required this.onTap,
     this.linkedToClient = false,
+    this.remainingPiastres,
     this.showDivider = true,
   });
 
+  final String providerId;
   final String name;
   final String? phone;
+  final String localeCode;
   final bool linkedToClient;
+  final int? remainingPiastres;
   final bool selected;
   final VoidCallback onTap;
   final bool showDivider;
@@ -167,26 +193,40 @@ class VoucherPickerSupplierCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
+    final accent = legacy.AppColors.accent(clientAccentKeyFor(providerId));
     final rawPhone = phone?.trim();
     final l10n = AppLocalizations.of(context);
+    final Widget? subtitle = remainingPiastres != null
+        ? Row(
+            children: [
+              Text(l10n.remaining),
+              const SizedBox(width: AppSize.spaceXS),
+              AppAmount(
+                piastres: remainingPiastres!,
+                role: AppAmountRole.remaining,
+                size: AppAmountSize.small,
+                localeCode: localeCode,
+              ),
+            ],
+          )
+        : (rawPhone != null && rawPhone.isNotEmpty
+            ? Text(
+                LtrIsolate.isolate(rawPhone),
+                textDirection: TextDirection.ltr,
+                textAlign: TextAlign.start,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              )
+            : null);
     return EntityPickerOptionRow(
       selected: selected,
       onSelect: onTap,
       leadingWidth: _leadingWidth,
       showDivider: showDivider,
       semanticLabel: name,
-      leading: _InitialAvatar(initial: name.isNotEmpty ? name.characters.first : '?', accent: colors.primaryDark),
+      leading: _InitialAvatar(initial: name.isNotEmpty ? name.characters.first : '?', accent: accent),
       title: name,
-      subtitle: rawPhone != null && rawPhone.isNotEmpty
-          ? Text(
-              LtrIsolate.isolate(rawPhone),
-              textDirection: TextDirection.ltr,
-              textAlign: TextAlign.start,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            )
-          : null,
+      subtitle: subtitle,
       trailing: linkedToClient ? _LinkedToClientBadge(label: l10n.voucherProviderLinkedBadge) : null,
     );
   }
@@ -234,10 +274,14 @@ class _InitialAvatar extends StatelessWidget {
             colors: [accent, Color.lerp(accent, Colors.black, 0.25)!],
           ),
         ),
-        child: Center(
-          child: Text(
-            initial,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+        child: SizedBox(
+          width: AppSize.hitMin,
+          height: AppSize.hitMin,
+          child: Center(
+            child: Text(
+              initial,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+            ),
           ),
         ),
       ),

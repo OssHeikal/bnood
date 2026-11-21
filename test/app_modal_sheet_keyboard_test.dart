@@ -1,4 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/widgets/custom_text_field.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/features/providers/provider_create_sheet.dart' show showProviderCreateSheet;
 import 'package:bnood/l10n/app_localizations.dart';
@@ -48,5 +49,52 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.text('حفظ'), findsOneWidget);
     expect(find.byType(SingleChildScrollView), findsNothing);
+  });
+
+  testWidgets('back with keyboard open unfocuses without closing sheet', (tester) async {
+    tester.view.physicalSize = _phone;
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: AppFoundationTheme.light(),
+          locale: const Locale('ar'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: HomeFoundationScope(
+            child: Builder(
+              builder: (context) => Scaffold(
+                body: Center(
+                  child: FilledButton(
+                    onPressed: () => showProviderCreateSheet(context),
+                    child: const Text('open'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    tester.view.viewInsets = const FakeViewPadding(bottom: _keyboard);
+    await tester.pump();
+
+    final field = find.byType(CustomTextField);
+    await tester.tap(field);
+    await tester.pump();
+
+    await tester.binding.handlePopRoute();
+    await tester.pump();
+
+    expect(find.text('حفظ'), findsOneWidget);
+    tester.view.viewInsets = FakeViewPadding.zero;
+    await tester.pump();
   });
 }

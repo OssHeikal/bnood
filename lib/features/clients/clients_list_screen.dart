@@ -100,7 +100,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
           AppFallbackAction(
             label: l10n.addClient,
             onPressed: () => _addClient(context, ref),
-            role: AppFallbackActionRole.tertiary,
+            role: AppFallbackActionRole.primary,
           ),
       ],
     );

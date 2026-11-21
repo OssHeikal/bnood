@@ -1,6 +1,5 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/api/api_error_user_message.dart';
@@ -13,6 +12,7 @@ import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
+import '../../core/widgets/text_field/app_input_formatters.dart';
 import '../../core/widgets/sheet_footer_refresh.dart';
 import '../../core/widgets/sheet_form_header.dart';
 import '../home/home_foundation_scope.dart';
@@ -58,7 +58,10 @@ class LowBalanceAmountSheet extends ConsumerStatefulWidget {
 class _LowBalanceAmountSheetState extends ConsumerState<LowBalanceAmountSheet> {
   final _formKey = GlobalKey<FormState>();
   late final _amountCtrl = TextEditingController(
-    text: GroupedDigitsFormatter.group(RemoteMoneyFormat.majorInputTextFromMinor(widget.initialAmountMinor)),
+    text: ThousandsGroupingFormatter.formatDisplay(
+      RemoteMoneyFormat.majorInputTextFromMinor(widget.initialAmountMinor),
+      allowDecimal: false,
+    ),
   )..addListener(widget.footerRefresh.bump);
   var _attemptedSubmit = false;
   var _saving = false;
@@ -116,10 +119,10 @@ class _LowBalanceAmountSheetState extends ConsumerState<LowBalanceAmountSheet> {
               label: l10n.notificationSettingsLowBalanceToggle,
               type: AppInputType.integer,
               ltrValue: true,
+              groupThousands: true,
               autofocus: true,
               fieldHeight: AppSize.fieldHeightComfortable,
               suffix: Text(MoneyFormat.currencyLabel),
-              formatters: [GroupedDigitsFormatter()],
               textInputAction: TextInputAction.done,
               validator: _validate,
             ),
@@ -131,28 +134,6 @@ class _LowBalanceAmountSheetState extends ConsumerState<LowBalanceAmountSheet> {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// Groups whole digits with commas while typing (10000 -> 10,000).
-class GroupedDigitsFormatter extends TextInputFormatter {
-  static String group(String digits) {
-    final clean = digits.replaceAll(RegExp(r'[^0-9]'), '').replaceFirst(RegExp(r'^0+(?=\d)'), '');
-    final buf = StringBuffer();
-    for (var i = 0; i < clean.length; i++) {
-      if (i > 0 && (clean.length - i) % 3 == 0) buf.write(',');
-      buf.write(clean[i]);
-    }
-    return buf.toString();
-  }
-
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    final text = group(newValue.text);
-    return TextEditingValue(
-      text: text,
-      selection: TextSelection.collapsed(offset: text.length),
     );
   }
 }
