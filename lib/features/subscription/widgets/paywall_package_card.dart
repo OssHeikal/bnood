@@ -33,14 +33,14 @@ class PaywallPackageCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     final monthlyBlocked = billingPeriod == 'monthly' && !package.selectableForBillingPeriod('monthly');
-    final yearlyOnlyGhost = monthlyBlocked && package.yearlyEnabled;
+    final showYearlyOnlyTrailing = monthlyBlocked &&
+        !package.isContact &&
+        package.yearlyEnabled &&
+        (package.yearlyOnlyLabel ?? '').isNotEmpty;
     final effectiveSelected = selected && !monthlyBlocked;
     final effectivePeriod = package.effectivePeriodWhen(billingPeriod);
-    final showYearlyOnlyHint =
-        billingPeriod == 'monthly' && (!package.monthlyEnabled && package.yearlyEnabled);
-    final pricing = yearlyOnlyGhost
-        ? package.pricing.yearly
-        : (effectivePeriod == 'yearly' ? package.pricing.yearly : package.pricing.monthly);
+    final pricing = effectivePeriod == 'yearly' ? package.pricing.yearly : package.pricing.monthly;
+    final showPriceTrailing = !showYearlyOnlyTrailing && pricing != null && !package.isContact;
 
     return Opacity(
       opacity: monthlyBlocked ? 0.45 : 1,
@@ -55,7 +55,7 @@ class PaywallPackageCard extends StatelessWidget {
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: onTap,
+          onTap: monthlyBlocked ? null : onTap,
           child: Padding(
             padding: PaywallTheme.planCardPadding,
             child: Row(
@@ -72,7 +72,6 @@ class PaywallPackageCard extends StatelessWidget {
                   children: [
                     _PlanTitleRow(
                       package: package,
-                      showYearlyOnlyHint: showYearlyOnlyHint,
                       isDark: isDark,
                       planNameStyle: theme.planName,
                       currentPlanLabel: l10n.paywallCurrentPlanChip,
@@ -87,7 +86,7 @@ class PaywallPackageCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    if (!yearlyOnlyGhost &&
+                    if (!monthlyBlocked &&
                         !package.isContact &&
                         pricing != null &&
                         effectivePeriod == 'yearly')
@@ -95,7 +94,7 @@ class PaywallPackageCard extends StatelessWidget {
                         padding: const EdgeInsets.only(top: AppSize.spaceXS),
                         child: _BilledYearlyLine(pricing: pricing, l10n: l10n, billedStyle: theme.planBilled),
                       )
-                    else if (!yearlyOnlyGhost && !package.isContact && effectivePeriod == 'monthly')
+                    else if (!monthlyBlocked && !package.isContact && effectivePeriod == 'monthly')
                       Padding(
                         padding: const EdgeInsets.only(top: AppSize.spaceXS),
                         child: Text(
@@ -115,19 +114,29 @@ class PaywallPackageCard extends StatelessWidget {
                   child: Text(
                     package.contactCtaText ?? package.name,
                     textAlign: TextAlign.end,
-                      style: theme.contactPrice,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    style: monthlyBlocked
+                        ? theme.contactPrice.copyWith(color: theme.muted)
+                        : theme.contactPrice,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 )
-              else if (pricing != null)
+              else if (showYearlyOnlyTrailing)
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: _YearlyOnlyTrailingBadge(
+                    label: package.yearlyOnlyLabel!,
+                    isDark: isDark,
+                  ),
+                )
+              else if (showPriceTrailing && pricing != null)
                 ConstrainedBox(
                   constraints: const BoxConstraints(minWidth: 84, maxWidth: 132),
                   child: _PriceBlock(
                     pricing: pricing,
-                    perMonthUnit: yearlyOnlyGhost ? l10n.paywallPerYearUnit : l10n.paywallPerMonthUnit,
-                    yearlyPeriod: yearlyOnlyGhost || effectivePeriod == 'yearly',
-                    showYearlyTotal: yearlyOnlyGhost,
+                    perMonthUnit: l10n.paywallPerMonthUnit,
+                    yearlyPeriod: effectivePeriod == 'yearly',
+                    showYearlyTotal: false,
                     theme: theme,
                   ),
                 ),
@@ -159,14 +168,12 @@ class PaywallPackageCard extends StatelessWidget {
 class _PlanTitleRow extends StatelessWidget {
   const _PlanTitleRow({
     required this.package,
-    required this.showYearlyOnlyHint,
     required this.isDark,
     required this.planNameStyle,
     required this.currentPlanLabel,
   });
 
   final AppPaywallPackage package;
-  final bool showYearlyOnlyHint;
   final bool isDark;
   final TextStyle planNameStyle;
   final String currentPlanLabel;
@@ -189,16 +196,6 @@ class _PlanTitleRow extends StatelessWidget {
           label: package.badgeLabel!,
           background: PaywallPackageCard._badgeBackground(package.badgeType, isDark),
           foreground: PaywallPackageCard._badgeForeground(package.badgeType, isDark),
-        ),
-      );
-    }
-
-    if (showYearlyOnlyHint && (package.yearlyOnlyLabel ?? '').isNotEmpty) {
-      chips.add(
-        _Tag(
-          label: package.yearlyOnlyLabel!,
-          background: isDark ? const Color(0xFF3A2F4E) : const Color(0xFFECE8F2),
-          foreground: isDark ? const Color(0xFFD8C6FF) : const Color(0xFF5B21B6),
         ),
       );
     }
@@ -387,6 +384,22 @@ class _RadioDot extends StatelessWidget {
           width: selected && enabled ? 5 : 1.5,
         ),
       ),
+    );
+  }
+}
+
+class _YearlyOnlyTrailingBadge extends StatelessWidget {
+  const _YearlyOnlyTrailingBadge({required this.label, required this.isDark});
+
+  final String label;
+  final bool isDark;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Tag(
+      label: label,
+      background: isDark ? const Color(0xFF3A2F4E) : const Color(0xFFECE8F2),
+      foreground: isDark ? const Color(0xFFD8C6FF) : const Color(0xFF5B21B6),
     );
   }
 }

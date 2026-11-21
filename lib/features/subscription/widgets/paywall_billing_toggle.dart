@@ -93,9 +93,10 @@ class _Option extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
         onTap: onTap,
         child: SizedBox(
-          height: 34,
+          height: 36,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
                 child: Text(
@@ -107,7 +108,7 @@ class _Option extends StatelessWidget {
                 ),
               ),
               if (suffix != null) ...[
-                const SizedBox(width: 6),
+                const SizedBox(width: 10),
                 _SavingsPill(label: suffix!),
               ],
             ],
@@ -131,7 +132,7 @@ class _SavingsPill extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
         child: Text(
           label,
           maxLines: 1,

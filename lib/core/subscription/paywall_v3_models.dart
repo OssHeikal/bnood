@@ -314,7 +314,9 @@ class AppPaywallPackage {
 
   /// Whether this package can be chosen while [billingPeriod] is selected on the paywall.
   bool selectableForBillingPeriod(String billingPeriod) {
-    if (isContact) return true;
+    if (isContact) {
+      return billingPeriod == 'yearly';
+    }
     return switch (billingPeriod) {
       'monthly' => monthlyEnabled,
       'yearly' => yearlyEnabled,

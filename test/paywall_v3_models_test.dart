@@ -124,6 +124,18 @@ void main() {
     expect(v3.firstSelectablePackageSlugForPeriod('yearly'), 'business');
   });
 
+  test('contact plan is selectable on yearly only', () {
+    const enterprise = AppPaywallPackage(
+      slug: 'enterprise',
+      name: 'Enterprise',
+      purchaseMode: 'contact',
+      pricing: AppPaywallPackagePricing(),
+      ctaLabels: AppPaywallPackageCtaLabels(contact: 'Contact'),
+    );
+    expect(enterprise.selectableForBillingPeriod('monthly'), isFalse);
+    expect(enterprise.selectableForBillingPeriod('yearly'), isTrue);
+  });
+
   test('comparison table sorts columns and rows by sort_order', () {
     final table = AppPaywallComparisonTable.fromJson({
       'columns': [
