@@ -30,16 +30,21 @@ void main() {
     ],
   );
 
+  const enterpriseTagline = 'For larger offices, unlimited projects';
   const enterpriseContact = AppPaywallPackage(
     slug: 'enterprise',
     name: 'Enterprise',
-    tagline: 'For larger offices, unlimited projects',
+    tagline: enterpriseTagline,
     purchaseMode: 'contact',
     contactCtaText: 'Contact us',
     monthlyEnabled: false,
     yearlyEnabled: false,
     pricing: AppPaywallPackagePricing(),
     ctaLabels: AppPaywallPackageCtaLabels(contact: 'Contact us'),
+    highlightBenefits: const [
+      AppPaywallBenefitItem(icon: 'spark', text: enterpriseTagline),
+      AppPaywallBenefitItem(icon: 'team', text: 'Dedicated support'),
+    ],
   );
 
   Widget wrap({
@@ -81,7 +86,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('For larger offices, unlimited projects'), findsOneWidget);
+    expect(find.text(enterpriseTagline), findsOneWidget);
+    expect(find.text('Dedicated support'), findsOneWidget);
+    expect(find.text(enterpriseTagline, skipOffstage: false), findsNWidgets(1));
     expect(find.text('Contact us'), findsOneWidget);
 
     final opacity = tester.widget<Opacity>(find.ancestor(of: find.text('Enterprise'), matching: find.byType(Opacity)));

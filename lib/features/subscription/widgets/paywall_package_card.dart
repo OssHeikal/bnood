@@ -42,6 +42,10 @@ class PaywallPackageCard extends StatelessWidget {
     final effectivePeriod = package.effectivePeriodWhen(billingPeriod);
     final pricing = effectivePeriod == 'yearly' ? package.pricing.yearly : package.pricing.monthly;
     final showPriceTrailing = !showYearlyOnlyTrailing && pricing != null && !package.isContact;
+    final tagline = package.tagline?.trim() ?? '';
+    final cardBenefits = package.highlightBenefits
+        .where((b) => tagline.isEmpty || b.text.trim() != tagline)
+        .toList();
 
     return Opacity(
       opacity: monthlyBlocked ? 0.45 : 1,
@@ -105,15 +109,15 @@ class PaywallPackageCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    if (package.highlightBenefits.isNotEmpty) ...[
+                    if (cardBenefits.isNotEmpty) ...[
                       const SizedBox(height: AppSize.spaceSM),
-                      for (var i = 0; i < package.highlightBenefits.length; i++)
+                      for (var i = 0; i < cardBenefits.length; i++)
                         PaywallBenefitRow(
-                          text: package.highlightBenefits[i].text,
-                          iconKey: package.highlightBenefits[i].icon,
+                          text: cardBenefits[i].text,
+                          iconKey: cardBenefits[i].icon,
                           textStyle: theme.planBenefit,
                           dense: true,
-                          isLast: i == package.highlightBenefits.length - 1,
+                          isLast: i == cardBenefits.length - 1,
                         ),
                     ],
                   ],

@@ -223,7 +223,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                         const SizedBox(height: PaywallTheme.blockGap),
                         Align(
                           alignment: AlignmentDirectional.centerStart,
-                          child: TextButton(
+                          child: TextButton.icon(
                             onPressed: () => PaywallComparisonSheet.show(
                               context,
                               table: _v3.comparisonTable!,
@@ -231,10 +231,20 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                             ),
                             style: TextButton.styleFrom(
                               foregroundColor: SubscriptionColors.violet,
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 4, 4),
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 6, AppSize.spaceSM, 6),
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              textStyle: theme.subheadline.copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: SubscriptionColors.violet,
+                              ),
                             ),
-                            child: Text(l10n.paywallComparePlans, style: theme.subheadline),
+                            icon: Icon(
+                              Icons.table_rows_rounded,
+                              size: 18,
+                              color: SubscriptionColors.violet,
+                            ),
+                            label: Text(l10n.paywallComparePlans),
                           ),
                         ),
                       ],
