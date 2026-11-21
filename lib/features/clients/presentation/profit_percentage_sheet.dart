@@ -7,13 +7,13 @@ import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/money/basis_points.dart';
 import '../data/clients_providers.dart';
-import '../../../core/app_state/dashboard_providers.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../core/widgets/sheet_footer_refresh.dart';
 import '../../../core/widgets/sheet_form_header.dart';
 import '../../home/presentation/home_foundation_scope.dart';
+import '../../../core/app_state/client_mutation_refresh.dart';
 
 Future<void> showProfitPercentageSheet({
   required BuildContext context,

@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/config/theme/app_colors.dart';
 import '../../../../core/config/theme/app_shape.dart';
 import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/app_state/dashboard_providers.dart';
 import '../../data/client_list_archive_filter.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/widgets/app_pressable.dart';
+import '../providers/clients_list_providers.dart';
 
 class ClientsListFilterChips extends ConsumerWidget {
   const ClientsListFilterChips({super.key});

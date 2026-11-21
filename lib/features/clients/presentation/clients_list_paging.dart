@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/clients_providers.dart';
 import '../data/clients_repository.dart';
-import '../../../core/app_state/dashboard_providers.dart';
 import '../../../features/home/data/home_row_models.dart';
 import '../../../core/shared/pagination/pagination.dart';
+import 'providers/clients_list_providers.dart';
 
 const clientsListPageSize = 50;
 

@@ -1,4 +1,3 @@
-import 'package:bnood/core/app_state/dashboard_providers.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/home/presentation/home_screen.dart';
@@ -7,6 +6,7 @@ import 'support/home_notifier_stubs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
 
 void main() {
   testWidgets('initial load skeleton then silent refresh keeps content visible', (tester) async {

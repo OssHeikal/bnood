@@ -14,7 +14,6 @@ import '../../../core/layout/bnood_max_width.dart';
 import '../../../core/layout/bnood_two_column.dart';
 import '../../../core/formatting/see_all_label.dart';
 import '../data/home_section_counts.dart';
-import '../../../core/app_state/dashboard_providers.dart';
 import '../../../core/resources/gen/assets.gen.dart';
 import '../../../core/widgets/app_fallback.dart';
 import '../../../app/shell_tab_scaffold.dart';
@@ -32,6 +31,8 @@ import 'widgets/home_loading_skeleton.dart';
 import 'widgets/home_section_header.dart';
 import 'widgets/home_stat_grid.dart';
 import 'widgets/home_identity_title.dart';
+import '../../clients/presentation/providers/clients_list_providers.dart';
+import 'providers/home_dashboard_providers.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 

@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
+import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
 
 import '../../features/providers/data/agreements_riverpod.dart';
 import '../../features/clients/data/clients_providers.dart';
@@ -6,7 +8,6 @@ import '../../features/home/data/home_repository.dart';
 import '../../features/home/data/home_riverpod.dart';
 import '../../features/home/data/home_section_counts.dart';
 import '../../features/items/data/items_providers.dart';
-import 'package:bnood/core/app_state/dashboard_providers.dart';
 import '../../features/providers/data/providers_riverpod.dart';
 import '../shared/pagination/paging_refresh.dart';
 import '../../features/subscription/data/subscription_riverpod.dart';

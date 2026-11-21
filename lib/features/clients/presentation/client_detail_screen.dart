@@ -18,7 +18,6 @@ import '../../subscription/presentation/subscription_error_handler.dart';
 import '../../subscription/presentation/subscription_gates.dart';
 import '../data/clients_providers.dart';
 import '../../../core/formatting/see_all_label.dart';
-import '../../../core/app_state/dashboard_providers.dart';
 import '../../../core/resources/gen/assets.gen.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_decision.dart';
@@ -46,6 +45,7 @@ import 'widgets/client_detail_item_row.dart';
 import 'widgets/client_detail_loading_skeleton.dart';
 import 'widgets/interactive_movement_card.dart';
 import 'widgets/client_detail_stat_grid.dart';
+import '../../../core/app_state/client_mutation_refresh.dart';
 
 class ClientDetailScreen extends ConsumerWidget {
   const ClientDetailScreen({super.key, required this.clientId});

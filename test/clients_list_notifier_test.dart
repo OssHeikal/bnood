@@ -1,7 +1,7 @@
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/core/app_state/dashboard_providers.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 
 void main() {
   test('HomeClientBalanceRow.hasBalances is false when API returns null balances', () {

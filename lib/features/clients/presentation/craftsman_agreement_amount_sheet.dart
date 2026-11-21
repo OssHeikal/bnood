@@ -9,13 +9,13 @@ import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../features/providers/data/agreements_riverpod.dart';
 import '../../../core/money/money_format.dart';
 import '../../../core/money/remote_money_format.dart';
-import '../../../core/app_state/dashboard_providers.dart';
 import '../../providers/presentation/provider_detail_provider.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/sheet_drag_handle.dart';
 import '../../home/presentation/home_foundation_scope.dart';
 import 'agreement_mutation_actions.dart';
+import '../../../core/app_state/client_mutation_refresh.dart';
 
 /// Draft save payload from the roster amount sub-sheet (`null` amount = no agreed amount).
 class CraftsmanAgreementAmountDraftResult {
