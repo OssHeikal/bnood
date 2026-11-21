@@ -14,7 +14,7 @@ import '../../features/subscription/data/subscription_riverpod.dart';
 import '../../features/clients/presentation/client_craftsmen_list_provider.dart';
 import '../../features/clients/presentation/client_detail_provider.dart';
 import '../../features/clients/presentation/client_items_stats_provider.dart';
-import '../../features/clients/presentation/client_suppliers_list_provider.dart';
+import '../../features/providers/presentation/client_suppliers_list_provider.dart';
 import '../../features/providers/presentation/provider_detail_provider.dart';
 
 /// Clears in-memory HTTP caches and Riverpod user data when the signed-in identity changes.

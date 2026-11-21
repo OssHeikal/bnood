@@ -12,9 +12,9 @@ import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/skeleton/async_value_body.dart';
 import '../../home/presentation/home_foundation_scope.dart';
 import 'client_suppliers_list_provider.dart';
-import 'craftsman_assignments_sheet.dart';
-import 'widgets/client_detail_craftsman_row.dart';
-import 'widgets/client_linked_provider_list_skeleton.dart';
+import '../../clients/presentation/craftsman_assignments_sheet.dart';
+import '../../clients/presentation/widgets/client_detail_craftsman_row.dart';
+import '../../clients/presentation/widgets/client_linked_provider_list_skeleton.dart';
 
 class ClientSuppliersListScreen extends ConsumerWidget {
   const ClientSuppliersListScreen({super.key, required this.clientId});
