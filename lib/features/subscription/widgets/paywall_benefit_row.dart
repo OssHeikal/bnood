@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/config/theme/app_size.dart';
+import '../paywall_theme.dart';
 import 'paywall_icon_mapper.dart';
 
 class PaywallBenefitRow extends StatelessWidget {
-  const PaywallBenefitRow({super.key, required this.text, this.iconKey});
+  const PaywallBenefitRow({
+    super.key,
+    required this.text,
+    this.iconKey,
+    this.textStyle,
+    this.isLast = false,
+  });
 
   final String text;
   final String? iconKey;
+  final TextStyle? textStyle;
+  final bool isLast;
 
   @override
   Widget build(BuildContext context) {
+    final style = textStyle ?? PaywallTheme.of(context).benefit;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 7),
+      padding: EdgeInsets.only(bottom: isLast ? 0 : AppSize.spaceSM),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -22,16 +33,11 @@ class PaywallBenefitRow extends StatelessWidget {
             )
           else
             const _CheckGlyph(),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSize.spaceSM),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
-                fontSize: 14.5,
-                height: 1.45,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF17141C),
-              ),
+              style: style,
               textAlign: TextAlign.start,
             ),
           ),
@@ -47,13 +53,13 @@ class _CheckGlyph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 20,
-      height: 20,
+      width: 18,
+      height: 18,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Icon(Icons.circle, size: 20, color: const Color(0xFF0F9D8E).withValues(alpha: 0.12)),
-          const Icon(Icons.check, size: 13, color: Color(0xFF0F9D8E)),
+          Icon(Icons.circle, size: 18, color: const Color(0xFF0F9D8E).withValues(alpha: 0.12)),
+          const Icon(Icons.check, size: 12, color: Color(0xFF0F9D8E)),
         ],
       ),
     );

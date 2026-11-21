@@ -2,6 +2,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/subscription/paywall_v3_models.dart';
+import '../paywall_theme.dart';
 import '../../../core/utils/safe_external_url.dart';
 import '../../../core/widgets/app_pressable.dart';
 import '../../content/content_page_screen.dart';
@@ -20,9 +21,7 @@ class PaywallFooterDock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final legal = isDark ? const Color(0xFF8F8798) : const Color(0xFF8E8896);
-    final muted = isDark ? const Color(0xFFA59EAF) : const Color(0xFF6F6878);
+    final theme = PaywallTheme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -31,7 +30,7 @@ class PaywallFooterDock extends StatelessWidget {
           Text(
             footer.reassurance!,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: muted, height: 1.35),
+            style: theme.footerReassure,
           ),
         const SizedBox(height: 3),
         Wrap(
@@ -48,21 +47,22 @@ class PaywallFooterDock extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
                   child: Text(
                     l10n.paywallRestorePurchase,
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: legal),
+                    style: theme.footerLegal.copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),
               ),
-            if (footer.restorePurchaseVisible) Text('·', style: TextStyle(color: legal, fontWeight: FontWeight.w600)),
+            if (footer.restorePurchaseVisible)
+              Text('·', style: theme.footerLegal.copyWith(decoration: null)),
             _FooterLink(
               label: l10n.settingsContentTerms,
               onTap: () => _openLegal(context, footer.termsUrl, ContentSlugs.terms),
-              color: legal,
+              style: theme.footerLegal.copyWith(fontWeight: FontWeight.w700),
             ),
-            Text('·', style: TextStyle(color: legal, fontWeight: FontWeight.w600)),
+            Text('·', style: theme.footerLegal.copyWith(decoration: null)),
             _FooterLink(
               label: l10n.settingsContentPrivacy,
               onTap: () => _openLegal(context, footer.privacyUrl, ContentSlugs.privacy),
-              color: legal,
+              style: theme.footerLegal.copyWith(fontWeight: FontWeight.w700),
             ),
           ],
         ),
@@ -83,11 +83,11 @@ class PaywallFooterDock extends StatelessWidget {
 }
 
 class _FooterLink extends StatelessWidget {
-  const _FooterLink({required this.label, required this.onTap, required this.color});
+  const _FooterLink({required this.label, required this.onTap, required this.style});
 
   final String label;
   final VoidCallback onTap;
-  final Color color;
+  final TextStyle style;
 
   @override
   Widget build(BuildContext context) {
@@ -98,12 +98,9 @@ class _FooterLink extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: color,
+          style: style.copyWith(
             decoration: TextDecoration.underline,
-            decorationColor: color,
+            decorationColor: style.color,
           ),
         ),
       ),

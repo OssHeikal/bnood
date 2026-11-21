@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/subscription/paywall_v3_models.dart';
 import '../../../core/subscription/subscription_colors.dart';
+import '../paywall_theme.dart';
 
 class PaywallBillingToggle extends StatelessWidget {
   const PaywallBillingToggle({
@@ -20,6 +21,7 @@ class PaywallBillingToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = PaywallTheme.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final track = isDark ? const Color(0xFF2A2433) : const Color(0xFFE7E1EF);
     final l10n = AppLocalizations.of(context);
@@ -31,16 +33,20 @@ class PaywallBillingToggle extends StatelessWidget {
         padding: const EdgeInsets.all(3),
         child: Row(
           children: [
-            Expanded(child: _Option(
-              label: billing.monthlyLabel,
-              selected: selectedPeriod == 'monthly',
-              onTap: () => onPeriodChanged('monthly'),
-            )),
+            Expanded(
+              child: _Option(
+                label: billing.monthlyLabel,
+                selected: selectedPeriod == 'monthly',
+                onTap: () => onPeriodChanged('monthly'),
+                theme: theme,
+              ),
+            ),
             Expanded(
               child: _Option(
                 label: billing.yearlyLabel,
                 selected: selectedPeriod == 'yearly',
                 onTap: () => onPeriodChanged('yearly'),
+                theme: theme,
                 suffix: showYearlySavingsBadge && savingsPercent != null && savingsPercent > 0
                     ? l10n.paywallSavingsPercent(savingsPercent)
                     : null,
@@ -58,20 +64,26 @@ class _Option extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.onTap,
+    required this.theme,
     this.suffix,
   });
 
   final String label;
   final bool selected;
   final VoidCallback onTap;
+  final PaywallTheme theme;
   final String? suffix;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final onColor = isDark ? const Color(0xFFF3EEF8) : const Color(0xFF1C1722);
-    final offColor = isDark ? const Color(0xFFA59EAF) : const Color(0xFF6F6878);
     final card = isDark ? const Color(0xFF221C2B) : Colors.white;
+    final labelStyle = theme.subheadline.copyWith(
+      fontSize: 13.5,
+      height: 1.2,
+      fontWeight: FontWeight.w800,
+      color: selected ? theme.ink : theme.muted,
+    );
 
     return Material(
       color: selected ? card : Colors.transparent,
@@ -85,14 +97,7 @@ class _Option extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 13.5,
-                  fontWeight: FontWeight.w800,
-                  color: selected ? onColor : offColor,
-                ),
-              ),
+              Text(label, style: labelStyle),
               if (suffix != null) ...[
                 const SizedBox(width: 6),
                 DecoratedBox(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/formatting/display_digits.dart';
 import '../../../core/subscription/paywall_v3_models.dart';
 import '../../../core/subscription/subscription_colors.dart';
+import '../paywall_theme.dart';
 
 class PaywallComparisonTable extends StatelessWidget {
   const PaywallComparisonTable({
@@ -16,55 +17,54 @@ class PaywallComparisonTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = PaywallTheme.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final ink = isDark ? const Color(0xFFF3EEF8) : const Color(0xFF1C1722);
-    final muted = isDark ? const Color(0xFFA59EAF) : const Color(0xFF6F6878);
     final highlightText = isDark ? const Color(0xFFE4D4FF) : SubscriptionColors.violetDark;
-    final highlightBg = isDark ? const Color(0xFF2A1D40) : SubscriptionColors.violetSoft.withValues(alpha: 0.55);
+    final highlightBg = isDark
+        ? const Color(0xFF2A1D40).withValues(alpha: 0.45)
+        : SubscriptionColors.violetSoft.withValues(alpha: 0.4);
 
-    return Table(
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      columnWidths: {
-        0: const FlexColumnWidth(1.55),
-        for (var i = 0; i < table.columns.length; i++) i + 1: const FlexColumnWidth(),
-      },
-      children: [
-        TableRow(
-          children: [
-            const SizedBox.shrink(),
-            for (final col in table.columns)
-              _HeaderCell(
-                label: col.name,
-                highlighted: col.slug == selectedPackageSlug,
-                ink: ink,
-                highlightText: highlightText,
-                highlightBg: highlightBg,
-                muted: muted,
-              ),
-          ],
-        ),
-        for (final row in table.rows)
+    return Opacity(
+      opacity: 0.95,
+      child: Table(
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        columnWidths: {
+          0: const FlexColumnWidth(1.6),
+          for (var i = 0; i < table.columns.length; i++) i + 1: const FlexColumnWidth(),
+        },
+        children: [
           TableRow(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Text(
-                  row.label,
-                  style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: muted, height: 1.25),
-                  textAlign: TextAlign.start,
-                ),
-              ),
+              const SizedBox.shrink(),
               for (final col in table.columns)
-                _ValueCell(
-                  value: table.cells[col.slug]?[row.key] ?? '—',
+                _HeaderCell(
+                  label: col.name,
                   highlighted: col.slug == selectedPackageSlug,
-                  muted: muted,
+                  theme: theme,
                   highlightText: highlightText,
                   highlightBg: highlightBg,
                 ),
             ],
           ),
-      ],
+          for (final row in table.rows)
+            TableRow(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Text(row.label, style: theme.compareRow, textAlign: TextAlign.start),
+                ),
+                for (final col in table.columns)
+                  _ValueCell(
+                    value: table.cells[col.slug]?[row.key] ?? '—',
+                    highlighted: col.slug == selectedPackageSlug,
+                    theme: theme,
+                    highlightText: highlightText,
+                    highlightBg: highlightBg,
+                  ),
+              ],
+            ),
+        ],
+      ),
     );
   }
 }
@@ -73,18 +73,16 @@ class _HeaderCell extends StatelessWidget {
   const _HeaderCell({
     required this.label,
     required this.highlighted,
-    required this.ink,
+    required this.theme,
     required this.highlightText,
     required this.highlightBg,
-    required this.muted,
   });
 
   final String label;
   final bool highlighted;
-  final Color ink;
+  final PaywallTheme theme;
   final Color highlightText;
   final Color highlightBg;
-  final Color muted;
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +92,7 @@ class _HeaderCell extends StatelessWidget {
       child: Text(
         label,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 10.5,
-          fontWeight: FontWeight.w800,
-          color: highlighted ? highlightText : ink,
-        ),
+        style: theme.compareHeader.copyWith(color: highlighted ? highlightText : theme.ink),
       ),
     );
   }
@@ -108,14 +102,14 @@ class _ValueCell extends StatelessWidget {
   const _ValueCell({
     required this.value,
     required this.highlighted,
-    required this.muted,
+    required this.theme,
     required this.highlightText,
     required this.highlightBg,
   });
 
   final String value;
   final bool highlighted;
-  final Color muted;
+  final PaywallTheme theme;
   final Color highlightText;
   final Color highlightBg;
 
@@ -129,24 +123,16 @@ class _ValueCell extends StatelessWidget {
     if (isCheck) {
       child = Icon(
         Icons.check_rounded,
-        size: 14,
-        color: highlighted ? highlightText : SubscriptionColors.violet,
+        size: 13,
+        color: highlighted ? highlightText : SubscriptionColors.violet.withValues(alpha: 0.85),
       );
     } else if (isDash) {
-      child = Text(
-        '—',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: muted),
-      );
+      child = Text('—', textAlign: TextAlign.center, style: theme.compareCell);
     } else {
       child = Text(
         DisplayDigits.toWesternDigits(trimmed),
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-          color: highlighted ? highlightText : muted,
-        ),
+        style: theme.compareCell.copyWith(color: highlighted ? highlightText : theme.muted),
       );
     }
 
@@ -175,7 +161,7 @@ class _CellFrame extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 3),
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
           child: child,
         ),
       ),

@@ -9,6 +9,7 @@ import '../../core/subscription/subscription_colors.dart';
 import '../../core/utils/safe_external_url.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
+import 'paywall_theme.dart';
 import 'widgets/paywall_benefit_row.dart';
 import 'widgets/paywall_billing_toggle.dart';
 import 'widgets/paywall_comparison_table.dart';
@@ -64,14 +65,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final ink = isDark ? const Color(0xFFF3EEF8) : const Color(0xFF1C1722);
-    final muted = isDark ? const Color(0xFFA59EAF) : const Color(0xFF6F6878);
-    final card = isDark ? const Color(0xFF221C2B) : Colors.white;
-    final line = isDark ? const Color(0xFF322B3C) : const Color(0xFFE7E2EE);
-    final canvas = isDark ? const Color(0xFF16121C) : SubscriptionColors.paywallCanvas;
-    final gradientTop = isDark ? const Color(0xFF221833) : SubscriptionColors.paywallGradientTop;
-
+    final theme = PaywallTheme.of(context);
     final benefits = _v3.benefitItems;
     final anyYearly = _v3.packages.any((p) => p.yearlyEnabled);
     final anyMonthly = _v3.packages.any((p) => p.monthlyEnabled);
@@ -79,13 +73,13 @@ class _PaywallScreenState extends State<PaywallScreen> {
 
     return AppFormRouteCanvas(
       child: Scaffold(
-        backgroundColor: canvas,
+        backgroundColor: theme.canvas,
         body: DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [gradientTop, canvas],
+              colors: [theme.gradientTop, theme.canvas],
               stops: const [0, 0.45],
             ),
           ),
@@ -94,10 +88,18 @@ class _PaywallScreenState extends State<PaywallScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(AppSize.spaceMD, AppSize.spaceSM, AppSize.spaceMD, 0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(
+                    PaywallTheme.edgeGutter,
+                    AppSize.spaceXS,
+                    PaywallTheme.edgeGutter,
+                    0,
+                  ),
                   child: Align(
                     alignment: AlignmentDirectional.centerStart,
                     child: IconButton(
+                      visualDensity: VisualDensity.compact,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                       onPressed: () {
                         final navigator = Navigator.of(context);
                         if (navigator.canPop()) {
@@ -106,59 +108,74 @@ class _PaywallScreenState extends State<PaywallScreen> {
                           context.go('/home');
                         }
                       },
-                      icon: Icon(Icons.close, size: 22, color: muted.withValues(alpha: 0.85)),
+                      icon: Icon(Icons.close, size: 20, color: theme.muted.withValues(alpha: 0.85)),
                     ),
                   ),
                 ),
                 Expanded(
                   child: ListView(
-                    padding: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      PaywallTheme.edgeGutter,
+                      0,
+                      PaywallTheme.edgeGutter,
+                      PaywallTheme.listBottomPadding,
+                    ),
                     children: [
                       Text(
                         _v3.header.title,
-                        style: TextStyle(fontSize: 24, height: 1.28, fontWeight: FontWeight.w800, color: ink, letterSpacing: -0.03 * 24),
+                        style: theme.headline,
                         textAlign: TextAlign.start,
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: PaywallTheme.heroAfterSubtitle),
                       Text(
                         _v3.header.subtitle,
-                        style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: muted, height: 1.5),
+                        style: theme.subheadline,
                         textAlign: TextAlign.start,
                       ),
                       if (_contextLine() != null) ...[
-                        const SizedBox(height: 10),
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: card,
-                            border: Border.all(color: line),
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                            child: Text(
-                              _contextLine()!,
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: muted),
-                              textAlign: TextAlign.start,
+                        const SizedBox(height: PaywallTheme.blockGap),
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: theme.card,
+                              border: Border.all(color: theme.line),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              child: Text(
+                                _contextLine()!,
+                                style: theme.contextChip,
+                                textAlign: TextAlign.start,
+                              ),
                             ),
                           ),
                         ),
                       ],
                       if (_v3.offerBanner != null) ...[
-                        const SizedBox(height: 10),
+                        const SizedBox(height: PaywallTheme.blockGap),
                         PaywallOfferBanner(banner: _v3.offerBanner!),
                       ],
-                      const SizedBox(height: 10),
-                      for (final item in benefits)
-                        PaywallBenefitRow(text: item.text, iconKey: item.icon),
+                      if (benefits.isNotEmpty) ...[
+                        const SizedBox(height: PaywallTheme.blockGap),
+                        for (var i = 0; i < benefits.length; i++)
+                          PaywallBenefitRow(
+                            text: benefits[i].text,
+                            iconKey: benefits[i].icon,
+                            textStyle: theme.benefit,
+                            isLast: i == benefits.length - 1,
+                          ),
+                      ],
                       if (_v3.socialProof != null) ...[
-                        const SizedBox(height: 2),
+                        const SizedBox(height: PaywallTheme.blockGap),
                         Text(
                           _v3.socialProof!.text,
-                          style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: muted),
+                          style: theme.proof,
                           textAlign: TextAlign.start,
                         ),
                       ],
-                      const SizedBox(height: 12),
+                      const SizedBox(height: PaywallTheme.beforePlans),
                       if (showBillingToggle) ...[
                         PaywallBillingToggle(
                           billing: _v3.billing,
@@ -166,39 +183,51 @@ class _PaywallScreenState extends State<PaywallScreen> {
                           onPeriodChanged: (p) => setState(() => _billingPeriod = p),
                           showYearlySavingsBadge: true,
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: PaywallTheme.blockGap),
                       ],
-                      for (final pkg in _v3.packages) ...[
+                      for (var i = 0; i < _v3.packages.length; i++) ...[
                         PaywallPackageCard(
-                          package: pkg,
-                          selected: pkg.slug == _selectedPackageSlug,
+                          package: _v3.packages[i],
+                          selected: _v3.packages[i].slug == _selectedPackageSlug,
                           billingPeriod: _billingPeriod,
                           localeCode: localeCode,
-                          onTap: () => setState(() => _selectedPackageSlug = pkg.slug),
+                          onTap: () => setState(() => _selectedPackageSlug = _v3.packages[i].slug),
                         ),
-                        const SizedBox(height: 7),
+                        if (i < _v3.packages.length - 1) const SizedBox(height: PaywallTheme.betweenPlans),
                       ],
                       if (_v3.comparisonTable != null) ...[
+                        const SizedBox(height: PaywallTheme.beforeComparison),
                         PaywallComparisonTable(
                           table: _v3.comparisonTable!,
                           selectedPackageSlug: _selectedPackageSlug,
                         ),
-                        const SizedBox(height: 4),
                       ],
                     ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
+                  padding: const EdgeInsetsDirectional.fromSTEB(
+                    PaywallTheme.edgeGutter,
+                    PaywallTheme.dockTopPadding,
+                    PaywallTheme.edgeGutter,
+                    PaywallTheme.dockBottomPadding,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       AppButton.primary(
                         text: _resolveCta().isNotEmpty ? _resolveCta() : widget.content.subscribeCta,
                         backgroundColor: SubscriptionColors.violet,
+                        size: AppButtonSize.large,
+                        borderRadius: BorderRadius.circular(14),
+                        textStyle: theme.footerReassure.copyWith(
+                          fontSize: 15.5,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
                         onPressed: _onPrimaryPressed,
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: PaywallTheme.ctaFooterGap),
                       if (_v3.footer.reassurance != null || _v3.footer.restorePurchaseVisible)
                         PaywallFooterDock(
                           footer: _v3.footer,

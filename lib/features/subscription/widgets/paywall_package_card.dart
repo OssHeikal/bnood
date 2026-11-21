@@ -1,10 +1,12 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/config/theme/app_size.dart';
 import '../../../core/formatting/display_digits.dart';
 import '../../../core/subscription/paywall_money_display.dart';
 import '../../../core/subscription/paywall_v3_models.dart';
 import '../../../core/subscription/subscription_colors.dart';
+import '../paywall_theme.dart';
 
 class PaywallPackageCard extends StatelessWidget {
   const PaywallPackageCard({
@@ -24,12 +26,10 @@ class PaywallPackageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = PaywallTheme.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final idleFill = isDark ? const Color(0xFF221C2B) : Colors.white;
     final selectedFill = isDark ? const Color(0xFF2A1D40) : SubscriptionColors.violetSoft;
-    final line = isDark ? const Color(0xFF322B3C) : const Color(0xFFE7E2EE);
-    final ink = isDark ? const Color(0xFFF3EEF8) : const Color(0xFF1C1722);
-    final muted = isDark ? const Color(0xFFA59EAF) : const Color(0xFF6F6878);
     final l10n = AppLocalizations.of(context);
 
     final effectivePeriod = package.effectivePeriodWhen(billingPeriod);
@@ -41,7 +41,7 @@ class PaywallPackageCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: selected ? SubscriptionColors.violet : line,
+          color: selected ? SubscriptionColors.violet : theme.line,
           width: selected ? 1.5 : 1,
         ),
       ),
@@ -54,7 +54,7 @@ class PaywallPackageCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _RadioDot(selected: selected),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSize.spaceSM),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,12 +62,9 @@ class PaywallPackageCard extends StatelessWidget {
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       spacing: 6,
-                      runSpacing: 4,
+                      runSpacing: AppSize.spaceXS,
                       children: [
-                        Text(
-                          package.name,
-                          style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800, color: ink),
-                        ),
+                        Text(package.name, style: theme.planName),
                         if (package.isCurrentPlan)
                           _Tag(
                             label: l10n.paywallCurrentPlanChip,
@@ -90,47 +87,34 @@ class PaywallPackageCard extends StatelessWidget {
                     ),
                     if (package.tagline != null && package.tagline!.isNotEmpty) ...[
                       const SizedBox(height: 1),
-                      Text(
-                        package.tagline!,
-                        style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: muted, height: 1.25),
-                        textAlign: TextAlign.start,
-                      ),
+                      Text(package.tagline!, style: theme.planMeta, textAlign: TextAlign.start),
                     ],
                     if (!package.isContact && pricing != null && effectivePeriod == 'yearly')
                       Padding(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: _BilledYearlyLine(pricing: pricing, l10n: l10n, muted: muted),
+                        padding: const EdgeInsets.only(top: 1),
+                        child: _BilledYearlyLine(pricing: pricing, l10n: l10n, billedStyle: theme.planBilled),
                       )
                     else if (!package.isContact && effectivePeriod == 'monthly')
                       Padding(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: Text(
-                          l10n.paywallBilledMonthly,
-                          style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: muted),
-                        ),
+                        padding: const EdgeInsets.only(top: 1),
+                        child: Text(l10n.paywallBilledMonthly, style: theme.planBilled),
                       ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSize.spaceSM),
               if (package.isContact)
                 Text(
                   package.contactCtaText ?? package.name,
                   textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    fontWeight: FontWeight.w800,
-                    color: isDark ? const Color(0xFFC4A6FF) : SubscriptionColors.violet,
-                    height: 1.3,
-                  ),
+                  style: theme.contactPrice,
                 )
               else if (pricing != null)
                 _PriceColumn(
                   pricing: pricing,
                   perMonthUnit: l10n.paywallPerMonthUnit,
                   yearlyPeriod: effectivePeriod == 'yearly',
-                  muted: muted,
-                  ink: ink,
+                  theme: theme,
                 ),
             ],
           ),
@@ -160,12 +144,12 @@ class _BilledYearlyLine extends StatelessWidget {
   const _BilledYearlyLine({
     required this.pricing,
     required this.l10n,
-    required this.muted,
+    required this.billedStyle,
   });
 
   final AppPaywallPeriodPricing pricing;
   final AppLocalizations l10n;
-  final Color muted;
+  final TextStyle billedStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +160,10 @@ class _BilledYearlyLine extends StatelessWidget {
       PaywallMoneyDisplay.formatMajorAmount(billed, arabic: arabic),
     );
     final originalBilled = pricing.resolvedOriginalBilledYearlyMajor();
-    final baseStyle = TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: muted, height: 1.3);
+    final strikeStyle = billedStyle.copyWith(
+      decoration: TextDecoration.lineThrough,
+      color: const Color(0xFF9B96A3),
+    );
 
     if (originalBilled != null && originalBilled > billed) {
       final originalText = DisplayDigits.toWesternDigits(
@@ -184,16 +171,10 @@ class _BilledYearlyLine extends StatelessWidget {
       );
       return Text.rich(
         TextSpan(
-          style: baseStyle,
+          style: billedStyle,
           children: [
             TextSpan(text: '${l10n.paywallBilledYearlyIntro} '),
-            TextSpan(
-              text: originalText,
-              style: baseStyle.copyWith(
-                decoration: TextDecoration.lineThrough,
-                color: const Color(0xFF9B96A3),
-              ),
-            ),
+            TextSpan(text: originalText, style: strikeStyle),
             const TextSpan(text: ' '),
             TextSpan(text: billedText),
             TextSpan(text: ' ${l10n.paywallBilledYearlySuffix}'),
@@ -202,10 +183,7 @@ class _BilledYearlyLine extends StatelessWidget {
       );
     }
 
-    return Text(
-      l10n.paywallBilledYearlyAt(billedText),
-      style: baseStyle,
-    );
+    return Text(l10n.paywallBilledYearlyAt(billedText), style: billedStyle);
   }
 }
 
@@ -214,22 +192,19 @@ class _PriceColumn extends StatelessWidget {
     required this.pricing,
     required this.perMonthUnit,
     required this.yearlyPeriod,
-    required this.muted,
-    required this.ink,
+    required this.theme,
   });
 
   final AppPaywallPeriodPricing pricing;
   final String perMonthUnit;
   final bool yearlyPeriod;
-  final Color muted;
-  final Color ink;
+  final PaywallTheme theme;
 
   @override
   Widget build(BuildContext context) {
     final arabic = Localizations.localeOf(context).languageCode == 'ar';
     final perMonthMajor = pricing.resolvedPerMonthMajor(arabic: arabic);
     final originalPerMonth = pricing.resolvedOriginalPerMonthMajor(yearlyPeriod: yearlyPeriod);
-    final perMonthDigits = DisplayDigits.formatInteger(perMonthMajor);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -237,22 +212,13 @@ class _PriceColumn extends StatelessWidget {
         if (originalPerMonth != null && originalPerMonth > perMonthMajor)
           Text(
             DisplayDigits.formatInteger(originalPerMonth),
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF9B96A3),
-              decoration: TextDecoration.lineThrough,
-              height: 1.1,
-            ),
+            style: theme.priceStrike,
           ),
         Text(
-          perMonthDigits,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: -0.03 * 18, color: ink, height: 1),
+          DisplayDigits.formatInteger(perMonthMajor),
+          style: theme.priceAmount,
         ),
-        Text(
-          perMonthUnit,
-          style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: muted),
-        ),
+        Text(perMonthUnit, style: theme.priceUnit),
       ],
     );
   }
@@ -296,7 +262,7 @@ class _Tag extends StatelessWidget {
           child: Center(
             child: Text(
               label,
-              style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: foreground),
+              style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: foreground, height: 1),
             ),
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/formatting/display_digits.dart';
 import '../../../core/subscription/paywall_v3_models.dart';
 import '../../../core/subscription/subscription_colors.dart';
+import '../paywall_theme.dart';
 
 class PaywallOfferBanner extends StatefulWidget {
   const PaywallOfferBanner({super.key, required this.banner});
@@ -58,6 +59,7 @@ class _PaywallOfferBannerState extends State<PaywallOfferBanner> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = PaywallTheme.of(context);
     final countdown = widget.banner.showCountdown ? _countdownLabel() : null;
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -71,7 +73,7 @@ class _PaywallOfferBannerState extends State<PaywallOfferBanner> {
             Expanded(
               child: Text(
                 widget.banner.text,
-                style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.w800),
+                style: theme.offerBanner,
                 textAlign: TextAlign.start,
               ),
             ),
