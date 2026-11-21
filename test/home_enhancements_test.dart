@@ -2,9 +2,9 @@ import 'package:bnood/core/clients/clients_providers.dart';
 import 'package:bnood/core/subscription/app_subscription.dart';
 import 'package:bnood/core/subscription/subscription_riverpod.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/database/database.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/providers/dashboard_providers.dart';
-import 'package:bnood/core/repositories/bnood_repository.dart';
+import 'package:bnood/core/home/home_row_models.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/auth_state.dart';
@@ -38,7 +38,6 @@ void main() {
     final now = DateTime.utc(2026, 11, 1);
     return ProviderScope(
       overrides: [
-        remoteClientsEnabledProvider.overrideWithValue(true),
         authControllerProvider.overrideWith(_AuthOsama.new),
         homeTotalsOverride(const HomeTotals(receivedPiastres: 0, spentPiastres: 0)),
         homeClientBalancesOverride(const []),

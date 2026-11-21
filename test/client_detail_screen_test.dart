@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/database/database.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/clients/client_detail_provider.dart';
 import 'package:bnood/features/clients/client_detail_screen.dart';

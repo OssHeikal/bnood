@@ -1,5 +1,5 @@
-import 'package:bnood/core/database/database.dart';
-import 'package:bnood/core/repositories/bnood_repository.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/home/home_row_models.dart';
 import 'package:bnood/core/widgets/app_amount.dart';
 import 'package:bnood/features/home/home_screen.dart';
 import 'package:bnood/features/home/widgets/home_person_card.dart';
@@ -32,6 +32,7 @@ void main() {
               ? homeSupplierSpendsOverride(suppliers)
               : emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),
+          emptyHomeSuppliersOverride(),
         ],
         child: MaterialApp(
           locale: locale,

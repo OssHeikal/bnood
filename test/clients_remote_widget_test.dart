@@ -1,6 +1,6 @@
 import 'package:bnood/core/clients/clients_providers.dart';
-import 'package:bnood/core/database/database.dart';
-import 'package:bnood/core/repositories/bnood_repository.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/home/home_row_models.dart';
 import 'package:bnood/features/clients/client_detail_provider.dart';
 import 'package:bnood/features/clients/client_detail_screen.dart';
 import 'package:bnood/features/clients/client_detail_snapshot.dart';
@@ -18,7 +18,6 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          remoteClientsEnabledProvider.overrideWithValue(true),
           clientsListBalancesOverride([
             HomeClientBalanceRow(
               client: Client(
@@ -80,7 +79,6 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          remoteClientsEnabledProvider.overrideWithValue(true),
           clientDetailProvider.overrideWith(() => _StaticDetailNotifier(snapshot)),
         ],
         child: const MaterialApp(

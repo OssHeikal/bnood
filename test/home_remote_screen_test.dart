@@ -1,7 +1,7 @@
 import 'package:bnood/core/clients/clients_providers.dart';
-import 'package:bnood/core/database/database.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/providers/dashboard_providers.dart';
-import 'package:bnood/core/repositories/bnood_repository.dart';
+import 'package:bnood/core/home/home_row_models.dart';
 import 'package:bnood/features/home/home_screen.dart';
 import 'package:bnood/features/providers/widgets/remote_craftsman_summary_card.dart';
 import 'package:bnood/features/home/widgets/home_person_card.dart';
@@ -20,7 +20,6 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          remoteClientsEnabledProvider.overrideWithValue(true),
           homeTotalsOverride(const HomeTotals(receivedPiastres: 3_000_000, spentPiastres: 1_000_000)),
           homeClientBalancesOverride([
             HomeClientBalanceRow(
@@ -56,6 +55,7 @@ void main() {
             ]),
           ),
           emptyHomeSupplierSpendsOverride(),
+          emptyHomeSuppliersOverride(),
         ],
         child: MaterialApp(
           locale: const Locale('en'),

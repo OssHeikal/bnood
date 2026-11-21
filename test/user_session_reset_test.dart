@@ -50,7 +50,6 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         sessionStoreProvider.overrideWithValue(store),
-        remoteClientsEnabledProvider.overrideWithValue(true),
         homeRepositoryProvider.overrideWith(
           (ref) => _SwitchingHomeRepository((userId) => userId == 'user-a' ? 1_000_000 : 9_000_000),
         ),

@@ -38,7 +38,6 @@ void main() {
       ProviderScope(
         overrides: [
           authControllerProvider.overrideWith(() => _AuthStub()),
-          remoteProvidersEnabledProvider.overrideWith((ref) => true),
           providersListPagingProvider.overrideWith(
             (ref) => ({required int page, required int pageSize}) async {
               await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -70,7 +69,6 @@ void main() {
       ProviderScope(
         overrides: [
           authControllerProvider.overrideWith(() => _AuthStub()),
-          remoteProvidersEnabledProvider.overrideWith((ref) => true),
           providersListPagingProvider.overrideWith(
             (ref) => ({required int page, required int pageSize}) async {
               if (page > 1) {
@@ -119,7 +117,6 @@ void main() {
       ProviderScope(
         overrides: [
           authControllerProvider.overrideWith(() => _AuthStub()),
-          remoteProvidersEnabledProvider.overrideWith((ref) => true),
           providersListPagingProvider.overrideWith(
             (ref) => ({required int page, required int pageSize}) async {
               return PagedFetchPage(items: rows, hasMore: false);

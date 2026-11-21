@@ -1,4 +1,4 @@
-import 'package:bnood/core/database/database.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/money/ledger_math.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -35,7 +35,6 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          remoteClientsEnabledProvider.overrideWith((ref) => true),
           clientsApiProvider.overrideWith((ref) => api),
         ],
         child: MaterialApp(

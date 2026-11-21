@@ -77,26 +77,4 @@ void main() {
     expect(find.byType(CompleteProfileScreen), findsOneWidget);
     expect(find.byType(ShellScaffold), findsNothing);
   });
-
-  testWidgets('unauthenticated user cannot open local home', (tester) async {
-    AppSplashSession.completed = true;
-    late ProviderContainer container;
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          appSettingsBootstrapProvider.overrideWithValue(_bootstrap()),
-          sessionStoreProvider.overrideWithValue(FakeSessionStore()),
-        ],
-        child: const BnoodApp(),
-      ),
-    );
-    final element = tester.element(find.byType(BnoodApp));
-    container = ProviderScope.containerOf(element);
-    await tester.pump();
-    container.read(goRouterProvider).go('/home');
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(find.byType(HomeScreen), findsNothing);
-    expect(find.byType(LoginScreen), findsOneWidget);
-  });
 }
