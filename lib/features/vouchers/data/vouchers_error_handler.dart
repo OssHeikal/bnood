@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/auth/auth_controller.dart';
-import '../../features/auth/auth_paths.dart';
-import '../../features/subscription/subscription_error_handler.dart';
-import '../api/auth_api_exception.dart';
+import '../../auth/auth_controller.dart';
+import '../../auth/auth_paths.dart';
+import '../../subscription/subscription_error_handler.dart';
+import 'package:bnood/core/api/auth_api_exception.dart';
 
 Future<bool> handleVouchersApiAuthError({
   required BuildContext context,

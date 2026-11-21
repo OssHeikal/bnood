@@ -1,4 +1,4 @@
-import '../../core/vouchers/app_voucher_record.dart';
+import '../data/app_voucher_record.dart';
 import 'voucher_sheet_receipt.dart';
 
 class RemoteVoucherSaveResult {

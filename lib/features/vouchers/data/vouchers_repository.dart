@@ -1,4 +1,4 @@
-import '../api/vouchers_api.dart';
+import 'vouchers_api.dart';
 import 'app_voucher_receipt.dart';
 import 'app_voucher_record.dart';
 

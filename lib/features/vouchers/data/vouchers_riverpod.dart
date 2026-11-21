@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../api/vouchers_api.dart';
-import '../storage/session_store.dart';
+import 'vouchers_api.dart';
+import 'package:bnood/core/storage/session_store.dart';
 import 'vouchers_repository.dart';
 
 final vouchersApiProvider = Provider<VouchersApi>((ref) {

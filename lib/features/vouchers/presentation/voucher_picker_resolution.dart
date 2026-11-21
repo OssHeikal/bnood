@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../clients/data/client_api_record.dart';
-import '../clients/data/clients_providers.dart';
-import '../../features/items/data/items_providers.dart';
-import '../../core/providers_api/app_provider_record.dart';
-import '../../core/providers_api/providers_riverpod.dart';
+import '../../clients/data/client_api_record.dart';
+import '../../clients/data/clients_providers.dart';
+import '../../items/data/items_providers.dart';
+import '../../../core/providers_api/app_provider_record.dart';
+import '../../../core/providers_api/providers_riverpod.dart';
 
 typedef ProviderRead = T Function<T>(ProviderListenable<T> provider);
 

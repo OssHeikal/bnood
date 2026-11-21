@@ -1,4 +1,4 @@
-import '../../core/vouchers/app_voucher_record.dart';
+import '../data/app_voucher_record.dart';
 import 'voucher_draft.dart';
 
 VoucherDraft voucherDraftFromAppVoucher(

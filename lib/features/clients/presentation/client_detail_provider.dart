@@ -6,7 +6,7 @@ import '../../../core/craftsmen/craftsman_snapshot_limit.dart';
 import '../data/clients_providers.dart';
 import '../../../core/providers_api/app_provider_record.dart';
 import '../../../core/money/money_format.dart';
-import '../../../core/vouchers/vouchers_riverpod.dart';
+import '../../../features/vouchers/data/vouchers_riverpod.dart';
 import 'client_detail_snapshot.dart';
 import 'client_item_spend_rows.dart';
 import 'client_voucher_movement_lines.dart';

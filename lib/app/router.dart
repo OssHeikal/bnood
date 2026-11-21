@@ -32,7 +32,7 @@ import '../features/clients/presentation/client_items_stats_screen.dart';
 import '../features/clients/presentation/movements_list_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/statements/client_statement_screen.dart';
-import '../features/vouchers/voucher_screen.dart';
+import '../features/vouchers/presentation/voucher_screen.dart';
 import '../features/providers/provider_detail_screen.dart';
 import 'app_shell_directory_body.dart';
 import 'auth_router_refresh.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../subscription/subscription_gates.dart';
+import '../../subscription/subscription_gates.dart';
 import 'voucher_draft.dart';
 import 'voucher_draft_enrich_remote.dart';
 import 'voucher_screen.dart';

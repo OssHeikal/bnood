@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/config/theme/app_size.dart';
 import '../../../../core/widgets/app_card.dart';
-import '../../../vouchers/voucher_launcher.dart';
-import '../../../../core/vouchers/app_voucher_record.dart';
-import '../../../vouchers/voucher_draft_from_app_voucher.dart';
+import '../../../vouchers/presentation/voucher_launcher.dart';
+import '../../../../features/vouchers/data/app_voucher_record.dart';
+import '../../../vouchers/presentation/voucher_draft_from_app_voucher.dart';
 import '../client_detail_snapshot.dart';
 import 'client_movement_card.dart';
 

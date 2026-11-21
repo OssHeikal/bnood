@@ -3,7 +3,7 @@ import 'package:bnood/core/contacts/contact_import_action.dart';
 import 'package:bnood/core/contacts/device_contact_import.dart';
 import 'package:bnood/core/widgets/buttons/pressable_scale.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
-import 'package:bnood/features/vouchers/inline_create_routes.dart';
+import 'package:bnood/features/vouchers/presentation/inline_create_routes.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/model/contact.dart';

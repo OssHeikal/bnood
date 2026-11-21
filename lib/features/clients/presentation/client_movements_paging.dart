@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/clients_providers.dart';
 import '../../../core/shared/pagination/pagination.dart';
-import '../../../core/vouchers/vouchers_riverpod.dart';
+import '../../../features/vouchers/data/vouchers_riverpod.dart';
 import 'client_detail_snapshot.dart';
 import 'client_movements_filters.dart';
 import 'client_voucher_movement_lines.dart';

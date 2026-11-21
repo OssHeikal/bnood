@@ -17,8 +17,8 @@ import '../../../../core/widgets/buttons/app_button.dart';
 import '../../../../core/widgets/custom_bottom_sheet.dart';
 import '../../../../core/widgets/sheet_drag_handle.dart';
 import '../../../items/presentation/item_semantic_icon.dart';
-import '../../../vouchers/voucher_date_sheet.dart';
-import '../../../vouchers/voucher_transaction_date_bounds.dart';
+import '../../../vouchers/presentation/voucher_date_sheet.dart';
+import '../../../vouchers/presentation/voucher_transaction_date_bounds.dart';
 import '../client_movements_filters.dart';
 
 void _closeSheet<T>(BuildContext context, T value) {

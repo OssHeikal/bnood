@@ -1,6 +1,6 @@
 import '../../core/agreements/app_agreement_record.dart';
 import '../../core/providers_api/app_provider_record.dart';
-import '../../core/vouchers/app_voucher_record.dart';
+import '../../features/vouchers/data/app_voucher_record.dart';
 
 class ProviderDetailClientRow {
   const ProviderDetailClientRow({

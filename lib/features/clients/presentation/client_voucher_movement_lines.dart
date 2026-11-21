@@ -1,4 +1,4 @@
-import '../../../core/vouchers/app_voucher_record.dart';
+import '../../../features/vouchers/data/app_voucher_record.dart';
 import 'client_detail_snapshot.dart';
 
 List<ClientDetailMovementLine> movementLinesFromVouchers(

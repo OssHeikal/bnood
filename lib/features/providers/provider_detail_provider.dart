@@ -4,7 +4,7 @@ import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/providers_api/providers_riverpod.dart';
-import '../../core/vouchers/vouchers_riverpod.dart';
+import '../../features/vouchers/data/vouchers_riverpod.dart';
 import 'provider_detail_snapshot.dart';
 
 final providerDetailProvider = AsyncNotifierProvider.family

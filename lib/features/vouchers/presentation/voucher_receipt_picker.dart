@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_android/image_picker_android.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 
-import '../../l10n/app_localizations.dart';
+import 'package:bnood/l10n/app_localizations.dart';
 
 /// Voucher receipt sources via [image_picker] (camera / system gallery picker only).
 class VoucherReceiptPicker {

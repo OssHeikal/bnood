@@ -1,5 +1,5 @@
-import 'package:bnood/core/vouchers/app_voucher_record.dart';
-import 'package:bnood/features/vouchers/voucher_draft_from_app_voucher.dart';
+import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
+import 'package:bnood/features/vouchers/presentation/voucher_draft_from_app_voucher.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

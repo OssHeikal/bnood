@@ -6,7 +6,7 @@ import '../core/config/theme/app_size.dart';
 import '../core/layout/app_layout.dart';
 import '../core/theme/app_colors.dart';
 import '../core/widgets/toast/shell_dock_presence.dart';
-import '../features/vouchers/voucher_launcher.dart';
+import '../features/vouchers/presentation/voucher_launcher.dart';
 import 'shell_chrome_scope.dart';
 import 'widgets/floating_shell_dock.dart';
 import 'widgets/shell_nav_destination.dart';

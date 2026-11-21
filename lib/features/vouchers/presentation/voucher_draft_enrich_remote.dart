@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../clients/data/clients_providers.dart';
-import '../../features/items/data/items_providers.dart';
-import '../../core/providers_api/providers_riverpod.dart';
-import '../../core/vouchers/vouchers_riverpod.dart';
+import '../../clients/data/clients_providers.dart';
+import '../../items/data/items_providers.dart';
+import '../../../core/providers_api/providers_riverpod.dart';
+import '../data/vouchers_riverpod.dart';
 import 'voucher_draft.dart';
 
 Future<VoucherDraft> enrichVoucherDraftRemote(ProviderContainer container, VoucherDraft draft) async {

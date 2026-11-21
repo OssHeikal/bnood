@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-import '../../core/api/auth_api_exception.dart';
-import '../../core/vouchers/app_voucher_receipt.dart';
-import '../../core/vouchers/vouchers_repository.dart';
+import '../../../core/api/auth_api_exception.dart';
+import '../data/app_voucher_receipt.dart';
+import '../data/vouchers_repository.dart';
 import 'receipt_image_compress.dart';
 import 'voucher_sheet_receipt.dart';
 

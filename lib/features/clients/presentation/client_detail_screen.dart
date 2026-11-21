@@ -31,7 +31,7 @@ import '../../../core/widgets/skeleton/async_value_body.dart';
 import '../../../core/widgets/toast/app_tone.dart';
 import '../../home/home_foundation_scope.dart';
 import '../../home/widgets/home_section_header.dart';
-import '../../vouchers/voucher_launcher.dart';
+import '../../vouchers/presentation/voucher_launcher.dart';
 import 'client_movements_navigation.dart';
 import 'client_detail_provider.dart';
 import 'client_detail_snapshot.dart';

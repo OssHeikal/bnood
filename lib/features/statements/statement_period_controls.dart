@@ -8,8 +8,8 @@ import '../../core/formatting/display_digits.dart';
 import '../../core/money/period_bounds.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_pressable.dart';
-import '../vouchers/voucher_date_sheet.dart';
-import '../vouchers/voucher_transaction_date_bounds.dart';
+import '../vouchers/presentation/voucher_date_sheet.dart';
+import '../vouchers/presentation/voucher_transaction_date_bounds.dart';
 import 'statement_export_store.dart';
 import 'statement_period_logic.dart';
 
