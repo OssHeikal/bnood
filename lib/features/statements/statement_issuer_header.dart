@@ -32,7 +32,7 @@ class StatementIssuerHeader extends StatelessWidget {
                 width: 48,
                 height: 48,
                 fit: BoxFit.contain,
-                errorBuilder: (_, __, ___) => UserIdentityAvatar(displayName: issuer.name, size: 48),
+                errorBuilder: (_, _, _) => UserIdentityAvatar(displayName: issuer.name, size: 48),
               ),
             ),
           )

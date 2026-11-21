@@ -23,9 +23,9 @@ class NotificationSettingsRecord {
 
   Map<String, dynamic> toPatchJson({bool? pushEnabled, bool? lowBalanceEnabled, int? lowBalanceAmountMinor}) {
     return {
-      if (pushEnabled != null) 'push_enabled': pushEnabled,
-      if (lowBalanceEnabled != null) 'low_balance_enabled': lowBalanceEnabled,
-      if (lowBalanceAmountMinor != null) 'low_balance_amount': lowBalanceAmountMinor,
+      'push_enabled': ?pushEnabled,
+      'low_balance_enabled': ?lowBalanceEnabled,
+      'low_balance_amount': ?lowBalanceAmountMinor,
     };
   }
 }

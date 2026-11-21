@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/layout/app_layout.dart';
-import '../../core/clients/clients_providers.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/providers/dashboard_providers.dart';
 import '../../core/clients/client_list_archive_filter.dart';
@@ -57,6 +56,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
   Future<void> _addClient(BuildContext context, WidgetRef ref) async {
     FocusManager.instance.primaryFocus?.unfocus();
     if (!await guardCreateActiveProject(context, ref)) return;
+    if (!context.mounted) return;
     final createdId = await showClientCreateSheet(context);
     if (createdId != null) {
       refreshAfterClientMutation(ref, clientId: createdId);

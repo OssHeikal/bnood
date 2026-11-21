@@ -3,7 +3,6 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/config/extensions/num_extensions.dart';
-import '../../core/clients/clients_providers.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
@@ -29,8 +28,6 @@ class ClientItemsStatsScreen extends ConsumerWidget {
     final localeCode = Localizations.localeOf(context).languageCode;
     final items = ref.watch(clientItemsStatsProvider(clientId));
     final clientName = ref.watch(clientDetailProvider(clientId)).valueOrNull?.client.name;
-    const remoteMoney = true;
-
     return HomeFoundationScope(
       child: Builder(
         builder: (context) {
@@ -83,7 +80,7 @@ class ClientItemsStatsScreen extends ConsumerWidget {
                             iconName: rows[i].iconName,
                             breakdown: rows[i].breakdown,
                             localeCode: localeCode,
-                            minorPerMajor: remoteMoney ? RemoteMoneyUnits.minorPerMajor : 100,
+                            minorPerMajor: RemoteMoneyUnits.minorPerMajor,
                             onTap: rows[i].itemId == null
                                 ? null
                                 : () => pushClientMovements(

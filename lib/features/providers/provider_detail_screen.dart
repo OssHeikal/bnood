@@ -8,7 +8,6 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
 import '../../core/layout/bnood_two_column.dart';
-import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/widgets/app_amount.dart';
 import '../../core/resources/gen/assets.gen.dart';
@@ -27,7 +26,6 @@ import 'provider_edit_sheet.dart';
 import 'provider_mutation_actions.dart';
 import '../clients/widgets/client_movement_card.dart';
 import '../clients/widgets/interactive_movement_card.dart';
-import '../../core/vouchers/vouchers_riverpod.dart';
 import 'provider_detail_voucher_line.dart';
 import 'widgets/provider_detail_linked_client_block.dart';
 import 'widgets/provider_detail_loading_skeleton.dart';
@@ -193,8 +191,6 @@ class _ProviderDetailBody extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final provider = data.provider;
     final isCraftsman = provider.type == AppProviderType.craftsman;
-    const linkClientsEnabled = true;
-
     Future<void> openLinkClients() async {
       await showProviderClientAssignmentsSheet(
         context: context,
@@ -246,8 +242,8 @@ class _ProviderDetailBody extends ConsumerWidget {
         ...[
           HomeSectionHeader(
             title: l10n.providerDetailLinkedClientsTitle,
-            actionLabel: linkClientsEnabled ? l10n.linkClients : null,
-            onAction: linkClientsEnabled ? openLinkClients : null,
+            actionLabel: l10n.linkClients,
+            onAction: openLinkClients,
             actionKey: const Key('provider_detail_link_clients'),
           ),
           AppSize.spaceSM.gap,
@@ -256,15 +252,13 @@ class _ProviderDetailBody extends ConsumerWidget {
               child: AppFallback.section(
                 icon: Icons.people_outline,
                 title: l10n.providerDetailNoLinkedClients,
-                actions: linkClientsEnabled
-                    ? [
-                        AppFallbackAction(
-                          label: l10n.linkClients,
-                          onPressed: openLinkClients,
-                          role: AppFallbackActionRole.tertiary,
-                        ),
-                      ]
-                    : const [],
+                actions: [
+                  AppFallbackAction(
+                    label: l10n.linkClients,
+                    onPressed: openLinkClients,
+                    role: AppFallbackActionRole.tertiary,
+                  ),
+                ],
               ),
             )
           else

@@ -4,8 +4,9 @@ import 'package:bnood/core/widgets/entity_picker_page.dart';
 import 'package:bnood/core/widgets/entity_picker_row.dart';
 import 'package:bnood/features/vouchers/voucher_picker_cards.dart';
 import 'package:bnood/l10n/app_localizations.dart';
+import 'dart:ui' show Tristate;
+
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -79,7 +80,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(tester.getSemantics(find.text('Hana')).hasFlag(SemanticsFlag.isSelected), isTrue);
+    expect(tester.getSemantics(find.text('Hana')).flagsCollection.isSelected, Tristate.isTrue);
     expect(find.byType(SvgPicture), findsOneWidget);
   });
 

@@ -49,7 +49,7 @@ class PaywallPlanTile extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            if (cornerBadge != null) cornerBadge!,
+            ?cornerBadge,
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 38, 14, 16),
               child: Column(

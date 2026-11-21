@@ -1,7 +1,6 @@
 import 'package:bnood/core/agreements/agreement_amount_api.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/money/remote_money_units.dart';
-import 'package:bnood/core/providers_api/providers_riverpod.dart';
 import 'package:bnood/features/clients/craftsman_agreement_amount_sheet.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';

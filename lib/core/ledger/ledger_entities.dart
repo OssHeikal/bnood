@@ -1,4 +1,5 @@
 /// Plain ledger row types (formerly Drift data classes).
+library;
 
 class Client {
   const Client({

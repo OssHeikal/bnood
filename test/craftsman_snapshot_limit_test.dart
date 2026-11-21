@@ -1,4 +1,3 @@
-import 'package:bnood/core/clients/clients_providers.dart';
 import 'package:bnood/core/craftsmen/craftsman_snapshot_limit.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';

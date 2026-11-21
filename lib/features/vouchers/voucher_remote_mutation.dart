@@ -102,7 +102,13 @@ Future<RemoteVoucherSaveResult> saveRemoteVoucher({
     if (await handleVouchersApiAuthError(context: context, ref: ref, error: e)) {
       return const RemoteVoucherSaveResult(voucherSaved: false);
     }
+    if (!context.mounted) {
+      return const RemoteVoucherSaveResult(voucherSaved: false);
+    }
     if (await handleSubscriptionApiError(context: context, ref: ref, error: e)) {
+      return const RemoteVoucherSaveResult(voucherSaved: false);
+    }
+    if (!context.mounted) {
       return const RemoteVoucherSaveResult(voucherSaved: false);
     }
     final l10n = AppLocalizations.of(context);

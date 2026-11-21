@@ -5,7 +5,6 @@ import '../../../core/config/theme/app_size.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../vouchers/voucher_launcher.dart';
 import '../../../core/vouchers/app_voucher_record.dart';
-import '../../../core/vouchers/vouchers_riverpod.dart';
 import '../../vouchers/voucher_draft_from_app_voucher.dart';
 import '../client_detail_snapshot.dart';
 import 'client_movement_card.dart';

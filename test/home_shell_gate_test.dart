@@ -3,7 +3,6 @@ import 'package:bnood/app/app_shell_tab_gate.dart';
 import 'package:bnood/core/api/home_api.dart';
 import 'package:bnood/core/home/app_home_dashboard.dart';
 import 'package:bnood/core/home/app_home_totals.dart';
-import 'package:bnood/core/clients/clients_providers.dart';
 import 'package:bnood/core/home/home_riverpod.dart';
 import 'package:bnood/core/home/home_repository.dart';
 import 'package:bnood/features/auth/auth_controller.dart';

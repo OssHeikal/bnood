@@ -1,8 +1,9 @@
 import 'package:bnood/app/widgets/floating_shell_dock.dart';
 import 'package:bnood/app/widgets/shell_nav_destination.dart';
 import 'package:bnood/app/widgets/shell_nav_icons.dart';
+import 'dart:ui' show Tristate;
+
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -99,7 +100,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final semantics = tester.getSemantics(find.text('Directory'));
-    expect(semantics.hasFlag(SemanticsFlag.isSelected), isTrue);
+    expect(semantics.flagsCollection.isSelected, Tristate.isTrue);
   });
 
   testWidgets('RTL keeps pill then satellite in child order', (tester) async {

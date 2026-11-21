@@ -10,7 +10,6 @@ import '../../core/vouchers/vouchers_riverpod.dart';
 import 'client_detail_snapshot.dart';
 import 'client_item_spend_rows.dart';
 import 'client_voucher_movement_lines.dart';
-import 'widgets/client_balance_card.dart';
 
 final clientDetailProvider =
     AsyncNotifierProvider.family<ClientDetailNotifier, ClientDetailSnapshot, String>(

@@ -7,7 +7,6 @@ import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/complete_profile_screen.dart';
-import 'package:bnood/features/auth/login_screen.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/app/shell_scaffold.dart';
 import 'package:bnood/features/home/home_screen.dart';

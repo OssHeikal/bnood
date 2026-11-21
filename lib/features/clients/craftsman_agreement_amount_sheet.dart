@@ -82,6 +82,7 @@ Future<void> showCraftsmanProjectAgreementEditSheet({
                 final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
                 final agreement = agreements.where((a) => a.providerId == craftsmanId).firstOrNull;
                 if (agreement == null) return;
+                if (!context.mounted) return;
                 await saveRemoteAgreementAmount(
                   context: context,
                   ref: ref,

@@ -1,8 +1,6 @@
 import 'package:bnood/core/agreements/app_agreement_record.dart';
-import 'package:bnood/core/agreements/agreements_riverpod.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/providers_api/app_provider_record.dart';
-import 'package:bnood/core/vouchers/vouchers_riverpod.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';

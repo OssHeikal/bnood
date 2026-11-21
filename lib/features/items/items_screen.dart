@@ -11,7 +11,6 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';
-import '../../core/items/items_providers.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/paging_refresh.dart';
 import '../../core/widgets/app_empty_state.dart';

@@ -5,7 +5,6 @@ import '../../core/clients/client_provider_agreement_preview.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import 'client_detail_snapshot.dart';
-import 'widgets/client_balance_card.dart';
 
 final clientCraftsmenListProvider =
     AsyncNotifierProvider.family<ClientCraftsmenListNotifier, ClientCraftsmenListSnapshot, String>(

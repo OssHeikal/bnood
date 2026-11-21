@@ -63,9 +63,11 @@ Future<Client?> _saveRemoteCreate(
     if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) {
       return null;
     }
+    if (!context.mounted) return null;
     if (await handleClientsApiSubscriptionError(context: context, ref: ref, error: e)) {
       return null;
     }
+    if (!context.mounted) return null;
     if (e.isDuplicateName) {
       final confirm = await AppDecision.show(
         context,
@@ -89,11 +91,12 @@ Future<Client?> _saveRemoteCreate(
         if (await handleClientsApiAuthError(context: context, ref: ref, error: retry)) {
           return null;
         }
+        if (!context.mounted) return null;
         if (await handleClientsApiSubscriptionError(context: context, ref: ref, error: retry)) {
           return null;
         }
         if (retry.isDuplicatePhone) {
-          throw retry;
+          rethrow;
         }
         AppToaster.show(apiErrorUserMessage(l10n, retry), kind: ToastKind.failure);
       }
@@ -130,6 +133,7 @@ Future<Client?> _saveRemoteUpdate(
     if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) {
       return null;
     }
+    if (!context.mounted) return null;
     if (e.isDuplicateName) {
       final confirm = await AppDecision.show(
         context,
@@ -201,6 +205,7 @@ Future<bool> confirmDeleteClient({
   } on AuthApiException catch (e) {
     if (!context.mounted) return false;
     if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) return false;
+    if (!context.mounted) return false;
     if (await handleClientsApiSubscriptionError(context: context, ref: ref, error: e)) return false;
     AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return false;

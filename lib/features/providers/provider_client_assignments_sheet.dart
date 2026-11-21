@@ -202,6 +202,7 @@ class _ProviderClientAssignmentsSheetState extends ConsumerState<ProviderClientA
       }
 
       for (final ag in toDelete) {
+        if (!mounted) return;
         final name = ag.clientName ?? '—';
         if (!await confirmPaidBeforeUnlinkIfNeeded(
           context: context,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
 import '../config/extensions/num_extensions.dart';
-import '../config/extensions/text_style_extensions.dart';
 import '../config/theme/app_colors.dart';
 import '../config/theme/app_size.dart';
 import '../layout/app_form_route_canvas.dart';

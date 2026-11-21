@@ -10,7 +10,6 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/layout/app_layout.dart';
 import '../../core/providers_api/app_provider_record.dart';
-import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/resources/gen/assets.gen.dart';
 import '../../core/shared/pagination/pagination.dart';
 import '../../core/widgets/app_fallback.dart';

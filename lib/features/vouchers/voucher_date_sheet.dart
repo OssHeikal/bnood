@@ -212,7 +212,7 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
                 ),
               ],
             ),
-            if (wheels != null) wheels,
+            ?wheels,
           ],
         ),
           ),
@@ -254,7 +254,7 @@ class _VoucherDateSheetPageState extends State<VoucherDateSheetPage> {
                 );
               },
             ),
-            if (wheels != null) wheels,
+            ?wheels,
           ],
         ),
       ),

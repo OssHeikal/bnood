@@ -1,4 +1,3 @@
-import 'package:bnood/core/clients/clients_providers.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/home/home_row_models.dart';
 import 'package:bnood/features/clients/client_detail_provider.dart';

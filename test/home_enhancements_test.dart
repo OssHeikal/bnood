@@ -1,4 +1,3 @@
-import 'package:bnood/core/clients/clients_providers.dart';
 import 'package:bnood/core/subscription/app_subscription.dart';
 import 'package:bnood/core/subscription/subscription_riverpod.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';

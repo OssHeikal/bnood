@@ -83,19 +83,30 @@ void main() {
   });
 }
 
-class _DeleteTestHost extends StatelessWidget {
+class _DeleteTestHost extends StatefulWidget {
   const _DeleteTestHost();
+
+  @override
+  State<_DeleteTestHost> createState() => _DeleteTestHostState();
+}
+
+class _DeleteTestHostState extends State<_DeleteTestHost> {
+  List<Page<void>> _pages = [
+    const MaterialPage<void>(child: Scaffold(body: Text('Clients list'))),
+    const MaterialPage<void>(
+      child: HomeFoundationScope(child: ClientDetailScreen(clientId: 'c1')),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      onPopPage: (route, result) => route.didPop(result),
-      pages: const [
-        MaterialPage(child: Scaffold(body: Text('Clients list'))),
-        MaterialPage(
-          child: HomeFoundationScope(child: ClientDetailScreen(clientId: 'c1')),
-        ),
-      ],
+      onDidRemovePage: (page) {
+        setState(() {
+          _pages = List<Page<void>>.of(_pages)..remove(page);
+        });
+      },
+      pages: _pages,
     );
   }
 }

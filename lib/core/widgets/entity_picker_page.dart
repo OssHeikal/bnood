@@ -192,7 +192,7 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
               ),
               AppSize.spaceMD.gap,
               Expanded(child: _listBody(l10n, indices, isCompletelyEmpty, isSearchEmpty)),
-              if (footer != null) footer,
+              ?footer,
             ],
           ),
         ),

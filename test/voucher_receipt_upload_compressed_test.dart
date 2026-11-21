@@ -49,7 +49,7 @@ void main() {
       if (options.method == 'POST' && options.uri.path.contains('/receipts')) {
         final form = options.data as FormData;
         final part = form.files.first.value;
-        postedLength = await part.length;
+        postedLength = part.length;
         return jsonResponse(
           '{"success":true,"data":{"id":"r1","mime":"image/jpeg","size":$postedLength,"created_at":"2026-11-09T10:00:00Z"}}',
         );

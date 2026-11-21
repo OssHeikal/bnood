@@ -29,11 +29,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Navigator(
-          onPopPage: (route, result) {
-            if (!route.didPop(result)) return false;
-            popped = result as VoucherCameraPickResult?;
-            return true;
-          },
+          onDidRemovePage: (_) {},
           pages: [const MaterialPage(child: _VoucherHost())],
         ),
       ),
@@ -49,8 +45,9 @@ void main() {
     popped = poppedResult;
 
     expect(popped, isNotNull);
-    expect(popped!.file, isNull);
-    expect(popped!.error, isNull);
+    final pick = popped!;
+    expect(pick.file, isNull);
+    expect(pick.error, isNull);
     expect(find.byType(_VoucherHost), findsOneWidget);
   });
 
@@ -61,11 +58,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Navigator(
-          onPopPage: (route, result) {
-            if (!route.didPop(result)) return false;
-            popped = result as VoucherCameraPickResult?;
-            return true;
-          },
+          onDidRemovePage: (_) {},
           pages: [const MaterialPage(child: _VoucherHost())],
         ),
       ),
@@ -92,10 +85,7 @@ void main() {
           body: Builder(
             builder: (context) {
               return Navigator(
-                onPopPage: (route, result) {
-                  if (!route.didPop(result)) return false;
-                  return true;
-                },
+                onDidRemovePage: (_) {},
                 pages: [
                   MaterialPage(
                     child: Center(

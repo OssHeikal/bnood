@@ -101,19 +101,24 @@ Future<bool> confirmUnlinkAgreementWithPaidGuard({
   String? clientId,
   String? providerId,
 }) async {
-  final confirmed = switch (agreementUnlinkConfirmVariant(agreement)) {
-    AgreementUnlinkConfirmVariant.paymentsGuard => await confirmPaidBeforeUnlinkIfNeeded(
-        context: context,
-        agreement: agreement,
-        paidGuardClientName: paidGuardClientName,
-      ),
-    AgreementUnlinkConfirmVariant.plain => await confirmPlainUnlinkAgreement(
-        context: context,
-        providerType: providerType,
-        partyName: unlinkDialogPartyName,
-      ),
-  };
+  if (!context.mounted) return false;
+  final variant = agreementUnlinkConfirmVariant(agreement);
+  final bool confirmed;
+  if (variant == AgreementUnlinkConfirmVariant.paymentsGuard) {
+    confirmed = await confirmPaidBeforeUnlinkIfNeeded(
+      context: context,
+      agreement: agreement,
+      paidGuardClientName: paidGuardClientName,
+    );
+  } else {
+    confirmed = await confirmPlainUnlinkAgreement(
+      context: context,
+      providerType: providerType,
+      partyName: unlinkDialogPartyName,
+    );
+  }
   if (!confirmed) return false;
+  if (!context.mounted) return false;
   return executeUnlinkAgreement(
     context: context,
     ref: ref,
@@ -139,6 +144,7 @@ Future<bool> confirmUnlinkAgreement({
   )) {
     return false;
   }
+  if (!context.mounted) return false;
   return executeUnlinkAgreement(
     context: context,
     ref: ref,

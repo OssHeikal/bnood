@@ -14,7 +14,7 @@ import 'package:bnood/core/api/items_api.dart';
 class _RecordingItemsRepository extends ItemsRepository {
   _RecordingItemsRepository(this._items) : super(ItemsApi());
 
-  List<CatalogItem> _items;
+  final List<CatalogItem> _items;
   List<List<String>> reorderCalls = [];
   Object? reorderError;
 

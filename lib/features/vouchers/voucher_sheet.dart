@@ -14,7 +14,6 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/extensions/text_style_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
-import '../../core/ledger/ledger_entities.dart';
 import '../../core/api/api_error_user_message.dart';
 import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_providers.dart';
@@ -24,7 +23,6 @@ import '../../core/items/items_providers.dart';
 import '../../core/items/items_repository.dart';
 import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/clients/client_list_archive_filter.dart';
-import '../../core/home/home_row_models.dart';
 import '../../core/vouchers/vouchers_error_handler.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';
 import '../subscription/subscription_error_handler.dart';
@@ -61,7 +59,6 @@ import 'voucher_receipt_source_sheet.dart';
 import 'voucher_picker_resolution.dart';
 import 'voucher_receipt_picker.dart';
 import 'voucher_transaction_date_bounds.dart';
-import '../../core/providers/transaction_mutation_refresh.dart';
 import 'voucher_remote_mutation.dart';
 import 'voucher_remote_receipts.dart';
 import 'voucher_receipt_upload_errors.dart';
@@ -69,7 +66,7 @@ import 'voucher_sheet_receipt.dart';
 
 enum VoucherSheetPresentation { modal, fullScreen }
 
-final GlobalKey<_VoucherSheetState> voucherSheetStateKey = GlobalKey<_VoucherSheetState>();
+final GlobalKey<VoucherSheetState> voucherSheetStateKey = GlobalKey<VoucherSheetState>();
 
 class VoucherSheet extends ConsumerStatefulWidget {
   const VoucherSheet({super.key, this.presentation = VoucherSheetPresentation.modal});
@@ -77,10 +74,10 @@ class VoucherSheet extends ConsumerStatefulWidget {
   final VoucherSheetPresentation presentation;
 
   @override
-  ConsumerState<VoucherSheet> createState() => _VoucherSheetState();
+  ConsumerState<VoucherSheet> createState() => VoucherSheetState();
 }
 
-class _VoucherSheetState extends ConsumerState<VoucherSheet> {
+class VoucherSheetState extends ConsumerState<VoucherSheet> {
   final _formKey = GlobalKey<FormState>();
   final _amountCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
@@ -224,12 +221,6 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     _descCtrl.dispose();
     _linkAmountCtrl.dispose();
     super.dispose();
-  }
-
-  String _localAmountFieldText(int piastres) {
-    final pounds = piastres / 100;
-    final whole = pounds.truncateToDouble() == pounds ? pounds.toInt().toString() : pounds.toStringAsFixed(2);
-    return whole;
   }
 
   Future<void> _pickClient() async {
@@ -507,6 +498,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     } on AuthApiException catch (e) {
       if (!mounted) return;
       if (await handleVouchersApiAuthError(context: context, ref: ref, error: e)) return;
+      if (!mounted) return;
       if (await handleSubscriptionApiError(context: context, ref: ref, error: e)) return;
       AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     } catch (e) {
@@ -532,13 +524,13 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     if (amount == null || amount <= 0) return;
 
     setState(() => _saving = true);
-    final date = draft.date ?? DateTime.now();
     final needsProviderLink = draft.kind == 'spend' && draft.providerLinkedToClient != true;
     final linkAmount = needsProviderLink ? await _inlineAgreementAmountPiastres() : null;
     try {
       if (needsProviderLink) {
         await ensureVoucherProviderAgreementBeforeSave(ref: ref, draft: draft, agreementAmountPiastres: linkAmount);
       }
+      if (!mounted) return;
       final result = await saveRemoteVoucher(
           context: context,
           ref: ref,
@@ -588,6 +580,7 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     } on AuthApiException catch (e) {
       if (!mounted) return;
       if (await handleVouchersApiAuthError(context: context, ref: ref, error: e)) return;
+      if (!mounted) return;
       if (await handleSubscriptionApiError(context: context, ref: ref, error: e)) return;
       AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     } catch (e) {

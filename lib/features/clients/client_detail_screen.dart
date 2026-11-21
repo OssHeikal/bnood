@@ -16,7 +16,6 @@ import '../../core/api/auth_api_exception.dart';
 import '../../core/clients/clients_error_handler.dart';
 import '../subscription/subscription_error_handler.dart';
 import '../subscription/subscription_gates.dart';
-import '../../core/agreements/agreements_riverpod.dart';
 import '../../core/clients/clients_providers.dart';
 import '../../core/formatting/see_all_label.dart';
 import '../../core/providers/dashboard_providers.dart';
@@ -230,6 +229,7 @@ class _ClientDetailBody extends ConsumerWidget {
     } on AuthApiException catch (e) {
       if (!context.mounted) return;
       if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) return;
+      if (!context.mounted) return;
       if (await handleClientsApiSubscriptionError(context: context, ref: ref, error: e)) return;
       AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     }
