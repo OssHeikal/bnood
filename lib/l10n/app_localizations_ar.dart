@@ -1563,6 +1563,32 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paywallComparePlans => 'قارن الباقات';
 
   @override
+  String get subscriptionLimitDismiss => 'تمام';
+
+  @override
+  String get subscriptionLimitProjectsTitle => 'وصلت للحد الأقصى للمشاريع';
+
+  @override
+  String subscriptionLimitProjectsMessage(String limit) {
+    return 'الحد المسموح: $limit';
+  }
+
+  @override
+  String get subscriptionLimitClientsTitle => 'وصلت للحد الأقصى للعملاء';
+
+  @override
+  String subscriptionLimitClientsMessage(String limit) {
+    return 'الحد المسموح: $limit';
+  }
+
+  @override
+  String get subscriptionLimitFinancialTitle =>
+      'وصلت للحد الأقصى للمعاملات المالية';
+
+  @override
+  String get subscriptionLimitArchiveClientTitle => 'أرشفة العملاء غير متاحة';
+
+  @override
   String get paywallCurrentPlanChip => 'باقتك الحالية';
 
   @override

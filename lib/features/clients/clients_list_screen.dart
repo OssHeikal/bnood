@@ -22,6 +22,7 @@ import '../home/home_foundation_scope.dart';
 import 'clients_list_paging.dart';
 import 'widgets/client_balance_card.dart';
 import '../subscription/subscription_gates.dart';
+import '../subscription/subscription_limit_handler.dart';
 import 'widgets/clients_list_filter_chips.dart';
 
 class ClientsListScreen extends ConsumerStatefulWidget {
@@ -55,7 +56,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
 
   Future<void> _addClient(BuildContext context, WidgetRef ref) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (!await guardCreateActiveProject(context, ref)) return;
+    if (!await guardCreateActiveProject(context, ref, limitKind: SubscriptionLimitKind.clients)) return;
     if (!context.mounted) return;
     final createdId = await showClientCreateSheet(context);
     if (createdId != null) {

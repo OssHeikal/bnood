@@ -46,6 +46,9 @@ abstract final class PaywallLauncher {
 
     final container = ProviderScope.containerOf(context, listen: false);
     final snap = container.read(subscriptionProvider).valueOrNull;
+    if (snap != null && !snap.showSurfaces) {
+      return;
+    }
 
     final navigator = Navigator.of(context, rootNavigator: true);
     await navigator.push<void>(

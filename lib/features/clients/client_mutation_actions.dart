@@ -14,6 +14,7 @@ import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/toast/app_tone.dart';
 import '../subscription/subscription_error_handler.dart';
 import '../subscription/subscription_gates.dart';
+import '../subscription/subscription_limit_handler.dart';
 
 Future<Client?> saveClientCreate({
   required WidgetRef ref,
@@ -50,7 +51,7 @@ Future<Client?> _saveRemoteCreate(
   required String name,
   String? phone,
 }) async {
-  if (!await guardCreateActiveProject(context, ref)) return null;
+  if (!await guardCreateActiveProject(context, ref, limitKind: SubscriptionLimitKind.clients)) return null;
 
   final repo = ref.read(clientsRepositoryProvider);
   try {

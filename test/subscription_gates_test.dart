@@ -31,6 +31,20 @@ void main() {
     expect(snap.shouldShowProfileSubscriptionCard, isFalse);
   });
 
+  test('capped user still blocked when paywall disabled', () {
+    final snap = AppSubscriptionSnapshot.fromDataJson({
+      'paywall_enabled': false,
+      'entitlements': {
+        'show_paywall_surfaces': true,
+        'can_create_active_project': false,
+        'active_projects_count': 1,
+        'active_project_cap': 1,
+      },
+    });
+    expect(snap.showSurfaces, isFalse);
+    expect(snap.entitlements.mayCreateActiveProject, isFalse);
+  });
+
   test('capped free user has paywall payload for gating', () {
     final snap = _cappedSnapshot();
     expect(snap.showSurfaces, isTrue);

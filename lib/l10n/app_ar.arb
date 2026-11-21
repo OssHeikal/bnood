@@ -639,6 +639,27 @@
   "paywallPerMonthUnit": "ج.م/شهر",
   "paywallPerYearUnit": "ج.م/سنة",
   "paywallComparePlans": "قارن الباقات",
+  "subscriptionLimitDismiss": "تمام",
+  "subscriptionLimitProjectsTitle": "وصلت للحد الأقصى للمشاريع",
+  "subscriptionLimitProjectsMessage": "الحد المسموح: {limit}",
+  "@subscriptionLimitProjectsMessage": {
+    "placeholders": {
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionLimitClientsTitle": "وصلت للحد الأقصى للعملاء",
+  "subscriptionLimitClientsMessage": "الحد المسموح: {limit}",
+  "@subscriptionLimitClientsMessage": {
+    "placeholders": {
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionLimitFinancialTitle": "وصلت للحد الأقصى للمعاملات المالية",
+  "subscriptionLimitArchiveClientTitle": "أرشفة العملاء غير متاحة",
   "paywallCurrentPlanChip": "باقتك الحالية",
   "paywallYearlyOnlyHint": "متاحة سنويًا فقط",
   "paywallBilledYearlyAt": "يتحسب {amount} سنويًا",

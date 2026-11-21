@@ -1579,6 +1579,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallComparePlans => 'Compare plans';
 
   @override
+  String get subscriptionLimitDismiss => 'Got it';
+
+  @override
+  String get subscriptionLimitProjectsTitle =>
+      'You\'ve reached the project limit';
+
+  @override
+  String subscriptionLimitProjectsMessage(String limit) {
+    return 'Maximum allowed: $limit';
+  }
+
+  @override
+  String get subscriptionLimitClientsTitle =>
+      'You\'ve reached the client limit';
+
+  @override
+  String subscriptionLimitClientsMessage(String limit) {
+    return 'Maximum allowed: $limit';
+  }
+
+  @override
+  String get subscriptionLimitFinancialTitle =>
+      'You\'ve reached the limit for financial transactions';
+
+  @override
+  String get subscriptionLimitArchiveClientTitle =>
+      'Client archiving isn\'t available';
+
+  @override
   String get paywallCurrentPlanChip => 'Current plan';
 
   @override
