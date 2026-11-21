@@ -2887,6 +2887,12 @@ abstract class AppLocalizations {
   /// **'EGP/mo'**
   String get paywallPerMonthUnit;
 
+  /// No description provided for @paywallPerYearUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'EGP/yr'**
+  String get paywallPerYearUnit;
+
   /// No description provided for @paywallCurrentPlanChip.
   ///
   /// In en, this message translates to:

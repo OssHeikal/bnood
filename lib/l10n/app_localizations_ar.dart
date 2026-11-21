@@ -1557,6 +1557,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paywallPerMonthUnit => 'ج.م/شهر';
 
   @override
+  String get paywallPerYearUnit => 'ج.م/سنة';
+
+  @override
   String get paywallCurrentPlanChip => 'باقتك الحالية';
 
   @override

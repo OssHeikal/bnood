@@ -653,6 +653,7 @@
   "paywallLoadFailedBody": "Check your connection and try again.",
   "paywallRestorePurchase": "Restore purchase",
   "paywallPerMonthUnit": "EGP/mo",
+  "paywallPerYearUnit": "EGP/yr",
   "paywallCurrentPlanChip": "Current plan",
   "paywallYearlyOnlyHint": "Available on yearly billing only",
   "paywallBilledYearlyAt": "Billed {amount} yearly",

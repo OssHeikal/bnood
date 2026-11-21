@@ -637,6 +637,7 @@
   "paywallLoadFailedBody": "تحقق من الاتصال وحاول مرة أخرى.",
   "paywallRestorePurchase": "استعادة الشراء",
   "paywallPerMonthUnit": "ج.م/شهر",
+  "paywallPerYearUnit": "ج.م/سنة",
   "paywallCurrentPlanChip": "باقتك الحالية",
   "paywallYearlyOnlyHint": "متاحة سنويًا فقط",
   "paywallBilledYearlyAt": "يتحسب {amount} سنويًا",

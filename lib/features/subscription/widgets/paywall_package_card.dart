@@ -33,11 +33,14 @@ class PaywallPackageCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     final monthlyBlocked = billingPeriod == 'monthly' && !package.selectableForBillingPeriod('monthly');
+    final yearlyOnlyGhost = monthlyBlocked && package.yearlyEnabled;
     final effectiveSelected = selected && !monthlyBlocked;
     final effectivePeriod = package.effectivePeriodWhen(billingPeriod);
     final showYearlyOnlyHint =
         billingPeriod == 'monthly' && (!package.monthlyEnabled && package.yearlyEnabled);
-    final pricing = effectivePeriod == 'yearly' ? package.pricing.yearly : package.pricing.monthly;
+    final pricing = yearlyOnlyGhost
+        ? package.pricing.yearly
+        : (effectivePeriod == 'yearly' ? package.pricing.yearly : package.pricing.monthly);
 
     return Opacity(
       opacity: monthlyBlocked ? 0.45 : 1,
@@ -84,12 +87,15 @@ class PaywallPackageCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    if (!package.isContact && pricing != null && effectivePeriod == 'yearly')
+                    if (!yearlyOnlyGhost &&
+                        !package.isContact &&
+                        pricing != null &&
+                        effectivePeriod == 'yearly')
                       Padding(
                         padding: const EdgeInsets.only(top: AppSize.spaceXS),
                         child: _BilledYearlyLine(pricing: pricing, l10n: l10n, billedStyle: theme.planBilled),
                       )
-                    else if (!package.isContact && effectivePeriod == 'monthly')
+                    else if (!yearlyOnlyGhost && !package.isContact && effectivePeriod == 'monthly')
                       Padding(
                         padding: const EdgeInsets.only(top: AppSize.spaceXS),
                         child: Text(
@@ -119,8 +125,9 @@ class PaywallPackageCard extends StatelessWidget {
                   constraints: const BoxConstraints(minWidth: 84, maxWidth: 132),
                   child: _PriceBlock(
                     pricing: pricing,
-                    perMonthUnit: l10n.paywallPerMonthUnit,
-                    yearlyPeriod: effectivePeriod == 'yearly',
+                    perMonthUnit: yearlyOnlyGhost ? l10n.paywallPerYearUnit : l10n.paywallPerMonthUnit,
+                    yearlyPeriod: yearlyOnlyGhost || effectivePeriod == 'yearly',
+                    showYearlyTotal: yearlyOnlyGhost,
                     theme: theme,
                   ),
                 ),
@@ -288,19 +295,29 @@ class _PriceBlock extends StatelessWidget {
     required this.pricing,
     required this.perMonthUnit,
     required this.yearlyPeriod,
+    required this.showYearlyTotal,
     required this.theme,
   });
 
   final AppPaywallPeriodPricing pricing;
   final String perMonthUnit;
   final bool yearlyPeriod;
+  final bool showYearlyTotal;
   final PaywallTheme theme;
 
   @override
   Widget build(BuildContext context) {
     final arabic = Localizations.localeOf(context).languageCode == 'ar';
+    final yearlyMajor = pricing.resolvedBilledYearlyMajor() ??
+        PaywallMoneyDisplay.wholeMajorFromMinor(pricing.discountedMinor);
+    final originalYearly = pricing.resolvedOriginalBilledYearlyMajor();
     final perMonthMajor = pricing.resolvedPerMonthMajor(arabic: arabic);
     final originalPerMonth = pricing.resolvedOriginalPerMonthMajor(yearlyPeriod: yearlyPeriod);
+
+    final amountMajor = showYearlyTotal ? yearlyMajor : perMonthMajor;
+    final strikeMajor = showYearlyTotal
+        ? (originalYearly != null && originalYearly > yearlyMajor ? originalYearly : null)
+        : originalPerMonth;
 
     return Align(
       alignment: AlignmentDirectional.centerEnd,
@@ -309,11 +326,11 @@ class _PriceBlock extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (originalPerMonth != null && originalPerMonth > perMonthMajor)
+            if (strikeMajor != null && strikeMajor > amountMajor)
               Align(
                 alignment: AlignmentDirectional.centerEnd,
                 child: Text(
-                  DisplayDigits.formatInteger(originalPerMonth),
+                  DisplayDigits.formatInteger(strikeMajor),
                   style: theme.priceStrike,
                   maxLines: 1,
                   textAlign: TextAlign.end,
@@ -326,7 +343,7 @@ class _PriceBlock extends StatelessWidget {
               textBaseline: TextBaseline.alphabetic,
               children: [
                 Text(
-                  DisplayDigits.formatInteger(perMonthMajor),
+                  DisplayDigits.formatInteger(amountMajor),
                   style: theme.priceAmount,
                   maxLines: 1,
                 ),

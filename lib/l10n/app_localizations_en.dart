@@ -1573,6 +1573,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallPerMonthUnit => 'EGP/mo';
 
   @override
+  String get paywallPerYearUnit => 'EGP/yr';
+
+  @override
   String get paywallCurrentPlanChip => 'Current plan';
 
   @override
