@@ -49,6 +49,7 @@ void main() {
         {
           'slug': 'enterprise',
           'name': 'Enterprise',
+          'tagline': 'For larger offices, unlimited projects',
           'purchase_mode': 'contact',
           'contact_cta_text': 'Contact us',
           'monthly_enabled': false,
@@ -84,6 +85,7 @@ void main() {
     expect(content.v3!.comparisonTable?.columns.length, 2);
     expect(content.v3!.benefitItems.first.text, '4 active projects');
     expect(content.v3!.packages.last.isContact, isTrue);
+    expect(content.v3!.packages.last.tagline, 'For larger offices, unlimited projects');
     expect(content.v3!.packages.last.resolveCta('yearly'), 'Contact us');
   });
 
