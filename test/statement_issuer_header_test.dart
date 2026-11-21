@@ -1,4 +1,4 @@
-import 'package:bnood/core/clients/client_statement_record.dart';
+import 'package:bnood/features/clients/data/client_statement_record.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/features/statements/statement_issuer_header.dart';
 import 'package:bnood/l10n/app_localizations.dart';

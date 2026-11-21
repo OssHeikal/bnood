@@ -1,5 +1,5 @@
 import 'package:bnood/core/agreements/app_agreement_record.dart';
-import 'package:bnood/core/clients/client_provider_agreement_preview.dart';
+import 'package:bnood/features/clients/data/client_provider_agreement_preview.dart';
 import 'package:bnood/core/providers_api/app_provider_record.dart';
 import 'package:flutter_test/flutter_test.dart';
 

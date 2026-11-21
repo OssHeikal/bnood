@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:bnood/core/api/app_dio.dart';
 import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/api/clients_api.dart';
-import 'package:bnood/core/clients/client_statement_pdf.dart';
+import 'package:bnood/features/clients/data/clients_api.dart';
+import 'package:bnood/features/clients/data/client_statement_pdf.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers_api/app_provider_record.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../clients/agreement_mutation_actions.dart';
-import '../../clients/craftsman_agreement_amount_sheet.dart';
-import '../../clients/widgets/linked_agreement_overflow_menu.dart';
+import '../../clients/presentation/agreement_mutation_actions.dart';
+import '../../clients/presentation/craftsman_agreement_amount_sheet.dart';
+import '../../clients/presentation/widgets/linked_agreement_overflow_menu.dart';
 import '../provider_detail_snapshot.dart';
 import 'provider_detail_client_agreement_card.dart';
 

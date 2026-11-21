@@ -1,5 +1,5 @@
-import 'package:bnood/core/clients/client_statement_record.dart';
-import 'package:bnood/core/clients/statement_item_visual.dart';
+import 'package:bnood/features/clients/data/client_statement_record.dart';
+import 'package:bnood/features/clients/data/statement_item_visual.dart';
 import 'package:bnood/core/items/item_api_record.dart';
 import 'package:flutter_test/flutter_test.dart';
 

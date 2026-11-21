@@ -1,10 +1,10 @@
 import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/api/clients_api.dart';
-import 'package:bnood/core/clients/client_api_record.dart';
-import 'package:bnood/core/clients/clients_providers.dart';
-import 'package:bnood/core/clients/clients_repository.dart';
+import 'package:bnood/features/clients/data/clients_api.dart';
+import 'package:bnood/features/clients/data/client_api_record.dart';
+import 'package:bnood/features/clients/data/clients_providers.dart';
+import 'package:bnood/features/clients/data/clients_repository.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/features/clients/client_mutation_actions.dart';
+import 'package:bnood/features/clients/presentation/client_mutation_actions.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

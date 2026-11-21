@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/clients/clients_providers.dart';
+import '../clients/data/clients_providers.dart';
 import '../../core/items/items_providers.dart';
 import '../../core/providers_api/providers_riverpod.dart';
 import '../../core/vouchers/vouchers_riverpod.dart';

@@ -1,7 +1,7 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/money/ledger_math.dart';
 import 'package:bnood/core/money/remote_money_units.dart';
-import 'package:bnood/features/clients/widgets/client_detail_item_row.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_detail_item_row.dart';
 import 'package:bnood/features/home/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';

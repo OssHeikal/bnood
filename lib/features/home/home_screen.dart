@@ -7,7 +7,7 @@ import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/craftsmen/craftsman_snapshot_limit.dart';
-import '../../core/clients/client_list_archive_filter.dart';
+import '../clients/data/client_list_archive_filter.dart';
 import '../../core/money/remote_money_units.dart';
 import '../../core/layout/app_layout.dart';
 import '../../core/layout/bnood_max_width.dart';

@@ -10,7 +10,7 @@ import '../../../core/resources/gen/assets.gen.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_overflow_menu.dart';
 import '../../../core/widgets/app_pressable.dart';
-import '../../../features/clients/widgets/client_balance_card.dart';
+import '../../../features/clients/presentation/widgets/client_balance_card.dart';
 import '../../../l10n/app_localizations.dart';
 
 /// Directory list row: stripe, avatar, name, paid subtitle, overflow menu.

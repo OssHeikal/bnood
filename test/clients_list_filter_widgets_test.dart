@@ -1,12 +1,12 @@
-import 'package:bnood/core/clients/client_list_archive_filter.dart';
+import 'package:bnood/features/clients/data/client_list_archive_filter.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/providers/dashboard_providers.dart';
 import 'package:bnood/core/home/home_row_models.dart';
 import 'package:bnood/core/shared/pagination/pagination.dart';
-import 'package:bnood/features/clients/clients_list_paging.dart';
-import 'package:bnood/features/clients/clients_list_screen.dart';
-import 'package:bnood/features/clients/widgets/clients_list_filter_chips.dart';
+import 'package:bnood/features/clients/presentation/clients_list_paging.dart';
+import 'package:bnood/features/clients/presentation/clients_list_screen.dart';
+import 'package:bnood/features/clients/presentation/widgets/clients_list_filter_chips.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

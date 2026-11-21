@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/clients/client_statement_record.dart';
+import '../clients/data/client_statement_record.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/utils/extensions/bidi_isolate.dart';

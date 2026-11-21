@@ -1,4 +1,4 @@
-import '../clients/client_api_record.dart';
+import '../../features/clients/data/client_api_record.dart';
 import '../ledger/ledger_entities.dart';
 import 'app_home_dashboard.dart';
 import 'home_row_models.dart';

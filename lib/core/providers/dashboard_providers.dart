@@ -1,16 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../clients/client_list_archive_filter.dart';
-import '../clients/clients_providers.dart';
-import '../clients/clients_repository.dart';
+import '../../features/clients/data/client_list_archive_filter.dart';
+import '../../features/clients/data/clients_providers.dart';
+import '../../features/clients/data/clients_repository.dart';
 import '../home/home_dashboard_mapping.dart';
 import '../home/home_riverpod.dart';
 import '../home/home_row_models.dart';
 import '../home/home_section_counts.dart';
-import '../../features/clients/client_craftsmen_list_provider.dart';
-import '../../features/clients/client_detail_provider.dart';
-import '../../features/clients/client_items_stats_provider.dart';
-import '../../features/clients/client_suppliers_list_provider.dart';
+import '../../features/clients/presentation/client_craftsmen_list_provider.dart';
+import '../../features/clients/presentation/client_detail_provider.dart';
+import '../../features/clients/presentation/client_items_stats_provider.dart';
+import '../../features/clients/presentation/client_suppliers_list_provider.dart';
 import '../../features/providers/provider_detail_provider.dart';
 import '../shared/pagination/paging_refresh.dart';
 import '../subscription/subscription_riverpod.dart';

@@ -3,8 +3,8 @@ import 'package:bnood/core/config/theme/app_shape.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/home/home_row_models.dart';
-import 'package:bnood/features/clients/clients_list_paging.dart';
-import 'package:bnood/features/clients/clients_list_screen.dart';
+import 'package:bnood/features/clients/presentation/clients_list_paging.dart';
+import 'package:bnood/features/clients/presentation/clients_list_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'dart:async';
 

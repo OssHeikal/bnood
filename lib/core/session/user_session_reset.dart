@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../agreements/agreements_riverpod.dart';
-import '../clients/clients_providers.dart';
+import '../../features/clients/data/clients_providers.dart';
 import '../home/home_repository.dart';
 import '../home/home_riverpod.dart';
 import '../home/home_section_counts.dart';
@@ -10,10 +10,10 @@ import '../providers/dashboard_providers.dart';
 import '../providers_api/providers_riverpod.dart';
 import '../shared/pagination/paging_refresh.dart';
 import '../subscription/subscription_riverpod.dart';
-import '../../features/clients/client_craftsmen_list_provider.dart';
-import '../../features/clients/client_detail_provider.dart';
-import '../../features/clients/client_items_stats_provider.dart';
-import '../../features/clients/client_suppliers_list_provider.dart';
+import '../../features/clients/presentation/client_craftsmen_list_provider.dart';
+import '../../features/clients/presentation/client_detail_provider.dart';
+import '../../features/clients/presentation/client_items_stats_provider.dart';
+import '../../features/clients/presentation/client_suppliers_list_provider.dart';
 import '../../features/providers/provider_detail_provider.dart';
 
 /// Clears in-memory HTTP caches and Riverpod user data when the signed-in identity changes.

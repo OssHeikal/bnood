@@ -1,7 +1,7 @@
 import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/clients_api.dart';
-import 'package:bnood/core/clients/clients_providers.dart';
-import 'package:bnood/core/clients/clients_repository.dart';
+import 'package:bnood/features/clients/data/clients_api.dart';
+import 'package:bnood/features/clients/data/clients_providers.dart';
+import 'package:bnood/features/clients/data/clients_repository.dart';
 import 'package:bnood/core/items/item_api_record.dart';
 import 'package:bnood/core/items/items_providers.dart';
 import 'package:bnood/features/auth/auth_controller.dart';

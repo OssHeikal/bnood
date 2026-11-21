@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
 import '../../app/widgets/shell_nav_icon.dart';
-import '../../core/clients/client_statement_record.dart';
-import '../../core/clients/statement_item_visual.dart';
+import '../clients/data/client_statement_record.dart';
+import '../clients/data/statement_item_visual.dart';
 import '../../core/items/item_api_record.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';

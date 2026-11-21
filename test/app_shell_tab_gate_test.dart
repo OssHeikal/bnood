@@ -7,7 +7,7 @@ import 'package:bnood/core/providers/settings_provider.dart';
 import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/clients/clients_list_screen.dart';
+import 'package:bnood/features/clients/presentation/clients_list_screen.dart';
 import 'package:bnood/core/items/item_api_record.dart';
 import 'package:bnood/core/items/items_providers.dart';
 import 'package:bnood/core/api/items_api.dart';

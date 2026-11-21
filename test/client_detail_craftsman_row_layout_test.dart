@@ -1,6 +1,6 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/features/clients/client_detail_snapshot.dart';
-import 'package:bnood/features/clients/widgets/client_detail_craftsman_row.dart';
+import 'package:bnood/features/clients/presentation/client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_detail_craftsman_row.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

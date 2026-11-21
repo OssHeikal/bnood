@@ -10,7 +10,7 @@ import '../../core/api/auth_api_exception.dart';
 import '../../core/validation/egypt_mobile_phone_validation.dart';
 import '../items/item_mutation_actions.dart';
 import '../../core/widgets/app_toaster.dart';
-import '../clients/client_mutation_actions.dart';
+import '../clients/presentation/client_mutation_actions.dart';
 import '../providers/provider_mutation_actions.dart';
 import '../../core/providers_api/app_provider_record.dart';
 import '../../core/widgets/buttons/app_button.dart';
