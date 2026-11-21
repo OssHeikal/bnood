@@ -68,6 +68,9 @@ abstract final class SubscriptionLimitHandler {
   }) async {
     if (!context.mounted) return;
     snapshot ??= _readSnapshot(ref, context);
+    if (snapshot?.bypassSubscriptionLimits ?? false) {
+      return;
+    }
     final showPaywall = snapshot?.showSurfaces ?? false;
 
     if (showPaywall) {
@@ -95,9 +98,14 @@ abstract final class SubscriptionLimitHandler {
     required SubscriptionLimitKind kind,
     required bool allowed,
     int? cap,
+    AppSubscriptionSnapshot? snapshot,
   }) async {
+    snapshot ??= _readSnapshot(ref, context);
+    if (snapshot?.bypassSubscriptionLimits ?? false) {
+      return true;
+    }
     if (allowed) return true;
-    await presentBlocked(context: context, ref: ref, kind: kind, cap: cap);
+    await presentBlocked(context: context, ref: ref, kind: kind, cap: cap, snapshot: snapshot);
     return false;
   }
 }

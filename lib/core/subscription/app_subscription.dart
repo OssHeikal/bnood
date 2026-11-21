@@ -427,22 +427,42 @@ List<AppPaywallPlan> _plansFromPremiumPackage(Map<String, dynamic> pkg, AppPaywa
 }
 
 class AppSubscriptionSnapshot {
-  const AppSubscriptionSnapshot({required this.paywallEnabled, required this.entitlements, this.paywall});
+  const AppSubscriptionSnapshot({
+    required this.paywallEnabled,
+    required this.subscriptionUiEnabled,
+    required this.isTestUser,
+    required this.entitlements,
+    this.paywall,
+  });
 
   final bool paywallEnabled;
+  final bool subscriptionUiEnabled;
+  final bool isTestUser;
   final AppSubscriptionEntitlements entitlements;
   final AppPaywallContent? paywall;
 
-  bool get showSurfaces => paywallEnabled && entitlements.showPaywallSurfaces;
+  bool get showSurfaces => subscriptionUiEnabled && entitlements.showPaywallSurfaces;
 
   bool get shouldShowProfileSubscriptionCard => showSurfaces;
+
+  /// QA accounts skip client-side limit UI even if the server snapshot still lists caps.
+  bool get bypassSubscriptionLimits => isTestUser;
 
   static AppSubscriptionSnapshot fromDataJson(
     Map<String, dynamic> json, {
     String localeCode = 'ar',
   }) {
+    final paywallEnabled = json['paywall_enabled'] == true;
+    final isTestUser = json['is_test_user'] == true;
+    final entitlementsRaw = (json['entitlements'] as Map<String, dynamic>?) ?? const {};
+    final subscriptionUiEnabled = json.containsKey('subscription_ui_enabled')
+        ? json['subscription_ui_enabled'] == true
+        : paywallEnabled && !isTestUser && entitlementsRaw['show_paywall_surfaces'] == true;
+
     return AppSubscriptionSnapshot(
-      paywallEnabled: json['paywall_enabled'] == true,
+      paywallEnabled: paywallEnabled,
+      subscriptionUiEnabled: subscriptionUiEnabled,
+      isTestUser: isTestUser,
       entitlements: AppSubscriptionEntitlements.fromJson((json['entitlements'] as Map<String, dynamic>?) ?? const {}),
       paywall: AppPaywallContent.fromJson(json['paywall'], localeCode: localeCode),
     );
