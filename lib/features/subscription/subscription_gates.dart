@@ -17,6 +17,7 @@ Future<bool> guardCreateActiveProject(
     kind: limitKind,
     allowed: snap.entitlements.mayCreateActiveProject,
     cap: snap.entitlements.activeProjectCap,
+    snapshot: snap,
   );
 }
 
@@ -28,6 +29,7 @@ Future<bool> guardFinancialMutation(BuildContext context, WidgetRef ref) async {
     ref: ref,
     kind: SubscriptionLimitKind.financialTransactions,
     allowed: snap.entitlements.canMutateFinancialTransactions,
+    snapshot: snap,
   );
 }
 
@@ -41,6 +43,7 @@ Future<bool> guardFinancialMutationFromContainer(
     context: context,
     kind: SubscriptionLimitKind.financialTransactions,
     allowed: snap.entitlements.canMutateFinancialTransactions,
+    snapshot: snap,
   );
 }
 
@@ -52,5 +55,6 @@ Future<bool> guardArchiveClient(BuildContext context, WidgetRef ref) async {
     ref: ref,
     kind: SubscriptionLimitKind.archiveClient,
     allowed: snap.entitlements.canArchiveClient,
+    snapshot: snap,
   );
 }

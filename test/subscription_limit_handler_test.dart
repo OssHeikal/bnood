@@ -174,6 +174,30 @@ void main() {
     expect(find.text('وصلت للحد الأقصى للمشاريع'), findsNothing);
   });
 
+  testWidgets('test user bypasses limit gate without dialog or paywall', (tester) async {
+    final paywallCalls = <int>[];
+    final snapshot = AppSubscriptionSnapshot.fromDataJson({
+      'paywall_enabled': true,
+      'is_test_user': true,
+      'subscription_ui_enabled': false,
+      'entitlements': {
+        'show_paywall_surfaces': false,
+        'can_create_active_project': false,
+        'active_projects_count': 5,
+        'active_project_cap': 1,
+      },
+    });
+    await pumpHarness(
+      tester,
+      snapshot: snapshot,
+      paywallCallCounter: paywallCalls,
+      trigger: const _GuardTriggerProjects(),
+    );
+    expect(await runGuard(tester), isTrue);
+    expect(paywallCalls, isEmpty);
+    expect(find.byType(Dialog), findsNothing);
+  });
+
   testWidgets('projects limit title in English', (tester) async {
     final paywallCalls = <int>[];
     await pumpHarness(
