@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/config/extensions/num_extensions.dart';
-import '../../../../../core/config/theme/app_colors.dart';
-import '../../../../../core/config/theme/app_shape.dart';
-import '../../../../../core/config/theme/app_size.dart';
-import '../../../../../core/theme/app_colors.dart' as legacy;
-import '../../../../../core/widgets/app_card.dart';
+import '../../../../core/config/extensions/num_extensions.dart';
+import '../../../../core/config/theme/app_colors.dart';
+import '../../../../core/config/theme/app_shape.dart';
+import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/theme/app_colors.dart' as legacy;
+import '../../../../core/widgets/app_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
 /// Remote home craftsman snapshot — name only (matches providers list compact meta).
@@ -50,7 +50,10 @@ class HomeCraftsmanPreviewCard extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    _Avatar(initial: name.isNotEmpty ? name[0] : '?', accent: accent),
+                    _Avatar(
+                      initial: name.isNotEmpty ? name[0] : '?',
+                      accent: accent,
+                    ),
                     AppSize.spaceMD.gap,
                     Expanded(
                       child: Column(
@@ -67,7 +70,9 @@ class HomeCraftsmanPreviewCard extends StatelessWidget {
                           AppSize.spaceXS.gap,
                           Text(
                             l10n.directoryCraftsmanKindMeta,
-                            style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                            style: text.caption.copyWith(
+                              color: colors.onSurfaceMuted,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.start,
@@ -112,7 +117,11 @@ class _Avatar extends StatelessWidget {
           child: Center(
             child: Text(
               initial,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+              ),
             ),
           ),
         ),

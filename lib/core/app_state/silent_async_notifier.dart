@@ -13,7 +13,9 @@ abstract class SilentAsyncNotifier<T> extends AsyncNotifier<T> {
     final previous = state.valueOrNull;
     final seq = ++_reloadSeq;
     if (previous != null) {
-      state = AsyncValue<T>.loading().copyWithPrevious(AsyncValue.data(previous));
+      state = AsyncValue<T>.loading().copyWithPrevious(
+        AsyncValue.data(previous),
+      );
     } else if (!state.hasValue) {
       state = const AsyncValue.loading();
     }
@@ -24,7 +26,10 @@ abstract class SilentAsyncNotifier<T> extends AsyncNotifier<T> {
     } catch (error, stackTrace) {
       if (seq != _reloadSeq) return;
       if (previous != null) {
-        state = AsyncValue<T>.error(error, stackTrace).copyWithPrevious(AsyncValue.data(previous));
+        state = AsyncValue<T>.error(
+          error,
+          stackTrace,
+        ).copyWithPrevious(AsyncValue.data(previous));
       } else {
         state = AsyncValue.error(error, stackTrace);
       }

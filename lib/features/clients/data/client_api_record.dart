@@ -54,14 +54,17 @@ class ClientApiRecord {
       name: projectJson['name'] as String,
       unitAddress: null,
       status: projectJson['status'] as String,
-      engineerBasisPoints: readOptionalInt(projectJson['engineer_basis_points']),
+      engineerBasisPoints: readOptionalInt(
+        projectJson['engineer_basis_points'],
+      ),
       createdAt: createdAt,
       updatedAt: updatedAt,
     );
 
     final balancesRaw = json['balances'];
-    final ClientApiBalances? balances =
-        balancesRaw == null ? null : ClientApiBalances.fromJson(balancesRaw);
+    final ClientApiBalances? balances = balancesRaw == null
+        ? null
+        : ClientApiBalances.fromJson(balancesRaw);
 
     return ClientApiRecord(
       client: client,

@@ -1,14 +1,14 @@
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../vouchers/presentation/voucher_receipt_picker.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/voucher_receipt_picker.dart';
 
 enum ProfileLogoPickSource { camera, gallery }
 
 /// Profile logo from camera or single gallery image (same stack as voucher receipts).
 class ProfileLogoPicker {
   ProfileLogoPicker({VoucherReceiptPicker? receiptPicker})
-      : _receiptPicker = receiptPicker ?? VoucherReceiptPicker();
+    : _receiptPicker = receiptPicker ?? VoucherReceiptPicker();
 
   final VoucherReceiptPicker _receiptPicker;
 
@@ -16,7 +16,9 @@ class ProfileLogoPicker {
     VoucherReceiptPicker.configureAndroidPhotoPicker();
     try {
       return switch (source) {
-        ProfileLogoPickSource.camera => _receiptPicker.pickCamera(imageQuality: 90),
+        ProfileLogoPickSource.camera => _receiptPicker.pickCamera(
+          imageQuality: 90,
+        ),
         ProfileLogoPickSource.gallery => _singleFromGallery(),
       };
     } on VoucherReceiptPickException {

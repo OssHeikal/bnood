@@ -23,7 +23,10 @@ void main() {
 
   test('trackClientCreatedAfterApi emits ClientCreated remote', () {
     trackClientCreatedAfterApi(testWidgetRef());
-    expect(fake.events.single, const ClientCreated(source: ClientCreatedSource.remote));
+    expect(
+      fake.events.single,
+      const ClientCreated(source: ClientCreatedSource.remote),
+    );
   });
 
   test('trackSignupCompletedAfterRegistration emits SignupCompleted', () {

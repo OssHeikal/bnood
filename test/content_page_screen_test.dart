@@ -7,7 +7,7 @@ import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/content/data/content_page_provider.dart';
-import 'package:bnood/features/content/presentation/content_page_screen.dart';
+import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,8 +16,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_session_store.dart';
 import 'support/stub_pages_api.dart';
 
-AppSettingsSnapshot _bootstrap() =>
-    const AppSettingsSnapshot(themeMode: ThemeMode.light, locale: Locale('en'), prefs: null);
+AppSettingsSnapshot _bootstrap() => const AppSettingsSnapshot(
+  themeMode: ThemeMode.light,
+  locale: Locale('en'),
+  prefs: null,
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -41,10 +44,14 @@ void main() {
       ),
     );
     await tester.pump();
-    final container = ProviderScope.containerOf(tester.element(find.byType(BnoodApp)));
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(BnoodApp)),
+    );
     container.read(goRouterProvider).go(ContentPaths.privacy);
     await tester.pumpAndSettle();
-    final l10n = AppLocalizations.of(tester.element(find.byType(ContentPageScreen)));
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(ContentPageScreen)),
+    );
     expect(find.text(l10n.contentPageNotFoundTitle), findsOneWidget);
   });
 }

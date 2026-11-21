@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import 'app_voucher_receipt.dart';
-import 'app_voucher_record.dart';
+import 'package:bnood/features/vouchers/data/app_voucher_receipt.dart';
+import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
 import 'package:bnood/core/api/api_response_parser.dart';
 import 'package:bnood/core/api/app_dio.dart';
 import 'package:bnood/core/api/auth_api_exception.dart';
@@ -18,7 +18,9 @@ class VouchersApi {
 
   static const _prefix = '/v1/vouchers';
 
-  Map<String, dynamic> get _authenticatedExtra => {AuthInterceptor.authenticatedExtraKey: true};
+  Map<String, dynamic> get _authenticatedExtra => {
+    AuthInterceptor.authenticatedExtraKey: true,
+  };
 
   void close({bool force = false}) {
     if (_ownsDio) {
@@ -41,8 +43,11 @@ class VouchersApi {
     }
   }
 
-  Future<VouchersListPage> listVouchers({String? q, int page = 1, int perPage = 50}) =>
-      _list(_prefix, q: q, page: page, perPage: perPage);
+  Future<VouchersListPage> listVouchers({
+    String? q,
+    int page = 1,
+    int perPage = 50,
+  }) => _list(_prefix, q: q, page: page, perPage: perPage);
 
   Future<VouchersListPage> listClientVouchers({
     required String clientId,
@@ -69,7 +74,12 @@ class VouchersApi {
     String? q,
     int page = 1,
     int perPage = 50,
-  }) => _list('/v1/providers/$providerId/vouchers', q: q, page: page, perPage: perPage);
+  }) => _list(
+    '/v1/providers/$providerId/vouchers',
+    q: q,
+    page: page,
+    perPage: perPage,
+  );
 
   Future<VouchersListPage> _list(
     String path, {
@@ -102,10 +112,15 @@ class VouchersApi {
       }
       final data = json['data'];
       if (data is! List) {
-        throw AuthApiException(statusCode: statusCode, message: 'Unexpected response shape');
+        throw AuthApiException(
+          statusCode: statusCode,
+          message: 'Unexpected response shape',
+        );
       }
       final meta = json['meta'] as Map<String, dynamic>? ?? const {};
-      final items = data.map((e) => AppVoucher.fromDataJson(e as Map<String, dynamic>)).toList();
+      final items = data
+          .map((e) => AppVoucher.fromDataJson(e as Map<String, dynamic>))
+          .toList();
       return VouchersListPage(
         items: items,
         page: (meta['page'] as num?)?.toInt() ?? page,
@@ -121,7 +136,10 @@ class VouchersApi {
         '$_prefix/$id',
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(response, (json) => AppVoucher.fromDataJson(json ?? const {}));
+      return ApiResponseParser.expectData(
+        response,
+        (json) => AppVoucher.fromDataJson(json ?? const {}),
+      );
     });
   }
 
@@ -143,7 +161,8 @@ class VouchersApi {
         'amount': amountMinor,
         'date': voucherDate,
         'payment_method': method,
-        if (description != null && description.isNotEmpty) 'description': description,
+        if (description != null && description.isNotEmpty)
+          'description': description,
         if (type == 'spend') ...{
           'item_id': itemId,
           'expense_classification': expenseClassification,
@@ -155,7 +174,10 @@ class VouchersApi {
         data: body,
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(response, (json) => AppVoucher.fromDataJson(json ?? const {}));
+      return ApiResponseParser.expectData(
+        response,
+        (json) => AppVoucher.fromDataJson(json ?? const {}),
+      );
     });
   }
 
@@ -191,7 +213,10 @@ class VouchersApi {
         data: body,
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(response, (json) => AppVoucher.fromDataJson(json ?? const {}));
+      return ApiResponseParser.expectData(
+        response,
+        (json) => AppVoucher.fromDataJson(json ?? const {}),
+      );
     });
   }
 
@@ -218,7 +243,9 @@ class VouchersApi {
       }
       final data = json['data'];
       if (data is! List) return const <AppVoucherReceipt>[];
-      return data.map((e) => AppVoucherReceipt.fromDataJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => AppVoucherReceipt.fromDataJson(e as Map<String, dynamic>))
+          .toList();
     });
   }
 
@@ -228,13 +255,21 @@ class VouchersApi {
     required String filename,
   }) {
     return _guard(() async {
-      final formData = FormData.fromMap({'image': await MultipartFile.fromFile(filePath, filename: filename)});
+      final formData = FormData.fromMap({
+        'image': await MultipartFile.fromFile(filePath, filename: filename),
+      });
       final response = await _dio.post<Map<String, dynamic>>(
         '$_prefix/$voucherId/receipts',
         data: formData,
-        options: Options(extra: _authenticatedExtra, contentType: 'multipart/form-data'),
+        options: Options(
+          extra: _authenticatedExtra,
+          contentType: 'multipart/form-data',
+        ),
       );
-      return ApiResponseParser.expectData(response, (json) => AppVoucherReceipt.fromDataJson(json ?? const {}));
+      return ApiResponseParser.expectData(
+        response,
+        (json) => AppVoucherReceipt.fromDataJson(json ?? const {}),
+      );
     });
   }
 
@@ -242,11 +277,17 @@ class VouchersApi {
     return _guard(() async {
       final response = await _dio.get<List<int>>(
         '/v1/receipts/$receiptId',
-        options: Options(extra: _authenticatedExtra, responseType: ResponseType.bytes),
+        options: Options(
+          extra: _authenticatedExtra,
+          responseType: ResponseType.bytes,
+        ),
       );
       final statusCode = response.statusCode ?? 0;
       if (statusCode < 200 || statusCode >= 300) {
-        throw AuthApiException(statusCode: statusCode, message: 'Receipt download failed');
+        throw AuthApiException(
+          statusCode: statusCode,
+          message: 'Receipt download failed',
+        );
       }
       return response.data ?? const [];
     });

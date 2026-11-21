@@ -13,8 +13,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_session_store.dart';
 
-AppSettingsSnapshot _bootstrap() =>
-    const AppSettingsSnapshot(themeMode: ThemeMode.light, locale: Locale('en'), prefs: null);
+AppSettingsSnapshot _bootstrap() => const AppSettingsSnapshot(
+  themeMode: ThemeMode.light,
+  locale: Locale('en'),
+  prefs: null,
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -33,10 +36,14 @@ void main() {
       ),
     );
     await tester.pump();
-    final container = ProviderScope.containerOf(tester.element(find.byType(BnoodApp)));
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(BnoodApp)),
+    );
     container.read(goRouterProvider).go(AuthPaths.register);
     await tester.pumpAndSettle();
-    final l10n = AppLocalizations.of(tester.element(find.byType(RegisterScreen)));
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(RegisterScreen)),
+    );
     expect(find.textContaining(l10n.settingsContentTerms), findsOneWidget);
     expect(find.textContaining(l10n.settingsContentPrivacy), findsOneWidget);
   });

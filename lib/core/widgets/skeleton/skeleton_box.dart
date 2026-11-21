@@ -19,19 +19,19 @@ class SkeletonBox extends StatelessWidget {
     this.width,
     required this.height,
     this.onPage = false,
-  })  : radius = null,
-        circle = false,
-        _pill = true;
+  }) : radius = null,
+       circle = false,
+       _pill = true;
 
   const SkeletonBox.round({
     super.key,
     required double size,
     this.onPage = false,
-  })  : width = size,
-        height = size,
-        radius = null,
-        circle = true,
-        _pill = false;
+  }) : width = size,
+       height = size,
+       radius = null,
+       circle = true,
+       _pill = false;
 
   final double? width;
   final double height;
@@ -52,7 +52,9 @@ class SkeletonBox extends StatelessWidget {
       );
     }
     final corner = radius ?? AppSize.radiusMD;
-    final shape = _pill ? StadiumBorder() : AppShape.superellipse(radius: corner);
+    final shape = _pill
+        ? StadiumBorder()
+        : AppShape.superellipse(radius: corner);
     return Material(
       color: fill,
       shape: shape,

@@ -21,14 +21,17 @@ import 'support/fake_app_gate_notifier.dart';
 import 'support/fake_session_store.dart';
 import 'support/stub_app_config_api.dart';
 
-AppSettingsSnapshot _bootstrap() =>
-    const AppSettingsSnapshot(themeMode: ThemeMode.light, locale: Locale('en'), prefs: null);
+AppSettingsSnapshot _bootstrap() => const AppSettingsSnapshot(
+  themeMode: ThemeMode.light,
+  locale: Locale('en'),
+  prefs: null,
+);
 
 AppConfigData _configJson(String status) => AppConfigData.fromDataJson({
-      'status': status,
-      'message': '',
-      'store_url': 'https://example.com/store',
-    });
+  'status': status,
+  'message': '',
+  'store_url': 'https://example.com/store',
+});
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -78,7 +81,9 @@ void main() {
     expect(find.byType(AppStartupSplashPage), findsOneWidget);
     await tester.pumpAndSettle(const Duration(seconds: 15));
     expect(find.byType(AppOptionalUpdateScreen), findsOneWidget);
-    final l10n = AppLocalizations.of(tester.element(find.byType(AppOptionalUpdateScreen)));
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(AppOptionalUpdateScreen)),
+    );
     await tester.tap(find.text(l10n.gateLaterAction));
     await tester.pumpAndSettle();
     expect(find.byType(LoginScreen), findsOneWidget);

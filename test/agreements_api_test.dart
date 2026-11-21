@@ -8,7 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-AgreementsApi _agreementsApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+AgreementsApi _agreementsApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return AgreementsApi(dio: dio);
@@ -94,8 +96,18 @@ void main() {
         ),
       );
       expect(
-        () => api.createAgreement(clientId: 'c1', providerId: 'p1', omitAmount: true),
-        throwsA(isA<AuthApiException>().having((e) => e.isAlreadyLinked, 'linked', isTrue)),
+        () => api.createAgreement(
+          clientId: 'c1',
+          providerId: 'p1',
+          omitAmount: true,
+        ),
+        throwsA(
+          isA<AuthApiException>().having(
+            (e) => e.isAlreadyLinked,
+            'linked',
+            isTrue,
+          ),
+        ),
       );
       api.close();
     });

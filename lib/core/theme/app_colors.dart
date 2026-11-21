@@ -19,16 +19,16 @@ abstract final class AppColors {
   static const darkOnSurface = Color(0xFFE8EDEC);
 
   static Color accent(String key) => switch (key) {
-        'teal' => primary,
-        'green' => const Color(0xFF1B9E5A),
-        'blue' => const Color(0xFF2B5BB0),
-        'purple' => const Color(0xFF6B45C0),
-        'pink' => const Color(0xFFD4569C),
-        'orange' => const Color(0xFFE67E22),
-        'gold' => const Color(0xFFC9A227),
-        'brick' => const Color(0xFFB84A4A),
-        'turquoise' => const Color(0xFF1AA89A),
-        'olive' => const Color(0xFF6B8E23),
-        _ => primary,
-      };
+    'teal' => primary,
+    'green' => const Color(0xFF1B9E5A),
+    'blue' => const Color(0xFF2B5BB0),
+    'purple' => const Color(0xFF6B45C0),
+    'pink' => const Color(0xFFD4569C),
+    'orange' => const Color(0xFFE67E22),
+    'gold' => const Color(0xFFC9A227),
+    'brick' => const Color(0xFFB84A4A),
+    'turquoise' => const Color(0xFF1AA89A),
+    'olive' => const Color(0xFF6B8E23),
+    _ => primary,
+  };
 }

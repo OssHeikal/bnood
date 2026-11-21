@@ -1,6 +1,6 @@
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/features/statements/presentation/statement_export_store.dart';
-import 'package:bnood/features/statements/presentation/statement_period_logic.dart';
+import 'package:bnood/features/statements/presentation/models/statement_export_store.dart';
+import 'package:bnood/features/statements/presentation/models/statement_period_logic.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -66,7 +66,10 @@ void main() {
 
   test('all time bounds use client createdAt when no transactions', () {
     final fallback = DateTime(2024, 8, 20);
-    final b = StatementPeriodLogic.allTimeBounds(const [], emptyFallbackStart: fallback);
+    final b = StatementPeriodLogic.allTimeBounds(
+      const [],
+      emptyFallbackStart: fallback,
+    );
     expect(b.start.year, 2024);
     expect(b.start.month, 8);
     expect(b.start.day, 20);

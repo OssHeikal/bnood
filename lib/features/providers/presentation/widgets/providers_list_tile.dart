@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/money/remote_money_units.dart';
-import '../../data/app_provider_record.dart';
-import 'directory_person_card.dart';
+import 'package:bnood/features/providers/data/app_provider_record.dart';
+import 'package:bnood/features/providers/presentation/widgets/directory_person_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';
-import 'remote_craftsman_summary_card.dart';
+import 'package:bnood/features/providers/presentation/widgets/remote_craftsman_summary_card.dart';
 
 class ProvidersListTile extends StatelessWidget {
   const ProvidersListTile({

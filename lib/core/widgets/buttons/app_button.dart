@@ -51,7 +51,10 @@ class AppButton extends StatefulWidget {
     this.followDirectionality = false,
     this.semanticLabel,
     this.autofocus = false,
-  }) : assert(text != '' || (semanticLabel != null && semanticLabel != ''), 'Icon-only buttons need a semanticLabel');
+  }) : assert(
+         text != '' || (semanticLabel != null && semanticLabel != ''),
+         'Icon-only buttons need a semanticLabel',
+       );
 
   factory AppButton.primary({
     Key? key,
@@ -501,7 +504,10 @@ class AppButton extends StatefulWidget {
     String? semanticLabel,
     bool autofocus = false,
   }) {
-    assert(icon != null || iconWidget != null, 'AppButton.icon needs icon or iconWidget');
+    assert(
+      icon != null || iconWidget != null,
+      'AppButton.icon needs icon or iconWidget',
+    );
     final label = text ?? '';
     final iconOnly = label.isEmpty;
     return AppButton(
@@ -518,8 +524,11 @@ class AppButton extends StatefulWidget {
       height: height,
       iconSize: iconSize,
       isExpanded: isExpanded,
-      contentAlign: contentAlign ??
-          (iconOnly ? AppButtonContentAlign.spaceBetween : AppButtonContentAlign.center),
+      contentAlign:
+          contentAlign ??
+          (iconOnly
+              ? AppButtonContentAlign.spaceBetween
+              : AppButtonContentAlign.center),
       minWidth: minWidth,
       isLoading: isLoading,
       backgroundColor: backgroundColor,
@@ -574,7 +583,9 @@ class AppButton extends StatefulWidget {
 
   bool get _interactive => _enabled && !isLoading;
 
-  bool get _haptic => enableHaptics || (style != AppButtonStyle.text && style != AppButtonStyle.icon);
+  bool get _haptic =>
+      enableHaptics ||
+      (style != AppButtonStyle.text && style != AppButtonStyle.icon);
 
   bool get _centering => contentAlign == AppButtonContentAlign.center;
 
@@ -636,7 +647,11 @@ class _AppButtonState extends State<AppButton> {
   }
 
   AppButtonColors _resolved(AppColors colors) {
-    var resolved = AppButtonColors.resolve(colors, widget.style, disabled: !widget._enabled);
+    var resolved = AppButtonColors.resolve(
+      colors,
+      widget.style,
+      disabled: !widget._enabled,
+    );
     if (!widget._enabled) {
       return resolved;
     }
@@ -653,12 +668,18 @@ class _AppButtonState extends State<AppButton> {
     return resolved;
   }
 
-  static AppButtonColors _pressedColors(AppButtonColors base, AppColors colors, AppButtonStyle style) {
+  static AppButtonColors _pressedColors(
+    AppButtonColors base,
+    AppColors colors,
+    AppButtonStyle style,
+  ) {
     return switch (style) {
       AppButtonStyle.primary => base.copyWith(surface: colors.primaryPressed),
       AppButtonStyle.destructive => base.copyWith(surface: colors.errorPressed),
-      AppButtonStyle.secondary || AppButtonStyle.outlined => base.copyWith(surface: colors.primaryTint),
-      AppButtonStyle.text || AppButtonStyle.icon => base.copyWith(surface: colors.surfaceSunken),
+      AppButtonStyle.secondary ||
+      AppButtonStyle.outlined => base.copyWith(surface: colors.primaryTint),
+      AppButtonStyle.text ||
+      AppButtonStyle.icon => base.copyWith(surface: colors.surfaceSunken),
       _ => base,
     };
   }
@@ -669,7 +690,8 @@ class _AppButtonState extends State<AppButton> {
       return resolved.foreground;
     }
     final backdrop = AppButtonColors.composite(resolved.surface, colors.canvas);
-    if (AppButtonColors.contrast(caller, backdrop) >= AppButtonColors.minContrast) {
+    if (AppButtonColors.contrast(caller, backdrop) >=
+        AppButtonColors.minContrast) {
       return caller;
     }
     return resolved.foreground;
@@ -681,23 +703,32 @@ class _AppButtonState extends State<AppButton> {
     }
     final row = widget.child == null && !widget.isIconButton;
     return opticalButtonPadding(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: widget.size.horizontalPadding, vertical: AppSize.spaceXS),
+      padding: EdgeInsetsDirectional.symmetric(
+        horizontal: widget.size.horizontalPadding,
+        vertical: AppSize.spaceXS,
+      ),
       hasLabel: widget.child == null && widget.text.isNotEmpty,
       hasLeading:
           row &&
           (widget.icon != null ||
               widget.iconWidget != null ||
-              widget._centering && (widget.trailingIcon != null || widget.badge != null)),
+              widget._centering &&
+                  (widget.trailingIcon != null || widget.badge != null)),
       hasTrailing:
           row &&
           (widget.trailingIcon != null ||
               widget.badge != null ||
-              widget._centering && (widget.icon != null || widget.iconWidget != null)),
+              widget._centering &&
+                  (widget.icon != null || widget.iconWidget != null)),
       direction: direction,
     );
   }
 
-  AppButtonPhase get _phase => buttonPhase(enabled: widget._enabled, loading: widget.isLoading, pressed: _pressed);
+  AppButtonPhase get _phase => buttonPhase(
+    enabled: widget._enabled,
+    loading: widget.isLoading,
+    pressed: _pressed,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -715,7 +746,10 @@ class _AppButtonState extends State<AppButton> {
     if (widget._enabled && widget.textStyle != null) {
       style = widget.textStyle!.copyWith(color: ink);
     } else {
-      style = widget.size.textStyle(context.text).setColor(ink).copyWith(height: 1.24);
+      style = widget.size
+          .textStyle(context.text)
+          .setColor(ink)
+          .copyWith(height: 1.24);
     }
     final radius = widget._enabled && widget.borderRadius != null
         ? widget.borderRadius!
@@ -725,7 +759,10 @@ class _AppButtonState extends State<AppButton> {
         ? null
         : Text(
             widget.text,
-            textDirection: rtlParagraphIfArabic(widget.text, Directionality.of(context)),
+            textDirection: rtlParagraphIfArabic(
+              widget.text,
+              Directionality.of(context),
+            ),
             maxLines: 1,
             softWrap: false,
             overflow: TextOverflow.ellipsis,
@@ -734,7 +771,9 @@ class _AppButtonState extends State<AppButton> {
           );
     final metrics = widget.size.iconSize;
     final glyphSize = widget.iconSize ?? metrics;
-    Widget? leading = widget.iconWidget ?? (widget.icon == null ? null : Icon(widget.icon, size: glyphSize));
+    Widget? leading =
+        widget.iconWidget ??
+        (widget.icon == null ? null : Icon(widget.icon, size: glyphSize));
     if (leading != null && (widget.iconWidget != null || widget.isIconButton)) {
       leading = SizedBox(
         width: glyphSize,
@@ -742,8 +781,11 @@ class _AppButtonState extends State<AppButton> {
         child: Center(child: leading),
       );
     }
-    Widget? trailing = widget.trailingIconWidget ??
-        (widget.trailingIcon == null ? null : Icon(widget.trailingIcon, size: glyphSize));
+    Widget? trailing =
+        widget.trailingIconWidget ??
+        (widget.trailingIcon == null
+            ? null
+            : Icon(widget.trailingIcon, size: glyphSize));
     if (trailing != null && widget.trailingIconWidget != null) {
       trailing = SizedBox(
         width: glyphSize,
@@ -835,7 +877,12 @@ class _AppButtonState extends State<AppButton> {
       ),
     );
     if (widget.style == AppButtonStyle.text) {
-      return Align(alignment: AlignmentDirectional.centerStart, widthFactor: 1, heightFactor: 1, child: button);
+      return Align(
+        alignment: AlignmentDirectional.centerStart,
+        widthFactor: 1,
+        heightFactor: 1,
+        child: button,
+      );
     }
     if (widget.width != null) {
       button = SizedBox(width: widget.width, child: button);

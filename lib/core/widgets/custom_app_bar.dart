@@ -38,7 +38,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return sub != null && sub.isNotEmpty;
   }
 
-  double get _toolbarHeight => _hasSubtitle ? _subtitleToolbarHeight : kToolbarHeight;
+  double get _toolbarHeight =>
+      _hasSubtitle ? _subtitleToolbarHeight : kToolbarHeight;
 
   @override
   Size get preferredSize {
@@ -89,7 +90,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (sub != null && sub.isNotEmpty) ...[
           const SizedBox(height: 2),
           Text(
-            subtitleLtr ? LtrIsolate.isolate(DisplayDigits.toWesternDigits(sub)) : sub,
+            subtitleLtr
+                ? LtrIsolate.isolate(DisplayDigits.toWesternDigits(sub))
+                : sub,
             style: text.caption.copyWith(color: colors.onSurfaceMuted),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -102,7 +105,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 SystemUiOverlayStyle _appBarOverlayStyle(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
-  final overlay = isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark;
+  final overlay = isDark
+      ? SystemUiOverlayStyle.light
+      : SystemUiOverlayStyle.dark;
   return overlay.copyWith(statusBarColor: Colors.transparent);
 }
 
@@ -211,4 +216,3 @@ class CustomAppBarAction extends StatelessWidget {
     );
   }
 }
-

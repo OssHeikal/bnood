@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import 'item_api_record.dart';
+import 'package:bnood/features/items/data/item_api_record.dart';
 import 'package:bnood/core/api/api_response_parser.dart';
 import 'package:bnood/core/api/app_dio.dart';
 import 'package:bnood/core/api/auth_api_exception.dart';
@@ -17,7 +17,9 @@ class ItemsApi {
 
   static const _prefix = '/v1/items';
 
-  Map<String, dynamic> get _authenticatedExtra => {AuthInterceptor.authenticatedExtraKey: true};
+  Map<String, dynamic> get _authenticatedExtra => {
+    AuthInterceptor.authenticatedExtraKey: true,
+  };
 
   void close({bool force = false}) {
     if (_ownsDio) {
@@ -94,10 +96,15 @@ class ItemsApi {
       }
       final data = json['data'];
       if (data is! List) {
-        throw AuthApiException(statusCode: statusCode, message: 'Unexpected response shape');
+        throw AuthApiException(
+          statusCode: statusCode,
+          message: 'Unexpected response shape',
+        );
       }
       final meta = json['meta'] as Map<String, dynamic>? ?? const {};
-      final items = data.map((e) => CatalogItem.fromDataJson(e as Map<String, dynamic>)).toList();
+      final items = data
+          .map((e) => CatalogItem.fromDataJson(e as Map<String, dynamic>))
+          .toList();
       return ItemsListPage(
         items: items,
         page: (meta['page'] as num?)?.toInt() ?? page,
@@ -113,29 +120,47 @@ class ItemsApi {
         '$_prefix/$id',
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(response, (json) => CatalogItem.fromDataJson(json ?? const {}));
+      return ApiResponseParser.expectData(
+        response,
+        (json) => CatalogItem.fromDataJson(json ?? const {}),
+      );
     });
   }
 
-  Future<CatalogItem> createItem({required String name, required String iconKey, required String colorKey}) {
+  Future<CatalogItem> createItem({
+    required String name,
+    required String iconKey,
+    required String colorKey,
+  }) {
     return _guard(() async {
       final response = await _dio.post<Map<String, dynamic>>(
         _prefix,
         data: {'name': name, 'icon_key': iconKey, 'color_key': colorKey},
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(response, (json) => CatalogItem.fromDataJson(json ?? const {}));
+      return ApiResponseParser.expectData(
+        response,
+        (json) => CatalogItem.fromDataJson(json ?? const {}),
+      );
     });
   }
 
-  Future<CatalogItem> updateItem({required String id, String? name, String? iconKey, String? colorKey}) {
+  Future<CatalogItem> updateItem({
+    required String id,
+    String? name,
+    String? iconKey,
+    String? colorKey,
+  }) {
     return _guard(() async {
       final response = await _dio.patch<Map<String, dynamic>>(
         '$_prefix/$id',
         data: {'name': ?name, 'icon_key': ?iconKey, 'color_key': ?colorKey},
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(response, (json) => CatalogItem.fromDataJson(json ?? const {}));
+      return ApiResponseParser.expectData(
+        response,
+        (json) => CatalogItem.fromDataJson(json ?? const {}),
+      );
     });
   }
 

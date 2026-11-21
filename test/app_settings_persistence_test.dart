@@ -59,22 +59,25 @@ void main() {
     expect(snap.locale, const Locale('en'));
   });
 
-  test('notifier: setTheme persists for next load (in-memory mock store)', () async {
-    final bootstrap = await bootstrapWithEmptyStore();
-    final container = ProviderContainer(
-      overrides: [appSettingsBootstrapProvider.overrideWithValue(bootstrap)],
-    );
-    addTearDown(container.dispose);
+  test(
+    'notifier: setTheme persists for next load (in-memory mock store)',
+    () async {
+      final bootstrap = await bootstrapWithEmptyStore();
+      final container = ProviderContainer(
+        overrides: [appSettingsBootstrapProvider.overrideWithValue(bootstrap)],
+      );
+      addTearDown(container.dispose);
 
-    await container.read(themeModeProvider.notifier).setTheme(ThemeMode.dark);
-    expect(container.read(themeModeProvider), ThemeMode.dark);
+      await container.read(themeModeProvider.notifier).setTheme(ThemeMode.dark);
+      expect(container.read(themeModeProvider), ThemeMode.dark);
 
-    final prefs = bootstrap.prefs!;
-    expect(AppSettingsStore.readThemeMode(prefs), ThemeMode.dark);
+      final prefs = bootstrap.prefs!;
+      expect(AppSettingsStore.readThemeMode(prefs), ThemeMode.dark);
 
-    final reloaded = await AppSettingsStore.load();
-    expect(reloaded.themeMode, ThemeMode.dark);
-  });
+      final reloaded = await AppSettingsStore.load();
+      expect(reloaded.themeMode, ThemeMode.dark);
+    },
+  );
 
   test('notifier: rapid locale updates keep last value on disk', () async {
     final bootstrap = await bootstrapWithEmptyStore();
@@ -92,7 +95,13 @@ void main() {
   });
 
   test('write returns false when prefs null', () async {
-    expect(await AppSettingsStore.writeThemeMode(null, ThemeMode.light), isFalse);
-    expect(await AppSettingsStore.writeLocale(null, const Locale('ar')), isFalse);
+    expect(
+      await AppSettingsStore.writeThemeMode(null, ThemeMode.light),
+      isFalse,
+    );
+    expect(
+      await AppSettingsStore.writeLocale(null, const Locale('ar')),
+      isFalse,
+    );
   });
 }

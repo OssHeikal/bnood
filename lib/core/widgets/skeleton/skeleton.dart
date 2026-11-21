@@ -17,13 +17,17 @@ class Skeleton extends StatefulWidget {
   State<Skeleton> createState() => _SkeletonState();
 }
 
-class _SkeletonState extends State<Skeleton> with SingleTickerProviderStateMixin {
+class _SkeletonState extends State<Skeleton>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: AppMotion.skeletonPulse, vsync: this);
+    _controller = AnimationController(
+      duration: AppMotion.skeletonPulse,
+      vsync: this,
+    );
   }
 
   @override
@@ -35,7 +39,8 @@ class _SkeletonState extends State<Skeleton> with SingleTickerProviderStateMixin
       return;
     }
     final periodMs = AppMotion.skeletonPulse.inMilliseconds;
-    _controller.value = (DateTime.now().millisecondsSinceEpoch % periodMs) / periodMs;
+    _controller.value =
+        (DateTime.now().millisecondsSinceEpoch % periodMs) / periodMs;
     if (!_controller.isAnimating) {
       _controller.repeat();
     }

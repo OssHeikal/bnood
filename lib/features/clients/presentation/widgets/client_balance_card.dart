@@ -70,11 +70,17 @@ class ClientBalanceCard extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceMD),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSize.spaceLG,
+                  vertical: AppSize.spaceMD,
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _Avatar(initial: name.isNotEmpty ? name[0] : '?', accent: accent),
+                    _Avatar(
+                      initial: name.isNotEmpty ? name[0] : '?',
+                      accent: accent,
+                    ),
                     AppSize.spaceMD.gap,
                     Expanded(
                       flex: 11,
@@ -82,7 +88,12 @@ class ClientBalanceCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(name, style: text.bodyEmphasis, maxLines: 1, overflow: TextOverflow.ellipsis),
+                          Text(
+                            name,
+                            style: text.bodyEmphasis,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           if (showClientFlows) ...[
                             AppSize.spaceXS.gap,
                             Align(
@@ -96,8 +107,12 @@ class ClientBalanceCard extends StatelessWidget {
                                       minorPerMajor: minorPerMajor,
                                     )
                                   : Text(
-                                      AppLocalizations.of(context).amountUnavailable,
-                                      style: text.moneySm.copyWith(color: colors.onSurfaceMuted),
+                                      AppLocalizations.of(
+                                        context,
+                                      ).amountUnavailable,
+                                      style: text.moneySm.copyWith(
+                                        color: colors.onSurfaceMuted,
+                                      ),
                                       textDirection: TextDirection.ltr,
                                     ),
                             ),
@@ -105,7 +120,9 @@ class ClientBalanceCard extends StatelessWidget {
                             const SizedBox(height: 2),
                             Text(
                               meta!,
-                              style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                              style: text.caption.copyWith(
+                                color: colors.onSurfaceMuted,
+                              ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -113,7 +130,10 @@ class ClientBalanceCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (showClientFlows) AppSize.spaceSM.gap else AppSize.spaceMD.gap,
+                    if (showClientFlows)
+                      AppSize.spaceSM.gap
+                    else
+                      AppSize.spaceMD.gap,
                     Expanded(
                       flex: 9,
                       child: Align(
@@ -131,7 +151,12 @@ class ClientBalanceCard extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (caption != null)
-                                    Text(caption, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
+                                    Text(
+                                      caption,
+                                      style: text.caption.copyWith(
+                                        color: colors.onSurfaceMuted,
+                                      ),
+                                    ),
                                   if (hasAmount)
                                     AppAmount(
                                       piastres: amountPiastres!,
@@ -142,8 +167,12 @@ class ClientBalanceCard extends StatelessWidget {
                                     )
                                   else
                                     Text(
-                                      AppLocalizations.of(context).amountUnavailable,
-                                      style: text.moneySm.copyWith(color: colors.onSurfaceMuted),
+                                      AppLocalizations.of(
+                                        context,
+                                      ).amountUnavailable,
+                                      style: text.moneySm.copyWith(
+                                        color: colors.onSurfaceMuted,
+                                      ),
                                       textDirection: TextDirection.ltr,
                                     ),
                                 ],
@@ -273,7 +302,11 @@ class _Avatar extends StatelessWidget {
           child: Center(
             child: Text(
               initial,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+              ),
             ),
           ),
         ),
@@ -283,6 +316,17 @@ class _Avatar extends StatelessWidget {
 }
 
 String clientAccentKeyFor(String id) {
-  const keys = ['teal', 'green', 'blue', 'purple', 'pink', 'orange', 'gold', 'brick', 'turquoise', 'olive'];
+  const keys = [
+    'teal',
+    'green',
+    'blue',
+    'purple',
+    'pink',
+    'orange',
+    'gold',
+    'brick',
+    'turquoise',
+    'olive',
+  ];
   return keys[id.hashCode.abs() % keys.length];
 }

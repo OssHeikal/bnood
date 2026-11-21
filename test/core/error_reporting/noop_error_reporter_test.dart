@@ -7,7 +7,11 @@ void main() {
     const reporter = NoopErrorReporter();
 
     expect(
-      () => reporter.captureException(Exception('e'), StackTrace.empty, fatal: true),
+      () => reporter.captureException(
+        Exception('e'),
+        StackTrace.empty,
+        fatal: true,
+      ),
       returnsNormally,
     );
     expect(() => reporter.captureMessage('msg'), returnsNormally);

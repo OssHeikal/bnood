@@ -1,7 +1,7 @@
 import 'package:bnood/core/config/theme/app_colors.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/features/clients/presentation/client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_movement_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -48,55 +48,68 @@ Transaction _tx({
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('movement card EN: trailing amount, badges, date, no receive/spend label', (tester) async {
-    final date = DateTime(2026, 11, 7);
-    final line = _line(
-      transaction: _tx(amount: 1000000, date: date, description: 'Tiles for lobby'),
-      itemName: 'Flooring',
-      payeeName: 'Cairo Supplies',
-    );
-
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: AppFoundationTheme.light(),
-        locale: const Locale('en'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(
-          body: ClientMovementCard(line: line, localeCode: 'en'),
+  testWidgets(
+    'movement card EN: trailing amount, badges, date, no receive/spend label',
+    (tester) async {
+      final date = DateTime(2026, 11, 7);
+      final line = _line(
+        transaction: _tx(
+          amount: 1000000,
+          date: date,
+          description: 'Tiles for lobby',
         ),
-      ),
-    );
-    await tester.pump();
+        itemName: 'Flooring',
+        payeeName: 'Cairo Supplies',
+      );
 
-    expect(find.text('Flooring'), findsOneWidget);
-    expect(find.text('Cairo Supplies'), findsOneWidget);
-    expect(find.text('Tiles for lobby'), findsOneWidget);
-    expect(find.text('Materials'), findsOneWidget);
-    expect(find.text('Cash'), findsOneWidget);
-    expect(find.text('Spend'), findsNothing);
-    expect(find.text('Receive'), findsNothing);
-    expect(find.textContaining('10,000 EGP'), findsOneWidget);
-    final dateLabel = ClientMovementCard.formatMovementDate(date, 'en');
-    expect(find.text(dateLabel), findsOneWidget);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppFoundationTheme.light(),
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: ClientMovementCard(line: line, localeCode: 'en'),
+          ),
+        ),
+      );
+      await tester.pump();
 
-    final amountFinder = find.textContaining('10,000 EGP');
-    final amountStyle = tester.widget<Text>(amountFinder).style;
-    final moneyMd = tester.element(amountFinder).text.moneyMd.fontSize;
-    expect(amountStyle?.fontSize, moneyMd);
+      expect(find.text('Flooring'), findsOneWidget);
+      expect(find.text('Cairo Supplies'), findsOneWidget);
+      expect(find.text('Tiles for lobby'), findsOneWidget);
+      expect(find.text('Materials'), findsOneWidget);
+      expect(find.text('Cash'), findsOneWidget);
+      expect(find.text('Spend'), findsNothing);
+      expect(find.text('Receive'), findsNothing);
+      expect(find.textContaining('10,000 EGP'), findsOneWidget);
+      final dateLabel = ClientMovementCard.formatMovementDate(date, 'en');
+      expect(find.text(dateLabel), findsOneWidget);
 
-    final amountTrailing = tester.getTopRight(amountFinder).dx;
-    final dateTrailing = tester.getTopRight(find.text(dateLabel)).dx;
-    expect(dateTrailing, closeTo(amountTrailing, 1));
+      final amountFinder = find.textContaining('10,000 EGP');
+      final amountStyle = tester.widget<Text>(amountFinder).style;
+      final moneyMd = tester.element(amountFinder).text.moneyMd.fontSize;
+      expect(amountStyle?.fontSize, moneyMd);
 
-    final amountDx = tester.getTopLeft(amountFinder).dx;
-    final titleDx = tester.getTopLeft(find.text('Flooring')).dx;
-    expect(amountDx, greaterThan(titleDx));
-  });
+      final amountTrailing = tester.getTopRight(amountFinder).dx;
+      final dateTrailing = tester.getTopRight(find.text(dateLabel)).dx;
+      expect(dateTrailing, closeTo(amountTrailing, 1));
 
-  testWidgets('movement card omits empty description and subtitle', (tester) async {
+      final amountDx = tester.getTopLeft(amountFinder).dx;
+      final titleDx = tester.getTopLeft(find.text('Flooring')).dx;
+      expect(amountDx, greaterThan(titleDx));
+    },
+  );
+
+  testWidgets('movement card omits empty description and subtitle', (
+    tester,
+  ) async {
     final line = _line(
-      transaction: _tx(amount: 50000, date: DateTime(2026, 1, 1), description: null),
+      transaction: _tx(
+        amount: 50000,
+        date: DateTime(2026, 1, 1),
+        description: null,
+      ),
       itemName: 'Paint',
       payeeName: null,
     );
@@ -119,7 +132,9 @@ void main() {
     expect(find.textContaining('Supplier'), findsNothing);
   });
 
-  testWidgets('movement card AR at narrow width does not overflow', (tester) async {
+  testWidgets('movement card AR at narrow width does not overflow', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(360, 640);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -151,7 +166,9 @@ void main() {
     expect(find.textContaining('EGP'), findsOneWidget);
   });
 
-  testWidgets('movement card AR places amount at trailing edge', (tester) async {
+  testWidgets('movement card AR places amount at trailing edge', (
+    tester,
+  ) async {
     final line = _line(
       transaction: _tx(amount: 1000000, date: DateTime(2026, 11, 7)),
       itemName: 'أرضيات',
@@ -174,20 +191,33 @@ void main() {
     );
     await tester.pump();
 
-    final dateLabel = ClientMovementCard.formatMovementDate(DateTime(2026, 11, 7), 'ar');
+    final dateLabel = ClientMovementCard.formatMovementDate(
+      DateTime(2026, 11, 7),
+      'ar',
+    );
     final amountFinder = find.textContaining('10,000 EGP');
     final cardWidth = tester.getSize(find.byType(ClientMovementCard)).width;
     final amountDx = tester.getTopLeft(amountFinder).dx;
     final titleDx = tester.getTopLeft(find.text('أرضيات')).dx;
     expect(titleDx, greaterThan(amountDx));
     expect(amountDx, lessThan(cardWidth * 0.35));
-    expect(tester.getTopRight(amountFinder).dx, closeTo(tester.getTopRight(find.text(dateLabel)).dx, 1));
+    expect(
+      tester.getTopRight(amountFinder).dx,
+      closeTo(tester.getTopRight(find.text(dateLabel)).dx, 1),
+    );
   });
 
-  testWidgets('party detail context shows client subtitle not payee', (tester) async {
+  testWidgets('party detail context shows client subtitle not payee', (
+    tester,
+  ) async {
     final date = DateTime(2026, 11, 7);
     final line = _line(
-      transaction: _tx(amount: 50000, date: date, expenseType: 'labor', description: 'Install'),
+      transaction: _tx(
+        amount: 50000,
+        date: date,
+        expenseType: 'labor',
+        description: 'Install',
+      ),
       itemName: 'Plumbing',
       payeeName: 'Ahmed Plumber',
     );
@@ -216,7 +246,9 @@ void main() {
     expect(find.text('Ahmed Plumber'), findsNothing);
   });
 
-  testWidgets('party detail omits payee when client link missing', (tester) async {
+  testWidgets('party detail omits payee when client link missing', (
+    tester,
+  ) async {
     final line = _line(
       transaction: _tx(amount: 50000, date: DateTime(2026, 11, 7)),
       itemName: 'Steel',
@@ -247,7 +279,10 @@ void main() {
   });
 
   test('formatMovementDate uses Western digits', () {
-    final label = ClientMovementCard.formatMovementDate(DateTime(2026, 11, 7), 'en');
+    final label = ClientMovementCard.formatMovementDate(
+      DateTime(2026, 11, 7),
+      'en',
+    );
     expect(label, contains('07'));
     expect(label, contains('2026'));
     expect(label, isNot(contains('٠')));

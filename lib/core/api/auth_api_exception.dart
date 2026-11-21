@@ -17,7 +17,8 @@ class AuthApiException implements Exception {
 
   bool get isAccountDeleted => code == 'account_deleted';
 
-  bool get isActiveProjectCapReached => statusCode == 403 && code == 'active_project_cap_reached';
+  bool get isActiveProjectCapReached =>
+      statusCode == 403 && code == 'active_project_cap_reached';
 
   bool get isSubscriptionFinancialReadOnly =>
       statusCode == 403 && code == 'subscription_financial_read_only';
@@ -30,7 +31,8 @@ class AuthApiException implements Exception {
   bool get isSessionExpired =>
       isUnauthorized && !isInvalidCredentials && code != 'invalid_credentials';
 
-  bool get isProfileIncomplete => statusCode == 403 && code == 'profile_incomplete';
+  bool get isProfileIncomplete =>
+      statusCode == 403 && code == 'profile_incomplete';
 
   bool get isNotFound => statusCode == 404 && code == 'not_found';
 
@@ -41,7 +43,8 @@ class AuthApiException implements Exception {
 
   bool get isClientArchived => statusCode == 409 && code == 'client_archived';
 
-  bool get isClientHasActivity => statusCode == 409 && code == 'client_has_activity';
+  bool get isClientHasActivity =>
+      statusCode == 409 && code == 'client_has_activity';
 
   bool get isClientArchivedAgreement =>
       statusCode == 422 && code == 'client_archived';
@@ -53,24 +56,30 @@ class AuthApiException implements Exception {
 
   bool get isClientNotFound => statusCode == 404 && code == 'client_not_found';
 
-  bool get isProviderNotFound => statusCode == 404 && code == 'provider_not_found';
+  bool get isProviderNotFound =>
+      statusCode == 404 && code == 'provider_not_found';
 
   bool get isItemNotFound => statusCode == 404 && code == 'item_not_found';
 
   bool get isVoucherNotFound => statusCode == 404 && code == 'not_found';
 
-  bool get isClientArchivedVoucher => statusCode == 422 && code == 'client_archived';
+  bool get isClientArchivedVoucher =>
+      statusCode == 422 && code == 'client_archived';
 
-  bool get isInvalidReceiveFields => statusCode == 422 && code == 'invalid_receive_fields';
+  bool get isInvalidReceiveFields =>
+      statusCode == 422 && code == 'invalid_receive_fields';
 
-  bool get isSpendRequiresItem => statusCode == 422 && code == 'spend_requires_item';
+  bool get isSpendRequiresItem =>
+      statusCode == 422 && code == 'spend_requires_item';
 
   bool get isSpendRequiresExpenseClassification =>
       statusCode == 422 && code == 'spend_requires_expense_classification';
 
-  bool get isLaborRequiresCraftsman => statusCode == 422 && code == 'labor_requires_craftsman';
+  bool get isLaborRequiresCraftsman =>
+      statusCode == 422 && code == 'labor_requires_craftsman';
 
-  bool get isProviderTypeMismatch => statusCode == 422 && code == 'provider_type_mismatch';
+  bool get isProviderTypeMismatch =>
+      statusCode == 422 && code == 'provider_type_mismatch';
 
   bool get isInvalidAmount => statusCode == 422 && code == 'invalid_amount';
 

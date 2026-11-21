@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../data/subscription_colors.dart';
+import 'package:bnood/features/subscription/data/subscription_colors.dart';
 
 class PaywallSavingsBadge extends StatefulWidget {
-  const PaywallSavingsBadge({super.key, required this.label, required this.visible});
+  const PaywallSavingsBadge({
+    super.key,
+    required this.label,
+    required this.visible,
+  });
 
   final String label;
   final bool visible;
@@ -12,7 +16,8 @@ class PaywallSavingsBadge extends StatefulWidget {
   State<PaywallSavingsBadge> createState() => _PaywallSavingsBadgeState();
 }
 
-class _PaywallSavingsBadgeState extends State<PaywallSavingsBadge> with SingleTickerProviderStateMixin {
+class _PaywallSavingsBadgeState extends State<PaywallSavingsBadge>
+    with SingleTickerProviderStateMixin {
   /// 5.6s cycle: ~1.6s hold, ~1.4s sweep, ~2.6s rest.
   static const _lead = 0.28;
   static const _sweepEnd = 0.54;
@@ -22,8 +27,10 @@ class _PaywallSavingsBadgeState extends State<PaywallSavingsBadge> with SingleTi
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 5600))
-      ..repeat();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 5600),
+    )..repeat();
   }
 
   @override
@@ -52,7 +59,11 @@ class _PaywallSavingsBadgeState extends State<PaywallSavingsBadge> with SingleTi
               decoration: BoxDecoration(
                 color: SubscriptionColors.violet,
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withValues(alpha: 0.12), blurRadius: 4, offset: const Offset(0, 2)),
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.12),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
                 ],
               ),
               child: Padding(
@@ -64,7 +75,13 @@ class _PaywallSavingsBadgeState extends State<PaywallSavingsBadge> with SingleTi
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
                     height: 1,
-                    shadows: [Shadow(color: Color(0x59280A50), offset: Offset(0, 1), blurRadius: 1)],
+                    shadows: [
+                      Shadow(
+                        color: Color(0x59280A50),
+                        offset: Offset(0, 1),
+                        blurRadius: 1,
+                      ),
+                    ],
                   ),
                 ),
               ),

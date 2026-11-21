@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:bnood/features/providers/data/app_agreement_record.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
-import 'package:bnood/features/clients/presentation/agreement_mutation_actions.dart';
+import 'package:bnood/features/clients/presentation/actions/agreement_mutation_actions.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 

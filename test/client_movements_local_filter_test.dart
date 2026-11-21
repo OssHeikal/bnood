@@ -1,6 +1,6 @@
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/features/clients/presentation/client_movements_filters.dart';
-import 'package:bnood/features/clients/presentation/client_movements_local_filter.dart';
+import 'package:bnood/features/clients/presentation/models/client_movements_filters.dart';
+import 'package:bnood/features/clients/presentation/models/client_movements_local_filter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Transaction _tx({
@@ -28,9 +28,19 @@ Transaction _tx({
 void main() {
   test('local filter applies item and search', () {
     final tx = [
-      _tx(id: 't1', date: DateTime(2026, 1, 10), itemId: 'i1', description: 'note alpha'),
+      _tx(
+        id: 't1',
+        date: DateTime(2026, 1, 10),
+        itemId: 'i1',
+        description: 'note alpha',
+      ),
       _tx(id: 't2', date: DateTime(2026, 1, 5), kind: 'receive'),
-      _tx(id: 't3', date: DateTime(2026, 2, 1), itemId: 'i2', description: 'other'),
+      _tx(
+        id: 't3',
+        date: DateTime(2026, 2, 1),
+        itemId: 'i2',
+        description: 'other',
+      ),
     ];
 
     const filters = ClientMovementsFilters(searchQuery: 'alpha', itemId: 'i1');
@@ -48,7 +58,11 @@ void main() {
   });
 
   test('local search is Arabic-insensitive on notes', () {
-    final tx = _tx(id: 't4', date: DateTime(2026, 3, 1), description: 'الوميتال');
+    final tx = _tx(
+      id: 't4',
+      date: DateTime(2026, 3, 1),
+      description: 'الوميتال',
+    );
     final lines = filterLocalMovementLines(
       transactions: [tx],
       filters: const ClientMovementsFilters(searchQuery: 'ألومي'),

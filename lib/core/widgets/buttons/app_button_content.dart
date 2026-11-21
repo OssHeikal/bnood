@@ -12,11 +12,15 @@ class AppButtonSlot extends InheritedWidget {
   final bool expand;
 
   static bool expandOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AppButtonSlot>()?.expand ?? false;
+    return context
+            .dependOnInheritedWidgetOfExactType<AppButtonSlot>()
+            ?.expand ??
+        false;
   }
 
   @override
-  bool updateShouldNotify(AppButtonSlot oldWidget) => expand != oldWidget.expand;
+  bool updateShouldNotify(AppButtonSlot oldWidget) =>
+      expand != oldWidget.expand;
 }
 
 /// Lays out a button label with optional icons and a badge, on one line.
@@ -48,7 +52,10 @@ class AppButtonContent extends StatelessWidget {
   final bool stacked;
   final AppButtonContentAlign align;
 
-  bool get _mixed => !stacked && label != null && (leading != null || trailing != null || badge != null);
+  bool get _mixed =>
+      !stacked &&
+      label != null &&
+      (leading != null || trailing != null || badge != null);
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +76,8 @@ class AppButtonContent extends StatelessWidget {
       height: barHeight,
       child: Builder(
         builder: (context) {
-          if (AppButtonSlot.expandOf(context) && align == AppButtonContentAlign.spaceBetween) {
+          if (AppButtonSlot.expandOf(context) &&
+              align == AppButtonContentAlign.spaceBetween) {
             return _pinned();
           }
           return _grouped();
@@ -84,7 +92,10 @@ class AppButtonContent extends StatelessWidget {
         if (leading != null) _slot(leading!),
         if (leading != null) SizedBox(width: gap),
         Expanded(
-          child: Align(alignment: AlignmentDirectional.centerStart, child: label),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: label,
+          ),
         ),
         ?_cluster(gapBefore: true),
       ],

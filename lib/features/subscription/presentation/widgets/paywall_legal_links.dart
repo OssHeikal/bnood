@@ -1,9 +1,9 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-import '../../../content/data/content_page_record.dart';
+import 'package:bnood/features/content/data/content_page_record.dart';
 import '../../../../core/widgets/app_pressable.dart';
-import '../../../content/presentation/content_page_screen.dart';
+import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
 
 /// Terms, privacy, and cancellation links under the paywall purchase actions.
 class PaywallLegalLinks extends StatelessWidget {
@@ -23,11 +23,20 @@ class PaywallLegalLinks extends StatelessWidget {
         spacing: 4,
         runSpacing: 4,
         children: [
-          _PaywallLegalLink(label: l10n.settingsContentTerms, slug: ContentSlugs.terms),
+          _PaywallLegalLink(
+            label: l10n.settingsContentTerms,
+            slug: ContentSlugs.terms,
+          ),
           const _PaywallLegalDot(),
-          _PaywallLegalLink(label: l10n.settingsContentPrivacy, slug: ContentSlugs.privacy),
+          _PaywallLegalLink(
+            label: l10n.settingsContentPrivacy,
+            slug: ContentSlugs.privacy,
+          ),
           const _PaywallLegalDot(),
-          _PaywallLegalLink(label: l10n.settingsContentCancellation, slug: ContentSlugs.cancellation),
+          _PaywallLegalLink(
+            label: l10n.settingsContentCancellation,
+            slug: ContentSlugs.cancellation,
+          ),
         ],
       ),
     );
@@ -41,7 +50,11 @@ class _PaywallLegalDot extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Text(
       '·',
-      style: TextStyle(color: Color(0xFF9A95A0), fontSize: 12, fontWeight: FontWeight.w600),
+      style: TextStyle(
+        color: Color(0xFF9A95A0),
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+      ),
     );
   }
 }
@@ -58,7 +71,9 @@ class _PaywallLegalLink extends StatelessWidget {
       enableHaptics: false,
       onPressed: () {
         Navigator.of(context, rootNavigator: true).push<void>(
-          MaterialPageRoute<void>(builder: (_) => ContentPageScreen(slug: slug)),
+          MaterialPageRoute<void>(
+            builder: (_) => ContentPageScreen(slug: slug),
+          ),
         );
       },
       child: Padding(

@@ -1,9 +1,6 @@
 /// Redacts sensitive values before API traffic is logged.
 abstract final class ApiLogRedactor {
-  static const _sensitiveHeaderKeys = {
-    'authorization',
-    'cookie',
-  };
+  static const _sensitiveHeaderKeys = {'authorization', 'cookie'};
 
   static const _sensitiveBodyKeys = {
     'password',

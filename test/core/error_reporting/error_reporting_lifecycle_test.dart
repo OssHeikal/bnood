@@ -13,7 +13,11 @@ class LifecycleRecorder implements ErrorReporter {
   int clearUserCount = 0;
 
   @override
-  void addBreadcrumb({required String message, String? category, Map<String, Object?>? data}) {}
+  void addBreadcrumb({
+    required String message,
+    String? category,
+    Map<String, Object?>? data,
+  }) {}
 
   @override
   void captureException(
@@ -46,36 +50,44 @@ class _AuthStub extends AuthController {
 }
 
 void main() {
-  test('errorReportingLifecycleProvider sets user on login and clears on logout', () {
-    final recorder = LifecycleRecorder();
-    final container = ProviderContainer(
-      overrides: [
-        authControllerProvider.overrideWith(_AuthStub.new),
-        errorReportersProvider.overrideWithValue([recorder]),
-      ],
-    );
-    addTearDown(container.dispose);
+  test(
+    'errorReportingLifecycleProvider sets user on login and clears on logout',
+    () {
+      final recorder = LifecycleRecorder();
+      final container = ProviderContainer(
+        overrides: [
+          authControllerProvider.overrideWith(_AuthStub.new),
+          errorReportersProvider.overrideWithValue([recorder]),
+        ],
+      );
+      addTearDown(container.dispose);
 
-    container.read(errorReportingLifecycleProvider);
+      container.read(errorReportingLifecycleProvider);
 
-    const authUser = User(id: '42', phone: '01098765432', name: 'Site Lead');
-    container.read(authControllerProvider.notifier).state = const AuthState(
-      bootstrapStatus: AuthBootstrapStatus.authenticated,
-      user: authUser,
-    );
+      const authUser = User(id: '42', phone: '01098765432', name: 'Site Lead');
+      container.read(authControllerProvider.notifier).state = const AuthState(
+        bootstrapStatus: AuthBootstrapStatus.authenticated,
+        user: authUser,
+      );
 
-    expect(
-      recorder.user,
-      const ErrorReportingUser(id: '42', phone: '01098765432', name: 'Site Lead'),
-    );
+      expect(
+        recorder.user,
+        const ErrorReportingUser(
+          id: '42',
+          phone: '01098765432',
+          name: 'Site Lead',
+        ),
+      );
 
-    container.read(authControllerProvider.notifier).state =
-        container.read(authControllerProvider).copyWith(
-              bootstrapStatus: AuthBootstrapStatus.unauthenticated,
-              clearUser: true,
-            );
+      container.read(authControllerProvider.notifier).state = container
+          .read(authControllerProvider)
+          .copyWith(
+            bootstrapStatus: AuthBootstrapStatus.unauthenticated,
+            clearUser: true,
+          );
 
-    expect(recorder.clearUserCount, greaterThanOrEqualTo(1));
-    expect(recorder.user, isNull);
-  });
+      expect(recorder.clearUserCount, greaterThanOrEqualTo(1));
+      expect(recorder.user, isNull);
+    },
+  );
 }

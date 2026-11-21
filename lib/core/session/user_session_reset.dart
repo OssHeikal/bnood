@@ -2,20 +2,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
 
-import '../../features/providers/data/agreements_riverpod.dart';
-import '../../features/clients/data/clients_providers.dart';
-import '../../features/home/data/home_repository.dart';
-import '../../features/home/data/home_riverpod.dart';
-import '../../features/home/data/home_section_counts.dart';
-import '../../features/items/data/items_providers.dart';
-import '../../features/providers/data/providers_riverpod.dart';
+import 'package:bnood/features/providers/data/agreements_riverpod.dart';
+import 'package:bnood/features/clients/data/clients_providers.dart';
+import 'package:bnood/features/home/data/home_repository.dart';
+import 'package:bnood/features/home/data/home_riverpod.dart';
+import 'package:bnood/features/home/data/home_section_counts.dart';
+import 'package:bnood/features/items/data/items_providers.dart';
+import 'package:bnood/features/providers/data/providers_riverpod.dart';
 import '../shared/pagination/paging_refresh.dart';
-import '../../features/subscription/data/subscription_riverpod.dart';
-import '../../features/clients/presentation/client_craftsmen_list_provider.dart';
-import '../../features/clients/presentation/client_detail_provider.dart';
-import '../../features/clients/presentation/client_items_stats_provider.dart';
-import '../../features/providers/presentation/client_suppliers_list_provider.dart';
-import '../../features/providers/presentation/provider_detail_provider.dart';
+import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
+import 'package:bnood/features/clients/presentation/providers/client_craftsmen_list_provider.dart';
+import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
+import 'package:bnood/features/clients/presentation/providers/client_items_stats_provider.dart';
+import 'package:bnood/features/providers/presentation/providers/client_suppliers_list_provider.dart';
+import 'package:bnood/features/providers/presentation/providers/provider_detail_provider.dart';
 
 /// Clears in-memory HTTP caches and Riverpod user data when the signed-in identity changes.
 void resetUserScopedState(Ref ref) {

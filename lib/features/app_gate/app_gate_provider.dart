@@ -7,10 +7,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../core/api/app_config_api.dart';
 import '../../core/api/auth_api_exception.dart';
-import 'data/app_config_record.dart';
+import 'package:bnood/features/app_gate/data/app_config_record.dart';
 import '../../core/app_state/settings_provider.dart';
-import 'app_gate_cold_start.dart';
-import 'app_gate_paths.dart';
+import 'package:bnood/features/app_gate/app_gate_cold_start.dart';
+import 'package:bnood/features/app_gate/app_gate_paths.dart';
 
 final appConfigApiProvider = Provider<AppConfigApi>((ref) {
   final api = AppConfigApi();
@@ -27,8 +27,9 @@ class AppGateMemory {
 final appGateMemoryProvider = Provider<AppGateMemory>((ref) => AppGateMemory());
 
 /// Latest config fetch for this process. Fail-open sets [AppConfigData.failOpen].
-final appGateProvider =
-    AsyncNotifierProvider<AppGateNotifier, AppConfigData>(AppGateNotifier.new);
+final appGateProvider = AsyncNotifierProvider<AppGateNotifier, AppConfigData>(
+  AppGateNotifier.new,
+);
 
 class AppGateNotifier extends AsyncNotifier<AppConfigData> {
   @override
@@ -39,7 +40,9 @@ class AppGateNotifier extends AsyncNotifier<AppConfigData> {
       final packageInfo = await PackageInfo.fromPlatform();
       final platform = _platformKey();
       final locale = ref.read(localeProvider).languageCode;
-      final data = await ref.read(appConfigApiProvider).fetchConfig(
+      final data = await ref
+          .read(appConfigApiProvider)
+          .fetchConfig(
             platform: platform,
             version: packageInfo.version,
             locale: locale,

@@ -5,7 +5,9 @@ import 'error_reporter.dart';
 import 'error_reporter_registrar.dart';
 
 /// Backends registered for error reporting (Sentry when `SENTRY_DSN` is set).
-final errorReportersProvider = Provider<List<ErrorReporter>>((ref) => buildErrorReporters());
+final errorReportersProvider = Provider<List<ErrorReporter>>(
+  (ref) => buildErrorReporters(),
+);
 
 final errorReporterProvider = Provider<ErrorReporter>((ref) {
   return CompositeErrorReporter(ref.watch(errorReportersProvider));

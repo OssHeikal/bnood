@@ -14,7 +14,11 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         appSettingsBootstrapProvider.overrideWithValue(
-          const AppSettingsSnapshot(themeMode: ThemeMode.light, locale: Locale('en'), prefs: null),
+          const AppSettingsSnapshot(
+            themeMode: ThemeMode.light,
+            locale: Locale('en'),
+            prefs: null,
+          ),
         ),
         appConfigApiProvider.overrideWith(
           (ref) => StubAppConfigApi(({
@@ -28,7 +32,9 @@ void main() {
       ],
     );
     addTearDown(container.dispose);
-    final data = await container.read(appGateProvider.notifier).fetchConfig(failOpen: true);
+    final data = await container
+        .read(appGateProvider.notifier)
+        .fetchConfig(failOpen: true);
     expect(data.status, AppGateStatus.ok);
   });
 }

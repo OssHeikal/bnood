@@ -2,15 +2,17 @@ import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_amount.dart';
 import 'package:bnood/core/widgets/app_card.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/features/statements/presentation/statement_summary_widgets.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/statements/presentation/widgets/statement_summary_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('stat row equal height keeps compact label-to-amount gap', (tester) async {
+  testWidgets('stat row equal height keeps compact label-to-amount gap', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -76,7 +78,10 @@ void main() {
     final shortLabelBox = tester.getRect(find.text(short).first);
     final shortAmountBox = tester.getRect(
       find.descendant(
-        of: find.ancestor(of: find.text(short).first, matching: find.byType(AppCard)),
+        of: find.ancestor(
+          of: find.text(short).first,
+          matching: find.byType(AppCard),
+        ),
         matching: find.byType(AppAmount),
       ),
     );

@@ -14,8 +14,16 @@ void main() {
             title: 'Empty',
             actions: [
               AppFallbackAction(label: 'Primary', onPressed: _noop),
-              AppFallbackAction(label: 'Secondary', onPressed: _noop, role: AppFallbackActionRole.secondary),
-              AppFallbackAction(label: 'Tertiary', onPressed: _noop, role: AppFallbackActionRole.tertiary),
+              AppFallbackAction(
+                label: 'Secondary',
+                onPressed: _noop,
+                role: AppFallbackActionRole.secondary,
+              ),
+              AppFallbackAction(
+                label: 'Tertiary',
+                onPressed: _noop,
+                role: AppFallbackActionRole.tertiary,
+              ),
             ],
           ),
         ),
@@ -32,7 +40,11 @@ void main() {
       MaterialApp(
         theme: AppFoundationTheme.light(),
         home: Scaffold(
-          body: AppFallback(title: 'Empty', actionLabel: 'Add', onAction: () {}),
+          body: AppFallback(
+            title: 'Empty',
+            actionLabel: 'Add',
+            onAction: () {},
+          ),
         ),
       ),
     );

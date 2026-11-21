@@ -84,7 +84,11 @@ class AppButtonFrame extends StatelessWidget {
     );
   }
 
-  Widget _surface(double visualMinWidth, bool fill, {required bool compactIcon}) {
+  Widget _surface(
+    double visualMinWidth,
+    bool fill, {
+    required bool compactIcon,
+  }) {
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
@@ -100,10 +104,7 @@ class AppButtonFrame extends StatelessWidget {
               borderRadius: radius,
               border: colors.border == null
                   ? null
-                  : Border.all(
-                      color: colors.border!,
-                      width: borderWidth,
-                    ),
+                  : Border.all(color: colors.border!, width: borderWidth),
             ),
             child: ConstrainedBox(
               constraints: BoxConstraints(

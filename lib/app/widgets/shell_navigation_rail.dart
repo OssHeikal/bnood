@@ -38,18 +38,30 @@ class ShellNavigationRail extends StatelessWidget {
         : AppColors.primary.withValues(alpha: 0.12);
   }
 
-  static ({Color activeIcon, Color inactiveIcon, Color activeLabel, Color inactiveLabel}) _colors(
-    BuildContext context,
-  ) {
+  static ({
+    Color activeIcon,
+    Color inactiveIcon,
+    Color activeLabel,
+    Color inactiveLabel,
+  })
+  _colors(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final isDark = brightness == Brightness.dark;
     final inactiveIcon = isDark ? AppColors.darkMuted : AppColors.lightMuted;
     final activeIcon = isDark ? AppColors.primary : AppColors.primaryDark;
     const activeLabel = AppColors.primary;
-    return (activeIcon: activeIcon, inactiveIcon: inactiveIcon, activeLabel: activeLabel, inactiveLabel: inactiveIcon);
+    return (
+      activeIcon: activeIcon,
+      inactiveIcon: inactiveIcon,
+      activeLabel: activeLabel,
+      inactiveLabel: inactiveIcon,
+    );
   }
 
-  Widget _destinationIcon({required ShellNavDestination destination, required Color color}) {
+  Widget _destinationIcon({
+    required ShellNavDestination destination,
+    required Color color,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSize.spaceSM),
       child: ShellNavIcon(
@@ -67,16 +79,24 @@ class ShellNavigationRail extends StatelessWidget {
     final isDark = brightness == Brightness.dark;
     final palette = _colors(context);
     final textTheme = Theme.of(context).textTheme;
-    final labelSelected = (textTheme.labelLarge ?? textTheme.labelMedium ?? const TextStyle(fontSize: 14)).copyWith(
-      fontWeight: FontWeight.w700,
-      color: palette.activeLabel,
-      height: 1.2,
-    );
-    final labelUnselected = (textTheme.labelMedium ?? textTheme.labelLarge ?? const TextStyle(fontSize: 13)).copyWith(
-      fontWeight: FontWeight.w500,
-      color: palette.inactiveLabel,
-      height: 1.2,
-    );
+    final labelSelected =
+        (textTheme.labelLarge ??
+                textTheme.labelMedium ??
+                const TextStyle(fontSize: 14))
+            .copyWith(
+              fontWeight: FontWeight.w700,
+              color: palette.activeLabel,
+              height: 1.2,
+            );
+    final labelUnselected =
+        (textTheme.labelMedium ??
+                textTheme.labelLarge ??
+                const TextStyle(fontSize: 13))
+            .copyWith(
+              fontWeight: FontWeight.w500,
+              color: palette.inactiveLabel,
+              height: 1.2,
+            );
 
     final voucherLeading = Padding(
       padding: const EdgeInsets.only(bottom: AppSize.spaceLG),
@@ -97,7 +117,11 @@ class ShellNavigationRail extends StatelessWidget {
               width: AppSize.shellDockPillExtent,
               height: AppSize.shellDockPillExtent,
               child: Center(
-                child: ShellNavIcon(asset: ShellNavIcons.voucherAdd, color: Colors.white, size: AppSize.icon),
+                child: ShellNavIcon(
+                  asset: ShellNavIcons.voucherAdd,
+                  color: Colors.white,
+                  size: AppSize.icon,
+                ),
               ),
             ),
           ),
@@ -111,8 +135,14 @@ class ShellNavigationRail extends StatelessWidget {
         indicatorColor: _tabFill(brightness),
         minWidth: railMinWidth,
         minExtendedWidth: railMinWidth,
-        selectedIconTheme: IconThemeData(color: palette.activeIcon, size: destinationIconSize),
-        unselectedIconTheme: IconThemeData(color: palette.inactiveIcon, size: destinationIconSize),
+        selectedIconTheme: IconThemeData(
+          color: palette.activeIcon,
+          size: destinationIconSize,
+        ),
+        unselectedIconTheme: IconThemeData(
+          color: palette.inactiveIcon,
+          size: destinationIconSize,
+        ),
         selectedLabelTextStyle: labelSelected,
         unselectedLabelTextStyle: labelUnselected,
       ),
@@ -121,14 +151,22 @@ class ShellNavigationRail extends StatelessWidget {
         onDestinationSelected: onDestinationSelected,
         labelType: NavigationRailLabelType.all,
         useIndicator: true,
-        indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.radiusMD)),
+        indicatorShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSize.radiusMD),
+        ),
         groupAlignment: -1,
         leading: voucherLeading,
         destinations: [
           for (var i = 0; i < destinations.length; i++)
             NavigationRailDestination(
-              icon: _destinationIcon(destination: destinations[i], color: palette.inactiveIcon),
-              selectedIcon: _destinationIcon(destination: destinations[i], color: palette.activeIcon),
+              icon: _destinationIcon(
+                destination: destinations[i],
+                color: palette.inactiveIcon,
+              ),
+              selectedIcon: _destinationIcon(
+                destination: destinations[i],
+                color: palette.activeIcon,
+              ),
               padding: const EdgeInsets.symmetric(vertical: AppSize.spaceXS),
               label: Text(destinations[i].label),
             ),

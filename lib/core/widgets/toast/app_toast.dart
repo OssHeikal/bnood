@@ -49,7 +49,10 @@ class AppToast extends StatelessWidget {
       container: true,
       label: semanticsLabel,
       child: Container(
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: AppSize.spaceMD, vertical: AppSize.gap),
+        padding: const EdgeInsetsDirectional.symmetric(
+          horizontal: AppSize.spaceMD,
+          vertical: AppSize.gap,
+        ),
         decoration: ShapeDecoration(
           color: backgroundColor,
           shape: RoundedRectangleBorder(
@@ -62,12 +65,30 @@ class AppToast extends StatelessWidget {
             final textMaxWidth = _textMaxWidth(constraints.maxWidth);
             final titleStyle = text.title.setColor(colors.onSurface);
             final hasTitle = title != null && title!.isNotEmpty;
-            final bodyStyle = text.body.setColor(hasTitle ? colors.muted : colors.onSurface);
+            final bodyStyle = text.body.setColor(
+              hasTitle ? colors.muted : colors.onSurface,
+            );
 
-            final titleLines = hasTitle ? _lineCount(context, title!, titleStyle, textMaxWidth, maxLines: 1) : 0;
-            final messageLines = _lineCount(context, message, bodyStyle, textMaxWidth, maxLines: _messageMaxLines);
+            final titleLines = hasTitle
+                ? _lineCount(
+                    context,
+                    title!,
+                    titleStyle,
+                    textMaxWidth,
+                    maxLines: 1,
+                  )
+                : 0;
+            final messageLines = _lineCount(
+              context,
+              message,
+              bodyStyle,
+              textMaxWidth,
+              maxLines: _messageMaxLines,
+            );
             final totalLines = titleLines + messageLines;
-            final rowAlign = totalLines > _compactLineThreshold ? CrossAxisAlignment.start : CrossAxisAlignment.center;
+            final rowAlign = totalLines > _compactLineThreshold
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center;
             final anchorStyle = hasTitle ? titleStyle : bodyStyle;
 
             return Row(
@@ -104,7 +125,10 @@ class AppToast extends StatelessWidget {
                           textAlign: TextAlign.start,
                           maxLines: _messageMaxLines,
                           overflow: TextOverflow.ellipsis,
-                          strutStyle: StrutStyle.fromTextStyle(bodyStyle, forceStrutHeight: true),
+                          strutStyle: StrutStyle.fromTextStyle(
+                            bodyStyle,
+                            forceStrutHeight: true,
+                          ),
                         ),
                       ],
                     ),
@@ -116,7 +140,11 @@ class AppToast extends StatelessWidget {
                 ],
                 if (onDismiss case final onDismiss?) ...[
                   const SizedBox(width: AppSize.spaceSM),
-                  _ToastDismissButton(onPressed: onDismiss, rowAlign: rowAlign, anchorStyle: anchorStyle),
+                  _ToastDismissButton(
+                    onPressed: onDismiss,
+                    rowAlign: rowAlign,
+                    anchorStyle: anchorStyle,
+                  ),
                 ],
               ],
             );
@@ -137,7 +165,13 @@ class AppToast extends StatelessWidget {
     return (totalWidth - reserved).clamp(0, double.infinity);
   }
 
-  int _lineCount(BuildContext context, String value, TextStyle style, double maxWidth, {required int maxLines}) {
+  int _lineCount(
+    BuildContext context,
+    String value,
+    TextStyle style,
+    double maxWidth, {
+    required int maxLines,
+  }) {
     if (value.isEmpty || maxWidth <= 0) {
       return 0;
     }
@@ -204,7 +238,9 @@ class _ToastLeadingIcon extends StatelessWidget {
 double _opticalTopInset(TextStyle style, double markerSize) {
   final fontSize = style.fontSize ?? 14;
   final heightFactor = style.height;
-  final lineHeight = heightFactor != null && heightFactor > 0 ? fontSize * heightFactor : fontSize * 1.2;
+  final lineHeight = heightFactor != null && heightFactor > 0
+      ? fontSize * heightFactor
+      : fontSize * 1.2;
   return ((lineHeight - markerSize) / 2).clamp(0, double.infinity);
 }
 
@@ -223,7 +259,10 @@ class _ToastIconChip extends StatelessWidget {
     return Container(
       width: AppSize.logoMark,
       height: AppSize.logoMark,
-      decoration: BoxDecoration(color: chipColor, borderRadius: BorderRadius.circular(AppSize.radius)),
+      decoration: BoxDecoration(
+        color: chipColor,
+        borderRadius: BorderRadius.circular(AppSize.radius),
+      ),
       alignment: Alignment.center,
       child: isLoading
           ? SizedBox(
@@ -252,7 +291,10 @@ class _ToastActionButton extends StatelessWidget {
     final text = context.text;
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: AppSize.hitMin, minHeight: AppSize.hitMin),
+      constraints: const BoxConstraints(
+        minWidth: AppSize.hitMin,
+        minHeight: AppSize.hitMin,
+      ),
       child: TextButton(
         onPressed: action.onPressed,
         style: TextButton.styleFrom(
@@ -269,7 +311,11 @@ class _ToastActionButton extends StatelessWidget {
 }
 
 class _ToastDismissButton extends StatelessWidget {
-  const _ToastDismissButton({required this.onPressed, required this.rowAlign, required this.anchorStyle});
+  const _ToastDismissButton({
+    required this.onPressed,
+    required this.rowAlign,
+    required this.anchorStyle,
+  });
 
   final VoidCallback onPressed;
   final CrossAxisAlignment rowAlign;
@@ -280,7 +326,11 @@ class _ToastDismissButton extends StatelessWidget {
     final colors = context.colors;
 
     final button = AppButton.icon(
-      iconWidget: FoundationIcon(Icons.close, size: AppSize.icon, color: colors.onSurface),
+      iconWidget: FoundationIcon(
+        Icons.close,
+        size: AppSize.icon,
+        color: colors.onSurface,
+      ),
       iconSize: AppSize.icon,
       height: 32,
       width: 32,

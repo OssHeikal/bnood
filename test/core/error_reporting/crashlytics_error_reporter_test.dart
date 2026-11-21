@@ -39,7 +39,10 @@ class FakeCrashlyticsClient implements CrashlyticsClient {
 void main() {
   test('does not record when inactive', () {
     final client = FakeCrashlyticsClient();
-    final reporter = CrashlyticsErrorReporter(client: client, isActive: () => false);
+    final reporter = CrashlyticsErrorReporter(
+      client: client,
+      isActive: () => false,
+    );
 
     reporter.captureException(Exception('e'), StackTrace.empty, fatal: true);
     reporter.setUser(const ErrorReportingUser(id: '1', phone: '010'));
@@ -50,10 +53,17 @@ void main() {
 
   test('setUser maps id and login phone only when active', () {
     final client = FakeCrashlyticsClient();
-    final reporter = CrashlyticsErrorReporter(client: client, isActive: () => true);
+    final reporter = CrashlyticsErrorReporter(
+      client: client,
+      isActive: () => true,
+    );
 
     reporter.setUser(
-      const ErrorReportingUser(id: 'usr-9', phone: '01055556666', name: 'Hidden'),
+      const ErrorReportingUser(
+        id: 'usr-9',
+        phone: '01055556666',
+        name: 'Hidden',
+      ),
     );
 
     expect(client.userId, 'usr-9');
@@ -62,7 +72,10 @@ void main() {
 
   test('clearUser clears identifier and login phone key when active', () {
     final client = FakeCrashlyticsClient();
-    final reporter = CrashlyticsErrorReporter(client: client, isActive: () => true);
+    final reporter = CrashlyticsErrorReporter(
+      client: client,
+      isActive: () => true,
+    );
 
     reporter.setUser(const ErrorReportingUser(id: 'usr-9', phone: '010'));
     reporter.clearUser();
@@ -73,10 +86,18 @@ void main() {
 
   test('captureException records error when active', () {
     final client = FakeCrashlyticsClient();
-    final reporter = CrashlyticsErrorReporter(client: client, isActive: () => true);
+    final reporter = CrashlyticsErrorReporter(
+      client: client,
+      isActive: () => true,
+    );
     final error = Exception('boom');
 
-    reporter.captureException(error, StackTrace.empty, context: const {'screen': 'home'}, fatal: true);
+    reporter.captureException(
+      error,
+      StackTrace.empty,
+      context: const {'screen': 'home'},
+      fatal: true,
+    );
 
     expect(client.errors, hasLength(1));
     expect(client.errors.single.error, error);

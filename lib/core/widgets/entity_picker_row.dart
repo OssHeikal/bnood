@@ -35,7 +35,8 @@ class EntityPickerOptionRow extends StatelessWidget {
   final bool showDivider;
   final String? semanticLabel;
 
-  static double dividerStartInset(double leadingWidth) => AppSize.screenPadding + leadingWidth + AppSize.spaceMD;
+  static double dividerStartInset(double leadingWidth) =>
+      AppSize.screenPadding + leadingWidth + AppSize.spaceMD;
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +63,20 @@ class EntityPickerOptionRow extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsetsDirectional.only(
                         start: AppSize.screenPadding,
-                        end: trailing == null ? AppSize.screenPadding : AppSize.spaceSM,
+                        end: trailing == null
+                            ? AppSize.screenPadding
+                            : AppSize.spaceSM,
                         top: AppSize.spaceMD,
                         bottom: AppSize.spaceMD,
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(width: leadingWidth, height: leadingWidth, child: leading),
+                          SizedBox(
+                            width: leadingWidth,
+                            height: leadingWidth,
+                            child: leading,
+                          ),
                           const SizedBox(width: AppSize.spaceMD),
                           Expanded(
                             child: Column(
@@ -84,7 +91,9 @@ class EntityPickerOptionRow extends StatelessWidget {
                                 if (subtitle != null) ...[
                                   const SizedBox(height: AppSize.spaceXS),
                                   DefaultTextStyle(
-                                    style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                                    style: text.caption.copyWith(
+                                      color: colors.onSurfaceMuted,
+                                    ),
                                     child: subtitle!,
                                   ),
                                 ],
@@ -99,7 +108,10 @@ class EntityPickerOptionRow extends StatelessWidget {
                               child: Assets.icons.checkOutline.svg(
                                 width: AppSize.iconSmall,
                                 height: AppSize.iconSmall,
-                                colorFilter: ColorFilter.mode(colors.primary, BlendMode.srcIn),
+                                colorFilter: ColorFilter.mode(
+                                  colors.primary,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           ],

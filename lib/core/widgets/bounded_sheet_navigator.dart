@@ -33,7 +33,8 @@ abstract final class SheetContentBounds {
   static const viewportFraction = 0.9;
 
   static double viewportCap(MediaQueryData media) {
-    final available = media.size.height - media.viewInsets.bottom - media.viewPadding.top;
+    final available =
+        media.size.height - media.viewInsets.bottom - media.viewPadding.top;
     return (available * viewportFraction).clamp(0, double.infinity);
   }
 

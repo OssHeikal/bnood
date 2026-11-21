@@ -104,7 +104,9 @@ Future<void> bootstrapAppsFlyer() async {
     unawaited(
       Future<void>.delayed(const Duration(seconds: 8), () {
         if (!firstSession.isCompleted) {
-          AnalyticsLog.info('appsflyer session-ready wait timeout (continuing launch)');
+          AnalyticsLog.info(
+            'appsflyer session-ready wait timeout (continuing launch)',
+          );
           firstSession.complete();
         }
       }),

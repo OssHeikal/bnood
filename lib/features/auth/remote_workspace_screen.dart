@@ -8,8 +8,8 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_app_bar.dart';
-import '../home/presentation/home_foundation_scope.dart';
-import 'auth_paths.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
 
 /// Legacy route: account actions now live on Profile and Settings.
 class RemoteWorkspaceScreen extends ConsumerWidget {

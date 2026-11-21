@@ -22,7 +22,9 @@ Widget _wrap(Widget child) {
 }
 
 void main() {
-  testWidgets('full pin submits once and resend clears the cells', (tester) async {
+  testWidgets('full pin submits once and resend clears the cells', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 

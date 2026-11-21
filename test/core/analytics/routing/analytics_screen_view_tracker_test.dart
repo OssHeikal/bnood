@@ -5,13 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 PageRoute<void> analyticsTestPageRoute(String name) => PageRouteBuilder<void>(
-      settings: RouteSettings(name: name),
-      pageBuilder: (_, _, _) => const SizedBox(),
-    );
+  settings: RouteSettings(name: name),
+  pageBuilder: (_, _, _) => const SizedBox(),
+);
 
 void main() {
   test('analyticsScreenNameForRoute uses path template, not ids', () {
-    expect(analyticsScreenNameForRoute(analyticsTestPageRoute('/clients/:clientId')), '/clients/:clientId');
+    expect(
+      analyticsScreenNameForRoute(analyticsTestPageRoute('/clients/:clientId')),
+      '/clients/:clientId',
+    );
   });
 
   test('analyticsScreenNameForRoute ignores popup routes', () {
@@ -47,8 +50,14 @@ void main() {
     final tracker = AnalyticsScreenViewTracker(emitted.add);
     final route = analyticsTestPageRoute('/clients');
 
-    final root = AnalyticsRouteObserver(tracker: tracker, scope: AnalyticsRouteObserverScope.root);
-    final branch = AnalyticsRouteObserver(tracker: tracker, scope: AnalyticsRouteObserverScope.shellBranch);
+    final root = AnalyticsRouteObserver(
+      tracker: tracker,
+      scope: AnalyticsRouteObserverScope.root,
+    );
+    final branch = AnalyticsRouteObserver(
+      tracker: tracker,
+      scope: AnalyticsRouteObserverScope.shellBranch,
+    );
 
     root.didPush(route, null);
     root.didPush(route, null);
@@ -76,8 +85,7 @@ class _TestPopupRoute extends PopupRoute<void> {
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
-  ) =>
-      const SizedBox();
+  ) => const SizedBox();
 
   @override
   Widget buildTransitions(
@@ -85,6 +93,5 @@ class _TestPopupRoute extends PopupRoute<void> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) =>
-      child;
+  ) => child;
 }

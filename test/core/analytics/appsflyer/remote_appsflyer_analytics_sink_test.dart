@@ -28,7 +28,10 @@ void main() {
   test('track ignores non-signup events for now', () async {
     await sink.track(const ClientCreated(source: ClientCreatedSource.local));
     expect(gateway.events, isEmpty);
-    expect(sink.accepts(const ClientCreated(source: ClientCreatedSource.local)), isFalse);
+    expect(
+      sink.accepts(const ClientCreated(source: ClientCreatedSource.local)),
+      isFalse,
+    );
   });
 
   test('setUser sets customer id and vendor user data', () async {
@@ -37,13 +40,10 @@ void main() {
     );
 
     expect(gateway.customerUserIds, ['user-9']);
-    expect(
-      gateway.userDataSets.single,
-      {
-        GaUserProperties.accountName: 'Osama',
-        GaUserProperties.accountPhone: '+201000000001',
-      },
-    );
+    expect(gateway.userDataSets.single, {
+      GaUserProperties.accountName: 'Osama',
+      GaUserProperties.accountPhone: '+201000000001',
+    });
   });
 
   test('setUser clears customer id and user data on logout', () async {
@@ -61,13 +61,16 @@ void main() {
     expect(container.read(appsFlyerGatewayProvider), isNull);
   });
 
-  test('appsFlyerGatewayProvider is null when bootstrap session not started', () {
-    AppsFlyerBootstrap.sessionStarted = false;
-    addTearDown(() => AppsFlyerBootstrap.sessionStarted = false);
+  test(
+    'appsFlyerGatewayProvider is null when bootstrap session not started',
+    () {
+      AppsFlyerBootstrap.sessionStarted = false;
+      addTearDown(() => AppsFlyerBootstrap.sessionStarted = false);
 
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
 
-    expect(container.read(appsFlyerGatewayProvider), isNull);
-  });
+      expect(container.read(appsFlyerGatewayProvider), isNull);
+    },
+  );
 }

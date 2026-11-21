@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/app_gate/data/app_config_record.dart';
-import '../features/app_gate/app_gate_paths.dart';
-import '../features/app_gate/app_gate_provider.dart';
+import 'package:bnood/features/app_gate/data/app_config_record.dart';
+import 'package:bnood/features/app_gate/app_gate_paths.dart';
+import 'package:bnood/features/app_gate/app_gate_provider.dart';
 
 /// Refetch app config on resume; only maintenance / force-update replace the route.
 class AppGateLifecycle extends ConsumerStatefulWidget {
@@ -16,7 +16,8 @@ class AppGateLifecycle extends ConsumerStatefulWidget {
   ConsumerState<AppGateLifecycle> createState() => _AppGateLifecycleState();
 }
 
-class _AppGateLifecycleState extends ConsumerState<AppGateLifecycle> with WidgetsBindingObserver {
+class _AppGateLifecycleState extends ConsumerState<AppGateLifecycle>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -36,9 +37,12 @@ class _AppGateLifecycleState extends ConsumerState<AppGateLifecycle> with Widget
   }
 
   Future<void> _onResume() async {
-    final config = await ref.read(appGateProvider.notifier).fetchConfig(failOpen: true);
+    final config = await ref
+        .read(appGateProvider.notifier)
+        .fetchConfig(failOpen: true);
     if (!mounted) return;
-    if (config.status != AppGateStatus.maintenance && config.status != AppGateStatus.forceUpdate) {
+    if (config.status != AppGateStatus.maintenance &&
+        config.status != AppGateStatus.forceUpdate) {
       return;
     }
     final router = GoRouter.of(context);

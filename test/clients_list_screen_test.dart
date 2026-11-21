@@ -3,8 +3,8 @@ import 'package:bnood/core/config/theme/app_shape.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
-import 'package:bnood/features/clients/presentation/clients_list_paging.dart';
-import 'package:bnood/features/clients/presentation/clients_list_screen.dart';
+import 'package:bnood/features/clients/presentation/providers/clients_list_paging.dart';
+import 'package:bnood/features/clients/presentation/screens/clients_list_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'dart:async';
 
@@ -28,7 +28,8 @@ void main() {
       ProviderScope(
         overrides: [
           clientsListPageFetcherProvider.overrideWith(
-            (ref) => ({required int page, required int pageSize}) => gate.future,
+            (ref) =>
+                ({required int page, required int pageSize}) => gate.future,
           ),
         ],
         child: const MaterialApp(
@@ -89,7 +90,8 @@ void main() {
           clientsListPageFetcherProvider.overrideWith(
             (ref) => ({required int page, required int pageSize}) async {
               version++;
-              if (page > 1) return const PagedFetchPage(items: [], hasMore: false);
+              if (page > 1)
+                return const PagedFetchPage(items: [], hasMore: false);
               return PagedFetchPage(
                 items: [
                   HomeClientBalanceRow(
@@ -130,7 +132,9 @@ void main() {
     expect(find.byType(PagedListSkeleton), findsNothing);
   });
 
-  testWidgets('app bar add uses teal tint superellipse and opens sheet', (tester) async {
+  testWidgets('app bar add uses teal tint superellipse and opens sheet', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [clientsListBalancesOverride([])],
@@ -153,14 +157,19 @@ void main() {
     );
     expect(material.color, AppColors.light.accentTeal.tint);
     expect(material.shape, AppShape.superellipse(radius: 8));
-    expect(tester.getSize(find.byKey(const Key('clients_app_bar_add'))), const Size(48, 48));
+    expect(
+      tester.getSize(find.byKey(const Key('clients_app_bar_add'))),
+      const Size(48, 48),
+    );
 
     await tester.tap(find.byKey(const Key('clients_app_bar_add')));
     await tester.pumpAndSettle();
     expect(find.text('Add client'), findsWidgets);
   });
 
-  testWidgets('search and filters collapse under the pinned title', (tester) async {
+  testWidgets('search and filters collapse under the pinned title', (
+    tester,
+  ) async {
     final now = DateTime.utc(2026, 11, 1);
     await tester.pumpWidget(
       ProviderScope(

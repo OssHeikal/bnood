@@ -7,8 +7,8 @@ import '../../../../core/config/theme/app_size.dart';
 import '../../../../core/money/remote_money_units.dart';
 import '../../../../core/widgets/app_pressable.dart';
 import 'package:bnood/l10n/app_localizations.dart';
-import '../provider_detail_snapshot.dart';
-import 'provider_detail_metrics_row.dart';
+import 'package:bnood/features/providers/presentation/models/provider_detail_snapshot.dart';
+import 'package:bnood/features/providers/presentation/widgets/provider_detail_metrics_row.dart';
 
 class ProviderDetailClientAgreementCard extends StatelessWidget {
   const ProviderDetailClientAgreementCard({
@@ -54,10 +54,13 @@ class ProviderDetailClientAgreementCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: AppPressable(
-                    onPressed: () => context.push('/clients/${agreement.clientId}'),
+                    onPressed: () =>
+                        context.push('/clients/${agreement.clientId}'),
                     child: Text(
                       row.clientName,
-                      style: text.bodyEmphasis.copyWith(color: colors.primaryDark),
+                      style: text.bodyEmphasis.copyWith(
+                        color: colors.primaryDark,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.start,

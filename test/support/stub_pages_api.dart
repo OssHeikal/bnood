@@ -4,7 +4,11 @@ import 'package:bnood/features/content/data/content_page_record.dart';
 class StubPagesApi extends PagesApi {
   StubPagesApi(this._handler) : super();
 
-  final Future<ContentPage> Function({required String slug, required String locale}) _handler;
+  final Future<ContentPage> Function({
+    required String slug,
+    required String locale,
+  })
+  _handler;
 
   @override
   Future<ContentPage> getPage({required String slug, required String locale}) =>

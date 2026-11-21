@@ -5,11 +5,7 @@ import 'bnood_max_width.dart';
 
 /// Centers menu / settings-style screens at [AppLayout.listMaxWidth] on tablet+.
 class BnoodListCanvas extends StatelessWidget {
-  const BnoodListCanvas({
-    super.key,
-    required this.child,
-    this.padding,
-  });
+  const BnoodListCanvas({super.key, required this.child, this.padding});
 
   final Widget child;
   final EdgeInsetsDirectional? padding;

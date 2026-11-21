@@ -57,7 +57,11 @@ class AppOverflowMenu extends StatelessWidget {
         key: buttonKey,
         padding: padding,
         constraints: const BoxConstraints(minWidth: _menuMinWidth),
-        icon: Icon(Icons.more_vert, size: AppSize.icon, color: colors.onSurfaceMuted),
+        icon: Icon(
+          Icons.more_vert,
+          size: AppSize.icon,
+          color: colors.onSurfaceMuted,
+        ),
         offset: const Offset(0, AppSize.spaceSM),
         shape: menuShape,
         color: colors.surface,
@@ -70,7 +74,9 @@ class AppOverflowMenu extends StatelessWidget {
           final entries = <PopupMenuEntry<int>>[];
           for (var i = 0; i < actions.length; i++) {
             if (i > 0) {
-              entries.add(const PopupMenuDivider(height: AppSize.borderWidthHairline));
+              entries.add(
+                const PopupMenuDivider(height: AppSize.borderWidthHairline),
+              );
             }
             entries.add(
               PopupMenuItem<int>(
@@ -103,7 +109,9 @@ class _AppOverflowMenuRow extends StatelessWidget {
       height: AppSize.hitMin,
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: AppSize.spaceLG),
+        padding: const EdgeInsetsDirectional.symmetric(
+          horizontal: AppSize.spaceLG,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -111,7 +119,11 @@ class _AppOverflowMenuRow extends StatelessWidget {
               width: AppSize.icon,
               child: Align(
                 alignment: AlignmentDirectional.centerStart,
-                child: ShellNavIcon(asset: action.icon, color: fg, size: AppSize.icon),
+                child: ShellNavIcon(
+                  asset: action.icon,
+                  color: fg,
+                  size: AppSize.icon,
+                ),
               ),
             ),
             AppSize.spaceMD.gap,

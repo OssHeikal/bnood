@@ -25,12 +25,20 @@ class ClientItemsStatsSkeleton extends StatelessWidget {
                   children: [
                     SkeletonBox.round(size: AppSize.statIconBox),
                     SizedBox(width: AppSize.spaceMD),
-                    Expanded(child: SkeletonText(role: SkeletonTextRole.body, width: 120)),
+                    Expanded(
+                      child: SkeletonText(
+                        role: SkeletonTextRole.body,
+                        width: 120,
+                      ),
+                    ),
                     SkeletonText(role: SkeletonTextRole.label, width: 56),
                   ],
                 ),
                 AppSize.spaceMD.gap,
-                const SkeletonText(role: SkeletonTextRole.supporting, width: 180),
+                const SkeletonText(
+                  role: SkeletonTextRole.supporting,
+                  width: 180,
+                ),
                 AppSize.spaceSM.gap,
                 const SkeletonBox(height: 8),
               ],

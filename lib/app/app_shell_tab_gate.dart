@@ -8,28 +8,24 @@ import '../core/config/theme/app_size.dart';
 import '../core/resources/gen/assets.gen.dart';
 import '../core/widgets/app_fallback.dart';
 import '../core/widgets/custom_app_bar.dart';
-import '../features/home/presentation/home_foundation_scope.dart';
-import '../features/auth/auth_paths.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
 import 'app_shell_online_tabs.dart';
 import 'widgets/shell_nav_icon.dart';
 
 /// Renders [child] when the tab is online for the current session; otherwise a localized placeholder.
 class AppShellTabGate extends ConsumerWidget {
-  const AppShellTabGate({
-    super.key,
-    required this.tab,
-    required this.child,
-  });
+  const AppShellTabGate({super.key, required this.tab, required this.child});
 
   final AppShellTabId tab;
   final Widget child;
 
   String _tabTitle(AppLocalizations l10n) => switch (tab) {
-        AppShellTabId.home => l10n.navHome,
-        AppShellTabId.clients => l10n.navClients,
-        AppShellTabId.directory => l10n.navDirectory,
-        AppShellTabId.items => l10n.navItems,
-      };
+    AppShellTabId.home => l10n.navHome,
+    AppShellTabId.clients => l10n.navClients,
+    AppShellTabId.directory => l10n.navDirectory,
+    AppShellTabId.items => l10n.navItems,
+  };
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

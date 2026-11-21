@@ -1,7 +1,10 @@
 String personInitials(String? name) {
   final trimmed = name?.trim();
   if (trimmed == null || trimmed.isEmpty) return '?';
-  final parts = trimmed.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+  final parts = trimmed
+      .split(RegExp(r'\s+'))
+      .where((p) => p.isNotEmpty)
+      .toList();
   if (parts.isEmpty) return '?';
   if (parts.length == 1) {
     return _initialGlyph(parts.first);

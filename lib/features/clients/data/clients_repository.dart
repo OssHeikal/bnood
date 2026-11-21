@@ -1,10 +1,10 @@
 import 'package:bnood/features/home/data/home_row_models.dart';
 
-import 'clients_api.dart';
-import 'client_api_record.dart';
-import 'client_list_archive_filter.dart';
-import 'client_statement_pdf.dart';
-import 'client_statement_record.dart';
+import 'package:bnood/features/clients/data/clients_api.dart';
+import 'package:bnood/features/clients/data/client_api_record.dart';
+import 'package:bnood/features/clients/data/client_list_archive_filter.dart';
+import 'package:bnood/features/clients/data/client_statement_pdf.dart';
+import 'package:bnood/features/clients/data/client_statement_record.dart';
 
 class ClientsRepository {
   ClientsRepository(this._api);
@@ -16,14 +16,16 @@ class ClientsRepository {
     String? q,
     int page = 1,
     int perPage = 50,
-  }) =>
-      _api.listClients(status: status, q: q, page: page, perPage: perPage);
+  }) => _api.listClients(status: status, q: q, page: page, perPage: perPage);
 
   Future<List<ClientApiRecord>> listAllActiveClients() async {
     final all = <ClientApiRecord>[];
     var page = 1;
     while (true) {
-      final result = await listClients(status: ClientListArchiveFilter.active, page: page);
+      final result = await listClients(
+        status: ClientListArchiveFilter.active,
+        page: page,
+      );
       all.addAll(result.items);
       if (!result.hasMore) break;
       page++;
@@ -38,13 +40,12 @@ class ClientsRepository {
     String? phone,
     int? engineerBasisPoints,
     bool confirmDuplicateName = false,
-  }) =>
-      _api.createClient(
-        name: name,
-        phone: phone,
-        engineerBasisPoints: engineerBasisPoints,
-        confirmDuplicateName: confirmDuplicateName,
-      );
+  }) => _api.createClient(
+    name: name,
+    phone: phone,
+    engineerBasisPoints: engineerBasisPoints,
+    confirmDuplicateName: confirmDuplicateName,
+  );
 
   Future<ClientApiRecord> updateClient({
     required String id,
@@ -54,16 +55,15 @@ class ClientsRepository {
     bool confirmDuplicateName = false,
     bool clearPhone = false,
     bool clearEngineerBasisPoints = false,
-  }) =>
-      _api.updateClient(
-        id: id,
-        name: name,
-        phone: phone,
-        engineerBasisPoints: engineerBasisPoints,
-        confirmDuplicateName: confirmDuplicateName,
-        clearPhone: clearPhone,
-        clearEngineerBasisPoints: clearEngineerBasisPoints,
-      );
+  }) => _api.updateClient(
+    id: id,
+    name: name,
+    phone: phone,
+    engineerBasisPoints: engineerBasisPoints,
+    confirmDuplicateName: confirmDuplicateName,
+    clearPhone: clearPhone,
+    clearEngineerBasisPoints: clearEngineerBasisPoints,
+  );
 
   Future<ClientApiRecord> archiveClient(String id) => _api.archiveClient(id);
 
@@ -73,8 +73,7 @@ class ClientsRepository {
     required String clientId,
     String? from,
     required String to,
-  }) =>
-      _api.getClientStatement(clientId: clientId, from: from, to: to);
+  }) => _api.getClientStatement(clientId: clientId, from: from, to: to);
 
   Future<AppClientItemSpend> getClientItemSpend(String clientId) =>
       _api.getClientItemSpend(clientId);
@@ -83,8 +82,7 @@ class ClientsRepository {
     required String clientId,
     String? from,
     required String to,
-  }) =>
-      _api.downloadClientStatementPdf(clientId: clientId, from: from, to: to);
+  }) => _api.downloadClientStatementPdf(clientId: clientId, from: from, to: to);
 }
 
 HomeClientBalanceRow balanceRowFromRecord(ClientApiRecord record) {

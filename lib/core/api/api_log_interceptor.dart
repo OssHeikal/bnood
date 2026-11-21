@@ -7,7 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'api_log_redactor.dart';
 import 'auth_api_exception.dart';
 
-typedef ApiLogWriter = void Function(String message, {Object? error, StackTrace? stackTrace});
+typedef ApiLogWriter =
+    void Function(String message, {Object? error, StackTrace? stackTrace});
 
 class ApiLogInterceptor extends Interceptor {
   ApiLogInterceptor({ApiLogWriter? write, bool? verbose})
@@ -16,12 +17,17 @@ class ApiLogInterceptor extends Interceptor {
 
   static const _startedAt = 'startedAt';
   static const _rule = '─';
-  static const _dioValidateStatusHint = 'This exception was thrown because the response has a status code';
+  static const _dioValidateStatusHint =
+      'This exception was thrown because the response has a status code';
 
   final ApiLogWriter _write;
   final bool _verbose;
 
-  static void _defaultWrite(String message, {Object? error, StackTrace? stackTrace}) {
+  static void _defaultWrite(
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
     log(message, name: 'ApiClient');
   }
 
@@ -33,15 +39,29 @@ class ApiLogInterceptor extends Interceptor {
   }
 
   @override
-  void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {
-    _write(_incoming(response.requestOptions, statusCode: response.statusCode, responseData: response.data));
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
+    _write(
+      _incoming(
+        response.requestOptions,
+        statusCode: response.statusCode,
+        responseData: response.data,
+      ),
+    );
     handler.next(response);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     _write(
-      _incoming(err.requestOptions, statusCode: err.response?.statusCode, responseData: err.response?.data, err: err),
+      _incoming(
+        err.requestOptions,
+        statusCode: err.response?.statusCode,
+        responseData: err.response?.data,
+        err: err,
+      ),
     );
     handler.next(err);
   }
@@ -49,11 +69,19 @@ class ApiLogInterceptor extends Interceptor {
   String _outgoing(RequestOptions options) {
     final method = options.method.toUpperCase();
     final header = 'API ► $method';
-    final lines = <String>[_target(options, includeQuery: _verbose), if (_verbose) ..._requestDetailLines(options)];
+    final lines = <String>[
+      _target(options, includeQuery: _verbose),
+      if (_verbose) ..._requestDetailLines(options),
+    ];
     return _block(header, lines);
   }
 
-  String _incoming(RequestOptions options, {int? statusCode, Object? responseData, DioException? err}) {
+  String _incoming(
+    RequestOptions options, {
+    int? statusCode,
+    Object? responseData,
+    DioException? err,
+  }) {
     final method = options.method.toUpperCase();
     final duration = _durationLabel(_durationMs(options));
 
@@ -80,7 +108,10 @@ class ApiLogInterceptor extends Interceptor {
     return _block(header, lines, widen: true);
   }
 
-  List<String> _requestDetailLines(RequestOptions options, {bool skipUrl = false}) {
+  List<String> _requestDetailLines(
+    RequestOptions options, {
+    bool skipUrl = false,
+  }) {
     if (!skipUrl && options.queryParameters.isNotEmpty) {
       // URL line already includes query when verbose.
     }
@@ -92,7 +123,10 @@ class ApiLogInterceptor extends Interceptor {
     ];
   }
 
-  List<String> _responseDetailLines(Object? responseData, {bool skipLabelIfEmpty = false}) {
+  List<String> _responseDetailLines(
+    Object? responseData, {
+    bool skipLabelIfEmpty = false,
+  }) {
     if (responseData == null && skipLabelIfEmpty) {
       return const [];
     }
@@ -167,11 +201,18 @@ class ApiLogInterceptor extends Interceptor {
     return '$top\n$body\n$bottom';
   }
 
-  int _contentWidth(String header, List<String> bodyLines, {bool widen = false}) {
+  int _contentWidth(
+    String header,
+    List<String> bodyLines, {
+    bool widen = false,
+  }) {
     if (bodyLines.isEmpty) {
       return 36;
     }
-    final longest = [header.length + 4, ...bodyLines.map((line) => line.length + 2)].reduce((a, b) => a > b ? a : b);
+    final longest = [
+      header.length + 4,
+      ...bodyLines.map((line) => line.length + 2),
+    ].reduce((a, b) => a > b ? a : b);
     final max = widen ? 120 : 100;
     return longest.clamp(36, max);
   }
@@ -250,7 +291,9 @@ class ApiLogInterceptor extends Interceptor {
 
     final cause = err.error;
     if (cause is AuthApiException) {
-      lines.add('↳ mapped · ${cause.statusCode} · code=${cause.code ?? '—'} · ${cause.message}');
+      lines.add(
+        '↳ mapped · ${cause.statusCode} · code=${cause.code ?? '—'} · ${cause.message}',
+      );
       final mappedFields = cause.fieldErrors;
       if (mappedFields != null && mappedFields.isNotEmpty) {
         lines.add('↳ mapped fields: ${_formatFieldErrors(mappedFields)}');
@@ -325,7 +368,9 @@ class ApiLogInterceptor extends Interceptor {
 
   String _formatFieldErrors(Map<String, List<String>> fieldErrors) {
     final keys = fieldErrors.keys.toList()..sort();
-    return keys.map((key) => '$key: ${fieldErrors[key]!.join('; ')}').join(' · ');
+    return keys
+        .map((key) => '$key: ${fieldErrors[key]!.join('; ')}')
+        .join(' · ');
   }
 
   String _target(RequestOptions options, {bool includeQuery = false}) {
@@ -335,9 +380,14 @@ class ApiLogInterceptor extends Interceptor {
     if (!includeQuery || uri.query.isEmpty) {
       return base;
     }
-    final query = ApiLogRedactor.queryParameters(Map<String, dynamic>.from(options.queryParameters));
+    final query = ApiLogRedactor.queryParameters(
+      Map<String, dynamic>.from(options.queryParameters),
+    );
     final encoded = query.entries
-        .map((e) => '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeQueryComponent('${e.value}')}')
+        .map(
+          (e) =>
+              '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeQueryComponent('${e.value}')}',
+        )
         .join('&');
     return '$base?$encoded';
   }

@@ -9,10 +9,10 @@ import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
-import '../home/presentation/home_foundation_scope.dart';
-import 'auth_controller.dart';
-import 'auth_form_utils.dart';
-import 'auth_messages.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_form_utils.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
 
 Future<bool?> showProfileEditNameSheet(
   BuildContext context, {
@@ -32,7 +32,8 @@ class ProfileEditNameSheet extends ConsumerStatefulWidget {
   final String initialName;
 
   @override
-  ConsumerState<ProfileEditNameSheet> createState() => _ProfileEditNameSheetState();
+  ConsumerState<ProfileEditNameSheet> createState() =>
+      _ProfileEditNameSheetState();
 }
 
 class _ProfileEditNameSheetState extends ConsumerState<ProfileEditNameSheet> {
@@ -54,7 +55,9 @@ class _ProfileEditNameSheetState extends ConsumerState<ProfileEditNameSheet> {
       _saving = true;
       _nameError = null;
     });
-    final error = await ref.read(authControllerProvider.notifier).saveProfileName(_nameCtrl.text);
+    final error = await ref
+        .read(authControllerProvider.notifier)
+        .saveProfileName(_nameCtrl.text);
     if (!mounted) return;
     if (error == null) {
       Navigator.pop(context, true);
@@ -72,56 +75,62 @@ class _ProfileEditNameSheetState extends ConsumerState<ProfileEditNameSheet> {
     final l10n = AppLocalizations.of(context);
 
     return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          AppSize.spaceMD.gap,
-          const SheetDragHandle(),
-          AppSize.spaceLG.gap,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
-            child: Text(l10n.profileEditNameTitle, style: context.text.pageTitle, textAlign: TextAlign.start),
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AppSize.spaceMD.gap,
+        const SheetDragHandle(),
+        AppSize.spaceLG.gap,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
+          child: Text(
+            l10n.profileEditNameTitle,
+            style: context.text.pageTitle,
+            textAlign: TextAlign.start,
           ),
-          AppSize.spaceXL.gap,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
-            child: Form(
-              key: _formKey,
-              child: CustomTextField(
-                controller: _nameCtrl,
-                label: l10n.authDisplayName,
-                placeholder: l10n.authDisplayNameHint,
-                fieldHeight: AppSize.fieldHeightComfortable,
-                errorMessage: _nameError,
-                textInputAction: TextInputAction.done,
-                validator: (v) => validateDisplayName(l10n, v),
+        ),
+        AppSize.spaceXL.gap,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
+          child: Form(
+            key: _formKey,
+            child: CustomTextField(
+              controller: _nameCtrl,
+              label: l10n.authDisplayName,
+              placeholder: l10n.authDisplayNameHint,
+              fieldHeight: AppSize.fieldHeightComfortable,
+              errorMessage: _nameError,
+              textInputAction: TextInputAction.done,
+              validator: (v) => validateDisplayName(l10n, v),
+            ),
+          ),
+        ),
+        AppSize.spaceXL.gap,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
+          child: Row(
+            children: [
+              Expanded(
+                child: AppButton.outlined(
+                  text: l10n.cancel,
+                  onPressed: _saving
+                      ? null
+                      : () => Navigator.pop(context, false),
+                ),
               ),
-            ),
-          ),
-          AppSize.spaceXL.gap,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
-            child: Row(
-              children: [
-                Expanded(
-                  child: AppButton.outlined(
-                    text: l10n.cancel,
-                    onPressed: _saving ? null : () => Navigator.pop(context, false),
-                  ),
+              AppSize.spaceMD.gap,
+              Expanded(
+                child: AppButton.primary(
+                  text: l10n.save,
+                  isLoading: _saving,
+                  onPressed: _saving ? null : _save,
                 ),
-                AppSize.spaceMD.gap,
-                Expanded(
-                  child: AppButton.primary(
-                    text: l10n.save,
-                    isLoading: _saving,
-                    onPressed: _saving ? null : _save,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          AppSize.spaceLG.gap,
-        ],
+        ),
+        AppSize.spaceLG.gap,
+      ],
     );
   }
 }

@@ -6,9 +6,9 @@ import 'package:go_router/go_router.dart';
 import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/toast/app_tone.dart';
-import 'auth_controller.dart';
-import 'auth_messages.dart';
-import 'auth_paths.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
 
 Future<void> confirmLogout(BuildContext context, WidgetRef ref) async {
   final l10n = AppLocalizations.of(context);

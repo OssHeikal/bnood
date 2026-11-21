@@ -155,7 +155,10 @@ class _ActionTile extends StatelessWidget {
       child: Opacity(
         opacity: enabled ? 1 : 0.55,
         child: AppCard(
-          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceXS, vertical: AppSize.spaceMD),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSize.spaceXS,
+            vertical: AppSize.spaceMD,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -166,11 +169,23 @@ class _ActionTile extends StatelessWidget {
                 child: SizedBox(
                   width: AppSize.buttonHeight,
                   height: AppSize.buttonHeight,
-                  child: Center(child: ShellNavIcon(asset: icon, color: iconColor, size: AppSize.icon)),
+                  child: Center(
+                    child: ShellNavIcon(
+                      asset: icon,
+                      color: iconColor,
+                      size: AppSize.icon,
+                    ),
+                  ),
                 ),
               ),
               AppSize.spaceXS.gap,
-              Text(label, style: labelStyle, maxLines: 2, textAlign: TextAlign.center, overflow: TextOverflow.ellipsis),
+              Text(
+                label,
+                style: labelStyle,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),

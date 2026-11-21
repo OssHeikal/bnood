@@ -10,7 +10,9 @@ final class ReportingUserIdentity {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ReportingUserIdentity && id == other.id && loginPhone == other.loginPhone;
+      other is ReportingUserIdentity &&
+          id == other.id &&
+          loginPhone == other.loginPhone;
 
   @override
   int get hashCode => Object.hash(id, loginPhone);

@@ -3,8 +3,8 @@ import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/core/shared/pagination/pagination.dart';
-import 'package:bnood/features/clients/presentation/clients_list_paging.dart';
-import 'package:bnood/features/clients/presentation/clients_list_screen.dart';
+import 'package:bnood/features/clients/presentation/providers/clients_list_paging.dart';
+import 'package:bnood/features/clients/presentation/screens/clients_list_screen.dart';
 import 'package:bnood/features/clients/presentation/widgets/clients_list_filter_chips.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -31,26 +31,32 @@ void main() {
   }
 
   List<HomeClientBalanceRow> twoClients(DateTime now) => [
-        HomeClientBalanceRow(
-          client: Client(id: 'c-active', workspaceId: 'w', name: 'Active Client', createdAt: now, updatedAt: now),
-          remainingPiastres: 100,
-          receivedPiastres: 100,
-          spentPiastres: 0,
-        ),
-        HomeClientBalanceRow(
-          client: Client(
-            id: 'c-arch',
-            workspaceId: 'w',
-            name: 'Archived Client',
-            archivedAt: now,
-            createdAt: now,
-            updatedAt: now,
-          ),
-          remainingPiastres: 50,
-          receivedPiastres: 50,
-          spentPiastres: 0,
-        ),
-      ];
+    HomeClientBalanceRow(
+      client: Client(
+        id: 'c-active',
+        workspaceId: 'w',
+        name: 'Active Client',
+        createdAt: now,
+        updatedAt: now,
+      ),
+      remainingPiastres: 100,
+      receivedPiastres: 100,
+      spentPiastres: 0,
+    ),
+    HomeClientBalanceRow(
+      client: Client(
+        id: 'c-arch',
+        workspaceId: 'w',
+        name: 'Archived Client',
+        archivedAt: now,
+        createdAt: now,
+        updatedAt: now,
+      ),
+      remainingPiastres: 50,
+      receivedPiastres: 50,
+      spentPiastres: 0,
+    ),
+  ];
 
   testWidgets('default Active filter chip selected EN', (tester) async {
     final now = DateTime.utc(2026, 11, 1);
@@ -80,7 +86,8 @@ void main() {
         overrides: [
           clientsListPageFetcherProvider.overrideWith(
             (ref) => ({required int page, required int pageSize}) async {
-              if (page > 1) return const PagedFetchPage(items: [], hasMore: false);
+              if (page > 1)
+                return const PagedFetchPage(items: [], hasMore: false);
               final filter = ref.read(clientsListFilterProvider);
               final list = switch (filter) {
                 ClientListArchiveFilter.active => [rows.first],
@@ -107,7 +114,12 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(wrap(locale: const Locale('ar'), overrides: [clientsListBalancesOverride([])]));
+    await tester.pumpWidget(
+      wrap(
+        locale: const Locale('ar'),
+        overrides: [clientsListBalancesOverride([])],
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('الكل'), findsOneWidget);
@@ -125,14 +137,20 @@ void main() {
     await tester.pumpWidget(
       wrap(
         locale: const Locale('en'),
-        overrides: [clientsListBalancesOverride([twoClients(now).first])],
+        overrides: [
+          clientsListBalancesOverride([twoClients(now).first]),
+        ],
       ),
     );
     await tester.pumpAndSettle();
 
     final all = tester.getSize(find.byKey(const Key('clients_filter_all')));
-    final active = tester.getSize(find.byKey(const Key('clients_filter_active')));
-    final archived = tester.getSize(find.byKey(const Key('clients_filter_archived')));
+    final active = tester.getSize(
+      find.byKey(const Key('clients_filter_active')),
+    );
+    final archived = tester.getSize(
+      find.byKey(const Key('clients_filter_archived')),
+    );
     final row = tester.getSize(find.byType(ClientsListFilterChips));
 
     expect(all.width, lessThan(archived.width));

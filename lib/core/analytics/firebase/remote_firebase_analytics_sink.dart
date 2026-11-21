@@ -7,7 +7,8 @@ import 'firebase_ga_event_mapping.dart';
 import 'ga_user_properties.dart';
 
 final class RemoteFirebaseAnalyticsSink extends FirebaseAnalyticsSink {
-  RemoteFirebaseAnalyticsSink({required FirebaseAnalyticsGateway gateway}) : _gateway = gateway;
+  RemoteFirebaseAnalyticsSink({required FirebaseAnalyticsGateway gateway})
+    : _gateway = gateway;
 
   final FirebaseAnalyticsGateway _gateway;
 
@@ -27,8 +28,14 @@ final class RemoteFirebaseAnalyticsSink extends FirebaseAnalyticsSink {
   Future<void> setUser(AnalyticsUser? user) async {
     if (user == null) {
       await _gateway.setUserId(null);
-      await _gateway.setUserProperty(name: GaUserProperties.accountName, value: null);
-      await _gateway.setUserProperty(name: GaUserProperties.accountPhone, value: null);
+      await _gateway.setUserProperty(
+        name: GaUserProperties.accountName,
+        value: null,
+      );
+      await _gateway.setUserProperty(
+        name: GaUserProperties.accountPhone,
+        value: null,
+      );
       return;
     }
 

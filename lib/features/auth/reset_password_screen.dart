@@ -8,12 +8,12 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
-import 'auth_controller.dart';
-import 'auth_form_ui.dart';
-import 'auth_form_utils.dart';
-import 'auth_messages.dart';
-import 'auth_paths.dart';
-import 'widgets/auth_flow_scaffold.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_form_ui.dart';
+import 'package:bnood/features/auth/auth_form_utils.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/auth/widgets/auth_flow_scaffold.dart';
 
 Future<void> _submitResetPassword(BuildContext context, WidgetRef ref) async {
   final fields = ref.read(resetPasswordFormFieldsProvider);
@@ -24,7 +24,9 @@ Future<void> _submitResetPassword(BuildContext context, WidgetRef ref) async {
   if (fields.formKey.currentState?.validate() != true) return;
   if (ref.read(authFormUiProvider(formId)).loading) return;
   ui.setLoading(true);
-  final error = await ref.read(authControllerProvider.notifier).resetPassword(
+  final error = await ref
+      .read(authControllerProvider.notifier)
+      .resetPassword(
         password: fields.password.text,
         passwordConfirmation: fields.confirm.text,
       );
@@ -75,8 +77,9 @@ class ResetPasswordScreen extends ConsumerWidget {
       alignment: AuthFlowAlignment.start,
       child: Form(
         key: fields.formKey,
-        autovalidateMode:
-            ui.attempted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: ui.attempted
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -96,13 +99,16 @@ class ResetPasswordScreen extends ConsumerWidget {
               type: AppInputType.password,
               fieldHeight: AppSize.fieldHeightComfortable,
               textInputAction: TextInputAction.done,
-              validator: (v) => validatePasswordConfirmation(l10n, v, fields.password.text),
+              validator: (v) =>
+                  validatePasswordConfirmation(l10n, v, fields.password.text),
             ),
             AppSize.spaceXL.gap,
             AppButton.primary(
               text: l10n.authResetPasswordAction,
               isLoading: loading,
-              onPressed: loading ? null : () => _submitResetPassword(context, ref),
+              onPressed: loading
+                  ? null
+                  : () => _submitResetPassword(context, ref),
             ),
           ],
         ),

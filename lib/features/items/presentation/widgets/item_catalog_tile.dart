@@ -4,7 +4,7 @@ import '../../../../core/config/theme/app_colors.dart';
 import '../../../../core/config/theme/app_shape.dart';
 import '../../../../core/config/theme/app_size.dart';
 import '../../../../core/widgets/app_card.dart';
-import '../item_semantic_icon.dart';
+import 'package:bnood/features/items/presentation/widgets/item_semantic_icon.dart';
 
 class ItemCatalogTile extends StatelessWidget {
   const ItemCatalogTile({

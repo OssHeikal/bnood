@@ -12,7 +12,11 @@ class RecordingErrorReporter implements ErrorReporter {
   bool throwOnNext = false;
 
   @override
-  void addBreadcrumb({required String message, String? category, Map<String, Object?>? data}) {
+  void addBreadcrumb({
+    required String message,
+    String? category,
+    Map<String, Object?>? data,
+  }) {
     if (throwOnNext) throw StateError('breadcrumb failed');
     breadcrumbs.add(message);
   }
@@ -85,7 +89,10 @@ void main() {
     failing.throwOnNext = false;
     ok.exceptions.clear();
 
-    expect(() => composite.setUser(const ErrorReportingUser(id: '1', phone: '010')), returnsNormally);
+    expect(
+      () => composite.setUser(const ErrorReportingUser(id: '1', phone: '010')),
+      returnsNormally,
+    );
     expect(ok.user?.id, '1');
   });
 
@@ -93,7 +100,11 @@ void main() {
     final a = RecordingErrorReporter();
     final b = RecordingErrorReporter();
     final composite = CompositeErrorReporter([a, b]);
-    const user = ErrorReportingUser(id: 'u1', phone: '01012345678', name: 'Engineer');
+    const user = ErrorReportingUser(
+      id: 'u1',
+      phone: '01012345678',
+      name: 'Engineer',
+    );
 
     composite.setUser(user);
     expect(a.user, user);

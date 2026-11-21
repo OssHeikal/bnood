@@ -7,10 +7,10 @@ import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_app_bar.dart';
-import '../home/presentation/home_foundation_scope.dart';
-import 'auth_controller.dart';
-import 'auth_form_ui.dart';
-import 'auth_state.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_form_ui.dart';
+import 'package:bnood/features/auth/auth_state.dart';
 
 class AuthBootstrapScreen extends ConsumerWidget {
   const AuthBootstrapScreen({super.key});

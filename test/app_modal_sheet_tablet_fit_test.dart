@@ -2,17 +2,18 @@ import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/core/widgets/bounded_sheet_navigator.dart';
 import 'package:bnood/core/widgets/sheet_drag_handle.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-
 const _tabletSize = Size(820, 1180);
 
 void main() {
-  testWidgets('AppModalSheet hugs short content on tablet width', (tester) async {
+  testWidgets('AppModalSheet hugs short content on tablet width', (
+    tester,
+  ) async {
     tester.view.physicalSize = _tabletSize;
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -42,10 +43,7 @@ void main() {
                       padding: EdgeInsets.all(24),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SheetDragHandle(),
-                          Text('Compact'),
-                        ],
+                        children: [SheetDragHandle(), Text('Compact')],
                       ),
                     ),
                   ),
@@ -61,7 +59,9 @@ void main() {
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
 
-    final cap = SheetContentBounds.viewportCap(MediaQueryData(size: _tabletSize));
+    final cap = SheetContentBounds.viewportCap(
+      MediaQueryData(size: _tabletSize),
+    );
     final bounds = find.byKey(AppModalSheet.sheetBoundsKey);
     expect(tester.getSize(bounds).height, lessThan(cap * 0.35));
   });

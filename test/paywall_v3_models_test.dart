@@ -81,46 +81,55 @@ void main() {
     expect(content.v3!.trigger, 'limit_reached');
     expect(content.v3!.packages, hasLength(2));
     expect(content.v3!.comparisonTable?.columns.length, 2);
-    expect(content.v3!.packages.first.highlightBenefits.first.text, 'Team included');
+    expect(
+      content.v3!.packages.first.highlightBenefits.first.text,
+      'Team included',
+    );
     expect(content.v3!.packages.last.isContact, isTrue);
-    expect(content.v3!.packages.last.tagline, 'For larger offices, unlimited projects');
+    expect(
+      content.v3!.packages.last.tagline,
+      'For larger offices, unlimited projects',
+    );
     expect(content.v3!.packages.last.resolveCta('yearly'), 'Contact us');
   });
 
-  test('firstSelectablePackageSlugForPeriod prefers recommended monthly package', () {
-    final v3 = AppPaywallV3Data(
-      trigger: 'default',
-      header: const AppPaywallHeader(title: 't', subtitle: 's'),
-      benefitItems: const [],
-      billing: const AppPaywallBilling(monthlyLabel: 'M', yearlyLabel: 'Y'),
-      packages: [
-        const AppPaywallPackage(
-          slug: 'business',
-          name: 'Business',
-          purchaseMode: 'checkout',
-          monthlyEnabled: false,
-          yearlyEnabled: true,
-          isRecommended: true,
-          pricing: AppPaywallPackagePricing(),
-          ctaLabels: AppPaywallPackageCtaLabels(yearly: 'Go'),
-        ),
-        const AppPaywallPackage(
-          slug: 'pro',
-          name: 'Pro',
-          purchaseMode: 'checkout',
-          monthlyEnabled: true,
-          yearlyEnabled: true,
-          pricing: AppPaywallPackagePricing(),
-          ctaLabels: AppPaywallPackageCtaLabels(yearly: 'Go'),
-        ),
-      ],
-      footer: const AppPaywallFooter(),
-      recommendedPackageSlug: 'business',
-    );
+  test(
+    'firstSelectablePackageSlugForPeriod prefers recommended monthly package',
+    () {
+      final v3 = AppPaywallV3Data(
+        trigger: 'default',
+        header: const AppPaywallHeader(title: 't', subtitle: 's'),
+        benefitItems: const [],
+        billing: const AppPaywallBilling(monthlyLabel: 'M', yearlyLabel: 'Y'),
+        packages: [
+          const AppPaywallPackage(
+            slug: 'business',
+            name: 'Business',
+            purchaseMode: 'checkout',
+            monthlyEnabled: false,
+            yearlyEnabled: true,
+            isRecommended: true,
+            pricing: AppPaywallPackagePricing(),
+            ctaLabels: AppPaywallPackageCtaLabels(yearly: 'Go'),
+          ),
+          const AppPaywallPackage(
+            slug: 'pro',
+            name: 'Pro',
+            purchaseMode: 'checkout',
+            monthlyEnabled: true,
+            yearlyEnabled: true,
+            pricing: AppPaywallPackagePricing(),
+            ctaLabels: AppPaywallPackageCtaLabels(yearly: 'Go'),
+          ),
+        ],
+        footer: const AppPaywallFooter(),
+        recommendedPackageSlug: 'business',
+      );
 
-    expect(v3.firstSelectablePackageSlugForPeriod('monthly'), 'pro');
-    expect(v3.firstSelectablePackageSlugForPeriod('yearly'), 'business');
-  });
+      expect(v3.firstSelectablePackageSlugForPeriod('monthly'), 'pro');
+      expect(v3.firstSelectablePackageSlugForPeriod('yearly'), 'business');
+    },
+  );
 
   test('contact plan is selectable on yearly only', () {
     const enterprise = AppPaywallPackage(
@@ -152,11 +161,17 @@ void main() {
 
     expect(table, isNotNull);
     expect(table!.columns.map((c) => c.slug).toList(), ['pro', 'enterprise']);
-    expect(table.rows.map((r) => r.key).toList(), ['active_projects', 'pdf_export']);
+    expect(table.rows.map((r) => r.key).toList(), [
+      'active_projects',
+      'pdf_export',
+    ]);
   });
 
   test('legacy premium object synthesizes v3 packages', () {
-    final snap = AppSubscriptionSnapshot.fromDataJson(liveShapePayload(), localeCode: 'ar');
+    final snap = AppSubscriptionSnapshot.fromDataJson(
+      liveShapePayload(),
+      localeCode: 'ar',
+    );
     expect(snap.paywall?.usesV3Layout, isTrue);
     expect(snap.paywall?.v3?.packages.single.slug, 'premium');
     expect(snap.paywall?.v3?.packages.single.yearlyEnabled, isTrue);

@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import '../config/theme/app_size.dart';
 import '../config/theme/app_colors.dart';
 
-enum GroupedListDividerKind {
-  nav,
-  insetStart,
-  insetBoth,
-  leadingIcon,
-}
+enum GroupedListDividerKind { nav, insetStart, insetBoth, leadingIcon }
 
 abstract final class GroupedListDivider {
-  static const navIndent = AppSize.spaceLG + AppSize.spaceXL * 2 + AppSize.spaceMD;
-  static const leadingIconIndent = AppSize.spaceLG + AppSize.icon + AppSize.spaceMD;
+  static const navIndent =
+      AppSize.spaceLG + AppSize.spaceXL * 2 + AppSize.spaceMD;
+  static const leadingIconIndent =
+      AppSize.spaceLG + AppSize.icon + AppSize.spaceMD;
 
   /// [Divider] indents are physical left/right, not logical start/end.
   static Widget build(

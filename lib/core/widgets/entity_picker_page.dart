@@ -16,7 +16,13 @@ import 'overlay_form_presentation.dart';
 import 'sheet_drag_handle.dart';
 
 typedef EntityPickerTileBuilder =
-    Widget Function(BuildContext context, String id, bool selected, VoidCallback onSelect, bool showDivider);
+    Widget Function(
+      BuildContext context,
+      String id,
+      bool selected,
+      VoidCallback onSelect,
+      bool showDivider,
+    );
 
 /// Searchable entity list; pops with selected id string.
 class EntityPickerPage extends StatefulWidget {
@@ -60,7 +66,9 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
 
   String _blobForIndex(int index) {
     final label = widget.entries[index].$2;
-    final extra = widget.searchKeys != null && index < widget.searchKeys!.length ? widget.searchKeys![index] : '';
+    final extra = widget.searchKeys != null && index < widget.searchKeys!.length
+        ? widget.searchKeys![index]
+        : '';
     return ArabicSearchNormalizer.normalize('$label $extra');
   }
 
@@ -78,7 +86,9 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
       final allowed = await widget.onBeforeCreate!(context);
       if (!allowed || !mounted) return;
     }
-    final created = await Navigator.of(context).push<String>(MaterialPageRoute(builder: (_) => widget.onCreateRoute()));
+    final created = await Navigator.of(
+      context,
+    ).push<String>(MaterialPageRoute(builder: (_) => widget.onCreateRoute()));
     if (created != null && mounted) {
       Navigator.pop(context, created);
     }
@@ -92,13 +102,20 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
     );
   }
 
-  Widget _listBody(AppLocalizations l10n, List<int> indices, bool isCompletelyEmpty, bool isSearchEmpty) {
+  Widget _listBody(
+    AppLocalizations l10n,
+    List<int> indices,
+    bool isCompletelyEmpty,
+    bool isSearchEmpty,
+  ) {
     if (isCompletelyEmpty || isSearchEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
         child: AppFallback.section(
           icon: Icons.search_off_outlined,
-          title: isCompletelyEmpty ? (widget.emptyTitle ?? l10n.voucherPickerEmptyTitle) : l10n.voucherPickerNoResults,
+          title: isCompletelyEmpty
+              ? (widget.emptyTitle ?? l10n.voucherPickerEmptyTitle)
+              : l10n.voucherPickerNoResults,
           description: isCompletelyEmpty ? widget.emptyDescription : null,
           actions: [
             AppFallbackAction(
@@ -121,7 +138,13 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
         final isLast = listIndex == indices.length - 1;
         void onSelect() => Navigator.pop(context, entry.$1);
         if (widget.tileBuilder != null) {
-          return widget.tileBuilder!(context, entry.$1, selected, onSelect, !isLast);
+          return widget.tileBuilder!(
+            context,
+            entry.$1,
+            selected,
+            onSelect,
+            !isLast,
+          );
         }
         return EntityPickerOptionRow(
           selected: selected,
@@ -147,7 +170,12 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
         : 0.0;
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, bottomPad),
+      padding: EdgeInsets.fromLTRB(
+        AppSize.screenPadding,
+        AppSize.spaceSM,
+        AppSize.screenPadding,
+        bottomPad,
+      ),
       child: AppPressable(
         onPressed: _create,
         child: Row(
@@ -155,7 +183,10 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
           spacing: AppSize.spaceSM,
           children: [
             Icon(Icons.add, color: colors.primary, size: AppSize.icon),
-            Text(l10n.createNew, style: context.text.body.semiBold.setColor(colors.primaryDark)),
+            Text(
+              l10n.createNew,
+              style: context.text.body.semiBold.setColor(colors.primaryDark),
+            ),
           ],
         ),
       ),
@@ -191,7 +222,14 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
                 child: _searchField(l10n),
               ),
               AppSize.spaceMD.gap,
-              Expanded(child: _listBody(l10n, indices, isCompletelyEmpty, isSearchEmpty)),
+              Expanded(
+                child: _listBody(
+                  l10n,
+                  indices,
+                  isCompletelyEmpty,
+                  isSearchEmpty,
+                ),
+              ),
               ?footer,
             ],
           ),
@@ -205,7 +243,12 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, 0),
+            padding: const EdgeInsets.fromLTRB(
+              AppSize.screenPadding,
+              AppSize.spaceSM,
+              AppSize.screenPadding,
+              0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -214,7 +257,9 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
                 Row(
                   children: [
                     BackButton(onPressed: () => Navigator.maybePop(context)),
-                    Expanded(child: Text(widget.title, style: context.text.title)),
+                    Expanded(
+                      child: Text(widget.title, style: context.text.title),
+                    ),
                   ],
                 ),
                 AppSize.spaceMD.gap,
@@ -223,7 +268,9 @@ class _EntityPickerPageState extends State<EntityPickerPage> {
             ),
           ),
           AppSize.spaceMD.gap,
-          Expanded(child: _listBody(l10n, indices, isCompletelyEmpty, isSearchEmpty)),
+          Expanded(
+            child: _listBody(l10n, indices, isCompletelyEmpty, isSearchEmpty),
+          ),
           ?footer,
         ],
       ),

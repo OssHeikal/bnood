@@ -5,7 +5,8 @@ import 'analytics_sink.dart';
 import 'analytics_user.dart';
 
 class CompositeAnalytics implements AnalyticsService {
-  CompositeAnalytics({required List<AnalyticsSink> sinks}) : _sinks = List.unmodifiable(sinks);
+  CompositeAnalytics({required List<AnalyticsSink> sinks})
+    : _sinks = List.unmodifiable(sinks);
 
   final List<AnalyticsSink> _sinks;
 
@@ -19,7 +20,11 @@ class CompositeAnalytics implements AnalyticsService {
       try {
         await sink.track(event);
       } catch (error, stackTrace) {
-        AnalyticsLog.error('$label track ${event.name} failed', error, stackTrace);
+        AnalyticsLog.error(
+          '$label track ${event.name} failed',
+          error,
+          stackTrace,
+        );
       }
     }
     final targets = accepted.isEmpty ? 'none' : accepted.join(', ');
@@ -33,7 +38,11 @@ class CompositeAnalytics implements AnalyticsService {
       try {
         await sink.setUser(user);
       } catch (error, stackTrace) {
-        AnalyticsLog.error('${_sinkLabel(sink)} setUser failed', error, stackTrace);
+        AnalyticsLog.error(
+          '${_sinkLabel(sink)} setUser failed',
+          error,
+          stackTrace,
+        );
       }
     }
     AnalyticsLog.info('setUser ${AnalyticsLog.user(user)} -> $labels');

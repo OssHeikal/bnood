@@ -72,7 +72,10 @@ class CustomTextField extends StatefulWidget {
     this.textInputAction,
     this.autofillHints,
   }) : search = false,
-       assert(controller == null || initialValue == null, 'Pass a controller or an initial value, not both.');
+       assert(
+         controller == null || initialValue == null,
+         'Pass a controller or an initial value, not both.',
+       );
 
   const CustomTextField.search({
     super.key,
@@ -184,7 +187,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   late bool _obscure;
   bool _focused = false;
 
-  TextEditingController get _controller => widget.controller ?? _ownedController!;
+  TextEditingController get _controller =>
+      widget.controller ?? _ownedController!;
 
   FocusNode get _focus => widget.focusNode ?? _ownedFocus!;
 
@@ -226,7 +230,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
     if (oldWidget.controller != widget.controller) {
       (oldWidget.controller ?? _ownedController)?.removeListener(_onText);
       if (widget.controller == null) {
-        _ownedController ??= TextEditingController(text: widget.initialValue ?? '');
+        _ownedController ??= TextEditingController(
+          text: widget.initialValue ?? '',
+        );
       } else if (oldWidget.controller == null) {
         _ownedController?.dispose();
         _ownedController = null;
@@ -246,7 +252,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
     if (oldWidget.type.isObscured != widget.type.isObscured) {
       _obscure = widget.type.isObscured;
     }
-    if (widget.controller == null && widget.initialValue != oldWidget.initialValue) {
+    if (widget.controller == null &&
+        widget.initialValue != oldWidget.initialValue) {
       final next = widget.initialValue ?? '';
       if (_controller.text != next) {
         _controller.value = _controller.value.copyWith(
@@ -307,7 +314,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
       return;
     }
     _debounce?.cancel();
-    _debounce = Timer(AppMotion.searchDebounce, () => widget.onChanged?.call(cleaned));
+    _debounce = Timer(
+      AppMotion.searchDebounce,
+      () => widget.onChanged?.call(cleaned),
+    );
   }
 
   void _clear() {
@@ -343,7 +353,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
     if (!_selectOnTap || _controller.text.isEmpty) {
       return;
     }
-    _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+    _controller.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: _controller.text.length,
+    );
   }
 
   void _toggleObscure() {
@@ -370,7 +383,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
     if (!widget.type.isNumeric) {
       return widget.type.keyboardType;
     }
-    return TextInputType.numberWithOptions(decimal: widget.type != AppInputType.integer, signed: widget.allowNegative);
+    return TextInputType.numberWithOptions(
+      decimal: widget.type != AppInputType.integer,
+      signed: widget.allowNegative,
+    );
   }
 
   TextDirection _textDirection(BuildContext context) {
@@ -428,9 +444,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   Widget _contextMenu(BuildContext context, EditableTextState editable) {
     final items = editable.contextMenuButtonItems.where((item) {
-      return item.type == ContextMenuButtonType.copy || item.type == ContextMenuButtonType.selectAll;
+      return item.type == ContextMenuButtonType.copy ||
+          item.type == ContextMenuButtonType.selectAll;
     }).toList();
-    return AdaptiveTextSelectionToolbar.buttonItems(anchors: editable.contextMenuAnchors, buttonItems: items);
+    return AdaptiveTextSelectionToolbar.buttonItems(
+      anchors: editable.contextMenuAnchors,
+      buttonItems: items,
+    );
   }
 
   @override
@@ -459,27 +479,40 @@ class _CustomTextFieldState extends State<CustomTextField> {
     final invalid = widget.invalid || shownError != null || _softOverflow(text);
     final style = AppInputStyle.resolve(
       context.colors,
-      AppInputState(disabled: widget.disabled, invalid: invalid, focused: _focused),
+      AppInputState(
+        disabled: widget.disabled,
+        invalid: invalid,
+        focused: _focused,
+      ),
     );
     final floated = widget.label == null || _focused || text.isNotEmpty;
-    final resolvedHeight = widget.fieldHeight ??
+    final resolvedHeight =
+        widget.fieldHeight ??
         (_multiline
             ? widget.multilineHeight ?? AppSize.multilineFieldHeight
             : widget.search
-                ? AppSize.searchFieldHeight
-                : AppSize.fieldHeight);
+            ? AppSize.searchFieldHeight
+            : AppSize.fieldHeight);
     final showClear =
-        widget.clearable && !_multiline && _focused && text.isNotEmpty && !widget.disabled && !widget.readOnly;
+        widget.clearable &&
+        !_multiline &&
+        _focused &&
+        text.isNotEmpty &&
+        !widget.disabled &&
+        !widget.readOnly;
     final frame = AppInputFrame(
       style: style,
       variant: widget.variant,
       multiline: _multiline,
       height: resolvedHeight,
       floated: floated,
-      label: widget.search || widget.variant == AppInputVariant.bare ? null : widget.label,
+      label: widget.search || widget.variant == AppInputVariant.bare
+          ? null
+          : widget.label,
       field: _input(context, style, floated, shownError, invalid),
       onSurfaceTap: _handleTap,
-      suffixAtStart: widget.type.isNumeric &&
+      suffixAtStart:
+          widget.type.isNumeric &&
           widget.type != AppInputType.currency &&
           widget.suffix == null &&
           Directionality.of(context) == TextDirection.rtl,
@@ -496,7 +529,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
           : null,
       passwordToggle: widget.type.isObscured && !widget.disabled
           ? AppInputIconAction(
-              icon: FoundationIcon(_obscure ? Icons.visibility : Icons.visibility_off),
+              icon: FoundationIcon(
+                _obscure ? Icons.visibility : Icons.visibility_off,
+              ),
               semanticLabel: FieldPlaceholders.clearField,
               onPressed: _toggleObscure,
             )
@@ -542,11 +577,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
-  Widget _input(BuildContext context, AppInputStyle style, bool floated, String? shownError, bool invalid) {
+  Widget _input(
+    BuildContext context,
+    AppInputStyle style,
+    bool floated,
+    String? shownError,
+    bool invalid,
+  ) {
     return Semantics(
       label: widget.search ? _placeholder() : widget.label,
       hint: shownError ?? widget.helperText,
-      validationResult: invalid ? SemanticsValidationResult.invalid : SemanticsValidationResult.valid,
+      validationResult: invalid
+          ? SemanticsValidationResult.invalid
+          : SemanticsValidationResult.valid,
       child: TextField(
         controller: _controller,
         focusNode: _focus,
@@ -561,7 +604,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         textCapitalization: widget.textCapitalization,
         textAlign: TextAlign.start,
         textDirection: _textDirection(context),
-        textAlignVertical: _multiline ? TextAlignVertical.top : TextAlignVertical.center,
+        textAlignVertical: _multiline
+            ? TextAlignVertical.top
+            : TextAlignVertical.center,
         maxLines: _multiline ? null : 1,
         expands: _multiline && widget.variant == AppInputVariant.field,
         cursorColor: style.cursor,
@@ -584,16 +629,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
         onChanged: _changed,
         onTap: widget.enableFocus ? _handleTap : null,
-        onTapOutside: widget.enableFocus && !_picker ? _unfocusOnTapOutside : null,
+        onTapOutside: widget.enableFocus && !_picker
+            ? _unfocusOnTapOutside
+            : null,
         scrollPadding: EdgeInsets.only(
-          bottom: AppModalSheetScope.footerPaddingOf(context) + MediaQuery.viewInsetsOf(context).bottom,
+          bottom:
+              AppModalSheetScope.footerPaddingOf(context) +
+              MediaQuery.viewInsetsOf(context).bottom,
         ),
         contextMenuBuilder: widget.readOnly ? _contextMenu : null,
         decoration: InputDecoration(
           isCollapsed: true,
           filled: false,
           contentPadding: EdgeInsets.zero,
-          hintText: floated && _placeholder().isNotEmpty ? _placeholder() : null,
+          hintText: floated && _placeholder().isNotEmpty
+              ? _placeholder()
+              : null,
           hintStyle: context.text.body.setColor(style.placeholder),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
@@ -606,4 +657,3 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 }
-

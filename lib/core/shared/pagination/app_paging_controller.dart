@@ -4,8 +4,11 @@ import 'paged_fetch_page.dart';
 
 /// v5 [PagingController] with API `hasMore` metadata (non-empty last pages).
 class AppPagingController<T> {
-  AppPagingController({required PagedFetchCallback<T> fetchPage, this.firstPageKey = 1, this.pageSize = 20})
-    : _fetchPage = fetchPage {
+  AppPagingController({
+    required PagedFetchCallback<T> fetchPage,
+    this.firstPageKey = 1,
+    this.pageSize = 20,
+  }) : _fetchPage = fetchPage {
     pagingController = PagingController<int, T>(
       getNextPageKey: (state) {
         if (!_hasMore) return null;

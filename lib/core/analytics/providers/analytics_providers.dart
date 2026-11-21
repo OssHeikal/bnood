@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../features/auth/auth_controller.dart';
-import '../../../features/auth/auth_state.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_state.dart';
 import '../../push/push_platform.dart';
 import '../appsflyer/appsflyer_bootstrap.dart';
 import '../appsflyer/appsflyer_gateway.dart';
@@ -21,14 +21,18 @@ import '../firebase/remote_firebase_analytics_sink.dart';
 import '../routing/analytics_screen_view_tracker.dart';
 import 'analytics_track.dart';
 
-final analyticsScreenViewTrackerProvider = Provider<AnalyticsScreenViewTracker>((ref) {
-  return AnalyticsScreenViewTracker((screenName) {
-    trackAnalyticsEvent(ref, ScreenViewed(screenName: screenName));
-  });
-});
+final analyticsScreenViewTrackerProvider = Provider<AnalyticsScreenViewTracker>(
+  (ref) {
+    return AnalyticsScreenViewTracker((screenName) {
+      trackAnalyticsEvent(ref, ScreenViewed(screenName: screenName));
+    });
+  },
+);
 
 /// Null when Firebase is not initialized on this platform (web, desktop, tests).
-final firebaseAnalyticsGatewayProvider = Provider<FirebaseAnalyticsGateway?>((ref) {
+final firebaseAnalyticsGatewayProvider = Provider<FirebaseAnalyticsGateway?>((
+  ref,
+) {
   if (!pushMessagingSupported) return null;
   return FirebaseAnalyticsGatewayImpl();
 });

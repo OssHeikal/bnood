@@ -17,6 +17,8 @@ abstract final class PaywallMoneyDisplay {
   static String formatMinorWhole(int minor, {required bool arabic}) =>
       formatMajorAmount(wholeMajorFromMinor(minor), arabic: arabic);
 
-  static String formatPerMonthFromMinor(int perMonthMinor, {required bool arabic}) =>
-      formatMajorAmount(wholeMajorFromMinor(perMonthMinor), arabic: arabic);
+  static String formatPerMonthFromMinor(
+    int perMonthMinor, {
+    required bool arabic,
+  }) => formatMajorAmount(wholeMajorFromMinor(perMonthMinor), arabic: arabic);
 }

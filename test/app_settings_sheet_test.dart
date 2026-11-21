@@ -4,8 +4,8 @@ import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/settings/presentation/app_preferences_body.dart';
-import 'package:bnood/features/settings/presentation/app_settings_sheet.dart';
+import 'package:bnood/features/settings/presentation/widgets/app_preferences_body.dart';
+import 'package:bnood/features/settings/presentation/sheets/app_settings_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +15,10 @@ import 'package:flutter_test/flutter_test.dart';
 class _AuthUser extends AuthController {
   @override
   AuthState build() => AuthState(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: const User(id: 'u1', phone: '+201012345678', name: 'Tester'),
-        bootstrapStarted: true,
-      );
+    bootstrapStatus: AuthBootstrapStatus.authenticated,
+    user: const User(id: 'u1', phone: '+201012345678', name: 'Tester'),
+    bootstrapStarted: true,
+  );
 }
 
 void main() {
@@ -51,7 +51,9 @@ void main() {
           authControllerProvider.overrideWith(_AuthUser.new),
         ],
         child: MaterialApp(
-          theme: brightness == Brightness.dark ? AppFoundationTheme.dark() : AppFoundationTheme.light(),
+          theme: brightness == Brightness.dark
+              ? AppFoundationTheme.dark()
+              : AppFoundationTheme.light(),
           locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -89,7 +91,9 @@ void main() {
     expect(find.text('العربية'), findsOneWidget);
   });
 
-  testWidgets('tap updates theme and locale on preferences body', (tester) async {
+  testWidgets('tap updates theme and locale on preferences body', (
+    tester,
+  ) async {
     late ThemeMode themeMode;
     late Locale locale;
 
@@ -125,7 +129,11 @@ void main() {
   });
 
   testWidgets('fits constrained height without overflow', (tester) async {
-    await pumpSheet(tester, surface: const Size(390, 400), brightness: Brightness.dark);
+    await pumpSheet(
+      tester,
+      surface: const Size(390, 400),
+      brightness: Brightness.dark,
+    );
     expect(tester.takeException(), isNull);
   });
 }

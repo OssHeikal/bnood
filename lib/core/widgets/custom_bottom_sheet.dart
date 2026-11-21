@@ -2,17 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../config/theme/app_colors.dart';
 import '../config/theme/app_size.dart';
-import '../../features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'app_modal_sheet.dart';
 import 'bounded_sheet_navigator.dart';
 
 /// Root bottom sheet with nested [Navigator] for inline-create flows.
 class CustomBottomSheet extends StatelessWidget {
-  const CustomBottomSheet({
-    super.key,
-    required this.child,
-    this.title,
-  });
+  const CustomBottomSheet({super.key, required this.child, this.title});
 
   final Widget child;
   final String? title;
@@ -45,8 +41,10 @@ class CustomBottomSheet extends StatelessWidget {
         builder: (context) {
           return LayoutBuilder(
             builder: (context, constraints) {
-              final maxHeight =
-                  SheetContentBounds.maxHeight(constraints, MediaQuery.of(context));
+              final maxHeight = SheetContentBounds.maxHeight(
+                constraints,
+                MediaQuery.of(context),
+              );
               return ConstrainedBox(
                 constraints: BoxConstraints(maxHeight: maxHeight),
                 child: Column(
@@ -85,7 +83,10 @@ class _BoundedStandaloneChild extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final maxHeight = SheetContentBounds.maxHeight(constraints, MediaQuery.of(context));
+        final maxHeight = SheetContentBounds.maxHeight(
+          constraints,
+          MediaQuery.of(context),
+        );
         return ConstrainedBox(
           constraints: BoxConstraints(
             maxHeight: maxHeight,

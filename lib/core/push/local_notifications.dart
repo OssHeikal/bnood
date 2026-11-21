@@ -11,14 +11,20 @@ class LocalNotifications {
 
   static final LocalNotifications instance = LocalNotifications._();
 
-  static const _channel = AndroidNotificationChannel('bnood_default', 'Bnood', importance: Importance.high);
+  static const _channel = AndroidNotificationChannel(
+    'bnood_default',
+    'Bnood',
+    importance: Importance.high,
+  );
 
   final _plugin = FlutterLocalNotificationsPlugin();
   bool _initialized = false;
   bool _launchDetailsRead = false;
   void Function(Map<String, String> data)? _onTap;
 
-  Future<void> init({required void Function(Map<String, String> data) onTap}) async {
+  Future<void> init({
+    required void Function(Map<String, String> data) onTap,
+  }) async {
     _onTap = onTap;
     if (_initialized) return;
 
@@ -30,9 +36,14 @@ class LocalNotifications {
         requestSoundPermission: false,
       ),
     );
-    await _plugin.initialize(settings: settings, onDidReceiveNotificationResponse: _handleResponse);
+    await _plugin.initialize(
+      settings: settings,
+      onDidReceiveNotificationResponse: _handleResponse,
+    );
     await _plugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(_channel);
     _initialized = true;
     PushLog.info('local notifications: ready');
@@ -42,7 +53,8 @@ class LocalNotifications {
     final n = message.notification;
     final title = n?.title;
     final body = n?.body;
-    if ((title == null || title.isEmpty) && (body == null || body.isEmpty)) return;
+    if ((title == null || title.isEmpty) && (body == null || body.isEmpty))
+      return;
 
     final details = NotificationDetails(
       android: AndroidNotificationDetails(
@@ -60,7 +72,9 @@ class LocalNotifications {
     );
 
     await _plugin.show(
-      id: (message.messageId ?? DateTime.now().toIso8601String()).hashCode & 0x7fffffff,
+      id:
+          (message.messageId ?? DateTime.now().toIso8601String()).hashCode &
+          0x7fffffff,
       title: title,
       body: body,
       notificationDetails: details,

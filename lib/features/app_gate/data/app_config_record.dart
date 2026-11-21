@@ -1,9 +1,4 @@
-enum AppGateStatus {
-  ok,
-  optionalUpdate,
-  forceUpdate,
-  maintenance,
-}
+enum AppGateStatus { ok, optionalUpdate, forceUpdate, maintenance }
 
 /// Parsed `GET /v1/app/config` payload with client-side priority guard.
 class AppConfigData {
@@ -25,14 +20,17 @@ class AppConfigData {
   final String? minVersion;
   final String? latestVersion;
 
-  static AppConfigData failOpen() => const AppConfigData(status: AppGateStatus.ok);
+  static AppConfigData failOpen() =>
+      const AppConfigData(status: AppGateStatus.ok);
 
   factory AppConfigData.fromDataJson(Map<String, dynamic>? json) {
     if (json == null) return failOpen();
     final maintenance = json['maintenance'];
-    final maintenanceEnabled = maintenance is Map<String, dynamic> && maintenance['enabled'] == true;
-    final maintenanceMessage =
-        maintenance is Map<String, dynamic> ? (maintenance['message'] as String? ?? '') : '';
+    final maintenanceEnabled =
+        maintenance is Map<String, dynamic> && maintenance['enabled'] == true;
+    final maintenanceMessage = maintenance is Map<String, dynamic>
+        ? (maintenance['message'] as String? ?? '')
+        : '';
     final status = resolveEffectiveStatus(
       maintenanceEnabled: maintenanceEnabled,
       apiStatus: json['status'] as String?,
@@ -63,7 +61,11 @@ class AppConfigData {
     };
   }
 
-  String messageForDisplay(String Function() maintenanceFallback, String Function() forceFallback, String Function() optionalFallback) {
+  String messageForDisplay(
+    String Function() maintenanceFallback,
+    String Function() forceFallback,
+    String Function() optionalFallback,
+  ) {
     final trimmed = message.trim();
     if (trimmed.isNotEmpty) return trimmed;
     if (status == AppGateStatus.maintenance) {

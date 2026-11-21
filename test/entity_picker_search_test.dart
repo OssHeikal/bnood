@@ -37,7 +37,9 @@ void main() {
     expect(find.text('No matches'), findsNothing);
   });
 
-  testWidgets('entity picker Arabic search ignores alif and ta marbuta', (tester) async {
+  testWidgets('entity picker Arabic search ignores alif and ta marbuta', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),

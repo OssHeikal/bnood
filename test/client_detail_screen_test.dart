@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
-import 'package:bnood/features/clients/presentation/client_detail_provider.dart';
-import 'package:bnood/features/clients/presentation/client_detail_screen.dart';
-import 'package:bnood/features/clients/presentation/client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
+import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +20,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          clientDetailProvider.overrideWith(() => _PendingDetailNotifier(gate.future)),
+          clientDetailProvider.overrideWith(
+            () => _PendingDetailNotifier(gate.future),
+          ),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
@@ -87,8 +89,14 @@ void main() {
     expect(find.textContaining('Remaining in active funds'), findsNothing);
     expect(find.textContaining('300 EGP'), findsWidgets);
     expect(find.textContaining('−'), findsWidgets);
-    expect(find.byKey(const Key('client_detail_action_receive')), findsOneWidget);
-    expect(find.byKey(const Key('client_detail_action_statement')), findsOneWidget);
+    expect(
+      find.byKey(const Key('client_detail_action_receive')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const Key('client_detail_action_statement')),
+      findsOneWidget,
+    );
     expect(find.byKey(const Key('client_detail_overflow')), findsOneWidget);
     expect(find.byType(Skeleton), findsNothing);
   });
@@ -143,69 +151,73 @@ void main() {
 
     expect(find.text('صنايعية'), findsOneWidget);
     expect(find.textContaining('1,000 EGP'), findsWidgets);
-    expect(AppLocalizations.of(tester.element(find.byType(ClientDetailScreen))).labor, 'مصنعية');
+    expect(
+      AppLocalizations.of(
+        tester.element(find.byType(ClientDetailScreen)),
+      ).labor,
+      'مصنعية',
+    );
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('silent refresh keeps detail content without skeleton', (tester) async {
+  testWidgets('silent refresh keeps detail content without skeleton', (
+    tester,
+  ) async {
     final now = DateTime.utc(2026, 11, 1);
     final notifier = _SequencedDetailNotifier([
-        ClientDetailSnapshot(
-          client: Client(
-            id: 'c1',
-            workspaceId: 'w',
-            name: 'Alpha',
-            createdAt: now,
-            updatedAt: now,
-          ),
-          project: Project(
-            id: 'p1',
-            workspaceId: 'w',
-            clientId: 'c1',
-            name: 'Project',
-            status: 'active',
-            createdAt: now,
-            updatedAt: now,
-          ),
-          receivedPiastres: 10000,
-          spentPiastres: 0,
-          estimatedProfitPiastres: null,
-          craftsmanPreviews: const [],
-          topItems: const [],
-          latestMovements: const [],
+      ClientDetailSnapshot(
+        client: Client(
+          id: 'c1',
+          workspaceId: 'w',
+          name: 'Alpha',
+          createdAt: now,
+          updatedAt: now,
         ),
-        ClientDetailSnapshot(
-          client: Client(
-            id: 'c1',
-            workspaceId: 'w',
-            name: 'Alpha',
-            createdAt: now,
-            updatedAt: now,
-          ),
-          project: Project(
-            id: 'p1',
-            workspaceId: 'w',
-            clientId: 'c1',
-            name: 'Project',
-            status: 'active',
-            createdAt: now,
-            updatedAt: now,
-          ),
-          receivedPiastres: 25000,
-          spentPiastres: 0,
-          estimatedProfitPiastres: null,
-          craftsmanPreviews: const [],
-          topItems: const [],
-          latestMovements: const [],
+        project: Project(
+          id: 'p1',
+          workspaceId: 'w',
+          clientId: 'c1',
+          name: 'Project',
+          status: 'active',
+          createdAt: now,
+          updatedAt: now,
         ),
-      ],
-    );
+        receivedPiastres: 10000,
+        spentPiastres: 0,
+        estimatedProfitPiastres: null,
+        craftsmanPreviews: const [],
+        topItems: const [],
+        latestMovements: const [],
+      ),
+      ClientDetailSnapshot(
+        client: Client(
+          id: 'c1',
+          workspaceId: 'w',
+          name: 'Alpha',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        project: Project(
+          id: 'p1',
+          workspaceId: 'w',
+          clientId: 'c1',
+          name: 'Project',
+          status: 'active',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        receivedPiastres: 25000,
+        spentPiastres: 0,
+        estimatedProfitPiastres: null,
+        craftsmanPreviews: const [],
+        topItems: const [],
+        latestMovements: const [],
+      ),
+    ]);
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          clientDetailProvider.overrideWith(() => notifier),
-        ],
+        overrides: [clientDetailProvider.overrideWith(() => notifier)],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),

@@ -5,11 +5,11 @@ import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/features/providers/presentation/provider_detail_provider.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/providers/presentation/providers/provider_detail_provider.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
-import 'package:bnood/features/providers/presentation/provider_detail_screen.dart';
-import 'package:bnood/features/providers/presentation/provider_detail_snapshot.dart';
+import 'package:bnood/features/providers/presentation/screens/provider_detail_screen.dart';
+import 'package:bnood/features/providers/presentation/models/provider_detail_snapshot.dart';
 import 'package:bnood/features/providers/presentation/widgets/provider_detail_loading_skeleton.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +58,9 @@ void main() {
     _StubProviderDetailNotifier.openLoads = 0;
   });
 
-  testWidgets('craftsman detail omits duplicate type/name card', (tester) async {
+  testWidgets('craftsman detail omits duplicate type/name card', (
+    tester,
+  ) async {
     await _pumpCraftsmanDetail(tester, agreements: const []);
     await tester.pumpAndSettle();
 
@@ -68,45 +70,70 @@ void main() {
     expect(find.text('Linked clients'), findsOneWidget);
   });
 
-  testWidgets('craftsman shows agreement totals header and linked client metrics', (tester) async {
-    await _pumpCraftsmanDetail(
-      tester,
-      agreements: [
-        ProviderDetailClientRow(
-          clientName: 'Client Osama',
-          agreement: AppAgreement(
-            id: 'ag1',
-            clientId: 'c1',
-            providerId: '01JCRAFT',
-            amountPiastres: null,
-            amountMajor: 5,
-            paidMajor: 2,
-            remainingMajor: 3,
+  testWidgets(
+    'craftsman shows agreement totals header and linked client metrics',
+    (tester) async {
+      await _pumpCraftsmanDetail(
+        tester,
+        agreements: [
+          ProviderDetailClientRow(
             clientName: 'Client Osama',
+            agreement: AppAgreement(
+              id: 'ag1',
+              clientId: 'c1',
+              providerId: '01JCRAFT',
+              amountPiastres: null,
+              amountMajor: 5,
+              paidMajor: 2,
+              remainingMajor: 3,
+              clientName: 'Client Osama',
+            ),
           ),
-        ),
-      ],
-    );
-    await tester.pumpAndSettle();
+        ],
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.byKey(const Key('provider_detail_agreement_totals_header')), findsOneWidget);
-    expect(find.byKey(const Key('provider_detail_total_agreed')), findsOneWidget);
-    expect(find.byKey(const Key('provider_detail_total_paid')), findsOneWidget);
-    expect(find.byKey(const Key('provider_detail_total_remaining')), findsOneWidget);
-    expect(find.text('Agreed'), findsWidgets);
-    expect(find.text('Paid'), findsWidgets);
-    expect(find.text('Remaining'), findsWidgets);
-    expect(find.text('Client Osama'), findsOneWidget);
-    expect(find.byKey(const Key('provider_detail_link_clients')), findsOneWidget);
-    expect(find.byKey(const Key('provider_detail_agreement_menu_ag1')), findsOneWidget);
-    await tester.tap(find.byKey(const Key('provider_detail_agreement_menu_ag1')));
-    await tester.pumpAndSettle();
-    expect(find.text('Edit agreement'), findsOneWidget);
-    expect(find.text('Unlink'), findsOneWidget);
-    expect(find.textContaining('5 EGP'), findsWidgets);
-  });
+      expect(
+        find.byKey(const Key('provider_detail_agreement_totals_header')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('provider_detail_total_agreed')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('provider_detail_total_paid')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('provider_detail_total_remaining')),
+        findsOneWidget,
+      );
+      expect(find.text('Agreed'), findsWidgets);
+      expect(find.text('Paid'), findsWidgets);
+      expect(find.text('Remaining'), findsWidgets);
+      expect(find.text('Client Osama'), findsOneWidget);
+      expect(
+        find.byKey(const Key('provider_detail_link_clients')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('provider_detail_agreement_menu_ag1')),
+        findsOneWidget,
+      );
+      await tester.tap(
+        find.byKey(const Key('provider_detail_agreement_menu_ag1')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Edit agreement'), findsOneWidget);
+      expect(find.text('Unlink'), findsOneWidget);
+      expect(find.textContaining('5 EGP'), findsWidgets);
+    },
+  );
 
-  testWidgets('supplier shows header total without duplicate type card', (tester) async {
+  testWidgets('supplier shows header total without duplicate type card', (
+    tester,
+  ) async {
     final snapshot = ProviderDetailSnapshot(
       provider: AppProvider(
         id: '01JSUP',
@@ -123,7 +150,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          providerDetailProvider.overrideWith(() => _StubProviderDetailNotifier(snapshot)),
+          providerDetailProvider.overrideWith(
+            () => _StubProviderDetailNotifier(snapshot),
+          ),
           authControllerProvider.overrideWith(_AuthOk.new),
         ],
         child: MaterialApp(
@@ -140,68 +169,78 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Type'), findsNothing);
-    expect(find.byKey(const Key('provider_detail_supplier_paid_header')), findsOneWidget);
+    expect(
+      find.byKey(const Key('provider_detail_supplier_paid_header')),
+      findsOneWidget,
+    );
     expect(find.text('Total paid to supplier'), findsOneWidget);
     expect(find.textContaining('10,000'), findsOneWidget);
     expect(find.text('Linked clients'), findsOneWidget);
     expect(find.text('No linked clients yet'), findsOneWidget);
   });
 
-  testWidgets('provider movements use client movement card with client subtitle and chips', (tester) async {
-    final snapshot = ProviderDetailSnapshot(
-      provider: AppProvider(
-        id: '01JCRAFT',
-        name: 'Ali Craftsman',
-        phone: '+201011111111',
-        type: AppProviderType.craftsman,
-        createdAt: DateTime.utc(2026, 11, 9),
-        updatedAt: DateTime.utc(2026, 11, 9),
-      ),
-      voucherHistory: [
-        ProviderDetailVoucherRow(
-          clientName: 'Ahmed Client',
-          voucher: AppVoucher(
-            id: 'v1',
-            clientId: 'c99',
-            type: 'spend',
-            amountMinor: 100_000,
-            voucherDate: DateTime.utc(2026, 11, 9),
-            method: 'cash',
-            expenseClassification: 'labor',
-            itemName: 'Plumbing',
+  testWidgets(
+    'provider movements use client movement card with client subtitle and chips',
+    (tester) async {
+      final snapshot = ProviderDetailSnapshot(
+        provider: AppProvider(
+          id: '01JCRAFT',
+          name: 'Ali Craftsman',
+          phone: '+201011111111',
+          type: AppProviderType.craftsman,
+          createdAt: DateTime.utc(2026, 11, 9),
+          updatedAt: DateTime.utc(2026, 11, 9),
+        ),
+        voucherHistory: [
+          ProviderDetailVoucherRow(
             clientName: 'Ahmed Client',
+            voucher: AppVoucher(
+              id: 'v1',
+              clientId: 'c99',
+              type: 'spend',
+              amountMinor: 100_000,
+              voucherDate: DateTime.utc(2026, 11, 9),
+              method: 'cash',
+              expenseClassification: 'labor',
+              itemName: 'Plumbing',
+              clientName: 'Ahmed Client',
+            ),
           ),
-        ),
-      ],
-    );
-
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          providerDetailProvider.overrideWith(() => _StubProviderDetailNotifier(snapshot)),
-          authControllerProvider.overrideWith(_AuthOk.new),
         ],
-        child: MaterialApp(
-          theme: AppFoundationTheme.light(),
-          locale: const Locale('en'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const HomeFoundationScope(
-            child: ProviderDetailScreen(providerId: '01JCRAFT'),
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            providerDetailProvider.overrideWith(
+              () => _StubProviderDetailNotifier(snapshot),
+            ),
+            authControllerProvider.overrideWith(_AuthOk.new),
+          ],
+          child: MaterialApp(
+            theme: AppFoundationTheme.light(),
+            locale: const Locale('en'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const HomeFoundationScope(
+              child: ProviderDetailScreen(providerId: '01JCRAFT'),
+            ),
           ),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.text('Plumbing'), findsOneWidget);
-    expect(find.text('Ahmed Client'), findsOneWidget);
-    expect(find.text('Labor'), findsOneWidget);
-    expect(find.text('Cash'), findsOneWidget);
-    expect(find.textContaining('2026'), findsOneWidget);
-  });
+      expect(find.text('Plumbing'), findsOneWidget);
+      expect(find.text('Ahmed Client'), findsOneWidget);
+      expect(find.text('Labor'), findsOneWidget);
+      expect(find.text('Cash'), findsOneWidget);
+      expect(find.textContaining('2026'), findsOneWidget);
+    },
+  );
 
-  testWidgets('refreshSilently after edit keeps body without skeleton flash', (tester) async {
+  testWidgets('refreshSilently after edit keeps body without skeleton flash', (
+    tester,
+  ) async {
     final initial = ProviderDetailSnapshot(
       provider: AppProvider(
         id: '01JCRAFT',
@@ -225,7 +264,11 @@ void main() {
       clientAgreements: const [],
     );
     // build + refetchOnOpen both consume the first snapshot before our silent refresh.
-    final notifier = _SequencedProviderDetailNotifier([initial, initial, updated]);
+    final notifier = _SequencedProviderDetailNotifier([
+      initial,
+      initial,
+      updated,
+    ]);
 
     await tester.pumpWidget(
       ProviderScope(
@@ -262,7 +305,9 @@ void main() {
     expect(find.byType(ProviderDetailLoadingSkeleton), findsNothing);
   });
 
-  testWidgets('refetchOnOpen loads details again when screen opens', (tester) async {
+  testWidgets('refetchOnOpen loads details again when screen opens', (
+    tester,
+  ) async {
     await _pumpCraftsmanDetail(tester, agreements: const []);
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
@@ -291,7 +336,9 @@ Future<void> _pumpCraftsmanDetail(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        providerDetailProvider.overrideWith(() => _StubProviderDetailNotifier(snapshot)),
+        providerDetailProvider.overrideWith(
+          () => _StubProviderDetailNotifier(snapshot),
+        ),
         authControllerProvider.overrideWith(_AuthOk.new),
       ],
       child: MaterialApp(
@@ -312,11 +359,7 @@ class _AuthOk extends AuthController {
   AuthState build() {
     return const AuthState(
       bootstrapStatus: AuthBootstrapStatus.authenticated,
-      user: User(
-        id: 'u1',
-        phone: '+201000000001',
-        name: 'Osama',
-      ),
+      user: User(id: 'u1', phone: '+201000000001', name: 'Osama'),
       bootstrapStarted: true,
     );
   }

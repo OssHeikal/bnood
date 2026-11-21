@@ -10,7 +10,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-HomeApi _homeApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+HomeApi _homeApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return HomeApi(dio: dio);
@@ -27,7 +29,10 @@ void main() {
       expect(totals.receivedMinor, 2_500_000);
       expect(totals.spentMinor, 1_500_000);
       expect(totals.remainingMinor, 1_000_000);
-      expect(RemoteMoneyFormat.formatMinor(totals.remainingMinor), '10,000 EGP');
+      expect(
+        RemoteMoneyFormat.formatMinor(totals.remainingMinor),
+        '10,000 EGP',
+      );
       expect(RemoteMoneyUnits.minorToMajor(1_000_000), 10_000);
     });
   });

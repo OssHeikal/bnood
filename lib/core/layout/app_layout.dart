@@ -18,7 +18,8 @@ abstract final class AppLayout {
 
 extension AppLayoutContext on BuildContext {
   ResponsiveBreakpointsData? get _breakpoints {
-    final inherited = getInheritedWidgetOfExactType<InheritedResponsiveBreakpoints>();
+    final inherited =
+        getInheritedWidgetOfExactType<InheritedResponsiveBreakpoints>();
     return inherited?.data;
   }
 
@@ -53,7 +54,8 @@ extension AppLayoutContext on BuildContext {
     return AppLayout.gutterTablet;
   }
 
-  EdgeInsetsDirectional get pagePadding => EdgeInsetsDirectional.fromSTEB(pageGutter, 0, pageGutter, 0);
+  EdgeInsetsDirectional get pagePadding =>
+      EdgeInsetsDirectional.fromSTEB(pageGutter, 0, pageGutter, 0);
 
   double get formMaxWidth => AppLayout.formMaxWidth;
 

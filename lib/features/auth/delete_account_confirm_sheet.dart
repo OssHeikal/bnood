@@ -11,11 +11,11 @@ import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
-import '../home/presentation/home_foundation_scope.dart';
-import 'auth_controller.dart';
-import 'auth_form_utils.dart';
-import 'auth_messages.dart';
-import 'auth_paths.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_form_utils.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
 
 Future<void> showDeleteAccountConfirmSheet(BuildContext context) {
   return AppModalSheet.show<void>(
@@ -28,10 +28,12 @@ class DeleteAccountConfirmSheet extends ConsumerStatefulWidget {
   const DeleteAccountConfirmSheet({super.key});
 
   @override
-  ConsumerState<DeleteAccountConfirmSheet> createState() => _DeleteAccountConfirmSheetState();
+  ConsumerState<DeleteAccountConfirmSheet> createState() =>
+      _DeleteAccountConfirmSheetState();
 }
 
-class _DeleteAccountConfirmSheetState extends ConsumerState<DeleteAccountConfirmSheet> {
+class _DeleteAccountConfirmSheetState
+    extends ConsumerState<DeleteAccountConfirmSheet> {
   final _formKey = GlobalKey<FormState>();
   final _passwordCtrl = TextEditingController();
   var _submitting = false;
@@ -50,9 +52,9 @@ class _DeleteAccountConfirmSheetState extends ConsumerState<DeleteAccountConfirm
       _submitting = true;
       _passwordError = null;
     });
-    final error = await ref.read(authControllerProvider.notifier).deleteAccount(
-          currentPassword: _passwordCtrl.text,
-        );
+    final error = await ref
+        .read(authControllerProvider.notifier)
+        .deleteAccount(currentPassword: _passwordCtrl.text);
     if (!mounted) return;
     final l10n = AppLocalizations.of(context);
     if (error == null) {
@@ -80,60 +82,64 @@ class _DeleteAccountConfirmSheetState extends ConsumerState<DeleteAccountConfirm
     final colors = context.colors;
 
     return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          AppSize.spaceMD.gap,
-          const SheetDragHandle(),
-          AppSize.spaceLG.gap,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
-            child: Text(l10n.authDeleteAccountConfirmTitle, style: context.text.pageTitle, textAlign: TextAlign.start),
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AppSize.spaceMD.gap,
+        const SheetDragHandle(),
+        AppSize.spaceLG.gap,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
+          child: Text(
+            l10n.authDeleteAccountConfirmTitle,
+            style: context.text.pageTitle,
+            textAlign: TextAlign.start,
           ),
-          AppSize.spaceSM.gap,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
-            child: Text(
-              l10n.authDeleteAccountConfirmBody,
-              style: context.text.body.copyWith(color: colors.onSurfaceMuted),
-              textAlign: TextAlign.start,
+        ),
+        AppSize.spaceSM.gap,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
+          child: Text(
+            l10n.authDeleteAccountConfirmBody,
+            style: context.text.body.copyWith(color: colors.onSurfaceMuted),
+            textAlign: TextAlign.start,
+          ),
+        ),
+        AppSize.spaceXL.gap,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
+          child: Form(
+            key: _formKey,
+            child: CustomTextField(
+              controller: _passwordCtrl,
+              label: l10n.authCurrentPassword,
+              type: AppInputType.password,
+              fieldHeight: AppSize.fieldHeightComfortable,
+              errorMessage: _passwordError,
+              textInputAction: TextInputAction.done,
+              validator: (v) => validateRequired(l10n, v),
             ),
           ),
-          AppSize.spaceXL.gap,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
-            child: Form(
-              key: _formKey,
-              child: CustomTextField(
-                controller: _passwordCtrl,
-                label: l10n.authCurrentPassword,
-                type: AppInputType.password,
-                fieldHeight: AppSize.fieldHeightComfortable,
-                errorMessage: _passwordError,
-                textInputAction: TextInputAction.done,
-                validator: (v) => validateRequired(l10n, v),
-              ),
-            ),
+        ),
+        AppSize.spaceXL.gap,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
+          child: AppButton.destructive(
+            text: l10n.authDeleteAccount,
+            isLoading: _submitting,
+            onPressed: _submitting ? null : _confirmDelete,
           ),
-          AppSize.spaceXL.gap,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
-            child: AppButton.destructive(
-              text: l10n.authDeleteAccount,
-              isLoading: _submitting,
-              onPressed: _submitting ? null : _confirmDelete,
-            ),
+        ),
+        AppSize.spaceMD.gap,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
+          child: AppButton.outlined(
+            text: l10n.cancel,
+            onPressed: _submitting ? null : () => Navigator.pop(context),
           ),
-          AppSize.spaceMD.gap,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
-            child: AppButton.outlined(
-              text: l10n.cancel,
-              onPressed: _submitting ? null : () => Navigator.pop(context),
-            ),
-          ),
-          AppSize.spaceLG.gap,
-        ],
+        ),
+        AppSize.spaceLG.gap,
+      ],
     );
   }
 }

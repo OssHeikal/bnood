@@ -5,8 +5,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
-import '../auth_form_utils.dart';
-import '../auth_otp.dart';
+import 'package:bnood/features/auth/auth_form_utils.dart';
+import 'package:bnood/features/auth/auth_otp.dart';
 
 /// Shared OTP PIN field (pin_code_fields 9.x) — LTR digits, autofill.
 class AuthOtpPinField extends StatelessWidget {
@@ -40,7 +40,8 @@ class AuthOtpPinField extends StatelessWidget {
         builder: (context, constraints) {
           const length = authOtpPinCellCount;
           const spacing = AppSize.spaceSM;
-          final cellSide = (constraints.maxWidth - spacing * (length - 1)) / length;
+          final cellSide =
+              (constraints.maxWidth - spacing * (length - 1)) / length;
           final theme = MaterialPinTheme(
             shape: MaterialPinShape.outlined,
             cellSize: Size.square(cellSide),
@@ -53,9 +54,10 @@ class AuthOtpPinField extends StatelessWidget {
             errorColor: colors.error,
             fillColor: colors.surface,
             focusedFillColor: colors.surface,
-            textStyle: Theme.of(
-              context,
-            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700, color: colors.onSurface),
+            textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: colors.onSurface,
+            ),
             showCursor: true,
             cursorColor: colors.primary,
             enableErrorShake: true,

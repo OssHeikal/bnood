@@ -106,12 +106,19 @@ class AppInputFrame extends StatelessWidget {
       curve: AppMotion.easeOut,
       height: height,
       padding: _contentPadding(),
-      decoration: BoxDecoration(color: style.surface, borderRadius: BorderRadius.circular(AppSize.cardRadius)),
+      decoration: BoxDecoration(
+        color: style.surface,
+        borderRadius: BorderRadius.circular(AppSize.cardRadius),
+      ),
       foregroundDecoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppSize.cardRadius),
         border: Border.all(color: style.border, width: style.borderWidth),
       ),
-      child: GestureDetector(behavior: HitTestBehavior.opaque, onTap: onSurfaceTap, child: row),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onSurfaceTap,
+        child: row,
+      ),
     );
   }
 
@@ -140,7 +147,12 @@ class AppInputFrame extends StatelessWidget {
     add(_action(passwordToggle));
     add(_icon(trailing, style.trailing, AppSize.iconSmall));
 
-    return Row(crossAxisAlignment: multiline ? CrossAxisAlignment.start : CrossAxisAlignment.center, children: slots);
+    return Row(
+      crossAxisAlignment: multiline
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.center,
+      children: slots,
+    );
   }
 
   Widget _editor(BuildContext context) {
@@ -161,7 +173,9 @@ class AppInputFrame extends StatelessWidget {
       children: [
         Positioned.fill(
           child: Padding(
-            padding: EdgeInsets.only(top: floated ? AppSize.floatedLabelHeight : 0),
+            padding: EdgeInsets.only(
+              top: floated ? AppSize.floatedLabelHeight : 0,
+            ),
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: editor,
@@ -193,7 +207,9 @@ class AppInputFrame extends StatelessWidget {
           child: AnimatedDefaultTextStyle(
             duration: AppMotion.durationOf(context, AppMotion.fast),
             curve: AppMotion.easeOut,
-            style: (floated ? floatedStyle : restingStyle).setColor(style.label).ellipsis,
+            style: (floated ? floatedStyle : restingStyle)
+                .setColor(style.label)
+                .ellipsis,
             child: Text(label!, maxLines: 1),
           ),
         ),
@@ -236,7 +252,12 @@ class AppInputFrame extends StatelessWidget {
     );
   }
 
-  Widget _colored(BuildContext context, Widget child, Color color, double size) {
+  Widget _colored(
+    BuildContext context,
+    Widget child,
+    Color color,
+    double size,
+  ) {
     return DefaultTextStyle(
       style: context.text.body.setColor(color),
       child: IconTheme(
@@ -248,7 +269,12 @@ class AppInputFrame extends StatelessWidget {
 }
 
 class AppInputIconAction extends StatelessWidget {
-  const AppInputIconAction({super.key, required this.icon, required this.semanticLabel, required this.onPressed});
+  const AppInputIconAction({
+    super.key,
+    required this.icon,
+    required this.semanticLabel,
+    required this.onPressed,
+  });
 
   final Widget icon;
   final String semanticLabel;
@@ -269,7 +295,10 @@ class AppInputIconAction extends StatelessWidget {
           onPressed: onPressed,
           padding: EdgeInsets.zero,
           icon: IconTheme.merge(
-            data: IconThemeData(size: theme.size ?? AppSize.iconSmall, color: theme.color),
+            data: IconThemeData(
+              size: theme.size ?? AppSize.iconSmall,
+              color: theme.color,
+            ),
             child: icon,
           ),
           style: IconButton.styleFrom(

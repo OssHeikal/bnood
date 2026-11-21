@@ -13,7 +13,12 @@ import '../bounded_sheet_navigator.dart';
 import '../toast/app_tone.dart';
 
 class SheetChoice<T> {
-  const SheetChoice({required this.value, required this.label, this.leading, this.enabled = true});
+  const SheetChoice({
+    required this.value,
+    required this.label,
+    this.leading,
+    this.enabled = true,
+  });
 
   final T value;
   final String label;
@@ -42,23 +47,39 @@ class SheetAction {
 }
 
 abstract final class AppSheet {
-  static Future<void> actions(BuildContext context, {required String title, required List<SheetAction> actions}) {
+  static Future<void> actions(
+    BuildContext context, {
+    required String title,
+    required List<SheetAction> actions,
+  }) {
     return AppModalSheet.show<void>(
       context: context,
       backgroundColor: context.colors.surface,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.cardRadius)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppSize.cardRadius),
+        ),
       ),
-      body: _ActionSheetBody(title: title, actions: actions, hostContext: context),
+      body: _ActionSheetBody(
+        title: title,
+        actions: actions,
+        hostContext: context,
+      ),
     );
   }
 
-  static Future<T?> choices<T>(BuildContext context, {required String title, required List<SheetChoice<T>> choices}) {
+  static Future<T?> choices<T>(
+    BuildContext context, {
+    required String title,
+    required List<SheetChoice<T>> choices,
+  }) {
     return AppModalSheet.show<T>(
       context: context,
       backgroundColor: context.colors.surface,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.cardRadius)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppSize.cardRadius),
+        ),
       ),
       body: _ChoiceSheetBody(title: title, choices: choices),
     );
@@ -73,50 +94,59 @@ class _ChoiceSheetBody<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxListHeight = SheetContentBounds.viewportCap(MediaQuery.of(context)) * 0.7;
+    final maxListHeight =
+        SheetContentBounds.viewportCap(MediaQuery.of(context)) * 0.7;
     final colors = context.colors;
 
     return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            AppSize.spaceMD.gap,
-            const SheetDragHandle(),
-            AppSize.spaceLG.gap,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
-              child: Text(title, style: context.text.title),
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AppSize.spaceMD.gap,
+        const SheetDragHandle(),
+        AppSize.spaceLG.gap,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
+          child: Text(title, style: context.text.title),
+        ),
+        AppSize.spaceMD.gap,
+        ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: maxListHeight),
+          child: ListView.separated(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            itemCount: choices.length,
+            separatorBuilder: (context, index) => GroupedListDivider.build(
+              context,
+              kind: GroupedListDividerKind.leadingIcon,
             ),
-            AppSize.spaceMD.gap,
-            ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: maxListHeight),
-              child: ListView.separated(
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                itemCount: choices.length,
-                separatorBuilder: (context, index) =>
-                    GroupedListDivider.build(context, kind: GroupedListDividerKind.leadingIcon),
-                itemBuilder: (context, index) {
-                  final choice = choices[index];
-                  return Material(
-                    color: colors.surface,
-                    child: CustomListTile(
-                      leading: choice.leading,
-                      title: choice.label,
-                      enabled: choice.enabled,
-                      onTap: choice.enabled ? () => Navigator.of(context).pop(choice.value) : null,
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+            itemBuilder: (context, index) {
+              final choice = choices[index];
+              return Material(
+                color: colors.surface,
+                child: CustomListTile(
+                  leading: choice.leading,
+                  title: choice.label,
+                  enabled: choice.enabled,
+                  onTap: choice.enabled
+                      ? () => Navigator.of(context).pop(choice.value)
+                      : null,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
 
 class _ActionSheetBody extends StatelessWidget {
-  const _ActionSheetBody({required this.title, required this.actions, required this.hostContext});
+  const _ActionSheetBody({
+    required this.title,
+    required this.actions,
+    required this.hostContext,
+  });
 
   final String title;
   final List<SheetAction> actions;
@@ -164,9 +194,17 @@ class _ActionSheetBody extends StatelessWidget {
           AppSize.spaceLG.gap,
           for (final action in actions) ...[
             if (action.destructive)
-              AppButton.destructive(text: action.label, isExpanded: true, onPressed: () => _onAction(context, action))
+              AppButton.destructive(
+                text: action.label,
+                isExpanded: true,
+                onPressed: () => _onAction(context, action),
+              )
             else
-              AppButton.primary(text: action.label, isExpanded: true, onPressed: () => _onAction(context, action)),
+              AppButton.primary(
+                text: action.label,
+                isExpanded: true,
+                onPressed: () => _onAction(context, action),
+              ),
             AppSize.gap.gap,
           ],
         ],

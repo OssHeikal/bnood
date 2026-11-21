@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../client_detail_snapshot.dart';
-import 'client_movement_card.dart';
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_movement_card.dart';
 
 /// Detail movements section; delegates to [ClientMovementCard].
 class ClientDetailMovementRow extends StatelessWidget {

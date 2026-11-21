@@ -19,7 +19,10 @@ class ClientLinkedProviderListSkeleton extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          for (var i = 0; i < count; i++) ...[if (i > 0) AppSize.spaceMD.gap, const _LinkedProviderRowBone()],
+          for (var i = 0; i < count; i++) ...[
+            if (i > 0) AppSize.spaceMD.gap,
+            const _LinkedProviderRowBone(),
+          ],
         ],
       ),
     );
@@ -63,13 +66,19 @@ class _LinkedProviderRowBone extends StatelessWidget {
                 for (var i = 0; i < 3; i++)
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsetsDirectional.only(end: i < 2 ? AppSize.spaceXS : 0),
+                      padding: EdgeInsetsDirectional.only(
+                        end: i < 2 ? AppSize.spaceXS : 0,
+                      ),
                       child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           SkeletonText(role: SkeletonTextRole.label, width: 48),
                           SizedBox(height: AppSize.spaceXS),
-                          SkeletonBox(width: 56, height: 16, radius: AppSize.radiusSM),
+                          SkeletonBox(
+                            width: 56,
+                            height: 16,
+                            radius: AppSize.radiusSM,
+                          ),
                         ],
                       ),
                     ),

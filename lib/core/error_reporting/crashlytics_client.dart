@@ -18,7 +18,7 @@ abstract interface class CrashlyticsClient {
 
 final class FirebaseCrashlyticsClient implements CrashlyticsClient {
   FirebaseCrashlyticsClient([FirebaseCrashlytics? crashlytics])
-      : _crashlytics = crashlytics ?? FirebaseCrashlytics.instance;
+    : _crashlytics = crashlytics ?? FirebaseCrashlytics.instance;
 
   final FirebaseCrashlytics _crashlytics;
 
@@ -31,12 +31,13 @@ final class FirebaseCrashlyticsClient implements CrashlyticsClient {
     StackTrace? stack, {
     bool fatal = false,
     String? reason,
-  }) =>
-      _crashlytics.recordError(error, stack, reason: reason, fatal: fatal);
+  }) => _crashlytics.recordError(error, stack, reason: reason, fatal: fatal);
 
   @override
-  Future<void> setCustomKey(String key, Object value) => _crashlytics.setCustomKey(key, value);
+  Future<void> setCustomKey(String key, Object value) =>
+      _crashlytics.setCustomKey(key, value);
 
   @override
-  Future<void> setUserIdentifier(String identifier) => _crashlytics.setUserIdentifier(identifier);
+  Future<void> setUserIdentifier(String identifier) =>
+      _crashlytics.setUserIdentifier(identifier);
 }

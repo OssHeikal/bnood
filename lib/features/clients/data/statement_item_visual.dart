@@ -1,5 +1,5 @@
 import 'package:bnood/features/items/data/item_api_record.dart';
-import 'client_statement_record.dart';
+import 'package:bnood/features/clients/data/client_statement_record.dart';
 
 /// Default item tile keys when API and catalog omit visuals (matches [CatalogItem.fromDataJson]).
 const statementItemDefaultIconKey = 'layers';
@@ -24,8 +24,10 @@ StatementItemVisual resolveStatementItemVisual(
   Map<String, CatalogItem>? catalogById,
 }) {
   final catalog = catalogById?[item.id];
-  final iconKey = item.iconKey ?? catalog?.iconKey ?? statementItemDefaultIconKey;
-  final colorKey = item.colorKey ?? catalog?.colorKey ?? statementItemDefaultColorKey;
+  final iconKey =
+      item.iconKey ?? catalog?.iconKey ?? statementItemDefaultIconKey;
+  final colorKey =
+      item.colorKey ?? catalog?.colorKey ?? statementItemDefaultColorKey;
   return StatementItemVisual(iconKey: iconKey, colorKey: colorKey);
 }
 

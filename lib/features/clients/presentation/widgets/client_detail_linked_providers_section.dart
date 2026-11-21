@@ -9,8 +9,8 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_fallback.dart';
 import '../../../../core/widgets/app_pressable.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../client_detail_snapshot.dart';
-import 'client_detail_craftsman_row.dart';
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_detail_craftsman_row.dart';
 
 class ClientDetailLinkedProvidersSection extends StatelessWidget {
   const ClientDetailLinkedProvidersSection({
@@ -62,7 +62,9 @@ class ClientDetailLinkedProvidersSection extends StatelessWidget {
                 child: Text(
                   assignLabel,
                   style: text.caption.copyWith(
-                    color: mutationsEnabled ? colors.primaryDark : colors.onSurfaceMuted,
+                    color: mutationsEnabled
+                        ? colors.primaryDark
+                        : colors.onSurfaceMuted,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -71,13 +73,17 @@ class ClientDetailLinkedProvidersSection extends StatelessWidget {
             AppSize.spaceSM.gap,
             AppPressable(
               enabled: mutationsEnabled,
-              onPressed: mutationsEnabled ? () => context.push(seeAllRoute) : null,
+              onPressed: mutationsEnabled
+                  ? () => context.push(seeAllRoute)
+                  : null,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                 child: Text(
                   seeAll,
                   style: text.caption.copyWith(
-                    color: mutationsEnabled ? colors.primaryDark : colors.onSurfaceMuted,
+                    color: mutationsEnabled
+                        ? colors.primaryDark
+                        : colors.onSurfaceMuted,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -105,7 +111,10 @@ class ClientDetailLinkedProvidersSection extends StatelessWidget {
         else
           for (var i = 0; i < previews.length; i++) ...[
             if (i > 0) AppSize.spaceMD.gap,
-            ClientDetailCraftsmanRow(preview: previews[i], localeCode: localeCode),
+            ClientDetailCraftsmanRow(
+              preview: previews[i],
+              localeCode: localeCode,
+            ),
           ],
       ],
     );

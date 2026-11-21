@@ -1,6 +1,6 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/home/presentation/widgets/home_stat_grid.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,10 @@ void main() {
             child: Scaffold(
               body: HomeStatGrid(
                 localeCode: locale.languageCode,
-                totals: const HomeTotals(receivedPiastres: 100000, spentPiastres: 100000),
+                totals: const HomeTotals(
+                  receivedPiastres: 100000,
+                  spentPiastres: 100000,
+                ),
               ),
             ),
           ),
@@ -38,21 +41,28 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('Arabic stat labels share card with amounts without layout error', (tester) async {
-    await pumpGrid(tester, locale: const Locale('ar'));
-    expect(find.text('وارد'), findsOneWidget);
-    expect(find.text('صادر'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+  testWidgets(
+    'Arabic stat labels share card with amounts without layout error',
+    (tester) async {
+      await pumpGrid(tester, locale: const Locale('ar'));
+      expect(find.text('وارد'), findsOneWidget);
+      expect(find.text('صادر'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
-  testWidgets('dark mode shows readable zero remaining with EGP', (tester) async {
+  testWidgets('dark mode shows readable zero remaining with EGP', (
+    tester,
+  ) async {
     await pumpGrid(tester, dark: true);
     expect(find.textContaining('0'), findsWidgets);
     expect(find.textContaining('EGP'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('English at 1.2 text scale lays out without overflow', (tester) async {
+  testWidgets('English at 1.2 text scale lays out without overflow', (
+    tester,
+  ) async {
     await pumpGrid(
       tester,
       locale: const Locale('en'),

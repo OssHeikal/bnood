@@ -8,10 +8,26 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final destinations = [
-    ShellNavDestination(icon: ShellNavIcons.home, label: 'Home', semanticsLabel: 'Home'),
-    ShellNavDestination(icon: ShellNavIcons.clients, label: 'Clients', semanticsLabel: 'Clients'),
-    ShellNavDestination(icon: ShellNavIcons.directory, label: 'Directory', semanticsLabel: 'Directory'),
-    ShellNavDestination(icon: ShellNavIcons.items, label: 'Items', semanticsLabel: 'Items'),
+    ShellNavDestination(
+      icon: ShellNavIcons.home,
+      label: 'Home',
+      semanticsLabel: 'Home',
+    ),
+    ShellNavDestination(
+      icon: ShellNavIcons.clients,
+      label: 'Clients',
+      semanticsLabel: 'Clients',
+    ),
+    ShellNavDestination(
+      icon: ShellNavIcons.directory,
+      label: 'Directory',
+      semanticsLabel: 'Directory',
+    ),
+    ShellNavDestination(
+      icon: ShellNavIcons.items,
+      label: 'Items',
+      semanticsLabel: 'Items',
+    ),
   ];
 
   Widget dock({
@@ -45,7 +61,9 @@ void main() {
   testWidgets('four tabs and voucher satellite', (tester) async {
     var tab = 0;
     var voucher = 0;
-    await tester.pumpWidget(dock(selected: 0, onTab: (_) => tab++, onVoucher: () => voucher++));
+    await tester.pumpWidget(
+      dock(selected: 0, onTab: (_) => tab++, onVoucher: () => voucher++),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Home'), findsOneWidget);
@@ -57,12 +75,22 @@ void main() {
     expect(voucherHit.height, FloatingShellDock.pillTrackExtent);
 
     final materials = tester.widgetList<Material>(
-      find.descendant(of: find.byType(FloatingShellDock), matching: find.byType(Material)),
+      find.descendant(
+        of: find.byType(FloatingShellDock),
+        matching: find.byType(Material),
+      ),
     );
     final pill = materials.firstWhere((m) => m.shape is StadiumBorder);
-    final pillBox = tester.getSize(find.descendant(of: find.byWidget(pill), matching: find.byType(SizedBox)).first);
+    final pillBox = tester.getSize(
+      find
+          .descendant(of: find.byWidget(pill), matching: find.byType(SizedBox))
+          .first,
+    );
     expect(pillBox.height, FloatingShellDock.pillTrackExtent);
-    expect(FloatingShellDock.voucherDiscDiameter, lessThan(FloatingShellDock.pillTrackExtent));
+    expect(
+      FloatingShellDock.voucherDiscDiameter,
+      lessThan(FloatingShellDock.pillTrackExtent),
+    );
 
     await tester.tap(find.bySemanticsLabel('New voucher'));
     await tester.pump();
@@ -77,9 +105,15 @@ void main() {
     await tester.pumpWidget(dock(selected: 0));
     await tester.pumpAndSettle();
 
-    final containers = tester.widgetList<AnimatedContainer>(find.byType(AnimatedContainer));
+    final containers = tester.widgetList<AnimatedContainer>(
+      find.byType(AnimatedContainer),
+    );
     expect(
-      containers.any((c) => c.decoration is BoxDecoration && (c.decoration! as BoxDecoration).color != null),
+      containers.any(
+        (c) =>
+            c.decoration is BoxDecoration &&
+            (c.decoration! as BoxDecoration).color != null,
+      ),
       isTrue,
     );
 
@@ -112,12 +146,17 @@ void main() {
     expect(voucherRect.left, lessThan(dockRect.center.dx));
   });
 
-  testWidgets('outer pill and satellite use stadium or circle shape', (tester) async {
+  testWidgets('outer pill and satellite use stadium or circle shape', (
+    tester,
+  ) async {
     await tester.pumpWidget(dock(selected: 0));
     await tester.pumpAndSettle();
 
     final materials = tester.widgetList<Material>(
-      find.descendant(of: find.byType(FloatingShellDock), matching: find.byType(Material)),
+      find.descendant(
+        of: find.byType(FloatingShellDock),
+        matching: find.byType(Material),
+      ),
     );
     expect(materials.any((m) => m.shape is StadiumBorder), isTrue);
     expect(materials.any((m) => m.shape is CircleBorder), isTrue);
@@ -134,12 +173,16 @@ void main() {
     expect(dockRect.width, greaterThan(360));
   });
 
-  testWidgets('survives text scale 1.2 and 2.0 without overflow', (tester) async {
+  testWidgets('survives text scale 1.2 and 2.0 without overflow', (
+    tester,
+  ) async {
     for (final scale in [1.2, 2.0]) {
       await tester.binding.setSurfaceSize(const Size(320, 200));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
-      await tester.pumpWidget(dock(selected: 1, textScaler: TextScaler.linear(scale)));
+      await tester.pumpWidget(
+        dock(selected: 1, textScaler: TextScaler.linear(scale)),
+      );
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
     }

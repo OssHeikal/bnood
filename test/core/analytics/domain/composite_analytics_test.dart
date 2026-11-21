@@ -23,21 +23,34 @@ void main() {
     expect(firebaseSink.events, isEmpty);
   });
 
-  test('ScreenViewed, ClientCreated and StatementShared reach only Firebase-policy sink', () async {
-    await composite.track(const ScreenViewed(screenName: '/clients'));
-    await composite.track(const ClientCreated(source: ClientCreatedSource.local));
-    await composite.track(const StatementShared());
+  test(
+    'ScreenViewed, ClientCreated and StatementShared reach only Firebase-policy sink',
+    () async {
+      await composite.track(const ScreenViewed(screenName: '/clients'));
+      await composite.track(
+        const ClientCreated(source: ClientCreatedSource.local),
+      );
+      await composite.track(const StatementShared());
 
-    expect(firebaseSink.events.length, 3);
-    expect(firebaseSink.events[0], isA<ScreenViewed>());
-    expect(firebaseSink.events[1], isA<ClientCreated>());
-    expect(firebaseSink.events[2], isA<StatementShared>());
-    expect(appsFlyerSink.events, isEmpty);
-  });
+      expect(firebaseSink.events.length, 3);
+      expect(firebaseSink.events[0], isA<ScreenViewed>());
+      expect(firebaseSink.events[1], isA<ClientCreated>());
+      expect(firebaseSink.events[2], isA<StatementShared>());
+      expect(appsFlyerSink.events, isEmpty);
+    },
+  );
 
   test('Subscription events reach both sinks', () async {
-  const started = SubscriptionStarted(packageSlug: 'pro', revenue: 100, currency: 'EGP');
-  const renewed = SubscriptionRenewed(packageSlug: 'pro', revenue: 100, currency: 'EGP');
+    const started = SubscriptionStarted(
+      packageSlug: 'pro',
+      revenue: 100,
+      currency: 'EGP',
+    );
+    const renewed = SubscriptionRenewed(
+      packageSlug: 'pro',
+      revenue: 100,
+      currency: 'EGP',
+    );
 
     await composite.track(started);
     await composite.track(renewed);

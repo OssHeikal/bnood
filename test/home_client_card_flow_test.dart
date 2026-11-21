@@ -2,7 +2,7 @@ import 'package:bnood/app/widgets/shell_nav_icon.dart';
 import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_amount.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/home/presentation/widgets/home_person_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -48,16 +48,26 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  void expectTrailingInOutColumn(WidgetTester tester, {required Locale locale, required String name}) {
+  void expectTrailingInOutColumn(
+    WidgetTester tester, {
+    required Locale locale,
+    required String name,
+  }) {
     final icons = find.byType(ShellNavIcon);
     expect(icons, findsNWidgets(2));
 
     final receiveIcon = tester.getRect(icons.at(0));
     final spendIcon = tester.getRect(icons.at(1));
-    expect(spendIcon.center.dy - receiveIcon.center.dy, greaterThan(AppSize.spaceXS));
+    expect(
+      spendIcon.center.dy - receiveIcon.center.dy,
+      greaterThan(AppSize.spaceXS),
+    );
 
     final nameRect = tester.getRect(find.text(name));
-    final amounts = find.descendant(of: find.byType(HomePersonCard), matching: find.byType(AppAmount));
+    final amounts = find.descendant(
+      of: find.byType(HomePersonCard),
+      matching: find.byType(AppAmount),
+    );
     expect(amounts, findsNWidgets(3));
     final remainingRect = tester.getRect(amounts.at(0));
     expect(remainingRect.top, greaterThan(nameRect.bottom - 2));
@@ -71,18 +81,51 @@ void main() {
     }
   }
 
-  testWidgets('client card: remaining under name, in/out in trailing column EN', (tester) async {
-    await pumpCard(tester, locale: const Locale('en'), received: 100000, spent: 25000, remaining: 75000);
+  testWidgets(
+    'client card: remaining under name, in/out in trailing column EN',
+    (tester) async {
+      await pumpCard(
+        tester,
+        locale: const Locale('en'),
+        received: 100000,
+        spent: 25000,
+        remaining: 75000,
+      );
 
-    expect(find.textContaining(AppAmount.format(piastres: 100000, localeCode: 'en')), findsOneWidget);
-    expect(find.textContaining(AppAmount.format(piastres: 25000, localeCode: 'en')), findsOneWidget);
-    expectTrailingInOutColumn(tester, locale: const Locale('en'), name: 'Osama Client');
-    expect(tester.takeException(), isNull);
-  });
+      expect(
+        find.textContaining(
+          AppAmount.format(piastres: 100000, localeCode: 'en'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.textContaining(
+          AppAmount.format(piastres: 25000, localeCode: 'en'),
+        ),
+        findsOneWidget,
+      );
+      expectTrailingInOutColumn(
+        tester,
+        locale: const Locale('en'),
+        name: 'Osama Client',
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('trailing column for zero in/out amounts', (tester) async {
-    await pumpCard(tester, locale: const Locale('en'), received: 0, spent: 0, remaining: 0);
-    expectTrailingInOutColumn(tester, locale: const Locale('en'), name: 'Osama Client');
+    await pumpCard(
+      tester,
+      locale: const Locale('en'),
+      received: 0,
+      spent: 0,
+      remaining: 0,
+    );
+    expectTrailingInOutColumn(
+      tester,
+      locale: const Locale('en'),
+      name: 'Osama Client',
+    );
     expect(tester.takeException(), isNull);
   });
 
@@ -95,7 +138,11 @@ void main() {
       remaining: 87654321,
       textScaler: TextScaler.linear(1.2),
     );
-    expectTrailingInOutColumn(tester, locale: const Locale('ar'), name: 'Osama Client');
+    expectTrailingInOutColumn(
+      tester,
+      locale: const Locale('ar'),
+      name: 'Osama Client',
+    );
     expect(tester.takeException(), isNull);
   });
 
@@ -109,18 +156,30 @@ void main() {
       textScaler: TextScaler.linear(1.2),
       surface: const Size(320, 220),
     );
-    expectTrailingInOutColumn(tester, locale: const Locale('en'), name: 'Osama Client');
+    expectTrailingInOutColumn(
+      tester,
+      locale: const Locale('en'),
+      name: 'Osama Client',
+    );
     expect(tester.takeException(), isNull);
   });
 
   testWidgets('negative remaining keeps minus under name', (tester) async {
-    await pumpCard(tester, locale: const Locale('en'), received: 10000, spent: 50000, remaining: -40000);
+    await pumpCard(
+      tester,
+      locale: const Locale('en'),
+      received: 10000,
+      spent: 50000,
+      remaining: -40000,
+    );
     expect(find.textContaining('−'), findsWidgets);
     final amounts = find.byType(AppAmount);
     expect(amounts, findsNWidgets(3));
   });
 
-  testWidgets('supplier amount stays trailing without subtitle or label', (tester) async {
+  testWidgets('supplier amount stays trailing without subtitle or label', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 200));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 

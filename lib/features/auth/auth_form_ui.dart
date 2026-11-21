@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../core/api/auth_api_exception.dart';
-import 'auth_controller.dart';
-import 'auth_messages.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
 
 enum AuthFormId {
   login,
@@ -45,7 +45,8 @@ class AuthFormUiState {
   }
 }
 
-class AuthFormUiNotifier extends AutoDisposeFamilyNotifier<AuthFormUiState, AuthFormId> {
+class AuthFormUiNotifier
+    extends AutoDisposeFamilyNotifier<AuthFormUiState, AuthFormId> {
   @override
   AuthFormUiState build(AuthFormId arg) => const AuthFormUiState();
 
@@ -67,7 +68,11 @@ class AuthFormUiNotifier extends AutoDisposeFamilyNotifier<AuthFormUiState, Auth
         }
       }
     }
-    state = state.copyWith(loading: false, attempted: true, fieldErrors: errors);
+    state = state.copyWith(
+      loading: false,
+      attempted: true,
+      fieldErrors: errors,
+    );
   }
 
   void clearLoading() {
@@ -75,16 +80,16 @@ class AuthFormUiNotifier extends AutoDisposeFamilyNotifier<AuthFormUiState, Auth
   }
 }
 
-final authFormUiProvider =
-    NotifierProvider.autoDispose.family<AuthFormUiNotifier, AuthFormUiState, AuthFormId>(
-  AuthFormUiNotifier.new,
-);
+final authFormUiProvider = NotifierProvider.autoDispose
+    .family<AuthFormUiNotifier, AuthFormUiState, AuthFormId>(
+      AuthFormUiNotifier.new,
+    );
 
 class LoginFormFields {
   LoginFormFields()
-      : formKey = GlobalKey<FormState>(),
-        phone = TextEditingController(),
-        password = TextEditingController();
+    : formKey = GlobalKey<FormState>(),
+      phone = TextEditingController(),
+      password = TextEditingController();
 
   final GlobalKey<FormState> formKey;
   final TextEditingController phone;
@@ -119,7 +124,9 @@ class LoginPhonePrefillNotifier extends Notifier<String?> {
 }
 
 final loginPhonePrefillProvider =
-    NotifierProvider<LoginPhonePrefillNotifier, String?>(LoginPhonePrefillNotifier.new);
+    NotifierProvider<LoginPhonePrefillNotifier, String?>(
+      LoginPhonePrefillNotifier.new,
+    );
 
 final loginPhonePrefillInitProvider = Provider.autoDispose<void>((ref) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -134,10 +141,10 @@ final loginPhonePrefillInitProvider = Provider.autoDispose<void>((ref) {
 
 class RegisterFormFields {
   RegisterFormFields()
-      : formKey = GlobalKey<FormState>(),
-        phone = TextEditingController(),
-        password = TextEditingController(),
-        confirm = TextEditingController();
+    : formKey = GlobalKey<FormState>(),
+      phone = TextEditingController(),
+      password = TextEditingController(),
+      confirm = TextEditingController();
 
   final GlobalKey<FormState> formKey;
   final TextEditingController phone;
@@ -151,7 +158,9 @@ class RegisterFormFields {
   }
 }
 
-final registerFormFieldsProvider = Provider.autoDispose<RegisterFormFields>((ref) {
+final registerFormFieldsProvider = Provider.autoDispose<RegisterFormFields>((
+  ref,
+) {
   final fields = RegisterFormFields();
   ref.onDispose(fields.dispose);
   return fields;
@@ -159,8 +168,8 @@ final registerFormFieldsProvider = Provider.autoDispose<RegisterFormFields>((ref
 
 class ForgotPasswordFormFields {
   ForgotPasswordFormFields()
-      : formKey = GlobalKey<FormState>(),
-        phone = TextEditingController();
+    : formKey = GlobalKey<FormState>(),
+      phone = TextEditingController();
 
   final GlobalKey<FormState> formKey;
   final TextEditingController phone;
@@ -170,16 +179,17 @@ class ForgotPasswordFormFields {
   }
 }
 
-final forgotPasswordFormFieldsProvider = Provider.autoDispose<ForgotPasswordFormFields>((ref) {
-  final fields = ForgotPasswordFormFields();
-  ref.onDispose(fields.dispose);
-  return fields;
-});
+final forgotPasswordFormFieldsProvider =
+    Provider.autoDispose<ForgotPasswordFormFields>((ref) {
+      final fields = ForgotPasswordFormFields();
+      ref.onDispose(fields.dispose);
+      return fields;
+    });
 
 class OtpFormFields {
   OtpFormFields()
-      : formKey = GlobalKey<FormState>(),
-        pinController = PinInputController();
+    : formKey = GlobalKey<FormState>(),
+      pinController = PinInputController();
 
   final GlobalKey<FormState> formKey;
   final PinInputController pinController;
@@ -189,13 +199,17 @@ class OtpFormFields {
   }
 }
 
-final forgotVerifyFormFieldsProvider = Provider.autoDispose<OtpFormFields>((ref) {
+final forgotVerifyFormFieldsProvider = Provider.autoDispose<OtpFormFields>((
+  ref,
+) {
   final fields = OtpFormFields();
   ref.onDispose(fields.dispose);
   return fields;
 });
 
-final registerVerifyFormFieldsProvider = Provider.autoDispose<OtpFormFields>((ref) {
+final registerVerifyFormFieldsProvider = Provider.autoDispose<OtpFormFields>((
+  ref,
+) {
   final fields = OtpFormFields();
   ref.onDispose(fields.dispose);
   return fields;
@@ -203,9 +217,9 @@ final registerVerifyFormFieldsProvider = Provider.autoDispose<OtpFormFields>((re
 
 class ResetPasswordFormFields {
   ResetPasswordFormFields()
-      : formKey = GlobalKey<FormState>(),
-        password = TextEditingController(),
-        confirm = TextEditingController();
+    : formKey = GlobalKey<FormState>(),
+      password = TextEditingController(),
+      confirm = TextEditingController();
 
   final GlobalKey<FormState> formKey;
   final TextEditingController password;
@@ -217,18 +231,19 @@ class ResetPasswordFormFields {
   }
 }
 
-final resetPasswordFormFieldsProvider = Provider.autoDispose<ResetPasswordFormFields>((ref) {
-  final fields = ResetPasswordFormFields();
-  ref.onDispose(fields.dispose);
-  return fields;
-});
+final resetPasswordFormFieldsProvider =
+    Provider.autoDispose<ResetPasswordFormFields>((ref) {
+      final fields = ResetPasswordFormFields();
+      ref.onDispose(fields.dispose);
+      return fields;
+    });
 
 class ChangePasswordFormFields {
   ChangePasswordFormFields()
-      : formKey = GlobalKey<FormState>(),
-        current = TextEditingController(),
-        password = TextEditingController(),
-        confirm = TextEditingController();
+    : formKey = GlobalKey<FormState>(),
+      current = TextEditingController(),
+      password = TextEditingController(),
+      confirm = TextEditingController();
 
   final GlobalKey<FormState> formKey;
   final TextEditingController current;
@@ -242,16 +257,17 @@ class ChangePasswordFormFields {
   }
 }
 
-final changePasswordFormFieldsProvider = Provider.autoDispose<ChangePasswordFormFields>((ref) {
-  final fields = ChangePasswordFormFields();
-  ref.onDispose(fields.dispose);
-  return fields;
-});
+final changePasswordFormFieldsProvider =
+    Provider.autoDispose<ChangePasswordFormFields>((ref) {
+      final fields = ChangePasswordFormFields();
+      ref.onDispose(fields.dispose);
+      return fields;
+    });
 
 class CompleteProfileFormFields {
   CompleteProfileFormFields()
-      : formKey = GlobalKey<FormState>(),
-        name = TextEditingController();
+    : formKey = GlobalKey<FormState>(),
+      name = TextEditingController();
 
   final GlobalKey<FormState> formKey;
   final TextEditingController name;
@@ -261,11 +277,12 @@ class CompleteProfileFormFields {
   }
 }
 
-final completeProfileFormFieldsProvider = Provider.autoDispose<CompleteProfileFormFields>((ref) {
-  final fields = CompleteProfileFormFields();
-  ref.onDispose(fields.dispose);
-  return fields;
-});
+final completeProfileFormFieldsProvider =
+    Provider.autoDispose<CompleteProfileFormFields>((ref) {
+      final fields = CompleteProfileFormFields();
+      ref.onDispose(fields.dispose);
+      return fields;
+    });
 
 class RegisterVerifyUiState {
   const RegisterVerifyUiState({
@@ -300,7 +317,8 @@ class RegisterVerifyUiState {
   }
 }
 
-class RegisterVerifyUiNotifier extends AutoDisposeNotifier<RegisterVerifyUiState> {
+class RegisterVerifyUiNotifier
+    extends AutoDisposeNotifier<RegisterVerifyUiState> {
   Timer? _resendTimer;
 
   @override
@@ -366,9 +384,10 @@ class RegisterVerifyUiNotifier extends AutoDisposeNotifier<RegisterVerifyUiState
 }
 
 final registerVerifyUiProvider =
-    NotifierProvider.autoDispose<RegisterVerifyUiNotifier, RegisterVerifyUiState>(
-  RegisterVerifyUiNotifier.new,
-);
+    NotifierProvider.autoDispose<
+      RegisterVerifyUiNotifier,
+      RegisterVerifyUiState
+    >(RegisterVerifyUiNotifier.new);
 
 final registerVerifyInitProvider = Provider.autoDispose<void>((ref) {
   WidgetsBinding.instance.addPostFrameCallback((_) {

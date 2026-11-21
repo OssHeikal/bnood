@@ -16,7 +16,9 @@ class DeviceTokensApi {
 
   static const _prefix = '/v1/device-tokens';
 
-  Map<String, dynamic> get _authenticatedExtra => {AuthInterceptor.authenticatedExtraKey: true};
+  Map<String, dynamic> get _authenticatedExtra => {
+    AuthInterceptor.authenticatedExtraKey: true,
+  };
 
   void close({bool force = false}) {
     if (_ownsDio) {

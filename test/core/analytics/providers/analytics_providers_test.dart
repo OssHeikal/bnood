@@ -12,11 +12,11 @@ import '../../../support/analytics/fake_analytics_service.dart';
 import '../../../support/fake_session_store.dart';
 
 User _user(String id) => User(
-      id: id,
-      phone: '+201000000001',
-      name: 'Test User',
-      phoneVerifiedAt: DateTime.utc(2026),
-    );
+  id: id,
+  phone: '+201000000001',
+  name: 'Test User',
+  phoneVerifiedAt: DateTime.utc(2026),
+);
 
 void main() {
   test('analyticsServiceProvider returns Noop when analytics disabled', () {
@@ -48,7 +48,11 @@ void main() {
 
     expect(
       fake.users.whereType<AnalyticsUser>().last,
-      const AnalyticsUser(id: 'user-1', name: 'Test User', phone: '+201000000001'),
+      const AnalyticsUser(
+        id: 'user-1',
+        name: 'Test User',
+        phone: '+201000000001',
+      ),
     );
 
     await auth.logout();

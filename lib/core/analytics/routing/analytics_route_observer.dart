@@ -39,11 +39,20 @@ class AnalyticsRouteObserver extends NavigatorObserver {
 }
 
 abstract final class AnalyticsRouteObservers {
-  static List<NavigatorObserver> forRoot(AnalyticsScreenViewTracker tracker) => [
-        AnalyticsRouteObserver(tracker: tracker, scope: AnalyticsRouteObserverScope.root),
+  static List<NavigatorObserver> forRoot(AnalyticsScreenViewTracker tracker) =>
+      [
+        AnalyticsRouteObserver(
+          tracker: tracker,
+          scope: AnalyticsRouteObserverScope.root,
+        ),
       ];
 
-  static List<NavigatorObserver> forShellBranch(AnalyticsScreenViewTracker tracker) => [
-        AnalyticsRouteObserver(tracker: tracker, scope: AnalyticsRouteObserverScope.shellBranch),
-      ];
+  static List<NavigatorObserver> forShellBranch(
+    AnalyticsScreenViewTracker tracker,
+  ) => [
+    AnalyticsRouteObserver(
+      tracker: tracker,
+      scope: AnalyticsRouteObserverScope.shellBranch,
+    ),
+  ];
 }

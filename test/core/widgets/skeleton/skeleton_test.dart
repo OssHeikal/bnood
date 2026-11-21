@@ -14,9 +14,7 @@ void main() {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: const Scaffold(
-          body: Skeleton(
-            child: SkeletonBox(width: 80, height: 16),
-          ),
+          body: Skeleton(child: SkeletonBox(width: 80, height: 16)),
         ),
       ),
     );
@@ -35,9 +33,7 @@ void main() {
         home: MediaQuery(
           data: const MediaQueryData(disableAnimations: true),
           child: const Scaffold(
-            body: Skeleton(
-              child: SkeletonBox(width: 80, height: 16),
-            ),
+            body: Skeleton(child: SkeletonBox(width: 80, height: 16)),
           ),
         ),
       ),

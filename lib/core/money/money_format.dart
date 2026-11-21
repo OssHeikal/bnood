@@ -19,11 +19,14 @@ class MoneyFormat {
     return '$whole.$frac $currencyLabel';
   }
 
-  static String withoutCurrencySuffix(String formatted) =>
-      formatted.replaceAll(RegExp(r'\s*EGP\s*$', caseSensitive: false), '').replaceAll(RegExp(r'\s*ج\.م\s*$'), '');
+  static String withoutCurrencySuffix(String formatted) => formatted
+      .replaceAll(RegExp(r'\s*EGP\s*$', caseSensitive: false), '')
+      .replaceAll(RegExp(r'\s*ج\.م\s*$'), '');
 
   static int? parseEgpInput(String input) {
-    final normalized = DisplayDigits.toWesternDigits(input.trim().replaceAll(',', '').replaceAll(' ', ''));
+    final normalized = DisplayDigits.toWesternDigits(
+      input.trim().replaceAll(',', '').replaceAll(' ', ''),
+    );
     if (normalized.isEmpty) return null;
     final parts = normalized.split('.');
     final whole = int.tryParse(parts.first);

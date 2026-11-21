@@ -23,39 +23,42 @@ List<(String, String)> _manyEntries() {
 }
 
 void main() {
-  testWidgets('full-screen picker list fills space above keyboard and pinned create row', (tester) async {
-    _seedPhoneViewport(tester);
-    tester.view.viewInsets = const FakeViewPadding(bottom: _keyboard);
+  testWidgets(
+    'full-screen picker list fills space above keyboard and pinned create row',
+    (tester) async {
+      _seedPhoneViewport(tester);
+      tester.view.viewInsets = const FakeViewPadding(bottom: _keyboard);
 
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: AppFoundationTheme.light(),
-        locale: const Locale('ar'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: EntityPickerPage(
-          title: 'العملاء',
-          presentation: OverlayFormPresentation.fullScreen,
-          entries: _manyEntries(),
-          onCreateRoute: () => const Scaffold(body: SizedBox()),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppFoundationTheme.light(),
+          locale: const Locale('ar'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: EntityPickerPage(
+            title: 'العملاء',
+            presentation: OverlayFormPresentation.fullScreen,
+            entries: _manyEntries(),
+            onCreateRoute: () => const Scaffold(body: SizedBox()),
+          ),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    final create = find.text('إنشاء جديد');
-    expect(create, findsOneWidget);
+      final create = find.text('إنشاء جديد');
+      expect(create, findsOneWidget);
 
-    final listView = find.byType(ListView);
-    expect(listView, findsOneWidget);
-    final listHeight = tester.getSize(listView).height;
-    expect(listHeight, greaterThan(280));
+      final listView = find.byType(ListView);
+      expect(listView, findsOneWidget);
+      final listHeight = tester.getSize(listView).height;
+      expect(listHeight, greaterThan(280));
 
-    final createBottom = tester.getBottomLeft(create).dy;
-    expect(
-      createBottom,
-      closeTo(_screenH - _keyboard - AppSize.spaceMD - _bottomInset, 4),
-    );
-    expect(tester.takeException(), isNull);
-  });
+      final createBottom = tester.getBottomLeft(create).dy;
+      expect(
+        createBottom,
+        closeTo(_screenH - _keyboard - AppSize.spaceMD - _bottomInset, 4),
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

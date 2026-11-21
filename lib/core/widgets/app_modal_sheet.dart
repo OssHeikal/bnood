@@ -24,13 +24,16 @@ class AppModalSheetScope extends InheritedWidget {
     return context.dependOnInheritedWidgetOfExactType<AppModalSheetScope>();
   }
 
-  static double footerPaddingOf(BuildContext context) => maybeOf(context)?.footerScrollPadding ?? 0;
+  static double footerPaddingOf(BuildContext context) =>
+      maybeOf(context)?.footerScrollPadding ?? 0;
 
-  static double homeIndicatorOf(BuildContext context) => maybeOf(context)?.homeIndicatorBottom ?? 0;
+  static double homeIndicatorOf(BuildContext context) =>
+      maybeOf(context)?.homeIndicatorBottom ?? 0;
 
   @override
   bool updateShouldNotify(AppModalSheetScope oldWidget) =>
-      oldWidget.footerScrollPadding != footerScrollPadding || oldWidget.homeIndicatorBottom != homeIndicatorBottom;
+      oldWidget.footerScrollPadding != footerScrollPadding ||
+      oldWidget.homeIndicatorBottom != homeIndicatorBottom;
 }
 
 /// Shared modal bottom sheet with header / scrollable body / pinned footer slots.
@@ -51,10 +54,14 @@ abstract final class AppModalSheet {
     bool enableDrag = true,
   }) {
     final brightness = Theme.of(context).brightness;
-    final colors = brightness == Brightness.dark ? AppColors.dark : AppColors.light;
+    final colors = brightness == Brightness.dark
+        ? AppColors.dark
+        : AppColors.light;
     final openerViewPadding = MediaQuery.viewPaddingOf(context);
     final openerPaddingInsets = MediaQuery.paddingOf(context);
-    final homeIndicatorBottom = openerViewPadding.bottom > 0 ? openerViewPadding.bottom : openerPaddingInsets.bottom;
+    final homeIndicatorBottom = openerViewPadding.bottom > 0
+        ? openerViewPadding.bottom
+        : openerPaddingInsets.bottom;
     final openerKeyboard = MediaQuery.viewInsetsOf(context).bottom;
     return showModalBottomSheet<T>(
       context: context,
@@ -70,12 +77,22 @@ abstract final class AppModalSheet {
       builder: (ctx) {
         final media = MediaQuery.of(ctx);
         final viewPad = media.viewPadding.copyWith(
-          top: openerViewPadding.top > 0 ? openerViewPadding.top : media.viewPadding.top,
-          bottom: homeIndicatorBottom > 0 ? homeIndicatorBottom : media.viewPadding.bottom,
-          left: openerViewPadding.left > 0 ? openerViewPadding.left : media.viewPadding.left,
-          right: openerViewPadding.right > 0 ? openerViewPadding.right : media.viewPadding.right,
+          top: openerViewPadding.top > 0
+              ? openerViewPadding.top
+              : media.viewPadding.top,
+          bottom: homeIndicatorBottom > 0
+              ? homeIndicatorBottom
+              : media.viewPadding.bottom,
+          left: openerViewPadding.left > 0
+              ? openerViewPadding.left
+              : media.viewPadding.left,
+          right: openerViewPadding.right > 0
+              ? openerViewPadding.right
+              : media.viewPadding.right,
         );
-        final keyboard = media.viewInsets.bottom > 0 ? media.viewInsets.bottom : openerKeyboard;
+        final keyboard = media.viewInsets.bottom > 0
+            ? media.viewInsets.bottom
+            : openerKeyboard;
         final maxHeight = SheetContentBounds.viewportCap(media);
         final isMobile = ctx.isMobileLayout;
         final maxWidth = isMobile ? media.size.width : ctx.formMaxWidth;
@@ -100,20 +117,35 @@ abstract final class AppModalSheet {
           clipBehavior: Clip.antiAlias,
           child: ConstrainedBox(
             key: sheetBoundsKey,
-            constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight),
+            constraints: BoxConstraints(
+              maxWidth: maxWidth,
+              maxHeight: maxHeight,
+            ),
             child: sheet,
           ),
         );
 
         sheet = Padding(
           padding: EdgeInsets.only(bottom: keyboard),
-          child: MediaQuery.removeViewInsets(context: ctx, removeBottom: true, child: sheet),
+          child: MediaQuery.removeViewInsets(
+            context: ctx,
+            removeBottom: true,
+            child: sheet,
+          ),
         );
 
         if (isMobile) {
           sheet = Padding(
-            padding: EdgeInsets.only(top: viewPad.top, left: viewPad.left, right: viewPad.right),
-            child: Align(alignment: Alignment.bottomCenter, widthFactor: 1, child: sheet),
+            padding: EdgeInsets.only(
+              top: viewPad.top,
+              left: viewPad.left,
+              right: viewPad.right,
+            ),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              widthFactor: 1,
+              child: sheet,
+            ),
           );
         } else {
           final closedBottom = AppSize.spaceMD + viewPad.bottom;
@@ -181,7 +213,9 @@ class _ModalSheetSlotsState extends State<_ModalSheetSlots> {
   }
 
   double get _footerChromeBottom {
-    final homeIndicator = widget.keyboardBottom > 0 ? 0.0 : widget.homeIndicatorBottom;
+    final homeIndicator = widget.keyboardBottom > 0
+        ? 0.0
+        : widget.homeIndicatorBottom;
     return AppSize.spaceMD + homeIndicator;
   }
 
@@ -240,7 +274,11 @@ class _ModalSheetSlotsState extends State<_ModalSheetSlots> {
 
 /// Requests focus after the hosting [ModalRoute] open animation completes.
 class AppModalSheetAutofocus extends StatefulWidget {
-  const AppModalSheetAutofocus({super.key, required this.focusNode, required this.child});
+  const AppModalSheetAutofocus({
+    super.key,
+    required this.focusNode,
+    required this.child,
+  });
 
   final FocusNode focusNode;
   final Widget child;

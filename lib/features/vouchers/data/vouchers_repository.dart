@@ -1,6 +1,6 @@
-import 'vouchers_api.dart';
-import 'app_voucher_receipt.dart';
-import 'app_voucher_record.dart';
+import 'package:bnood/features/vouchers/data/vouchers_api.dart';
+import 'package:bnood/features/vouchers/data/app_voucher_receipt.dart';
+import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
 
 class VouchersRepository {
   VouchersRepository(this._api);
@@ -11,8 +11,7 @@ class VouchersRepository {
     String? q,
     int page = 1,
     int perPage = 50,
-  }) =>
-      _api.listVouchers(q: q, page: page, perPage: perPage);
+  }) => _api.listVouchers(q: q, page: page, perPage: perPage);
 
   Future<VouchersListPage> listClientVouchers({
     required String clientId,
@@ -23,31 +22,36 @@ class VouchersRepository {
     String sort = 'date_desc',
     int page = 1,
     int perPage = 50,
-  }) =>
-      _api.listClientVouchers(
-        clientId: clientId,
-        q: q,
-        itemId: itemId,
-        from: from,
-        to: to,
-        sort: sort,
-        page: page,
-        perPage: perPage,
-      );
+  }) => _api.listClientVouchers(
+    clientId: clientId,
+    q: q,
+    itemId: itemId,
+    from: from,
+    to: to,
+    sort: sort,
+    page: page,
+    perPage: perPage,
+  );
 
   Future<VouchersListPage> listProviderVouchers({
     required String providerId,
     String? q,
     int page = 1,
     int perPage = 50,
-  }) =>
-      _api.listProviderVouchers(providerId: providerId, q: q, page: page, perPage: perPage);
+  }) => _api.listProviderVouchers(
+    providerId: providerId,
+    q: q,
+    page: page,
+    perPage: perPage,
+  );
 
   Future<List<AppVoucher>> listAllClientVouchers(String clientId) =>
       _listAll((page) => listClientVouchers(clientId: clientId, page: page));
 
   Future<List<AppVoucher>> listAllProviderVouchers(String providerId) =>
-      _listAll((page) => listProviderVouchers(providerId: providerId, page: page));
+      _listAll(
+        (page) => listProviderVouchers(providerId: providerId, page: page),
+      );
 
   Future<AppVoucher> getVoucher(String id) => _api.getVoucher(id);
 
@@ -61,18 +65,17 @@ class VouchersRepository {
     String? itemId,
     String? providerId,
     String? expenseClassification,
-  }) =>
-      _api.createVoucher(
-        clientId: clientId,
-        type: type,
-        amountMinor: amountMinor,
-        voucherDate: voucherDate,
-        method: method,
-        description: description,
-        itemId: itemId,
-        providerId: providerId,
-        expenseClassification: expenseClassification,
-      );
+  }) => _api.createVoucher(
+    clientId: clientId,
+    type: type,
+    amountMinor: amountMinor,
+    voucherDate: voucherDate,
+    method: method,
+    description: description,
+    itemId: itemId,
+    providerId: providerId,
+    expenseClassification: expenseClassification,
+  );
 
   Future<AppVoucher> patchVoucher({
     required String id,
@@ -85,19 +88,18 @@ class VouchersRepository {
     String? providerId,
     String? expenseClassification,
     bool clearProvider = false,
-  }) =>
-      _api.patchVoucher(
-        id: id,
-        amountMinor: amountMinor,
-        voucherDate: voucherDate,
-        method: method,
-        description: description,
-        clearDescription: clearDescription,
-        itemId: itemId,
-        providerId: providerId,
-        expenseClassification: expenseClassification,
-        clearProvider: clearProvider,
-      );
+  }) => _api.patchVoucher(
+    id: id,
+    amountMinor: amountMinor,
+    voucherDate: voucherDate,
+    method: method,
+    description: description,
+    clearDescription: clearDescription,
+    itemId: itemId,
+    providerId: providerId,
+    expenseClassification: expenseClassification,
+    clearProvider: clearProvider,
+  );
 
   Future<void> deleteVoucher(String id) => _api.deleteVoucher(id);
 
@@ -108,10 +110,14 @@ class VouchersRepository {
     required String voucherId,
     required String filePath,
     required String filename,
-  }) =>
-      _api.uploadVoucherReceipt(voucherId: voucherId, filePath: filePath, filename: filename);
+  }) => _api.uploadVoucherReceipt(
+    voucherId: voucherId,
+    filePath: filePath,
+    filename: filename,
+  );
 
-  Future<List<int>> downloadReceiptBytes(String receiptId) => _api.downloadReceiptBytes(receiptId);
+  Future<List<int>> downloadReceiptBytes(String receiptId) =>
+      _api.downloadReceiptBytes(receiptId);
 
   Future<void> deleteReceipt(String receiptId) => _api.deleteReceipt(receiptId);
 

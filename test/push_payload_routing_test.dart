@@ -4,7 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('low_balance routes to client detail when client_id present', () {
     expect(
-      resolvePushNavigationLocation({'type': 'low_balance', 'client_id': 'abc'}),
+      resolvePushNavigationLocation({
+        'type': 'low_balance',
+        'client_id': 'abc',
+      }),
       '/clients/abc',
     );
   });
@@ -14,12 +17,18 @@ void main() {
   });
 
   test('subscription_expiry routes to paywall', () {
-    expect(resolvePushNavigationLocation({'type': 'subscription_expiry'}), pushSubscriptionLocation);
+    expect(
+      resolvePushNavigationLocation({'type': 'subscription_expiry'}),
+      pushSubscriptionLocation,
+    );
   });
 
   test('broadcast target subscription routes to paywall', () {
     expect(
-      resolvePushNavigationLocation({'type': 'admin_broadcast', 'target': 'subscription'}),
+      resolvePushNavigationLocation({
+        'type': 'admin_broadcast',
+        'target': 'subscription',
+      }),
       pushSubscriptionLocation,
     );
   });

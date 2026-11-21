@@ -13,14 +13,21 @@ class AuthInterceptor extends QueuedInterceptor {
   static const authenticatedExtraKey = 'authenticated';
 
   @override
-  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     if (options.extra[authenticatedExtraKey] == true) {
       final token = await _store.readToken();
       if (token == null || token.isEmpty) {
         return handler.reject(
           DioException(
             requestOptions: options,
-            error: AuthApiException(statusCode: 401, message: 'No session', code: 'unauthorized'),
+            error: AuthApiException(
+              statusCode: 401,
+              message: 'No session',
+              code: 'unauthorized',
+            ),
           ),
           true,
         );

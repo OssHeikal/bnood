@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import 'data/app_config_record.dart';
+import 'package:bnood/features/app_gate/data/app_config_record.dart';
 import '../../core/utils/safe_external_url.dart';
-import 'app_gate_cold_start.dart';
-import 'app_gate_provider.dart';
-import 'app_gate_session.dart';
-import 'widgets/gate_blocking_scaffold.dart';
+import 'package:bnood/features/app_gate/app_gate_cold_start.dart';
+import 'package:bnood/features/app_gate/app_gate_provider.dart';
+import 'package:bnood/features/app_gate/app_gate_session.dart';
+import 'package:bnood/features/app_gate/widgets/gate_blocking_scaffold.dart';
 
 class AppOptionalUpdateScreen extends ConsumerWidget {
   const AppOptionalUpdateScreen({super.key});
@@ -16,7 +16,8 @@ class AppOptionalUpdateScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final config = ref.watch(appGateProvider).valueOrNull ?? AppConfigData.failOpen();
+    final config =
+        ref.watch(appGateProvider).valueOrNull ?? AppConfigData.failOpen();
     final message = config.messageForDisplay(
       () => l10n.gateMaintenanceFallbackMessage,
       () => l10n.gateForceUpdateFallbackMessage,

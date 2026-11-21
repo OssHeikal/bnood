@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
-import '../../data/client_statement_record.dart';
-import '../../data/statement_item_visual.dart';
-import '../../../../features/items/data/item_api_record.dart';
+import 'package:bnood/features/clients/data/client_statement_record.dart';
+import 'package:bnood/features/clients/data/statement_item_visual.dart';
+import 'package:bnood/features/items/data/item_api_record.dart';
 import '../../../../core/config/extensions/num_extensions.dart';
 import '../../../../core/config/theme/app_colors.dart';
 import '../../../../core/config/theme/app_shape.dart';
@@ -16,10 +16,10 @@ import '../../../../core/widgets/bounded_sheet_navigator.dart';
 import '../../../../core/widgets/buttons/app_button.dart';
 import '../../../../core/widgets/custom_bottom_sheet.dart';
 import '../../../../core/widgets/sheet_drag_handle.dart';
-import '../../../items/presentation/item_semantic_icon.dart';
-import '../../../vouchers/presentation/voucher_date_sheet.dart';
-import '../../../vouchers/presentation/voucher_transaction_date_bounds.dart';
-import '../client_movements_filters.dart';
+import 'package:bnood/features/items/presentation/widgets/item_semantic_icon.dart';
+import 'package:bnood/features/vouchers/presentation/sheets/voucher_date_sheet.dart';
+import 'package:bnood/features/vouchers/presentation/models/voucher_transaction_date_bounds.dart';
+import 'package:bnood/features/clients/presentation/models/client_movements_filters.dart';
 
 void _closeSheet<T>(BuildContext context, T value) {
   Navigator.of(context).pop(value);
@@ -34,12 +34,16 @@ Future<T?> _showMovementsFilterSheet<T>(
     context: context,
     title: null,
     nestedNavigator: false,
-    builder: (ctx) => _MovementsFilterSheetScaffold(title: title, child: body(ctx)),
+    builder: (ctx) =>
+        _MovementsFilterSheetScaffold(title: title, child: body(ctx)),
   );
 }
 
 class _MovementsFilterSheetScaffold extends StatelessWidget {
-  const _MovementsFilterSheetScaffold({required this.title, required this.child});
+  const _MovementsFilterSheetScaffold({
+    required this.title,
+    required this.child,
+  });
 
   final String title;
   final Widget child;
@@ -49,21 +53,23 @@ class _MovementsFilterSheetScaffold extends StatelessWidget {
     final text = context.text;
 
     return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(top: AppSize.spaceSM),
-            child: SheetDragHandle(),
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: AppSize.spaceSM),
+          child: SheetDragHandle(),
+        ),
+        AppSize.spaceMD.gap,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSize.screenPadding,
           ),
-          AppSize.spaceMD.gap,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
-            child: Text(title, style: text.title),
-          ),
-          AppSize.spaceMD.gap,
-          child,
-        ],
+          child: Text(title, style: text.title),
+        ),
+        AppSize.spaceMD.gap,
+        child,
+      ],
     );
   }
 }
@@ -103,11 +109,14 @@ class _SortSheetBody extends StatelessWidget {
         if (current != ClientMovementsSort.dateDesc) ...[
           AppSize.spaceMD.gap,
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSize.screenPadding,
+            ),
             child: AppButton(
               text: l10n.movementsClearFilter,
               style: AppButtonStyle.text,
-              onPressed: () => _closeSheet(context, ClientMovementsSort.dateDesc),
+              onPressed: () =>
+                  _closeSheet(context, ClientMovementsSort.dateDesc),
             ),
           ),
         ],
@@ -176,11 +185,14 @@ class _ItemSheetBody extends StatelessWidget {
         if (currentItemId != null) ...[
           AppSize.spaceMD.gap,
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSize.screenPadding,
+            ),
             child: AppButton(
               text: l10n.movementsClearFilter,
               style: AppButtonStyle.text,
-              onPressed: () => _closeSheet(context, const MovementsItemPickResult()),
+              onPressed: () =>
+                  _closeSheet(context, const MovementsItemPickResult()),
             ),
           ),
         ],
@@ -193,7 +205,10 @@ class _ItemSheetBody extends StatelessWidget {
 class _ItemFilterIcon extends StatelessWidget {
   const _ItemFilterIcon({required this.iconKey, required this.colorKey});
 
-  factory _ItemFilterIcon.fromItemSpend(AppClientStatementItemSpend item, {Map<String, CatalogItem>? catalogById}) {
+  factory _ItemFilterIcon.fromItemSpend(
+    AppClientStatementItemSpend item, {
+    Map<String, CatalogItem>? catalogById,
+  }) {
     final visual = resolveStatementItemVisual(item, catalogById: catalogById);
     return _ItemFilterIcon(iconKey: visual.iconKey, colorKey: visual.colorKey);
   }
@@ -328,14 +343,18 @@ class _DateSheetBodyState extends State<_DateSheetBody> {
           AppSize.spaceMD.gap,
           AppButton(
             text: l10n.save,
-            onPressed: () => _closeSheet(context, MovementsDatePickResult(from: _from, to: _to)),
+            onPressed: () => _closeSheet(
+              context,
+              MovementsDatePickResult(from: _from, to: _to),
+            ),
           ),
           if (_from != null || _to != null) ...[
             AppSize.spaceSM.gap,
             AppButton(
               text: l10n.movementsClearFilter,
               style: AppButtonStyle.text,
-              onPressed: () => _closeSheet(context, const MovementsDatePickResult()),
+              onPressed: () =>
+                  _closeSheet(context, const MovementsDatePickResult()),
             ),
           ],
           AppSize.spaceLG.gap,
@@ -346,7 +365,11 @@ class _DateSheetBodyState extends State<_DateSheetBody> {
 }
 
 class _DateRow extends StatelessWidget {
-  const _DateRow({required this.label, required this.value, required this.onTap});
+  const _DateRow({
+    required this.label,
+    required this.value,
+    required this.onTap,
+  });
 
   final String label;
   final String value;
@@ -373,13 +396,22 @@ class _DateRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(label, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
+                    Text(
+                      label,
+                      style: text.caption.copyWith(
+                        color: colors.onSurfaceMuted,
+                      ),
+                    ),
                     AppSize.spaceXS.gap,
                     Text(value, style: text.bodyEmphasis),
                   ],
                 ),
               ),
-              Icon(Icons.calendar_today_outlined, size: AppSize.iconCompact, color: colors.muted),
+              Icon(
+                Icons.calendar_today_outlined,
+                size: AppSize.iconCompact,
+                color: colors.muted,
+              ),
             ],
           ),
         ),
@@ -395,7 +427,8 @@ class _FilterOptionsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxHeight = SheetContentBounds.viewportCap(MediaQuery.of(context)) * 0.55;
+    final maxHeight =
+        SheetContentBounds.viewportCap(MediaQuery.of(context)) * 0.55;
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxHeight),
       child: ListView(
@@ -430,12 +463,17 @@ class _FilterSheetOption extends StatelessWidget {
         onPressed: onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceMD, vertical: AppSize.spaceMD),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSize.spaceMD,
+            vertical: AppSize.spaceMD,
+          ),
           decoration: BoxDecoration(
             color: selected ? colors.primaryTint : colors.surface,
             borderRadius: BorderRadius.circular(AppSize.radiusSM),
             border: Border.all(
-              color: selected ? colors.primary.withValues(alpha: 0.35) : colors.outlineSubtle,
+              color: selected
+                  ? colors.primary.withValues(alpha: 0.35)
+                  : colors.outlineSubtle,
             ),
           ),
           child: Row(
@@ -455,7 +493,11 @@ class _FilterSheetOption extends StatelessWidget {
                 ),
               ),
               if (selected)
-                Icon(Icons.check_circle, color: colors.primary, size: AppSize.iconCompact),
+                Icon(
+                  Icons.check_circle,
+                  color: colors.primary,
+                  size: AppSize.iconCompact,
+                ),
             ],
           ),
         ),

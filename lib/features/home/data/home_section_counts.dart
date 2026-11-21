@@ -12,4 +12,6 @@ class HomeSectionCounts {
   final int? suppliersCount;
 }
 
-final homeSectionCountsProvider = StateProvider<HomeSectionCounts>((ref) => const HomeSectionCounts());
+final homeSectionCountsProvider = StateProvider<HomeSectionCounts>(
+  (ref) => const HomeSectionCounts(),
+);

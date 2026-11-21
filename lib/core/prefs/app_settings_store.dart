@@ -57,7 +57,10 @@ abstract final class AppSettingsStore {
     };
   }
 
-  static Future<bool> writeThemeMode(SharedPreferences? prefs, ThemeMode mode) async {
+  static Future<bool> writeThemeMode(
+    SharedPreferences? prefs,
+    ThemeMode mode,
+  ) async {
     if (prefs == null) return false;
     return prefs.setString(themeKey, switch (mode) {
       ThemeMode.light => 'light',
@@ -66,7 +69,10 @@ abstract final class AppSettingsStore {
     });
   }
 
-  static Future<bool> writeLocale(SharedPreferences? prefs, Locale locale) async {
+  static Future<bool> writeLocale(
+    SharedPreferences? prefs,
+    Locale locale,
+  ) async {
     if (prefs == null) return false;
     final code = locale.languageCode;
     if (code != 'ar' && code != 'en') return false;

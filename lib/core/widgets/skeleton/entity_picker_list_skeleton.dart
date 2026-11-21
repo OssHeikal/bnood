@@ -22,7 +22,9 @@ class EntityPickerListSkeleton extends StatelessWidget {
         itemCount: rowCount,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSize.screenPadding,
+            ),
             child: Column(
               children: [
                 Row(
@@ -36,7 +38,10 @@ class EntityPickerListSkeleton extends StatelessWidget {
                         children: const [
                           SkeletonText(role: SkeletonTextRole.body),
                           SizedBox(height: AppSize.spaceXS),
-                          SkeletonText(role: SkeletonTextRole.supporting, width: 120),
+                          SkeletonText(
+                            role: SkeletonTextRole.supporting,
+                            width: 120,
+                          ),
                         ],
                       ),
                     ),
@@ -46,7 +51,9 @@ class EntityPickerListSkeleton extends StatelessWidget {
                   Divider(
                     height: 1,
                     thickness: 1,
-                    indent: EntityPickerOptionRow.dividerStartInset(_leadingSize),
+                    indent: EntityPickerOptionRow.dividerStartInset(
+                      _leadingSize,
+                    ),
                   ),
               ],
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../features/auth/auth_controller.dart';
-import '../../features/auth/auth_state.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_state.dart';
 import 'user_session_reset.dart';
 
 String? _sessionIdentity(AuthState? state) {

@@ -8,7 +8,8 @@ class PushRepository {
   final NotificationSettingsApi _settingsApi;
   final DeviceTokensApi _deviceTokensApi;
 
-  Future<NotificationSettingsRecord> fetchSettings() => _settingsApi.getSettings();
+  Future<NotificationSettingsRecord> fetchSettings() =>
+      _settingsApi.getSettings();
 
   Future<NotificationSettingsRecord> updateSettings({
     bool? pushEnabled,
@@ -20,8 +21,16 @@ class PushRepository {
     lowBalanceAmountMinor: lowBalanceAmountMinor,
   );
 
-  Future<void> registerDeviceToken({required String token, required String platform, required String locale}) =>
-      _deviceTokensApi.registerToken(token: token, platform: platform, locale: locale);
+  Future<void> registerDeviceToken({
+    required String token,
+    required String platform,
+    required String locale,
+  }) => _deviceTokensApi.registerToken(
+    token: token,
+    platform: platform,
+    locale: locale,
+  );
 
-  Future<void> deleteDeviceToken(String token) => _deviceTokensApi.deleteToken(token: token);
+  Future<void> deleteDeviceToken(String token) =>
+      _deviceTokensApi.deleteToken(token: token);
 }

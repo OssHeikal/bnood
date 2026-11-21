@@ -8,7 +8,10 @@ void main() {
 
   test('maps network and session errors to instructive copy', () {
     expect(
-      apiAuthErrorUserMessage(l10n, AuthApiException(statusCode: 0, message: 'x', code: 'network')),
+      apiAuthErrorUserMessage(
+        l10n,
+        AuthApiException(statusCode: 0, message: 'x', code: 'network'),
+      ),
       l10n.apiErrorNetwork,
     );
     expect(
@@ -32,6 +35,9 @@ void main() {
   });
 
   test('generic object uses fallback', () {
-    expect(apiErrorUserMessage(l10n, Exception('boom')), l10n.apiGenericFailure);
+    expect(
+      apiErrorUserMessage(l10n, Exception('boom')),
+      l10n.apiGenericFailure,
+    );
   });
 }

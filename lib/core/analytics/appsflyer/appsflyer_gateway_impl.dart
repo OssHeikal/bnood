@@ -4,7 +4,8 @@ import '../domain/analytics_log.dart';
 import 'appsflyer_gateway.dart';
 
 class AppsFlyerGatewayImpl implements AppsFlyerGateway {
-  AppsFlyerGatewayImpl({AppsFlyerSdk? sdk}) : _sdk = sdk ?? AppsFlyerSdk.instance;
+  AppsFlyerGatewayImpl({AppsFlyerSdk? sdk})
+    : _sdk = sdk ?? AppsFlyerSdk.instance;
 
   final AppsFlyerSdk _sdk;
 
@@ -30,7 +31,11 @@ class AppsFlyerGatewayImpl implements AppsFlyerGateway {
       }
       await _sdk.setCustomerUserId(customerId);
     } catch (error, stackTrace) {
-      AnalyticsLog.error('appsflyer setCustomerUserId failed', error, stackTrace);
+      AnalyticsLog.error(
+        'appsflyer setCustomerUserId failed',
+        error,
+        stackTrace,
+      );
     }
   }
 
@@ -39,7 +44,11 @@ class AppsFlyerGatewayImpl implements AppsFlyerGateway {
     try {
       await _sdk.setAdditionalData(data);
     } catch (error, stackTrace) {
-      AnalyticsLog.error('appsflyer setAdditionalData failed', error, stackTrace);
+      AnalyticsLog.error(
+        'appsflyer setAdditionalData failed',
+        error,
+        stackTrace,
+      );
     }
   }
 }

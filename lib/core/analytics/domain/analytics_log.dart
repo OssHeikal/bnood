@@ -16,7 +16,13 @@ abstract final class AnalyticsLog {
 
   static void error(String message, Object error, [StackTrace? stackTrace]) {
     if (!kDebugMode) return;
-    developer.log(message, name: _name, level: 1000, error: error, stackTrace: stackTrace);
+    developer.log(
+      message,
+      name: _name,
+      level: 1000,
+      error: error,
+      stackTrace: stackTrace,
+    );
   }
 
   static String event(AnalyticsEvent event) => '${event.name} ${event.params}';

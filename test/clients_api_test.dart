@@ -9,7 +9,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-ClientsApi _clientsApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+ClientsApi _clientsApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return ClientsApi(dio: dio);
@@ -71,8 +73,10 @@ void main() {
       late RequestOptions captured;
       final api = _clientsApi((options) async {
         captured = options;
-        return jsonResponse('''
-{"success":true,"message":"ok","data":[],"meta":{"page":1,"per_page":50,"total":0}}''');
+        return jsonResponse(
+          '''
+{"success":true,"message":"ok","data":[],"meta":{"page":1,"per_page":50,"total":0}}''',
+        );
       });
       await api.listClients(status: ClientListArchiveFilter.active, q: 'ah');
       expect(captured.headers['Authorization'], 'Bearer tok');
@@ -90,7 +94,13 @@ void main() {
       );
       expect(
         () => api.createClient(name: 'Ahmed'),
-        throwsA(isA<AuthApiException>().having((e) => e.isDuplicateName, 'dup', isTrue)),
+        throwsA(
+          isA<AuthApiException>().having(
+            (e) => e.isDuplicateName,
+            'dup',
+            isTrue,
+          ),
+        ),
       );
       api.close();
     });
@@ -126,7 +136,13 @@ void main() {
       );
       expect(
         () => api.deleteClient('01J'),
-        throwsA(isA<AuthApiException>().having((e) => e.isClientHasActivity, 'activity', isTrue)),
+        throwsA(
+          isA<AuthApiException>().having(
+            (e) => e.isClientHasActivity,
+            'activity',
+            isTrue,
+          ),
+        ),
       );
       api.close();
     });

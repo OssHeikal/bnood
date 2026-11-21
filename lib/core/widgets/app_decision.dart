@@ -6,7 +6,7 @@ import '../config/theme/app_size.dart';
 import '../config/theme/app_colors.dart';
 import '../resources/gen/assets.gen.dart';
 import '../../app/widgets/shell_nav_icon.dart';
-import '../../features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'bnood_failure.dart';
 import 'foundation_icon.dart';
 import 'sheet_drag_handle.dart';
@@ -79,7 +79,9 @@ abstract final class AppDecision {
         context: context,
         backgroundColor: context.colors.surface,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.cardRadius)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(AppSize.cardRadius),
+          ),
         ),
         body: _AppDecisionSheet(
           title: title,
@@ -97,7 +99,8 @@ abstract final class AppDecision {
       ).then((value) => value ?? OverlayAnswer.dismissed);
     }
 
-    final barrierDismiss = dismissible ?? (tone != AppTone.danger && onConfirm == null);
+    final barrierDismiss =
+        dismissible ?? (tone != AppTone.danger && onConfirm == null);
 
     return showDialog<OverlayAnswer>(
       context: context,
@@ -170,7 +173,9 @@ class _AppDecisionDialogState extends State<_AppDecisionDialog> {
   }
 
   bool get _showCloseControl {
-    final barrierAllowed = widget.dismissible ?? (widget.tone != AppTone.danger && widget.onConfirm == null);
+    final barrierAllowed =
+        widget.dismissible ??
+        (widget.tone != AppTone.danger && widget.onConfirm == null);
     return widget.cancelLabel == null && barrierAllowed && !_locked;
   }
 
@@ -262,12 +267,23 @@ class _AppDecisionDialogState extends State<_AppDecisionDialog> {
             final colors = ctx.colors;
             return Dialog(
               backgroundColor: colors.surface,
-              insetPadding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceXL),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.cardRadius)),
+              insetPadding: const EdgeInsets.symmetric(
+                horizontal: AppSize.spaceLG,
+                vertical: AppSize.spaceXL,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSize.cardRadius),
+              ),
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 400, maxHeight: MediaQuery.sizeOf(context).height * 0.85),
+                constraints: BoxConstraints(
+                  maxWidth: 400,
+                  maxHeight: MediaQuery.sizeOf(context).height * 0.85,
+                ),
                 child: SingleChildScrollView(
-                  child: Padding(padding: const EdgeInsets.all(AppSize.screenPadding), child: body),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSize.screenPadding),
+                    child: body,
+                  ),
                 ),
               ),
             );
@@ -514,7 +530,12 @@ class _DecisionBody extends StatelessWidget {
               ],
             )
           else if (!showHandle && cancelLabel != null) ...[
-            _DecisionDialogHeader(tone: tone, icon: icon, iconWidget: iconWidget, onDismiss: locked ? null : onCancel),
+            _DecisionDialogHeader(
+              tone: tone,
+              icon: icon,
+              iconWidget: iconWidget,
+              onDismiss: locked ? null : onCancel,
+            ),
             AppSize.gap.gap,
             Text(title, style: context.text.title),
           ] else ...[
@@ -526,12 +547,18 @@ class _DecisionBody extends StatelessWidget {
           ],
           if (description != null && description!.isNotEmpty) ...[
             AppSize.gap.gap,
-            Text(description!, style: context.text.body.setColor(context.colors.muted)),
+            Text(
+              description!,
+              style: context.text.body.setColor(context.colors.muted),
+            ),
           ],
           if (typedField != null) ...[AppSize.spaceLG.gap, typedField!],
           if (failureMessage != null) ...[
             AppSize.gap.gap,
-            Text(failureMessage!, style: context.text.supporting.setColor(context.colors.error)),
+            Text(
+              failureMessage!,
+              style: context.text.supporting.setColor(context.colors.error),
+            ),
           ],
           AppSize.spaceLG.gap,
           _DecisionActions(
@@ -552,7 +579,12 @@ class _DecisionBody extends StatelessWidget {
 }
 
 class _DecisionDialogHeader extends StatelessWidget {
-  const _DecisionDialogHeader({required this.tone, required this.icon, this.iconWidget, required this.onDismiss});
+  const _DecisionDialogHeader({
+    required this.tone,
+    required this.icon,
+    this.iconWidget,
+    required this.onDismiss,
+  });
 
   final AppTone tone;
   final IconData? icon;
@@ -600,13 +632,23 @@ class _DecisionToneIcon extends StatelessWidget {
     } else if (icon != null) {
       child = FoundationIcon(icon!, size: AppSize.icon, color: glyphColor);
     } else if (tone == AppTone.danger) {
-      child = FoundationIcon(Icons.logout, size: AppSize.icon, color: glyphColor);
+      child = FoundationIcon(
+        Icons.logout,
+        size: AppSize.icon,
+        color: glyphColor,
+      );
     } else {
       child = tone.glyphWidget(size: AppSize.icon, color: glyphColor);
     }
     return DecoratedBox(
-      decoration: BoxDecoration(color: tone.tint(colors), borderRadius: BorderRadius.circular(AppSize.radius)),
-      child: Padding(padding: const EdgeInsets.all(AppSize.spaceSM), child: child),
+      decoration: BoxDecoration(
+        color: tone.tint(colors),
+        borderRadius: BorderRadius.circular(AppSize.radius),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSize.spaceSM),
+        child: child,
+      ),
     );
   }
 }
@@ -661,7 +703,10 @@ class _DecisionActions extends StatelessWidget {
     );
 
     if (showHandle) {
-      return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [cancel, AppSize.gap.gap, confirm]);
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [cancel, AppSize.gap.gap, confirm],
+      );
     }
 
     return Align(

@@ -106,7 +106,12 @@ class _EntityPickerLoadPageState extends State<EntityPickerLoadPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(AppSize.screenPadding, AppSize.spaceSM, AppSize.screenPadding, 0),
+            padding: const EdgeInsets.fromLTRB(
+              AppSize.screenPadding,
+              AppSize.spaceSM,
+              AppSize.screenPadding,
+              0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -115,7 +120,9 @@ class _EntityPickerLoadPageState extends State<EntityPickerLoadPage> {
                 Row(
                   children: [
                     BackButton(onPressed: () => Navigator.maybePop(context)),
-                    Expanded(child: Text(widget.title, style: context.text.title)),
+                    Expanded(
+                      child: Text(widget.title, style: context.text.title),
+                    ),
                   ],
                 ),
               ],

@@ -8,7 +8,11 @@ final class SentryErrorReporter implements ErrorReporter {
   const SentryErrorReporter();
 
   @override
-  void addBreadcrumb({required String message, String? category, Map<String, Object?>? data}) {
+  void addBreadcrumb({
+    required String message,
+    String? category,
+    Map<String, Object?>? data,
+  }) {
     Sentry.addBreadcrumb(
       Breadcrumb(
         message: message,

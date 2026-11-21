@@ -8,13 +8,13 @@ class StubAppConfigApi extends AppConfigApi {
     required String platform,
     required String version,
     required String locale,
-  }) _handler;
+  })
+  _handler;
 
   @override
   Future<AppConfigData> fetchConfig({
     required String platform,
     required String version,
     required String locale,
-  }) =>
-      _handler(platform: platform, version: version, locale: locale);
+  }) => _handler(platform: platform, version: version, locale: locale);
 }

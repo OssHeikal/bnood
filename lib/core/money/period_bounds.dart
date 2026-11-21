@@ -10,8 +10,10 @@ class PeriodBounds {
   DateTime get endOfDay =>
       DateTime(end.year, end.month, end.day, 23, 59, 59, 999);
 
-  static PeriodBounds normalize(
-      {required DateTime start, required DateTime end}) {
+  static PeriodBounds normalize({
+    required DateTime start,
+    required DateTime end,
+  }) {
     final s = DateTime(start.year, start.month, start.day);
     var e = DateTime(end.year, end.month, end.day);
     if (e.isBefore(s)) {

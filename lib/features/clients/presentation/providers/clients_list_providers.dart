@@ -1,13 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/client_list_archive_filter.dart';
-import '../../data/clients_providers.dart';
-import '../../data/clients_repository.dart';
-import '../../../home/data/home_row_models.dart';
+import 'package:bnood/features/clients/data/client_list_archive_filter.dart';
+import 'package:bnood/features/clients/data/clients_providers.dart';
+import 'package:bnood/features/clients/data/clients_repository.dart';
+import 'package:bnood/features/home/data/home_row_models.dart';
 import '../../../../core/app_state/silent_async_notifier.dart';
 
-final clientsListFilterProvider =
-    StateProvider<ClientListArchiveFilter>((ref) => ClientListArchiveFilter.active);
+final clientsListFilterProvider = StateProvider<ClientListArchiveFilter>(
+  (ref) => ClientListArchiveFilter.active,
+);
 
 final clientsListSearchQueryProvider = StateProvider<String>((ref) => '');
 
@@ -26,7 +27,9 @@ class ClientsListSnapshot {
 }
 
 final clientsListProvider =
-    AsyncNotifierProvider<ClientsListNotifier, ClientsListSnapshot>(ClientsListNotifier.new);
+    AsyncNotifierProvider<ClientsListNotifier, ClientsListSnapshot>(
+      ClientsListNotifier.new,
+    );
 
 final clientsListBalancesProvider = clientsListProvider;
 
@@ -50,13 +53,17 @@ class ClientsListNotifier extends SilentAsyncNotifier<ClientsListSnapshot> {
     if (current == null || !current.hasMore || _loadingMore) return;
     _loadingMore = true;
     final previous = current;
-    state = AsyncValue<ClientsListSnapshot>.loading().copyWithPrevious(AsyncValue.data(previous));
+    state = AsyncValue<ClientsListSnapshot>.loading().copyWithPrevious(
+      AsyncValue.data(previous),
+    );
     try {
       final next = await _fetchPage(page: current.page + 1, existing: current);
       state = AsyncValue.data(next);
     } catch (error, stackTrace) {
-      state = AsyncValue<ClientsListSnapshot>.error(error, stackTrace)
-          .copyWithPrevious(AsyncValue.data(previous));
+      state = AsyncValue<ClientsListSnapshot>.error(
+        error,
+        stackTrace,
+      ).copyWithPrevious(AsyncValue.data(previous));
     } finally {
       _loadingMore = false;
     }
@@ -69,7 +76,11 @@ class ClientsListNotifier extends SilentAsyncNotifier<ClientsListSnapshot> {
     final clientsRepo = ref.read(clientsRepositoryProvider);
     final filter = ref.read(clientsListFilterProvider);
     final q = ref.read(clientsListSearchQueryProvider);
-    final result = await clientsRepo.listClients(status: filter, q: q, page: page);
+    final result = await clientsRepo.listClients(
+      status: filter,
+      q: q,
+      page: page,
+    );
     final rows = result.items.map(balanceRowFromRecord).toList();
     if (existing != null && page > 1) {
       return ClientsListSnapshot(

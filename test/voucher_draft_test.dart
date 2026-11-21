@@ -1,4 +1,4 @@
-import 'package:bnood/features/vouchers/presentation/voucher_draft.dart';
+import 'package:bnood/features/vouchers/presentation/models/voucher_draft.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -14,9 +14,15 @@ void main() {
 
   test('materials labor toggle clears payees', () {
     const d = VoucherDraft(
-        supplierId: 's', craftsmanId: 'c', expenseType: 'materials');
+      supplierId: 's',
+      craftsmanId: 'c',
+      expenseType: 'materials',
+    );
     final next = d.copyWith(
-        expenseType: 'labor', clearSupplier: true, clearCraftsman: true);
+      expenseType: 'labor',
+      clearSupplier: true,
+      clearCraftsman: true,
+    );
     expect(next.supplierId, isNull);
     expect(next.craftsmanId, isNull);
   });

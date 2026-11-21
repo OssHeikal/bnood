@@ -36,7 +36,8 @@ class SheetFormScaffold extends StatelessWidget {
               Flexible(
                 fit: FlexFit.loose,
                 child: SingleChildScrollView(
-                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   padding: padding,
                   child: scrollChild,
                 ),

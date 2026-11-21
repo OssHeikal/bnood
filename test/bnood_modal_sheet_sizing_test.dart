@@ -3,8 +3,8 @@ import 'package:bnood/core/widgets/app_modal_sheet.dart';
 import 'package:bnood/core/widgets/bounded_sheet_navigator.dart';
 import 'package:bnood/core/widgets/custom_bottom_sheet.dart';
 import 'package:bnood/core/widgets/sheet_drag_handle.dart';
-import 'package:bnood/features/clients/presentation/profit_percentage_sheet.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/clients/presentation/sheets/profit_percentage_sheet.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -48,7 +48,9 @@ void main() {
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
 
-    final cap = SheetContentBounds.viewportCap(MediaQueryData(size: _tallPhone));
+    final cap = SheetContentBounds.viewportCap(
+      MediaQueryData(size: _tallPhone),
+    );
     final handle = find.descendant(
       of: find.byType(BottomSheet),
       matching: find.byType(SheetDragHandle),
@@ -59,7 +61,9 @@ void main() {
     expect(handleTop, greaterThan(_tallPhone.height * 0.35));
   });
 
-  testWidgets('custom bottom sheet inline create respects viewport cap', (tester) async {
+  testWidgets('custom bottom sheet inline create respects viewport cap', (
+    tester,
+  ) async {
     await pumpHost(
       tester,
       Builder(
@@ -81,7 +85,9 @@ void main() {
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
 
-    final cap = SheetContentBounds.viewportCap(MediaQueryData(size: _tallPhone));
+    final cap = SheetContentBounds.viewportCap(
+      MediaQueryData(size: _tallPhone),
+    );
     final bounds = find.byKey(AppModalSheet.sheetBoundsKey);
     expect(tester.getSize(bounds).height, lessThan(cap * 0.5));
   });

@@ -13,17 +13,13 @@ class ScriptedDioAdapter implements HttpClientAdapter {
     RequestOptions options,
     Stream<Uint8List>? requestStream,
     Future<void>? cancelFuture,
-  ) =>
-      _handler(options);
+  ) => _handler(options);
 
   @override
   void close({bool force = false}) {}
 }
 
-ResponseBody jsonResponse(
-  String body, {
-  int statusCode = 200,
-}) {
+ResponseBody jsonResponse(String body, {int statusCode = 200}) {
   return ResponseBody.fromString(
     body,
     statusCode,
@@ -43,7 +39,8 @@ ResponseBody pdfResponse(
     statusCode,
     headers: {
       Headers.contentTypeHeader: ['application/pdf'],
-      if (contentDisposition != null) 'content-disposition': [contentDisposition],
+      if (contentDisposition != null)
+        'content-disposition': [contentDisposition],
     },
   );
 }

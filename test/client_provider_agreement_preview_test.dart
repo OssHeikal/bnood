@@ -5,28 +5,34 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('clientAgreementPreviews filters by provider type', () {
-  final agreements = [
-    AppAgreement(
-      id: 'a1',
-      clientId: 'c1',
-      providerId: 'craft-1',
-      amountPiastres: 100,
-      providerType: AppProviderType.craftsman,
-      providerName: 'Craft',
-    ),
-    AppAgreement(
-      id: 'a2',
-      clientId: 'c1',
-      providerId: 'sup-1',
-      amountPiastres: null,
-      amountMajor: null,
-      remainingMajor: null,
-      providerType: AppProviderType.supplier,
-      providerName: 'Supplier',
-    ),
-  ];
-    final craftsmen = clientAgreementPreviews(agreements, AppProviderType.craftsman);
-    final suppliers = clientAgreementPreviews(agreements, AppProviderType.supplier);
+    final agreements = [
+      AppAgreement(
+        id: 'a1',
+        clientId: 'c1',
+        providerId: 'craft-1',
+        amountPiastres: 100,
+        providerType: AppProviderType.craftsman,
+        providerName: 'Craft',
+      ),
+      AppAgreement(
+        id: 'a2',
+        clientId: 'c1',
+        providerId: 'sup-1',
+        amountPiastres: null,
+        amountMajor: null,
+        remainingMajor: null,
+        providerType: AppProviderType.supplier,
+        providerName: 'Supplier',
+      ),
+    ];
+    final craftsmen = clientAgreementPreviews(
+      agreements,
+      AppProviderType.craftsman,
+    );
+    final suppliers = clientAgreementPreviews(
+      agreements,
+      AppProviderType.supplier,
+    );
     expect(craftsmen, hasLength(1));
     expect(craftsmen.first.craftsmanId, 'craft-1');
     expect(suppliers, hasLength(1));
@@ -111,39 +117,42 @@ void main() {
     expect(deletes.map((a) => a.id), isEmpty);
   });
 
-  test('provider assignments save delete scope is limited to provider agreements', () {
-    final mixed = [
-      AppAgreement(
-        id: 'p1-c1',
-        clientId: 'c1',
-        providerId: 'prov-a',
-        amountPiastres: 1,
-        providerType: AppProviderType.craftsman,
-      ),
-      AppAgreement(
-        id: 'p1-c2',
-        clientId: 'c2',
-        providerId: 'prov-a',
-        amountPiastres: 2,
-        providerType: AppProviderType.craftsman,
-      ),
-      AppAgreement(
-        id: 'p2-c1',
-        clientId: 'c1',
-        providerId: 'prov-b',
-        amountPiastres: 3,
-        providerType: AppProviderType.supplier,
-      ),
-    ];
-    final scoped = agreementsBelongingToProvider(mixed, 'prov-a');
-    expect(scoped.map((a) => a.id), ['p1-c1', 'p1-c2']);
+  test(
+    'provider assignments save delete scope is limited to provider agreements',
+    () {
+      final mixed = [
+        AppAgreement(
+          id: 'p1-c1',
+          clientId: 'c1',
+          providerId: 'prov-a',
+          amountPiastres: 1,
+          providerType: AppProviderType.craftsman,
+        ),
+        AppAgreement(
+          id: 'p1-c2',
+          clientId: 'c2',
+          providerId: 'prov-a',
+          amountPiastres: 2,
+          providerType: AppProviderType.craftsman,
+        ),
+        AppAgreement(
+          id: 'p2-c1',
+          clientId: 'c1',
+          providerId: 'prov-b',
+          amountPiastres: 3,
+          providerType: AppProviderType.supplier,
+        ),
+      ];
+      final scoped = agreementsBelongingToProvider(mixed, 'prov-a');
+      expect(scoped.map((a) => a.id), ['p1-c1', 'p1-c2']);
 
-    final deletes = providerAgreementsToDeleteOnAssignmentsSave(
-      providerAgreements: scoped,
-      selectedClientIds: const {'c2'},
-    ).map((a) => a.id).toList();
+      final deletes = providerAgreementsToDeleteOnAssignmentsSave(
+        providerAgreements: scoped,
+        selectedClientIds: const {'c2'},
+      ).map((a) => a.id).toList();
 
-    expect(deletes, ['p1-c1']);
-    expect(deletes, isNot(contains('p2-c1')));
-  });
+      expect(deletes, ['p1-c1']);
+      expect(deletes, isNot(contains('p2-c1')));
+    },
+  );
 }

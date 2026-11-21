@@ -7,11 +7,9 @@ import 'auth_api_exception.dart';
 import '../storage/session_store.dart';
 
 class PagesApi {
-  PagesApi({
-    Dio? dio,
-    SessionStore? sessionStore,
-  })  : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
-        _ownsDio = dio == null;
+  PagesApi({Dio? dio, SessionStore? sessionStore})
+    : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
+      _ownsDio = dio == null;
 
   final Dio _dio;
   final bool _ownsDio;
@@ -22,7 +20,10 @@ class PagesApi {
     }
   }
 
-  Future<ContentPage> getPage({required String slug, required String locale}) async {
+  Future<ContentPage> getPage({
+    required String slug,
+    required String locale,
+  }) async {
     try {
       final response = await _dio.get<Map<String, dynamic>>(
         '/v1/pages/$slug',

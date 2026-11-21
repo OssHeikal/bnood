@@ -7,7 +7,11 @@ final class NoopErrorReporter implements ErrorReporter {
   static const NoopErrorReporter instance = NoopErrorReporter();
 
   @override
-  void addBreadcrumb({required String message, String? category, Map<String, Object?>? data}) {}
+  void addBreadcrumb({
+    required String message,
+    String? category,
+    Map<String, Object?>? data,
+  }) {}
 
   @override
   void captureException(

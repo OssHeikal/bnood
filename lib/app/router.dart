@@ -2,38 +2,38 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/auth/auth_bootstrap_screen.dart';
-import '../features/auth/auth_controller.dart';
-import '../features/auth/auth_paths.dart';
-import '../features/auth/auth_state.dart';
-import '../features/auth/change_password_screen.dart';
-import '../features/auth/complete_profile_screen.dart';
-import '../features/auth/forgot_password_screen.dart';
-import '../features/auth/forgot_verify_screen.dart';
-import '../features/auth/login_screen.dart';
-import '../features/auth/register_screen.dart';
-import '../features/auth/register_verify_screen.dart';
-import '../features/auth/remote_workspace_screen.dart';
-import '../features/auth/user_profile_screen.dart';
-import '../features/app_gate/app_force_update_screen.dart';
-import '../features/app_gate/app_gate_paths.dart';
-import '../features/app_gate/app_maintenance_screen.dart';
-import '../features/app_gate/app_optional_update_screen.dart';
-import '../features/content/presentation/content_page_screen.dart';
-import '../features/settings/presentation/app_preferences_screen.dart';
-import '../features/settings/presentation/notification_settings_screen.dart';
-import '../features/settings/presentation/app_settings_screen.dart';
-import '../features/auth/reset_password_screen.dart';
-import '../features/clients/presentation/client_detail_screen.dart';
-import '../features/clients/presentation/clients_list_screen.dart';
-import '../features/clients/presentation/client_craftsmen_list_screen.dart';
-import '../features/providers/presentation/client_suppliers_list_screen.dart';
-import '../features/clients/presentation/client_items_stats_screen.dart';
-import '../features/clients/presentation/movements_list_screen.dart';
-import '../features/home/presentation/home_screen.dart';
-import '../features/statements/presentation/client_statement_screen.dart';
-import '../features/vouchers/presentation/voucher_screen.dart';
-import '../features/providers/presentation/provider_detail_screen.dart';
+import 'package:bnood/features/auth/auth_bootstrap_screen.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/auth/auth_state.dart';
+import 'package:bnood/features/auth/change_password_screen.dart';
+import 'package:bnood/features/auth/complete_profile_screen.dart';
+import 'package:bnood/features/auth/forgot_password_screen.dart';
+import 'package:bnood/features/auth/forgot_verify_screen.dart';
+import 'package:bnood/features/auth/login_screen.dart';
+import 'package:bnood/features/auth/register_screen.dart';
+import 'package:bnood/features/auth/register_verify_screen.dart';
+import 'package:bnood/features/auth/remote_workspace_screen.dart';
+import 'package:bnood/features/auth/user_profile_screen.dart';
+import 'package:bnood/features/app_gate/app_force_update_screen.dart';
+import 'package:bnood/features/app_gate/app_gate_paths.dart';
+import 'package:bnood/features/app_gate/app_maintenance_screen.dart';
+import 'package:bnood/features/app_gate/app_optional_update_screen.dart';
+import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
+import 'package:bnood/features/settings/presentation/screens/app_preferences_screen.dart';
+import 'package:bnood/features/settings/presentation/screens/notification_settings_screen.dart';
+import 'package:bnood/features/settings/presentation/screens/app_settings_screen.dart';
+import 'package:bnood/features/auth/reset_password_screen.dart';
+import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
+import 'package:bnood/features/clients/presentation/screens/clients_list_screen.dart';
+import 'package:bnood/features/clients/presentation/screens/client_craftsmen_list_screen.dart';
+import 'package:bnood/features/providers/presentation/screens/client_suppliers_list_screen.dart';
+import 'package:bnood/features/clients/presentation/screens/client_items_stats_screen.dart';
+import 'package:bnood/features/clients/presentation/screens/movements_list_screen.dart';
+import 'package:bnood/features/home/presentation/screens/home_screen.dart';
+import 'package:bnood/features/statements/presentation/screens/client_statement_screen.dart';
+import 'package:bnood/features/vouchers/presentation/screens/voucher_screen.dart';
+import 'package:bnood/features/providers/presentation/screens/provider_detail_screen.dart';
 import 'app_shell_directory_body.dart';
 import 'auth_router_refresh.dart';
 import 'app_splash_session.dart';
@@ -81,7 +81,9 @@ String? _authRedirect(Ref ref, GoRouterState state) {
   if (auth.isAuthenticated && auth.user != null) {
     final home = authenticatedHomeFor(auth.user!);
     final needsProfile = userNeedsProfileCompletion(auth.user);
-    if (needsProfile && loc != AuthPaths.completeProfile && loc != AuthPaths.changePassword) {
+    if (needsProfile &&
+        loc != AuthPaths.completeProfile &&
+        loc != AuthPaths.changePassword) {
       return AuthPaths.completeProfile;
     }
     if (!needsProfile && loc == AuthPaths.completeProfile) {
@@ -93,7 +95,9 @@ String? _authRedirect(Ref ref, GoRouterState state) {
     if (isLocalLedgerLocation(loc) || loc == AuthPaths.login) {
       return home;
     }
-    if (isAuthFlowLocation(loc) && loc != AuthPaths.changePassword && loc != AuthPaths.completeProfile) {
+    if (isAuthFlowLocation(loc) &&
+        loc != AuthPaths.changePassword &&
+        loc != AuthPaths.completeProfile) {
       return home;
     }
   } else {
@@ -123,52 +127,109 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ...sentryNavigationObservers(),
     ],
     refreshListenable: refresh,
-    initialLocation: AppSplashSession.completed ? AuthPaths.login : AppStartupSplashPage.path,
+    initialLocation: AppSplashSession.completed
+        ? AuthPaths.login
+        : AppStartupSplashPage.path,
     redirect: (_, state) => _authRedirect(ref, state),
     routes: [
       GoRoute(
         path: AppStartupSplashPage.path,
-        pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const AppStartupSplashPage()),
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const AppStartupSplashPage(),
+        ),
       ),
       GoRoute(
         path: AppGatePaths.maintenance,
-        pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const AppMaintenanceScreen()),
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const AppMaintenanceScreen(),
+        ),
       ),
       GoRoute(
         path: AppGatePaths.forceUpdate,
-        pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const AppForceUpdateScreen()),
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const AppForceUpdateScreen(),
+        ),
       ),
       GoRoute(
         path: AppGatePaths.optionalUpdate,
-        pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const AppOptionalUpdateScreen()),
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const AppOptionalUpdateScreen(),
+        ),
       ),
       GoRoute(
         path: '/pages/:slug',
-        builder: (_, state) => ContentPageScreen(slug: state.pathParameters['slug']!),
+        builder: (_, state) =>
+            ContentPageScreen(slug: state.pathParameters['slug']!),
       ),
       GoRoute(
         path: AuthPaths.bootstrap,
-        pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const AuthBootstrapScreen()),
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const AuthBootstrapScreen(),
+        ),
       ),
       GoRoute(
         path: AuthPaths.login,
-        pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const LoginScreen()),
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const LoginScreen(),
+        ),
       ),
-      GoRoute(path: AuthPaths.register, builder: (_, _) => const RegisterScreen()),
-      GoRoute(path: AuthPaths.registerVerify, builder: (_, _) => const RegisterVerifyScreen()),
+      GoRoute(
+        path: AuthPaths.register,
+        builder: (_, _) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.registerVerify,
+        builder: (_, _) => const RegisterVerifyScreen(),
+      ),
       GoRoute(
         path: AuthPaths.completeProfile,
-        pageBuilder: (_, state) => NoTransitionPage<void>(key: state.pageKey, child: const CompleteProfileScreen()),
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const CompleteProfileScreen(),
+        ),
       ),
-      GoRoute(path: AuthPaths.forgotPassword, builder: (_, _) => const ForgotPasswordScreen()),
-      GoRoute(path: AuthPaths.forgotVerify, builder: (_, _) => const ForgotVerifyScreen()),
-      GoRoute(path: AuthPaths.resetPassword, builder: (_, _) => const ResetPasswordScreen()),
-      GoRoute(path: AuthPaths.changePassword, builder: (_, _) => const ChangePasswordScreen()),
-      GoRoute(path: AuthPaths.remote, builder: (_, _) => const RemoteWorkspaceScreen()),
-      GoRoute(path: AuthPaths.profile, builder: (_, _) => const UserProfileScreen()),
-      GoRoute(path: AuthPaths.settings, builder: (_, _) => const AppMenuScreen()),
-      GoRoute(path: AuthPaths.preferences, builder: (_, _) => const AppPreferencesScreen()),
-      GoRoute(path: AuthPaths.notifications, builder: (_, _) => const NotificationSettingsScreen()),
+      GoRoute(
+        path: AuthPaths.forgotPassword,
+        builder: (_, _) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.forgotVerify,
+        builder: (_, _) => const ForgotVerifyScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.resetPassword,
+        builder: (_, _) => const ResetPasswordScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.changePassword,
+        builder: (_, _) => const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.remote,
+        builder: (_, _) => const RemoteWorkspaceScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.profile,
+        builder: (_, _) => const UserProfileScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.settings,
+        builder: (_, _) => const AppMenuScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.preferences,
+        builder: (_, _) => const AppPreferencesScreen(),
+      ),
+      GoRoute(
+        path: AuthPaths.notifications,
+        builder: (_, _) => const NotificationSettingsScreen(),
+      ),
       StatefulShellRoute.indexedStack(
         pageBuilder: (context, state, navigationShell) {
           return NoTransitionPage<void>(
@@ -178,25 +239,37 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
         branches: [
           StatefulShellBranch(
-            observers: AnalyticsRouteObservers.forShellBranch(screenViewTracker),
+            observers: AnalyticsRouteObservers.forShellBranch(
+              screenViewTracker,
+            ),
             routes: [
               GoRoute(
                 path: _localHome,
-                builder: (_, _) => const AppShellTabGate(tab: AppShellTabId.home, child: HomeScreen()),
+                builder: (_, _) => const AppShellTabGate(
+                  tab: AppShellTabId.home,
+                  child: HomeScreen(),
+                ),
               ),
             ],
           ),
           StatefulShellBranch(
-            observers: AnalyticsRouteObservers.forShellBranch(screenViewTracker),
+            observers: AnalyticsRouteObservers.forShellBranch(
+              screenViewTracker,
+            ),
             routes: [
               GoRoute(
                 path: '/clients',
-                builder: (_, _) => const AppShellTabGate(tab: AppShellTabId.clients, child: ClientsListScreen()),
+                builder: (_, _) => const AppShellTabGate(
+                  tab: AppShellTabId.clients,
+                  child: ClientsListScreen(),
+                ),
               ),
             ],
           ),
           StatefulShellBranch(
-            observers: AnalyticsRouteObservers.forShellBranch(screenViewTracker),
+            observers: AnalyticsRouteObservers.forShellBranch(
+              screenViewTracker,
+            ),
             routes: [
               GoRoute(
                 path: '/directory',
@@ -204,18 +277,25 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                   final tab = state.uri.queryParameters['tab'];
                   return AppShellTabGate(
                     tab: AppShellTabId.directory,
-                    child: AppShellDirectoryBody(initialTabIndex: tab == 'craftsmen' ? 1 : 0),
+                    child: AppShellDirectoryBody(
+                      initialTabIndex: tab == 'craftsmen' ? 1 : 0,
+                    ),
                   );
                 },
               ),
             ],
           ),
           StatefulShellBranch(
-            observers: AnalyticsRouteObservers.forShellBranch(screenViewTracker),
+            observers: AnalyticsRouteObservers.forShellBranch(
+              screenViewTracker,
+            ),
             routes: [
               GoRoute(
                 path: '/items',
-                builder: (_, _) => const AppShellTabGate(tab: AppShellTabId.items, child: AppShellItemsBody()),
+                builder: (_, _) => const AppShellTabGate(
+                  tab: AppShellTabId.items,
+                  child: AppShellItemsBody(),
+                ),
               ),
             ],
           ),
@@ -223,7 +303,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/clients/:clientId',
-        builder: (_, state) => ClientDetailScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) =>
+            ClientDetailScreen(clientId: state.pathParameters['clientId']!),
       ),
       GoRoute(
         path: '/clients/:clientId/movements',
@@ -234,33 +315,46 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/clients/:clientId/craftsmen',
-        builder: (_, state) => ClientCraftsmenListScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) => ClientCraftsmenListScreen(
+          clientId: state.pathParameters['clientId']!,
+        ),
       ),
       GoRoute(
         path: '/clients/:clientId/suppliers',
-        builder: (_, state) => ClientSuppliersListScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) => ClientSuppliersListScreen(
+          clientId: state.pathParameters['clientId']!,
+        ),
       ),
       GoRoute(
         path: '/clients/:clientId/items',
-        builder: (_, state) => ClientItemsStatsScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) =>
+            ClientItemsStatsScreen(clientId: state.pathParameters['clientId']!),
       ),
       GoRoute(
         path: '/clients/:clientId/statement',
-        builder: (_, state) => ClientStatementScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) =>
+            ClientStatementScreen(clientId: state.pathParameters['clientId']!),
       ),
       GoRoute(
         path: '/providers/:providerId',
-        builder: (_, state) => ProviderDetailScreen(providerId: state.pathParameters['providerId']!),
+        builder: (_, state) => ProviderDetailScreen(
+          providerId: state.pathParameters['providerId']!,
+        ),
       ),
       GoRoute(
         path: '/suppliers/:supplierId',
-        redirect: (_, state) => '/providers/${state.pathParameters['supplierId']}',
+        redirect: (_, state) =>
+            '/providers/${state.pathParameters['supplierId']}',
       ),
       GoRoute(
         path: '/craftsmen/:craftsmanId',
-        redirect: (_, state) => '/providers/${state.pathParameters['craftsmanId']}',
+        redirect: (_, state) =>
+            '/providers/${state.pathParameters['craftsmanId']}',
       ),
-      GoRoute(path: VoucherScreen.path, builder: (_, _) => const VoucherScreen()),
+      GoRoute(
+        path: VoucherScreen.path,
+        builder: (_, _) => const VoucherScreen(),
+      ),
     ],
   );
 });

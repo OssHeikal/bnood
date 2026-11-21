@@ -8,7 +8,7 @@ import '../../../../core/config/theme/app_shape.dart';
 import '../../../../core/config/theme/app_size.dart';
 import '../../../../core/widgets/app_pressable.dart';
 import '../../../../core/widgets/custom_text_field.dart';
-import '../client_movements_filters.dart';
+import 'package:bnood/features/clients/presentation/models/client_movements_filters.dart';
 
 class ClientMovementsFilterBar extends StatelessWidget {
   const ClientMovementsFilterBar({
@@ -40,9 +40,12 @@ class ClientMovementsFilterBar extends StatelessWidget {
     final locale = Localizations.localeOf(context).languageCode;
     final dateFmt = DateFormat.yMMMd(locale);
 
-    final sortLabel =
-        filters.sort == ClientMovementsSort.dateAsc ? l10n.movementsSortOldest : l10n.movementsSortNewest;
-    final itemLabel = filters.hasItemFilter ? (filters.itemName ?? l10n.movementsFilterItem) : l10n.movementsFilterItem;
+    final sortLabel = filters.sort == ClientMovementsSort.dateAsc
+        ? l10n.movementsSortOldest
+        : l10n.movementsSortNewest;
+    final itemLabel = filters.hasItemFilter
+        ? (filters.itemName ?? l10n.movementsFilterItem)
+        : l10n.movementsFilterItem;
     final dateLabel = _dateChipLabel(l10n, dateFmt, filters);
 
     return Column(
@@ -85,7 +88,9 @@ class ClientMovementsFilterBar extends StatelessWidget {
               onPressed: onClearAll,
               child: Text(
                 l10n.movementsClearFilters,
-                style: context.text.bodyEmphasis.copyWith(color: context.colors.primary),
+                style: context.text.bodyEmphasis.copyWith(
+                  color: context.colors.primary,
+                ),
               ),
             ),
           ),
@@ -94,7 +99,11 @@ class ClientMovementsFilterBar extends StatelessWidget {
     );
   }
 
-  static String _dateChipLabel(AppLocalizations l10n, DateFormat fmt, ClientMovementsFilters filters) {
+  static String _dateChipLabel(
+    AppLocalizations l10n,
+    DateFormat fmt,
+    ClientMovementsFilters filters,
+  ) {
     if (!filters.hasDateFilter) return l10n.movementsFilterDate;
     final from = filters.from;
     final to = filters.to;
@@ -131,7 +140,9 @@ class _FilterChip extends StatelessWidget {
       child: AppPressable(
         onPressed: onTap,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: AppSize.buttonHeightSmall),
+          constraints: const BoxConstraints(
+            minHeight: AppSize.buttonHeightSmall,
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceMD),
             child: Row(
@@ -153,7 +164,11 @@ class _FilterChip extends StatelessWidget {
                   const SizedBox(width: AppSize.spaceXS),
                   AppPressable(
                     onPressed: onClear,
-                    child: Icon(Icons.close, size: 16, color: applied ? colors.onPrimary : colors.onSurfaceMuted),
+                    child: Icon(
+                      Icons.close,
+                      size: 16,
+                      color: applied ? colors.onPrimary : colors.onSurfaceMuted,
+                    ),
                   ),
                 ],
               ],

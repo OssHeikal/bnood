@@ -14,9 +14,7 @@ Dio createAppDio(SessionStore store) {
   final dio = Dio(
     BaseOptions(
       baseUrl: ApiConfig.baseUrl,
-      headers: {
-        Headers.acceptHeader: 'application/json',
-      },
+      headers: {Headers.acceptHeader: 'application/json'},
       contentType: Headers.jsonContentType,
       responseType: ResponseType.json,
     ),

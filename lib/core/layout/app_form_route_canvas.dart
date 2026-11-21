@@ -17,17 +17,17 @@ class AppFormRouteCanvas extends StatelessWidget {
       builder: (context, constraints) {
         if (constraints.maxWidth <= AppBreakpoints.mobileMax) return child;
         final theme = Theme.of(context);
-        final panelWidth = math.min(AppLayout.formMaxWidth, constraints.maxWidth);
+        final panelWidth = math.min(
+          AppLayout.formMaxWidth,
+          constraints.maxWidth,
+        );
         return ColoredBox(
           color: theme.scaffoldBackgroundColor,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Spacer(),
-              SizedBox(
-                width: panelWidth,
-                child: child,
-              ),
+              SizedBox(width: panelWidth, child: child),
               const Spacer(),
             ],
           ),

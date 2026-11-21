@@ -17,7 +17,9 @@ class NotificationSettingsApi {
 
   static const _prefix = '/v1/notification-settings';
 
-  Map<String, dynamic> get _authenticatedExtra => {AuthInterceptor.authenticatedExtraKey: true};
+  Map<String, dynamic> get _authenticatedExtra => {
+    AuthInterceptor.authenticatedExtraKey: true,
+  };
 
   void close({bool force = false}) {
     if (_ownsDio) {
@@ -42,7 +44,10 @@ class NotificationSettingsApi {
 
   Future<NotificationSettingsRecord> getSettings() {
     return _guard(() async {
-      final response = await _dio.get<Map<String, dynamic>>(_prefix, options: Options(extra: _authenticatedExtra));
+      final response = await _dio.get<Map<String, dynamic>>(
+        _prefix,
+        options: Options(extra: _authenticatedExtra),
+      );
       return ApiResponseParser.expectData(
         response,
         (json) => NotificationSettingsRecord.fromDataJson(json ?? const {}),
@@ -58,7 +63,8 @@ class NotificationSettingsApi {
     final body =
         NotificationSettingsRecord(
           lowBalanceEnabled: lowBalanceEnabled ?? true,
-          lowBalanceAmountMinor: lowBalanceAmountMinor ?? kDefaultLowBalanceAmountMinor,
+          lowBalanceAmountMinor:
+              lowBalanceAmountMinor ?? kDefaultLowBalanceAmountMinor,
         ).toPatchJson(
           pushEnabled: pushEnabled,
           lowBalanceEnabled: lowBalanceEnabled,

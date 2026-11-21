@@ -1,6 +1,6 @@
 import 'package:bnood/features/clients/data/client_api_record.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'app_voucher_receipt.dart';
+import 'package:bnood/features/vouchers/data/app_voucher_receipt.dart';
 
 class AppVoucher {
   const AppVoucher({
@@ -43,14 +43,15 @@ class AppVoucher {
   String? get supplierId =>
       isSpend && expenseClassification == 'materials' ? providerId : null;
 
-  String? get craftsmanId => isSpend && expenseClassification == 'labor' ? providerId : null;
+  String? get craftsmanId =>
+      isSpend && expenseClassification == 'labor' ? providerId : null;
 
   String? get expenseType => expenseClassification;
 
   static AppVoucher fromDataJson(Map<String, dynamic> json) {
     final client = json['client'];
     String? clientName;
-  String? projectId;
+    String? projectId;
     if (client is Map<String, dynamic>) {
       clientName = client['name'] as String?;
       final project = client['project'];
@@ -84,8 +85,11 @@ class AppVoucher {
     final receiptsRaw = json['receipts'];
     final receipts = receiptsRaw is List
         ? receiptsRaw
-            .map((e) => AppVoucherReceipt.fromDataJson(e as Map<String, dynamic>))
-            .toList()
+              .map(
+                (e) =>
+                    AppVoucherReceipt.fromDataJson(e as Map<String, dynamic>),
+              )
+              .toList()
         : const <AppVoucherReceipt>[];
 
     return AppVoucher(

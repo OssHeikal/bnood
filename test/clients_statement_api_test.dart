@@ -8,7 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-ClientsApi _clientsApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+ClientsApi _clientsApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return ClientsApi(dio: dio);
@@ -36,7 +38,10 @@ void main() {
       expect(statement.items.first.iconKey, isNull);
       expect(statement.items.first.colorKey, isNull);
       expect(statement.items.first.spentMinor, 500_000);
-      expect(RemoteMoneyFormat.formatMinor(statement.items.first.spentMinor), '5,000 EGP');
+      expect(
+        RemoteMoneyFormat.formatMinor(statement.items.first.spentMinor),
+        '5,000 EGP',
+      );
     });
 
     test('parses period_start from API', () {
@@ -118,7 +123,11 @@ void main() {
           '{"success":true,"data":{"from":"2026-01-01","to":"2026-01-31","received":0,"spent":0,"remaining":0,"items":[]}}',
         );
       });
-      await api.getClientStatement(clientId: 'c1', from: '2026-01-01', to: '2026-01-31');
+      await api.getClientStatement(
+        clientId: 'c1',
+        from: '2026-01-01',
+        to: '2026-01-31',
+      );
       expect(uri.queryParameters['from'], '2026-01-01');
       expect(uri.queryParameters['to'], '2026-01-31');
       expect(uri.path, endsWith('/clients/c1/statement'));

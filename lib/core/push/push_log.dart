@@ -14,7 +14,13 @@ abstract final class PushLog {
 
   static void error(String message, Object error, [StackTrace? stackTrace]) {
     if (!kDebugMode) return;
-    developer.log(message, name: _name, level: 1000, error: error, stackTrace: stackTrace);
+    developer.log(
+      message,
+      name: _name,
+      level: 1000,
+      error: error,
+      stackTrace: stackTrace,
+    );
   }
 
   /// Full token/ID (logs are debug-only, so it's safe to copy for testing).

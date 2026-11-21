@@ -1,6 +1,6 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
-import 'package:bnood/features/home/presentation/home_screen.dart';
+import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +11,9 @@ import 'support/home_notifier_stubs.dart';
 // Uses the same home data stubs as other home widget tests to avoid async spinners.
 
 void main() {
-  testWidgets('home title sits below simulated status bar inset', (tester) async {
+  testWidgets('home title sits below simulated status bar inset', (
+    tester,
+  ) async {
     const statusBar = 47.0;
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -19,7 +21,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          homeTotalsOverride(const HomeTotals(receivedPiastres: 0, spentPiastres: 0)),
+          homeTotalsOverride(
+            const HomeTotals(receivedPiastres: 0, spentPiastres: 0),
+          ),
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),
@@ -31,7 +35,9 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: MediaQuery(
-            data: const MediaQueryData(padding: EdgeInsets.only(top: statusBar)),
+            data: const MediaQueryData(
+              padding: EdgeInsets.only(top: statusBar),
+            ),
             child: const HomeScreen(),
           ),
         ),

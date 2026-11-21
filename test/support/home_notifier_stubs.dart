@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/core/shared/pagination/pagination.dart';
-import 'package:bnood/features/clients/presentation/clients_list_paging.dart';
+import 'package:bnood/features/clients/presentation/providers/clients_list_paging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
@@ -79,7 +79,9 @@ Override homeTotalsOverride(HomeTotals totals) =>
     homeTotalsProvider.overrideWith(() => StubHomeTotalsNotifier(totals));
 
 Override homeClientBalancesOverride(List<HomeClientBalanceRow> rows) =>
-    homeClientBalancesProvider.overrideWith(() => StubHomeClientBalancesNotifier(rows));
+    homeClientBalancesProvider.overrideWith(
+      () => StubHomeClientBalancesNotifier(rows),
+    );
 
 class StubClientsListNotifier extends ClientsListNotifier {
   StubClientsListNotifier(this.rows);
@@ -88,14 +90,15 @@ class StubClientsListNotifier extends ClientsListNotifier {
 
   @override
   Future<ClientsListSnapshot> fetch() async => ClientsListSnapshot(
-        rows: rows,
-        page: 1,
-        total: rows.length,
-        hasMore: false,
-      );
+    rows: rows,
+    page: 1,
+    total: rows.length,
+    hasMore: false,
+  );
 }
 
-Override clientsListBalancesOverride(List<HomeClientBalanceRow> rows) => clientsListPageFetcherProvider.overrideWith(
+Override clientsListBalancesOverride(List<HomeClientBalanceRow> rows) =>
+    clientsListPageFetcherProvider.overrideWith(
       (ref) => ({required int page, required int pageSize}) async {
         if (page > 1) return const PagedFetchPage(items: [], hasMore: false);
         return PagedFetchPage(items: rows, hasMore: false);
@@ -103,9 +106,12 @@ Override clientsListBalancesOverride(List<HomeClientBalanceRow> rows) => clients
     );
 
 Override homeSupplierSpendsOverride(List<HomeSupplierSpendRow> rows) =>
-    homeSupplierSpendsProvider.overrideWith(() => StubHomeSupplierSpendsNotifier(rows));
+    homeSupplierSpendsProvider.overrideWith(
+      () => StubHomeSupplierSpendsNotifier(rows),
+    );
 
-Override emptyHomeSupplierSpendsOverride() => homeSupplierSpendsOverride(const []);
+Override emptyHomeSupplierSpendsOverride() =>
+    homeSupplierSpendsOverride(const []);
 
 class StubHomeCraftsmenNotifier extends HomeCraftsmenNotifier {
   StubHomeCraftsmenNotifier(this.rows);
@@ -116,8 +122,9 @@ class StubHomeCraftsmenNotifier extends HomeCraftsmenNotifier {
   Future<List<HomeCraftsmanActivityRow>> fetch() async => rows;
 }
 
-Override emptyHomeCraftsmenOverride() =>
-    homeCraftsmenProvider.overrideWith(() => StubHomeCraftsmenNotifier(const []));
+Override emptyHomeCraftsmenOverride() => homeCraftsmenProvider.overrideWith(
+  () => StubHomeCraftsmenNotifier(const []),
+);
 
 Override homeCraftsmenOverride(List<HomeCraftsmanActivityRow> rows) =>
     homeCraftsmenProvider.overrideWith(() => StubHomeCraftsmenNotifier(rows));
@@ -131,6 +138,6 @@ class StubHomeSuppliersNotifier extends HomeSuppliersNotifier {
   Future<List<HomeCraftsmanActivityRow>> fetch() async => rows;
 }
 
-Override emptyHomeSuppliersOverride() =>
-    homeSuppliersProvider.overrideWith(() => StubHomeSuppliersNotifier(const []));
-
+Override emptyHomeSuppliersOverride() => homeSuppliersProvider.overrideWith(
+  () => StubHomeSuppliersNotifier(const []),
+);

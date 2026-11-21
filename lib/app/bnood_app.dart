@@ -40,9 +40,7 @@ class BnoodApp extends ConsumerWidget {
             breakpoints: AppBreakpoints.all,
             child: child ?? const SizedBox.shrink(),
           );
-          return AppKeyboardScope(
-            child: appToastBuilder(context, responsive),
-          );
+          return AppKeyboardScope(child: appToastBuilder(context, responsive));
         },
         onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,
         theme: AppTheme.light(),

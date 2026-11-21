@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../data/app_subscription.dart';
-import '../../data/subscription_colors.dart';
-import 'paywall_savings_badge.dart';
+import 'package:bnood/features/subscription/data/app_subscription.dart';
+import 'package:bnood/features/subscription/data/subscription_colors.dart';
+import 'package:bnood/features/subscription/presentation/widgets/paywall_savings_badge.dart';
 
 class PaywallPlanTile extends StatelessWidget {
   const PaywallPlanTile({
@@ -35,7 +35,9 @@ class PaywallPlanTile extends StatelessWidget {
     final unitSuffix = perMonthSuffix;
 
     return Material(
-      color: selected ? SubscriptionColors.violetSoft : SubscriptionColors.planIdle,
+      color: selected
+          ? SubscriptionColors.violetSoft
+          : SubscriptionColors.planIdle,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(
@@ -57,13 +59,19 @@ class PaywallPlanTile extends StatelessWidget {
                 children: [
                   Text(
                     periodTitle,
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF17141C)),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF17141C),
+                    ),
                     textAlign: TextAlign.start,
                   ),
                   const SizedBox(height: 10),
                   if (originalMonthlyLabel != null) ...[
                     Text(
-                      originalMonthlyLabel!.replaceAll(' EGP', '').replaceAll(' EGP', ''),
+                      originalMonthlyLabel!
+                          .replaceAll(' EGP', '')
+                          .replaceAll(' EGP', ''),
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
@@ -90,7 +98,11 @@ class PaywallPlanTile extends StatelessWidget {
                       ),
                       Text(
                         unitSuffix,
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF6D6676)),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF6D6676),
+                        ),
                       ),
                     ],
                   ),
@@ -98,7 +110,12 @@ class PaywallPlanTile extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       billedCaption!,
-                      style: const TextStyle(fontSize: 12, height: 1.45, fontWeight: FontWeight.w500, color: Color(0xFF6D6676)),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        height: 1.45,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF6D6676),
+                      ),
                       textAlign: TextAlign.start,
                     ),
                   ],

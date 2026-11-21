@@ -44,7 +44,9 @@ TextAlign alignTextInAmbient(String text, TextDirection ambient) {
 }
 
 bool _isStrongRtl(int rune) {
-  return (rune >= 0x0590 && rune <= 0x08FF) || (rune >= 0xFB1D && rune <= 0xFDFF) || (rune >= 0xFE70 && rune <= 0xFEFF);
+  return (rune >= 0x0590 && rune <= 0x08FF) ||
+      (rune >= 0xFB1D && rune <= 0xFDFF) ||
+      (rune >= 0xFE70 && rune <= 0xFEFF);
 }
 
 bool _isStrongLtr(int rune) {

@@ -34,18 +34,19 @@ class AppBrandLockup extends StatelessWidget {
     final inverse = _useInverse(context);
     final svg = switch (kind) {
       AppBrandLockupKind.horizontal =>
-        inverse ? Assets.brand.logoArHorizontalWhiteSvg : Assets.brand.logoArHorizontalPrimarySvg,
+        inverse
+            ? Assets.brand.logoArHorizontalWhiteSvg
+            : Assets.brand.logoArHorizontalPrimarySvg,
       AppBrandLockupKind.vertical =>
-        inverse ? Assets.brand.logoArVerticalWhiteSvg : Assets.brand.logoArVerticalPrimarySvg,
+        inverse
+            ? Assets.brand.logoArVerticalWhiteSvg
+            : Assets.brand.logoArVerticalPrimarySvg,
       AppBrandLockupKind.hero =>
         inverse ? Assets.brand.heroArDarkSvg : Assets.brand.heroArLightSvg,
-      AppBrandLockupKind.symbol => inverse ? Assets.brand.iconWhiteSvg : Assets.brand.iconPrimarySvg,
+      AppBrandLockupKind.symbol =>
+        inverse ? Assets.brand.iconWhiteSvg : Assets.brand.iconPrimarySvg,
     };
-    return svg.svg(
-      height: height,
-      width: width,
-      fit: BoxFit.contain,
-    );
+    return svg.svg(height: height, width: width, fit: BoxFit.contain);
   }
 }
 
@@ -53,5 +54,6 @@ class AppBrandLockup extends StatelessWidget {
 class AppBrandPdfLogo {
   AppBrandPdfLogo._();
 
-  static const String horizontalPrimaryPng = 'assets/brand/logo_ar_horizontal_primary@2x.png';
+  static const String horizontalPrimaryPng =
+      'assets/brand/logo_ar_horizontal_primary@2x.png';
 }

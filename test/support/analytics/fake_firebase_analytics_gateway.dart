@@ -32,10 +32,7 @@ class FakeFirebaseAnalyticsGateway implements FirebaseAnalyticsGateway {
   }
 
   @override
-  Future<void> setUserProperty({
-    required String name,
-    String? value,
-  }) async {
+  Future<void> setUserProperty({required String name, String? value}) async {
     userProperties.add(MapEntry(name, value));
   }
 }

@@ -9,7 +9,7 @@ import '../../../../core/widgets/app_amount.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_pressable.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../items/presentation/item_semantic_icon.dart';
+import 'package:bnood/features/items/presentation/widgets/item_semantic_icon.dart';
 
 class ClientDetailItemRow extends StatelessWidget {
   const ClientDetailItemRow({
@@ -37,7 +37,9 @@ class ClientDetailItemRow extends StatelessWidget {
     final colors = context.colors;
     final text = context.text;
     final total = breakdown.totalPiastres;
-    final materialsShare = total == 0 ? 0.0 : breakdown.materialsPiastres / total;
+    final materialsShare = total == 0
+        ? 0.0
+        : breakdown.materialsPiastres / total;
     final accent = itemSemanticAccentColor(colorKey);
     final card = AppCard(
       padding: const EdgeInsets.all(AppSize.spaceLG),
@@ -63,7 +65,14 @@ class ClientDetailItemRow extends StatelessWidget {
                 ),
               ),
               AppSize.spaceMD.gap,
-              Expanded(child: Text(itemName, style: text.bodyEmphasis, maxLines: 1, overflow: TextOverflow.ellipsis)),
+              Expanded(
+                child: Text(
+                  itemName,
+                  style: text.bodyEmphasis,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
               AppAmount(
                 piastres: total,
                 role: AppAmountRole.spend,
@@ -116,8 +125,13 @@ class ClientDetailItemRow extends StatelessWidget {
                       ),
                     if (materialsShare < 1)
                       Expanded(
-                        flex: ((1 - materialsShare) * 1000).round().clamp(1, 1000),
-                        child: ColoredBox(color: colors.spend.withValues(alpha: 0.35)),
+                        flex: ((1 - materialsShare) * 1000).round().clamp(
+                          1,
+                          1000,
+                        ),
+                        child: ColoredBox(
+                          color: colors.spend.withValues(alpha: 0.35),
+                        ),
                       ),
                   ],
                 ),
@@ -165,7 +179,10 @@ class _SplitMetric extends StatelessWidget {
               Container(
                 width: 6,
                 height: 6,
-                decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                  color: dotColor,
+                  shape: BoxShape.circle,
+                ),
               ),
               AppSize.spaceXS.gap,
               Flexible(

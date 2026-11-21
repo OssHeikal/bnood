@@ -12,6 +12,7 @@ class User {
   final String phone;
   final String? name;
   final DateTime? phoneVerifiedAt;
+
   /// Statement / PDF contact line; null → server uses [phone].
   final String? contactPhone;
   final String? logoUrl;
@@ -48,7 +49,9 @@ class User {
       phone: phone,
       name: name ?? this.name,
       phoneVerifiedAt: phoneVerifiedAt,
-      contactPhone: clearContactPhone ? null : (contactPhone ?? this.contactPhone),
+      contactPhone: clearContactPhone
+          ? null
+          : (contactPhone ?? this.contactPhone),
       logoUrl: clearLogoUrl ? null : (logoUrl ?? this.logoUrl),
     );
   }
@@ -65,5 +68,6 @@ class User {
           logoUrl == other.logoUrl;
 
   @override
-  int get hashCode => Object.hash(id, phone, name, phoneVerifiedAt, contactPhone, logoUrl);
+  int get hashCode =>
+      Object.hash(id, phone, name, phoneVerifiedAt, contactPhone, logoUrl);
 }

@@ -32,12 +32,9 @@ class AppEmptyState extends StatelessWidget {
     final colors = context.colors;
     final text = context.text;
 
-    final glyph = leading ??
-        Icon(
-          icon,
-          size: AppSize.iconExtraLarge,
-          color: colors.primary,
-        );
+    final glyph =
+        leading ??
+        Icon(icon, size: AppSize.iconExtraLarge, color: colors.primary);
 
     return Semantics(
       container: true,
@@ -60,11 +57,7 @@ class AppEmptyState extends StatelessWidget {
               ),
             ),
             AppSize.spaceLG.gap,
-            Text(
-              title,
-              style: text.sectionTitle,
-              textAlign: TextAlign.center,
-            ),
+            Text(title, style: text.sectionTitle, textAlign: TextAlign.center),
             if (description != null) ...[
               AppSize.spaceSM.gap,
               Text(

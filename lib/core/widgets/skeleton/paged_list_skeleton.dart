@@ -16,7 +16,10 @@ class PagedListSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        for (var i = 0; i < count; i++) ...[if (i > 0) AppSize.spaceMD.gap, const _PersonCardBone()],
+        for (var i = 0; i < count; i++) ...[
+          if (i > 0) AppSize.spaceMD.gap,
+          const _PersonCardBone(),
+        ],
       ],
     );
   }
@@ -30,7 +33,10 @@ class _PersonCardBone extends StatelessWidget {
     return AppCard(
       padding: EdgeInsets.zero,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceMD),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSize.spaceLG,
+          vertical: AppSize.spaceMD,
+        ),
         child: Row(
           children: [
             const SkeletonBox.round(size: AppSize.hitMin),

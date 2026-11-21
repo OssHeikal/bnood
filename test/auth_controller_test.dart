@@ -42,10 +42,9 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      final outcome = await container.read(authControllerProvider.notifier).login(
-            phone: '01012345678',
-            password: 'wrongpass1',
-          );
+      final outcome = await container
+          .read(authControllerProvider.notifier)
+          .login(phone: '01012345678', password: 'wrongpass1');
       expect(outcome, isA<LoginOutcomeFailed>());
       expect(await store.readToken(), 'existing');
       expect(container.read(authControllerProvider).isAuthenticated, isFalse);
@@ -69,7 +68,9 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      await container.read(authControllerProvider.notifier).bootstrapFromStoredSession();
+      await container
+          .read(authControllerProvider.notifier)
+          .bootstrapFromStoredSession();
       expect(await store.readToken(), isNull);
       expect(
         container.read(authControllerProvider).bootstrapStatus,
@@ -83,16 +84,15 @@ void main() {
         overrides: [
           sessionStoreProvider.overrideWithValue(store),
           authApiProvider.overrideWithValue(
-            _apiForTest(
-              store,
-              (_) async => throw Exception('offline'),
-            ),
+            _apiForTest(store, (_) async => throw Exception('offline')),
           ),
         ],
       );
       addTearDown(container.dispose);
 
-      await container.read(authControllerProvider.notifier).bootstrapFromStoredSession();
+      await container
+          .read(authControllerProvider.notifier)
+          .bootstrapFromStoredSession();
       expect(await store.readToken(), 'keep');
       expect(
         container.read(authControllerProvider).bootstrapStatus,
@@ -106,26 +106,20 @@ void main() {
         overrides: [
           sessionStoreProvider.overrideWithValue(store),
           authApiProvider.overrideWithValue(
-            _apiForTest(
-              store,
-              (options) async {
-                if (options.path.endsWith('/register') &&
-                    !options.path.contains('verify')) {
-                  return jsonResponse(
-                    '{"success":true,"data":{"registration_id":"reg_1","expires_in":600,"resend_after":60}}',
-                    statusCode: 202,
-                  );
-                }
+            _apiForTest(store, (options) async {
+              if (options.path.endsWith('/register') &&
+                  !options.path.contains('verify')) {
                 return jsonResponse(
-                  '''
+                  '{"success":true,"data":{"registration_id":"reg_1","expires_in":600,"resend_after":60}}',
+                  statusCode: 202,
+                );
+              }
+              return jsonResponse('''
 {"success":true,"message":"ok","data":{
   "token":"tok_new",
   "user":{"id":"u1","phone":"+201012345678","phone_verified_at":"2025-01-01T00:00:00Z"}
-}}''',
-                  statusCode: 201,
-                );
-              },
-            ),
+}}''', statusCode: 201);
+            }),
           ),
         ],
       );
@@ -146,10 +140,15 @@ void main() {
     test('adoptSessionForTest does not expose token in state', () async {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      container.read(authControllerProvider.notifier).adoptSessionForTest(
+      container
+          .read(authControllerProvider.notifier)
+          .adoptSessionForTest(
             const User(id: 'u1', phone: '+201012345678', name: 'Eng'),
           );
-      expect(container.read(authControllerProvider).user?.phone, '+201012345678');
+      expect(
+        container.read(authControllerProvider).user?.phone,
+        '+201012345678',
+      );
     });
 
     test('saveProfileName updates user on success', () async {
@@ -158,29 +157,28 @@ void main() {
         overrides: [
           sessionStoreProvider.overrideWithValue(store),
           authApiProvider.overrideWithValue(
-            _apiForTest(
-              store,
-              (options) async {
-                expect(options.method, 'PATCH');
-                return jsonResponse(
-                  '''
+            _apiForTest(store, (options) async {
+              expect(options.method, 'PATCH');
+              return jsonResponse('''
 {"success":true,"message":"ok","data":{
   "user":{"id":"u1","phone":"+201012345678","name":"Osama","phone_verified_at":"2025-01-01T00:00:00Z"}
-}}''',
-                );
-              },
-            ),
+}}''');
+            }),
           ),
         ],
       );
       addTearDown(container.dispose);
-      container.read(authControllerProvider.notifier).adoptSessionForTest(
-            const User(id: 'u1', phone: '+201012345678'),
-          );
-      final err =
-          await container.read(authControllerProvider.notifier).saveProfileName('Osama');
+      container
+          .read(authControllerProvider.notifier)
+          .adoptSessionForTest(const User(id: 'u1', phone: '+201012345678'));
+      final err = await container
+          .read(authControllerProvider.notifier)
+          .saveProfileName('Osama');
       expect(err, isNull);
-      expect(container.read(authControllerProvider).user?.hasCompleteName, isTrue);
+      expect(
+        container.read(authControllerProvider).user?.hasCompleteName,
+        isTrue,
+      );
     });
   });
 }

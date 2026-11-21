@@ -7,14 +7,12 @@ import 'app_dio.dart';
 import 'auth_api_exception.dart';
 import 'auth_interceptor.dart';
 import 'auth_login_result.dart';
-import '../../features/auth/models/user.dart';
+import 'package:bnood/features/auth/models/user.dart';
 
 class AuthApi {
-  AuthApi({
-    Dio? dio,
-    SessionStore? sessionStore,
-  })  : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
-        _ownsDio = dio == null;
+  AuthApi({Dio? dio, SessionStore? sessionStore})
+    : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
+      _ownsDio = dio == null;
 
   final Dio _dio;
   final bool _ownsDio;
@@ -22,8 +20,8 @@ class AuthApi {
   static const _authPrefix = ApiConfig.subscriberAuthPrefix;
 
   Map<String, dynamic> get _authenticatedExtra => {
-        AuthInterceptor.authenticatedExtraKey: true,
-      };
+    AuthInterceptor.authenticatedExtraKey: true,
+  };
 
   Future<T> _guard<T>(Future<T> Function() run) async {
     try {
@@ -55,7 +53,10 @@ class AuthApi {
         },
       );
       if (response.statusCode == 202) {
-        return ApiResponseParser.expectData(response, RegistrationAccepted.fromJson);
+        return ApiResponseParser.expectData(
+          response,
+          RegistrationAccepted.fromJson,
+        );
       }
       throw ApiResponseParser.fromFailure(
         response,
@@ -71,7 +72,10 @@ class AuthApi {
         data: {'registration_id': registrationId},
       );
       if (response.statusCode == 202) {
-        return ApiResponseParser.expectData(response, RegistrationAccepted.fromJson);
+        return ApiResponseParser.expectData(
+          response,
+          RegistrationAccepted.fromJson,
+        );
       }
       throw ApiResponseParser.fromFailure(
         response,
@@ -87,13 +91,13 @@ class AuthApi {
     return _guard(() async {
       final response = await _dio.post<Map<String, dynamic>>(
         '$_authPrefix/register/verify',
-        data: {
-          'registration_id': registrationId,
-          'code': code,
-        },
+        data: {'registration_id': registrationId, 'code': code},
       );
       if (response.statusCode == 201) {
-        return ApiResponseParser.expectData(response, AuthSessionPayload.fromJson);
+        return ApiResponseParser.expectData(
+          response,
+          AuthSessionPayload.fromJson,
+        );
       }
       throw ApiResponseParser.fromFailure(
         response,
@@ -102,17 +106,11 @@ class AuthApi {
     });
   }
 
-  Future<LoginResult> login({
-    required String phone,
-    required String password,
-  }) {
+  Future<LoginResult> login({required String phone, required String password}) {
     return _guard(() async {
       final response = await _dio.post<Map<String, dynamic>>(
         '$_authPrefix/login',
-        data: {
-          'phone': phone,
-          'password': password,
-        },
+        data: {'phone': phone, 'password': password},
       );
       final json = ApiResponseParser.decodeJson(response);
       final status = response.statusCode ?? 0;
@@ -144,9 +142,8 @@ class AuthApi {
       );
       return ApiResponseParser.expectData(
         response,
-        (data) => User.fromJson(
-          (data?['user'] as Map<String, dynamic>?) ?? data!,
-        ),
+        (data) =>
+            User.fromJson((data?['user'] as Map<String, dynamic>?) ?? data!),
       );
     });
   }
@@ -173,15 +170,15 @@ class AuthApi {
     });
   }
 
-  Future<User> uploadProfileLogo({
-    required String filePath,
-    String? filename,
-  }) {
+  Future<User> uploadProfileLogo({required String filePath, String? filename}) {
     return _guard(() async {
       final response = await _dio.post<Map<String, dynamic>>(
         '$_authPrefix/profile/logo',
         data: FormData.fromMap({
-          'logo': await MultipartFile.fromFile(filePath, filename: filename ?? 'logo.jpg'),
+          'logo': await MultipartFile.fromFile(
+            filePath,
+            filename: filename ?? 'logo.jpg',
+          ),
         }),
         options: Options(extra: _authenticatedExtra),
       );
@@ -225,7 +222,10 @@ class AuthApi {
         data: {'phone': phone},
       );
       if (response.statusCode == 202) {
-        return ApiResponseParser.expectData(response, RecoveryAccepted.fromJson);
+        return ApiResponseParser.expectData(
+          response,
+          RecoveryAccepted.fromJson,
+        );
       }
       throw ApiResponseParser.fromFailure(
         response,
@@ -241,12 +241,12 @@ class AuthApi {
     return _guard(() async {
       final response = await _dio.post<Map<String, dynamic>>(
         '$_authPrefix/forgot-password/verify',
-        data: {
-          'recovery_id': recoveryId,
-          'code': code,
-        },
+        data: {'recovery_id': recoveryId, 'code': code},
       );
-      return ApiResponseParser.expectData(response, ResetAuthorization.fromJson);
+      return ApiResponseParser.expectData(
+        response,
+        ResetAuthorization.fromJson,
+      );
     });
   }
 
@@ -346,10 +346,7 @@ class RecoveryAccepted {
 }
 
 class ResetAuthorization {
-  const ResetAuthorization({
-    required this.resetToken,
-    required this.expiresIn,
-  });
+  const ResetAuthorization({required this.resetToken, required this.expiresIn});
 
   final String resetToken;
   final int expiresIn;
@@ -363,10 +360,7 @@ class ResetAuthorization {
 }
 
 class AuthSessionPayload {
-  const AuthSessionPayload({
-    required this.token,
-    required this.user,
-  });
+  const AuthSessionPayload({required this.token, required this.user});
 
   final String token;
   final User user;

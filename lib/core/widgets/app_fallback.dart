@@ -53,8 +53,8 @@ class AppFallback extends StatelessWidget {
     this.onAction,
     this.actions,
     this.isError = false,
-  })  : expanded = false,
-        scope = AppFallbackScope.section;
+  }) : expanded = false,
+       scope = AppFallbackScope.section;
 
   final IconData icon;
   final Widget? leading;
@@ -85,26 +85,26 @@ class AppFallback extends StatelessWidget {
     final expanded = scope == AppFallbackScope.screen;
     return switch (action.role) {
       AppFallbackActionRole.primary => AppButton.primary(
-          text: action.label,
-          icon: action.icon,
-          onPressed: onPressed,
-          isLoading: action.loading,
-          isExpanded: expanded,
-        ),
+        text: action.label,
+        icon: action.icon,
+        onPressed: onPressed,
+        isLoading: action.loading,
+        isExpanded: expanded,
+      ),
       AppFallbackActionRole.secondary => AppButton.outlined(
-          text: action.label,
-          icon: action.icon,
-          onPressed: onPressed,
-          isLoading: action.loading,
-          isExpanded: expanded,
-        ),
+        text: action.label,
+        icon: action.icon,
+        onPressed: onPressed,
+        isLoading: action.loading,
+        isExpanded: expanded,
+      ),
       AppFallbackActionRole.tertiary => AppButton.text(
-          text: action.label,
-          icon: action.icon,
-          onPressed: onPressed,
-          isLoading: action.loading,
-          isExpanded: expanded,
-        ),
+        text: action.label,
+        icon: action.icon,
+        onPressed: onPressed,
+        isLoading: action.loading,
+        isExpanded: expanded,
+      ),
     };
   }
 
@@ -117,28 +117,36 @@ class AppFallback extends StatelessWidget {
     final section = scope == AppFallbackScope.section;
     final iconSize = section ? AppSize.icon : AppSize.iconExtraLarge;
     final titleStyle = section ? text.bodyEmphasis : text.sectionTitle;
-    final descriptionStyle = section ? text.caption.copyWith(color: colors.onSurfaceMuted) : text.supporting;
+    final descriptionStyle = section
+        ? text.caption.copyWith(color: colors.onSurfaceMuted)
+        : text.supporting;
     final body = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Align(
           alignment: Alignment.center,
-          child: leading ??
-              Icon(icon, size: iconSize, color: tint),
+          child: leading ?? Icon(icon, size: iconSize, color: tint),
         ),
         AppSize.spaceSM.gap,
         Text(title, style: titleStyle, textAlign: TextAlign.center),
         if (description != null) ...[
           AppSize.spaceXS.gap,
-          Text(description!, style: descriptionStyle, textAlign: TextAlign.center),
+          Text(
+            description!,
+            style: descriptionStyle,
+            textAlign: TextAlign.center,
+          ),
         ],
         if (resolved.isNotEmpty) ...[
           SizedBox(height: section ? AppSize.spaceMD : AppSize.spaceLG),
           for (var i = 0; i < resolved.length; i++) ...[
             if (i > 0) AppSize.spaceSM.gap,
             if (section)
-              Align(alignment: Alignment.center, child: _actionButton(resolved[i]))
+              Align(
+                alignment: Alignment.center,
+                child: _actionButton(resolved[i]),
+              )
             else
               _actionButton(resolved[i]),
           ],
@@ -146,7 +154,9 @@ class AppFallback extends StatelessWidget {
       ],
     );
 
-    final padded = section ? body : Padding(padding: const EdgeInsets.all(AppSize.spaceLG), child: body);
+    final padded = section
+        ? body
+        : Padding(padding: const EdgeInsets.all(AppSize.spaceLG), child: body);
     if (expanded) {
       return Center(child: padded);
     }

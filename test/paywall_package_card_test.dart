@@ -61,7 +61,9 @@ void main() {
         data: const MediaQueryData(size: Size(390, 840)),
         child: Directionality(
           textDirection: textDirection,
-          child: Scaffold(body: Center(child: SizedBox(width: 360, child: child))),
+          child: Scaffold(
+            body: Center(child: SizedBox(width: 360, child: child)),
+          ),
         ),
       ),
     );
@@ -72,7 +74,9 @@ void main() {
     expect(enterpriseContact.selectableForBillingPeriod('yearly'), isTrue);
   });
 
-  testWidgets('monthly tab ghosts Enterprise and shows tagline', (tester) async {
+  testWidgets('monthly tab ghosts Enterprise and shows tagline', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       wrap(
         child: PaywallPackageCard(
@@ -91,35 +95,45 @@ void main() {
     expect(find.text(enterpriseTagline, skipOffstage: false), findsNWidgets(1));
     expect(find.text('Contact us'), findsOneWidget);
 
-    final opacity = tester.widget<Opacity>(find.ancestor(of: find.text('Enterprise'), matching: find.byType(Opacity)));
+    final opacity = tester.widget<Opacity>(
+      find.ancestor(
+        of: find.text('Enterprise'),
+        matching: find.byType(Opacity),
+      ),
+    );
     expect(opacity.opacity, 0.45);
   });
 
-  testWidgets('Business monthly shows yearly-only badge trailing, hides price', (tester) async {
-    await tester.pumpWidget(
-      wrap(
-        child: PaywallPackageCard(
-          package: businessYearlyOnly,
-          selected: false,
-          billingPeriod: 'monthly',
-          localeCode: 'en',
-          onTap: () {},
+  testWidgets(
+    'Business monthly shows yearly-only badge trailing, hides price',
+    (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          child: PaywallPackageCard(
+            package: businessYearlyOnly,
+            selected: false,
+            billingPeriod: 'monthly',
+            localeCode: 'en',
+            onTap: () {},
+          ),
+          textDirection: TextDirection.rtl,
+          locale: const Locale('ar'),
         ),
-        textDirection: TextDirection.rtl,
-        locale: const Locale('ar'),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.text('Yearly only'), findsOneWidget);
-    expect(find.text('583'), findsNothing);
-    expect(find.text('10 active projects'), findsOneWidget);
-    final business = tester.getRect(find.text('Business'));
-    final badge = tester.getRect(find.text('Yearly only'));
-    expect(business.center.dx, greaterThan(badge.center.dx));
-  });
+      expect(find.text('Yearly only'), findsOneWidget);
+      expect(find.text('583'), findsNothing);
+      expect(find.text('10 active projects'), findsOneWidget);
+      final business = tester.getRect(find.text('Business'));
+      final badge = tester.getRect(find.text('Yearly only'));
+      expect(business.center.dx, greaterThan(badge.center.dx));
+    },
+  );
 
-  testWidgets('yearly tab shows annual price without billed-yearly caption', (tester) async {
+  testWidgets('yearly tab shows annual price without billed-yearly caption', (
+    tester,
+  ) async {
     const yearlyPro = AppPaywallPackage(
       slug: 'pro',
       name: 'Pro',
@@ -137,7 +151,9 @@ void main() {
           hasDiscount: true,
         ),
       ),
-      ctaLabels: const AppPaywallPackageCtaLabels(yearly: 'Start Pro at 2,999 EGP/yr'),
+      ctaLabels: const AppPaywallPackageCtaLabels(
+        yearly: 'Start Pro at 2,999 EGP/yr',
+      ),
     );
 
     await tester.pumpWidget(
@@ -161,30 +177,33 @@ void main() {
     expect(find.textContaining('3,500'), findsOneWidget);
   });
 
-  testWidgets('billing toggle yearly savings chip has breathable horizontal padding', (tester) async {
-    await tester.pumpWidget(
-      wrap(
-        child: PaywallBillingToggle(
-          billing: const AppPaywallBilling(
-            monthlyLabel: 'Monthly',
-            yearlyLabel: 'Yearly',
-            yearlySavingsPercent: 16,
+  testWidgets(
+    'billing toggle yearly savings chip has breathable horizontal padding',
+    (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          child: PaywallBillingToggle(
+            billing: const AppPaywallBilling(
+              monthlyLabel: 'Monthly',
+              yearlyLabel: 'Yearly',
+              yearlySavingsPercent: 16,
+            ),
+            selectedPeriod: 'yearly',
+            onPeriodChanged: (_) {},
+            showYearlySavingsBadge: true,
           ),
-          selectedPeriod: 'yearly',
-          onPeriodChanged: (_) {},
-          showYearlySavingsBadge: true,
+          locale: const Locale('en'),
+          textDirection: TextDirection.ltr,
         ),
-        locale: const Locale('en'),
-        textDirection: TextDirection.ltr,
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    final pill = tester.getSize(find.text('Save 16%'));
-    expect(pill.width, greaterThan(52));
+      final pill = tester.getSize(find.text('Save 16%'));
+      expect(pill.width, greaterThan(52));
 
-    final yearly = tester.getRect(find.text('Yearly'));
-    final chip = tester.getRect(find.text('Save 16%'));
-    expect(chip.left - yearly.right, greaterThan(8));
-  });
+      final yearly = tester.getRect(find.text('Yearly'));
+      final chip = tester.getRect(find.text('Save 16%'));
+      expect(chip.left - yearly.right, greaterThan(8));
+    },
+  );
 }

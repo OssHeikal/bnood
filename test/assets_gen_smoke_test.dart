@@ -11,7 +11,13 @@ void main() {
   });
 
   test('social SVG key names match files', () {
-    expect(Assets.icons.whatsappColor.keyName, 'assets/icons/whatsapp_color.svg');
-    expect(Assets.icons.whatsappMonochrome.keyName, 'assets/icons/whatsapp_monochrome.svg');
+    expect(
+      Assets.icons.whatsappColor.keyName,
+      'assets/icons/whatsapp_color.svg',
+    );
+    expect(
+      Assets.icons.whatsappMonochrome.keyName,
+      'assets/icons/whatsapp_monochrome.svg',
+    );
   });
 }

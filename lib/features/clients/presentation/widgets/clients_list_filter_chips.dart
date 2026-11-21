@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/config/theme/app_colors.dart';
 import '../../../../core/config/theme/app_shape.dart';
 import '../../../../core/config/theme/app_size.dart';
-import '../../data/client_list_archive_filter.dart';
+import 'package:bnood/features/clients/data/client_list_archive_filter.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/widgets/app_pressable.dart';
-import '../providers/clients_list_providers.dart';
+import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 
 class ClientsListFilterChips extends ConsumerWidget {
   const ClientsListFilterChips({super.key});
@@ -85,7 +85,9 @@ class _FilterChip extends StatelessWidget {
       child: AppPressable(
         onPressed: onTap,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: AppSize.buttonHeightSmall),
+          constraints: const BoxConstraints(
+            minHeight: AppSize.buttonHeightSmall,
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
             child: Center(

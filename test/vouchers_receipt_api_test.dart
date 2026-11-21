@@ -1,8 +1,8 @@
 import 'package:bnood/features/vouchers/data/vouchers_api.dart';
 import 'package:bnood/features/vouchers/data/app_voucher_receipt.dart';
 import 'package:bnood/features/vouchers/data/vouchers_repository.dart';
-import 'package:bnood/features/vouchers/presentation/voucher_remote_receipts.dart';
-import 'package:bnood/features/vouchers/presentation/voucher_sheet_receipt.dart';
+import 'package:bnood/features/vouchers/presentation/models/voucher_remote_receipts.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/voucher_sheet_receipt.dart';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -14,7 +14,9 @@ import 'support/fake_session_store.dart';
 import 'support/receipt_test_image.dart';
 import 'support/scripted_dio_adapter.dart';
 
-VouchersApi _vouchersApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+VouchersApi _vouchersApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return VouchersApi(dio: dio);
@@ -57,51 +59,54 @@ void main() {
     expect(receipt.size, 1200);
   });
 
-  test('failed receipt upload keeps voucher id for retry without second create', () async {
-    var createCount = 0;
-    var uploadCount = 0;
-    final temp = writeReceiptTestJpeg(
-      path: '${Directory.systemTemp.path}/bnood_receipt_test.jpg',
-    );
-    final api = _vouchersApi((options) async {
-      if (options.uri.path.contains('/receipts') && options.method == 'POST') {
-        uploadCount++;
-        return jsonResponse(
-          '{"success":false,"message":"bad","code":"invalid_mime"}',
-          statusCode: 422,
-        );
-      }
-      if (options.method == 'POST') {
-        createCount++;
-      }
-      return jsonResponse(
-        '{"success":true,"data":{"id":"01JV","client_id":"c1","type":"receive","amount":100,"date":"2026-11-09","payment_method":"cash"}}',
+  test(
+    'failed receipt upload keeps voucher id for retry without second create',
+    () async {
+      var createCount = 0;
+      var uploadCount = 0;
+      final temp = writeReceiptTestJpeg(
+        path: '${Directory.systemTemp.path}/bnood_receipt_test.jpg',
       );
-    });
-    final repo = VouchersRepository(api);
-    final voucher = await repo.createVoucher(
-      clientId: 'c1',
-      type: 'receive',
-      amountMinor: 100,
-      voucherDate: '2026-11-09',
-      method: 'cash',
-    );
-    expect(voucher.id, '01JV');
-    expect(createCount, 1);
-    expect(uploadCount, 0);
+      final api = _vouchersApi((options) async {
+        if (options.uri.path.contains('/receipts') &&
+            options.method == 'POST') {
+          uploadCount++;
+          return jsonResponse(
+            '{"success":false,"message":"bad","code":"invalid_mime"}',
+            statusCode: 422,
+          );
+        }
+        if (options.method == 'POST') {
+          createCount++;
+        }
+        return jsonResponse(
+          '{"success":true,"data":{"id":"01JV","client_id":"c1","type":"receive","amount":100,"date":"2026-11-09","payment_method":"cash"}}',
+        );
+      });
+      final repo = VouchersRepository(api);
+      final voucher = await repo.createVoucher(
+        clientId: 'c1',
+        type: 'receive',
+        amountMinor: 100,
+        voucherDate: '2026-11-09',
+        method: 'cash',
+      );
+      expect(voucher.id, '01JV');
+      expect(createCount, 1);
+      expect(uploadCount, 0);
 
-    final upload = await uploadPendingReceiptsBestEffort(
-      repo: repo,
-      voucherId: voucher.id,
-      receipts: [
-        VoucherSheetReceipt(localPath: temp.path, needsUpload: true),
-      ],
-    );
-    expect(upload.failedCount, 1);
-    expect(upload.receipts.single.isPendingUpload, isTrue);
-    expect(uploadCount, 1);
-    expect(createCount, 1);
-    api.close();
-  });
-
+      final upload = await uploadPendingReceiptsBestEffort(
+        repo: repo,
+        voucherId: voucher.id,
+        receipts: [
+          VoucherSheetReceipt(localPath: temp.path, needsUpload: true),
+        ],
+      );
+      expect(upload.failedCount, 1);
+      expect(upload.receipts.single.isPendingUpload, isTrue);
+      expect(uploadCount, 1);
+      expect(createCount, 1);
+      api.close();
+    },
+  );
 }

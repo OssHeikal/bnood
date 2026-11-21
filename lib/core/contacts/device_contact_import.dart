@@ -38,13 +38,22 @@ String? resolveContactPhoneForImport(Contact contact) {
   if (selected != null && selected.isNotEmpty) {
     return selected;
   }
-  final numbers = contact.phoneNumbers?.map((p) => p.trim()).where((p) => p.isNotEmpty).toList() ?? [];
+  final numbers =
+      contact.phoneNumbers
+          ?.map((p) => p.trim())
+          .where((p) => p.isNotEmpty)
+          .toList() ??
+      [];
   if (numbers.length == 1) return numbers.first;
   return null;
 }
 
 List<String> contactPhoneChoices(Contact contact) {
-  return contact.phoneNumbers?.map((p) => p.trim()).where((p) => p.isNotEmpty).toList() ?? [];
+  return contact.phoneNumbers
+          ?.map((p) => p.trim())
+          .where((p) => p.isNotEmpty)
+          .toList() ??
+      [];
 }
 
 abstract final class DeviceContactPicker {
@@ -61,7 +70,8 @@ abstract final class DeviceContactPicker {
       final l10n = AppLocalizations.of(context);
       if (!await ensureAndroidContactsPermission(context)) return null;
       if (!context.mounted) return null;
-      final Contact? contact = await (pickOverride ?? () => _native.selectPhoneNumber())();
+      final Contact? contact =
+          await (pickOverride ?? () => _native.selectPhoneNumber())();
       if (contact == null) return null;
 
       var phone = resolveContactPhoneForImport(contact);
@@ -91,7 +101,11 @@ abstract final class DeviceContactPicker {
     }
   }
 
-  static Future<String?> _choosePhone(BuildContext context, List<String> phones, AppLocalizations l10n) {
+  static Future<String?> _choosePhone(
+    BuildContext context,
+    List<String> phones,
+    AppLocalizations l10n,
+  ) {
     return AppModalSheet.show<String>(
       context: context,
       scrollable: false,
@@ -105,7 +119,10 @@ abstract final class DeviceContactPicker {
         children: [
           for (final p in phones)
             ListTile(
-              title: Text(DisplayDigits.toWesternDigits(p), textDirection: TextDirection.ltr),
+              title: Text(
+                DisplayDigits.toWesternDigits(p),
+                textDirection: TextDirection.ltr,
+              ),
               onTap: () => Navigator.pop(context, p),
             ),
         ],

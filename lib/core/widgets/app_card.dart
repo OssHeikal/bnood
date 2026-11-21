@@ -23,7 +23,11 @@ class AppCard extends StatelessWidget {
   });
 
   factory AppCard.statReceive({required Widget child, VoidCallback? onTap}) {
-    return AppCard(preset: AppCardPreset.statReceive, onTap: onTap, child: child);
+    return AppCard(
+      preset: AppCardPreset.statReceive,
+      onTap: onTap,
+      child: child,
+    );
   }
 
   factory AppCard.statSpend({required Widget child, VoidCallback? onTap}) {
@@ -31,7 +35,11 @@ class AppCard extends StatelessWidget {
   }
 
   factory AppCard.statRemaining({required Widget child, VoidCallback? onTap}) {
-    return AppCard(preset: AppCardPreset.statRemaining, onTap: onTap, child: child);
+    return AppCard(
+      preset: AppCardPreset.statRemaining,
+      onTap: onTap,
+      child: child,
+    );
   }
 
   final Widget child;
@@ -63,46 +71,50 @@ class AppCard extends StatelessWidget {
     if (!isDark) {
       return switch (preset) {
         AppCardPreset.statReceive => const LinearGradient(
-            begin: begin,
-            end: end,
-            colors: [Color(0xFFE8F8EF), Color(0xFFF5FCF8)],
-          ),
+          begin: begin,
+          end: end,
+          colors: [Color(0xFFE8F8EF), Color(0xFFF5FCF8)],
+        ),
         AppCardPreset.statSpend => const LinearGradient(
-            begin: begin,
-            end: end,
-            colors: [Color(0xFFFCECEC), Color(0xFFFEF7F7)],
-          ),
+          begin: begin,
+          end: end,
+          colors: [Color(0xFFFCECEC), Color(0xFFFEF7F7)],
+        ),
         AppCardPreset.statRemaining => const LinearGradient(
-            begin: begin,
-            end: end,
-            colors: [Color(0xFFE6F6F4), Color(0xFFF3FBFA)],
-          ),
+          begin: begin,
+          end: end,
+          colors: [Color(0xFFE6F6F4), Color(0xFFF3FBFA)],
+        ),
         AppCardPreset.plain => null,
       };
     }
     Color blendTint(Color tint) => Color.lerp(tint, colors.surface, 0.28)!;
     return switch (preset) {
       AppCardPreset.statReceive => LinearGradient(
-          begin: begin,
-          end: end,
-          colors: [colors.successBg, blendTint(colors.successBg)],
-        ),
+        begin: begin,
+        end: end,
+        colors: [colors.successBg, blendTint(colors.successBg)],
+      ),
       AppCardPreset.statSpend => LinearGradient(
-          begin: begin,
-          end: end,
-          colors: [colors.errorBg, blendTint(colors.errorBg)],
-        ),
+        begin: begin,
+        end: end,
+        colors: [colors.errorBg, blendTint(colors.errorBg)],
+      ),
       AppCardPreset.statRemaining => LinearGradient(
-          begin: begin,
-          end: end,
-          colors: [colors.infoBg, blendTint(colors.infoBg)],
-        ),
+        begin: begin,
+        end: end,
+        colors: [colors.infoBg, blendTint(colors.infoBg)],
+      ),
       AppCardPreset.plain => null,
     };
   }
 
   Gradient? _statGradient(BuildContext context) {
-    return statCardGradient(preset, context.colors, Theme.of(context).brightness);
+    return statCardGradient(
+      preset,
+      context.colors,
+      Theme.of(context).brightness,
+    );
   }
 
   @override
@@ -112,7 +124,9 @@ class AppCard extends StatelessWidget {
     final fill = background ?? colors.surface;
     final shape = AppShape.superellipse(
       radius: radius,
-      side: borderWidth > 0 ? BorderSide(color: borderColor ?? colors.outline, width: borderWidth) : BorderSide.none,
+      side: borderWidth > 0
+          ? BorderSide(color: borderColor ?? colors.outline, width: borderWidth)
+          : BorderSide.none,
     );
 
     final surface = Material(
@@ -124,9 +138,7 @@ class AppCard extends StatelessWidget {
       child: Ink(
         decoration: resolvedGradient == null
             ? null
-            : BoxDecoration(
-                gradient: resolvedGradient,
-              ),
+            : BoxDecoration(gradient: resolvedGradient),
         child: Padding(padding: padding, child: child),
       ),
     );

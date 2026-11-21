@@ -1,6 +1,6 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_card.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/home/presentation/widgets/home_person_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,10 @@ void main() {
     await tester.pumpAndSettle();
 
     final cardFinder = find.byType(AppCard);
-    final stripeFinder = find.descendant(of: cardFinder, matching: find.byType(ColoredBox));
+    final stripeFinder = find.descendant(
+      of: cardFinder,
+      matching: find.byType(ColoredBox),
+    );
     expect(stripeFinder, findsOneWidget);
 
     final card = tester.getRect(cardFinder);

@@ -5,7 +5,10 @@ import 'analytics_track.dart';
 
 /// After a successful remote client create API response.
 void trackClientCreatedAfterApi(WidgetRef ref) {
-  trackAnalyticsEventFromWidget(ref, const ClientCreated(source: ClientCreatedSource.remote));
+  trackAnalyticsEventFromWidget(
+    ref,
+    const ClientCreated(source: ClientCreatedSource.remote),
+  );
 }
 
 /// After registration profile name is saved (complete-profile screen only).

@@ -6,7 +6,7 @@ import '../../../../core/config/theme/app_shape.dart';
 import '../../../../core/config/theme/app_size.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import '../../../../core/widgets/app_pressable.dart';
-import '../providers_list_paging.dart';
+import 'package:bnood/features/providers/presentation/providers/providers_list_paging.dart';
 
 class ProvidersListFilterChips extends ConsumerWidget {
   const ProvidersListFilterChips({super.key});
@@ -84,7 +84,9 @@ class _FilterChip extends StatelessWidget {
       child: AppPressable(
         onPressed: onTap,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: AppSize.buttonHeightSmall),
+          constraints: const BoxConstraints(
+            minHeight: AppSize.buttonHeightSmall,
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG),
             child: Center(

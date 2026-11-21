@@ -109,10 +109,7 @@ abstract final class ApiResponseParser {
         final json = decodeJson(response);
         return fromFailure(response, json);
       } catch (_) {
-        return AuthApiException(
-          statusCode: status,
-          message: 'Request failed',
-        );
+        return AuthApiException(statusCode: status, message: 'Request failed');
       }
     }
     return transport(err);

@@ -14,6 +14,7 @@ class AppClientStatementItemSpend {
   final int spentMinor;
   final int materialsMinor;
   final int laborMinor;
+
   /// Same keys as items API (`icon_key` / `color_key`); null when omitted.
   final String? colorKey;
   final String? iconKey;
@@ -54,7 +55,11 @@ class StatementIssuer {
     if (phone == null) return null;
     final contactPhone = phone.toString();
     final logo = _readOptionalString(raw['logo_url']);
-    return StatementIssuer(name: name, logoUrl: logo, contactPhone: contactPhone);
+    return StatementIssuer(
+      name: name,
+      logoUrl: logo,
+      contactPhone: contactPhone,
+    );
   }
 }
 
@@ -74,12 +79,14 @@ class AppClientStatement {
 
   final String from;
   final String to;
+
   /// Earliest statement day for this client (`period_start` from API).
   final String? periodStart;
   final int openingBalanceMinor;
   final int receivedMinor;
   final int spentMinor;
   final int closingBalanceMinor;
+
   /// Same as [closingBalanceMinor] for API compatibility.
   final int remainingMinor;
   final List<AppClientStatementItemSpend> items;
@@ -89,11 +96,17 @@ class AppClientStatement {
     final itemsRaw = json['items'];
     final items = itemsRaw is List
         ? itemsRaw
-            .map((e) => AppClientStatementItemSpend.fromDataJson(e as Map<String, dynamic>))
-            .toList()
+              .map(
+                (e) => AppClientStatementItemSpend.fromDataJson(
+                  e as Map<String, dynamic>,
+                ),
+              )
+              .toList()
         : const <AppClientStatementItemSpend>[];
 
-    final remainingFromApi = json.containsKey('remaining') ? _readMinor(json['remaining']) : null;
+    final remainingFromApi = json.containsKey('remaining')
+        ? _readMinor(json['remaining'])
+        : null;
     final closing = json.containsKey('closing_balance')
         ? _readMinor(json['closing_balance'])
         : (remainingFromApi ?? 0);
@@ -124,8 +137,12 @@ class AppClientItemSpend {
     final itemsRaw = json['items'];
     final items = itemsRaw is List
         ? itemsRaw
-            .map((e) => AppClientStatementItemSpend.fromDataJson(e as Map<String, dynamic>))
-            .toList()
+              .map(
+                (e) => AppClientStatementItemSpend.fromDataJson(
+                  e as Map<String, dynamic>,
+                ),
+              )
+              .toList()
         : const <AppClientStatementItemSpend>[];
     return AppClientItemSpend(items: items);
   }

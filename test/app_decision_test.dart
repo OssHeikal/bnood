@@ -4,12 +4,16 @@ import 'package:bnood/core/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_decision.dart';
 import 'package:bnood/core/widgets/buttons/app_button.dart';
 import 'package:bnood/core/widgets/toast/app_tone.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Widget _wrap(Widget child, {Locale locale = const Locale('ar'), double textScale = 1}) {
+Widget _wrap(
+  Widget child, {
+  Locale locale = const Locale('ar'),
+  double textScale = 1,
+}) {
   return MaterialApp(
     locale: locale,
     theme: AppFoundationTheme.light(),
@@ -42,7 +46,9 @@ Widget _wrap(Widget child, {Locale locale = const Locale('ar'), double textScale
 }
 
 void main() {
-  testWidgets('AppDecision opens and cancels in AR at 1.2x text scale', (tester) async {
+  testWidgets('AppDecision opens and cancels in AR at 1.2x text scale', (
+    tester,
+  ) async {
     await tester.pumpWidget(_wrap(const SizedBox(), textScale: 1.2));
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
@@ -54,7 +60,9 @@ void main() {
   });
 
   testWidgets('AppDecision confirms in EN', (tester) async {
-    await tester.pumpWidget(_wrap(const SizedBox(), locale: const Locale('en')));
+    await tester.pumpWidget(
+      _wrap(const SizedBox(), locale: const Locale('en')),
+    );
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('نعم'));
@@ -63,7 +71,9 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('AppDecision async failure shows retry without assertion', (tester) async {
+  testWidgets('AppDecision async failure shows retry without assertion', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -96,7 +106,12 @@ void main() {
     );
     await tester.tap(find.text('danger'));
     await tester.pumpAndSettle();
-    await tester.tap(find.descendant(of: find.byType(Dialog), matching: find.widgetWithText(AppButton, 'حذف')));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(Dialog),
+        matching: find.widgetWithText(AppButton, 'حذف'),
+      ),
+    );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.takeException(), isNull);
@@ -104,7 +119,9 @@ void main() {
     expect(find.text('إعادة المحاولة'), findsOneWidget);
   });
 
-  testWidgets('danger dialog without override still shows logout icon', (tester) async {
+  testWidgets('danger dialog without override still shows logout icon', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -131,7 +148,9 @@ void main() {
     expect(find.byIcon(Icons.logout), findsOneWidget);
   });
 
-  testWidgets('archive danger iconWidget replaces logout glyph', (tester) async {
+  testWidgets('archive danger iconWidget replaces logout glyph', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -161,7 +180,9 @@ void main() {
     expect(find.bySemanticsLabel('Archive'), findsWidgets);
   });
 
-  testWidgets('IconData icon override still wins over danger default', (tester) async {
+  testWidgets('IconData icon override still wins over danger default', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -190,34 +211,37 @@ void main() {
     expect(find.byIcon(Icons.logout), findsNothing);
   });
 
-  testWidgets('root dialog keeps colors when only the page has foundation theme', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.light(),
-        home: HomeFoundationScope(
-          child: Builder(
-            builder: (context) => Scaffold(
-              body: Center(
-                child: ElevatedButton(
-                  onPressed: () => AppDecision.show(
-                    context,
-                    title: 'Account exists',
-                    description: 'Log in instead',
-                    confirmLabel: 'Log in',
-                    cancelLabel: 'Other phone',
+  testWidgets(
+    'root dialog keeps colors when only the page has foundation theme',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(),
+          home: HomeFoundationScope(
+            child: Builder(
+              builder: (context) => Scaffold(
+                body: Center(
+                  child: ElevatedButton(
+                    onPressed: () => AppDecision.show(
+                      context,
+                      title: 'Account exists',
+                      description: 'Log in instead',
+                      confirmLabel: 'Log in',
+                      cancelLabel: 'Other phone',
+                    ),
+                    child: const Text('open-auth'),
                   ),
-                  child: const Text('open-auth'),
                 ),
               ),
             ),
           ),
         ),
-      ),
-    );
-    await tester.tap(find.text('open-auth'));
-    await tester.pumpAndSettle();
-    expect(tester.takeException(), isNull);
-    expect(find.text('Account exists'), findsOneWidget);
-    expect(find.text('Log in'), findsOneWidget);
-  });
+      );
+      await tester.tap(find.text('open-auth'));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('Account exists'), findsOneWidget);
+      expect(find.text('Log in'), findsOneWidget);
+    },
+  );
 }

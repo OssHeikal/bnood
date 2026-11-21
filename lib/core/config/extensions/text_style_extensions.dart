@@ -3,7 +3,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/widgets.dart';
 
 extension TextStyleChain on TextStyle {
-  TextStyle get tabularFigures => copyWith(fontFeatures: const [ui.FontFeature.tabularFigures()]);
+  TextStyle get tabularFigures =>
+      copyWith(fontFeatures: const [ui.FontFeature.tabularFigures()]);
   TextStyle get bold => copyWith(fontWeight: FontWeight.w700);
 
   TextStyle get semiBold => copyWith(fontWeight: FontWeight.w600);

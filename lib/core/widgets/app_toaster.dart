@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../config/navigation/root_navigator_key.dart';
 import '../config/theme/app_size.dart';
 import '../layout/app_layout.dart';
-import '../../features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'toast/app_toast.dart';
 import 'toast/app_tone.dart';
 import 'toast/shell_dock_presence.dart';
@@ -47,7 +47,10 @@ abstract final class AppToaster {
     return null;
   }
 
-  static EdgeInsetsDirectional _margin(BuildContext ctx, AppToastLayoutHint layout) {
+  static EdgeInsetsDirectional _margin(
+    BuildContext ctx,
+    AppToastLayoutHint layout,
+  ) {
     final mq = MediaQuery.maybeOf(ctx);
     final safeBottom = mq?.viewPadding.bottom ?? 0;
     final keyboard = mq?.viewInsets.bottom ?? 0;
@@ -60,7 +63,11 @@ abstract final class AppToaster {
             ? safeBottom + AppSize.shellDockTopFromSafeBottom + AppSize.spaceSM
             : AppSize.spaceMD + bottomInset,
       AppToastLayoutHint.statementExportFooter =>
-        AppSize.buttonHeight + AppSize.spaceMD + AppSize.spaceSM + bottomInset + AppSize.spaceMD,
+        AppSize.buttonHeight +
+            AppSize.spaceMD +
+            AppSize.spaceSM +
+            bottomInset +
+            AppSize.spaceMD,
     };
     final wide = !ctx.isMobileLayout;
     return EdgeInsetsDirectional.only(
@@ -78,7 +85,13 @@ abstract final class AppToaster {
     ToastAction? action,
     required bool isLoading,
   }) {
-    final toast = AppToast(tone: tone, message: message, title: title, action: action, isLoading: isLoading);
+    final toast = AppToast(
+      tone: tone,
+      message: message,
+      title: title,
+      action: action,
+      isLoading: isLoading,
+    );
     if (layoutCtx.isMobileLayout) {
       return toast;
     }
@@ -241,7 +254,14 @@ abstract final class AppToaster {
     AppToastLayoutHint layout = AppToastLayoutHint.standard,
     Duration? duration,
   }) {
-    show(message, layoutContext: layoutContext, layout: layout, duration: duration, isLoading: true, replace: true);
+    show(
+      message,
+      layoutContext: layoutContext,
+      layout: layout,
+      duration: duration,
+      isLoading: true,
+      replace: true,
+    );
   }
 
   static void clear() {

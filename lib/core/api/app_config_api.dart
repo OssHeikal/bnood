@@ -7,11 +7,9 @@ import 'package:bnood/features/app_gate/data/app_config_record.dart';
 import '../storage/session_store.dart';
 
 class AppConfigApi {
-  AppConfigApi({
-    Dio? dio,
-    SessionStore? sessionStore,
-  })  : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
-        _ownsDio = dio == null;
+  AppConfigApi({Dio? dio, SessionStore? sessionStore})
+    : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
+      _ownsDio = dio == null;
 
   final Dio _dio;
   final bool _ownsDio;

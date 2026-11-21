@@ -53,7 +53,10 @@ class _DashedBorderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius));
+    final rect = RRect.fromRectAndRadius(
+      Offset.zero & size,
+      Radius.circular(radius),
+    );
     final path = Path()..addRRect(rect);
     final paint = Paint()
       ..color = color
@@ -63,7 +66,10 @@ class _DashedBorderPainter extends CustomPainter {
       var distance = 0.0;
       while (distance < metric.length) {
         final end = distance + dash;
-        canvas.drawPath(metric.extractPath(distance, end.clamp(0, metric.length)), paint);
+        canvas.drawPath(
+          metric.extractPath(distance, end.clamp(0, metric.length)),
+          paint,
+        );
         distance = end + gap;
       }
     }

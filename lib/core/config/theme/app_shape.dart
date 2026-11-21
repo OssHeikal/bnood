@@ -8,8 +8,14 @@ import 'app_size.dart';
 /// - Shell nav pill + selected tab overlay: [stadium]
 /// - Voucher satellite + avatars marked circular: [circle] / [CircleBorder]
 abstract final class AppShape {
-  static ShapeBorder superellipse({double radius = AppSize.radiusMD, BorderSide side = BorderSide.none}) {
-    return RoundedSuperellipseBorder(side: side, borderRadius: BorderRadius.circular(radius));
+  static ShapeBorder superellipse({
+    double radius = AppSize.radiusMD,
+    BorderSide side = BorderSide.none,
+  }) {
+    return RoundedSuperellipseBorder(
+      side: side,
+      borderRadius: BorderRadius.circular(radius),
+    );
   }
 
   static const ShapeBorder stadium = StadiumBorder();

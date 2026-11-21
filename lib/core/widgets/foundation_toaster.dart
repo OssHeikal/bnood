@@ -1,7 +1,8 @@
 import 'app_toaster.dart';
 import 'bnood_failure.dart';
 
-export 'app_toaster.dart' show ToastAction, AppToaster, ToastKind, AppToastLayoutHint;
+export 'app_toaster.dart'
+    show ToastAction, AppToaster, ToastKind, AppToastLayoutHint;
 
 /// Preview / legacy entrypoints — delegate to [AppToaster].
 class FoundationToaster {
@@ -13,7 +14,12 @@ class FoundationToaster {
     ToastAction? action,
     bool persistent = false,
   }) {
-    AppToaster.success(message, duration: duration, action: action, persistent: persistent);
+    AppToaster.success(
+      message,
+      duration: duration,
+      action: action,
+      persistent: persistent,
+    );
   }
 
   static void fromFailure(
@@ -53,7 +59,12 @@ class FoundationToaster {
     ToastAction? action,
     bool persistent = false,
   }) {
-    AppToaster.warning(message, duration: duration, action: action, persistent: persistent);
+    AppToaster.warning(
+      message,
+      duration: duration,
+      action: action,
+      persistent: persistent,
+    );
   }
 
   static void info(
@@ -62,7 +73,12 @@ class FoundationToaster {
     ToastAction? action,
     bool persistent = false,
   }) {
-    AppToaster.info(message, duration: duration, action: action, persistent: persistent);
+    AppToaster.info(
+      message,
+      duration: duration,
+      action: action,
+      persistent: persistent,
+    );
   }
 
   static void loading(String message, {Duration? duration}) {

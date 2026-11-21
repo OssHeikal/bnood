@@ -15,8 +15,8 @@ final class CrashlyticsErrorReporter implements ErrorReporter {
   CrashlyticsErrorReporter({
     CrashlyticsClient? client,
     CrashlyticsActiveGate? isActive,
-  })  : _clientOverride = client,
-        _isActive = isActive ?? (() => kReleaseMode);
+  }) : _clientOverride = client,
+       _isActive = isActive ?? (() => kReleaseMode);
 
   final CrashlyticsClient? _clientOverride;
   CrashlyticsClient? _client;
@@ -28,7 +28,11 @@ final class CrashlyticsErrorReporter implements ErrorReporter {
   bool get _collecting => _isActive();
 
   @override
-  void addBreadcrumb({required String message, String? category, Map<String, Object?>? data}) {
+  void addBreadcrumb({
+    required String message,
+    String? category,
+    Map<String, Object?>? data,
+  }) {
     if (!_collecting) return;
     final categoryPrefix = category == null ? '' : '[$category] ';
     if (data == null || data.isEmpty) {
@@ -94,7 +98,12 @@ final class CrashlyticsErrorReporter implements ErrorReporter {
       return;
     }
     unawaited(_resolvedClient.setUserIdentifier(identity.id));
-    unawaited(_resolvedClient.setCustomKey(errorReportingLoginPhoneKey, identity.loginPhone));
+    unawaited(
+      _resolvedClient.setCustomKey(
+        errorReportingLoginPhoneKey,
+        identity.loginPhone,
+      ),
+    );
   }
 
   static String? _contextReason(Map<String, Object?>? context) {

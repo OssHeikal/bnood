@@ -6,7 +6,9 @@ import '../storage/session_store.dart';
 import 'push_permission_store.dart';
 import 'push_repository.dart';
 
-final notificationSettingsApiProvider = Provider<NotificationSettingsApi>((ref) {
+final notificationSettingsApiProvider = Provider<NotificationSettingsApi>((
+  ref,
+) {
   final store = ref.watch(sessionStoreProvider);
   final api = NotificationSettingsApi(sessionStore: store);
   ref.onDispose(api.close);
@@ -21,7 +23,12 @@ final deviceTokensApiProvider = Provider<DeviceTokensApi>((ref) {
 });
 
 final pushRepositoryProvider = Provider<PushRepository>((ref) {
-  return PushRepository(ref.watch(notificationSettingsApiProvider), ref.watch(deviceTokensApiProvider));
+  return PushRepository(
+    ref.watch(notificationSettingsApiProvider),
+    ref.watch(deviceTokensApiProvider),
+  );
 });
 
-final pushPermissionStoreProvider = Provider<PushPermissionStore>((ref) => PushPermissionStore());
+final pushPermissionStoreProvider = Provider<PushPermissionStore>(
+  (ref) => PushPermissionStore(),
+);

@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:bnood/features/vouchers/data/vouchers_api.dart';
 import 'package:bnood/features/vouchers/data/vouchers_repository.dart';
-import 'package:bnood/features/vouchers/presentation/voucher_remote_receipts.dart';
-import 'package:bnood/features/vouchers/presentation/voucher_sheet_receipt.dart';
+import 'package:bnood/features/vouchers/presentation/models/voucher_remote_receipts.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/voucher_sheet_receipt.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,7 +13,9 @@ import 'support/fake_session_store.dart';
 import 'support/receipt_test_image.dart';
 import 'support/scripted_dio_adapter.dart';
 
-VouchersApi _vouchersApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+VouchersApi _vouchersApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return VouchersApi(dio: dio);
@@ -25,7 +27,8 @@ void main() {
   test('dismiss without save sends no DELETE when nothing staged', () async {
     var deleteCount = 0;
     final api = _vouchersApi((options) async {
-      if (options.method == 'DELETE' && options.uri.path.contains('/receipts/')) {
+      if (options.method == 'DELETE' &&
+          options.uri.path.contains('/receipts/')) {
         deleteCount++;
       }
       return jsonResponse('{"success":true,"data":{}}');
@@ -48,11 +51,13 @@ void main() {
       path: '${Directory.systemTemp.path}/bnood_receipt_orchestration.jpg',
     );
     final api = _vouchersApi((options) async {
-      if (options.method == 'DELETE' && options.uri.path.endsWith('/receipts/r-old')) {
+      if (options.method == 'DELETE' &&
+          options.uri.path.endsWith('/receipts/r-old')) {
         calls.add('delete');
         return jsonResponse('{"success":true,"data":null}');
       }
-      if (options.uri.path.contains('/vouchers/01JV/receipts') && options.method == 'POST') {
+      if (options.uri.path.contains('/vouchers/01JV/receipts') &&
+          options.method == 'POST') {
         calls.add('upload');
         return jsonResponse(
           '{"success":true,"data":{"id":"r-new","mime":"image/jpeg","size":10,"created_at":"2026-11-09T10:00:00Z"}}',
@@ -65,9 +70,7 @@ void main() {
       repo: repo,
       voucherId: '01JV',
       receiptIdsToDelete: const ['r-old'],
-      receipts: [
-        VoucherSheetReceipt(localPath: temp.path, needsUpload: true),
-      ],
+      receipts: [VoucherSheetReceipt(localPath: temp.path, needsUpload: true)],
     );
     expect(calls, ['delete', 'upload']);
     expect(result.failedDeleteCount, 0);
@@ -94,7 +97,10 @@ void main() {
       return jsonResponse('{"success":true,"data":{}}');
     });
     final repo = VouchersRepository(api);
-    final pending = VoucherSheetReceipt(localPath: temp.path, needsUpload: true);
+    final pending = VoucherSheetReceipt(
+      localPath: temp.path,
+      needsUpload: true,
+    );
     final result = await syncVoucherReceiptsOnSave(
       repo: repo,
       voucherId: '01JV',
@@ -129,9 +135,7 @@ void main() {
       repo: repo,
       voucherId: '01JV',
       receiptIdsToDelete: const [],
-      receipts: [
-        VoucherSheetReceipt(localPath: temp.path, needsUpload: true),
-      ],
+      receipts: [VoucherSheetReceipt(localPath: temp.path, needsUpload: true)],
     );
     expect(deleteCount, 0);
     expect(uploadCount, 1);

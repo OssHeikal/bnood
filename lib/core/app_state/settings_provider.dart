@@ -5,16 +5,22 @@ import '../prefs/app_settings_store.dart';
 
 /// Bootstrap snapshot from [main] after disk load (or defaults when prefs unavailable).
 final appSettingsBootstrapProvider = Provider<AppSettingsSnapshot>(
-  (ref) => throw StateError('appSettingsBootstrapProvider must be overridden in main'),
+  (ref) => throw StateError(
+    'appSettingsBootstrapProvider must be overridden in main',
+  ),
 );
 
 final settingsPersistenceAvailableProvider = Provider<bool>(
   (ref) => ref.watch(appSettingsBootstrapProvider).persistenceAvailable,
 );
 
-final themeModeProvider = NotifierProvider<ThemeModeNotifier, ThemeMode>(ThemeModeNotifier.new);
+final themeModeProvider = NotifierProvider<ThemeModeNotifier, ThemeMode>(
+  ThemeModeNotifier.new,
+);
 
-final localeProvider = NotifierProvider<LocaleSettingsNotifier, Locale>(LocaleSettingsNotifier.new);
+final localeProvider = NotifierProvider<LocaleSettingsNotifier, Locale>(
+  LocaleSettingsNotifier.new,
+);
 
 class ThemeModeNotifier extends Notifier<ThemeMode> {
   @override

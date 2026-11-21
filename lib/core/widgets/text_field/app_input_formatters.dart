@@ -139,7 +139,9 @@ class ThousandsGroupingFormatter extends TextInputFormatter {
 
   static String formatDisplay(String raw, {required bool allowDecimal}) {
     if (raw.isEmpty) return raw;
-    final western = DisplayDigits.toWesternDigits(raw.replaceAll(',', '').replaceAll(' ', ''));
+    final western = DisplayDigits.toWesternDigits(
+      raw.replaceAll(',', '').replaceAll(' ', ''),
+    );
     if (western.isEmpty) return western;
 
     var negative = false;
@@ -204,7 +206,10 @@ class ThousandsGroupingFormatter extends TextInputFormatter {
   }
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final raw = newValue.text;
     final formatted = formatDisplay(raw, allowDecimal: allowDecimal);
     final baseSig = _significantCountBefore(

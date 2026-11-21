@@ -1,5 +1,5 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/features/clients/presentation/client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_detail_craftsman_row.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,9 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('paid-only metric stacks at logical start AR narrow', (tester) async {
+  testWidgets('paid-only metric stacks at logical start AR narrow', (
+    tester,
+  ) async {
     const preview = ClientCraftsmanPreviewRow(
       craftsmanId: 'cr1',
       name: 'Craftsman',
@@ -80,9 +82,15 @@ void main() {
       surface: const Size(320, 400),
     );
 
-    final agreed = tester.getSize(find.byKey(const Key('client_craftsman_metric_agreed')));
-    final paid = tester.getSize(find.byKey(const Key('client_craftsman_metric_paid')));
-    final remaining = tester.getSize(find.byKey(const Key('client_craftsman_metric_remaining')));
+    final agreed = tester.getSize(
+      find.byKey(const Key('client_craftsman_metric_agreed')),
+    );
+    final paid = tester.getSize(
+      find.byKey(const Key('client_craftsman_metric_paid')),
+    );
+    final remaining = tester.getSize(
+      find.byKey(const Key('client_craftsman_metric_remaining')),
+    );
 
     expect(agreed.width, closeTo(paid.width, 1));
     expect(paid.width, closeTo(remaining.width, 1));
@@ -112,9 +120,15 @@ void main() {
     expect(find.text('مدفوع'), findsOneWidget);
     expect(find.text('المتبقي'), findsOneWidget);
 
-    final agreed = tester.getSize(find.byKey(const Key('client_craftsman_metric_agreed')));
-    final paid = tester.getSize(find.byKey(const Key('client_craftsman_metric_paid')));
-    final remaining = tester.getSize(find.byKey(const Key('client_craftsman_metric_remaining')));
+    final agreed = tester.getSize(
+      find.byKey(const Key('client_craftsman_metric_agreed')),
+    );
+    final paid = tester.getSize(
+      find.byKey(const Key('client_craftsman_metric_paid')),
+    );
+    final remaining = tester.getSize(
+      find.byKey(const Key('client_craftsman_metric_remaining')),
+    );
     expect(agreed.width, closeTo(paid.width, 1));
     expect(paid.width, closeTo(remaining.width, 1));
   });

@@ -17,9 +17,7 @@ void main() {
 
   test('track logs GA event name and params for accepted events', () async {
     await sink.track(const ClientCreated(source: ClientCreatedSource.remote));
-    await sink.track(
-      const ScreenViewed(screenName: '/clients/:id'),
-    );
+    await sink.track(const ScreenViewed(screenName: '/clients/:id'));
 
     expect(gateway.events.length, 1);
     expect(gateway.events[0].name, 'client_created');
@@ -28,7 +26,11 @@ void main() {
   });
 
   test('track maps subscription revenue as num', () async {
-    const event = SubscriptionStarted(packageSlug: 'annual', revenue: 499.0, currency: 'EGP');
+    const event = SubscriptionStarted(
+      packageSlug: 'annual',
+      revenue: 499.0,
+      currency: 'EGP',
+    );
     await sink.track(event);
 
     expect(gateway.events.single.parameters, {
@@ -53,17 +55,27 @@ void main() {
     expect(gateway.userIds, ['user-42']);
     expect(gateway.userProperties.length, 2);
     expect(gateway.userProperties[0].key, GaUserProperties.accountName);
-    expect(gateway.userProperties[0].value, longName.substring(0, gaUserPropertyMaxLength));
+    expect(
+      gateway.userProperties[0].value,
+      longName.substring(0, gaUserPropertyMaxLength),
+    );
     expect(gateway.userProperties[1].key, GaUserProperties.accountPhone);
-    expect(gateway.userProperties[1].value, longPhone.substring(0, gaUserPropertyMaxLength));
+    expect(
+      gateway.userProperties[1].value,
+      longPhone.substring(0, gaUserPropertyMaxLength),
+    );
   });
 
   test('setUser clears id and properties on logout', () async {
-    await sink.setUser(const AnalyticsUser(id: 'user-1', name: 'Name', phone: '+20'));
+    await sink.setUser(
+      const AnalyticsUser(id: 'user-1', name: 'Name', phone: '+20'),
+    );
     await sink.setUser(null);
 
     expect(gateway.userIds.last, isNull);
-    final tail = gateway.userProperties.sublist(gateway.userProperties.length - 2);
+    final tail = gateway.userProperties.sublist(
+      gateway.userProperties.length - 2,
+    );
     expect(tail[0].key, GaUserProperties.accountName);
     expect(tail[0].value, isNull);
     expect(tail[1].key, GaUserProperties.accountPhone);

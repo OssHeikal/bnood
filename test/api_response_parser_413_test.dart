@@ -21,7 +21,11 @@ void main() {
   });
 
   test('voucher upload error message prefers localized too-large', () {
-    final err = AuthApiException(statusCode: 413, message: 'html', code: 'invalid_size');
+    final err = AuthApiException(
+      statusCode: 413,
+      message: 'html',
+      code: 'invalid_size',
+    );
     expect(err.isInvalidSize, isTrue);
   });
 }

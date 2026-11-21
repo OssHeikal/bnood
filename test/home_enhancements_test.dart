@@ -7,14 +7,14 @@ import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/features/home/presentation/home_screen.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/features/home/presentation/widgets/home_identity_title.dart';
 import 'package:bnood/features/auth/widgets/user_identity_avatar.dart';
 import 'package:bnood/features/providers/presentation/widgets/remote_craftsman_summary_card.dart';
 import 'package:bnood/core/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
-import 'package:bnood/features/settings/presentation/app_settings_screen.dart';
+import 'package:bnood/features/settings/presentation/screens/app_settings_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -33,12 +33,17 @@ class _SilentSubscriptionNotifier extends SubscriptionNotifier {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  ProviderScope remoteHomeScope({required Widget child, List<Override> extra = const []}) {
+  ProviderScope remoteHomeScope({
+    required Widget child,
+    List<Override> extra = const [],
+  }) {
     final now = DateTime.utc(2026, 11, 1);
     return ProviderScope(
       overrides: [
         authControllerProvider.overrideWith(_AuthOsama.new),
-        homeTotalsOverride(const HomeTotals(receivedPiastres: 0, spentPiastres: 0)),
+        homeTotalsOverride(
+          const HomeTotals(receivedPiastres: 0, spentPiastres: 0),
+        ),
         homeClientBalancesOverride(const []),
         homeCraftsmenProvider.overrideWith(
           () => StubHomeCraftsmenNotifier([
@@ -67,27 +72,29 @@ void main() {
     );
   }
 
-  testWidgets('remote home uses identity app bar and craftsman linked clients', (tester) async {
-    await tester.pumpWidget(
-      remoteHomeScope(
-        child: MaterialApp(
-          theme: AppFoundationTheme.light(),
-          locale: const Locale('ar'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const HomeScreen(),
+  testWidgets(
+    'remote home uses identity app bar and craftsman linked clients',
+    (tester) async {
+      await tester.pumpWidget(
+        remoteHomeScope(
+          child: MaterialApp(
+            theme: AppFoundationTheme.light(),
+            locale: const Locale('ar'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const HomeScreen(),
+          ),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.byType(HomeIdentityTitle), findsOneWidget);
-    expect(find.text('Osama Engineer'), findsOneWidget);
-    expect(find.text('3 عملاء مرتبطين'), findsOneWidget);
-    expect(find.byType(RemoteCraftsmanSummaryCard), findsOneWidget);
-    expect(find.text('Paid'), findsNothing);
-  });
-
+      expect(find.byType(HomeIdentityTitle), findsOneWidget);
+      expect(find.text('Osama Engineer'), findsOneWidget);
+      expect(find.text('3 عملاء مرتبطين'), findsOneWidget);
+      expect(find.byType(RemoteCraftsmanSummaryCard), findsOneWidget);
+      expect(find.text('Paid'), findsNothing);
+    },
+  );
 
   Future<void> pumpIdentityTitle(
     WidgetTester tester, {
@@ -105,7 +112,9 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: HomeFoundationScope(
-            child: Scaffold(body: HomeIdentityTitle(displayName: user.name ?? '')),
+            child: Scaffold(
+              body: HomeIdentityTitle(displayName: user.name ?? ''),
+            ),
           ),
         ),
       ),
@@ -113,7 +122,9 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('HomeIdentityTitle passes profile logo to avatar', (tester) async {
+  testWidgets('HomeIdentityTitle passes profile logo to avatar', (
+    tester,
+  ) async {
     const logo = 'https://cdn.example/logo-home.png';
     await pumpIdentityTitle(
       tester,
@@ -125,10 +136,17 @@ void main() {
         phoneVerifiedAt: DateTime.utc(2026, 1, 1),
       ),
     );
-    expect(tester.widget<UserIdentityAvatar>(find.byType(UserIdentityAvatar)).imageUrl, logo);
+    expect(
+      tester
+          .widget<UserIdentityAvatar>(find.byType(UserIdentityAvatar))
+          .imageUrl,
+      logo,
+    );
   });
 
-  testWidgets('HomeIdentityTitle clears logo when auth drops logoUrl', (tester) async {
+  testWidgets('HomeIdentityTitle clears logo when auth drops logoUrl', (
+    tester,
+  ) async {
     await pumpIdentityTitle(
       tester,
       user: User(
@@ -138,7 +156,12 @@ void main() {
         phoneVerifiedAt: DateTime.utc(2026, 1, 1),
       ),
     );
-    expect(tester.widget<UserIdentityAvatar>(find.byType(UserIdentityAvatar)).imageUrl, isNull);
+    expect(
+      tester
+          .widget<UserIdentityAvatar>(find.byType(UserIdentityAvatar))
+          .imageUrl,
+      isNull,
+    );
     expect(find.text('OE'), findsOneWidget);
   });
 
@@ -146,7 +169,10 @@ void main() {
     final router = GoRouter(
       routes: [
         GoRoute(path: '/', builder: (_, _) => const HomeScreen()),
-        GoRoute(path: AuthPaths.profile, builder: (_, _) => const Scaffold(body: Text('profile-body'))),
+        GoRoute(
+          path: AuthPaths.profile,
+          builder: (_, _) => const Scaffold(body: Text('profile-body')),
+        ),
       ],
     );
 
@@ -180,7 +206,10 @@ void main() {
     final router = GoRouter(
       routes: [
         GoRoute(path: '/', builder: (_, _) => const HomeScreen()),
-        GoRoute(path: AuthPaths.settings, builder: (_, _) => const AppSettingsScreen()),
+        GoRoute(
+          path: AuthPaths.settings,
+          builder: (_, _) => const AppSettingsScreen(),
+        ),
       ],
     );
 
@@ -204,7 +233,9 @@ void main() {
     expect(find.byType(BottomSheet), findsNothing);
   });
 
-  testWidgets('home list bottom padding respects shell clearance', (tester) async {
+  testWidgets('home list bottom padding respects shell clearance', (
+    tester,
+  ) async {
     const clearance = 112.0;
     await tester.pumpWidget(
       remoteHomeScope(
@@ -214,7 +245,9 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: MediaQuery(
-            data: const MediaQueryData(padding: EdgeInsets.only(bottom: clearance)),
+            data: const MediaQueryData(
+              padding: EdgeInsets.only(bottom: clearance),
+            ),
             child: const HomeScreen(),
           ),
         ),
@@ -263,22 +296,22 @@ class _AuthWithUser extends AuthController {
 
   @override
   AuthState build() => AuthState(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: user,
-        bootstrapStarted: true,
-      );
+    bootstrapStatus: AuthBootstrapStatus.authenticated,
+    user: user,
+    bootstrapStarted: true,
+  );
 }
 
 class _AuthOsama extends AuthController {
   @override
   AuthState build() => AuthState(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: User(
-          id: 'u1',
-          phone: '+201012345678',
-          name: 'Osama Engineer',
-          phoneVerifiedAt: DateTime.utc(2026, 1, 1),
-        ),
-        bootstrapStarted: true,
-      );
+    bootstrapStatus: AuthBootstrapStatus.authenticated,
+    user: User(
+      id: 'u1',
+      phone: '+201012345678',
+      name: 'Osama Engineer',
+      phoneVerifiedAt: DateTime.utc(2026, 1, 1),
+    ),
+    bootstrapStarted: true,
+  );
 }

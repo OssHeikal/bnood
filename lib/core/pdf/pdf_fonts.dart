@@ -15,10 +15,7 @@ class PdfFonts {
     if (_cache != null) return _cache!;
     final regData = await rootBundle.load('assets/fonts/Cairo-Regular.ttf');
     final boldData = await rootBundle.load('assets/fonts/Cairo-Bold.ttf');
-    _cache = PdfFonts._(
-      pw.Font.ttf(regData),
-      pw.Font.ttf(boldData),
-    );
+    _cache = PdfFonts._(pw.Font.ttf(regData), pw.Font.ttf(boldData));
     return _cache!;
   }
 

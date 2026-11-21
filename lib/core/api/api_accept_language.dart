@@ -19,5 +19,6 @@ abstract final class ApiAcceptLanguage {
     _readLocale = () => locale;
   }
 
-  static String headerValue() => acceptLanguageHeaderForLocale(_readLocale().languageCode);
+  static String headerValue() =>
+      acceptLanguageHeaderForLocale(_readLocale().languageCode);
 }

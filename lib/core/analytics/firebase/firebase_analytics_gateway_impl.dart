@@ -5,7 +5,7 @@ import 'firebase_analytics_gateway.dart';
 
 class FirebaseAnalyticsGatewayImpl implements FirebaseAnalyticsGateway {
   FirebaseAnalyticsGatewayImpl({FirebaseAnalytics? analytics})
-      : _analytics = analytics ?? FirebaseAnalytics.instance;
+    : _analytics = analytics ?? FirebaseAnalytics.instance;
 
   final FirebaseAnalytics _analytics;
 
@@ -28,9 +28,6 @@ class FirebaseAnalyticsGatewayImpl implements FirebaseAnalyticsGateway {
   Future<void> setUserId(String? id) => _analytics.setUserId(id: id);
 
   @override
-  Future<void> setUserProperty({
-    required String name,
-    String? value,
-  }) =>
+  Future<void> setUserProperty({required String name, String? value}) =>
       _analytics.setUserProperty(name: name, value: value);
 }

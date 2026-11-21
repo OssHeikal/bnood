@@ -17,11 +17,17 @@ class NotificationSettingsRecord {
     return NotificationSettingsRecord(
       pushEnabled: json['push_enabled'] != false,
       lowBalanceEnabled: json['low_balance_enabled'] == true,
-      lowBalanceAmountMinor: (json['low_balance_amount'] as num?)?.toInt() ?? kDefaultLowBalanceAmountMinor,
+      lowBalanceAmountMinor:
+          (json['low_balance_amount'] as num?)?.toInt() ??
+          kDefaultLowBalanceAmountMinor,
     );
   }
 
-  Map<String, dynamic> toPatchJson({bool? pushEnabled, bool? lowBalanceEnabled, int? lowBalanceAmountMinor}) {
+  Map<String, dynamic> toPatchJson({
+    bool? pushEnabled,
+    bool? lowBalanceEnabled,
+    int? lowBalanceAmountMinor,
+  }) {
     return {
       'push_enabled': ?pushEnabled,
       'low_balance_enabled': ?lowBalanceEnabled,

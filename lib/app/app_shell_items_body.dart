@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../features/items/presentation/items_screen.dart';
+import 'package:bnood/features/items/presentation/screens/items_screen.dart';
 import 'app_shell_online_tabs.dart';
 
 /// Items shell branch body. Remote sessions never mount this (see [AppShellTabGate]).

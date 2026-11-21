@@ -3,8 +3,8 @@ import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/features/items/data/item_api_record.dart';
 import 'package:bnood/features/items/data/items_providers.dart';
 import 'package:bnood/features/items/data/items_repository.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/features/items/presentation/item_edit_sheet.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/items/presentation/sheets/item_edit_sheet.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -15,18 +15,22 @@ void main() {
   final now = DateTime.utc(2026, 11, 9);
 
   CatalogItem defaultItem({bool customized = false}) => CatalogItem(
-        id: 'def-1',
-        name: customized ? 'My label' : 'افتراضي',
-        iconKey: 'category',
-        colorKey: 'gold',
-        isDefault: true,
-        isCustomized: customized,
-        sortOrder: 0,
-        createdAt: now,
-        updatedAt: now,
-      );
+    id: 'def-1',
+    name: customized ? 'My label' : 'افتراضي',
+    iconKey: 'category',
+    colorKey: 'gold',
+    isDefault: true,
+    isCustomized: customized,
+    sortOrder: 0,
+    createdAt: now,
+    updatedAt: now,
+  );
 
-  Widget harness({required ItemsRepository repo, required Locale locale, required CatalogItem item}) {
+  Widget harness({
+    required ItemsRepository repo,
+    required Locale locale,
+    required CatalogItem item,
+  }) {
     return ProviderScope(
       overrides: [
         itemsRepositoryProvider.overrideWithValue(repo),
@@ -65,24 +69,33 @@ void main() {
     );
   }
 
-  testWidgets('default item edit sheet shows only save + delete and a color picker', (tester) async {
-    await tester.pumpWidget(
-      harness(repo: _TrackingRepo(), locale: const Locale('ar'), item: defaultItem(customized: true)),
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('open'));
-    await tester.pumpAndSettle();
+  testWidgets(
+    'default item edit sheet shows only save + delete and a color picker',
+    (tester) async {
+      await tester.pumpWidget(
+        harness(
+          repo: _TrackingRepo(),
+          locale: const Locale('ar'),
+          item: defaultItem(customized: true),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
 
-    expect(find.text('حذف'), findsOneWidget);
-    expect(find.text('أرشفة'), findsNothing);
-    expect(find.text('رجوع للأصلي'), findsNothing);
-    expect(find.byKey(const ValueKey('item_color_pink')), findsOneWidget);
-    expect(find.byKey(const ValueKey('item_icon_layers')), findsOneWidget);
-  });
+      expect(find.text('حذف'), findsOneWidget);
+      expect(find.text('أرشفة'), findsNothing);
+      expect(find.text('رجوع للأصلي'), findsNothing);
+      expect(find.byKey(const ValueKey('item_color_pink')), findsOneWidget);
+      expect(find.byKey(const ValueKey('item_icon_layers')), findsOneWidget);
+    },
+  );
 
   testWidgets('editing a default item sends the chosen color', (tester) async {
     final repo = _TrackingRepo();
-    await tester.pumpWidget(harness(repo: repo, locale: const Locale('en'), item: defaultItem()));
+    await tester.pumpWidget(
+      harness(repo: repo, locale: const Locale('en'), item: defaultItem()),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
@@ -96,9 +109,13 @@ void main() {
     expect(repo.updatedColorKey, 'pink');
   });
 
-  testWidgets('delete on a default item runs the unified delete', (tester) async {
+  testWidgets('delete on a default item runs the unified delete', (
+    tester,
+  ) async {
     final repo = _TrackingRepo();
-    await tester.pumpWidget(harness(repo: repo, locale: const Locale('en'), item: defaultItem()));
+    await tester.pumpWidget(
+      harness(repo: repo, locale: const Locale('en'), item: defaultItem()),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
@@ -126,7 +143,12 @@ class _TrackingRepo extends ItemsRepository {
   }
 
   @override
-  Future<CatalogItem> updateItem({required String id, String? name, String? iconKey, String? colorKey}) async {
+  Future<CatalogItem> updateItem({
+    required String id,
+    String? name,
+    String? iconKey,
+    String? colorKey,
+  }) async {
     updatedColorKey = colorKey;
     final now = DateTime.utc(2026, 11, 9);
     return CatalogItem(

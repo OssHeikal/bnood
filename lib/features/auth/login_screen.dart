@@ -9,13 +9,13 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
-import 'auth_controller.dart';
-import 'auth_form_ui.dart';
-import 'auth_form_utils.dart';
-import 'auth_login_outcome.dart';
-import 'auth_messages.dart';
-import 'auth_paths.dart';
-import 'widgets/auth_flow_scaffold.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_form_ui.dart';
+import 'package:bnood/features/auth/auth_form_utils.dart';
+import 'package:bnood/features/auth/auth_login_outcome.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/auth/widgets/auth_flow_scaffold.dart';
 
 Future<void> _submitLogin(BuildContext context, WidgetRef ref) async {
   final fields = ref.read(loginFormFieldsProvider);
@@ -43,7 +43,8 @@ Future<void> _submitLogin(BuildContext context, WidgetRef ref) async {
       final l10n = AppLocalizations.of(context);
       ui.fail(error);
       final state = ref.read(authFormUiProvider(formId));
-      if (state.errorFor('phone') == null && state.errorFor('password') == null) {
+      if (state.errorFor('phone') == null &&
+          state.errorFor('password') == null) {
         AppToaster.show(authApiMessage(l10n, error), kind: ToastKind.failure);
       }
   }
@@ -67,7 +68,9 @@ class LoginScreen extends ConsumerWidget {
       showLogo: true,
       child: Form(
         key: fields.formKey,
-        autovalidateMode: ui.attempted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: ui.attempted
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -97,7 +100,9 @@ class LoginScreen extends ConsumerWidget {
               alignment: AlignmentDirectional.centerEnd,
               child: AppButton.text(
                 text: l10n.authForgotPassword,
-                onPressed: loading ? null : () => context.push(AuthPaths.forgotPassword),
+                onPressed: loading
+                    ? null
+                    : () => context.push(AuthPaths.forgotPassword),
               ),
             ),
             AppSize.spaceMD.gap,
@@ -113,7 +118,9 @@ class LoginScreen extends ConsumerWidget {
                   child: AppButton.text(
                     foregroundColor: context.colors.primary,
                     text: l10n.authRegisterLink,
-                    onPressed: loading ? null : () => context.push(AuthPaths.register),
+                    onPressed: loading
+                        ? null
+                        : () => context.push(AuthPaths.register),
                   ),
                 );
               },

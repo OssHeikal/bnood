@@ -1,8 +1,8 @@
 import 'package:bnood/features/clients/data/client_statement_record.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/features/clients/presentation/client_movements_filters.dart';
+import 'package:bnood/features/clients/presentation/models/client_movements_filters.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_movements_filter_sheets.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,7 +11,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('sort sheet closes after selection without navigator assert', (tester) async {
+  testWidgets('sort sheet closes after selection without navigator assert', (
+    tester,
+  ) async {
     ClientMovementsSort? result;
 
     await tester.pumpWidget(
@@ -52,7 +54,9 @@ void main() {
     expect(result, ClientMovementsSort.dateAsc);
   });
 
-  testWidgets('item sheet shows semantic icon and closes on pick', (tester) async {
+  testWidgets('item sheet shows semantic icon and closes on pick', (
+    tester,
+  ) async {
     MovementsItemPickResult? result;
 
     await tester.pumpWidget(
@@ -104,7 +108,9 @@ void main() {
     expect(result?.itemName, 'Plumbing');
   });
 
-  testWidgets('item sheet shows empty state when list is empty', (tester) async {
+  testWidgets('item sheet shows empty state when list is empty', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -116,7 +122,8 @@ void main() {
             builder: (context) => Scaffold(
               body: Center(
                 child: ElevatedButton(
-                  onPressed: () => showMovementsItemSheet(context, items: const []),
+                  onPressed: () =>
+                      showMovementsItemSheet(context, items: const []),
                   child: const Text('Open item'),
                 ),
               ),

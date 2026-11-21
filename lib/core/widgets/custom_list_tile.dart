@@ -47,30 +47,53 @@ class CustomListTile extends StatelessWidget {
     Widget row = ConstrainedBox(
       constraints: const BoxConstraints(minHeight: AppSize.hitMin),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceMD),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSize.spaceLG,
+          vertical: AppSize.spaceMD,
+        ),
         child: Row(
           children: [
-            if (leading != null) ...[leading!, const SizedBox(width: AppSize.spaceMD)],
+            if (leading != null) ...[
+              leading!,
+              const SizedBox(width: AppSize.spaceMD),
+            ],
             Expanded(
               child: Column(
                 spacing: AppSize.spaceXS,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(title, style: context.text.body.semiBold.setColor(effectiveTitleColor)),
+                  Text(
+                    title,
+                    style: context.text.body.semiBold.setColor(
+                      effectiveTitleColor,
+                    ),
+                  ),
                   if (hasSubtitle)
                     Row(
                       children: [
-                        if (subtitlePrefix != null) ...[subtitlePrefix!, const SizedBox(width: AppSize.spaceXS)],
+                        if (subtitlePrefix != null) ...[
+                          subtitlePrefix!,
+                          const SizedBox(width: AppSize.spaceXS),
+                        ],
                         Expanded(
                           child: Text(
                             subtitle!,
                             maxLines: subtitleMaxLines,
                             overflow: TextOverflow.ellipsis,
                             textDirection:
-                                subtitleTextDirection ?? inferTextDirection(subtitle!, Directionality.of(context)),
-                            textAlign: alignTextInAmbient(subtitle!, Directionality.of(context)),
-                            style: context.text.caption.setColor(colors.textTertiary),
+                                subtitleTextDirection ??
+                                inferTextDirection(
+                                  subtitle!,
+                                  Directionality.of(context),
+                                ),
+                            textAlign: alignTextInAmbient(
+                              subtitle!,
+                              Directionality.of(context),
+                            ),
+                            style: context.text.caption.setColor(
+                              colors.textTertiary,
+                            ),
                           ),
                         ),
                       ],
@@ -80,12 +103,21 @@ class CustomListTile extends StatelessWidget {
             ),
             if (hasTrailingText) ...[
               const SizedBox(width: AppSize.spaceSM),
-              Text(trailingText!, style: context.text.caption.setColor(colors.textTertiary)),
+              Text(
+                trailingText!,
+                style: context.text.caption.setColor(colors.textTertiary),
+              ),
             ],
-            if (trailing != null) ...[const SizedBox(width: AppSize.spaceSM), trailing!],
+            if (trailing != null) ...[
+              const SizedBox(width: AppSize.spaceSM),
+              trailing!,
+            ],
             if (showChevron) ...[
               const SizedBox(width: AppSize.spaceSM),
-              AppChevron.forward(color: colors.textTertiary, size: AppSize.iconCompact),
+              AppChevron.forward(
+                color: colors.textTertiary,
+                size: AppSize.iconCompact,
+              ),
             ],
           ],
         ),
@@ -93,7 +125,11 @@ class CustomListTile extends StatelessWidget {
     );
 
     if (onTap != null) {
-      row = AppPressable(onPressed: enabled ? onTap : null, enabled: enabled, child: row);
+      row = AppPressable(
+        onPressed: enabled ? onTap : null,
+        enabled: enabled,
+        child: row,
+      );
     }
 
     if (!enabled) {
@@ -101,7 +137,12 @@ class CustomListTile extends StatelessWidget {
     }
 
     if (onTap != null) {
-      return Semantics(button: true, label: title, enabled: enabled, child: row);
+      return Semantics(
+        button: true,
+        label: title,
+        enabled: enabled,
+        child: row,
+      );
     }
 
     return row;

@@ -10,8 +10,8 @@ abstract final class AppBreakpoints {
   static const desktopName = DESKTOP;
 
   static List<Breakpoint> get all => const [
-        Breakpoint(start: 0, end: mobileMax, name: mobileName),
-        Breakpoint(start: mobileMax + 1, end: tabletMax, name: tabletName),
-        Breakpoint(start: tabletMax + 1, end: double.infinity, name: desktopName),
-      ];
+    Breakpoint(start: 0, end: mobileMax, name: mobileName),
+    Breakpoint(start: mobileMax + 1, end: tabletMax, name: tabletName),
+    Breakpoint(start: tabletMax + 1, end: double.infinity, name: desktopName),
+  ];
 }

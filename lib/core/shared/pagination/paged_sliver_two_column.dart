@@ -65,12 +65,14 @@ class PagedSliverTwoColumn<PageKeyType, ItemType> extends StatelessWidget {
       fetchNextPage: fetchNextPage,
       builderDelegate: builderDelegate,
       shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
-      loadingListingBuilder: (context, itemWidgetBuilder, itemCount, progress) =>
-          _buildPairedSliver(itemWidgetBuilder, itemCount, progress),
+      loadingListingBuilder:
+          (context, itemWidgetBuilder, itemCount, progress) =>
+              _buildPairedSliver(itemWidgetBuilder, itemCount, progress),
       errorListingBuilder: (context, itemWidgetBuilder, itemCount, error) =>
           _buildPairedSliver(itemWidgetBuilder, itemCount, error),
-      completedListingBuilder: (context, itemWidgetBuilder, itemCount, noMore) =>
-          _buildPairedSliver(itemWidgetBuilder, itemCount, noMore),
+      completedListingBuilder:
+          (context, itemWidgetBuilder, itemCount, noMore) =>
+              _buildPairedSliver(itemWidgetBuilder, itemCount, noMore),
     );
   }
 }

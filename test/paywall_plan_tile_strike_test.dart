@@ -1,6 +1,6 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_plan_tile.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('yearly tile without originalMinor does not show strikethrough', (tester) async {
+  testWidgets('yearly tile without originalMinor does not show strikethrough', (
+    tester,
+  ) async {
     const plan = AppPaywallPlan(
       id: 'yearly',
       label: 'Premium',
@@ -42,9 +44,12 @@ void main() {
     await tester.pump();
 
     expect(find.text('249.17'), findsOneWidget);
-    expect(find.byWidgetPredicate(
-      (w) => w is Text && w.style?.decoration == TextDecoration.lineThrough,
-    ), findsNothing);
+    expect(
+      find.byWidgetPredicate(
+        (w) => w is Text && w.style?.decoration == TextDecoration.lineThrough,
+      ),
+      findsNothing,
+    );
   });
 
   testWidgets('yearly tile with original shows strikethrough', (tester) async {
@@ -79,8 +84,11 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.byWidgetPredicate(
-      (w) => w is Text && w.style?.decoration == TextDecoration.lineThrough,
-    ), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (w) => w is Text && w.style?.decoration == TextDecoration.lineThrough,
+      ),
+      findsOneWidget,
+    );
   });
 }

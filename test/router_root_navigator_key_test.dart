@@ -6,11 +6,17 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('production GoRouter uses the shared rootNavigatorKey (AppToaster layout context)', () {
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
-    final router = container.read(goRouterProvider);
-    expect(identical(router.routerDelegate.navigatorKey, rootNavigatorKey), isTrue);
-    router.dispose();
-  });
+  test(
+    'production GoRouter uses the shared rootNavigatorKey (AppToaster layout context)',
+    () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final router = container.read(goRouterProvider);
+      expect(
+        identical(router.routerDelegate.navigatorKey, rootNavigatorKey),
+        isTrue,
+      );
+      router.dispose();
+    },
+  );
 }

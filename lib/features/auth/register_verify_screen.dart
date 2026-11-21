@@ -8,12 +8,12 @@ import '../../core/config/theme/app_size.dart';
 import '../../core/utils/extensions/bidi_isolate.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
-import 'auth_controller.dart';
-import 'auth_form_ui.dart';
-import 'auth_messages.dart';
-import 'auth_paths.dart';
-import 'widgets/auth_flow_scaffold.dart';
-import 'widgets/auth_otp_challenge_form.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_form_ui.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/auth/widgets/auth_flow_scaffold.dart';
+import 'package:bnood/features/auth/widgets/auth_otp_challenge_form.dart';
 
 Future<void> _submitRegisterVerify(BuildContext context, WidgetRef ref) async {
   final fields = ref.read(registerVerifyFormFieldsProvider);
@@ -28,7 +28,9 @@ Future<void> _submitRegisterVerify(BuildContext context, WidgetRef ref) async {
   if (uiState.loading) return;
   ui.setLoading(true);
   final code = fields.pinController.text.trim();
-  final error = await ref.read(authControllerProvider.notifier).verifyRegistration(code);
+  final error = await ref
+      .read(authControllerProvider.notifier)
+      .verifyRegistration(code);
   if (!context.mounted) return;
   if (error == null) {
     final user = ref.read(authControllerProvider).user!;
@@ -51,7 +53,9 @@ Future<void> _resendRegisterVerify(BuildContext context, WidgetRef ref) async {
   if (uiState.resendSeconds > 0 || uiState.resendLoading) return;
   ui.clearCodeError();
   ui.setResendLoading(true);
-  final error = await ref.read(authControllerProvider.notifier).resendRegistration();
+  final error = await ref
+      .read(authControllerProvider.notifier)
+      .resendRegistration();
   if (!context.mounted) return;
   final l10n = AppLocalizations.of(context);
   ui.setResendLoading(false);
@@ -101,8 +105,9 @@ class RegisterVerifyScreen extends ConsumerWidget {
         formKey: fields.formKey,
         pinController: fields.pinController,
         phone: pending.phone,
-        autovalidateMode:
-            ui.attempted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: ui.attempted
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         loading: ui.loading,
         verifyLabel: l10n.authVerifyAction,
         onVerify: () => _submitRegisterVerify(context, ref),

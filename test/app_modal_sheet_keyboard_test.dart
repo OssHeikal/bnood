@@ -1,7 +1,8 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/custom_text_field.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/features/providers/presentation/provider_create_sheet.dart' show showProviderCreateSheet;
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/providers/presentation/sheets/provider_create_sheet.dart'
+    show showProviderCreateSheet;
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +14,9 @@ const _phone = Size(440, 956);
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('modal sheet does not overflow when keyboard is open', (tester) async {
+  testWidgets('modal sheet does not overflow when keyboard is open', (
+    tester,
+  ) async {
     tester.view.physicalSize = _phone;
     tester.view.devicePixelRatio = 1;
     tester.view.viewInsets = const FakeViewPadding(bottom: _keyboard);
@@ -51,7 +54,9 @@ void main() {
     expect(find.byType(SingleChildScrollView), findsNothing);
   });
 
-  testWidgets('back with keyboard open unfocuses without closing sheet', (tester) async {
+  testWidgets('back with keyboard open unfocuses without closing sheet', (
+    tester,
+  ) async {
     tester.view.physicalSize = _phone;
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);

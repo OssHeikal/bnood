@@ -19,7 +19,12 @@ class AppButtonColors {
   final Color? border;
   final BoxShadow? shadow;
 
-  AppButtonColors copyWith({Color? surface, Color? foreground, Color? border, BoxShadow? shadow}) {
+  AppButtonColors copyWith({
+    Color? surface,
+    Color? foreground,
+    Color? border,
+    BoxShadow? shadow,
+  }) {
     return AppButtonColors(
       surface: surface ?? this.surface,
       foreground: foreground ?? this.foreground,

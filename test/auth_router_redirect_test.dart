@@ -9,7 +9,7 @@ import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/complete_profile_screen.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/app/shell_scaffold.dart';
-import 'package:bnood/features/home/presentation/home_screen.dart';
+import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,8 +17,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_session_store.dart';
 
-AppSettingsSnapshot _bootstrap() =>
-    const AppSettingsSnapshot(themeMode: ThemeMode.light, locale: Locale('en'), prefs: null);
+AppSettingsSnapshot _bootstrap() => const AppSettingsSnapshot(
+  themeMode: ThemeMode.light,
+  locale: Locale('en'),
+  prefs: null,
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +42,9 @@ void main() {
     );
     final element = tester.element(find.byType(BnoodApp));
     container = ProviderScope.containerOf(element);
-    container.read(authControllerProvider.notifier).adoptSessionForTest(
+    container
+        .read(authControllerProvider.notifier)
+        .adoptSessionForTest(
           const User(id: 'usr', phone: '+201012345678', name: 'Eng'),
         );
     await tester.pump();
@@ -48,7 +53,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.byType(ShellScaffold), findsOneWidget);
     expect(find.byType(HomeScreen), findsOneWidget);
-    final l10n = AppLocalizations.of(tester.element(find.byType(ShellScaffold)));
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(ShellScaffold)),
+    );
     expect(find.text(l10n.shellTabNotOnlineTitle), findsNothing);
   });
 
@@ -66,9 +73,9 @@ void main() {
     );
     final element = tester.element(find.byType(BnoodApp));
     container = ProviderScope.containerOf(element);
-    container.read(authControllerProvider.notifier).adoptSessionForTest(
-          const User(id: 'usr', phone: '+201012345678'),
-        );
+    container
+        .read(authControllerProvider.notifier)
+        .adoptSessionForTest(const User(id: 'usr', phone: '+201012345678'));
     await tester.pump();
     container.read(goRouterProvider).go(AuthPaths.remote);
     await tester.pump();

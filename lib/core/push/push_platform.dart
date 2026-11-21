@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 
-import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform, kIsWeb;
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform, kIsWeb;
 
 /// FCM is supported only on Android and iOS (not web/desktop test hosts).
 bool get pushMessagingSupported {

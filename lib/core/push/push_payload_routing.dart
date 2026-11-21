@@ -15,7 +15,8 @@ abstract final class PushBroadcastTarget {
 /// Pseudo-route consumed by [PushCoordinator] to present the paywall (menu subscription).
 const pushSubscriptionLocation = '/subscription';
 
-bool isPushSubscriptionLocation(String location) => location == pushSubscriptionLocation;
+bool isPushSubscriptionLocation(String location) =>
+    location == pushSubscriptionLocation;
 
 /// Maps FCM data to a go_router location. Unknown shapes fall back to home.
 String resolvePushNavigationLocation(Map<String, String> data) {
@@ -30,7 +31,8 @@ String resolvePushNavigationLocation(Map<String, String> data) {
   if (type == PushPayloadType.subscriptionExpiry) {
     return pushSubscriptionLocation;
   }
-  if (type == PushPayloadType.broadcast || type == PushPayloadType.adminBroadcast) {
+  if (type == PushPayloadType.broadcast ||
+      type == PushPayloadType.adminBroadcast) {
     return _targetLocation(data['target']?.trim());
   }
   final target = data['target']?.trim();
@@ -41,7 +43,8 @@ String resolvePushNavigationLocation(Map<String, String> data) {
 }
 
 String _targetLocation(String? target) {
-  if (target == PushBroadcastTarget.subscription) return pushSubscriptionLocation;
+  if (target == PushBroadcastTarget.subscription)
+    return pushSubscriptionLocation;
   return authenticatedHomeForPath();
 }
 

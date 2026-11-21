@@ -11,7 +11,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('roster row full padding tap toggles selection in EN', (tester) async {
+  testWidgets('roster row full padding tap toggles selection in EN', (
+    tester,
+  ) async {
     var selected = false;
     final craftsman = CraftsmenData(
       id: 'c1',
@@ -53,7 +55,9 @@ void main() {
     expect(find.byType(CustomTextField), findsNothing);
   });
 
-  testWidgets('remote scale shows one million EGP not ten million', (tester) async {
+  testWidgets('remote scale shows one million EGP not ten million', (
+    tester,
+  ) async {
     final craftsman = CraftsmenData(
       id: 'c-remote',
       workspaceId: 'w',

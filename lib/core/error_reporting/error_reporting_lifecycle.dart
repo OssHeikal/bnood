@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../features/auth/auth_controller.dart';
-import '../../features/auth/auth_state.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_state.dart';
 import 'error_reporting_providers.dart';
 import 'error_reporting_user.dart';
 
@@ -9,11 +9,7 @@ ErrorReportingUser? _userFromAuth(AuthState auth) {
   if (!auth.isAuthenticated) return null;
   final user = auth.user;
   if (user == null) return null;
-  return ErrorReportingUser(
-    id: user.id,
-    phone: user.phone,
-    name: user.name,
-  );
+  return ErrorReportingUser(id: user.id, phone: user.phone, name: user.name);
 }
 
 bool _sameReportingUser(ErrorReportingUser? a, ErrorReportingUser? b) => a == b;

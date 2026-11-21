@@ -5,5 +5,7 @@ import 'crashlytics_config.dart';
 
 Future<void> bootstrapCrashlytics() async {
   if (!CrashlyticsConfig.isSupported) return;
-  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(kReleaseMode);
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+    kReleaseMode,
+  );
 }

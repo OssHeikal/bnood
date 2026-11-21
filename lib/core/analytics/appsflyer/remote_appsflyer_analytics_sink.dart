@@ -6,14 +6,18 @@ import 'appsflyer_event_mapping.dart';
 import 'appsflyer_gateway.dart';
 
 final class RemoteAppsFlyerAnalyticsSink extends AppsFlyerAnalyticsSink {
-  RemoteAppsFlyerAnalyticsSink({required AppsFlyerGateway gateway}) : _gateway = gateway;
+  RemoteAppsFlyerAnalyticsSink({required AppsFlyerGateway gateway})
+    : _gateway = gateway;
 
   final AppsFlyerGateway _gateway;
 
   @override
   Future<void> track(AnalyticsEvent event) async {
     if (!appsFlyerShouldEmitEvent(event)) return;
-    await _gateway.logEvent(name: appsFlyerCompleteRegistrationEvent, parameters: const {});
+    await _gateway.logEvent(
+      name: appsFlyerCompleteRegistrationEvent,
+      parameters: const {},
+    );
   }
 
   @override

@@ -47,15 +47,17 @@ class BnoodColumnGrid extends StatelessWidget {
       rows.add(
         IntrinsicHeight(
           child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (var c = 0; c < columns; c++) ...[
-              if (c > 0) SizedBox(width: spacing),
-              Expanded(
-                child: i + c < children.length ? children[i + c] : const SizedBox.shrink(),
-              ),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var c = 0; c < columns; c++) ...[
+                if (c > 0) SizedBox(width: spacing),
+                Expanded(
+                  child: i + c < children.length
+                      ? children[i + c]
+                      : const SizedBox.shrink(),
+                ),
+              ],
             ],
-          ],
           ),
         ),
       );

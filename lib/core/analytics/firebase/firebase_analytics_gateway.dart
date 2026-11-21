@@ -8,8 +8,5 @@ abstract interface class FirebaseAnalyticsGateway {
 
   Future<void> setUserId(String? id);
 
-  Future<void> setUserProperty({
-    required String name,
-    String? value,
-  });
+  Future<void> setUserProperty({required String name, String? value});
 }

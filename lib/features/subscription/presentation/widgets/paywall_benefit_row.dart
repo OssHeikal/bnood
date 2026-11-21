@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/config/theme/app_size.dart';
-import '../paywall_theme.dart';
-import 'paywall_icon_mapper.dart';
+import 'package:bnood/features/subscription/presentation/widgets/paywall_theme.dart';
+import 'package:bnood/features/subscription/presentation/widgets/paywall_icon_mapper.dart';
 
 class PaywallBenefitRow extends StatelessWidget {
   const PaywallBenefitRow({
@@ -66,8 +66,16 @@ class _CheckGlyph extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Icon(Icons.circle, size: size, color: const Color(0xFF0F9D8E).withValues(alpha: 0.12)),
-          Icon(Icons.check, size: compact ? 10 : 12, color: const Color(0xFF0F9D8E)),
+          Icon(
+            Icons.circle,
+            size: size,
+            color: const Color(0xFF0F9D8E).withValues(alpha: 0.12),
+          ),
+          Icon(
+            Icons.check,
+            size: compact ? 10 : 12,
+            color: const Color(0xFF0F9D8E),
+          ),
         ],
       ),
     );

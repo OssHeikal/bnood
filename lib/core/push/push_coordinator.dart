@@ -8,13 +8,13 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../app/app_splash_session.dart';
 import '../../app/app_startup_splash.dart';
 import '../../app/router.dart';
-import '../../features/auth/auth_controller.dart';
-import '../../features/auth/auth_paths.dart';
-import '../../features/auth/auth_state.dart';
-import '../../features/subscription/presentation/paywall_launcher.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/auth/auth_state.dart';
+import 'package:bnood/features/subscription/presentation/actions/paywall_launcher.dart';
 import '../config/navigation/root_navigator_key.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
-import '../../features/subscription/data/subscription_riverpod.dart';
+import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
 import 'local_notifications.dart';
 import 'push_cold_start_navigation.dart';
 import 'push_payload_routing.dart';
@@ -25,10 +25,13 @@ import 'push_providers.dart';
 import 'push_repository.dart';
 
 class PushCoordinator {
-  PushCoordinator({required Ref ref, required PushRepository repository, required PushPermissionStore permissionStore})
-    : _ref = ref,
-      _repository = repository,
-      _permissionStore = permissionStore;
+  PushCoordinator({
+    required Ref ref,
+    required PushRepository repository,
+    required PushPermissionStore permissionStore,
+  }) : _ref = ref,
+       _repository = repository,
+       _permissionStore = permissionStore;
 
   final Ref _ref;
   final PushRepository _repository;
@@ -89,8 +92,11 @@ class PushCoordinator {
   /// arrives on [FirebaseMessaging.onRegistered] and is uploaded there. The
   /// backend keeps sending to the HTTP v1 `token` field, which accepts FIDs.
   Future<void> _register() async {
-    if (defaultTargetPlatform == TargetPlatform.iOS && !await _waitForApnsToken()) {
-      PushLog.info('register skipped: no APNs token (simulator or push not configured)');
+    if (defaultTargetPlatform == TargetPlatform.iOS &&
+        !await _waitForApnsToken()) {
+      PushLog.info(
+        'register skipped: no APNs token (simulator or push not configured)',
+      );
       return;
     }
     try {
@@ -124,15 +130,23 @@ class PushCoordinator {
     if (previous != null && previous != fid) {
       try {
         await _repository.deleteDeviceToken(previous);
-        PushLog.info('removed previous id ${PushLog.id(previous)} from backend');
+        PushLog.info(
+          'removed previous id ${PushLog.id(previous)} from backend',
+        );
       } catch (e, st) {
         PushLog.error('remove previous id failed', e, st);
       }
     }
     final locale = _ref.read(localeProvider).languageCode;
     try {
-      await _repository.registerDeviceToken(token: fid, platform: pushDevicePlatformValue(), locale: locale);
-      PushLog.info('uploaded id to backend (platform=${pushDevicePlatformValue()}, locale=$locale)');
+      await _repository.registerDeviceToken(
+        token: fid,
+        platform: pushDevicePlatformValue(),
+        locale: locale,
+      );
+      PushLog.info(
+        'uploaded id to backend (platform=${pushDevicePlatformValue()}, locale=$locale)',
+      );
     } catch (e, st) {
       PushLog.error('upload id to backend failed', e, st);
     }
@@ -170,14 +184,20 @@ class PushCoordinator {
     await LocalNotifications.instance.init(onTap: _navigateForData);
     _foregroundSub = FirebaseMessaging.onMessage.listen(_onForegroundMessage);
     _openedSub = FirebaseMessaging.onMessageOpenedApp.listen(_onOpenedMessage);
-    _registeredSub = FirebaseMessaging.instance.onRegistered.listen(_onRegistered);
+    _registeredSub = FirebaseMessaging.instance.onRegistered.listen(
+      _onRegistered,
+    );
     PushLog.info('listening: onMessage, onMessageOpenedApp, onRegistered');
   }
 
   Future<void> _stageColdStartTap() async {
     final message = await FirebaseMessaging.instance.getInitialMessage();
     final fcm = message?.data.map((k, v) => MapEntry(k, v.toString()));
-    PushLog.info(message == null ? 'initial message: none' : 'initial message: ${PushLog.message(message)}');
+    PushLog.info(
+      message == null
+          ? 'initial message: none'
+          : 'initial message: ${PushLog.message(message)}',
+    );
     final local = await LocalNotifications.instance.readLaunchTapData();
     if (local != null) {
       PushLog.info('local launch tap: $local');
@@ -186,7 +206,9 @@ class PushCoordinator {
   }
 
   void _scheduleFlushPending() {
-    _flushInFlight ??= _flushPendingWhenReady().whenComplete(() => _flushInFlight = null);
+    _flushInFlight ??= _flushPendingWhenReady().whenComplete(
+      () => _flushInFlight = null,
+    );
   }
 
   Future<void> _flushPendingWhenReady() async {
@@ -214,8 +236,11 @@ class PushCoordinator {
     if (context == null) return false;
     final router = _ref.read(goRouterProvider);
     final loc = router.routerDelegate.currentConfiguration.uri.path;
-    if (loc == AppStartupSplashPage.path || loc == AuthPaths.bootstrap) return false;
-    if (isAuthFlowLocation(loc) && loc != AuthPaths.changePassword && loc != AuthPaths.completeProfile) {
+    if (loc == AppStartupSplashPage.path || loc == AuthPaths.bootstrap)
+      return false;
+    if (isAuthFlowLocation(loc) &&
+        loc != AuthPaths.changePassword &&
+        loc != AuthPaths.completeProfile) {
       return false;
     }
     return true;
@@ -230,7 +255,9 @@ class PushCoordinator {
     PushLog.info('opened from notification: ${PushLog.message(message)}');
     final data = message.data.map((k, v) => MapEntry(k, v.toString()));
     if (_coldStart.shouldIgnoreOpenedApp(data)) {
-      PushLog.info('opened from notification: skipped (cold start already handled)');
+      PushLog.info(
+        'opened from notification: skipped (cold start already handled)',
+      );
       return;
     }
     _navigateForData(data);
@@ -309,9 +336,12 @@ final pushLifecycleProvider = Provider<void>((ref) {
   Future.microtask(() => sync(initial));
 
   ref.listen(authControllerProvider, (previous, next) {
-    final prevId = previous?.isAuthenticated == true ? previous?.user?.id : null;
+    final prevId = previous?.isAuthenticated == true
+        ? previous?.user?.id
+        : null;
     final nextId = next.isAuthenticated ? next.user?.id : null;
-    if (prevId == nextId && previous?.isAuthenticated == next.isAuthenticated) return;
+    if (prevId == nextId && previous?.isAuthenticated == next.isAuthenticated)
+      return;
     Future.microtask(() => sync(next));
   });
 });

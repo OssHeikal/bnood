@@ -97,10 +97,10 @@ class AppAmount extends StatelessWidget {
   }
 
   TextStyle _base(AppText text) => switch (size) {
-        AppAmountSize.balance => text.balance,
-        AppAmountSize.medium => text.moneyMd,
-        AppAmountSize.small => text.moneySm,
-      };
+    AppAmountSize.balance => text.balance,
+    AppAmountSize.medium => text.moneyMd,
+    AppAmountSize.small => text.moneySm,
+  };
 
   @override
   Widget build(BuildContext context) {

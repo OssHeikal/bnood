@@ -4,7 +4,7 @@ import 'package:bnood/features/items/data/items_repository.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/items/presentation/items_list_paging.dart';
+import 'package:bnood/features/items/presentation/providers/items_list_paging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -50,10 +50,12 @@ class _FakeItemsRepository extends ItemsRepository {
 void main() {
   test('items list fetcher pages when remote enabled', () async {
     final user = User(id: 'u1', phone: '+201000000000', name: 'Test');
-    final container = ProviderContainer(overrides: [
-      itemsRepositoryProvider.overrideWithValue(_FakeItemsRepository()),
-      authControllerProvider.overrideWith(() => _AuthStub(user)),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        itemsRepositoryProvider.overrideWithValue(_FakeItemsRepository()),
+        authControllerProvider.overrideWith(() => _AuthStub(user)),
+      ],
+    );
     addTearDown(container.dispose);
 
     final fetch = container.read(itemsListPageFetcherProvider);
@@ -73,8 +75,8 @@ class _AuthStub extends AuthController {
 
   @override
   AuthState build() => AuthState(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: _user,
-        bootstrapStarted: true,
-      );
+    bootstrapStatus: AuthBootstrapStatus.authenticated,
+    user: _user,
+    bootstrapStarted: true,
+  );
 }

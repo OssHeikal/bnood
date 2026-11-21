@@ -110,8 +110,12 @@ class RemoteCraftsmanSummaryCard extends StatelessWidget {
                               if (subtitle != null) ...[
                                 AppSize.spaceXS.gap,
                                 Text(
-                                  subtitle.isolate ? LtrIsolate.isolate(subtitle.text) : subtitle.text,
-                                  style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                                  subtitle.isolate
+                                      ? LtrIsolate.isolate(subtitle.text)
+                                      : subtitle.text,
+                                  style: text.caption.copyWith(
+                                    color: colors.onSurfaceMuted,
+                                  ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.start,
@@ -158,7 +162,10 @@ class RemoteCraftsmanSummaryCard extends StatelessWidget {
             ),
             if (actions != null && actions.isNotEmpty)
               Padding(
-                padding: const EdgeInsetsDirectional.only(top: AppSize.spaceXS, end: AppSize.spaceXS),
+                padding: const EdgeInsetsDirectional.only(
+                  top: AppSize.spaceXS,
+                  end: AppSize.spaceXS,
+                ),
                 child: Align(
                   alignment: AlignmentDirectional.topEnd,
                   child: AppOverflowMenu(actions: actions),
@@ -204,12 +211,18 @@ class _KindBadge extends StatelessWidget {
         shape: AppShape.superellipse(radius: AppSize.radiusSM),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceSM, vertical: 2),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSize.spaceSM,
+          vertical: 2,
+        ),
         child: Text(
           label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: context.text.caption.copyWith(color: color, fontWeight: FontWeight.w700),
+          style: context.text.caption.copyWith(
+            color: color,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     );
@@ -288,7 +301,11 @@ class _Avatar extends StatelessWidget {
           child: Center(
             child: Text(
               initial,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+              ),
             ),
           ),
         ),
@@ -301,17 +318,16 @@ List<AppOverflowMenuAction> providerOverflowActions({
   required AppLocalizations l10n,
   required VoidCallback onEdit,
   required VoidCallback onDelete,
-}) =>
-    [
-      AppOverflowMenuAction(
-        label: l10n.edit,
-        icon: Assets.icons.documentEditOutline,
-        onSelected: onEdit,
-      ),
-      AppOverflowMenuAction(
-        label: l10n.delete,
-        icon: Assets.icons.deleteSquareOutline,
-        onSelected: onDelete,
-        destructive: true,
-      ),
-    ];
+}) => [
+  AppOverflowMenuAction(
+    label: l10n.edit,
+    icon: Assets.icons.documentEditOutline,
+    onSelected: onEdit,
+  ),
+  AppOverflowMenuAction(
+    label: l10n.delete,
+    icon: Assets.icons.deleteSquareOutline,
+    onSelected: onDelete,
+    destructive: true,
+  ),
+];

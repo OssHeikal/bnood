@@ -5,8 +5,8 @@ import '../../../../core/config/theme/app_size.dart';
 import '../../../../core/money/remote_money_units.dart';
 import '../../../../core/widgets/app_amount.dart';
 import '../../../../core/widgets/app_card.dart';
-import '../provider_detail_agreement_totals.dart';
-import 'provider_detail_metric_stack.dart';
+import 'package:bnood/features/providers/presentation/models/provider_detail_agreement_totals.dart';
+import 'package:bnood/features/providers/presentation/widgets/provider_detail_metric_stack.dart';
 
 class ProviderDetailTotalsCards extends StatelessWidget {
   const ProviderDetailTotalsCards({

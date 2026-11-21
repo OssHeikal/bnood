@@ -1,7 +1,7 @@
 import 'package:bnood/core/config/theme/app_size.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/app_modal_sheet.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/core/widgets/buttons/app_button.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -11,15 +11,23 @@ const _topInset = 59.0;
 const _bottomInset = 34.0;
 
 void _applyDeviceInsets(WidgetTester tester) {
-  tester.view.padding = const FakeViewPadding(top: _topInset, bottom: _bottomInset);
-  tester.view.viewPadding = const FakeViewPadding(top: _topInset, bottom: _bottomInset);
+  tester.view.padding = const FakeViewPadding(
+    top: _topInset,
+    bottom: _bottomInset,
+  );
+  tester.view.viewPadding = const FakeViewPadding(
+    top: _topInset,
+    bottom: _bottomInset,
+  );
   tester.view.physicalSize = const Size(430, 932);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
 }
 
 void main() {
-  testWidgets('AppModalSheet keeps bottom actions above home indicator', (tester) async {
+  testWidgets('AppModalSheet keeps bottom actions above home indicator', (
+    tester,
+  ) async {
     _applyDeviceInsets(tester);
     await tester.pumpWidget(
       MaterialApp(

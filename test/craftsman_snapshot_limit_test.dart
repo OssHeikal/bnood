@@ -7,7 +7,7 @@ import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/home/presentation/home_screen.dart';
+import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/features/providers/presentation/widgets/remote_craftsman_summary_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +52,9 @@ void main() {
       ProviderScope(
         overrides: [
           authControllerProvider.overrideWith(_AuthUser.new),
-          homeTotalsOverride(const HomeTotals(receivedPiastres: 0, spentPiastres: 0)),
+          homeTotalsOverride(
+            const HomeTotals(receivedPiastres: 0, spentPiastres: 0),
+          ),
           homeClientBalancesOverride(const []),
           homeCraftsmenProvider.overrideWith(
             () => StubHomeCraftsmenNotifier(List.generate(5, _row)),
@@ -77,8 +79,8 @@ void main() {
 class _AuthUser extends AuthController {
   @override
   AuthState build() => AuthState(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: const User(id: 'u1', phone: '+201012345678', name: 'Tester'),
-        bootstrapStarted: true,
-      );
+    bootstrapStatus: AuthBootstrapStatus.authenticated,
+    user: const User(id: 'u1', phone: '+201012345678', name: 'Tester'),
+    bootstrapStarted: true,
+  );
 }

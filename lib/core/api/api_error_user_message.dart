@@ -15,7 +15,9 @@ String apiAuthErrorUserMessage(AppLocalizations l10n, AuthApiException error) {
   if (error.isNetwork) return l10n.apiErrorNetwork;
   if (error.isThrottled) return l10n.apiErrorThrottled;
   if (error.isSessionExpired ||
-      (error.isUnauthorized && !error.isInvalidCredentials && error.code != 'invalid_credentials')) {
+      (error.isUnauthorized &&
+          !error.isInvalidCredentials &&
+          error.code != 'invalid_credentials')) {
     return l10n.apiErrorSessionExpired;
   }
   if (error.isInvalidSize || error.statusCode == 413) {

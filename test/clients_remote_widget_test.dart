@@ -1,9 +1,9 @@
 import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
-import 'package:bnood/features/clients/presentation/client_detail_provider.dart';
-import 'package:bnood/features/clients/presentation/client_detail_screen.dart';
-import 'package:bnood/features/clients/presentation/client_detail_snapshot.dart';
-import 'package:bnood/features/clients/presentation/clients_list_screen.dart';
+import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
+import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/screens/clients_list_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,7 +46,9 @@ void main() {
     expect(find.textContaining('EGP'), findsNothing);
   });
 
-  testWidgets('archived client detail disables edit affordance', (tester) async {
+  testWidgets('archived client detail disables edit affordance', (
+    tester,
+  ) async {
     final now = DateTime.utc(2026, 11, 9);
     final snapshot = ClientDetailSnapshot(
       client: Client(
@@ -78,7 +80,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          clientDetailProvider.overrideWith(() => _StaticDetailNotifier(snapshot)),
+          clientDetailProvider.overrideWith(
+            () => _StaticDetailNotifier(snapshot),
+          ),
         ],
         child: const MaterialApp(
           locale: Locale('en'),

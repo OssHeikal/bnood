@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/config/extensions/num_extensions.dart';
-import '../../../../../core/config/theme/app_colors.dart';
-import '../../../../../core/config/theme/app_size.dart';
-import '../../../../../core/widgets/app_pressable.dart';
+import '../../../../core/config/extensions/num_extensions.dart';
+import '../../../../core/config/theme/app_colors.dart';
+import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/widgets/app_pressable.dart';
 
 class HomeSectionHeader extends StatelessWidget {
   const HomeSectionHeader({
@@ -31,10 +31,14 @@ class HomeSectionHeader extends StatelessWidget {
   /// (see client/provider detail two-column layouts on tablet+).
   static double columnLeadBeforeContent(BuildContext context) {
     final text = context.text;
-    final titleLine = (text.sectionTitle.fontSize ?? 15) * (text.sectionTitle.height ?? 1.25);
-    final captionLine = (text.caption.fontSize ?? 12) * (text.caption.height ?? 1.2);
+    final titleLine =
+        (text.sectionTitle.fontSize ?? 15) * (text.sectionTitle.height ?? 1.25);
+    final captionLine =
+        (text.caption.fontSize ?? 12) * (text.caption.height ?? 1.2);
     const seeAllVerticalPad = 8.0;
-    final rowHeight = titleLine > captionLine + seeAllVerticalPad ? titleLine : captionLine + seeAllVerticalPad;
+    final rowHeight = titleLine > captionLine + seeAllVerticalPad
+        ? titleLine
+        : captionLine + seeAllVerticalPad;
     return rowHeight + AppSize.spaceSM;
   }
 
@@ -55,7 +59,9 @@ class HomeSectionHeader extends StatelessWidget {
               child: Text(
                 actionLabel!,
                 style: text.caption.copyWith(
-                  color: actionEnabled ? colors.primaryDark : colors.onSurfaceMuted,
+                  color: actionEnabled
+                      ? colors.primaryDark
+                      : colors.onSurfaceMuted,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -71,7 +77,9 @@ class HomeSectionHeader extends StatelessWidget {
               child: Text(
                 seeAllLabel!,
                 style: text.caption.copyWith(
-                  color: seeAllEnabled ? colors.primaryDark : colors.onSurfaceMuted,
+                  color: seeAllEnabled
+                      ? colors.primaryDark
+                      : colors.onSurfaceMuted,
                   fontWeight: FontWeight.w700,
                 ),
               ),

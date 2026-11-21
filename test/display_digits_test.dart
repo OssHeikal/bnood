@@ -18,29 +18,39 @@ void main() {
     expect(MoneyFormat.parseEgpInput('١٢٣٤.٥٠'), 123450);
   });
 
-  test('AppAmount remaining negative ar keeps minus and western digits', () async {
-    final text = AppAmount.format(piastres: 5000, localeCode: 'ar');
-    expect(text, contains('50'));
-    expect(text, contains('EGP'));
-    expect(text, isNot(contains('ج.م')));
-    expect(text, isNot(contains('٥')));
+  test(
+    'AppAmount remaining negative ar keeps minus and western digits',
+    () async {
+      final text = AppAmount.format(piastres: 5000, localeCode: 'ar');
+      expect(text, contains('50'));
+      expect(text, contains('EGP'));
+      expect(text, isNot(contains('ج.م')));
+      expect(text, isNot(contains('٥')));
 
-    final negativeDisplay = '−${MoneyFormat.formatPiastres(12500, locale: 'ar_EG')}';
-    expect(negativeDisplay, startsWith('−'));
-    expect(negativeDisplay, contains('125'));
-  });
+      final negativeDisplay =
+          '−${MoneyFormat.formatPiastres(12500, locale: 'ar_EG')}';
+      expect(negativeDisplay, startsWith('−'));
+      expect(negativeDisplay, contains('125'));
+    },
+  );
 
   test('formatInteger uses comma grouping', () {
     expect(DisplayDigits.formatInteger(1000), '1,000');
   });
 
-  testWidgets('AppAmount widget ar locale shows western digits', (tester) async {
+  testWidgets('AppAmount widget ar locale shows western digits', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
         locale: const Locale('ar'),
         home: const Scaffold(
-          body: AppAmount(piastres: 990000, role: AppAmountRole.remaining, localeCode: 'ar'),
+          body: AppAmount(
+            piastres: 990000,
+            role: AppAmountRole.remaining,
+            localeCode: 'ar',
+          ),
         ),
       ),
     );

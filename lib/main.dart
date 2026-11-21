@@ -24,7 +24,9 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (pushMessagingSupported) {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     await bootstrapCrashlytics();
     await bootstrapFirebaseAnalytics();
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
@@ -55,9 +57,6 @@ Future<void> main() async {
   );
   installErrorHandlers(container.read(errorReporterProvider));
   runApp(
-    UncontrolledProviderScope(
-      container: container,
-      child: const BnoodApp(),
-    ),
+    UncontrolledProviderScope(container: container, child: const BnoodApp()),
   );
 }

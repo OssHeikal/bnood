@@ -2,11 +2,11 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/config/theme/app_size.dart';
-import '../../data/paywall_v3_models.dart';
+import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import '../../../../core/widgets/app_modal_sheet.dart';
 import '../../../../core/widgets/sheet_drag_handle.dart';
-import '../paywall_theme.dart';
-import 'paywall_comparison_table.dart';
+import 'package:bnood/features/subscription/presentation/widgets/paywall_theme.dart';
+import 'package:bnood/features/subscription/presentation/widgets/paywall_comparison_table.dart';
 
 class PaywallComparisonSheet {
   const PaywallComparisonSheet._();

@@ -49,10 +49,12 @@ class LedgerMath {
     required String craftsmanId,
   }) {
     return rows
-        .where((t) =>
-            t.kind == 'spend' &&
-            t.expenseType == 'labor' &&
-            t.craftsmanId == craftsmanId)
+        .where(
+          (t) =>
+              t.kind == 'spend' &&
+              t.expenseType == 'labor' &&
+              t.craftsmanId == craftsmanId,
+        )
         .fold<int>(0, (sum, t) => sum + t.amountPiastres);
   }
 
@@ -69,10 +71,20 @@ class LedgerMath {
     required DateTime periodStart,
     required DateTime periodEnd,
   }) {
-    final start =
-        DateTime(periodStart.year, periodStart.month, periodStart.day);
+    final start = DateTime(
+      periodStart.year,
+      periodStart.month,
+      periodStart.day,
+    );
     final end = DateTime(
-        periodEnd.year, periodEnd.month, periodEnd.day, 23, 59, 59, 999);
+      periodEnd.year,
+      periodEnd.month,
+      periodEnd.day,
+      23,
+      59,
+      59,
+      999,
+    );
 
     int beforeReceive = 0;
     int beforeSpend = 0;
@@ -115,16 +127,19 @@ class LedgerMath {
   }
 
   static Map<String, ItemExpenseBreakdown> itemBreakdown(
-      Iterable<Transaction> spendRows) {
+    Iterable<Transaction> spendRows,
+  ) {
     final map = <String, ItemExpenseBreakdown>{};
     for (final t in spendRows) {
       final itemId = t.itemId;
       if (itemId == null) continue;
       final existing = map[itemId] ?? const ItemExpenseBreakdown();
       map[itemId] = ItemExpenseBreakdown(
-        materialsPiastres: existing.materialsPiastres +
+        materialsPiastres:
+            existing.materialsPiastres +
             (t.expenseType == 'materials' ? t.amountPiastres : 0),
-        laborPiastres: existing.laborPiastres +
+        laborPiastres:
+            existing.laborPiastres +
             (t.expenseType == 'labor' ? t.amountPiastres : 0),
       );
     }

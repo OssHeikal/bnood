@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../core/config/theme/app_size.dart';
-import '../../data/item_api_record.dart';
+import 'package:bnood/features/items/data/item_api_record.dart';
 import '../../../../core/layout/bnood_grid_count.dart';
-import 'item_catalog_tile.dart';
+import 'package:bnood/features/items/presentation/widgets/item_catalog_tile.dart';
 
 /// Two-column catalog grid with long-press drag reorder for every item (defaults included).
 class ItemsReorderableUserGrid extends StatelessWidget {
@@ -22,7 +22,12 @@ class ItemsReorderableUserGrid extends StatelessWidget {
   static const _mainAxisExtent = 116.0;
 
   SliverGridDelegate _gridDelegate(BuildContext context) {
-    final crossAxisCount = bnoodGridCount(context, mobile: 2, tablet: 3, desktop: 4);
+    final crossAxisCount = bnoodGridCount(
+      context,
+      mobile: 2,
+      tablet: 3,
+      desktop: 4,
+    );
     return SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: crossAxisCount,
       crossAxisSpacing: AppSize.spaceMD,
@@ -37,9 +42,15 @@ class ItemsReorderableUserGrid extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final crossAxisCount = bnoodGridCount(context, mobile: 2, tablet: 3, desktop: 4);
+        final crossAxisCount = bnoodGridCount(
+          context,
+          mobile: 2,
+          tablet: 3,
+          desktop: 4,
+        );
         final cellWidth =
-            (constraints.maxWidth - AppSize.spaceMD * (crossAxisCount - 1)) / crossAxisCount;
+            (constraints.maxWidth - AppSize.spaceMD * (crossAxisCount - 1)) /
+            crossAxisCount;
         final gridDelegate = _gridDelegate(context);
         return GridView.builder(
           shrinkWrap: true,

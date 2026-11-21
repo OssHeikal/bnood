@@ -4,8 +4,8 @@ import 'package:bnood/l10n/app_localizations.dart';
 import '../../../../core/config/theme/app_colors.dart';
 import '../../../../core/config/theme/app_shape.dart';
 import '../../../../core/config/theme/app_size.dart';
-import '../../data/item_api_record.dart';
-import '../item_semantic_icon.dart';
+import 'package:bnood/features/items/data/item_api_record.dart';
+import 'package:bnood/features/items/presentation/widgets/item_semantic_icon.dart';
 
 /// Icon grid + color swatches shared by the item create and edit sheets.
 class ItemVisualPickers extends StatelessWidget {
@@ -37,7 +37,10 @@ class ItemVisualPickers extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(l10n.itemPickColorLabel, style: text.caption.copyWith(fontWeight: FontWeight.w600)),
+        Text(
+          l10n.itemPickColorLabel,
+          style: text.caption.copyWith(fontWeight: FontWeight.w600),
+        ),
         const SizedBox(height: AppSize.spaceSM),
         Wrap(
           spacing: AppSize.spaceMD,
@@ -53,12 +56,18 @@ class ItemVisualPickers extends StatelessWidget {
           ],
         ),
         const SizedBox(height: AppSize.spaceLG),
-        Text(l10n.itemPickIconLabel, style: text.caption.copyWith(fontWeight: FontWeight.w600)),
+        Text(
+          l10n.itemPickIconLabel,
+          style: text.caption.copyWith(fontWeight: FontWeight.w600),
+        ),
         const SizedBox(height: AppSize.spaceSM),
         LayoutBuilder(
           builder: (context, constraints) {
             final width = constraints.maxWidth;
-            final columns = ((width + iconCellSpacing) / (iconCellMin + iconCellSpacing)).floor().clamp(1, 12);
+            final columns =
+                ((width + iconCellSpacing) / (iconCellMin + iconCellSpacing))
+                    .floor()
+                    .clamp(1, 12);
             final cell = (width - iconCellSpacing * (columns - 1)) / columns;
             return Wrap(
               spacing: iconCellSpacing,
@@ -135,7 +144,12 @@ class _IconCell extends StatelessWidget {
 }
 
 class _ColorSwatch extends StatelessWidget {
-  const _ColorSwatch({required this.colorKey, required this.color, required this.selected, required this.onTap});
+  const _ColorSwatch({
+    required this.colorKey,
+    required this.color,
+    required this.selected,
+    required this.onTap,
+  });
 
   final String colorKey;
   final Color color;
@@ -160,11 +174,20 @@ class _ColorSwatch extends StatelessWidget {
           padding: const EdgeInsets.all(AppSize.spaceXS),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: selected ? color : Colors.transparent, width: AppSize.focusWidth),
+            border: Border.all(
+              color: selected ? color : Colors.transparent,
+              width: AppSize.focusWidth,
+            ),
           ),
           child: DecoratedBox(
             decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-            child: selected ? Icon(Icons.check_rounded, size: AppSize.iconSmall, color: colors.onSolid) : null,
+            child: selected
+                ? Icon(
+                    Icons.check_rounded,
+                    size: AppSize.iconSmall,
+                    color: colors.onSolid,
+                  )
+                : null,
           ),
         ),
       ),

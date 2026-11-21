@@ -8,19 +8,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-SubscriptionApi _api(Future<ResponseBody> Function(RequestOptions options) handler) {
+SubscriptionApi _api(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return SubscriptionApi(dio: dio);
 }
 
 void main() {
-  test('getSubscription maps paywall payload and sends Accept-Language', () async {
-    ApiAcceptLanguage.syncLocale(const Locale('ar'));
-    late String? acceptLanguage;
-    final api = _api((options) async {
-      acceptLanguage = options.headers['Accept-Language'] as String?;
-      return jsonResponse('''
+  test(
+    'getSubscription maps paywall payload and sends Accept-Language',
+    () async {
+      ApiAcceptLanguage.syncLocale(const Locale('ar'));
+      late String? acceptLanguage;
+      final api = _api((options) async {
+        acceptLanguage = options.headers['Accept-Language'] as String?;
+        return jsonResponse('''
 {
   "success": true,
   "data": {
@@ -42,12 +46,16 @@ void main() {
   }
 }
 ''');
-    });
-    final snap = await api.getSubscription(languageCode: 'ar');
-    expect(acceptLanguage, acceptLanguageHeaderForLocale('ar'));
-    expect(snap.paywallEnabled, isTrue);
-    expect(snap.entitlements.canCreateActiveProject, isFalse);
-    expect(snap.paywall?.title, 'Title');
-    expect(snap.paywall?.planById('yearly')?.monthlyEquivalentMinor, (299000 / 12).round());
-  });
+      });
+      final snap = await api.getSubscription(languageCode: 'ar');
+      expect(acceptLanguage, acceptLanguageHeaderForLocale('ar'));
+      expect(snap.paywallEnabled, isTrue);
+      expect(snap.entitlements.canCreateActiveProject, isFalse);
+      expect(snap.paywall?.title, 'Title');
+      expect(
+        snap.paywall?.planById('yearly')?.monthlyEquivalentMinor,
+        (299000 / 12).round(),
+      );
+    },
+  );
 }

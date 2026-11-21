@@ -10,13 +10,13 @@ import '../../core/widgets/app_decision.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
-import 'auth_controller.dart';
-import 'auth_form_ui.dart';
-import 'auth_form_utils.dart';
-import 'auth_messages.dart';
-import 'auth_paths.dart';
-import '../content/presentation/register_legal_links.dart';
-import 'widgets/auth_flow_scaffold.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_form_ui.dart';
+import 'package:bnood/features/auth/auth_form_utils.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/content/presentation/widgets/register_legal_links.dart';
+import 'package:bnood/features/auth/widgets/auth_flow_scaffold.dart';
 
 Future<void> _submitRegister(BuildContext context, WidgetRef ref) async {
   final fields = ref.read(registerFormFieldsProvider);
@@ -52,7 +52,9 @@ Future<void> _submitRegister(BuildContext context, WidgetRef ref) async {
     );
     if (!context.mounted) return;
     if (answer == OverlayAnswer.confirmed) {
-      ref.read(loginPhonePrefillProvider.notifier).setPhone(fields.phone.text.trim());
+      ref
+          .read(loginPhonePrefillProvider.notifier)
+          .setPhone(fields.phone.text.trim());
       fields.password.clear();
       fields.confirm.clear();
       context.go(AuthPaths.login);
@@ -82,7 +84,9 @@ class RegisterScreen extends ConsumerWidget {
       alignment: AuthFlowAlignment.start,
       child: Form(
         key: fields.formKey,
-        autovalidateMode: ui.attempted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: ui.attempted
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -114,7 +118,8 @@ class RegisterScreen extends ConsumerWidget {
               type: AppInputType.password,
               fieldHeight: AppSize.fieldHeightComfortable,
               textInputAction: TextInputAction.done,
-              validator: (v) => validatePasswordConfirmation(l10n, v, fields.password.text),
+              validator: (v) =>
+                  validatePasswordConfirmation(l10n, v, fields.password.text),
             ),
             AppSize.spaceXL.gap,
             AppButton.primary(
@@ -131,7 +136,9 @@ class RegisterScreen extends ConsumerWidget {
                   child: AppButton.text(
                     foregroundColor: context.colors.primary,
                     text: l10n.authLoginLink,
-                    onPressed: loading ? null : () => context.push(AuthPaths.login),
+                    onPressed: loading
+                        ? null
+                        : () => context.push(AuthPaths.login),
                   ),
                 );
               },

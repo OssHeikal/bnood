@@ -1,7 +1,4 @@
-enum ClientCreatedSource {
-  remote,
-  local,
-}
+enum ClientCreatedSource { remote, local }
 
 sealed class AnalyticsEvent {
   const AnalyticsEvent();
@@ -72,10 +69,10 @@ final class SubscriptionStarted extends AnalyticsEvent {
 
   @override
   Map<String, Object> get params => {
-        'package_slug': packageSlug,
-        'revenue': revenue,
-        'currency': currency,
-      };
+    'package_slug': packageSlug,
+    'revenue': revenue,
+    'currency': currency,
+  };
 }
 
 final class SubscriptionRenewed extends AnalyticsEvent {
@@ -94,8 +91,8 @@ final class SubscriptionRenewed extends AnalyticsEvent {
 
   @override
   Map<String, Object> get params => {
-        'package_slug': packageSlug,
-        'revenue': revenue,
-        'currency': currency,
-      };
+    'package_slug': packageSlug,
+    'revenue': revenue,
+    'currency': currency,
+  };
 }

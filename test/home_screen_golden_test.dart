@@ -1,5 +1,5 @@
 import 'package:bnood/features/home/data/home_row_models.dart';
-import 'package:bnood/features/home/presentation/home_screen.dart';
+import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +15,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          homeTotalsOverride(const HomeTotals(receivedPiastres: 2500000, spentPiastres: 1800000)),
+          homeTotalsOverride(
+            const HomeTotals(receivedPiastres: 2500000, spentPiastres: 1800000),
+          ),
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),

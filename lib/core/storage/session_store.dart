@@ -4,10 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Bearer token only — never log or mirror into preferences/SQLite.
 class SessionStore {
   SessionStore({FlutterSecureStorage? storage})
-      : _storage = storage ??
-            const FlutterSecureStorage(
-              aOptions: AndroidOptions(encryptedSharedPreferences: true),
-            );
+    : _storage =
+          storage ??
+          const FlutterSecureStorage(
+            aOptions: AndroidOptions(encryptedSharedPreferences: true),
+          );
 
   static const _tokenKey = 'bnood.subscriber.bearer';
 

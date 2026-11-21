@@ -17,11 +17,17 @@ extension WidgetInsets on Widget {
   Widget paddingHorizontal(double value) => paddingSymmetric(horizontal: value);
 
   Widget paddingTop(double value) {
-    return Padding(padding: EdgeInsets.only(top: value), child: this);
+    return Padding(
+      padding: EdgeInsets.only(top: value),
+      child: this,
+    );
   }
 
   Widget paddingBottom(double value) {
-    return Padding(padding: EdgeInsets.only(bottom: value), child: this);
+    return Padding(
+      padding: EdgeInsets.only(bottom: value),
+      child: this,
+    );
   }
 
   Widget paddingStart(double value) {

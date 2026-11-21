@@ -18,8 +18,14 @@ class RemoteMoneyFormat {
     if (frac.abs() < 1e-9) {
       return '$sign$wholeText ${MoneyFormat.currencyLabel}';
     }
-    final fracMinor = (frac * RemoteMoneyUnits.minorPerMajor).round().clamp(0, 99);
-    final fracText = fracMinor.toString().padLeft(2, '0').replaceFirst(RegExp(r'0+$'), '');
+    final fracMinor = (frac * RemoteMoneyUnits.minorPerMajor).round().clamp(
+      0,
+      99,
+    );
+    final fracText = fracMinor
+        .toString()
+        .padLeft(2, '0')
+        .replaceFirst(RegExp(r'0+$'), '');
     final body = fracText.isEmpty ? wholeText : '$wholeText.$fracText';
     return '$sign$body ${MoneyFormat.currencyLabel}';
   }
@@ -52,6 +58,9 @@ class RemoteMoneyFormat {
     final major = RemoteMoneyUnits.minorToMajor(minor);
     final whole = major.truncateToDouble();
     if ((major - whole).abs() < 1e-9) return whole.toInt().toString();
-    return major.toStringAsFixed(2).replaceFirst(RegExp(r'0+$'), '').replaceFirst(RegExp(r'\.$'), '');
+    return major
+        .toStringAsFixed(2)
+        .replaceFirst(RegExp(r'0+$'), '')
+        .replaceFirst(RegExp(r'\.$'), '');
   }
 }

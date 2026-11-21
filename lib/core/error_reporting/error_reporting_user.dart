@@ -1,10 +1,6 @@
 /// Login identity attached to error reports (not statement contact phone).
 class ErrorReportingUser {
-  const ErrorReportingUser({
-    required this.id,
-    required this.phone,
-    this.name,
-  });
+  const ErrorReportingUser({required this.id, required this.phone, this.name});
 
   final String id;
   final String phone;

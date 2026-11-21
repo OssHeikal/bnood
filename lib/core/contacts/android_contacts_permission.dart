@@ -36,7 +36,10 @@ Future<bool> ensureAndroidContactsPermission(BuildContext context) async {
   return false;
 }
 
-Future<bool> _openSettingsPrompt(BuildContext context, AppLocalizations l10n) async {
+Future<bool> _openSettingsPrompt(
+  BuildContext context,
+  AppLocalizations l10n,
+) async {
   final answer = await AppDecision.show(
     context,
     title: l10n.contactsPermissionSettingsTitle,

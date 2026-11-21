@@ -8,7 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-ItemsApi _itemsApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+ItemsApi _itemsApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return ItemsApi(dio: dio);
@@ -92,7 +94,13 @@ void main() {
       );
       expect(
         () => api.createItem(name: 'X', iconKey: 'category', colorKey: 'teal'),
-        throwsA(isA<AuthApiException>().having((e) => e.isDuplicateName, 'dup', isTrue)),
+        throwsA(
+          isA<AuthApiException>().having(
+            (e) => e.isDuplicateName,
+            'dup',
+            isTrue,
+          ),
+        ),
       );
       api.close();
     });
@@ -106,7 +114,9 @@ void main() {
       await api.reorderItems(['01A', '01B']);
       expect(captured.method, 'PUT');
       expect(captured.path, endsWith('/v1/items/reorder'));
-      expect(captured.data, {'ids': ['01A', '01B']});
+      expect(captured.data, {
+        'ids': ['01A', '01B'],
+      });
       api.close();
     });
 
@@ -114,7 +124,9 @@ void main() {
       late RequestOptions captured;
       final api = _itemsApi((options) async {
         captured = options;
-        return jsonResponse('{"success":true,"message":"ok","data":{"id":"01J","result":"deleted"}}');
+        return jsonResponse(
+          '{"success":true,"message":"ok","data":{"id":"01J","result":"deleted"}}',
+        );
       });
       final result = await api.deleteItem('01J');
       expect(captured.method, 'DELETE');
@@ -125,7 +137,9 @@ void main() {
 
     test('delete parses archived result for linked or default item', () async {
       final api = _itemsApi(
-        (_) async => jsonResponse('{"success":true,"message":"ok","data":{"id":"01J","result":"archived"}}'),
+        (_) async => jsonResponse(
+          '{"success":true,"message":"ok","data":{"id":"01J","result":"archived"}}',
+        ),
       );
       expect(await api.deleteItem('01J'), ItemDeleteResult.archived);
       api.close();

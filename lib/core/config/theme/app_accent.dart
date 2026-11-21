@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 /// Feature accent ramp for tinted cards: 50 fill, 100 border, ink for icons.
 class AppAccent {
-  const AppAccent({required this.tint, required this.border, required this.ink});
+  const AppAccent({
+    required this.tint,
+    required this.border,
+    required this.ink,
+  });
 
   final Color tint;
   final Color border;
