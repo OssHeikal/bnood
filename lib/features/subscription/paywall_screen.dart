@@ -1,12 +1,14 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/layout/app_form_route_canvas.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/subscription/app_subscription.dart';
+import '../../core/subscription/paywall_contact.dart';
+import '../../features/auth/auth_controller.dart';
 import '../../core/subscription/subscription_colors.dart';
-import '../../core/utils/safe_external_url.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import 'paywall_theme.dart';
@@ -18,16 +20,16 @@ import 'widgets/paywall_offer_banner.dart';
 import 'widgets/paywall_package_card.dart';
 import 'widgets/paywall_legal_links.dart';
 
-class PaywallScreen extends StatefulWidget {
+class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key, required this.content});
 
   final AppPaywallContent content;
 
   @override
-  State<PaywallScreen> createState() => _PaywallScreenState();
+  ConsumerState<PaywallScreen> createState() => _PaywallScreenState();
 }
 
-class _PaywallScreenState extends State<PaywallScreen> {
+class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   late String _selectedPackageSlug;
   late String _billingPeriod;
 
@@ -71,12 +73,20 @@ class _PaywallScreenState extends State<PaywallScreen> {
     final pkg = _selectedPackage;
     final l10n = AppLocalizations.of(context);
     if (pkg.isContact) {
-      final url = pkg.contactUrl;
-      if (url != null && url.trim().isNotEmpty) {
-        launchAllowedUrl(url.trim());
-        return;
-      }
-      AppToaster.show(l10n.subscriptionPaymentNotConnectedYet, kind: ToastKind.info);
+      final periodLabel = _billingPeriod == 'yearly' ? l10n.paywallPlanYearly : l10n.paywallPlanMonthly;
+      final user = ref.read(authControllerProvider).user;
+      launchPaywallContact(
+        contact: pkg.contact,
+        legacyContactUrl: pkg.contactUrl,
+        planName: pkg.name,
+        periodLabel: periodLabel,
+        userName: user?.name,
+        userPhone: user?.phone,
+      ).then((opened) {
+        if (!opened && context.mounted) {
+          AppToaster.show(l10n.subscriptionPaymentNotConnectedYet, kind: ToastKind.info);
+        }
+      });
       return;
     }
     AppToaster.show(l10n.subscriptionPaymentNotConnectedYet, kind: ToastKind.info);

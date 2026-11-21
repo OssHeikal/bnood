@@ -1,4 +1,5 @@
 import 'app_subscription.dart';
+import 'paywall_contact.dart';
 import 'paywall_money_display.dart';
 
 /// Query values for `GET /v1/subscription?paywall_trigger=…`.
@@ -272,6 +273,7 @@ class AppPaywallPackage {
     required this.purchaseMode,
     this.contactUrl,
     this.contactCtaText,
+    this.contact,
     this.yearlyOnly = false,
     this.yearlyOnlyLabel,
     this.monthlyEnabled = false,
@@ -295,6 +297,7 @@ class AppPaywallPackage {
   final String purchaseMode;
   final String? contactUrl;
   final String? contactCtaText;
+  final AppPaywallContact? contact;
   final bool yearlyOnly;
   final String? yearlyOnlyLabel;
   final bool monthlyEnabled;
@@ -371,6 +374,7 @@ class AppPaywallPackage {
       purchaseMode: raw['purchase_mode'] as String? ?? 'checkout',
       contactUrl: raw['contact_url'] as String?,
       contactCtaText: raw['contact_cta_text'] as String?,
+      contact: AppPaywallContact.fromJson(raw['contact']),
       yearlyOnly: raw['yearly_only'] == true,
       yearlyOnlyLabel: raw['yearly_only_label'] as String?,
       monthlyEnabled: raw['monthly_enabled'] == true,
