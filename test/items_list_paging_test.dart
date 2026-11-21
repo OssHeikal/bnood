@@ -1,14 +1,14 @@
-import 'package:bnood/core/items/item_api_record.dart';
-import 'package:bnood/core/items/items_providers.dart';
-import 'package:bnood/core/items/items_repository.dart';
+import 'package:bnood/features/items/data/item_api_record.dart';
+import 'package:bnood/features/items/data/items_providers.dart';
+import 'package:bnood/features/items/data/items_repository.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/items/items_list_paging.dart';
+import 'package:bnood/features/items/presentation/items_list_paging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bnood/core/api/items_api.dart';
+import 'package:bnood/features/items/data/items_api.dart';
 
 class _FakeItemsRepository extends ItemsRepository {
   _FakeItemsRepository() : super(ItemsApi());

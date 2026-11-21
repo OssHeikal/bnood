@@ -1,4 +1,4 @@
-import 'package:bnood/features/items/item_semantic_icon.dart';
+import 'package:bnood/features/items/presentation/item_semantic_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

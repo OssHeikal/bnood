@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../../core/config/theme/app_colors.dart';
-import '../../../core/config/theme/app_shape.dart';
-import '../../../core/config/theme/app_size.dart';
-import '../../../core/items/item_api_record.dart';
+import '../../../../core/config/theme/app_colors.dart';
+import '../../../../core/config/theme/app_shape.dart';
+import '../../../../core/config/theme/app_size.dart';
+import '../../data/item_api_record.dart';
 import '../item_semantic_icon.dart';
 
 /// Icon grid + color swatches shared by the item create and edit sheets.

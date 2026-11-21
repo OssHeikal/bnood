@@ -1,4 +1,4 @@
-import 'package:bnood/core/items/item_api_record.dart';
+import 'package:bnood/features/items/data/item_api_record.dart';
 import 'client_statement_record.dart';
 
 /// Default item tile keys when API and catalog omit visuals (matches [CatalogItem.fromDataJson]).

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../core/items/item_icon_catalog.dart';
-import '../../core/theme/app_colors.dart' as legacy;
-import '../../core/resources/gen/assets.gen.dart';
+import '../data/item_icon_catalog.dart';
+import '../../../core/theme/app_colors.dart' as legacy;
+import '../../../core/resources/gen/assets.gen.dart';
 
 Color itemSemanticAccentColor(String colorKey) => legacy.AppColors.accent(colorKey);
 

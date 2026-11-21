@@ -1,4 +1,4 @@
-import '../../core/items/item_api_record.dart';
+import '../data/item_api_record.dart';
 
 /// Reorder any visible catalog index (user + default items).
 List<CatalogItem> reorderCatalogItems(

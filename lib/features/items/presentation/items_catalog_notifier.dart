@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/items/item_api_record.dart';
-import '../../core/items/items_providers.dart';
-import '../../core/items/items_repository.dart' show fetchAllCatalogItems;
-import '../../core/shared/pagination/paging_refresh.dart';
+import '../data/item_api_record.dart';
+import '../data/items_providers.dart';
+import '../data/items_repository.dart' show fetchAllCatalogItems;
+import '../../../core/shared/pagination/paging_refresh.dart';
 import 'items_catalog_order.dart';
 
 class ItemsCatalogNotifier extends Notifier<AsyncValue<List<CatalogItem>>> {

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../api/items_api.dart';
-import '../storage/session_store.dart';
+import 'items_api.dart';
+import 'package:bnood/core/storage/session_store.dart';
 import 'item_api_record.dart';
 import 'items_repository.dart';
 

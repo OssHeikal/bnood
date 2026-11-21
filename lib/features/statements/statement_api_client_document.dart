@@ -4,7 +4,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import '../../app/widgets/shell_nav_icon.dart';
 import '../clients/data/client_statement_record.dart';
 import '../clients/data/statement_item_visual.dart';
-import '../../core/items/item_api_record.dart';
+import '../../features/items/data/item_api_record.dart';
 import '../../core/config/extensions/num_extensions.dart';
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/theme/app_shape.dart';
@@ -14,7 +14,7 @@ import '../../core/resources/gen/assets.gen.dart';
 import '../../core/widgets/app_amount.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_fallback.dart';
-import '../../features/items/item_semantic_icon.dart';
+import '../../features/items/presentation/item_semantic_icon.dart';
 import 'statement_issuer_header.dart';
 import 'statement_summary_widgets.dart';
 

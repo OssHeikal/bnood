@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/config/theme/app_size.dart';
-import '../../../core/widgets/app_card.dart';
-import '../../../core/widgets/skeleton/skeleton.dart';
-import '../../../core/widgets/skeleton/skeleton_box.dart';
-import '../../../core/widgets/skeleton/skeleton_text.dart';
+import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/skeleton/skeleton.dart';
+import '../../../../core/widgets/skeleton/skeleton_box.dart';
+import '../../../../core/widgets/skeleton/skeleton_text.dart';
 
 /// Mirrors [ItemCatalogTile]: tinted card padding, icon chip row, title at bottom.
 class ItemsLoadingSkeleton extends StatelessWidget {

@@ -9,7 +9,7 @@ import '../../../../core/widgets/app_amount.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_pressable.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../items/item_semantic_icon.dart';
+import '../../../items/presentation/item_semantic_icon.dart';
 
 class ClientDetailItemRow extends StatelessWidget {
   const ClientDetailItemRow({

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/config/theme/app_colors.dart';
-import '../../../core/config/theme/app_shape.dart';
-import '../../../core/config/theme/app_size.dart';
-import '../../../core/widgets/app_card.dart';
+import '../../../../core/config/theme/app_colors.dart';
+import '../../../../core/config/theme/app_shape.dart';
+import '../../../../core/config/theme/app_size.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../item_semantic_icon.dart';
 
 class ItemCatalogTile extends StatelessWidget {

@@ -1,6 +1,6 @@
 import '../data/client_statement_record.dart';
 import '../data/statement_item_visual.dart';
-import '../../../core/items/item_api_record.dart';
+import '../../../features/items/data/item_api_record.dart';
 import '../../../core/money/ledger_math.dart';
 import 'client_detail_snapshot.dart';
 

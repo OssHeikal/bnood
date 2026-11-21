@@ -9,7 +9,7 @@ import '../../core/utils/extensions/bidi_isolate.dart';
 import '../../core/widgets/app_amount.dart';
 import '../../core/widgets/entity_picker_row.dart';
 import '../../features/clients/presentation/widgets/client_balance_card.dart';
-import '../../features/items/item_semantic_icon.dart';
+import '../../features/items/presentation/item_semantic_icon.dart';
 import '../../l10n/app_localizations.dart';
 
 class VoucherPickerClientCard extends StatelessWidget {

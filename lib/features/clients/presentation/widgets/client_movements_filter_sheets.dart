@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../data/client_statement_record.dart';
 import '../../data/statement_item_visual.dart';
-import '../../../../core/items/item_api_record.dart';
+import '../../../../features/items/data/item_api_record.dart';
 import '../../../../core/config/extensions/num_extensions.dart';
 import '../../../../core/config/theme/app_colors.dart';
 import '../../../../core/config/theme/app_shape.dart';
@@ -16,7 +16,7 @@ import '../../../../core/widgets/bounded_sheet_navigator.dart';
 import '../../../../core/widgets/buttons/app_button.dart';
 import '../../../../core/widgets/custom_bottom_sheet.dart';
 import '../../../../core/widgets/sheet_drag_handle.dart';
-import '../../../items/item_semantic_icon.dart';
+import '../../../items/presentation/item_semantic_icon.dart';
 import '../../../vouchers/voucher_date_sheet.dart';
 import '../../../vouchers/voucher_transaction_date_bounds.dart';
 import '../client_movements_filters.dart';

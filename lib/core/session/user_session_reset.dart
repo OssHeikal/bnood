@@ -5,7 +5,7 @@ import '../../features/clients/data/clients_providers.dart';
 import '../home/home_repository.dart';
 import '../home/home_riverpod.dart';
 import '../home/home_section_counts.dart';
-import '../items/items_providers.dart';
+import '../../features/items/data/items_providers.dart';
 import '../providers/dashboard_providers.dart';
 import '../providers_api/providers_riverpod.dart';
 import '../shared/pagination/paging_refresh.dart';

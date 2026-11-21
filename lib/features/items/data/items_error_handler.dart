@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/auth/auth_controller.dart';
-import '../../features/auth/auth_paths.dart';
-import '../api/auth_api_exception.dart';
+import '../../auth/auth_controller.dart';
+import '../../auth/auth_paths.dart';
+import 'package:bnood/core/api/auth_api_exception.dart';
 
 /// Maps items API auth failures to navigation; returns true when handled.
 Future<bool> handleItemsApiAuthError({

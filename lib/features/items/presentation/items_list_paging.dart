@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/items/item_api_record.dart';
-import '../../core/items/items_providers.dart';
-import '../../core/shared/pagination/pagination.dart';
+import '../data/item_api_record.dart';
+import '../data/items_providers.dart';
+import '../../../core/shared/pagination/pagination.dart';
 
 const itemsListPageSize = 50;
 
