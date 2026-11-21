@@ -1,4 +1,4 @@
-import 'package:bnood/core/formatting/person_initials.dart';
+import 'package:bnood/core/domain/formatting/person_initials.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

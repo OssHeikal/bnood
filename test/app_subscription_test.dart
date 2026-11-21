@@ -6,10 +6,7 @@ void main() {
     test('showSurfaces requires paywall flag and entitlements flag', () {
       final snap = AppSubscriptionSnapshot.fromDataJson({
         'paywall_enabled': true,
-        'entitlements': {
-          'show_paywall_surfaces': false,
-          'is_premium': false,
-        },
+        'entitlements': {'show_paywall_surfaces': false, 'is_premium': false},
       });
       expect(snap.showSurfaces, isFalse);
 
@@ -20,22 +17,25 @@ void main() {
       expect(on.showSurfaces, isTrue);
     });
 
-    test('test user disables subscription UI while global paywall may stay on', () {
-      final snap = AppSubscriptionSnapshot.fromDataJson({
-        'paywall_enabled': true,
-        'is_test_user': true,
-        'subscription_ui_enabled': false,
-        'entitlements': {
-          'show_paywall_surfaces': false,
-          'can_create_active_project': true,
-          'active_project_cap': null,
-        },
-      });
-      expect(snap.isTestUser, isTrue);
-      expect(snap.showSurfaces, isFalse);
-      expect(snap.bypassSubscriptionLimits, isTrue);
-      expect(snap.entitlements.mayCreateActiveProject, isTrue);
-    });
+    test(
+      'test user disables subscription UI while global paywall may stay on',
+      () {
+        final snap = AppSubscriptionSnapshot.fromDataJson({
+          'paywall_enabled': true,
+          'is_test_user': true,
+          'subscription_ui_enabled': false,
+          'entitlements': {
+            'show_paywall_surfaces': false,
+            'can_create_active_project': true,
+            'active_project_cap': null,
+          },
+        });
+        expect(snap.isTestUser, isTrue);
+        expect(snap.showSurfaces, isFalse);
+        expect(snap.bypassSubscriptionLimits, isTrue);
+        expect(snap.entitlements.mayCreateActiveProject, isTrue);
+      },
+    );
 
     test('yearly plan derives monthly equivalent from total', () {
       final plan = AppPaywallPlan.fromJson({

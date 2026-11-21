@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/resources/gen/assets.gen.dart';
+import '../../core/ui/resources/gen/assets.gen.dart';
 
 /// Monochrome outline SVG from owner set; tint via [ColorFilter], not asset edits.
 class ShellNavIcon extends StatelessWidget {

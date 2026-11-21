@@ -1,4 +1,4 @@
-import 'models/user.dart';
+import 'package:bnood/features/auth/models/user.dart';
 
 abstract final class AuthPaths {
   static const bootstrap = '/auth/bootstrap';

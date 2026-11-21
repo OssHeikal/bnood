@@ -1,7 +1,7 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/features/statements/presentation/statement_pdf_export.dart';
-import 'package:bnood/features/statements/presentation/statement_screen_toast.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/statements/presentation/actions/statement_pdf_export.dart';
+import 'package:bnood/features/statements/presentation/actions/statement_screen_toast.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -12,70 +12,87 @@ void main() {
 
   tearDown(StatementPdfExport.resetShareForTests);
 
-  testWidgets('sharePositionOriginFor returns non-zero rect from export button', (tester) async {
-    Rect? captured;
-    StatementPdfExport.shareFromFile = (_, _, {sharePositionOrigin}) async {
-      captured = sharePositionOrigin;
-    };
+  testWidgets(
+    'sharePositionOriginFor returns non-zero rect from export button',
+    (tester) async {
+      Rect? captured;
+      StatementPdfExport.shareFromFile = (_, _, {sharePositionOrigin}) async {
+        captured = sharePositionOrigin;
+      };
 
-    final buttonKey = GlobalKey();
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: AppFoundationTheme.light(),
-        home: HomeFoundationScope(
-          child: Scaffold(
-            bottomNavigationBar: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: ElevatedButton(key: buttonKey, onPressed: () {}, child: const Text('Share PDF')),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-    await tester.pump();
-
-    final ctx = buttonKey.currentContext!;
-    final origin = StatementPdfExport.sharePositionOriginFor(ctx);
-    await StatementPdfExport.shareFromFile('x.pdf', 'x.pdf', sharePositionOrigin: origin);
-
-    expect(captured, isNotNull);
-    expect(captured!.width, greaterThan(1));
-    expect(captured!.height, greaterThan(1));
-    expect(captured!.left, greaterThanOrEqualTo(0));
-    expect(captured!.top, greaterThanOrEqualTo(0));
-  });
-
-  testWidgets('statement share failure toast does not throw without AppColors on root theme', (tester) async {
-    final botToastBuilder = BotToastInit();
-    await tester.pumpWidget(
-      MaterialApp(
-        builder: botToastBuilder,
-        navigatorObservers: [BotToastNavigatorObserver()],
-        theme: ThemeData.light(),
-        locale: const Locale('ar'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: HomeFoundationScope(
-          child: Builder(
-            builder: (context) => Scaffold(
-              body: Center(
-                child: ElevatedButton(
-                  onPressed: () => StatementScreenToast.failure(context, 'تعذّرت المشاركة'),
-                  child: const Text('fail'),
+      final buttonKey = GlobalKey();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppFoundationTheme.light(),
+          home: HomeFoundationScope(
+            child: Scaffold(
+              bottomNavigationBar: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: ElevatedButton(
+                    key: buttonKey,
+                    onPressed: () {},
+                    child: const Text('Share PDF'),
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      ),
-    );
-    await tester.pump();
-    await tester.tap(find.text('fail'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
-    expect(tester.takeException(), isNull);
-    expect(find.text('تعذّرت المشاركة'), findsOneWidget);
-  });
+      );
+      await tester.pump();
+
+      final ctx = buttonKey.currentContext!;
+      final origin = StatementPdfExport.sharePositionOriginFor(ctx);
+      await StatementPdfExport.shareFromFile(
+        'x.pdf',
+        'x.pdf',
+        sharePositionOrigin: origin,
+      );
+
+      expect(captured, isNotNull);
+      expect(captured!.width, greaterThan(1));
+      expect(captured!.height, greaterThan(1));
+      expect(captured!.left, greaterThanOrEqualTo(0));
+      expect(captured!.top, greaterThanOrEqualTo(0));
+    },
+  );
+
+  testWidgets(
+    'statement share failure toast does not throw without AppColors on root theme',
+    (tester) async {
+      final botToastBuilder = BotToastInit();
+      await tester.pumpWidget(
+        MaterialApp(
+          builder: botToastBuilder,
+          navigatorObservers: [BotToastNavigatorObserver()],
+          theme: ThemeData.light(),
+          locale: const Locale('ar'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: HomeFoundationScope(
+            child: Builder(
+              builder: (context) => Scaffold(
+                body: Center(
+                  child: ElevatedButton(
+                    onPressed: () => StatementScreenToast.failure(
+                      context,
+                      'تعذّرت المشاركة',
+                    ),
+                    child: const Text('fail'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.tap(find.text('fail'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(tester.takeException(), isNull);
+      expect(find.text('تعذّرت المشاركة'), findsOneWidget);
+    },
+  );
 }

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/clients/data/clients_api.dart';
 import 'package:bnood/features/clients/data/client_statement_pdf.dart';
 import 'package:dio/dio.dart';
@@ -10,7 +10,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-ClientsApi _clientsApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+ClientsApi _clientsApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return ClientsApi(dio: dio);
@@ -20,7 +22,9 @@ void main() {
   group('clientStatementPdfFileNameFromHeader', () {
     test('parses quoted filename', () {
       expect(
-        clientStatementPdfFileNameFromHeader('inline; filename="statement-ahmed.pdf"'),
+        clientStatementPdfFileNameFromHeader(
+          'inline; filename="statement-ahmed.pdf"',
+        ),
         'statement-ahmed.pdf',
       );
     });
@@ -32,10 +36,12 @@ void main() {
       final api = _clientsApi((options) async {
         uri = options.uri;
         expect(options.responseType, ResponseType.bytes);
-        return pdfResponse(
-          const [0x25, 0x50, 0x44, 0x46],
-          contentDisposition: 'inline; filename="statement-client.pdf"',
-        );
+        return pdfResponse(const [
+          0x25,
+          0x50,
+          0x44,
+          0x46,
+        ], contentDisposition: 'inline; filename="statement-client.pdf"');
       });
       final pdf = await api.downloadClientStatementPdf(
         clientId: 'c1',
@@ -75,7 +81,9 @@ void main() {
           from: '2026-12-01',
           to: '2026-01-01',
         ),
-        throwsA(isA<AuthApiException>().having((e) => e.statusCode, 'status', 422)),
+        throwsA(
+          isA<AuthApiException>().having((e) => e.statusCode, 'status', 422),
+        ),
       );
       api.close();
     });
@@ -88,8 +96,18 @@ void main() {
         ),
       );
       expect(
-        () => api.downloadClientStatementPdf(clientId: 'c1', from: '2026-09-15', to: '2026-11-09'),
-        throwsA(isA<AuthApiException>().having((e) => e.isNotFound, 'not_found', isTrue)),
+        () => api.downloadClientStatementPdf(
+          clientId: 'c1',
+          from: '2026-09-15',
+          to: '2026-11-09',
+        ),
+        throwsA(
+          isA<AuthApiException>().having(
+            (e) => e.isNotFound,
+            'not_found',
+            isTrue,
+          ),
+        ),
       );
       api.close();
     });

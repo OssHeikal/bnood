@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/widgets/app_decision.dart';
-import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/toast/app_tone.dart';
-import 'auth_controller.dart';
-import 'auth_messages.dart';
-import 'auth_paths.dart';
+import '../../core/ui/widgets/app_decision.dart';
+import '../../core/ui/widgets/app_toaster.dart';
+import '../../core/ui/widgets/toast/app_tone.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
 
 Future<void> confirmLogout(BuildContext context, WidgetRef ref) async {
   final l10n = AppLocalizations.of(context);

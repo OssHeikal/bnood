@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/money/basis_points.dart';
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_chevron.dart';
-import '../../../../core/widgets/app_pressable.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/money/basis_points.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_chevron.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class ClientDetailProfitCard extends StatelessWidget {
@@ -35,7 +35,9 @@ class ClientDetailProfitCard extends StatelessWidget {
     final text = context.text;
     final percentCaption = engineerBasisPoints == null
         ? l10n.engineerFeeNoRate
-        : l10n.engineerFeePercentCaption(BasisPoints.formatPercent(engineerBasisPoints));
+        : l10n.engineerFeePercentCaption(
+            BasisPoints.formatPercent(engineerBasisPoints),
+          );
 
     return AppPressable(
       enabled: mutationsEnabled,
@@ -49,18 +51,26 @@ class ClientDetailProfitCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(l10n.engineerEstimatedProfitTitle, style: text.bodyEmphasis),
+                    Text(
+                      l10n.engineerEstimatedProfitTitle,
+                      style: text.bodyEmphasis,
+                    ),
                     AppSize.spaceXS.gap,
                     Text(
                       '$percentCaption · ${l10n.engineerFeeInternalOnly}',
-                      style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                      style: text.caption.copyWith(
+                        color: colors.onSurfaceMuted,
+                      ),
                     ),
                   ],
                 ),
               ),
               AppSize.spaceMD.gap,
               if (estimatedProfitPiastres == null)
-                Text(l10n.engineerFeeUndefined, style: text.moneyMd.copyWith(color: colors.primaryDark))
+                Text(
+                  l10n.engineerFeeUndefined,
+                  style: text.moneyMd.copyWith(color: colors.primaryDark),
+                )
               else
                 AppAmount(
                   piastres: estimatedProfitPiastres!,
@@ -70,7 +80,8 @@ class ClientDetailProfitCard extends StatelessWidget {
                   minorPerMajor: minorPerMajor,
                 ),
               AppSize.spaceSM.gap,
-              if (mutationsEnabled) const AppChevron.forward(size: AppSize.iconSmall),
+              if (mutationsEnabled)
+                const AppChevron.forward(size: AppSize.iconSmall),
             ],
           ),
         ),

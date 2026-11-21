@@ -1,4 +1,4 @@
-import 'package:bnood/core/money/remote_money_units.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
 
 /// Convert UI minor units (remote scale) to API major EGP for agreements.
 double? agreementAmountMajorFromMinor(int? amountMinor) {

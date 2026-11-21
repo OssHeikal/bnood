@@ -1,4 +1,4 @@
-import 'package:bnood/features/vouchers/presentation/receipt_image_codec.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/receipt_image_codec.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

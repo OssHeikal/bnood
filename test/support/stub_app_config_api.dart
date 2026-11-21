@@ -1,4 +1,4 @@
-import 'package:bnood/core/api/app_config_api.dart';
+import 'package:bnood/core/network/api/app_config_api.dart';
 import 'package:bnood/features/app_gate/data/app_config_record.dart';
 
 class StubAppConfigApi extends AppConfigApi {
@@ -8,13 +8,13 @@ class StubAppConfigApi extends AppConfigApi {
     required String platform,
     required String version,
     required String locale,
-  }) _handler;
+  })
+  _handler;
 
   @override
   Future<AppConfigData> fetchConfig({
     required String platform,
     required String version,
     required String locale,
-  }) =>
-      _handler(platform: platform, version: version, locale: locale);
+  }) => _handler(platform: platform, version: version, locale: locale);
 }

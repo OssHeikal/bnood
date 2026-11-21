@@ -1,8 +1,8 @@
-import 'package:bnood/core/config/theme/app_size.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/entity_picker_page.dart';
-import 'package:bnood/core/widgets/entity_picker_row.dart';
-import 'package:bnood/features/vouchers/presentation/voucher_picker_cards.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/entity_picker_page.dart';
+import 'package:bnood/core/ui/widgets/entity_picker_row.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/voucher_picker_cards.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'dart:ui' show Tristate;
 
@@ -11,7 +11,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('picker row tap on title padding returns selected id', (tester) async {
+  testWidgets('picker row tap on title padding returns selected id', (
+    tester,
+  ) async {
     String? picked;
     await tester.pumpWidget(
       MaterialApp(
@@ -80,11 +82,16 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(tester.getSemantics(find.text('Hana')).flagsCollection.isSelected, Tristate.isTrue);
+    expect(
+      tester.getSemantics(find.text('Hana')).flagsCollection.isSelected,
+      Tristate.isTrue,
+    );
     expect(find.byType(SvgPicture), findsOneWidget);
   });
 
-  testWidgets('EN divider start inset aligns with title column', (tester) async {
+  testWidgets('EN divider start inset aligns with title column', (
+    tester,
+  ) async {
     const leadingWidth = AppSize.hitMin;
     final expectedInset = EntityPickerOptionRow.dividerStartInset(leadingWidth);
 
@@ -115,10 +122,15 @@ void main() {
     expect(titleLeft, closeTo(expectedInset, 1.5));
 
     final dividerBox = tester.getRect(find.byType(Divider));
-    expect(dividerBox.right, closeTo(tester.getSize(find.byType(Scaffold)).width, 1.5));
+    expect(
+      dividerBox.right,
+      closeTo(tester.getSize(find.byType(Scaffold)).width, 1.5),
+    );
   });
 
-  testWidgets('AR divider uses logical indent with zero end indent', (tester) async {
+  testWidgets('AR divider uses logical indent with zero end indent', (
+    tester,
+  ) async {
     const leadingWidth = AppSize.hitMin;
     final expectedInset = EntityPickerOptionRow.dividerStartInset(leadingWidth);
 
@@ -159,7 +171,10 @@ void main() {
             selected: false,
             onSelect: () => tapped = true,
             leadingWidth: AppSize.statIconBox,
-            leading: const SizedBox(width: AppSize.statIconBox, height: AppSize.statIconBox),
+            leading: const SizedBox(
+              width: AppSize.statIconBox,
+              height: AppSize.statIconBox,
+            ),
             title: 'Row',
             showDivider: false,
           ),

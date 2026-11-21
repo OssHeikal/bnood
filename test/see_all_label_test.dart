@@ -1,4 +1,4 @@
-import 'package:bnood/core/formatting/see_all_label.dart';
+import 'package:bnood/core/domain/formatting/see_all_label.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

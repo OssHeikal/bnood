@@ -1,13 +1,15 @@
-import 'package:bnood/core/config/theme/app_colors.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/custom_app_bar.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/core/services/config/theme/app_colors.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/custom_app_bar.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('AR CustomAppBar: name and phone share logical start edge', (tester) async {
+  testWidgets('AR CustomAppBar: name and phone share logical start edge', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -37,7 +39,9 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('EN CustomAppBar: name and phone share logical start edge', (tester) async {
+  testWidgets('EN CustomAppBar: name and phone share logical start edge', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -62,7 +66,9 @@ void main() {
     expect(phoneDx, closeTo(nameDx, 2));
   });
 
-  testWidgets('CustomAppBar title uses pageTitle and subtitle bar is 64', (tester) async {
+  testWidgets('CustomAppBar title uses pageTitle and subtitle bar is 64', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -97,13 +103,18 @@ void main() {
     expect(titleText.style?.fontWeight, bodyStyle?.fontWeight);
 
     final appBar = tester.widget<AppBar>(
-      find.descendant(of: find.byType(CustomAppBar), matching: find.byType(AppBar)),
+      find.descendant(
+        of: find.byType(CustomAppBar),
+        matching: find.byType(AppBar),
+      ),
     );
     expect(appBar.centerTitle, isFalse);
     expect(appBar.toolbarHeight, 64);
   });
 
-  testWidgets('CustomAppBarAction tint and surface backgrounds', (tester) async {
+  testWidgets('CustomAppBarAction tint and surface backgrounds', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -128,7 +139,10 @@ void main() {
                     ),
                   ],
                 ),
-                body: Text('colors', style: TextStyle(color: colors.accentTeal.tint)),
+                body: Text(
+                  'colors',
+                  style: TextStyle(color: colors.accentTeal.tint),
+                ),
               );
             },
           ),
@@ -138,16 +152,20 @@ void main() {
     await tester.pump();
 
     final tintMaterial = tester.widget<Material>(
-      find.descendant(
-        of: find.byTooltip('add'),
-        matching: find.byType(Material),
-      ).first,
+      find
+          .descendant(
+            of: find.byTooltip('add'),
+            matching: find.byType(Material),
+          )
+          .first,
     );
     final surfaceMaterial = tester.widget<Material>(
-      find.descendant(
-        of: find.byTooltip('edit'),
-        matching: find.byType(Material),
-      ).first,
+      find
+          .descendant(
+            of: find.byTooltip('edit'),
+            matching: find.byType(Material),
+          )
+          .first,
     );
     expect(tintMaterial.color, AppColors.light.accentTeal.tint);
     expect(surfaceMaterial.color, AppColors.light.surface);

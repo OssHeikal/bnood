@@ -1,25 +1,23 @@
 import 'package:dio/dio.dart';
 
-import 'app_subscription.dart';
-import 'package:bnood/core/api/api_response_parser.dart';
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/api/auth_interceptor.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/features/subscription/data/app_subscription.dart';
+import 'package:bnood/core/network/api/api_response_parser.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_interceptor.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 
 class SubscriptionApi {
-  SubscriptionApi({
-    Dio? dio,
-    SessionStore? sessionStore,
-  })  : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
-        _ownsDio = dio == null;
+  SubscriptionApi({Dio? dio, SessionStore? sessionStore})
+    : _dio = dio ?? createAppDio(sessionStore ?? SessionStore()),
+      _ownsDio = dio == null;
 
   final Dio _dio;
   final bool _ownsDio;
 
   Map<String, dynamic> get _authenticatedExtra => {
-        AuthInterceptor.authenticatedExtraKey: true,
-      };
+    AuthInterceptor.authenticatedExtraKey: true,
+  };
 
   void close({bool force = false}) {
     if (_ownsDio) {
@@ -34,12 +32,17 @@ class SubscriptionApi {
     try {
       final response = await _dio.get<Map<String, dynamic>>(
         '/v1/subscription',
-        queryParameters: paywallTrigger != null ? {'paywall_trigger': paywallTrigger.queryParameter} : null,
+        queryParameters: paywallTrigger != null
+            ? {'paywall_trigger': paywallTrigger.queryParameter}
+            : null,
         options: Options(extra: _authenticatedExtra),
       );
       return ApiResponseParser.expectData(
         response,
-        (data) => AppSubscriptionSnapshot.fromDataJson(data ?? const {}, localeCode: languageCode),
+        (data) => AppSubscriptionSnapshot.fromDataJson(
+          data ?? const {},
+          localeCode: languageCode,
+        ),
       );
     } on AuthApiException {
       rethrow;

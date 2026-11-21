@@ -1,7 +1,8 @@
 import 'package:bnood/features/providers/data/app_agreement_record.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
-import '../presentation/client_detail_snapshot.dart';
-import '../presentation/widgets/client_balance_card.dart' show clientAccentKeyFor;
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
+import '../presentation/widgets/client_balance_card.dart'
+    show clientAccentKeyFor;
 
 /// Whether [agreement] belongs to [kind] for assignments and roster diffing.
 ///
@@ -24,7 +25,13 @@ List<AppAgreement> clientAgreementsForKind(
   required Set<String> kindProviderIds,
 }) {
   return agreements
-      .where((a) => agreementMatchesProviderKind(a, kind, kindProviderIds: kindProviderIds))
+      .where(
+        (a) => agreementMatchesProviderKind(
+          a,
+          kind,
+          kindProviderIds: kindProviderIds,
+        ),
+      )
       .toList();
 }
 
@@ -34,7 +41,9 @@ Iterable<AppAgreement> providerAgreementsToDeleteOnAssignmentsSave({
   required Iterable<AppAgreement> providerAgreements,
   required Set<String> selectedClientIds,
 }) {
-  return providerAgreements.where((a) => !selectedClientIds.contains(a.clientId));
+  return providerAgreements.where(
+    (a) => !selectedClientIds.contains(a.clientId),
+  );
 }
 
 List<AppAgreement> agreementsBelongingToProvider(
@@ -82,11 +91,13 @@ List<ClientCraftsmanPreviewRow> clientAgreementPreviews(
 }) {
   final ids = kindProviderIds ?? const <String>{};
   return agreements
-      .where((a) => agreementMatchesProviderKind(
-            a,
-            type,
-            kindProviderIds: kindProviderIds ?? ids,
-          ))
+      .where(
+        (a) => agreementMatchesProviderKind(
+          a,
+          type,
+          kindProviderIds: kindProviderIds ?? ids,
+        ),
+      )
       .map((a) => clientPreviewRowFromAgreement(a, providerType: type))
       .toList()
     ..sort((a, b) => a.name.compareTo(b.name));

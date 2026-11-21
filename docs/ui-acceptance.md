@@ -34,7 +34,7 @@ Use before treating a UI milestone as done. Functional tests passing is **necess
 | ID | Task | Status |
 |----|------|--------|
 | UI-01 | Cairo **400–700** via `FontVariation` on Regular + Bold 700 | **Done** in `AppFont` / `AppText` (preview theme) |
-| UI-02 | Port SmartRx widgets under `lib/core/widgets/` | **Done** — see [porting-phase1.md](porting-phase1.md); legacy enum `app_button.dart` retained for features |
+| UI-02 | Port SmartRx widgets under `lib/core/ui/widgets/` | **Done** — see [porting-phase1.md](porting-phase1.md); legacy enum `app_button.dart` retained for features |
 | UI-03 | **AppCard** | **Done** (`app_card.dart`) |
 | UI-04 | **AppAmount** | **Done** (`app_amount.dart`) |
 | UI-05 | **AppFallback** | **Done** (`app_fallback.dart`) |

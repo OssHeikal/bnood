@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/theme/app_colors.dart' as legacy;
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/resources/gen/assets.gen.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_overflow_menu.dart';
-import '../../../../core/widgets/app_pressable.dart';
-import '../../../clients/presentation/widgets/client_balance_card.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/theme/app_colors.dart' as legacy;
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_overflow_menu.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_balance_card.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
 /// Directory list row: stripe, avatar, name, paid subtitle, overflow menu.
@@ -69,12 +69,17 @@ class DirectoryPersonCard extends StatelessWidget {
                     start: AppSize.spaceLG,
                     top: AppSize.spaceMD,
                     bottom: AppSize.spaceMD,
-                    end: paidInTrailing && !showOverflowMenu ? AppSize.spaceLG : AppSize.spaceSM,
+                    end: paidInTrailing && !showOverflowMenu
+                        ? AppSize.spaceLG
+                        : AppSize.spaceSM,
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      _Avatar(initial: name.isNotEmpty ? name[0] : '?', accent: accent),
+                      _Avatar(
+                        initial: name.isNotEmpty ? name[0] : '?',
+                        accent: accent,
+                      ),
                       AppSize.spaceMD.gap,
                       Expanded(
                         child: Column(
@@ -91,12 +96,15 @@ class DirectoryPersonCard extends StatelessWidget {
                               const SizedBox(height: 2),
                               Text(
                                 trade!,
-                                style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                                style: text.caption.copyWith(
+                                  color: colors.onSurfaceMuted,
+                                ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ],
-                            if (paidInTrailing && remainingPiastres != null) ...[
+                            if (paidInTrailing &&
+                                remainingPiastres != null) ...[
                               const SizedBox(height: 2),
                               Align(
                                 alignment: AlignmentDirectional.centerStart,
@@ -115,7 +123,9 @@ class DirectoryPersonCard extends StatelessWidget {
                                   Flexible(
                                     child: Text(
                                       '${l10n.paid}: ',
-                                      style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                                      style: text.caption.copyWith(
+                                        color: colors.onSurfaceMuted,
+                                      ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -205,7 +215,11 @@ class _Avatar extends StatelessWidget {
           child: Center(
             child: Text(
               initial,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+              ),
             ),
           ),
         ),

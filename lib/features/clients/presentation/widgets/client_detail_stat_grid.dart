@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/resources/gen/assets.gen.dart';
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/widgets/app_card.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/app_card.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -139,7 +139,9 @@ class _StatTile extends StatelessWidget {
               child: amount == null
                   ? Text(
                       l10n.amountUnavailable,
-                      style: context.text.moneyMd.copyWith(color: context.colors.onSurfaceMuted),
+                      style: context.text.moneyMd.copyWith(
+                        color: context.colors.onSurfaceMuted,
+                      ),
                       textDirection: TextDirection.ltr,
                     )
                   : AppAmount(
@@ -158,7 +160,11 @@ class _StatTile extends StatelessWidget {
 }
 
 class _IconBubble extends StatelessWidget {
-  const _IconBubble({required this.icon, required this.tint, required this.tintBg});
+  const _IconBubble({
+    required this.icon,
+    required this.tint,
+    required this.tintBg,
+  });
 
   final SvgGenImage icon;
   final Color tint;
@@ -173,7 +179,13 @@ class _IconBubble extends StatelessWidget {
       child: SizedBox(
         width: AppSize.statIconBox,
         height: AppSize.statIconBox,
-        child: Center(child: ShellNavIcon(asset: icon, color: tint, size: AppSize.iconSmall)),
+        child: Center(
+          child: ShellNavIcon(
+            asset: icon,
+            color: tint,
+            size: AppSize.iconSmall,
+          ),
+        ),
       ),
     );
   }

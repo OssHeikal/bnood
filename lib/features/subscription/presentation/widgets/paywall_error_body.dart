@@ -1,8 +1,8 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/subscription_colors.dart';
-import '../../../../core/widgets/buttons/app_button.dart';
+import 'package:bnood/features/subscription/data/subscription_colors.dart';
+import '../../../../core/ui/widgets/buttons/app_button.dart';
 
 class PaywallErrorBody extends StatelessWidget {
   const PaywallErrorBody({super.key, required this.onRetry});
@@ -18,12 +18,22 @@ class PaywallErrorBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           DecoratedBox(
-            decoration: const BoxDecoration(color: SubscriptionColors.violetSoft, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+              color: SubscriptionColors.violetSoft,
+              shape: BoxShape.circle,
+            ),
             child: const SizedBox(
               width: 44,
               height: 44,
               child: Center(
-                child: Text('!', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: SubscriptionColors.violet)),
+                child: Text(
+                  '!',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: SubscriptionColors.violet,
+                  ),
+                ),
               ),
             ),
           ),
@@ -36,7 +46,12 @@ class PaywallErrorBody extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             l10n.paywallLoadFailedBody,
-            style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, height: 1.55, color: Color(0xFF6D6676)),
+            style: const TextStyle(
+              fontSize: 13.5,
+              fontWeight: FontWeight.w600,
+              height: 1.55,
+              color: Color(0xFF6D6676),
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),

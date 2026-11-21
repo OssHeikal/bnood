@@ -15,7 +15,10 @@ abstract final class SubscriptionColors {
     final trimmed = raw.trim();
     if (trimmed.startsWith('#')) {
       final hex = trimmed.substring(1);
-      final value = int.tryParse(hex.length <= 6 ? hex.padLeft(6, '0') : hex, radix: 16);
+      final value = int.tryParse(
+        hex.length <= 6 ? hex.padLeft(6, '0') : hex,
+        radix: 16,
+      );
       if (value != null) return Color(0xFF000000 | value);
     }
     return violet;

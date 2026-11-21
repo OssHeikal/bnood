@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../config/theme/app_size.dart';
+import '../../services/config/theme/app_size.dart';
 
 /// Paged list with two items per row; row height follows the taller card.
 class PagedSliverTwoColumn<PageKeyType, ItemType> extends StatelessWidget {
@@ -65,12 +65,14 @@ class PagedSliverTwoColumn<PageKeyType, ItemType> extends StatelessWidget {
       fetchNextPage: fetchNextPage,
       builderDelegate: builderDelegate,
       shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
-      loadingListingBuilder: (context, itemWidgetBuilder, itemCount, progress) =>
-          _buildPairedSliver(itemWidgetBuilder, itemCount, progress),
+      loadingListingBuilder:
+          (context, itemWidgetBuilder, itemCount, progress) =>
+              _buildPairedSliver(itemWidgetBuilder, itemCount, progress),
       errorListingBuilder: (context, itemWidgetBuilder, itemCount, error) =>
           _buildPairedSliver(itemWidgetBuilder, itemCount, error),
-      completedListingBuilder: (context, itemWidgetBuilder, itemCount, noMore) =>
-          _buildPairedSliver(itemWidgetBuilder, itemCount, noMore),
+      completedListingBuilder:
+          (context, itemWidgetBuilder, itemCount, noMore) =>
+              _buildPairedSliver(itemWidgetBuilder, itemCount, noMore),
     );
   }
 }

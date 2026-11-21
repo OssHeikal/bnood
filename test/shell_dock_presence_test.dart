@@ -1,12 +1,12 @@
 import 'package:bnood/app/widgets/floating_shell_dock.dart';
 import 'package:bnood/app/widgets/shell_nav_destination.dart';
 import 'package:bnood/app/widgets/shell_nav_icons.dart';
-import 'package:bnood/core/config/navigation/root_navigator_key.dart';
-import 'package:bnood/core/config/theme/app_size.dart';
-import 'package:bnood/core/widgets/app_toaster.dart';
-import 'package:bnood/core/widgets/toast/app_toast.dart';
-import 'package:bnood/core/widgets/toast/shell_dock_presence.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/core/services/config/navigation/root_navigator_key.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
+import 'package:bnood/core/ui/widgets/app_toaster.dart';
+import 'package:bnood/core/ui/widgets/toast/app_toast.dart';
+import 'package:bnood/core/ui/widgets/toast/shell_dock_presence.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +43,11 @@ class _FakeShell extends StatelessWidget {
                   child: const Text('sheet'),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute<void>(builder: (_) => const Scaffold(body: Text('details')))),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const Scaffold(body: Text('details')),
+                    ),
+                  ),
                   child: const Text('details'),
                 ),
               ],
@@ -62,8 +64,16 @@ class _FakeShell extends StatelessWidget {
                 onVoucher: () {},
                 voucherSemanticsLabel: 'add',
                 destinations: [
-                  ShellNavDestination(icon: ShellNavIcons.home, label: 'Home', semanticsLabel: 'Home'),
-                  ShellNavDestination(icon: ShellNavIcons.items, label: 'Items', semanticsLabel: 'Items'),
+                  ShellNavDestination(
+                    icon: ShellNavIcons.home,
+                    label: 'Home',
+                    semanticsLabel: 'Home',
+                  ),
+                  ShellNavDestination(
+                    icon: ShellNavIcons.items,
+                    label: 'Items',
+                    semanticsLabel: 'Items',
+                  ),
                 ],
               ),
             ),
@@ -87,7 +97,11 @@ Future<void> expectToastJustAboveDock(WidgetTester tester) async {
   final dockTop = tester.getRect(find.byType(FloatingShellDock)).top;
   final toastBottom = tester.getRect(find.byType(AppToast)).bottom;
   final gap = dockTop - toastBottom;
-  expect(gap, inInclusiveRange(AppSize.spaceXS, AppSize.spaceMD), reason: 'gap between toast and dock = $gap');
+  expect(
+    gap,
+    inInclusiveRange(AppSize.spaceXS, AppSize.spaceMD),
+    reason: 'gap between toast and dock = $gap',
+  );
 }
 
 void main() {
@@ -97,7 +111,10 @@ void main() {
     return MaterialApp(
       navigatorKey: useRootKey ? rootNavigatorKey : null,
       builder: BotToastInit(),
-      navigatorObservers: [BotToastNavigatorObserver(), ShellDockPresence.createObserver()],
+      navigatorObservers: [
+        BotToastNavigatorObserver(),
+        ShellDockPresence.createObserver(),
+      ],
       locale: const Locale('ar'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -105,21 +122,35 @@ void main() {
     );
   }
 
-  testWidgets('dock stays visible under sheets and hides under pushed pages', (tester) async {
+  testWidgets('dock stays visible under sheets and hides under pushed pages', (
+    tester,
+  ) async {
     await tester.pumpWidget(app(hasDock: true));
     expect(ShellDockPresence.visible, isTrue);
 
     await tester.tap(find.text('sheet'));
     await tester.pumpAndSettle();
-    expect(ShellDockPresence.visible, isTrue, reason: 'popup route keeps the dock underneath');
+    expect(
+      ShellDockPresence.visible,
+      isTrue,
+      reason: 'popup route keeps the dock underneath',
+    );
 
     await tester.tap(find.text('close-and-toast'));
-    expect(ShellDockPresence.visible, isTrue, reason: 'resolved at show time, right after pop');
+    expect(
+      ShellDockPresence.visible,
+      isTrue,
+      reason: 'resolved at show time, right after pop',
+    );
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('details'));
     await tester.pumpAndSettle();
-    expect(ShellDockPresence.visible, isFalse, reason: 'full page covers the dock');
+    expect(
+      ShellDockPresence.visible,
+      isFalse,
+      reason: 'full page covers the dock',
+    );
 
     tester.state<NavigatorState>(find.byType(Navigator).first).pop();
     await tester.pumpAndSettle();
@@ -128,12 +159,16 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('desktop shell without dock never reserves clearance', (tester) async {
+  testWidgets('desktop shell without dock never reserves clearance', (
+    tester,
+  ) async {
     await tester.pumpWidget(app(hasDock: false));
     expect(ShellDockPresence.visible, isFalse);
   });
 
-  testWidgets('toast fired as a sheet closes sits just above the dock', (tester) async {
+  testWidgets('toast fired as a sheet closes sits just above the dock', (
+    tester,
+  ) async {
     _simulateHomeIndicator(tester);
     await tester.pumpWidget(app(hasDock: true));
     await tester.tap(find.text('sheet'));
@@ -149,23 +184,28 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('toast keeps dock clearance even without the root navigator key', (tester) async {
-    _simulateHomeIndicator(tester);
-    await tester.pumpWidget(app(hasDock: true, useRootKey: false));
-    await tester.tap(find.text('sheet'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('close-and-toast'));
-    for (var i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 100));
-    }
+  testWidgets(
+    'toast keeps dock clearance even without the root navigator key',
+    (tester) async {
+      _simulateHomeIndicator(tester);
+      await tester.pumpWidget(app(hasDock: true, useRootKey: false));
+      await tester.tap(find.text('sheet'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('close-and-toast'));
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
 
-    await expectToastJustAboveDock(tester);
+      await expectToastJustAboveDock(tester);
 
-    AppToaster.clear();
-    await tester.pumpAndSettle();
-  });
+      AppToaster.clear();
+      await tester.pumpAndSettle();
+    },
+  );
 
-  testWidgets('pushed details page (no dock) uses safe area + standard gap', (tester) async {
+  testWidgets('pushed details page (no dock) uses safe area + standard gap', (
+    tester,
+  ) async {
     _simulateHomeIndicator(tester);
     await tester.pumpWidget(app(hasDock: true));
     await tester.tap(find.text('details'));

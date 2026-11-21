@@ -1,4 +1,4 @@
-import 'package:bnood/core/formatting/cairo_local_time.dart';
+import 'package:bnood/core/domain/formatting/cairo_local_time.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

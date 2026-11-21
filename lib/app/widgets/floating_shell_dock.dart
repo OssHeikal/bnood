@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../core/config/extensions/num_extensions.dart';
-import '../../core/config/theme/app_motion.dart';
-import '../../core/config/theme/app_size.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/widgets/app_pressable.dart';
+import '../../core/services/config/extensions/num_extensions.dart';
+import '../../core/services/config/theme/app_motion.dart';
+import '../../core/services/config/theme/app_size.dart';
+import '../../core/ui/theme/app_colors.dart';
+import '../../core/ui/widgets/app_pressable.dart';
 import 'shell_nav_destination.dart';
 import 'shell_nav_icon.dart';
 import 'shell_nav_icons.dart';
@@ -27,12 +27,15 @@ class FloatingShellDock extends StatelessWidget {
   final String voucherSemanticsLabel;
 
   static const clearanceHeight = AppSize.shellDockClearance;
+
   /// Shared painted extent for pill track and voucher disc (see [AppSize.shellDockPillExtent]).
   static const pillTrackExtent = AppSize.shellDockPillExtent;
   static const voucherDiscDiameter = AppSize.shellDockVoucherDiameter;
   static const voucherSatelliteSize = AppSize.shellDockPillExtent;
+
   /// Horizontal inset for dock row (pill + satellite). Tighter than screen padding to widen pill.
   static const horizontalInset = AppSize.spaceMD;
+
   /// Caps pill+satellite group on wide layouts; phone uses nearly full width minus [horizontalInset].
   static const maxDockGroupWidth = 520.0;
 
@@ -122,7 +125,11 @@ class FloatingShellDock extends StatelessWidget {
           return Align(
             alignment: Alignment.bottomCenter,
             child: heavyText
-                ? FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.bottomCenter, child: bar)
+                ? FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.bottomCenter,
+                    child: bar,
+                  )
                 : bar,
           );
         },
@@ -189,7 +196,9 @@ class _DockTab extends StatelessWidget {
                   color: selected ? _tabFill(brightness) : Colors.transparent,
                   borderRadius: stadium,
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceXS),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSize.spaceXS,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

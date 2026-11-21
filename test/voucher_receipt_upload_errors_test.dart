@@ -1,6 +1,6 @@
-import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/features/vouchers/presentation/receipt_image_compress.dart';
-import 'package:bnood/features/vouchers/presentation/voucher_receipt_upload_errors.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/receipt_image_compress.dart';
+import 'package:bnood/features/vouchers/presentation/models/voucher_receipt_upload_errors.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,11 +12,18 @@ void main() {
     final l10n = lookupAppLocalizations(const Locale('en'));
     final sizeMsg = voucherReceiptUploadErrorMessage(
       l10n,
-      AuthApiException(statusCode: 413, message: 'Network request failed', code: 'invalid_size'),
+      AuthApiException(
+        statusCode: 413,
+        message: 'Network request failed',
+        code: 'invalid_size',
+      ),
     );
     expect(sizeMsg, l10n.voucherReceiptTooLarge);
     expect(
-      voucherReceiptUploadErrorMessage(l10n, const ReceiptImageCompressionException()),
+      voucherReceiptUploadErrorMessage(
+        l10n,
+        const ReceiptImageCompressionException(),
+      ),
       l10n.voucherReceiptCompressFailed,
     );
   });

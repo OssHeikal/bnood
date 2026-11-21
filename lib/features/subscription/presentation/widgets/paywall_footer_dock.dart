@@ -1,12 +1,12 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/paywall_v3_models.dart';
-import '../paywall_theme.dart';
+import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
+import 'package:bnood/features/subscription/presentation/widgets/paywall_theme.dart';
 import '../../../../core/utils/safe_external_url.dart';
-import '../../../../core/widgets/app_pressable.dart';
-import '../../../content/presentation/content_page_screen.dart';
-import '../../../content/data/content_page_record.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
+import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
+import 'package:bnood/features/content/data/content_page_record.dart';
 
 class PaywallFooterDock extends StatelessWidget {
   const PaywallFooterDock({
@@ -44,10 +44,15 @@ class PaywallFooterDock extends StatelessWidget {
                 enableHaptics: false,
                 onPressed: onRestore,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 2,
+                    vertical: 2,
+                  ),
                   child: Text(
                     l10n.paywallRestorePurchase,
-                    style: theme.footerLegal.copyWith(fontWeight: FontWeight.w700),
+                    style: theme.footerLegal.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
@@ -55,13 +60,15 @@ class PaywallFooterDock extends StatelessWidget {
               Text('·', style: theme.footerLegal.copyWith(decoration: null)),
             _FooterLink(
               label: l10n.settingsContentTerms,
-              onTap: () => _openLegal(context, footer.termsUrl, ContentSlugs.terms),
+              onTap: () =>
+                  _openLegal(context, footer.termsUrl, ContentSlugs.terms),
               style: theme.footerLegal.copyWith(fontWeight: FontWeight.w700),
             ),
             Text('·', style: theme.footerLegal.copyWith(decoration: null)),
             _FooterLink(
               label: l10n.settingsContentPrivacy,
-              onTap: () => _openLegal(context, footer.privacyUrl, ContentSlugs.privacy),
+              onTap: () =>
+                  _openLegal(context, footer.privacyUrl, ContentSlugs.privacy),
               style: theme.footerLegal.copyWith(fontWeight: FontWeight.w700),
             ),
           ],
@@ -70,7 +77,11 @@ class PaywallFooterDock extends StatelessWidget {
     );
   }
 
-  Future<void> _openLegal(BuildContext context, String? url, String slug) async {
+  Future<void> _openLegal(
+    BuildContext context,
+    String? url,
+    String slug,
+  ) async {
     if (url != null && url.trim().isNotEmpty) {
       final opened = await launchAllowedUrl(url.trim());
       if (opened) return;
@@ -83,7 +94,11 @@ class PaywallFooterDock extends StatelessWidget {
 }
 
 class _FooterLink extends StatelessWidget {
-  const _FooterLink({required this.label, required this.onTap, required this.style});
+  const _FooterLink({
+    required this.label,
+    required this.onTap,
+    required this.style,
+  });
 
   final String label;
   final VoidCallback onTap;

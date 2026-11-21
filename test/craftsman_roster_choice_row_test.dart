@@ -1,8 +1,8 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/money/remote_money_units.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/core/widgets/custom_text_field.dart';
-import 'package:bnood/core/widgets/entity_picker_row.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
+import 'package:bnood/core/ui/widgets/custom_text_field.dart';
+import 'package:bnood/core/ui/widgets/entity_picker_row.dart';
 import 'package:bnood/features/clients/presentation/widgets/craftsman_roster_choice_row.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('roster row full padding tap toggles selection in EN', (tester) async {
+  testWidgets('roster row full padding tap toggles selection in EN', (
+    tester,
+  ) async {
     var selected = false;
     final craftsman = CraftsmenData(
       id: 'c1',
@@ -53,7 +55,9 @@ void main() {
     expect(find.byType(CustomTextField), findsNothing);
   });
 
-  testWidgets('remote scale shows one million EGP not ten million', (tester) async {
+  testWidgets('remote scale shows one million EGP not ten million', (
+    tester,
+  ) async {
     final craftsman = CraftsmenData(
       id: 'c-remote',
       workspaceId: 'w',

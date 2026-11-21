@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../vouchers/presentation/voucher_launcher.dart';
-import '../../../../features/vouchers/data/app_voucher_record.dart';
-import '../../../vouchers/presentation/voucher_draft_from_app_voucher.dart';
-import '../client_detail_snapshot.dart';
-import 'client_movement_card.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import 'package:bnood/features/vouchers/presentation/actions/voucher_launcher.dart';
+import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
+import 'package:bnood/features/vouchers/presentation/models/voucher_draft_from_app_voucher.dart';
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_movement_card.dart';
 
 /// Tap opens edit voucher sheet (delete lives in that sheet only).
 class InteractiveMovementCard extends ConsumerStatefulWidget {
@@ -33,10 +33,12 @@ class InteractiveMovementCard extends ConsumerStatefulWidget {
   final EdgeInsetsGeometry padding;
 
   @override
-  ConsumerState<InteractiveMovementCard> createState() => _InteractiveMovementCardState();
+  ConsumerState<InteractiveMovementCard> createState() =>
+      _InteractiveMovementCardState();
 }
 
-class _InteractiveMovementCardState extends ConsumerState<InteractiveMovementCard> {
+class _InteractiveMovementCardState
+    extends ConsumerState<InteractiveMovementCard> {
   final _busy = false;
 
   Future<void> _openEdit() async {
@@ -72,7 +74,10 @@ class _InteractiveMovementCardState extends ConsumerState<InteractiveMovementCar
     final canMutate = widget.mutationsEnabled && !_busy;
 
     return AppCard(
-      padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceLG, vertical: AppSize.spaceXS),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSize.spaceLG,
+        vertical: AppSize.spaceXS,
+      ),
       onTap: canMutate ? _openEdit : null,
       child: ClientMovementCard(
         line: widget.line,

@@ -1,4 +1,4 @@
-import 'item_api_record.dart';
+import 'package:bnood/features/items/data/item_api_record.dart';
 
 /// Full item icon catalog (aligned with backend `AppItemIcon` enum).
 const itemIconCatalogKeys = <String>[

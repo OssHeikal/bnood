@@ -1,18 +1,23 @@
-import 'package:bnood/features/vouchers/presentation/voucher_draft.dart';
-import 'package:bnood/features/vouchers/presentation/voucher_launcher.dart';
+import 'package:bnood/features/vouchers/presentation/models/voucher_draft.dart';
+import 'package:bnood/features/vouchers/presentation/actions/voucher_launcher.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('home generic add defaults draft to spend', () {
-    final draft = VoucherLauncher.draftForFreshEntry(date: DateTime(2026, 11, 7));
+    final draft = VoucherLauncher.draftForFreshEntry(
+      date: DateTime(2026, 11, 7),
+    );
     expect(draft.kind, 'spend');
     expect(draft.clientId, isNull);
     expect(draft.editingTransactionId, isNull);
   });
 
-  test('VoucherDraft.fresh provider seed stays receive until launcher sets home draft', () {
-    expect(VoucherDraft.fresh.kind, 'receive');
-  });
+  test(
+    'VoucherDraft.fresh provider seed stays receive until launcher sets home draft',
+    () {
+      expect(VoucherDraft.fresh.kind, 'receive');
+    },
+  );
 
   test('contextual client receive keeps receive', () {
     const draft = VoucherDraft(
@@ -25,11 +30,7 @@ void main() {
   });
 
   test('contextual client spend keeps spend', () {
-    const draft = VoucherDraft(
-      clientId: 'c1',
-      projectId: 'p1',
-      kind: 'spend',
-    );
+    const draft = VoucherDraft(clientId: 'c1', projectId: 'p1', kind: 'spend');
     expect(draft.kind, 'spend');
   });
 

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:bnood/core/api/api_log_interceptor.dart';
+import 'package:bnood/core/network/api/api_log_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -16,7 +16,9 @@ void main() {
         verbose: true,
       ),
     );
-    final bytes = Uint8List.fromList(List<int>.generate(180, (i) => (i + 80) % 256));
+    final bytes = Uint8List.fromList(
+      List<int>.generate(180, (i) => (i + 80) % 256),
+    );
     dio.httpClientAdapter = ScriptedDioAdapter((_) async => pdfResponse(bytes));
 
     final response = await dio.get<List<int>>(
@@ -41,7 +43,8 @@ void main() {
       ),
     );
     dio.httpClientAdapter = ScriptedDioAdapter(
-      (_) async => jsonResponse('{"success":false,"code":"not_found"}', statusCode: 404),
+      (_) async =>
+          jsonResponse('{"success":false,"code":"not_found"}', statusCode: 404),
     );
     dio.options.validateStatus = (status) => status != null && status < 500;
 

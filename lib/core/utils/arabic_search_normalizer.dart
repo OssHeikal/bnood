@@ -1,6 +1,8 @@
 /// Arabic-insensitive search: alif/hamza variants, ta marbuta, ya/alef maqsura, etc.
 abstract final class ArabicSearchNormalizer {
-  static final _tashkeel = RegExp(r'[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]');
+  static final _tashkeel = RegExp(
+    r'[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]',
+  );
   static final _tatweel = RegExp(r'\u0640');
   static final _spaces = RegExp(r'\s+');
 
@@ -19,13 +21,13 @@ abstract final class ArabicSearchNormalizer {
   }
 
   static String _mapChar(String ch) => switch (ch) {
-        'أ' || 'إ' || 'آ' || 'ٱ' => 'ا',
-        'ة' => 'ه',
-        'ى' => 'ي',
-        'ؤ' => 'و',
-        'ئ' => 'ي',
-        _ => ch,
-      };
+    'أ' || 'إ' || 'آ' || 'ٱ' => 'ا',
+    'ة' => 'ه',
+    'ى' => 'ي',
+    'ؤ' => 'و',
+    'ئ' => 'ي',
+    _ => ch,
+  };
 
   static bool matches({required String query, required String haystack}) {
     final q = normalize(query);
@@ -33,7 +35,10 @@ abstract final class ArabicSearchNormalizer {
     return normalize(haystack).contains(q);
   }
 
-  static bool matchesAny({required String query, required Iterable<String> haystacks}) {
+  static bool matchesAny({
+    required String query,
+    required Iterable<String> haystacks,
+  }) {
     for (final h in haystacks) {
       if (matches(query: query, haystack: h)) return true;
     }

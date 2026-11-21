@@ -1,4 +1,4 @@
-import 'package:bnood/core/api/api_response_parser.dart';
+import 'package:bnood/core/network/api/api_response_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -18,10 +18,17 @@ void main() {
         data: {
           'success': true,
           'message': 'ok',
-          'data': {'registration_id': 'reg_1', 'expires_in': 600, 'resend_after': 60},
+          'data': {
+            'registration_id': 'reg_1',
+            'expires_in': 600,
+            'resend_after': 60,
+          },
         },
       );
-      final data = ApiResponseParser.expectData(response, (json) => json!['registration_id'] as String);
+      final data = ApiResponseParser.expectData(
+        response,
+        (json) => json!['registration_id'] as String,
+      );
       expect(data, 'reg_1');
     });
 
@@ -43,7 +50,10 @@ void main() {
     });
 
     test('fromFailure maps throttle code', () {
-      final response = _response(statusCode: 429, data: {'success': false, 'message': 'slow', 'code': 'throttled'});
+      final response = _response(
+        statusCode: 429,
+        data: {'success': false, 'message': 'slow', 'code': 'throttled'},
+      );
       final json = ApiResponseParser.decodeJson(response);
       final err = ApiResponseParser.fromFailure(response, json);
       expect(err.isThrottled, isTrue);
@@ -58,7 +68,11 @@ void main() {
     test('fromDio maps bad response', () {
       final response = _response(
         statusCode: 401,
-        data: {'success': false, 'message': 'bad', 'code': 'invalid_credentials'},
+        data: {
+          'success': false,
+          'message': 'bad',
+          'code': 'invalid_credentials',
+        },
       );
       final dioErr = DioException(
         requestOptions: RequestOptions(path: '/login'),

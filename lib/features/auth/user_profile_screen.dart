@@ -3,28 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/config/extensions/num_extensions.dart';
-import '../../core/config/theme/app_colors.dart';
-import '../../core/config/theme/app_size.dart';
-import '../../core/layout/bnood_list_canvas.dart';
+import '../../core/services/config/extensions/num_extensions.dart';
+import '../../core/services/config/theme/app_colors.dart';
+import '../../core/services/config/theme/app_size.dart';
+import '../../core/ui/layout/bnood_list_canvas.dart';
 import '../../core/utils/extensions/bidi_isolate.dart';
-import '../../core/widgets/app_chevron.dart';
-import '../../core/widgets/app_pressable.dart';
-import '../../core/widgets/custom_app_bar.dart';
-import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/grouped_list_divider.dart';
-import '../home/presentation/home_foundation_scope.dart';
-import 'auth_controller.dart';
-import 'auth_paths.dart';
-import 'delete_account_confirm_sheet.dart';
-import 'profile_edit_contact_phone_sheet.dart';
-import 'profile_edit_name_sheet.dart';
-import 'profile_logo_actions.dart';
-import '../subscription/data/subscription_colors.dart';
-import '../subscription/data/subscription_riverpod.dart';
-import 'models/user.dart';
-import 'widgets/profile_subscription_card.dart';
-import 'widgets/user_identity_avatar.dart';
+import '../../core/ui/widgets/app_chevron.dart';
+import '../../core/ui/widgets/app_pressable.dart';
+import '../../core/ui/widgets/custom_app_bar.dart';
+import '../../core/ui/widgets/app_toaster.dart';
+import '../../core/ui/widgets/grouped_list_divider.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/auth/delete_account_confirm_sheet.dart';
+import 'package:bnood/features/auth/profile_edit_contact_phone_sheet.dart';
+import 'package:bnood/features/auth/profile_edit_name_sheet.dart';
+import 'package:bnood/features/auth/profile_logo_actions.dart';
+import 'package:bnood/features/subscription/data/subscription_colors.dart';
+import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
+import 'package:bnood/features/auth/models/user.dart';
+import 'package:bnood/features/auth/widgets/profile_subscription_card.dart';
+import 'package:bnood/features/auth/widgets/user_identity_avatar.dart';
 
 String _contactPhoneSummary(AppLocalizations l10n, User? user) {
   final custom = user?.contactPhone?.trim();
@@ -45,7 +45,8 @@ class UserProfileScreen extends ConsumerWidget {
     final phone = user?.phone;
     final entitlements = ref.watch(subscriptionEntitlementsProvider);
     final surfaces = ref.watch(subscriptionSurfacesEnabledProvider);
-    final premiumAvatar = surfaces && (entitlements?.showPremiumAvatar ?? false);
+    final premiumAvatar =
+        surfaces && (entitlements?.showPremiumAvatar ?? false);
 
     return HomeFoundationScope(
       child: Builder(
@@ -57,120 +58,151 @@ class UserProfileScreen extends ConsumerWidget {
             appBar: CustomAppBar(title: l10n.userProfileTitle),
             body: BnoodListCanvas(
               child: SafeArea(
-              child: ListView(
-                padding: EdgeInsets.symmetric(vertical: AppSize.screenPadding),
-                children: [
-                  Align(
-                    child: UserIdentityAvatar(
-                      displayName: name.isNotEmpty ? name : '?',
-                      size: 80,
-                      imageUrl: user?.logoUrl,
-                      onTap: user == null ? null : () => showProfileLogoOptions(context, ref, hasLogo: user.logoUrl?.isNotEmpty == true),
-                      semanticsLabel: l10n.profileLogo,
-                      backgroundColor: premiumAvatar ? entitlements!.premiumAvatarColor : null,
-                      foregroundColor: premiumAvatar ? SubscriptionColors.onViolet : null,
-                    ),
+                child: ListView(
+                  padding: EdgeInsets.symmetric(
+                    vertical: AppSize.screenPadding,
                   ),
-                  AppSize.spaceMD.gap,
-                  if (name.isNotEmpty)
+                  children: [
+                    Align(
+                      child: UserIdentityAvatar(
+                        displayName: name.isNotEmpty ? name : '?',
+                        size: 80,
+                        imageUrl: user?.logoUrl,
+                        onTap: user == null
+                            ? null
+                            : () => showProfileLogoOptions(
+                                context,
+                                ref,
+                                hasLogo: user.logoUrl?.isNotEmpty == true,
+                              ),
+                        semanticsLabel: l10n.profileLogo,
+                        backgroundColor: premiumAvatar
+                            ? entitlements!.premiumAvatarColor
+                            : null,
+                        foregroundColor: premiumAvatar
+                            ? SubscriptionColors.onViolet
+                            : null,
+                      ),
+                    ),
+                    AppSize.spaceMD.gap,
+                    if (name.isNotEmpty)
+                      Text(
+                        name,
+                        style: text.pageTitle,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    AppSize.spaceXS.gap,
                     Text(
-                      name,
-                      style: text.pageTitle,
+                      phone != null && phone.isNotEmpty
+                          ? LtrIsolate.isolate(phone)
+                          : '—',
+                      style: text.body.copyWith(color: colors.onSurfaceMuted),
                       textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  AppSize.spaceXS.gap,
-                  Text(
-                    phone != null && phone.isNotEmpty ? LtrIsolate.isolate(phone) : '—',
-                    style: text.body.copyWith(color: colors.onSurfaceMuted),
-                    textAlign: TextAlign.center,
-                  ),
-                  AppSize.spaceXL.gap,
-                  const ProfileSubscriptionCard(),
-                  AppSize.spaceXL.gap,
-                  _ProfileSection(
-                    title: l10n.profilePersonalSection,
-                    children: [
-                      _ProfileActionRow(
-                        label: l10n.authDisplayName,
-                        value: name.isNotEmpty ? name : '—',
-                        actionLabel: l10n.edit,
-                        onAction: user == null
-                            ? null
-                            : () async {
-                                await showProfileEditNameSheet(context, initialName: name);
-                              },
-                      ),
-                      _ProfileActionRow(
-                        label: l10n.authPhone,
-                        value: phone != null && phone.isNotEmpty ? LtrIsolate.isolate(phone) : '—',
-                        valueLtr: true,
-                      ),
-                    ],
-                  ),
-                  AppSize.spaceXL.gap,
-                  _ProfileSection(
-                    title: l10n.profileStatementBrandingSection,
-                    subtitle: l10n.profileStatementBrandingSectionSubtitle,
-                    children: [
-                      _ProfileActionRow(
-                        label: l10n.profileLogo,
-                        value: user?.logoUrl?.isNotEmpty == true ? l10n.profileLogoSet : l10n.profileLogoNotSet,
-                        actionLabel: user?.logoUrl?.isNotEmpty == true
-                            ? l10n.profileBrandingActionChange
-                            : l10n.profileBrandingActionAdd,
-                        onAction: user == null
-                            ? null
-                            : () => showProfileLogoOptions(context, ref, hasLogo: user.logoUrl?.isNotEmpty == true),
-                      ),
-                      _ProfileActionRow(
-                        label: l10n.profileContactPhone,
-                        value: _contactPhoneSummary(l10n, user),
-                        valueLtr: user?.contactPhone?.trim().isNotEmpty == true,
-                        actionLabel: user?.contactPhone?.trim().isNotEmpty == true
-                            ? l10n.edit
-                            : l10n.profileBrandingActionAdd,
-                        onAction: user == null
-                            ? null
-                            : () async {
-                                final saved = await showProfileEditContactPhoneSheet(
+                    AppSize.spaceXL.gap,
+                    const ProfileSubscriptionCard(),
+                    AppSize.spaceXL.gap,
+                    _ProfileSection(
+                      title: l10n.profilePersonalSection,
+                      children: [
+                        _ProfileActionRow(
+                          label: l10n.authDisplayName,
+                          value: name.isNotEmpty ? name : '—',
+                          actionLabel: l10n.edit,
+                          onAction: user == null
+                              ? null
+                              : () async {
+                                  await showProfileEditNameSheet(
+                                    context,
+                                    initialName: name,
+                                  );
+                                },
+                        ),
+                        _ProfileActionRow(
+                          label: l10n.authPhone,
+                          value: phone != null && phone.isNotEmpty
+                              ? LtrIsolate.isolate(phone)
+                              : '—',
+                          valueLtr: true,
+                        ),
+                      ],
+                    ),
+                    AppSize.spaceXL.gap,
+                    _ProfileSection(
+                      title: l10n.profileStatementBrandingSection,
+                      subtitle: l10n.profileStatementBrandingSectionSubtitle,
+                      children: [
+                        _ProfileActionRow(
+                          label: l10n.profileLogo,
+                          value: user?.logoUrl?.isNotEmpty == true
+                              ? l10n.profileLogoSet
+                              : l10n.profileLogoNotSet,
+                          actionLabel: user?.logoUrl?.isNotEmpty == true
+                              ? l10n.profileBrandingActionChange
+                              : l10n.profileBrandingActionAdd,
+                          onAction: user == null
+                              ? null
+                              : () => showProfileLogoOptions(
                                   context,
-                                  initialContactPhone: user.contactPhone,
-                                );
-                                if (saved == true && context.mounted) {
-                                  AppToaster.show(l10n.profileContactPhoneUpdated, kind: ToastKind.success);
-                                }
-                              },
-                      ),
-                    ],
-                  ),
-                  AppSize.spaceXL.gap,
-                  _ProfileSection(
-                    title: l10n.profileSecuritySection,
-                    children: [
-                      _ProfileNavRow(
-                        label: l10n.authChangePassword,
-                        subtitle: l10n.profileChangePasswordHint,
-                        onTap: () => context.push(AuthPaths.changePassword),
-                      ),
-                    ],
-                  ),
-                  AppSize.spaceXL.gap,
-                  _ProfileSection(
-                    title: l10n.profileDangerSection,
-                    children: [
-                      _ProfileNavRow(
-                        label: l10n.authDeleteAccount,
-                        subtitle: l10n.profileDeleteAccountHint,
-                        destructive: true,
-                        onTap: () => showDeleteAccountConfirmSheet(context),
-                      ),
-                    ],
-                  ),
-                ],
+                                  ref,
+                                  hasLogo: user.logoUrl?.isNotEmpty == true,
+                                ),
+                        ),
+                        _ProfileActionRow(
+                          label: l10n.profileContactPhone,
+                          value: _contactPhoneSummary(l10n, user),
+                          valueLtr:
+                              user?.contactPhone?.trim().isNotEmpty == true,
+                          actionLabel:
+                              user?.contactPhone?.trim().isNotEmpty == true
+                              ? l10n.edit
+                              : l10n.profileBrandingActionAdd,
+                          onAction: user == null
+                              ? null
+                              : () async {
+                                  final saved =
+                                      await showProfileEditContactPhoneSheet(
+                                        context,
+                                        initialContactPhone: user.contactPhone,
+                                      );
+                                  if (saved == true && context.mounted) {
+                                    AppToaster.show(
+                                      l10n.profileContactPhoneUpdated,
+                                      kind: ToastKind.success,
+                                    );
+                                  }
+                                },
+                        ),
+                      ],
+                    ),
+                    AppSize.spaceXL.gap,
+                    _ProfileSection(
+                      title: l10n.profileSecuritySection,
+                      children: [
+                        _ProfileNavRow(
+                          label: l10n.authChangePassword,
+                          subtitle: l10n.profileChangePasswordHint,
+                          onTap: () => context.push(AuthPaths.changePassword),
+                        ),
+                      ],
+                    ),
+                    AppSize.spaceXL.gap,
+                    _ProfileSection(
+                      title: l10n.profileDangerSection,
+                      children: [
+                        _ProfileNavRow(
+                          label: l10n.authDeleteAccount,
+                          subtitle: l10n.profileDeleteAccountHint,
+                          destructive: true,
+                          onTap: () => showDeleteAccountConfirmSheet(context),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
             ),
           );
         },
@@ -180,7 +212,11 @@ class UserProfileScreen extends ConsumerWidget {
 }
 
 class _ProfileSection extends StatelessWidget {
-  const _ProfileSection({required this.title, required this.children, this.subtitle});
+  const _ProfileSection({
+    required this.title,
+    required this.children,
+    this.subtitle,
+  });
 
   final String title;
   final String? subtitle;
@@ -204,7 +240,10 @@ class _ProfileSection extends StatelessWidget {
         ],
         AppSize.spaceSM.gap,
         DecoratedBox(
-          decoration: BoxDecoration(color: colors.surfaceSunken, borderRadius: BorderRadius.circular(AppSize.radiusSM)),
+          decoration: BoxDecoration(
+            color: colors.surfaceSunken,
+            borderRadius: BorderRadius.circular(AppSize.radiusSM),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -253,7 +292,12 @@ class _ProfileActionRow extends StatelessWidget {
     );
 
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(AppSize.spaceMD, AppSize.spaceMD, AppSize.spaceMD, AppSize.spaceMD),
+      padding: const EdgeInsetsDirectional.fromSTEB(
+        AppSize.spaceMD,
+        AppSize.spaceMD,
+        AppSize.spaceMD,
+        AppSize.spaceMD,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -261,7 +305,10 @@ class _ProfileActionRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(label, style: text.caption.copyWith(color: colors.onSurfaceMuted)),
+                Text(
+                  label,
+                  style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                ),
                 AppSize.spaceXS.gap,
                 valueWidget,
               ],
@@ -272,8 +319,14 @@ class _ProfileActionRow extends StatelessWidget {
             AppPressable(
               onPressed: onAction,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceXS, vertical: AppSize.spaceXS),
-                child: Text(actionLabel!, style: text.bodyEmphasis.copyWith(color: colors.primary)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSize.spaceXS,
+                  vertical: AppSize.spaceXS,
+                ),
+                child: Text(
+                  actionLabel!,
+                  style: text.bodyEmphasis.copyWith(color: colors.primary),
+                ),
               ),
             ),
           ],
@@ -284,7 +337,12 @@ class _ProfileActionRow extends StatelessWidget {
 }
 
 class _ProfileNavRow extends StatelessWidget {
-  const _ProfileNavRow({required this.label, required this.onTap, this.subtitle, this.destructive = false});
+  const _ProfileNavRow({
+    required this.label,
+    required this.onTap,
+    this.subtitle,
+    this.destructive = false,
+  });
 
   final String label;
   final String? subtitle;
@@ -295,7 +353,9 @@ class _ProfileNavRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final text = context.text;
-    final titleStyle = destructive ? text.bodyEmphasis.copyWith(color: colors.error) : text.bodyEmphasis;
+    final titleStyle = destructive
+        ? text.bodyEmphasis.copyWith(color: colors.error)
+        : text.bodyEmphasis;
 
     return AppPressable(
       onPressed: onTap,
@@ -317,7 +377,9 @@ class _ProfileNavRow extends StatelessWidget {
                     AppSize.spaceXS.gap,
                     Text(
                       subtitle!,
-                      style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                      style: text.caption.copyWith(
+                        color: colors.onSurfaceMuted,
+                      ),
                       textAlign: TextAlign.start,
                     ),
                   ],

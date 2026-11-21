@@ -5,7 +5,7 @@ import 'package:bnood/features/providers/data/providers_riverpod.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/providers/presentation/providers_list_paging.dart';
+import 'package:bnood/features/providers/presentation/providers/providers_list_paging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -40,7 +40,12 @@ class _FakeProvidersRepository extends ProvidersRepository {
         total: 60,
       );
     }
-    return ProvidersListPage(items: const [], page: 2, perPage: perPage, total: 60);
+    return ProvidersListPage(
+      items: const [],
+      page: 2,
+      perPage: perPage,
+      total: 60,
+    );
   }
 }
 
@@ -48,10 +53,12 @@ void main() {
   test('providers list fetcher pages and applies type filter', () async {
     final user = User(id: 'u1', phone: '+201000000000', name: 'Test');
     final fake = _FakeProvidersRepository();
-    final container = ProviderContainer(overrides: [
-      appProvidersRepositoryProvider.overrideWithValue(fake),
-      authControllerProvider.overrideWith(() => _AuthStub(user)),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        appProvidersRepositoryProvider.overrideWithValue(fake),
+        authControllerProvider.overrideWith(() => _AuthStub(user)),
+      ],
+    );
     addTearDown(container.dispose);
     container.read(providersListTypeFilterProvider.notifier).state =
         ProvidersListTypeFilter.craftsman;
@@ -73,8 +80,8 @@ class _AuthStub extends AuthController {
 
   @override
   AuthState build() => AuthState(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: _user,
-        bootstrapStarted: true,
-      );
+    bootstrapStatus: AuthBootstrapStatus.authenticated,
+    user: _user,
+    bootstrapStarted: true,
+  );
 }

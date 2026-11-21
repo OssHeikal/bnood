@@ -1,8 +1,8 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/features/clients/presentation/client_detail_provider.dart';
-import 'package:bnood/features/clients/presentation/client_detail_screen.dart';
-import 'package:bnood/features/clients/presentation/client_detail_snapshot.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
+import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
+import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,12 +41,13 @@ void main() {
     );
   }
 
-  Future<void> pumpDetail(WidgetTester tester, ClientDetailSnapshot snapshot) async {
+  Future<void> pumpDetail(
+    WidgetTester tester,
+    ClientDetailSnapshot snapshot,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          clientDetailProvider.overrideWith(() => _Stub(snapshot)),
-        ],
+        overrides: [clientDetailProvider.overrideWith(() => _Stub(snapshot))],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -85,7 +86,10 @@ void main() {
     await tester.tap(find.text('Cancel'));
     await tester.pumpAndSettle();
     expect(find.text('Archived Tower'), findsWidgets);
-    expect(find.byKey(const Key('client_detail_action_receive')), findsOneWidget);
+    expect(
+      find.byKey(const Key('client_detail_action_receive')),
+      findsOneWidget,
+    );
   });
 }
 

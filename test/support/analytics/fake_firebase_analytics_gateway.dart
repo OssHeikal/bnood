@@ -1,4 +1,4 @@
-import 'package:bnood/core/analytics/firebase/firebase_analytics_gateway.dart';
+import 'package:bnood/core/services/analytics/firebase/firebase_analytics_gateway.dart';
 
 class LoggedGaEvent {
   const LoggedGaEvent({required this.name, this.parameters});
@@ -32,10 +32,7 @@ class FakeFirebaseAnalyticsGateway implements FirebaseAnalyticsGateway {
   }
 
   @override
-  Future<void> setUserProperty({
-    required String name,
-    String? value,
-  }) async {
+  Future<void> setUserProperty({required String name, String? value}) async {
     userProperties.add(MapEntry(name, value));
   }
 }

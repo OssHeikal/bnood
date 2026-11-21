@@ -1,4 +1,4 @@
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -53,8 +53,16 @@ void main() {
   });
 
   test('403 codes map to subscription handlers', () {
-    final cap = AuthApiException(statusCode: 403, message: 'cap', code: 'active_project_cap_reached');
-  final fin = AuthApiException(statusCode: 403, message: 'ro', code: 'subscription_financial_read_only');
+    final cap = AuthApiException(
+      statusCode: 403,
+      message: 'cap',
+      code: 'active_project_cap_reached',
+    );
+    final fin = AuthApiException(
+      statusCode: 403,
+      message: 'ro',
+      code: 'subscription_financial_read_only',
+    );
     expect(cap.isActiveProjectCapReached, isTrue);
     expect(fin.isSubscriptionFinancialReadOnly, isTrue);
   });

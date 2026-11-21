@@ -1,19 +1,16 @@
-enum AppProviderType {
-  supplier,
-  craftsman,
-}
+enum AppProviderType { supplier, craftsman }
 
 extension AppProviderTypeApi on AppProviderType {
   String get apiValue => switch (this) {
-        AppProviderType.supplier => 'supplier',
-        AppProviderType.craftsman => 'craftsman',
-      };
+    AppProviderType.supplier => 'supplier',
+    AppProviderType.craftsman => 'craftsman',
+  };
 
   static AppProviderType? fromApi(String? raw) => switch (raw) {
-        'supplier' => AppProviderType.supplier,
-        'craftsman' => AppProviderType.craftsman,
-        _ => null,
-      };
+    'supplier' => AppProviderType.supplier,
+    'craftsman' => AppProviderType.craftsman,
+    _ => null,
+  };
 }
 
 class AppProvider {
@@ -56,10 +53,10 @@ class AppProvider {
     final clientsCount = clientsRaw == null
         ? null
         : clientsRaw is int
-            ? clientsRaw
-            : clientsRaw is num
-                ? clientsRaw.round()
-                : null;
+        ? clientsRaw
+        : clientsRaw is num
+        ? clientsRaw.round()
+        : null;
 
     return AppProvider(
       id: json['id'] as String,

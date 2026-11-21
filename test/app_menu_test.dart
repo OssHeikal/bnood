@@ -1,5 +1,5 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/prefs/app_settings_store.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/data/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
@@ -7,11 +7,11 @@ import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/settings/presentation/app_menu_body.dart';
-import 'package:bnood/features/settings/presentation/app_preferences_screen.dart';
-import 'package:bnood/features/settings/presentation/app_settings_screen.dart';
+import 'package:bnood/features/settings/presentation/widgets/app_menu_body.dart';
+import 'package:bnood/features/settings/presentation/screens/app_preferences_screen.dart';
+import 'package:bnood/features/settings/presentation/screens/app_settings_screen.dart';
 import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
-import 'package:bnood/features/subscription/presentation/paywall_launcher.dart';
+import 'package:bnood/features/subscription/presentation/actions/paywall_launcher.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,15 +22,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class _AuthUser extends AuthController {
   @override
   AuthState build() => AuthState(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: const User(id: 'u1', phone: '+201012345678', name: 'Tester'),
-        bootstrapStarted: true,
-      );
+    bootstrapStatus: AuthBootstrapStatus.authenticated,
+    user: const User(id: 'u1', phone: '+201012345678', name: 'Tester'),
+    bootstrapStarted: true,
+  );
 }
 
 class _EnabledSubscription extends SubscriptionNotifier {
   @override
-  Future<AppSubscriptionSnapshot?> build() async => AppSubscriptionSnapshot.fromDataJson({
+  Future<AppSubscriptionSnapshot?> build() async =>
+      AppSubscriptionSnapshot.fromDataJson({
         'paywall_enabled': true,
         'entitlements': {'show_paywall_surfaces': true},
       });
@@ -38,7 +39,8 @@ class _EnabledSubscription extends SubscriptionNotifier {
 
 class _DisabledSubscription extends SubscriptionNotifier {
   @override
-  Future<AppSubscriptionSnapshot?> build() async => AppSubscriptionSnapshot.fromDataJson({
+  Future<AppSubscriptionSnapshot?> build() async =>
+      AppSubscriptionSnapshot.fromDataJson({
         'paywall_enabled': false,
         'entitlements': {'show_paywall_surfaces': true},
       });
@@ -50,39 +52,55 @@ void main() {
   Future<AppSettingsSnapshot> bootstrap() async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    return AppSettingsSnapshot(themeMode: ThemeMode.system, locale: const Locale('en'), prefs: prefs);
+    return AppSettingsSnapshot(
+      themeMode: ThemeMode.system,
+      locale: const Locale('en'),
+      prefs: prefs,
+    );
   }
 
-  testWidgets('menu lists account subscription settings then content in order when signed in', (tester) async {
-    final snap = await bootstrap();
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          appSettingsBootstrapProvider.overrideWithValue(snap),
-          authControllerProvider.overrideWith(_AuthUser.new),
-          subscriptionProvider.overrideWith(_EnabledSubscription.new),
-        ],
-        child: MaterialApp(
-          theme: AppFoundationTheme.light(),
-          locale: const Locale('en'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(body: SingleChildScrollView(child: AppMenuBody())),
+  testWidgets(
+    'menu lists account subscription settings then content in order when signed in',
+    (tester) async {
+      final snap = await bootstrap();
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            appSettingsBootstrapProvider.overrideWithValue(snap),
+            authControllerProvider.overrideWith(_AuthUser.new),
+            subscriptionProvider.overrideWith(_EnabledSubscription.new),
+          ],
+          child: MaterialApp(
+            theme: AppFoundationTheme.light(),
+            locale: const Locale('en'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const Scaffold(
+              body: SingleChildScrollView(child: AppMenuBody()),
+            ),
+          ),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
-    final l10n = AppLocalizations.of(tester.element(find.byType(AppMenuBody)));
-    final labels = find.byType(Text).evaluate().map((e) => (e.widget as Text).data).whereType<String>().toList();
-    final accountIndex = labels.indexOf(l10n.authAccountSection);
-    final subscriptionIndex = labels.indexOf(l10n.profileSubscriptionSection);
-    final settingsIndex = labels.indexOf(l10n.settingsTitle);
-    final aboutIndex = labels.indexOf(l10n.settingsContentAbout);
-    expect(accountIndex, greaterThanOrEqualTo(0));
-    expect(subscriptionIndex, greaterThan(accountIndex));
-    expect(settingsIndex, greaterThan(subscriptionIndex));
-    expect(aboutIndex, greaterThan(settingsIndex));
-  });
+      );
+      await tester.pumpAndSettle();
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(AppMenuBody)),
+      );
+      final labels = find
+          .byType(Text)
+          .evaluate()
+          .map((e) => (e.widget as Text).data)
+          .whereType<String>()
+          .toList();
+      final accountIndex = labels.indexOf(l10n.authAccountSection);
+      final subscriptionIndex = labels.indexOf(l10n.profileSubscriptionSection);
+      final settingsIndex = labels.indexOf(l10n.settingsTitle);
+      final aboutIndex = labels.indexOf(l10n.settingsContentAbout);
+      expect(accountIndex, greaterThanOrEqualTo(0));
+      expect(subscriptionIndex, greaterThan(accountIndex));
+      expect(settingsIndex, greaterThan(subscriptionIndex));
+      expect(aboutIndex, greaterThan(settingsIndex));
+    },
+  );
 
   testWidgets('subscription row hidden when signed out', (tester) async {
     final snap = await bootstrap();
@@ -94,7 +112,9 @@ void main() {
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(body: SingleChildScrollView(child: AppMenuBody())),
+          home: const Scaffold(
+            body: SingleChildScrollView(child: AppMenuBody()),
+          ),
         ),
       ),
     );
@@ -102,7 +122,9 @@ void main() {
     expect(find.text('Subscription'), findsNothing);
   });
 
-  testWidgets('subscription row hidden when subscription is disabled', (tester) async {
+  testWidgets('subscription row hidden when subscription is disabled', (
+    tester,
+  ) async {
     final snap = await bootstrap();
     await tester.pumpWidget(
       ProviderScope(
@@ -116,7 +138,9 @@ void main() {
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(body: SingleChildScrollView(child: AppMenuBody())),
+          home: const Scaffold(
+            body: SingleChildScrollView(child: AppMenuBody()),
+          ),
         ),
       ),
     );
@@ -135,9 +159,15 @@ void main() {
           authControllerProvider.overrideWith(_AuthUser.new),
           subscriptionProvider.overrideWith(_EnabledSubscription.new),
           paywallPresentProvider.overrideWith(
-            (ref) => (context, {WidgetRef? ref, PaywallFetchTrigger trigger = PaywallFetchTrigger.defaultTrigger}) async {
-              paywallCalls++;
-            },
+            (ref) =>
+                (
+                  context, {
+                  WidgetRef? ref,
+                  PaywallFetchTrigger trigger =
+                      PaywallFetchTrigger.defaultTrigger,
+                }) async {
+                  paywallCalls++;
+                },
           ),
         ],
         child: MaterialApp(
@@ -145,7 +175,9 @@ void main() {
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(body: SingleChildScrollView(child: AppMenuBody())),
+          home: const Scaffold(
+            body: SingleChildScrollView(child: AppMenuBody()),
+          ),
         ),
       ),
     );
@@ -155,7 +187,9 @@ void main() {
     expect(paywallCalls, 1);
   });
 
-  testWidgets('preferences sub-screen shows theme and language only', (tester) async {
+  testWidgets('preferences sub-screen shows theme and language only', (
+    tester,
+  ) async {
     final snap = await bootstrap();
     await tester.pumpWidget(
       ProviderScope(
@@ -170,7 +204,9 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final l10n = AppLocalizations.of(tester.element(find.byType(AppPreferencesScreen)));
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(AppPreferencesScreen)),
+    );
     expect(find.text(l10n.settingsThemeSection), findsOneWidget);
     expect(find.text(l10n.settingsLanguageSection), findsOneWidget);
     expect(find.text(l10n.settingsContentAbout), findsNothing);
@@ -205,8 +241,15 @@ void main() {
     final snap = await bootstrap();
     final router = GoRouter(
       routes: [
-        GoRoute(path: '/', builder: (_, _) => const Scaffold(body: SingleChildScrollView(child: AppMenuBody()))),
-        GoRoute(path: AuthPaths.preferences, builder: (_, _) => const AppPreferencesScreen()),
+        GoRoute(
+          path: '/',
+          builder: (_, _) =>
+              const Scaffold(body: SingleChildScrollView(child: AppMenuBody())),
+        ),
+        GoRoute(
+          path: AuthPaths.preferences,
+          builder: (_, _) => const AppPreferencesScreen(),
+        ),
       ],
     );
     await tester.pumpWidget(

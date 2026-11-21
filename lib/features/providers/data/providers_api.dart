@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 
-import 'app_provider_record.dart';
-import 'package:bnood/core/api/api_response_parser.dart';
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/api/auth_interceptor.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/features/providers/data/app_provider_record.dart';
+import 'package:bnood/core/network/api/api_response_parser.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_interceptor.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 
 class ProvidersApi {
   ProvidersApi({Dio? dio, SessionStore? sessionStore})
@@ -17,7 +17,9 @@ class ProvidersApi {
 
   static const _prefix = '/v1/providers';
 
-  Map<String, dynamic> get _authenticatedExtra => {AuthInterceptor.authenticatedExtraKey: true};
+  Map<String, dynamic> get _authenticatedExtra => {
+    AuthInterceptor.authenticatedExtraKey: true,
+  };
 
   void close({bool force = false}) {
     if (_ownsDio) {
@@ -40,7 +42,12 @@ class ProvidersApi {
     }
   }
 
-  Future<ProvidersListPage> listProviders({String? q, AppProviderType? type, int page = 1, int perPage = 50}) {
+  Future<ProvidersListPage> listProviders({
+    String? q,
+    AppProviderType? type,
+    int page = 1,
+    int perPage = 50,
+  }) {
     return _guard(() async {
       final response = await _dio.get<Map<String, dynamic>>(
         _prefix,
@@ -59,10 +66,15 @@ class ProvidersApi {
       }
       final data = json['data'];
       if (data is! List) {
-        throw AuthApiException(statusCode: statusCode, message: 'Unexpected response shape');
+        throw AuthApiException(
+          statusCode: statusCode,
+          message: 'Unexpected response shape',
+        );
       }
       final meta = json['meta'] as Map<String, dynamic>? ?? const {};
-      final items = data.map((e) => AppProvider.fromDataJson(e as Map<String, dynamic>)).toList();
+      final items = data
+          .map((e) => AppProvider.fromDataJson(e as Map<String, dynamic>))
+          .toList();
       return ProvidersListPage(
         items: items,
         page: (meta['page'] as num?)?.toInt() ?? page,
@@ -78,22 +90,41 @@ class ProvidersApi {
         '$_prefix/$id',
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(response, (json) => AppProvider.fromDataJson(json ?? const {}));
+      return ApiResponseParser.expectData(
+        response,
+        (json) => AppProvider.fromDataJson(json ?? const {}),
+      );
     });
   }
 
-  Future<AppProvider> createProvider({required String name, required AppProviderType type, String? phone}) {
+  Future<AppProvider> createProvider({
+    required String name,
+    required AppProviderType type,
+    String? phone,
+  }) {
     return _guard(() async {
       final response = await _dio.post<Map<String, dynamic>>(
         _prefix,
-        data: {'name': name, 'type': type.apiValue, if (phone != null && phone.isNotEmpty) 'phone': phone},
+        data: {
+          'name': name,
+          'type': type.apiValue,
+          if (phone != null && phone.isNotEmpty) 'phone': phone,
+        },
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(response, (json) => AppProvider.fromDataJson(json ?? const {}));
+      return ApiResponseParser.expectData(
+        response,
+        (json) => AppProvider.fromDataJson(json ?? const {}),
+      );
     });
   }
 
-  Future<AppProvider> updateProvider({required String id, String? name, String? phone, bool clearPhone = false}) {
+  Future<AppProvider> updateProvider({
+    required String id,
+    String? name,
+    String? phone,
+    bool clearPhone = false,
+  }) {
     return _guard(() async {
       final body = <String, dynamic>{'name': ?name};
       if (clearPhone) {
@@ -106,7 +137,10 @@ class ProvidersApi {
         data: body,
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(response, (json) => AppProvider.fromDataJson(json ?? const {}));
+      return ApiResponseParser.expectData(
+        response,
+        (json) => AppProvider.fromDataJson(json ?? const {}),
+      );
     });
   }
 

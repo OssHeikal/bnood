@@ -18,7 +18,7 @@ dart run build_runner build --delete-conflicting-outputs
 fvm flutter run --dart-define-from-file=.env.dev
 ```
 
-See [.vscode/launch.json](.vscode/launch.json) for **Bnood (dev)** / **Bnood (prod)**. API base URL: `lib/core/config/api_config.dart` and root `.env.dev` / `.env.prod` (public URLs only).
+See [.vscode/launch.json](.vscode/launch.json) for **Bnood (dev)** / **Bnood (prod)**. API base URL: `lib/core/services/config/api_config.dart` and root `.env.dev` / `.env.prod` (public URLs only).
 
 ## Documentation
 

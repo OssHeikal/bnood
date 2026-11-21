@@ -2,10 +2,10 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../core/config/extensions/num_extensions.dart';
-import '../../../core/config/theme/app_size.dart';
-import '../../../core/widgets/buttons/app_button.dart';
-import 'auth_otp_pin_field.dart';
+import '../../../core/services/config/extensions/num_extensions.dart';
+import '../../../core/services/config/theme/app_size.dart';
+import '../../../core/ui/widgets/buttons/app_button.dart';
+import 'package:bnood/features/auth/widgets/auth_otp_pin_field.dart';
 
 /// Registration / recovery OTP body: phone label, PIN field, verify + optional resend in scroll.
 class AuthOtpChallengeForm extends StatelessWidget {
@@ -65,12 +65,17 @@ class AuthOtpChallengeForm extends StatelessWidget {
             onCompleted: loading ? null : (_) => onVerify(),
           ),
           AppSize.spaceXL.gap,
-          AppButton.primary(text: verifyLabel, isLoading: loading, onPressed: loading ? null : onVerify),
+          AppButton.primary(
+            text: verifyLabel,
+            isLoading: loading,
+            onPressed: loading ? null : onVerify,
+          ),
           if (resend != null) ...[
             AppSize.spaceSM.gap,
             AppButton.text(
               text: resendSeconds > 0
-                  ? (resendWaitLabel?.call(resendSeconds) ?? l10n.authResendWait(resendSeconds))
+                  ? (resendWaitLabel?.call(resendSeconds) ??
+                        l10n.authResendWait(resendSeconds))
                   : (resendLabel ?? l10n.authResendCode),
               onPressed: resendBlocked
                   ? null

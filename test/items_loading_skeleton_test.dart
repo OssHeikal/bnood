@@ -1,16 +1,18 @@
-import 'package:bnood/core/config/theme/app_size.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton_box.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton_text.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton_box.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton_text.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/items/presentation/widgets/items_loading_skeleton.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('item catalog tile skeleton matches ItemCatalogTile structure', (tester) async {
+  testWidgets('item catalog tile skeleton matches ItemCatalogTile structure', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -18,9 +20,7 @@ void main() {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         builder: (context, child) => HomeFoundationScope(child: child!),
-        home: const Scaffold(
-          body: ItemsLoadingSkeleton(count: 1),
-        ),
+        home: const Scaffold(body: ItemsLoadingSkeleton(count: 1)),
       ),
     );
     await tester.pump();
@@ -32,7 +32,10 @@ void main() {
       find.descendant(
         of: find.byType(ItemCatalogTileSkeleton),
         matching: find.byWidgetPredicate(
-          (w) => w is SkeletonBox && w.width == ItemsLoadingSkeleton.iconSize && w.height == ItemsLoadingSkeleton.iconSize,
+          (w) =>
+              w is SkeletonBox &&
+              w.width == ItemsLoadingSkeleton.iconSize &&
+              w.height == ItemsLoadingSkeleton.iconSize,
         ),
       ),
     );
@@ -41,12 +44,24 @@ void main() {
     expect(iconBox.radius, AppSize.radiusSM);
 
     final textBones = tester.widgetList<SkeletonText>(
-      find.descendant(of: find.byType(ItemCatalogTileSkeleton), matching: find.byType(SkeletonText)),
+      find.descendant(
+        of: find.byType(ItemCatalogTileSkeleton),
+        matching: find.byType(SkeletonText),
+      ),
     );
     expect(textBones.length, 3);
-    expect(textBones.any((t) => t.width == ItemsLoadingSkeleton.defaultBadgeWidth), isTrue);
-    expect(textBones.any((t) => t.width == ItemsLoadingSkeleton.titlePrimaryWidth), isTrue);
-    expect(textBones.any((t) => t.width == ItemsLoadingSkeleton.titleSecondaryWidth), isTrue);
+    expect(
+      textBones.any((t) => t.width == ItemsLoadingSkeleton.defaultBadgeWidth),
+      isTrue,
+    );
+    expect(
+      textBones.any((t) => t.width == ItemsLoadingSkeleton.titlePrimaryWidth),
+      isTrue,
+    );
+    expect(
+      textBones.any((t) => t.width == ItemsLoadingSkeleton.titleSecondaryWidth),
+      isTrue,
+    );
     expect(textBones.every((t) => t.width != null && t.width! <= 96), isTrue);
   });
 }

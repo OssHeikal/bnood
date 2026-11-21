@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:bnood/core/money/remote_money_units.dart';
-import 'paywall_v3_models.dart';
-import 'subscription_colors.dart';
-
+import 'package:bnood/core/domain/money/remote_money_units.dart';
+import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
+import 'package:bnood/features/subscription/data/subscription_colors.dart';
 export 'paywall_v3_models.dart';
 
 class AppSubscriptionEntitlements {
@@ -41,9 +40,11 @@ class AppSubscriptionEntitlements {
   final bool showPaywallSurfaces;
   final bool isExpiredPremium;
 
-  bool get showPremiumAvatar => premiumAvatarFlag == true || (isPremium && !isExpiredPremium);
+  bool get showPremiumAvatar =>
+      premiumAvatarFlag == true || (isPremium && !isExpiredPremium);
 
-  Color get premiumAvatarColor => SubscriptionColors.parsePremiumAvatar(premiumAvatarColorHex);
+  Color get premiumAvatarColor =>
+      SubscriptionColors.parsePremiumAvatar(premiumAvatarColorHex);
 
   /// Client-side cap check; complements server `can_create_active_project`.
   bool get mayCreateActiveProject {
@@ -83,7 +84,8 @@ class AppSubscriptionEntitlements {
     final rawPremiumAvatar = json['premium_avatar'];
     if (rawPremiumAvatar is bool) {
       premiumAvatarFlag = rawPremiumAvatar;
-    } else if (rawPremiumAvatar is String && rawPremiumAvatar.trim().isNotEmpty) {
+    } else if (rawPremiumAvatar is String &&
+        rawPremiumAvatar.trim().isNotEmpty) {
       premiumAvatarColorHex = rawPremiumAvatar.trim();
       premiumAvatarFlag = true;
     }
@@ -103,10 +105,19 @@ class AppSubscriptionEntitlements {
           : json['active_project_cap'] is num
           ? (json['active_project_cap'] as num).round()
           : null,
-      canCreateActiveProject: readBool(json['can_create_active_project'], fallback: true),
-      canMutateFinancialTransactions: readBool(json['can_mutate_financial_transactions'], fallback: true),
+      canCreateActiveProject: readBool(
+        json['can_create_active_project'],
+        fallback: true,
+      ),
+      canMutateFinancialTransactions: readBool(
+        json['can_mutate_financial_transactions'],
+        fallback: true,
+      ),
       canArchiveClient: readBool(json['can_archive_client'], fallback: true),
-      showPaywallSurfaces: readBool(json['show_paywall_surfaces'], fallback: true),
+      showPaywallSurfaces: readBool(
+        json['show_paywall_surfaces'],
+        fallback: true,
+      ),
       isExpiredPremium: readBool(json['is_expired_premium']),
     );
   }
@@ -139,9 +150,13 @@ class AppPaywallOffer {
       title: title,
       subtitle: raw['subtitle'] as String?,
       yearlySavingsBadge:
-          raw['badge_text'] as String? ?? raw['yearly_savings_badge'] as String? ?? raw['savings_badge'] as String?,
+          raw['badge_text'] as String? ??
+          raw['yearly_savings_badge'] as String? ??
+          raw['savings_badge'] as String?,
       monthlyOriginalMinor: _readOptionalMinor(raw['monthly_original_minor']),
-      monthlyDiscountedMinor: _readOptionalMinor(raw['monthly_discounted_minor']),
+      monthlyDiscountedMinor: _readOptionalMinor(
+        raw['monthly_discounted_minor'],
+      ),
       yearlyOriginalMinor: _readOptionalMinor(raw['yearly_original_minor']),
       yearlyDiscountedMinor: _readOptionalMinor(raw['yearly_discounted_minor']),
     );
@@ -215,10 +230,12 @@ class AppPaywallPlan {
 
   String formatMonthlyMajor() => _formatMajor(monthlyEquivalentMinor);
 
-  String? formatOriginalMonthlyMajor() =>
-      originalMonthlyEquivalentMinor == null ? null : _formatMajor(originalMonthlyEquivalentMinor!);
+  String? formatOriginalMonthlyMajor() => originalMonthlyEquivalentMinor == null
+      ? null
+      : _formatMajor(originalMonthlyEquivalentMinor!);
 
-  String? formatTotalBilledMajor() => totalBilledMinor == null ? null : _formatMajor(totalBilledMinor!);
+  String? formatTotalBilledMajor() =>
+      totalBilledMinor == null ? null : _formatMajor(totalBilledMinor!);
 
   static String _formatMajor(int minor) {
     final major = RemoteMoneyUnits.minorToMajor(minor);
@@ -274,12 +291,19 @@ class AppPaywallContent {
     AppPaywallPackage? legacyBenefitPackage;
     if (v3 != null && v3.packages.isNotEmpty) {
       final slug = v3.recommendedPackageSlug;
-      legacyBenefitPackage = slug != null ? v3.packageBySlug(slug) : v3.packages.first;
+      legacyBenefitPackage = slug != null
+          ? v3.packageBySlug(slug)
+          : v3.packages.first;
     }
-    final benefits = legacyBenefitPackage != null && legacyBenefitPackage.highlightBenefits.isNotEmpty
+    final benefits =
+        legacyBenefitPackage != null &&
+            legacyBenefitPackage.highlightBenefits.isNotEmpty
         ? legacyBenefitPackage.highlightBenefits.map((e) => e.text).toList()
         : benefitsRaw is List
-        ? benefitsRaw.map((e) => e.toString()).where((s) => s.isNotEmpty).toList()
+        ? benefitsRaw
+              .map((e) => e.toString())
+              .where((s) => s.isNotEmpty)
+              .toList()
         : const <String>[];
 
     return AppPaywallContent(
@@ -332,7 +356,8 @@ List<AppPaywallPlan> _parsePaywallPlans(Object? raw, AppPaywallOffer? offer) {
 bool _isPremiumPackageMap(Map<String, dynamic> json) {
   final id = json['id'] as String? ?? json['slug'] as String?;
   if (id == 'yearly' || id == 'monthly') return false;
-  if (json['price_monthly_minor'] != null || json['price_yearly_minor'] != null) {
+  if (json['price_monthly_minor'] != null ||
+      json['price_yearly_minor'] != null) {
     return true;
   }
   return id == 'premium';
@@ -354,20 +379,37 @@ List<AppPaywallPlan> _orderYearlyThenMonthly(List<AppPaywallPlan> plans) {
   return [?yearly, ?monthly, ...rest];
 }
 
-List<AppPaywallPlan> _plansFromPremiumPackage(Map<String, dynamic> pkg, AppPaywallOffer? offer) {
+List<AppPaywallPlan> _plansFromPremiumPackage(
+  Map<String, dynamic> pkg,
+  AppPaywallOffer? offer,
+) {
   final badge = pkg['badge_text'] as String? ?? offer?.yearlySavingsBadge;
 
   final priceMonthly = _readOptionalMinor(pkg['price_monthly_minor']);
-  final priceMonthlyDiscounted = _readOptionalMinor(pkg['price_monthly_discounted_minor']);
+  final priceMonthlyDiscounted = _readOptionalMinor(
+    pkg['price_monthly_discounted_minor'],
+  );
   final priceYearly = _readOptionalMinor(pkg['price_yearly_minor']);
-  final priceYearlyDiscounted = _readOptionalMinor(pkg['price_yearly_discounted_minor']);
-  final yearlyBilledTotal = _readOptionalMinor(pkg['yearly_billed_total_minor']);
-  final yearlyMonthlyEqField = _readOptionalMinor(pkg['yearly_monthly_equivalent_minor']);
+  final priceYearlyDiscounted = _readOptionalMinor(
+    pkg['price_yearly_discounted_minor'],
+  );
+  final yearlyBilledTotal = _readOptionalMinor(
+    pkg['yearly_billed_total_minor'],
+  );
+  final yearlyMonthlyEqField = _readOptionalMinor(
+    pkg['yearly_monthly_equivalent_minor'],
+  );
 
   final hasMonthlyPromo =
       offer?.monthlyDiscountedMinor != null ||
-      (priceMonthlyDiscounted != null && priceMonthly != null && priceMonthlyDiscounted != priceMonthly);
-  var monthlyDisplay = offer?.monthlyDiscountedMinor ?? priceMonthlyDiscounted ?? priceMonthly ?? 0;
+      (priceMonthlyDiscounted != null &&
+          priceMonthly != null &&
+          priceMonthlyDiscounted != priceMonthly);
+  var monthlyDisplay =
+      offer?.monthlyDiscountedMinor ??
+      priceMonthlyDiscounted ??
+      priceMonthly ??
+      0;
   int? monthlyOriginal;
   if (hasMonthlyPromo) {
     final list = offer?.monthlyOriginalMinor ?? priceMonthly;
@@ -376,10 +418,16 @@ List<AppPaywallPlan> _plansFromPremiumPackage(Map<String, dynamic> pkg, AppPaywa
     }
   }
 
-  final yearlyBilled = offer?.yearlyDiscountedMinor ?? priceYearlyDiscounted ?? yearlyBilledTotal ?? priceYearly;
+  final yearlyBilled =
+      offer?.yearlyDiscountedMinor ??
+      priceYearlyDiscounted ??
+      yearlyBilledTotal ??
+      priceYearly;
   final hasYearlyPromo =
       offer?.yearlyDiscountedMinor != null ||
-      (priceYearlyDiscounted != null && priceYearly != null && priceYearlyDiscounted != priceYearly);
+      (priceYearlyDiscounted != null &&
+          priceYearly != null &&
+          priceYearlyDiscounted != priceYearly);
 
   int yearlyMonthlyDisplay;
   if (offer?.yearlyDiscountedMinor != null) {
@@ -441,7 +489,8 @@ class AppSubscriptionSnapshot {
   final AppSubscriptionEntitlements entitlements;
   final AppPaywallContent? paywall;
 
-  bool get showSurfaces => subscriptionUiEnabled && entitlements.showPaywallSurfaces;
+  bool get showSurfaces =>
+      subscriptionUiEnabled && entitlements.showPaywallSurfaces;
 
   bool get shouldShowProfileSubscriptionCard => showSurfaces;
 
@@ -454,17 +503,25 @@ class AppSubscriptionSnapshot {
   }) {
     final paywallEnabled = json['paywall_enabled'] == true;
     final isTestUser = json['is_test_user'] == true;
-    final entitlementsRaw = (json['entitlements'] as Map<String, dynamic>?) ?? const {};
+    final entitlementsRaw =
+        (json['entitlements'] as Map<String, dynamic>?) ?? const {};
     final subscriptionUiEnabled = json.containsKey('subscription_ui_enabled')
         ? json['subscription_ui_enabled'] == true
-        : paywallEnabled && !isTestUser && entitlementsRaw['show_paywall_surfaces'] == true;
+        : paywallEnabled &&
+              !isTestUser &&
+              entitlementsRaw['show_paywall_surfaces'] == true;
 
     return AppSubscriptionSnapshot(
       paywallEnabled: paywallEnabled,
       subscriptionUiEnabled: subscriptionUiEnabled,
       isTestUser: isTestUser,
-      entitlements: AppSubscriptionEntitlements.fromJson((json['entitlements'] as Map<String, dynamic>?) ?? const {}),
-      paywall: AppPaywallContent.fromJson(json['paywall'], localeCode: localeCode),
+      entitlements: AppSubscriptionEntitlements.fromJson(
+        (json['entitlements'] as Map<String, dynamic>?) ?? const {},
+      ),
+      paywall: AppPaywallContent.fromJson(
+        json['paywall'],
+        localeCode: localeCode,
+      ),
     );
   }
 }

@@ -1,26 +1,26 @@
-import 'package:bnood/core/money/ledger_math.dart';
-import 'package:bnood/core/money/period_bounds.dart';
-import 'package:bnood/core/money/supplier_period_math.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/domain/money/ledger_math.dart';
+import 'package:bnood/core/domain/money/period_bounds.dart';
+import 'package:bnood/core/domain/money/supplier_period_math.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Transaction _spend(int amount, DateTime d) => Transaction(
-      id: 'x',
-      workspaceId: 'w',
-      projectId: 'p',
-      kind: 'spend',
-      amountPiastres: amount,
-      date: d,
-      method: 'cash',
-      description: null,
-      receiptImagePath: null,
-      itemId: 'i',
-      expenseType: 'materials',
-      supplierId: 's',
-      craftsmanId: null,
-      createdAt: d,
-      updatedAt: d,
-    );
+  id: 'x',
+  workspaceId: 'w',
+  projectId: 'p',
+  kind: 'spend',
+  amountPiastres: amount,
+  date: d,
+  method: 'cash',
+  description: null,
+  receiptImagePath: null,
+  itemId: 'i',
+  expenseType: 'materials',
+  supplierId: 's',
+  craftsmanId: null,
+  createdAt: d,
+  updatedAt: d,
+);
 
 void main() {
   test('client closing = opening + receive - spend', () {
@@ -74,10 +74,11 @@ void main() {
     expect(t.periodReceivedPiastres, 50000);
     expect(t.periodSpentPiastres, 20000);
     expect(
-        t.closingBalancePiastres,
-        t.openingBalancePiastres +
-            t.periodReceivedPiastres -
-            t.periodSpentPiastres);
+      t.closingBalancePiastres,
+      t.openingBalancePiastres +
+          t.periodReceivedPiastres -
+          t.periodSpentPiastres,
+    );
   });
 
   test('empty period keeps opening from prior activity', () {

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:bnood/features/vouchers/presentation/voucher_camera_pick_route.dart';
-import 'package:bnood/features/vouchers/presentation/voucher_receipt_picker.dart';
+import 'package:bnood/features/vouchers/presentation/actions/voucher_camera_pick_route.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/voucher_receipt_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,7 +23,9 @@ class _FakePicker extends VoucherReceiptPicker {
 }
 
 void main() {
-  testWidgets('camera route cancel pops null file and keeps voucher layer', (tester) async {
+  testWidgets('camera route cancel pops null file and keeps voucher layer', (
+    tester,
+  ) async {
     VoucherCameraPickResult? popped;
 
     await tester.pumpWidget(
@@ -37,7 +39,11 @@ void main() {
 
     final hostContext = tester.element(find.byType(_VoucherHost));
     final routeFuture = Navigator.of(hostContext).push<VoucherCameraPickResult>(
-      PageRouteBuilder(opaque: false, pageBuilder: (_, _, _) => VoucherCameraPickRoute(picker: _FakePicker(null))),
+      PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (_, _, _) =>
+            VoucherCameraPickRoute(picker: _FakePicker(null)),
+      ),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
@@ -51,7 +57,9 @@ void main() {
     expect(find.byType(_VoucherHost), findsOneWidget);
   });
 
-  testWidgets('camera route success returns file without dismissing host', (tester) async {
+  testWidgets('camera route success returns file without dismissing host', (
+    tester,
+  ) async {
     VoucherCameraPickResult? popped;
     final xfile = XFile.fromData(Uint8List.fromList([1, 2, 3]), name: 'r.jpg');
 
@@ -66,7 +74,11 @@ void main() {
 
     final hostContext = tester.element(find.byType(_VoucherHost));
     final routeFuture = Navigator.of(hostContext).push<VoucherCameraPickResult>(
-      PageRouteBuilder(opaque: false, pageBuilder: (_, _, _) => VoucherCameraPickRoute(picker: _FakePicker(xfile))),
+      PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (_, _, _) =>
+            VoucherCameraPickRoute(picker: _FakePicker(xfile)),
+      ),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
@@ -76,7 +88,9 @@ void main() {
     expect(find.byType(_VoucherHost), findsOneWidget);
   });
 
-  testWidgets('camera route pops without closing parent navigator', (tester) async {
+  testWidgets('camera route pops without closing parent navigator', (
+    tester,
+  ) async {
     var parentAlive = true;
 
     await tester.pumpWidget(
@@ -91,10 +105,14 @@ void main() {
                     child: Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          await Navigator.of(context).push<VoucherCameraPickResult>(
+                          await Navigator.of(
+                            context,
+                          ).push<VoucherCameraPickResult>(
                             PageRouteBuilder(
                               opaque: false,
-                              pageBuilder: (_, _, _) => VoucherCameraPickRoute(picker: _FakePicker(null)),
+                              pageBuilder: (_, _, _) => VoucherCameraPickRoute(
+                                picker: _FakePicker(null),
+                              ),
                             ),
                           );
                         },

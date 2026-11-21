@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/config/extensions/num_extensions.dart';
-import '../../core/config/theme/app_size.dart';
-import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/buttons/app_button.dart';
-import '../../core/widgets/custom_text_field.dart';
-import 'auth_controller.dart';
-import 'auth_form_ui.dart';
-import 'auth_form_utils.dart';
-import 'auth_messages.dart';
-import 'auth_paths.dart';
-import 'widgets/auth_flow_scaffold.dart';
+import '../../core/services/config/extensions/num_extensions.dart';
+import '../../core/services/config/theme/app_size.dart';
+import '../../core/ui/widgets/app_toaster.dart';
+import '../../core/ui/widgets/buttons/app_button.dart';
+import '../../core/ui/widgets/custom_text_field.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_form_ui.dart';
+import 'package:bnood/features/auth/auth_form_utils.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/auth/widgets/auth_flow_scaffold.dart';
 
 Future<void> _submitForgotPassword(BuildContext context, WidgetRef ref) async {
   final fields = ref.read(forgotPasswordFormFieldsProvider);
@@ -24,8 +24,9 @@ Future<void> _submitForgotPassword(BuildContext context, WidgetRef ref) async {
   if (fields.formKey.currentState?.validate() != true) return;
   if (ref.read(authFormUiProvider(formId)).loading) return;
   ui.setLoading(true);
-  final error =
-      await ref.read(authControllerProvider.notifier).forgotPassword(fields.phone.text.trim());
+  final error = await ref
+      .read(authControllerProvider.notifier)
+      .forgotPassword(fields.phone.text.trim());
   if (!context.mounted) return;
   if (error == null) {
     ui.clearLoading();
@@ -55,8 +56,9 @@ class ForgotPasswordScreen extends ConsumerWidget {
       alignment: AuthFlowAlignment.start,
       child: Form(
         key: fields.formKey,
-        autovalidateMode:
-            ui.attempted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: ui.attempted
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -75,7 +77,9 @@ class ForgotPasswordScreen extends ConsumerWidget {
             AppButton.primary(
               text: l10n.authContinue,
               isLoading: loading,
-              onPressed: loading ? null : () => _submitForgotPassword(context, ref),
+              onPressed: loading
+                  ? null
+                  : () => _submitForgotPassword(context, ref),
             ),
           ],
         ),

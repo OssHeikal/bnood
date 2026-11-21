@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../config/theme/app_size.dart';
+import '../../services/config/theme/app_size.dart';
 import 'app_paged_builders.dart';
 import 'app_paging_controller.dart';
 import 'paged_sliver_two_column.dart';
 
-enum AppPagedLayout { list, listSeparated, sliverList, sliverListSeparated, sliverGrid, sliverTwoColumn }
+enum AppPagedLayout {
+  list,
+  listSeparated,
+  sliverList,
+  sliverListSeparated,
+  sliverGrid,
+  sliverTwoColumn,
+}
 
 class AppPagedView<T> extends StatelessWidget {
   AppPagedView({
@@ -83,7 +90,9 @@ class AppPagedView<T> extends StatelessWidget {
             fetchNextPage: fetchNextPage,
             physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
             builderDelegate: delegate,
-            separatorBuilder: separatorBuilder ?? (_, _) => const SizedBox(height: AppSize.spaceMD),
+            separatorBuilder:
+                separatorBuilder ??
+                (_, _) => const SizedBox(height: AppSize.spaceMD),
           ),
           AppPagedLayout.sliverList => CustomScrollView(
             physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
@@ -109,7 +118,9 @@ class AppPagedView<T> extends StatelessWidget {
                 fetchNextPage: fetchNextPage,
                 shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
                 builderDelegate: delegate,
-                separatorBuilder: separatorBuilder ?? (_, _) => const SizedBox(height: AppSize.spaceMD),
+                separatorBuilder:
+                    separatorBuilder ??
+                    (_, _) => const SizedBox(height: AppSize.spaceMD),
               ),
               ...sliverFooters,
             ],
@@ -125,7 +136,8 @@ class AppPagedView<T> extends StatelessWidget {
                   sliver: PagedSliverGrid<int, T>(
                     state: state,
                     fetchNextPage: fetchNextPage,
-                    shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
+                    shrinkWrapFirstPageIndicators:
+                        shrinkWrapFirstPageIndicators,
                     gridDelegate: gridDelegate,
                     builderDelegate: delegate,
                   ),
@@ -152,7 +164,8 @@ class AppPagedView<T> extends StatelessWidget {
                   sliver: PagedSliverTwoColumn<int, T>(
                     state: state,
                     fetchNextPage: fetchNextPage,
-                    shrinkWrapFirstPageIndicators: shrinkWrapFirstPageIndicators,
+                    shrinkWrapFirstPageIndicators:
+                        shrinkWrapFirstPageIndicators,
                     builderDelegate: delegate,
                   ),
                 )
@@ -172,6 +185,10 @@ class AppPagedView<T> extends StatelessWidget {
 
     if (!pullToRefresh) return content;
 
-    return RefreshIndicator.adaptive(edgeOffset: refreshEdgeOffset, onRefresh: _onRefresh, child: content);
+    return RefreshIndicator.adaptive(
+      edgeOffset: refreshEdgeOffset,
+      onRefresh: _onRefresh,
+      child: content,
+    );
   }
 }

@@ -12,7 +12,7 @@ User-visible **numbers the app generates** must use ASCII digits `0`–`9`, even
 
 ## Central API
 
-`lib/core/formatting/display_digits.dart`:
+`lib/core/domain/formatting/display_digits.dart`:
 
 - `DisplayDigits.decimalPattern()` / `formatInteger` — grouping with `en_US` digit shapes only
 - `DisplayDigits.toWesternDigits` — normalize Eastern Arabic numerals in **input** before parse

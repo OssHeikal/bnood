@@ -1,13 +1,15 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/app_keyboard_scope.dart';
-import 'package:bnood/core/widgets/app_modal_sheet.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/app_keyboard_scope.dart';
+import 'package:bnood/core/ui/widgets/app_modal_sheet.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('barrier tap dismisses AppModalSheet under AppKeyboardScope', (tester) async {
+  testWidgets('barrier tap dismisses AppModalSheet under AppKeyboardScope', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),
@@ -24,7 +26,9 @@ void main() {
                       context: context,
                       body: const Padding(
                         padding: EdgeInsets.all(24),
-                        child: TextField(decoration: InputDecoration(labelText: 'Name')),
+                        child: TextField(
+                          decoration: InputDecoration(labelText: 'Name'),
+                        ),
                       ),
                     ),
                     child: const Text('open'),

@@ -6,15 +6,15 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/brand/app_brand_lockup.dart';
-import '../core/config/theme/app_colors.dart';
-import '../features/app_gate/data/app_config_record.dart';
-import '../features/app_gate/app_gate_cold_start.dart';
-import '../features/app_gate/app_gate_provider.dart';
-import '../features/app_gate/app_gate_session.dart';
-import '../features/auth/auth_controller.dart';
-import '../features/auth/auth_state.dart';
-import '../features/home/presentation/home_foundation_scope.dart';
+import '../core/ui/brand/app_brand_lockup.dart';
+import '../core/services/config/theme/app_colors.dart';
+import 'package:bnood/features/app_gate/data/app_config_record.dart';
+import 'package:bnood/features/app_gate/app_gate_cold_start.dart';
+import 'package:bnood/features/app_gate/app_gate_provider.dart';
+import 'package:bnood/features/app_gate/app_gate_session.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_state.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'app_splash_routing.dart';
 import 'app_splash_session.dart';
 
@@ -140,15 +140,18 @@ class _AppStartupSplashPageState extends ConsumerState<AppStartupSplashPage>
       parent: _entrance,
       curve: Curves.easeOutCubic,
     );
-    _logoScale = Tween<double>(begin: 0.96, end: 1).animate(
-      CurvedAnimation(parent: _entrance, curve: Curves.easeOutCubic),
-    );
+    _logoScale = Tween<double>(
+      begin: 0.96,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _entrance, curve: Curves.easeOutCubic));
     _entrance.addStatusListener(_onEntranceStatus);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _reducedMotion = MediaQuery.disableAnimationsOf(context);
       ref.read(authControllerProvider.notifier).ensureBootstrap();
-      ref.read(appGateProvider.notifier).fetchConfig(failOpen: true).then((config) {
+      ref.read(appGateProvider.notifier).fetchConfig(failOpen: true).then((
+        config,
+      ) {
         if (!mounted || _left) return;
         _gateConfig = config;
         setState(() => _configReady = true);
@@ -158,14 +161,11 @@ class _AppStartupSplashPageState extends ConsumerState<AppStartupSplashPage>
         AppStartupSplash.splashBootstrapTimeout,
         _onBootstrapTimeout,
       );
-      _minDisplayTimer = Timer(
-        AppStartupSplash.splashMinDisplayDuration,
-        () {
-          if (!mounted) return;
-          setState(() => _minDisplayElapsed = true);
-          _tryHandoff();
-        },
-      );
+      _minDisplayTimer = Timer(AppStartupSplash.splashMinDisplayDuration, () {
+        if (!mounted) return;
+        setState(() => _minDisplayElapsed = true);
+        _tryHandoff();
+      });
       _startEntranceIfNeeded();
     });
   }
@@ -225,7 +225,10 @@ class _AppStartupSplashPageState extends ConsumerState<AppStartupSplashPage>
     AppSplashSession.completed = true;
     final destination = appSplashDestinationFor(auth);
     AppGateSession.postSplashDestination = destination;
-    final config = _gateConfig ?? ref.read(appGateProvider).valueOrNull ?? AppConfigData.failOpen();
+    final config =
+        _gateConfig ??
+        ref.read(appGateProvider).valueOrNull ??
+        AppConfigData.failOpen();
     final route = splashRouteForGate(config, destination);
     AppGateColdStart.splashHandoffDone = true;
     context.go(route);

@@ -1,6 +1,6 @@
 import 'package:bnood/features/providers/data/app_agreement_record.dart';
-import 'package:bnood/core/money/remote_money_format.dart';
-import 'package:bnood/core/money/remote_money_units.dart';
+import 'package:bnood/core/domain/money/remote_money_format.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

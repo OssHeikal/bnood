@@ -1,11 +1,11 @@
 import 'package:bnood/app/app_splash_session.dart';
 import 'package:bnood/app/app_startup_splash.dart';
 import 'package:bnood/app/bnood_app.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/app_gate/data/app_config_record.dart';
-import 'package:bnood/core/prefs/app_settings_store.dart';
+import 'package:bnood/core/data/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/app_gate/app_gate_cold_start.dart';
 import 'package:bnood/features/app_gate/app_gate_provider.dart';
 import 'package:bnood/features/app_gate/app_gate_session.dart';
@@ -21,14 +21,17 @@ import 'support/fake_app_gate_notifier.dart';
 import 'support/fake_session_store.dart';
 import 'support/stub_app_config_api.dart';
 
-AppSettingsSnapshot _bootstrap() =>
-    const AppSettingsSnapshot(themeMode: ThemeMode.light, locale: Locale('en'), prefs: null);
+AppSettingsSnapshot _bootstrap() => const AppSettingsSnapshot(
+  themeMode: ThemeMode.light,
+  locale: Locale('en'),
+  prefs: null,
+);
 
 AppConfigData _configJson(String status) => AppConfigData.fromDataJson({
-      'status': status,
-      'message': '',
-      'store_url': 'https://example.com/store',
-    });
+  'status': status,
+  'message': '',
+  'store_url': 'https://example.com/store',
+});
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -78,7 +81,9 @@ void main() {
     expect(find.byType(AppStartupSplashPage), findsOneWidget);
     await tester.pumpAndSettle(const Duration(seconds: 15));
     expect(find.byType(AppOptionalUpdateScreen), findsOneWidget);
-    final l10n = AppLocalizations.of(tester.element(find.byType(AppOptionalUpdateScreen)));
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(AppOptionalUpdateScreen)),
+    );
     await tester.tap(find.text(l10n.gateLaterAction));
     await tester.pumpAndSettle();
     expect(find.byType(LoginScreen), findsOneWidget);

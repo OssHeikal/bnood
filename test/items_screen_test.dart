@@ -1,20 +1,21 @@
 import 'package:bnood/features/items/data/items_api.dart';
-import 'package:bnood/core/config/theme/app_size.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_size.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/items/data/item_api_record.dart';
 import 'package:bnood/features/items/data/items_providers.dart';
-import 'package:bnood/features/items/data/items_repository.dart' show ItemCatalogListStatus, ItemsRepository;
+import 'package:bnood/features/items/data/items_repository.dart'
+    show ItemCatalogListStatus, ItemsRepository;
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/core/widgets/app_card.dart';
-import 'package:bnood/core/widgets/app_empty_state.dart';
-import 'package:bnood/core/widgets/buttons/app_button.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton.dart';
-import 'package:bnood/core/widgets/skeleton/skeleton_box.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/core/ui/widgets/app_card.dart';
+import 'package:bnood/core/ui/widgets/app_empty_state.dart';
+import 'package:bnood/core/ui/widgets/buttons/app_button.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton.dart';
+import 'package:bnood/core/ui/widgets/skeleton/skeleton_box.dart';
 import 'package:bnood/features/items/presentation/widgets/items_loading_skeleton.dart';
-import 'package:bnood/features/items/presentation/items_screen.dart';
+import 'package:bnood/features/items/presentation/screens/items_screen.dart';
 import 'package:bnood/features/items/presentation/widgets/item_catalog_tile.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,9 @@ void main() {
             data: MediaQuery.of(context).copyWith(
               size: size,
               padding: itemsScreenMediaQueryForTests(context).copyWith(top: 59),
-              viewPadding: itemsScreenMediaQueryForTests(context).copyWith(top: 59),
+              viewPadding: itemsScreenMediaQueryForTests(
+                context,
+              ).copyWith(top: 59),
               disableAnimations: true,
             ),
             child: HomeFoundationScope(child: appChild!),
@@ -78,11 +81,17 @@ void main() {
     );
   }
 
-  List<Override> remoteOverrides({List<CatalogItem>? items, Duration? catalogDelay}) {
+  List<Override> remoteOverrides({
+    List<CatalogItem>? items,
+    Duration? catalogDelay,
+  }) {
     return [
       authControllerProvider.overrideWith(() => _AuthStub()),
       itemsRepositoryProvider.overrideWithValue(
-        _FakeCatalogRepository(items: items ?? sampleItems, catalogDelay: catalogDelay),
+        _FakeCatalogRepository(
+          items: items ?? sampleItems,
+          catalogDelay: catalogDelay,
+        ),
       ),
       itemIconsCatalogProvider.overrideWith(
         (ref) async => const ItemIconsCatalog(
@@ -97,7 +106,9 @@ void main() {
     await tester.pumpWidget(
       wrap(
         child: const ItemsScreen(),
-        overrides: remoteOverrides(catalogDelay: const Duration(milliseconds: 200)),
+        overrides: remoteOverrides(
+          catalogDelay: const Duration(milliseconds: 200),
+        ),
       ),
     );
     await tester.pump();
@@ -120,28 +131,34 @@ void main() {
     expect(find.text('بند اختبار'), findsOneWidget);
   });
 
-  testWidgets('catalog grid has horizontal gutter and 24px icons', (tester) async {
+  testWidgets('catalog grid has horizontal gutter and 24px icons', (
+    tester,
+  ) async {
     await tester.pumpWidget(
-      wrap(
-        child: const ItemsScreen(),
-        overrides: remoteOverrides(),
-      ),
+      wrap(child: const ItemsScreen(), overrides: remoteOverrides()),
     );
     await tester.pumpAndSettle();
 
     final icons = tester.widgetList<SvgPicture>(
-      find.descendant(of: find.byType(ItemCatalogTile), matching: find.byType(SvgPicture)),
+      find.descendant(
+        of: find.byType(ItemCatalogTile),
+        matching: find.byType(SvgPicture),
+      ),
     );
     expect(icons, isNotEmpty);
-    expect(icons.every((icon) => icon.width == AppSize.icon && icon.height == AppSize.icon), isTrue);
+    expect(
+      icons.every(
+        (icon) => icon.width == AppSize.icon && icon.height == AppSize.icon,
+      ),
+      isTrue,
+    );
   });
 
-  testWidgets('tiles show no default badge and custom item is tappable', (tester) async {
+  testWidgets('tiles show no default badge and custom item is tappable', (
+    tester,
+  ) async {
     await tester.pumpWidget(
-      wrap(
-        child: const ItemsScreen(),
-        overrides: remoteOverrides(),
-      ),
+      wrap(child: const ItemsScreen(), overrides: remoteOverrides()),
     );
     await tester.pumpAndSettle();
     expect(find.text('سباكة'), findsOneWidget);
@@ -151,12 +168,11 @@ void main() {
     expect(find.text('تعديل البند'), findsOneWidget);
   });
 
-  testWidgets('default item edit sheet has a single delete action', (tester) async {
+  testWidgets('default item edit sheet has a single delete action', (
+    tester,
+  ) async {
     await tester.pumpWidget(
-      wrap(
-        child: const ItemsScreen(),
-        overrides: remoteOverrides(),
-      ),
+      wrap(child: const ItemsScreen(), overrides: remoteOverrides()),
     );
     await tester.pumpAndSettle();
     await tester.tap(find.byType(ItemCatalogTile).at(1));
@@ -166,19 +182,20 @@ void main() {
     expect(find.text('أرشفة'), findsNothing);
   });
 
-  testWidgets('user and default tiles are long-press draggable', (tester) async {
+  testWidgets('user and default tiles are long-press draggable', (
+    tester,
+  ) async {
     await tester.pumpWidget(
-      wrap(
-        child: const ItemsScreen(),
-        overrides: remoteOverrides(),
-      ),
+      wrap(child: const ItemsScreen(), overrides: remoteOverrides()),
     );
     await tester.pumpAndSettle();
     expect(find.byType(LongPressDraggable<int>), findsNWidgets(2));
     expect(find.byType(ItemCatalogTile), findsNWidgets(2));
   });
 
-  testWidgets('active catalog empty state is centered without list card', (tester) async {
+  testWidgets('active catalog empty state is centered without list card', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       wrap(
         child: const ItemsScreen(),
@@ -193,20 +210,19 @@ void main() {
     expect(find.text('لا توجد بنود بعد'), findsOneWidget);
     expect(find.widgetWithText(AppButton, 'إضافة بند'), findsOneWidget);
 
-    final hasCenteredEmptyColumn = tester.widgetList<Column>(find.byType(Column)).any(
-      (column) =>
-          column.mainAxisAlignment == MainAxisAlignment.center &&
-          column.children.any((child) => child is AppEmptyState),
-    );
+    final hasCenteredEmptyColumn = tester
+        .widgetList<Column>(find.byType(Column))
+        .any(
+          (column) =>
+              column.mainAxisAlignment == MainAxisAlignment.center &&
+              column.children.any((child) => child is AppEmptyState),
+        );
     expect(hasCenteredEmptyColumn, isTrue);
   });
 
   testWidgets('items screen has no active/archived filter bar', (tester) async {
     await tester.pumpWidget(
-      wrap(
-        child: const ItemsScreen(),
-        overrides: remoteOverrides(),
-      ),
+      wrap(child: const ItemsScreen(), overrides: remoteOverrides()),
     );
     await tester.pumpAndSettle();
 
@@ -217,10 +233,7 @@ void main() {
 
   testWidgets('create sheet rejects empty name', (tester) async {
     await tester.pumpWidget(
-      wrap(
-        child: const ItemsScreen(),
-        overrides: remoteOverrides(),
-      ),
+      wrap(child: const ItemsScreen(), overrides: remoteOverrides()),
     );
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('items_app_bar_add')));
@@ -232,7 +245,8 @@ void main() {
 }
 
 class _FakeCatalogRepository extends ItemsRepository {
-  _FakeCatalogRepository({required this.items, this.catalogDelay}) : super(ItemsApi());
+  _FakeCatalogRepository({required this.items, this.catalogDelay})
+    : super(ItemsApi());
 
   final List<CatalogItem> items;
   final Duration? catalogDelay;
@@ -247,15 +261,20 @@ class _FakeCatalogRepository extends ItemsRepository {
     if (catalogDelay != null) {
       await Future<void>.delayed(catalogDelay!);
     }
-    return ItemsListPage(items: items, page: 1, perPage: perPage, total: items.length);
+    return ItemsListPage(
+      items: items,
+      page: 1,
+      perPage: perPage,
+      total: items.length,
+    );
   }
 }
 
 class _AuthStub extends AuthController {
   @override
   AuthState build() => AuthState(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        bootstrapStarted: true,
-        user: User(id: 'u1', phone: '+201012345678', name: 'Test'),
-      );
+    bootstrapStatus: AuthBootstrapStatus.authenticated,
+    bootstrapStarted: true,
+    user: User(id: 'u1', phone: '+201012345678', name: 'Test'),
+  );
 }

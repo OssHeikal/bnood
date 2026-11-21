@@ -55,8 +55,11 @@ Future<bool> launchPaywallContact({
   final phone = contact?.whatsappPhone?.trim();
   final template = contact?.messageTemplate?.trim();
 
-  if (phone != null && phone.isNotEmpty && template != null && template.isNotEmpty) {
-  var message = applyPaywallContactPlaceholders(
+  if (phone != null &&
+      phone.isNotEmpty &&
+      template != null &&
+      template.isNotEmpty) {
+    var message = applyPaywallContactPlaceholders(
       template,
       plan: planName,
       period: periodLabel,
@@ -73,8 +76,8 @@ Future<bool> launchPaywallContact({
   final fallback = contact?.whatsappUrl?.trim().isNotEmpty == true
       ? contact!.whatsappUrl!
       : (contact?.contactUrl?.trim().isNotEmpty == true
-          ? contact!.contactUrl!
-          : legacyContactUrl?.trim());
+            ? contact!.contactUrl!
+            : legacyContactUrl?.trim());
 
   if (fallback != null && fallback.isNotEmpty) {
     var url = fallback;

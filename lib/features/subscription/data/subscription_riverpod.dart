@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'subscription_api.dart';
+import 'package:bnood/features/subscription/data/subscription_api.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 
-import '../../auth/auth_controller.dart';
-import 'app_subscription.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/subscription/data/app_subscription.dart';
 
 final subscriptionApiProvider = Provider<SubscriptionApi>((ref) {
   final store = ref.watch(sessionStoreProvider);
@@ -15,7 +15,9 @@ final subscriptionApiProvider = Provider<SubscriptionApi>((ref) {
 });
 
 final subscriptionProvider =
-    AsyncNotifierProvider<SubscriptionNotifier, AppSubscriptionSnapshot?>(SubscriptionNotifier.new);
+    AsyncNotifierProvider<SubscriptionNotifier, AppSubscriptionSnapshot?>(
+      SubscriptionNotifier.new,
+    );
 
 class SubscriptionNotifier extends AsyncNotifier<AppSubscriptionSnapshot?> {
   @override
@@ -28,7 +30,9 @@ class SubscriptionNotifier extends AsyncNotifier<AppSubscriptionSnapshot?> {
   Future<AppSubscriptionSnapshot?> _load() async {
     try {
       final languageCode = ref.read(localeProvider).languageCode;
-      return await ref.read(subscriptionApiProvider).getSubscription(languageCode: languageCode);
+      return await ref
+          .read(subscriptionApiProvider)
+          .getSubscription(languageCode: languageCode);
     } catch (_) {
       rethrow;
     }
@@ -70,6 +74,8 @@ final subscriptionSurfacesEnabledProvider = Provider<bool>((ref) {
   return value?.showSurfaces ?? false;
 });
 
-final subscriptionEntitlementsProvider = Provider<AppSubscriptionEntitlements?>((ref) {
-  return ref.watch(subscriptionProvider).valueOrNull?.entitlements;
-});
+final subscriptionEntitlementsProvider = Provider<AppSubscriptionEntitlements?>(
+  (ref) {
+    return ref.watch(subscriptionProvider).valueOrNull?.entitlements;
+  },
+);

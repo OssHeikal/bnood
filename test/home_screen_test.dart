@@ -1,6 +1,6 @@
 import 'package:bnood/features/home/data/home_row_models.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/features/home/presentation/home_screen.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
+import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,11 +77,21 @@ void main() {
 
   testWidgets('home header app name follows locale', (tester) async {
     const totals = HomeTotals(receivedPiastres: 0, spentPiastres: 0);
-    await pumpHome(tester, locale: const Locale('en'), totals: totals, clients: const []);
+    await pumpHome(
+      tester,
+      locale: const Locale('en'),
+      totals: totals,
+      clients: const [],
+    );
     expect(find.text('Bnood'), findsOneWidget);
     expect(find.text('بنود'), findsNothing);
 
-    await pumpHome(tester, locale: const Locale('ar'), totals: totals, clients: const []);
+    await pumpHome(
+      tester,
+      locale: const Locale('ar'),
+      totals: totals,
+      clients: const [],
+    );
     expect(find.text('بنود'), findsOneWidget);
     expect(find.text('Bnood'), findsNothing);
   });
@@ -137,7 +147,9 @@ void main() {
     expect(find.text('See all'), findsWidgets);
   });
 
-  testWidgets('suppliers section is below craftsmen on remote home', (tester) async {
+  testWidgets('suppliers section is below craftsmen on remote home', (
+    tester,
+  ) async {
     final now = DateTime.utc(2026, 11, 1);
     await tester.binding.setSurfaceSize(const Size(390, 1400));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -145,7 +157,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          homeTotalsOverride(const HomeTotals(receivedPiastres: 0, spentPiastres: 0)),
+          homeTotalsOverride(
+            const HomeTotals(receivedPiastres: 0, spentPiastres: 0),
+          ),
           homeClientBalancesOverride(const []),
           emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),
@@ -178,7 +192,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final craftsmenTitle = tester.getTopLeft(find.text('Craftsmen with recent labor'));
+    final craftsmenTitle = tester.getTopLeft(
+      find.text('Craftsmen with recent labor'),
+    );
     final supplierTitle = tester.getTopLeft(find.text('Suppliers'));
     expect(craftsmenTitle.dy, lessThan(supplierTitle.dy));
     expect(find.text('Steel Co'), findsOneWidget);

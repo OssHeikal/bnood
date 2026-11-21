@@ -1,5 +1,5 @@
-import '../features/auth/auth_paths.dart';
-import '../features/auth/auth_state.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/auth/auth_state.dart';
 
 /// Where the splash should send the user once startup auth is resolved.
 String appSplashDestinationFor(AuthState auth) {

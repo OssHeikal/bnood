@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/widgets/app_pressable.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/formatting/display_digits.dart';
-import '../../../../core/resources/gen/assets.gen.dart';
-import '../../../../core/money/remote_money_units.dart';
-import '../../../../core/widgets/app_amount.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/formatting/display_digits.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/domain/money/remote_money_units.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 
 /// Subtitle semantics for [ClientMovementCard].
 enum ClientMovementCardContext {
@@ -45,7 +45,10 @@ class ClientMovementCard extends StatelessWidget {
 
   static String formatMovementDate(DateTime date, String localeCode) {
     final locale = localeCode == 'ar' ? 'ar_EG' : 'en_US';
-    final formatted = DateFormat('EEE dd MMM yyyy', locale).format(date.toLocal());
+    final formatted = DateFormat(
+      'EEE dd MMM yyyy',
+      locale,
+    ).format(date.toLocal());
     return DisplayDigits.toWesternDigits(formatted);
   }
 
@@ -58,9 +61,13 @@ class ClientMovementCard extends StatelessWidget {
     final isReceive = t.kind == 'receive';
     final tint = isReceive ? colors.receive : colors.spend;
     final tintBg = isReceive ? colors.successBg : colors.errorBg;
-    final icon = isReceive ? Assets.icons.arrowDownLeftCircleOutline : Assets.icons.arrowUpRightCircleOutline;
+    final icon = isReceive
+        ? Assets.icons.arrowDownLeftCircleOutline
+        : Assets.icons.arrowUpRightCircleOutline;
 
-    final title = isReceive ? l10n.clientReceiveMovementDetail : (line.itemName ?? l10n.clientDetailUnspecifiedItem);
+    final title = isReceive
+        ? l10n.clientReceiveMovementDetail
+        : (line.itemName ?? l10n.clientDetailUnspecifiedItem);
     final String? subtitle;
     final String? subtitleClientId;
     if (contextMode == ClientMovementCardContext.partyDetail) {
@@ -113,7 +120,11 @@ class ClientMovementCard extends StatelessWidget {
                   width: AppSize.statIconBox,
                   height: AppSize.statIconBox,
                   child: Center(
-                    child: ShellNavIcon(asset: icon, color: tint, size: AppSize.iconSmall),
+                    child: ShellNavIcon(
+                      asset: icon,
+                      color: tint,
+                      size: AppSize.iconSmall,
+                    ),
                   ),
                 ),
               ),
@@ -134,8 +145,12 @@ class ClientMovementCard extends StatelessWidget {
                         label: subtitle,
                         clientId: subtitleClientId,
                         style: text.caption.copyWith(
-                          color: subtitleClientId != null ? colors.primaryDark : colors.onSurfaceMuted,
-                          fontWeight: subtitleClientId != null ? FontWeight.w700 : null,
+                          color: subtitleClientId != null
+                              ? colors.primaryDark
+                              : colors.onSurfaceMuted,
+                          fontWeight: subtitleClientId != null
+                              ? FontWeight.w700
+                              : null,
                         ),
                       ),
                     ],
@@ -153,7 +168,9 @@ class ClientMovementCard extends StatelessWidget {
                       alignment: AlignmentDirectional.centerEnd,
                       child: AppAmount(
                         piastres: t.amountPiastres,
-                        role: isReceive ? AppAmountRole.receive : AppAmountRole.spend,
+                        role: isReceive
+                            ? AppAmountRole.receive
+                            : AppAmountRole.spend,
                         size: AppAmountSize.medium,
                         localeCode: localeCode,
                         minorPerMajor: line.usesRemoteMinorUnits
@@ -164,7 +181,9 @@ class ClientMovementCard extends StatelessWidget {
                     AppSize.spaceXS.gap,
                     Text(
                       dateLabel,
-                      style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                      style: text.caption.copyWith(
+                        color: colors.onSurfaceMuted,
+                      ),
                       textAlign: TextAlign.end,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -193,7 +212,11 @@ class ClientMovementCard extends StatelessWidget {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   for (final badge in badges)
-                    _MovementBadge(label: badge.label, color: badge.color, bg: badge.bg),
+                    _MovementBadge(
+                      label: badge.label,
+                      color: badge.color,
+                      bg: badge.bg,
+                    ),
                 ],
               ),
             ),
@@ -232,7 +255,11 @@ class _MovementSubtitle extends StatelessWidget {
 }
 
 class _BadgeSpec {
-  const _BadgeSpec({required this.label, required this.color, required this.bg});
+  const _BadgeSpec({
+    required this.label,
+    required this.color,
+    required this.bg,
+  });
 
   final String label;
   final Color color;
@@ -240,7 +267,11 @@ class _BadgeSpec {
 }
 
 class _MovementBadge extends StatelessWidget {
-  const _MovementBadge({required this.label, required this.color, required this.bg});
+  const _MovementBadge({
+    required this.label,
+    required this.color,
+    required this.bg,
+  });
 
   final String label;
   final Color color;
@@ -249,10 +280,22 @@ class _MovementBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(AppSize.radiusSM)),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(AppSize.radiusSM),
+      ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceSM, vertical: 2),
-        child: Text(label, style: context.text.caption.copyWith(color: color, fontWeight: FontWeight.w700)),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSize.spaceSM,
+          vertical: 2,
+        ),
+        child: Text(
+          label,
+          style: context.text.caption.copyWith(
+            color: color,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
       ),
     );
   }

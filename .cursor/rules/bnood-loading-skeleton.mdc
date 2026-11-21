@@ -6,11 +6,11 @@ alwaysApply: false
 
 # Loading and skeleton
 
-Ported from SmartRx patient `lib/core/widgets/skeleton/` (Dog handoff). Bnood paths only.
+Ported from SmartRx patient `lib/core/ui/widgets/skeleton/` (Dog handoff). Bnood paths only.
 
 ## Kit
 
-`lib/core/widgets/skeleton/`:
+`lib/core/ui/widgets/skeleton/`:
 
 - `Skeleton` — cosine pulse 0.55–1.0, `AppMotion.skeletonPulse` (1600ms), wall-clock sync, reduced motion → full opacity static
 - `SkeletonBox` / `SkeletonText` — `surfaceSunken` / `outlineSubtle`, superellipse corners (`AppShape`) except pills/circles

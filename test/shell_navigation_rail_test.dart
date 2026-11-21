@@ -2,19 +2,37 @@ import 'package:bnood/app/widgets/shell_navigation_rail.dart';
 import 'package:bnood/app/widgets/shell_nav_destination.dart';
 import 'package:bnood/app/widgets/shell_nav_icon.dart';
 import 'package:bnood/app/widgets/shell_nav_icons.dart';
-import 'package:bnood/core/theme/app_theme.dart';
+import 'package:bnood/core/ui/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final destinations = [
-    ShellNavDestination(icon: ShellNavIcons.home, label: 'Home', semanticsLabel: 'Home'),
-    ShellNavDestination(icon: ShellNavIcons.clients, label: 'Clients', semanticsLabel: 'Clients'),
-    ShellNavDestination(icon: ShellNavIcons.directory, label: 'Directory', semanticsLabel: 'Directory'),
-    ShellNavDestination(icon: ShellNavIcons.items, label: 'Items', semanticsLabel: 'Items'),
+    ShellNavDestination(
+      icon: ShellNavIcons.home,
+      label: 'Home',
+      semanticsLabel: 'Home',
+    ),
+    ShellNavDestination(
+      icon: ShellNavIcons.clients,
+      label: 'Clients',
+      semanticsLabel: 'Clients',
+    ),
+    ShellNavDestination(
+      icon: ShellNavIcons.directory,
+      label: 'Directory',
+      semanticsLabel: 'Directory',
+    ),
+    ShellNavDestination(
+      icon: ShellNavIcons.items,
+      label: 'Items',
+      semanticsLabel: 'Items',
+    ),
   ];
 
-  testWidgets('rail uses widened theme and larger destination icons', (tester) async {
+  testWidgets('rail uses widened theme and larger destination icons', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(1280, 900));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -39,7 +57,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final theme = tester.widget<NavigationRailTheme>(find.byType(NavigationRailTheme));
+    final theme = tester.widget<NavigationRailTheme>(
+      find.byType(NavigationRailTheme),
+    );
     expect(theme.data.minWidth, ShellNavigationRail.railMinWidth);
 
     final icons = tester.widgetList<ShellNavIcon>(find.byType(ShellNavIcon));
@@ -48,7 +68,9 @@ void main() {
       isTrue,
     );
 
-    final indicator = tester.widget<NavigationRail>(find.byType(NavigationRail));
+    final indicator = tester.widget<NavigationRail>(
+      find.byType(NavigationRail),
+    );
     expect(indicator.indicatorShape, isA<RoundedRectangleBorder>());
   });
 }

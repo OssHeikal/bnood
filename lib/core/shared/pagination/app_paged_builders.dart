@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../config/theme/app_size.dart';
-import '../../widgets/app_card.dart';
-import '../../widgets/app_fallback.dart';
-import '../../widgets/skeleton/paged_list_skeleton.dart';
+import '../../services/config/theme/app_size.dart';
+import '../../ui/widgets/app_card.dart';
+import '../../ui/widgets/app_fallback.dart';
+import '../../ui/widgets/skeleton/paged_list_skeleton.dart';
 import '../../../l10n/app_localizations.dart';
 
 /// Optional overrides for indicator builders on [AppPagedView].
@@ -18,13 +18,26 @@ class AppPagedBuilders<T> {
     this.noMoreItems,
     this.invisibleItemsThreshold = 4,
     this.firstPageSkeletonCount = 4,
-    this.contentPadding = const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
+    this.contentPadding = const EdgeInsets.symmetric(
+      horizontal: AppSize.screenPadding,
+    ),
   });
 
-  final Widget Function(BuildContext context, PagingState<int, T> state)? firstPageProgress;
+  final Widget Function(BuildContext context, PagingState<int, T> state)?
+  firstPageProgress;
   final WidgetBuilder? newPageProgress;
-  final Widget Function(BuildContext context, PagingState<int, T> state, VoidCallback retry)? firstPageError;
-  final Widget Function(BuildContext context, PagingState<int, T> state, VoidCallback retry)? newPageError;
+  final Widget Function(
+    BuildContext context,
+    PagingState<int, T> state,
+    VoidCallback retry,
+  )?
+  firstPageError;
+  final Widget Function(
+    BuildContext context,
+    PagingState<int, T> state,
+    VoidCallback retry,
+  )?
+  newPageError;
   final WidgetBuilder? empty;
   final WidgetBuilder? noMoreItems;
   final int invisibleItemsThreshold;
@@ -55,12 +68,11 @@ class AppPagedBuilders<T> {
         if (firstPageProgress != null) {
           return padded(firstPageProgress!(ctx, state));
         }
-        return padded(
-          PagedListSkeleton(count: firstPageSkeletonCount),
-        );
+        return padded(PagedListSkeleton(count: firstPageSkeletonCount));
       },
       newPageProgressIndicatorBuilder: (ctx) {
-        if (newPageProgress != null) return padded(newPageProgress!(ctx), topSpacing: false);
+        if (newPageProgress != null)
+          return padded(newPageProgress!(ctx), topSpacing: false);
         return padded(
           const Center(
             child: Padding(
@@ -98,7 +110,10 @@ class AppPagedBuilders<T> {
       },
       newPageErrorIndicatorBuilder: (ctx) {
         if (newPageError != null) {
-          return padded(newPageError!(ctx, state, fetchNextPage), topSpacing: false);
+          return padded(
+            newPageError!(ctx, state, fetchNextPage),
+            topSpacing: false,
+          );
         }
         return padded(
           AppCard(
@@ -130,9 +145,9 @@ class AppPagedBuilders<T> {
       },
       noMoreItemsIndicatorBuilder: noMoreItems != null
           ? (ctx) => Padding(
-                padding: contentPadding.copyWith(bottom: AppSize.spaceMD),
-                child: noMoreItems!(ctx),
-              )
+              padding: contentPadding.copyWith(bottom: AppSize.spaceMD),
+              child: noMoreItems!(ctx),
+            )
           : null,
     );
   }

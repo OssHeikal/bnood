@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/formatting/display_digits.dart';
-import '../../data/paywall_v3_models.dart';
-import '../../data/subscription_colors.dart';
-import '../paywall_theme.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/formatting/display_digits.dart';
+import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
+import 'package:bnood/features/subscription/data/subscription_colors.dart';
+import 'package:bnood/features/subscription/presentation/widgets/paywall_theme.dart';
 
 class PaywallComparisonTable extends StatelessWidget {
   const PaywallComparisonTable({
@@ -24,16 +24,30 @@ class PaywallComparisonTable extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = PaywallTheme.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final highlightText = isDark ? const Color(0xFFE4D4FF) : SubscriptionColors.violetDark;
+    final highlightText = isDark
+        ? const Color(0xFFE4D4FF)
+        : SubscriptionColors.violetDark;
     final highlightBg = isDark
         ? const Color(0xFF2A1D40).withValues(alpha: 0.55)
         : SubscriptionColors.violetSoft.withValues(alpha: 0.55);
     final stripe = isDark ? const Color(0xFF1E1828) : const Color(0xFFF7F4FA);
 
     if (comfortableSheetLayout) {
-      final headerStyle = theme.compareHeader.copyWith(fontSize: 14, height: 1.25, fontWeight: FontWeight.w800);
-      final rowLabelStyle = theme.compareRow.copyWith(fontSize: 14.5, height: 1.3, fontWeight: FontWeight.w700);
-      final cellStyle = theme.compareCell.copyWith(fontSize: 14, height: 1.3, fontWeight: FontWeight.w600);
+      final headerStyle = theme.compareHeader.copyWith(
+        fontSize: 14,
+        height: 1.25,
+        fontWeight: FontWeight.w800,
+      );
+      final rowLabelStyle = theme.compareRow.copyWith(
+        fontSize: 14.5,
+        height: 1.3,
+        fontWeight: FontWeight.w700,
+      );
+      final cellStyle = theme.compareCell.copyWith(
+        fontSize: 14,
+        height: 1.3,
+        fontWeight: FontWeight.w600,
+      );
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -65,7 +79,9 @@ class PaywallComparisonTable extends StatelessWidget {
             DecoratedBox(
               decoration: BoxDecoration(
                 color: i.isOdd ? stripe : Colors.transparent,
-                border: Border(bottom: BorderSide(color: theme.line.withValues(alpha: 0.65))),
+                border: Border(
+                  bottom: BorderSide(color: theme.line.withValues(alpha: 0.65)),
+                ),
               ),
               child: IntrinsicHeight(
                 child: Row(
@@ -83,12 +99,15 @@ class PaywallComparisonTable extends StatelessWidget {
                       Expanded(
                         flex: 4,
                         child: _ValueCell(
-                          value: table.cells[col.slug]?[table.rows[i].key] ?? '—',
+                          value:
+                              table.cells[col.slug]?[table.rows[i].key] ?? '—',
                           highlighted: col.slug == selectedPackageSlug,
                           theme: theme,
                           highlightText: highlightText,
                           highlightBg: highlightBg,
-                          checkColor: col.slug == selectedPackageSlug ? theme.compareCheckSelected : theme.compareCheck,
+                          checkColor: col.slug == selectedPackageSlug
+                              ? theme.compareCheckSelected
+                              : theme.compareCheck,
                           textStyle: cellStyle,
                           minHeight: _sheetRowMinHeight,
                           comfortable: true,
@@ -108,7 +127,8 @@ class PaywallComparisonTable extends StatelessWidget {
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: {
           0: const FlexColumnWidth(2),
-          for (var i = 0; i < table.columns.length; i++) i + 1: const FlexColumnWidth(1),
+          for (var i = 0; i < table.columns.length; i++)
+            i + 1: const FlexColumnWidth(1),
         },
         children: [
           TableRow(
@@ -148,7 +168,9 @@ class PaywallComparisonTable extends StatelessWidget {
                     theme: theme,
                     highlightText: highlightText,
                     highlightBg: highlightBg,
-                    checkColor: col.slug == selectedPackageSlug ? theme.compareCheckSelected : theme.compareCheck,
+                    checkColor: col.slug == selectedPackageSlug
+                        ? theme.compareCheckSelected
+                        : theme.compareCheck,
                     textStyle: theme.compareCell,
                     minHeight: 32,
                     comfortable: false,
@@ -162,7 +184,11 @@ class PaywallComparisonTable extends StatelessWidget {
 }
 
 class _RowLabelCell extends StatelessWidget {
-  const _RowLabelCell({required this.label, required this.style, required this.minHeight});
+  const _RowLabelCell({
+    required this.label,
+    required this.style,
+    required this.minHeight,
+  });
 
   final String label;
   final TextStyle style;
@@ -173,10 +199,21 @@ class _RowLabelCell extends StatelessWidget {
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: minHeight),
       child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(AppSize.spaceSM, 10, AppSize.spaceMD, 10),
+        padding: const EdgeInsetsDirectional.fromSTEB(
+          AppSize.spaceSM,
+          10,
+          AppSize.spaceMD,
+          10,
+        ),
         child: Align(
           alignment: AlignmentDirectional.centerStart,
-          child: Text(label, style: style, textAlign: TextAlign.start, maxLines: 2, overflow: TextOverflow.ellipsis),
+          child: Text(
+            label,
+            style: style,
+            textAlign: TextAlign.start,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ),
     );
@@ -217,7 +254,9 @@ class _HeaderCell extends StatelessWidget {
         maxLines: comfortable ? 2 : 1,
         softWrap: comfortable,
         overflow: TextOverflow.ellipsis,
-        style: textStyle.copyWith(color: highlighted ? highlightText : theme.ink),
+        style: textStyle.copyWith(
+          color: highlighted ? highlightText : theme.ink,
+        ),
       ),
     );
   }
@@ -254,7 +293,11 @@ class _ValueCell extends StatelessWidget {
 
     Widget child;
     if (isCheck) {
-      child = Icon(Icons.check_rounded, size: comfortable ? 18 : 13, color: checkColor);
+      child = Icon(
+        Icons.check_rounded,
+        size: comfortable ? 18 : 13,
+        color: checkColor,
+      );
     } else if (isDash) {
       child = Text('—', textAlign: TextAlign.center, style: textStyle);
     } else {
@@ -263,7 +306,9 @@ class _ValueCell extends StatelessWidget {
         textAlign: TextAlign.center,
         maxLines: comfortable ? 2 : 1,
         overflow: TextOverflow.ellipsis,
-        style: textStyle.copyWith(color: highlighted ? highlightText : theme.muted),
+        style: textStyle.copyWith(
+          color: highlighted ? highlightText : theme.muted,
+        ),
       );
     }
 
@@ -297,14 +342,20 @@ class _CellFrame extends StatelessWidget {
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: minHeight),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: comfortable ? 6 : 2, horizontal: comfortable ? AppSize.spaceXS : 1),
+        padding: EdgeInsets.symmetric(
+          vertical: comfortable ? 6 : 2,
+          horizontal: comfortable ? AppSize.spaceXS : 1,
+        ),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: highlighted ? highlightBg : Colors.transparent,
             borderRadius: BorderRadius.circular(comfortable ? 8 : 6),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: comfortable ? 8 : 4, horizontal: comfortable ? 6 : 2),
+            padding: EdgeInsets.symmetric(
+              vertical: comfortable ? 8 : 4,
+              horizontal: comfortable ? 6 : 2,
+            ),
             child: child,
           ),
         ),

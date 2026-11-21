@@ -3,16 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import 'data/app_config_record.dart';
-import 'app_gate_provider.dart';
-import 'app_gate_session.dart';
-import 'widgets/gate_blocking_scaffold.dart';
+import 'package:bnood/features/app_gate/data/app_config_record.dart';
+import 'package:bnood/features/app_gate/app_gate_provider.dart';
+import 'package:bnood/features/app_gate/app_gate_session.dart';
+import 'package:bnood/features/app_gate/widgets/gate_blocking_scaffold.dart';
 
 class AppMaintenanceScreen extends ConsumerStatefulWidget {
   const AppMaintenanceScreen({super.key});
 
   @override
-  ConsumerState<AppMaintenanceScreen> createState() => _AppMaintenanceScreenState();
+  ConsumerState<AppMaintenanceScreen> createState() =>
+      _AppMaintenanceScreenState();
 }
 
 class _AppMaintenanceScreenState extends ConsumerState<AppMaintenanceScreen> {
@@ -22,7 +23,9 @@ class _AppMaintenanceScreenState extends ConsumerState<AppMaintenanceScreen> {
     if (_retrying) return;
     setState(() => _retrying = true);
     try {
-      final config = await ref.read(appGateProvider.notifier).fetchConfig(failOpen: false);
+      final config = await ref
+          .read(appGateProvider.notifier)
+          .fetchConfig(failOpen: false);
       if (!mounted) return;
       if (config.status != AppGateStatus.maintenance) {
         final dest = AppGateSession.postSplashDestination ?? '/auth/login';
@@ -38,7 +41,8 @@ class _AppMaintenanceScreenState extends ConsumerState<AppMaintenanceScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final config = ref.watch(appGateProvider).valueOrNull ?? AppConfigData.failOpen();
+    final config =
+        ref.watch(appGateProvider).valueOrNull ?? AppConfigData.failOpen();
     final message = config.messageForDisplay(
       () => l10n.gateMaintenanceFallbackMessage,
       () => l10n.gateForceUpdateFallbackMessage,

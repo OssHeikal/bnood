@@ -1,6 +1,6 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/app_amount.dart';
-import 'package:bnood/core/widgets/app_fallback.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/app_amount.dart';
+import 'package:bnood/core/ui/widgets/app_fallback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

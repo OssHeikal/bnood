@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/config/extensions/num_extensions.dart';
-import '../../core/config/theme/app_size.dart';
+import '../../core/services/config/extensions/num_extensions.dart';
+import '../../core/services/config/theme/app_size.dart';
 import '../../core/utils/extensions/bidi_isolate.dart';
-import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/buttons/app_button.dart';
-import 'auth_controller.dart';
-import 'auth_form_ui.dart';
-import 'auth_messages.dart';
-import 'auth_paths.dart';
-import 'widgets/auth_flow_scaffold.dart';
-import 'widgets/auth_otp_challenge_form.dart';
+import '../../core/ui/widgets/app_toaster.dart';
+import '../../core/ui/widgets/buttons/app_button.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_form_ui.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
+import 'package:bnood/features/auth/auth_paths.dart';
+import 'package:bnood/features/auth/widgets/auth_flow_scaffold.dart';
+import 'package:bnood/features/auth/widgets/auth_otp_challenge_form.dart';
 
 Future<void> _submitForgotVerify(BuildContext context, WidgetRef ref) async {
   final fields = ref.read(forgotVerifyFormFieldsProvider);
@@ -28,7 +28,9 @@ Future<void> _submitForgotVerify(BuildContext context, WidgetRef ref) async {
   if (ref.read(authFormUiProvider(formId)).loading) return;
   ui.setLoading(true);
   final code = fields.pinController.text.trim();
-  final error = await ref.read(authControllerProvider.notifier).verifyForgotPassword(code);
+  final error = await ref
+      .read(authControllerProvider.notifier)
+      .verifyForgotPassword(code);
   if (!context.mounted) return;
   if (error == null) {
     ui.clearLoading();
@@ -83,13 +85,16 @@ class ForgotVerifyScreen extends ConsumerWidget {
         formKey: fields.formKey,
         pinController: fields.pinController,
         phone: pending.phone,
-        autovalidateMode:
-            ui.attempted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: ui.attempted
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         loading: ui.loading,
         verifyLabel: l10n.authContinue,
         onVerify: () => _submitForgotVerify(context, ref),
         codeError: ui.errorFor('code'),
-        codeErrorOf: () => ref.read(authFormUiProvider(AuthFormId.forgotVerify)).errorFor('code'),
+        codeErrorOf: () => ref
+            .read(authFormUiProvider(AuthFormId.forgotVerify))
+            .errorFor('code'),
       ),
     );
   }

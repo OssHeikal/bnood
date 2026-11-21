@@ -1,4 +1,4 @@
-import 'package:bnood/core/widgets/app_amount.dart';
+import 'package:bnood/core/ui/widgets/app_amount.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -17,7 +17,11 @@ void main() {
   });
 
   test('format without currency strips suffix', () {
-    final plain = AppAmount.format(piastres: 500_000, localeCode: 'en', showCurrency: false);
+    final plain = AppAmount.format(
+      piastres: 500_000,
+      localeCode: 'en',
+      showCurrency: false,
+    );
     expect(plain, isNot(contains('EGP')));
     expect(plain, isNot(contains('ج.م')));
   });

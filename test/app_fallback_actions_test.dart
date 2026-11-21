@@ -1,6 +1,6 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/app_fallback.dart';
-import 'package:bnood/core/widgets/buttons/app_button.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/app_fallback.dart';
+import 'package:bnood/core/ui/widgets/buttons/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,8 +14,16 @@ void main() {
             title: 'Empty',
             actions: [
               AppFallbackAction(label: 'Primary', onPressed: _noop),
-              AppFallbackAction(label: 'Secondary', onPressed: _noop, role: AppFallbackActionRole.secondary),
-              AppFallbackAction(label: 'Tertiary', onPressed: _noop, role: AppFallbackActionRole.tertiary),
+              AppFallbackAction(
+                label: 'Secondary',
+                onPressed: _noop,
+                role: AppFallbackActionRole.secondary,
+              ),
+              AppFallbackAction(
+                label: 'Tertiary',
+                onPressed: _noop,
+                role: AppFallbackActionRole.tertiary,
+              ),
             ],
           ),
         ),
@@ -32,7 +40,11 @@ void main() {
       MaterialApp(
         theme: AppFoundationTheme.light(),
         home: Scaffold(
-          body: AppFallback(title: 'Empty', actionLabel: 'Add', onAction: () {}),
+          body: AppFallback(
+            title: 'Empty',
+            actionLabel: 'Add',
+            onAction: () {},
+          ),
         ),
       ),
     );

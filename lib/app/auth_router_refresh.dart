@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
 
 class AuthRouterRefresh extends ChangeNotifier {
   AuthRouterRefresh();

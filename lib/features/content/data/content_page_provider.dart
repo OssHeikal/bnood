@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/api/pages_api.dart';
-import 'content_page_record.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/pages_api.dart';
+import 'package:bnood/features/content/data/content_page_record.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
 
 final pagesApiProvider = Provider<PagesApi>((ref) {
@@ -11,8 +11,10 @@ final pagesApiProvider = Provider<PagesApi>((ref) {
   return api;
 });
 
-final contentPageProvider =
-    FutureProvider.family<ContentPage, String>((ref, slug) async {
+final contentPageProvider = FutureProvider.family<ContentPage, String>((
+  ref,
+  slug,
+) async {
   final locale = ref.watch(localeProvider).languageCode;
   try {
     return await ref.read(pagesApiProvider).getPage(slug: slug, locale: locale);

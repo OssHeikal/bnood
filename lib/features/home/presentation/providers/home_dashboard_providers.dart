@@ -1,33 +1,40 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/home_dashboard_mapping.dart';
-import '../../data/home_riverpod.dart';
-import '../../data/home_row_models.dart';
-import '../../data/home_section_counts.dart';
+import 'package:bnood/features/home/data/home_dashboard_mapping.dart';
+import 'package:bnood/features/home/data/home_riverpod.dart';
+import 'package:bnood/features/home/data/home_row_models.dart';
+import 'package:bnood/features/home/data/home_section_counts.dart';
 import '../../../../core/app_state/silent_async_notifier.dart';
 import '../../../../core/shared/pagination/paging_refresh.dart';
 
-final homeTotalsProvider = AsyncNotifierProvider<HomeTotalsNotifier, HomeTotals>(HomeTotalsNotifier.new);
+final homeTotalsProvider =
+    AsyncNotifierProvider<HomeTotalsNotifier, HomeTotals>(
+      HomeTotalsNotifier.new,
+    );
 
 final homeClientBalancesProvider =
-    AsyncNotifierProvider<HomeClientBalancesNotifier, List<HomeClientBalanceRow>>(
-  HomeClientBalancesNotifier.new,
-);
+    AsyncNotifierProvider<
+      HomeClientBalancesNotifier,
+      List<HomeClientBalanceRow>
+    >(HomeClientBalancesNotifier.new);
 
 final homeSupplierSpendsProvider =
-    AsyncNotifierProvider<HomeSupplierSpendsNotifier, List<HomeSupplierSpendRow>>(
-  HomeSupplierSpendsNotifier.new,
-);
+    AsyncNotifierProvider<
+      HomeSupplierSpendsNotifier,
+      List<HomeSupplierSpendRow>
+    >(HomeSupplierSpendsNotifier.new);
 
 final homeCraftsmenProvider =
-    AsyncNotifierProvider<HomeCraftsmenNotifier, List<HomeCraftsmanActivityRow>>(
-  HomeCraftsmenNotifier.new,
-);
+    AsyncNotifierProvider<
+      HomeCraftsmenNotifier,
+      List<HomeCraftsmanActivityRow>
+    >(HomeCraftsmenNotifier.new);
 
 final homeSuppliersProvider =
-    AsyncNotifierProvider<HomeSuppliersNotifier, List<HomeCraftsmanActivityRow>>(
-  HomeSuppliersNotifier.new,
-);
+    AsyncNotifierProvider<
+      HomeSuppliersNotifier,
+      List<HomeCraftsmanActivityRow>
+    >(HomeSuppliersNotifier.new);
 
 Future<void> refreshHomeDashboard(WidgetRef ref) {
   ref.read(homeRepositoryProvider).invalidateDashboard();
@@ -54,7 +61,8 @@ class HomeTotalsNotifier extends SilentAsyncNotifier<HomeTotals> {
   }
 }
 
-class HomeClientBalancesNotifier extends SilentAsyncNotifier<List<HomeClientBalanceRow>> {
+class HomeClientBalancesNotifier
+    extends SilentAsyncNotifier<List<HomeClientBalanceRow>> {
   @override
   Future<List<HomeClientBalanceRow>> fetch() async {
     final dashboard = await ref.read(homeRepositoryProvider).getHomeDashboard();
@@ -62,12 +70,14 @@ class HomeClientBalancesNotifier extends SilentAsyncNotifier<List<HomeClientBala
   }
 }
 
-class HomeSupplierSpendsNotifier extends SilentAsyncNotifier<List<HomeSupplierSpendRow>> {
+class HomeSupplierSpendsNotifier
+    extends SilentAsyncNotifier<List<HomeSupplierSpendRow>> {
   @override
   Future<List<HomeSupplierSpendRow>> fetch() async => const [];
 }
 
-class HomeCraftsmenNotifier extends SilentAsyncNotifier<List<HomeCraftsmanActivityRow>> {
+class HomeCraftsmenNotifier
+    extends SilentAsyncNotifier<List<HomeCraftsmanActivityRow>> {
   @override
   Future<List<HomeCraftsmanActivityRow>> fetch() async {
     final dashboard = await ref.read(homeRepositoryProvider).getHomeDashboard();
@@ -80,7 +90,8 @@ class HomeCraftsmenNotifier extends SilentAsyncNotifier<List<HomeCraftsmanActivi
   }
 }
 
-class HomeSuppliersNotifier extends SilentAsyncNotifier<List<HomeCraftsmanActivityRow>> {
+class HomeSuppliersNotifier
+    extends SilentAsyncNotifier<List<HomeCraftsmanActivityRow>> {
   @override
   Future<List<HomeCraftsmanActivityRow>> fetch() async {
     final dashboard = await ref.read(homeRepositoryProvider).getHomeDashboard();

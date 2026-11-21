@@ -1,4 +1,4 @@
-import 'package:bnood/core/api/api_accept_language.dart';
+import 'package:bnood/core/network/api/api_accept_language.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

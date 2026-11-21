@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math' as math;
 
-import 'package:bnood/features/vouchers/presentation/receipt_image_compress.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/receipt_image_compress.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
 

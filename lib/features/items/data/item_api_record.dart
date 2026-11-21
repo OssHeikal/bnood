@@ -37,7 +37,9 @@ class CatalogItem {
       sortOrder: (json['sort_order'] as num?)?.toInt() ?? 0,
       createdAt: DateTime.parse(json['created_at'] as String).toUtc(),
       updatedAt: DateTime.parse(json['updated_at'] as String).toUtc(),
-      archivedAt: archivedRaw == null ? null : DateTime.parse(archivedRaw as String).toUtc(),
+      archivedAt: archivedRaw == null
+          ? null
+          : DateTime.parse(archivedRaw as String).toUtc(),
     );
   }
 }
@@ -73,10 +75,7 @@ class ItemColorOption {
 }
 
 class ItemIconsCatalog {
-  const ItemIconsCatalog({
-    required this.colors,
-    required this.iconKeys,
-  });
+  const ItemIconsCatalog({required this.colors, required this.iconKeys});
 
   final List<ItemColorOption> colors;
   final List<String> iconKeys;
@@ -86,11 +85,13 @@ class ItemIconsCatalog {
     final iconsRaw = json['icons'];
     final colors = colorsRaw is List
         ? colorsRaw
-            .whereType<Map<String, dynamic>>()
-            .map(ItemColorOption.fromJson)
-            .toList()
+              .whereType<Map<String, dynamic>>()
+              .map(ItemColorOption.fromJson)
+              .toList()
         : <ItemColorOption>[];
-    final icons = iconsRaw is List ? iconsRaw.map((e) => e.toString()).toList() : <String>[];
+    final icons = iconsRaw is List
+        ? iconsRaw.map((e) => e.toString()).toList()
+        : <String>[];
     return ItemIconsCatalog(colors: colors, iconKeys: icons);
   }
 }
@@ -103,6 +104,7 @@ enum ItemDeleteResult {
   /// Hidden for this user (linked own item or a default item).
   archived;
 
-  static ItemDeleteResult fromWire(String? value) =>
-      value == 'archived' ? ItemDeleteResult.archived : ItemDeleteResult.deleted;
+  static ItemDeleteResult fromWire(String? value) => value == 'archived'
+      ? ItemDeleteResult.archived
+      : ItemDeleteResult.deleted;
 }

@@ -1,9 +1,9 @@
 import 'package:bnood/app/app_splash_session.dart';
 import 'package:bnood/app/bnood_app.dart';
 import 'package:bnood/app/router.dart';
-import 'package:bnood/core/prefs/app_settings_store.dart';
+import 'package:bnood/core/data/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/register_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
@@ -13,8 +13,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_session_store.dart';
 
-AppSettingsSnapshot _bootstrap() =>
-    const AppSettingsSnapshot(themeMode: ThemeMode.light, locale: Locale('en'), prefs: null);
+AppSettingsSnapshot _bootstrap() => const AppSettingsSnapshot(
+  themeMode: ThemeMode.light,
+  locale: Locale('en'),
+  prefs: null,
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -33,10 +36,14 @@ void main() {
       ),
     );
     await tester.pump();
-    final container = ProviderScope.containerOf(tester.element(find.byType(BnoodApp)));
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(BnoodApp)),
+    );
     container.read(goRouterProvider).go(AuthPaths.register);
     await tester.pumpAndSettle();
-    final l10n = AppLocalizations.of(tester.element(find.byType(RegisterScreen)));
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(RegisterScreen)),
+    );
     expect(find.textContaining(l10n.settingsContentTerms), findsOneWidget);
     expect(find.textContaining(l10n.settingsContentPrivacy), findsOneWidget);
   });

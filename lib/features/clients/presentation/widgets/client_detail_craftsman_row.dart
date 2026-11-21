@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/theme/app_colors.dart' as legacy;
-import '../../../../core/money/remote_money_units.dart';
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_chevron.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/theme/app_colors.dart' as legacy;
+import '../../../../core/domain/money/remote_money_units.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_chevron.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../features/providers/data/app_provider_record.dart';
-import '../client_detail_snapshot.dart';
+import 'package:bnood/features/providers/data/app_provider_record.dart';
+import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 
 class ClientDetailCraftsmanRow extends StatelessWidget {
   const ClientDetailCraftsmanRow({
@@ -39,8 +39,8 @@ class ClientDetailCraftsmanRow extends StatelessWidget {
     final detailRoute = onlineOnly
         ? '/providers/${preview.craftsmanId}'
         : isSupplier
-            ? '/providers/${preview.craftsmanId}'
-            : '/craftsmen/${preview.craftsmanId}';
+        ? '/providers/${preview.craftsmanId}'
+        : '/craftsmen/${preview.craftsmanId}';
 
     return AppCard(
       onTap: () => context.push(detailRoute),
@@ -69,7 +69,9 @@ class ClientDetailCraftsmanRow extends StatelessWidget {
                     ),
                     Text(
                       meta,
-                      style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                      style: text.caption.copyWith(
+                        color: colors.onSurfaceMuted,
+                      ),
                       textAlign: TextAlign.start,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -215,7 +217,10 @@ class _SmallAvatar extends StatelessWidget {
         child: Center(
           child: Text(
             initial,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ),
       ),

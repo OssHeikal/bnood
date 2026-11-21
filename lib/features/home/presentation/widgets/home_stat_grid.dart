@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/config/extensions/num_extensions.dart';
-import '../../../../../core/config/theme/app_colors.dart';
-import '../../../../../core/config/theme/app_shape.dart';
-import '../../../../../core/config/theme/app_size.dart';
-import '../../data/home_row_models.dart';
-import '../../../../../core/resources/gen/assets.gen.dart';
-import '../../../../../core/widgets/app_amount.dart';
-import '../../../../../core/widgets/app_card.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import 'package:bnood/features/home/data/home_row_models.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/app_card.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
@@ -126,7 +126,12 @@ class _StatTile extends StatelessWidget {
               _IconBubble(icon: icon, tint: tint, tintBg: tintBg),
               AppSize.spaceSM.gap,
               Expanded(
-                child: Text(label, style: labelStyle, maxLines: labelMaxLines, overflow: TextOverflow.ellipsis),
+                child: Text(
+                  label,
+                  style: labelStyle,
+                  maxLines: labelMaxLines,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
@@ -152,7 +157,11 @@ class _StatTile extends StatelessWidget {
 }
 
 class _IconBubble extends StatelessWidget {
-  const _IconBubble({required this.icon, required this.tint, required this.tintBg});
+  const _IconBubble({
+    required this.icon,
+    required this.tint,
+    required this.tintBg,
+  });
 
   final SvgGenImage icon;
   final Color tint;
@@ -168,7 +177,11 @@ class _IconBubble extends StatelessWidget {
         width: AppSize.statIconBox,
         height: AppSize.statIconBox,
         child: Center(
-          child: ShellNavIcon(asset: icon, color: tint, size: AppSize.iconSmall),
+          child: ShellNavIcon(
+            asset: icon,
+            color: tint,
+            size: AppSize.iconSmall,
+          ),
         ),
       ),
     );

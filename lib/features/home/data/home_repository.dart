@@ -1,6 +1,6 @@
-import 'home_api.dart';
-import 'app_home_dashboard.dart';
-import 'app_home_totals.dart';
+import 'package:bnood/features/home/data/home_api.dart';
+import 'package:bnood/features/home/data/app_home_dashboard.dart';
+import 'package:bnood/features/home/data/app_home_totals.dart';
 
 class HomeRepository {
   HomeRepository(this._api);
@@ -28,5 +28,6 @@ class HomeRepository {
     return future;
   }
 
-  Future<AppHomeTotals> getHomeTotals() async => (await getHomeDashboard()).totals;
+  Future<AppHomeTotals> getHomeTotals() async =>
+      (await getHomeDashboard()).totals;
 }

@@ -7,13 +7,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  testWidgets('bottom fade is IgnorePointer so list receives taps', (tester) async {
+  testWidgets('bottom fade is IgnorePointer so list receives taps', (
+    tester,
+  ) async {
     var tapped = false;
     final router = GoRouter(
       initialLocation: '/home',
       routes: [
         StatefulShellRoute.indexedStack(
-          builder: (context, state, navigationShell) => ShellScaffold(navigationShell: navigationShell),
+          builder: (context, state, navigationShell) =>
+              ShellScaffold(navigationShell: navigationShell),
           branches: [
             StatefulShellBranch(
               routes: [
@@ -22,20 +25,32 @@ void main() {
                   builder: (context, state) => ListView(
                     children: [
                       const SizedBox(height: 400),
-                      ListTile(title: const Text('last-row'), onTap: () => tapped = true),
+                      ListTile(
+                        title: const Text('last-row'),
+                        onTap: () => tapped = true,
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
             StatefulShellBranch(
-              routes: [GoRoute(path: '/clients', builder: (_, _) => const SizedBox())],
+              routes: [
+                GoRoute(path: '/clients', builder: (_, _) => const SizedBox()),
+              ],
             ),
             StatefulShellBranch(
-              routes: [GoRoute(path: '/directory', builder: (_, _) => const SizedBox())],
+              routes: [
+                GoRoute(
+                  path: '/directory',
+                  builder: (_, _) => const SizedBox(),
+                ),
+              ],
             ),
             StatefulShellBranch(
-              routes: [GoRoute(path: '/items', builder: (_, _) => const SizedBox())],
+              routes: [
+                GoRoute(path: '/items', builder: (_, _) => const SizedBox()),
+              ],
             ),
           ],
         ),
@@ -62,7 +77,9 @@ void main() {
     expect(fadeIgnores, findsWidgets);
   });
 
-  testWidgets('keyboard applies inset once to tab list viewport', (tester) async {
+  testWidgets('keyboard applies inset once to tab list viewport', (
+    tester,
+  ) async {
     const phone = Size(390, 844);
     const keyboard = 336.0;
     tester.view.physicalSize = phone;
@@ -72,10 +89,13 @@ void main() {
       initialLocation: '/clients',
       routes: [
         StatefulShellRoute.indexedStack(
-          builder: (context, state, navigationShell) => ShellScaffold(navigationShell: navigationShell),
+          builder: (context, state, navigationShell) =>
+              ShellScaffold(navigationShell: navigationShell),
           branches: [
             StatefulShellBranch(
-              routes: [GoRoute(path: '/home', builder: (_, _) => const SizedBox())],
+              routes: [
+                GoRoute(path: '/home', builder: (_, _) => const SizedBox()),
+              ],
             ),
             StatefulShellBranch(
               routes: [
@@ -91,10 +111,17 @@ void main() {
               ],
             ),
             StatefulShellBranch(
-              routes: [GoRoute(path: '/directory', builder: (_, _) => const SizedBox())],
+              routes: [
+                GoRoute(
+                  path: '/directory',
+                  builder: (_, _) => const SizedBox(),
+                ),
+              ],
             ),
             StatefulShellBranch(
-              routes: [GoRoute(path: '/items', builder: (_, _) => const SizedBox())],
+              routes: [
+                GoRoute(path: '/items', builder: (_, _) => const SizedBox()),
+              ],
             ),
           ],
         ),
@@ -114,10 +141,15 @@ void main() {
     addTearDown(tester.view.reset);
     await tester.pump();
 
-    final position = tester.state<ScrollableState>(find.byType(Scrollable)).position;
+    final position = tester
+        .state<ScrollableState>(find.byType(Scrollable))
+        .position;
     final expectedViewport = phone.height - keyboard;
     expect(position.viewportDimension, closeTo(expectedViewport, 8));
-    expect(position.viewportDimension, greaterThan(phone.height - keyboard * 1.5));
+    expect(
+      position.viewportDimension,
+      greaterThan(phone.height - keyboard * 1.5),
+    );
   });
 
   testWidgets('hides floating dock while keyboard is open', (tester) async {
@@ -125,24 +157,35 @@ void main() {
       initialLocation: '/home',
       routes: [
         StatefulShellRoute.indexedStack(
-          builder: (context, state, navigationShell) => ShellScaffold(navigationShell: navigationShell),
+          builder: (context, state, navigationShell) =>
+              ShellScaffold(navigationShell: navigationShell),
           branches: [
             StatefulShellBranch(
               routes: [
                 GoRoute(
                   path: '/home',
-                  builder: (context, state) => const Scaffold(body: TextField()),
+                  builder: (context, state) =>
+                      const Scaffold(body: TextField()),
                 ),
               ],
             ),
             StatefulShellBranch(
-              routes: [GoRoute(path: '/clients', builder: (_, _) => const SizedBox())],
+              routes: [
+                GoRoute(path: '/clients', builder: (_, _) => const SizedBox()),
+              ],
             ),
             StatefulShellBranch(
-              routes: [GoRoute(path: '/directory', builder: (_, _) => const SizedBox())],
+              routes: [
+                GoRoute(
+                  path: '/directory',
+                  builder: (_, _) => const SizedBox(),
+                ),
+              ],
             ),
             StatefulShellBranch(
-              routes: [GoRoute(path: '/items', builder: (_, _) => const SizedBox())],
+              routes: [
+                GoRoute(path: '/items', builder: (_, _) => const SizedBox()),
+              ],
             ),
           ],
         ),
@@ -165,10 +208,15 @@ void main() {
     expect(find.byType(FloatingShellDock), findsNothing);
 
     final padded = tester.widgetList<MediaQuery>(
-      find.descendant(of: find.byType(ShellScaffold), matching: find.byType(MediaQuery)),
+      find.descendant(
+        of: find.byType(ShellScaffold),
+        matching: find.byType(MediaQuery),
+      ),
     );
     expect(
-      padded.any((mq) => mq.data.padding.bottom < FloatingShellDock.clearanceHeight),
+      padded.any(
+        (mq) => mq.data.padding.bottom < FloatingShellDock.clearanceHeight,
+      ),
       isTrue,
     );
   });

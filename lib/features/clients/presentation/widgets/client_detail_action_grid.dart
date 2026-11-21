@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/resources/gen/assets.gen.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_pressable.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_pressable.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -155,7 +155,10 @@ class _ActionTile extends StatelessWidget {
       child: Opacity(
         opacity: enabled ? 1 : 0.55,
         child: AppCard(
-          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceXS, vertical: AppSize.spaceMD),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSize.spaceXS,
+            vertical: AppSize.spaceMD,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -166,11 +169,23 @@ class _ActionTile extends StatelessWidget {
                 child: SizedBox(
                   width: AppSize.buttonHeight,
                   height: AppSize.buttonHeight,
-                  child: Center(child: ShellNavIcon(asset: icon, color: iconColor, size: AppSize.icon)),
+                  child: Center(
+                    child: ShellNavIcon(
+                      asset: icon,
+                      color: iconColor,
+                      size: AppSize.icon,
+                    ),
+                  ),
                 ),
               ),
               AppSize.spaceXS.gap,
-              Text(label, style: labelStyle, maxLines: 2, textAlign: TextAlign.center, overflow: TextOverflow.ellipsis),
+              Text(
+                label,
+                style: labelStyle,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),

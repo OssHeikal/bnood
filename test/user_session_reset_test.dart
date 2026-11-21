@@ -1,9 +1,9 @@
 import 'package:bnood/features/home/data/home_api.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/home/data/app_home_dashboard.dart';
 import 'package:bnood/features/home/data/home_riverpod.dart';
 import 'package:bnood/features/home/data/home_repository.dart';
-import 'package:bnood/core/session/user_session_lifecycle.dart';
+import 'package:bnood/core/network/session/user_session_lifecycle.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +15,7 @@ import 'package:bnood/features/home/presentation/providers/home_dashboard_provid
 
 class _SwitchingHomeRepository extends HomeRepository {
   _SwitchingHomeRepository(this._receivedForUser)
-      : super(HomeApi(sessionStore: FakeSessionStore()));
+    : super(HomeApi(sessionStore: FakeSessionStore()));
 
   final int Function(String? userId) _receivedForUser;
 
@@ -38,39 +38,44 @@ class _SwitchingHomeRepository extends HomeRepository {
 }
 
 User _user(String id, String name) => User(
-      id: id,
-      phone: '+201000000001',
-      name: name,
-      phoneVerifiedAt: DateTime.utc(2026),
-    );
+  id: id,
+  phone: '+201000000001',
+  name: name,
+  phoneVerifiedAt: DateTime.utc(2026),
+);
 
 void main() {
-  test('logout then login as another user reloads home without manual refresh', () async {
-    final store = FakeSessionStore();
-    final container = ProviderContainer(
-      overrides: [
-        sessionStoreProvider.overrideWithValue(store),
-        homeRepositoryProvider.overrideWith(
-          (ref) => _SwitchingHomeRepository((userId) => userId == 'user-a' ? 1_000_000 : 9_000_000),
-        ),
-      ],
-    );
-    addTearDown(container.dispose);
+  test(
+    'logout then login as another user reloads home without manual refresh',
+    () async {
+      final store = FakeSessionStore();
+      final container = ProviderContainer(
+        overrides: [
+          sessionStoreProvider.overrideWithValue(store),
+          homeRepositoryProvider.overrideWith(
+            (ref) => _SwitchingHomeRepository(
+              (userId) => userId == 'user-a' ? 1_000_000 : 9_000_000,
+            ),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
 
-    container.read(userSessionLifecycleProvider);
+      container.read(userSessionLifecycleProvider);
 
-    final auth = container.read(authControllerProvider.notifier);
-    _SwitchingHomeRepository.bindUser('user-a');
-    auth.adoptSessionForTest(_user('user-a', 'Account A'));
-    final totalsA = await container.read(homeTotalsProvider.future);
-    expect(totalsA.receivedPiastres, 1_000_000);
+      final auth = container.read(authControllerProvider.notifier);
+      _SwitchingHomeRepository.bindUser('user-a');
+      auth.adoptSessionForTest(_user('user-a', 'Account A'));
+      final totalsA = await container.read(homeTotalsProvider.future);
+      expect(totalsA.receivedPiastres, 1_000_000);
 
-    await auth.logout();
-    _SwitchingHomeRepository.bindUser('user-b');
-    auth.adoptSessionForTest(_user('user-b', 'Account B'));
+      await auth.logout();
+      _SwitchingHomeRepository.bindUser('user-b');
+      auth.adoptSessionForTest(_user('user-b', 'Account B'));
 
-    final totalsB = await container.read(homeTotalsProvider.future);
-    expect(totalsB.receivedPiastres, 9_000_000);
-    expect(totalsB.receivedPiastres, isNot(totalsA.receivedPiastres));
-  });
+      final totalsB = await container.read(homeTotalsProvider.future);
+      expect(totalsB.receivedPiastres, 9_000_000);
+      expect(totalsB.receivedPiastres, isNot(totalsA.receivedPiastres));
+    },
+  );
 }

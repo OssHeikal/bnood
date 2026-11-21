@@ -1,16 +1,18 @@
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/vouchers/data/vouchers_api.dart';
 import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
-import 'package:bnood/core/money/remote_money_units.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bnood/core/api/app_dio.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
 
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-VouchersApi _vouchersApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+VouchersApi _vouchersApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return VouchersApi(dio: dio);
@@ -70,7 +72,12 @@ void main() {
           '{"success":true,"data":[],"meta":{"page":1,"per_page":20,"total":0}}',
         );
       });
-      await api.listClientVouchers(clientId: 'c1', itemId: '01JVITEM', page: 1, perPage: 20);
+      await api.listClientVouchers(
+        clientId: 'c1',
+        itemId: '01JVITEM',
+        page: 1,
+        perPage: 20,
+      );
       expect(uri.queryParameters['item_id'], '01JVITEM');
       expect(uri.path, endsWith('/clients/c1/vouchers'));
       api.close();
@@ -116,7 +123,13 @@ void main() {
           voucherDate: '2026-11-09',
           method: 'cash',
         ),
-        throwsA(isA<AuthApiException>().having((e) => e.isClientArchivedVoucher, 'archived', isTrue)),
+        throwsA(
+          isA<AuthApiException>().having(
+            (e) => e.isClientArchivedVoucher,
+            'archived',
+            isTrue,
+          ),
+        ),
       );
       api.close();
     });

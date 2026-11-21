@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import '../core/config/navigation/root_navigator_key.dart';
-import '../core/config/theme/app_theme.dart';
+import '../core/services/config/navigation/root_navigator_key.dart';
+import '../core/services/config/theme/app_theme.dart';
 import 'ui_foundation_preview_screen.dart';
 
 class UiFoundationPreviewApp extends StatelessWidget {

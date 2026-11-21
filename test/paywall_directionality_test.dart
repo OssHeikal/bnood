@@ -1,4 +1,4 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_comparison_table.dart';
 import 'package:bnood/features/subscription/presentation/widgets/paywall_package_card.dart';
@@ -70,10 +70,15 @@ void main() {
     );
   }
 
-  testWidgets('RTL comparison row label sits at layout start (right)', (tester) async {
+  testWidgets('RTL comparison row label sits at layout start (right)', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       wrap(
-        child: PaywallComparisonTable(table: comparisonTable, selectedPackageSlug: 'pro'),
+        child: PaywallComparisonTable(
+          table: comparisonTable,
+          selectedPackageSlug: 'pro',
+        ),
         textDirection: TextDirection.rtl,
         locale: const Locale('ar'),
       ),
@@ -85,10 +90,15 @@ void main() {
     expect(label.center.dx, greaterThan(pro.center.dx));
   });
 
-  testWidgets('LTR comparison row label sits at layout start (left)', (tester) async {
+  testWidgets('LTR comparison row label sits at layout start (left)', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       wrap(
-        child: PaywallComparisonTable(table: comparisonTable, selectedPackageSlug: 'pro'),
+        child: PaywallComparisonTable(
+          table: comparisonTable,
+          selectedPackageSlug: 'pro',
+        ),
         textDirection: TextDirection.ltr,
         locale: const Locale('en'),
       ),
@@ -100,7 +110,9 @@ void main() {
     expect(label.center.dx, lessThan(pro.center.dx));
   });
 
-  testWidgets('RTL plan chip follows plan name in reading order', (tester) async {
+  testWidgets('RTL plan chip follows plan name in reading order', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       wrap(
         child: PaywallPackageCard(
@@ -121,7 +133,9 @@ void main() {
     expect(name.center.dx, greaterThan(chip.center.dx));
   });
 
-  testWidgets('LTR plan chip follows plan name in reading order', (tester) async {
+  testWidgets('LTR plan chip follows plan name in reading order', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       wrap(
         child: PaywallPackageCard(

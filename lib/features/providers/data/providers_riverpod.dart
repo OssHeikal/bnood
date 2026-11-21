@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'providers_api.dart';
-import 'package:bnood/core/storage/session_store.dart';
-import 'providers_repository.dart';
+import 'package:bnood/features/providers/data/providers_api.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
+import 'package:bnood/features/providers/data/providers_repository.dart';
 
 final appProvidersApiProvider = Provider<ProvidersApi>((ref) {
   final store = ref.watch(sessionStoreProvider);

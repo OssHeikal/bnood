@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 
-import '../core/config/extensions/num_extensions.dart';
-import '../core/config/theme/app_size.dart';
-import '../core/config/theme/app_colors.dart';
-import '../core/config/theme/app_theme.dart';
-import '../core/l10n/field_placeholders.dart';
-import '../core/widgets/app_amount.dart';
-import '../core/widgets/app_card.dart';
-import '../core/widgets/app_fallback.dart';
-import '../core/widgets/app_decision.dart';
-import '../core/widgets/toast/app_tone.dart';
-import '../core/widgets/custom_text_field.dart';
-import '../core/widgets/foundation_toaster.dart';
-import '../core/widgets/buttons/app_button.dart';
-import '../core/widgets/custom_app_bar.dart';
-import '../core/widgets/sheet/app_sheet.dart';
+import '../core/services/config/extensions/num_extensions.dart';
+import '../core/services/config/theme/app_size.dart';
+import '../core/services/config/theme/app_colors.dart';
+import '../core/services/config/theme/app_theme.dart';
+import '../core/ui/l10n/field_placeholders.dart';
+import '../core/ui/widgets/app_amount.dart';
+import '../core/ui/widgets/app_card.dart';
+import '../core/ui/widgets/app_fallback.dart';
+import '../core/ui/widgets/app_decision.dart';
+import '../core/ui/widgets/toast/app_tone.dart';
+import '../core/ui/widgets/custom_text_field.dart';
+import '../core/ui/widgets/foundation_toaster.dart';
+import '../core/ui/widgets/buttons/app_button.dart';
+import '../core/ui/widgets/custom_app_bar.dart';
+import '../core/ui/widgets/sheet/app_sheet.dart';
 
 /// In-memory demo only — no database.
 class UiFoundationPreviewScreen extends StatefulWidget {
   const UiFoundationPreviewScreen({super.key});
 
   @override
-  State<UiFoundationPreviewScreen> createState() => _UiFoundationPreviewScreenState();
+  State<UiFoundationPreviewScreen> createState() =>
+      _UiFoundationPreviewScreenState();
 }
 
 class _UiFoundationPreviewScreenState extends State<UiFoundationPreviewScreen> {
@@ -42,16 +43,22 @@ class _UiFoundationPreviewScreenState extends State<UiFoundationPreviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: _mode == ThemeMode.dark ? AppFoundationTheme.dark() : AppFoundationTheme.light(),
+      data: _mode == ThemeMode.dark
+          ? AppFoundationTheme.dark()
+          : AppFoundationTheme.light(),
       child: Localizations.override(
         context: context,
         locale: _locale,
         child: MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(_textScale)),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(_textScale)),
           child: Builder(
             builder: (context) => Scaffold(
               appBar: CustomAppBar(
-                title: _locale.languageCode == 'ar' ? 'معاينة واجهة' : 'UI foundation',
+                title: _locale.languageCode == 'ar'
+                    ? 'معاينة واجهة'
+                    : 'UI foundation',
               ),
               body: ListView(
                 padding: const EdgeInsets.all(AppSize.spaceLG),
@@ -138,11 +145,19 @@ class _UiFoundationPreviewScreenState extends State<UiFoundationPreviewScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: const [
-        AppAmount(piastres: 1_200_000, role: AppAmountRole.remaining, size: AppAmountSize.balance),
+        AppAmount(
+          piastres: 1_200_000,
+          role: AppAmountRole.remaining,
+          size: AppAmountSize.balance,
+        ),
         AppAmount(piastres: 500_000, role: AppAmountRole.receive),
         AppAmount(piastres: 300_000, role: AppAmountRole.spend),
         AppAmount(piastres: 0, role: AppAmountRole.neutral),
-        AppAmount(piastres: -150_000, role: AppAmountRole.spend, showSign: true),
+        AppAmount(
+          piastres: -150_000,
+          role: AppAmountRole.spend,
+          showSign: true,
+        ),
       ],
     );
   }
@@ -198,7 +213,11 @@ class _UiFoundationPreviewScreenState extends State<UiFoundationPreviewScreen> {
           isLoading: _loading,
         ),
         AppSize.spaceSM.gap,
-        AppButton.secondary(text: 'Secondary', onPressed: () {}, isExpanded: true),
+        AppButton.secondary(
+          text: 'Secondary',
+          onPressed: () {},
+          isExpanded: true,
+        ),
         AppSize.spaceSM.gap,
         AppButton.primary(
           text: _locale.languageCode == 'ar' ? 'تبديل تحميل' : 'Toggle loading',
@@ -207,7 +226,10 @@ class _UiFoundationPreviewScreenState extends State<UiFoundationPreviewScreen> {
         AppSize.spaceSM.gap,
         AppButton.destructive(text: 'Disabled', onPressed: null),
         AppSize.spaceSM.gap,
-        AppButton.text(text: _locale.languageCode == 'ar' ? 'نص / ثالثي' : 'Text / tertiary', onPressed: () {}),
+        AppButton.text(
+          text: _locale.languageCode == 'ar' ? 'نص / ثالثي' : 'Text / tertiary',
+          onPressed: () {},
+        ),
         AppSize.spaceSM.gap,
         AppButton.destructive(
           text: _locale.languageCode == 'ar' ? 'حذف' : 'Delete',
@@ -220,7 +242,10 @@ class _UiFoundationPreviewScreenState extends State<UiFoundationPreviewScreen> {
   Widget _fields(BuildContext context) {
     return Column(
       children: [
-        CustomTextField.search(controller: _search, placeholder: FieldPlaceholders.search),
+        CustomTextField.search(
+          controller: _search,
+          placeholder: FieldPlaceholders.search,
+        ),
         AppSize.spaceMD.gap,
         CustomTextField(
           label: _locale.languageCode == 'ar' ? 'مبلغ' : 'Amount',
@@ -246,7 +271,10 @@ class _UiFoundationPreviewScreenState extends State<UiFoundationPreviewScreen> {
             context,
             title: 'خيارات',
             actions: [
-              SheetAction(label: 'إلغاء', onPressed: () => Navigator.pop(context)),
+              SheetAction(
+                label: 'إلغاء',
+                onPressed: () => Navigator.pop(context),
+              ),
             ],
           ),
           isExpanded: false,

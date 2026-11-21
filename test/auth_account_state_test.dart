@@ -1,9 +1,9 @@
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
-import 'package:bnood/core/api/auth_api_providers.dart';
-import 'package:bnood/core/api/auth_login_result.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_providers.dart';
+import 'package:bnood/core/network/api/auth_login_result.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_form_ui.dart';
 import 'package:bnood/features/auth/auth_form_utils.dart';
@@ -31,12 +31,9 @@ void main() {
     test('register maps account_exists on 409', () async {
       final api = _apiWithAdapter(
         FakeSessionStore(),
-        (_) async => jsonResponse(
-          '''
+        (_) async => jsonResponse('''
 {"success":false,"message":"This phone is already linked to an account.","code":"account_exists"}
-''',
-          statusCode: 409,
-        ),
+''', statusCode: 409),
       );
       expect(
         () => api.register(
@@ -56,41 +53,44 @@ void main() {
     test('login 200 returns session result', () async {
       final api = _apiWithAdapter(
         FakeSessionStore(),
-        (_) async => jsonResponse(
-          '''
+        (_) async => jsonResponse('''
 {"success":true,"message":"ok","data":{
   "token":"tok",
   "user":{"id":"u1","phone":"+201012345678","name":"Eng","phone_verified_at":"2025-01-01T00:00:00Z"}
-}}''',
-          statusCode: 200,
-        ),
+}}''', statusCode: 200),
       );
-      final result = await api.login(phone: '01012345678', password: 'password123');
+      final result = await api.login(
+        phone: '01012345678',
+        password: 'password123',
+      );
       expect(result, isA<LoginResultSession>());
       final session = (result as LoginResultSession).session;
       expect(session.token, 'tok');
       api.close();
     });
 
-    test('login 202 returns registration challenge without token fields', () async {
-      final api = _apiWithAdapter(
-        FakeSessionStore(),
-        (_) async => jsonResponse(
-          '''
+    test(
+      'login 202 returns registration challenge without token fields',
+      () async {
+        final api = _apiWithAdapter(
+          FakeSessionStore(),
+          (_) async => jsonResponse('''
 {"success":true,"message":"Registration started.","data":{
   "registration_id":"reg_ulid",
   "expires_in":600,
   "resend_after":60
-}}''',
-          statusCode: 202,
-        ),
-      );
-      final result = await api.login(phone: '01012345678', password: 'password123');
-      expect(result, isA<LoginRegistrationChallenge>());
-      final challenge = (result as LoginRegistrationChallenge).challenge;
-      expect(challenge.registrationId, 'reg_ulid');
-      api.close();
-    });
+}}''', statusCode: 202),
+        );
+        final result = await api.login(
+          phone: '01012345678',
+          password: 'password123',
+        );
+        expect(result, isA<LoginRegistrationChallenge>());
+        final challenge = (result as LoginRegistrationChallenge).challenge;
+        expect(challenge.registrationId, 'reg_ulid');
+        api.close();
+      },
+    );
   });
 
   group('AuthController login challenge', () {
@@ -102,30 +102,29 @@ void main() {
           authApiProvider.overrideWithValue(
             _apiForTest(
               store,
-              (_) async => jsonResponse(
-                '''
+              (_) async => jsonResponse('''
 {"success":true,"message":"Registration started.","data":{
   "registration_id":"reg_1",
   "expires_in":600,
   "resend_after":45
-}}''',
-                statusCode: 202,
-              ),
+}}''', statusCode: 202),
             ),
           ),
         ],
       );
       addTearDown(container.dispose);
 
-      final outcome = await container.read(authControllerProvider.notifier).login(
-            phone: '01012345678',
-            password: 'password123',
-          );
+      final outcome = await container
+          .read(authControllerProvider.notifier)
+          .login(phone: '01012345678', password: 'password123');
       expect(outcome, isA<LoginOutcomeRegistrationChallenge>());
       expect(await store.readToken(), 'existing');
       expect(container.read(authControllerProvider).isAuthenticated, isFalse);
       expect(
-        container.read(authControllerProvider).pendingRegistration?.registrationId,
+        container
+            .read(authControllerProvider)
+            .pendingRegistration
+            ?.registrationId,
         'reg_1',
       );
     });
@@ -135,8 +134,13 @@ void main() {
     test('takePhone returns value once', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      container.read(loginPhonePrefillProvider.notifier).setPhone('01012345678');
-      expect(container.read(loginPhonePrefillProvider.notifier).takePhone(), '01012345678');
+      container
+          .read(loginPhonePrefillProvider.notifier)
+          .setPhone('01012345678');
+      expect(
+        container.read(loginPhonePrefillProvider.notifier).takePhone(),
+        '01012345678',
+      );
       expect(container.read(loginPhonePrefillProvider), isNull);
     });
   });

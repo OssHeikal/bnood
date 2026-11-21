@@ -1,4 +1,4 @@
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 
 class HomeTotals {
   const HomeTotals({
@@ -11,11 +11,15 @@ class HomeTotals {
   final int spentPiastres;
   final int? remainingPiastresOverride;
 
-  int get remainingPiastres => remainingPiastresOverride ?? receivedPiastres - spentPiastres;
+  int get remainingPiastres =>
+      remainingPiastresOverride ?? receivedPiastres - spentPiastres;
 }
 
 class HomeSupplierSpendRow {
-  const HomeSupplierSpendRow({required this.supplier, required this.spentPiastres});
+  const HomeSupplierSpendRow({
+    required this.supplier,
+    required this.spentPiastres,
+  });
   final Supplier supplier;
   final int spentPiastres;
 }
@@ -52,5 +56,7 @@ class HomeClientBalanceRow {
   final Project? project;
 
   bool get hasBalances =>
-      remainingPiastres != null && receivedPiastres != null && spentPiastres != null;
+      remainingPiastres != null &&
+      receivedPiastres != null &&
+      spentPiastres != null;
 }

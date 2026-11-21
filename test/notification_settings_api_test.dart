@@ -1,13 +1,15 @@
-import 'package:bnood/core/api/app_dio.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
 import 'package:bnood/features/settings/data/notification_settings_api.dart';
-import 'package:bnood/core/push/notification_settings_record.dart';
+import 'package:bnood/core/network/push/notification_settings_record.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-NotificationSettingsApi _api(Future<ResponseBody> Function(RequestOptions options) handler) {
+NotificationSettingsApi _api(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return NotificationSettingsApi(dio: dio);
@@ -15,7 +17,8 @@ NotificationSettingsApi _api(Future<ResponseBody> Function(RequestOptions option
 
 void main() {
   test('getSettings parses low balance fields', () async {
-    final api = _api((_) async => jsonResponse('''
+    final api = _api(
+      (_) async => jsonResponse('''
 {
   "success": true,
   "data": {
@@ -23,21 +26,24 @@ void main() {
     "low_balance_amount": 1500000
   }
 }
-'''));
+'''),
+    );
     final record = await api.getSettings();
     expect(record.lowBalanceEnabled, isTrue);
     expect(record.lowBalanceAmountMinor, 1_500_000);
   });
 
   test('getSettings uses default amount when missing', () async {
-    final api = _api((_) async => jsonResponse('''
+    final api = _api(
+      (_) async => jsonResponse('''
 {
   "success": true,
   "data": {
     "low_balance_enabled": false
   }
 }
-'''));
+'''),
+    );
     final record = await api.getSettings();
     expect(record.lowBalanceAmountMinor, kDefaultLowBalanceAmountMinor);
   });

@@ -1,16 +1,17 @@
 import 'package:bnood/app/app_splash_session.dart';
 import 'package:bnood/app/bnood_app.dart';
 import 'package:bnood/app/router.dart';
-import 'package:bnood/features/content/data/content_page_record.dart' show ContentPage, ContentPaths;
-import 'package:bnood/core/prefs/app_settings_store.dart';
+import 'package:bnood/features/content/data/content_page_record.dart'
+    show ContentPage, ContentPaths;
+import 'package:bnood/core/data/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/app_gate/app_maintenance_screen.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/login_screen.dart';
 import 'package:bnood/features/app_gate/app_gate_provider.dart';
 import 'package:bnood/features/content/data/content_page_provider.dart';
-import 'package:bnood/features/content/presentation/content_page_screen.dart';
+import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,8 +21,11 @@ import 'support/fake_session_store.dart';
 import 'support/stub_pages_api.dart';
 import 'package:bnood/features/app_gate/data/app_config_record.dart';
 
-AppSettingsSnapshot _bootstrap() =>
-    const AppSettingsSnapshot(themeMode: ThemeMode.light, locale: Locale('en'), prefs: null);
+AppSettingsSnapshot _bootstrap() => const AppSettingsSnapshot(
+  themeMode: ThemeMode.light,
+  locale: Locale('en'),
+  prefs: null,
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +41,9 @@ void main() {
         overrides: [
           appSettingsBootstrapProvider.overrideWithValue(_bootstrap()),
           sessionStoreProvider.overrideWithValue(FakeSessionStore()),
-          appGateProvider.overrideWith(() => FakeAppGateNotifier(AppConfigData.failOpen())),
+          appGateProvider.overrideWith(
+            () => FakeAppGateNotifier(AppConfigData.failOpen()),
+          ),
           pagesApiProvider.overrideWith(
             (ref) => StubPagesApi(({required slug, required locale}) async {
               return ContentPage.fromDataJson({

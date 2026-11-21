@@ -1,4 +1,4 @@
-import 'app_home_totals.dart';
+import 'package:bnood/features/home/data/app_home_totals.dart';
 
 class AppHomeClientPreview {
   const AppHomeClientPreview({
@@ -75,8 +75,8 @@ class AppHomeCraftsmanPreview {
     final clientsCount = clientsRaw is int
         ? clientsRaw
         : clientsRaw is num
-            ? clientsRaw.round()
-            : 0;
+        ? clientsRaw.round()
+        : 0;
 
     return AppHomeCraftsmanPreview(
       id: json['id'] as String,
@@ -121,18 +121,26 @@ class AppHomeDashboard {
     final suppliersRaw = json['suppliers'];
     final clients = clientsRaw is List
         ? clientsRaw
-            .map((e) => AppHomeClientPreview.fromJson(e as Map<String, dynamic>))
-            .toList()
+              .map(
+                (e) => AppHomeClientPreview.fromJson(e as Map<String, dynamic>),
+              )
+              .toList()
         : const <AppHomeClientPreview>[];
     final craftsmen = craftsmenRaw is List
         ? craftsmenRaw
-            .map((e) => AppHomeCraftsmanPreview.fromJson(e as Map<String, dynamic>))
-            .toList()
+              .map(
+                (e) =>
+                    AppHomeCraftsmanPreview.fromJson(e as Map<String, dynamic>),
+              )
+              .toList()
         : const <AppHomeCraftsmanPreview>[];
     final suppliers = suppliersRaw is List
         ? suppliersRaw
-            .map((e) => AppHomeCraftsmanPreview.fromJson(e as Map<String, dynamic>))
-            .toList()
+              .map(
+                (e) =>
+                    AppHomeCraftsmanPreview.fromJson(e as Map<String, dynamic>),
+              )
+              .toList()
         : const <AppHomeCraftsmanPreview>[];
 
     return AppHomeDashboard(

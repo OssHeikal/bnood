@@ -1,4 +1,4 @@
-import 'package:bnood/features/vouchers/presentation/voucher_receipt_picker.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/voucher_receipt_picker.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,22 +13,29 @@ void main() {
     expect(
       voucherReceiptPickUserMessage(
         l10n,
-        VoucherReceiptPickException(PlatformException(code: 'camera_access_denied')),
+        VoucherReceiptPickException(
+          PlatformException(code: 'camera_access_denied'),
+        ),
       ),
       l10n.voucherReceiptCameraDenied,
     );
     expect(
       voucherReceiptPickUserMessage(
         l10n,
-        VoucherReceiptPickException(PlatformException(code: 'photo_access_denied')),
+        VoucherReceiptPickException(
+          PlatformException(code: 'photo_access_denied'),
+        ),
       ),
       l10n.voucherReceiptGalleryDenied,
     );
   });
 
-  test('Arabic ARB permission strings use Western digits when applicable', () async {
-    final l10n = await AppLocalizations.delegate.load(const Locale('ar'));
-    expect(l10n.voucherReceiptAttachFailed, isNotEmpty);
-    expect(l10n.voucherReceiptCameraDenied, isNotEmpty);
-  });
+  test(
+    'Arabic ARB permission strings use Western digits when applicable',
+    () async {
+      final l10n = await AppLocalizations.delegate.load(const Locale('ar'));
+      expect(l10n.voucherReceiptAttachFailed, isNotEmpty);
+      expect(l10n.voucherReceiptCameraDenied, isNotEmpty);
+    },
+  );
 }

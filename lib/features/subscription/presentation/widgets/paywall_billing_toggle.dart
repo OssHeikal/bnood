@@ -1,9 +1,9 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/paywall_v3_models.dart';
-import '../../data/subscription_colors.dart';
-import '../paywall_theme.dart';
+import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
+import 'package:bnood/features/subscription/data/subscription_colors.dart';
+import 'package:bnood/features/subscription/presentation/widgets/paywall_theme.dart';
 
 class PaywallBillingToggle extends StatelessWidget {
   const PaywallBillingToggle({
@@ -28,7 +28,10 @@ class PaywallBillingToggle extends StatelessWidget {
     final savingsPercent = billing.yearlySavingsPercent;
 
     return DecoratedBox(
-      decoration: BoxDecoration(color: track, borderRadius: BorderRadius.circular(999)),
+      decoration: BoxDecoration(
+        color: track,
+        borderRadius: BorderRadius.circular(999),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(3),
         child: Row(
@@ -47,7 +50,10 @@ class PaywallBillingToggle extends StatelessWidget {
                 selected: selectedPeriod == 'yearly',
                 onTap: () => onPeriodChanged('yearly'),
                 theme: theme,
-                suffix: showYearlySavingsBadge && savingsPercent != null && savingsPercent > 0
+                suffix:
+                    showYearlySavingsBadge &&
+                        savingsPercent != null &&
+                        savingsPercent > 0
                     ? l10n.paywallSavingsPercent(savingsPercent)
                     : null,
               ),
@@ -137,7 +143,12 @@ class _SavingsPill extends StatelessWidget {
           label,
           maxLines: 1,
           softWrap: false,
-          style: const TextStyle(color: Colors.white, fontSize: 9.5, fontWeight: FontWeight.w800, height: 1.1),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 9.5,
+            fontWeight: FontWeight.w800,
+            height: 1.1,
+          ),
         ),
       ),
     );

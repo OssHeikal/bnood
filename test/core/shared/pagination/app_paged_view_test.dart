@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/core/shared/pagination/pagination.dart';
-import 'package:bnood/core/widgets/skeleton/paged_list_skeleton.dart';
+import 'package:bnood/core/ui/widgets/skeleton/paged_list_skeleton.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

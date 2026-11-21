@@ -3,19 +3,21 @@ import 'dart:math' as math;
 
 import 'package:bnood/features/vouchers/data/vouchers_api.dart';
 import 'package:bnood/features/vouchers/data/vouchers_repository.dart';
-import 'package:bnood/features/vouchers/presentation/receipt_image_compress.dart';
-import 'package:bnood/features/vouchers/presentation/voucher_remote_receipts.dart';
-import 'package:bnood/features/vouchers/presentation/voucher_sheet_receipt.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/receipt_image_compress.dart';
+import 'package:bnood/features/vouchers/presentation/models/voucher_remote_receipts.dart';
+import 'package:bnood/features/vouchers/presentation/widgets/voucher_sheet_receipt.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
 
-import 'package:bnood/core/api/app_dio.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
 
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-VouchersApi _vouchersApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+VouchersApi _vouchersApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return VouchersApi(dio: dio);

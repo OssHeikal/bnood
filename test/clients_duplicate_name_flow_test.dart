@@ -1,10 +1,10 @@
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/clients/data/clients_api.dart';
 import 'package:bnood/features/clients/data/client_api_record.dart';
 import 'package:bnood/features/clients/data/clients_providers.dart';
 import 'package:bnood/features/clients/data/clients_repository.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/features/clients/presentation/client_mutation_actions.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
+import 'package:bnood/features/clients/presentation/actions/client_mutation_actions.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,11 +24,22 @@ class _DuplicateClientsRepository extends ClientsRepository {
   }) async {
     calls++;
     if (calls == 1) {
-      throw AuthApiException(statusCode: 409, message: 'dup', code: 'duplicate_name');
+      throw AuthApiException(
+        statusCode: 409,
+        message: 'dup',
+        code: 'duplicate_name',
+      );
     }
     final now = DateTime.utc(2026, 11, 9);
     return ClientApiRecord(
-      client: Client(id: 'c1', workspaceId: 'remote', name: name, phone: phone, createdAt: now, updatedAt: now),
+      client: Client(
+        id: 'c1',
+        workspaceId: 'remote',
+        name: name,
+        phone: phone,
+        createdAt: now,
+        updatedAt: now,
+      ),
       project: Project(
         id: 'p1',
         workspaceId: 'remote',
@@ -58,7 +69,11 @@ class _HarnessState extends ConsumerState<_Harness> {
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            final created = await saveClientCreate(ref: ref, context: context, name: 'Ahmed');
+            final created = await saveClientCreate(
+              ref: ref,
+              context: context,
+              name: 'Ahmed',
+            );
             widget.onResult(created);
           },
           child: const Text('save'),
@@ -69,15 +84,15 @@ class _HarnessState extends ConsumerState<_Harness> {
 }
 
 void main() {
-  testWidgets('duplicate name confirm resends with confirm_duplicate_name', (tester) async {
+  testWidgets('duplicate name confirm resends with confirm_duplicate_name', (
+    tester,
+  ) async {
     final repo = _DuplicateClientsRepository();
     Client? created;
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          clientsRepositoryProvider.overrideWithValue(repo),
-        ],
+        overrides: [clientsRepositoryProvider.overrideWithValue(repo)],
         child: MaterialApp(
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,

@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/config/extensions/num_extensions.dart';
-import '../../core/config/theme/app_size.dart';
-import '../../core/widgets/app_toaster.dart';
-import '../../core/widgets/buttons/app_button.dart';
-import '../../core/widgets/custom_text_field.dart';
-import 'auth_controller.dart';
-import 'auth_form_ui.dart';
-import 'auth_form_utils.dart';
-import 'auth_messages.dart';
-import 'widgets/auth_flow_scaffold.dart';
+import '../../core/services/config/extensions/num_extensions.dart';
+import '../../core/services/config/theme/app_size.dart';
+import '../../core/ui/widgets/app_toaster.dart';
+import '../../core/ui/widgets/buttons/app_button.dart';
+import '../../core/ui/widgets/custom_text_field.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_form_ui.dart';
+import 'package:bnood/features/auth/auth_form_utils.dart';
+import 'package:bnood/features/auth/auth_messages.dart';
+import 'package:bnood/features/auth/widgets/auth_flow_scaffold.dart';
 
 Future<void> _submitChangePassword(BuildContext context, WidgetRef ref) async {
   final fields = ref.read(changePasswordFormFieldsProvider);
@@ -23,7 +23,9 @@ Future<void> _submitChangePassword(BuildContext context, WidgetRef ref) async {
   if (fields.formKey.currentState?.validate() != true) return;
   if (ref.read(authFormUiProvider(formId)).loading) return;
   ui.setLoading(true);
-  final error = await ref.read(authControllerProvider.notifier).changePassword(
+  final error = await ref
+      .read(authControllerProvider.notifier)
+      .changePassword(
         currentPassword: fields.current.text,
         password: fields.password.text,
         passwordConfirmation: fields.confirm.text,
@@ -37,7 +39,8 @@ Future<void> _submitChangePassword(BuildContext context, WidgetRef ref) async {
   }
   ui.fail(error);
   final state = ref.read(authFormUiProvider(formId));
-  if (state.errorFor('current_password') == null && state.errorFor('password') == null) {
+  if (state.errorFor('current_password') == null &&
+      state.errorFor('password') == null) {
     AppToaster.show(authApiMessage(l10n, error), kind: ToastKind.failure);
   }
 }
@@ -57,8 +60,9 @@ class ChangePasswordScreen extends ConsumerWidget {
       alignment: AuthFlowAlignment.start,
       child: Form(
         key: fields.formKey,
-        autovalidateMode:
-            ui.attempted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: ui.attempted
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -88,13 +92,16 @@ class ChangePasswordScreen extends ConsumerWidget {
               type: AppInputType.password,
               fieldHeight: AppSize.fieldHeightComfortable,
               textInputAction: TextInputAction.done,
-              validator: (v) => validatePasswordConfirmation(l10n, v, fields.password.text),
+              validator: (v) =>
+                  validatePasswordConfirmation(l10n, v, fields.password.text),
             ),
             AppSize.spaceXL.gap,
             AppButton.primary(
               text: l10n.save,
               isLoading: loading,
-              onPressed: loading ? null : () => _submitChangePassword(context, ref),
+              onPressed: loading
+                  ? null
+                  : () => _submitChangePassword(context, ref),
             ),
           ],
         ),

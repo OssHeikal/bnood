@@ -3,7 +3,11 @@ import 'package:bnood/features/clients/data/statement_item_visual.dart';
 import 'package:bnood/features/items/data/item_api_record.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-CatalogItem _catalogItem({required String id, String iconKey = 'bathtub', String colorKey = 'blue'}) {
+CatalogItem _catalogItem({
+  required String id,
+  String iconKey = 'bathtub',
+  String colorKey = 'blue',
+}) {
   return CatalogItem(
     id: id,
     name: 'Item $id',
@@ -52,7 +56,9 @@ void main() {
       });
       final visual = resolveStatementItemVisual(
         item,
-        catalogById: {'i1': _catalogItem(id: 'i1', iconKey: 'sink', colorKey: 'orange')},
+        catalogById: {
+          'i1': _catalogItem(id: 'i1', iconKey: 'sink', colorKey: 'orange'),
+        },
       );
       expect(visual.iconKey, 'bathtub');
       expect(visual.colorKey, 'blue');
@@ -66,7 +72,13 @@ void main() {
       });
       final visual = resolveStatementItemVisual(
         item,
-        catalogById: {'catalog-id': _catalogItem(id: 'catalog-id', iconKey: 'bathtub', colorKey: 'blue')},
+        catalogById: {
+          'catalog-id': _catalogItem(
+            id: 'catalog-id',
+            iconKey: 'bathtub',
+            colorKey: 'blue',
+          ),
+        },
       );
       expect(visual.iconKey, 'bathtub');
       expect(visual.colorKey, 'blue');

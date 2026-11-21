@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/brand/app_brand_lockup.dart';
-import '../../../core/layout/app_form_route_canvas.dart';
-import '../../../core/config/extensions/num_extensions.dart';
-import '../../../core/config/theme/app_colors.dart';
-import '../../../core/config/theme/app_size.dart';
-import '../../../core/widgets/custom_app_bar.dart';
-import '../../home/presentation/home_foundation_scope.dart';
+import '../../../core/ui/brand/app_brand_lockup.dart';
+import '../../../core/ui/layout/app_form_route_canvas.dart';
+import '../../../core/services/config/extensions/num_extensions.dart';
+import '../../../core/services/config/theme/app_colors.dart';
+import '../../../core/services/config/theme/app_size.dart';
+import '../../../core/ui/widgets/custom_app_bar.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 
 /// Body-only auth shell: empty app bar, keyboard-safe scroll, no pinned footer chrome.
 enum AuthFlowAlignment { start, center }
@@ -29,10 +29,13 @@ class AuthFlowScaffold extends StatelessWidget {
   final bool showLogo;
   final double logoHeight;
 
-  TextAlign get _textAlign => alignment == AuthFlowAlignment.center ? TextAlign.center : TextAlign.start;
+  TextAlign get _textAlign => alignment == AuthFlowAlignment.center
+      ? TextAlign.center
+      : TextAlign.start;
 
-  CrossAxisAlignment get _crossAxis =>
-      alignment == AuthFlowAlignment.center ? CrossAxisAlignment.center : CrossAxisAlignment.stretch;
+  CrossAxisAlignment get _crossAxis => alignment == AuthFlowAlignment.center
+      ? CrossAxisAlignment.center
+      : CrossAxisAlignment.stretch;
 
   @override
   Widget build(BuildContext context) {
@@ -42,42 +45,54 @@ class AuthFlowScaffold extends StatelessWidget {
         child: Builder(
           builder: (context) {
             return Scaffold(
-            appBar: const CustomAppBar(),
-            body: SafeArea(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(
-                  AppSize.screenPadding,
-                  AppSize.spaceLG,
-                  AppSize.screenPadding,
-                  AppSize.spaceLG + insetBottom,
-                ),
-                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                child: Column(
-                  crossAxisAlignment: _crossAxis,
-                  children: [
-                    if (showLogo) ...[
-                      AppSize.space2XL.gap,
-                      AppBrandLockup(kind: AppBrandLockupKind.vertical, height: logoHeight),
+              appBar: const CustomAppBar(),
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(
+                    AppSize.screenPadding,
+                    AppSize.spaceLG,
+                    AppSize.screenPadding,
+                    AppSize.spaceLG + insetBottom,
+                  ),
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    crossAxisAlignment: _crossAxis,
+                    children: [
+                      if (showLogo) ...[
+                        AppSize.space2XL.gap,
+                        AppBrandLockup(
+                          kind: AppBrandLockupKind.vertical,
+                          height: logoHeight,
+                        ),
+                      ],
+                      if (title != null) ...[
+                        SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            title!,
+                            style: context.text.pageTitle,
+                            textAlign: _textAlign,
+                          ),
+                        ),
+                        AppSize.spaceSM.gap,
+                      ],
+                      if (subtitle != null) ...[
+                        SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            subtitle!,
+                            style: context.text.supporting,
+                            textAlign: _textAlign,
+                          ),
+                        ),
+                        AppSize.spaceLG.gap,
+                      ],
+                      SizedBox(width: double.infinity, child: child),
                     ],
-                    if (title != null) ...[
-                      SizedBox(
-                        width: double.infinity,
-                        child: Text(title!, style: context.text.pageTitle, textAlign: _textAlign),
-                      ),
-                      AppSize.spaceSM.gap,
-                    ],
-                    if (subtitle != null) ...[
-                      SizedBox(
-                        width: double.infinity,
-                        child: Text(subtitle!, style: context.text.supporting, textAlign: _textAlign),
-                      ),
-                      AppSize.spaceLG.gap,
-                    ],
-                    SizedBox(width: double.infinity, child: child),
-                  ],
+                  ),
                 ),
               ),
-            ),
             );
           },
         ),

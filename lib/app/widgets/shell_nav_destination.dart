@@ -1,4 +1,4 @@
-import '../../core/resources/gen/assets.gen.dart';
+import '../../core/ui/resources/gen/assets.gen.dart';
 
 class ShellNavDestination {
   const ShellNavDestination({

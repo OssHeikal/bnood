@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/ledger/ledger_entities.dart';
-import '../../../../core/theme/app_colors.dart' as legacy;
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/widgets/entity_picker_row.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/ledger/ledger_entities.dart';
+import '../../../../core/ui/theme/app_colors.dart' as legacy;
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/entity_picker_row.dart';
 import '../../../../l10n/app_localizations.dart';
-import 'client_balance_card.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_balance_card.dart';
 
 class CraftsmanRosterChoiceRow extends StatelessWidget {
   const CraftsmanRosterChoiceRow({
@@ -41,7 +41,9 @@ class CraftsmanRosterChoiceRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
     final accent = legacy.AppColors.accent(clientAccentKeyFor(craftsman.id));
-    final initial = craftsman.name.isNotEmpty ? craftsman.name.characters.first : '?';
+    final initial = craftsman.name.isNotEmpty
+        ? craftsman.name.characters.first
+        : '?';
     final trade = craftsman.trade?.trim();
     final subtitle = selectionLocked
         ? l10n.craftsmanAgreementHasPayments
@@ -80,7 +82,10 @@ class CraftsmanRosterChoiceRow extends StatelessWidget {
               child: Center(
                 child: Text(
                   initial,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ),
@@ -118,10 +123,14 @@ class _AgreedAmountTrailing extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final label = showAmountSummary ? l10n.craftsmanEditAgreedAmount : l10n.craftsmanSetAgreedAmount;
+    final label = showAmountSummary
+        ? l10n.craftsmanEditAgreedAmount
+        : l10n.craftsmanSetAgreedAmount;
 
     return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.48),
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.sizeOf(context).width * 0.48,
+      ),
       child: InkWell(
         onTap: onManageAmount,
         child: Column(
@@ -140,7 +149,9 @@ class _AgreedAmountTrailing extends StatelessWidget {
               else
                 Text(
                   l10n.craftsmanDetailNoAgreedAmount,
-                  style: context.text.caption.copyWith(color: colors.onSurfaceMuted),
+                  style: context.text.caption.copyWith(
+                    color: colors.onSurfaceMuted,
+                  ),
                   textAlign: TextAlign.end,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -152,7 +163,10 @@ class _AgreedAmountTrailing extends StatelessWidget {
               textAlign: TextAlign.end,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: context.text.label.copyWith(color: colors.primary, height: 1.15),
+              style: context.text.label.copyWith(
+                color: colors.primary,
+                height: 1.15,
+              ),
             ),
           ],
         ),

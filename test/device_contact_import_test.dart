@@ -1,4 +1,4 @@
-import 'package:bnood/core/contacts/device_contact_import.dart';
+import 'package:bnood/core/data/contacts/device_contact_import.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/model/contact.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,17 +24,20 @@ void main() {
     expect(contactPhoneChoices(contact), ['010', '011']);
   });
 
-  test('applyDeviceContactFields does not clear phone when contact has no number', () {
-    final name = TextEditingController(text: 'draft');
-    final phone = TextEditingController(text: '01099998888');
-    applyDeviceContactFields(
-      name: name,
-      phone: phone,
-      fields: const DeviceContactFields(name: 'From Contact'),
-    );
-    expect(name.text, 'From Contact');
-    expect(phone.text, '01099998888');
-  });
+  test(
+    'applyDeviceContactFields does not clear phone when contact has no number',
+    () {
+      final name = TextEditingController(text: 'draft');
+      final phone = TextEditingController(text: '01099998888');
+      applyDeviceContactFields(
+        name: name,
+        phone: phone,
+        fields: const DeviceContactFields(name: 'From Contact'),
+      );
+      expect(name.text, 'From Contact');
+      expect(phone.text, '01099998888');
+    },
+  );
 
   test('applyDeviceContactFields westernizes digits and preserves plus', () {
     final name = TextEditingController();
@@ -46,5 +49,4 @@ void main() {
     );
     expect(phone.text, '+20 1012345678');
   });
-
 }

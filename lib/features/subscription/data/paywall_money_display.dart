@@ -1,5 +1,5 @@
-import 'package:bnood/core/formatting/display_digits.dart';
-import 'package:bnood/core/money/remote_money_units.dart';
+import 'package:bnood/core/domain/formatting/display_digits.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
 
 /// Whole-EGP paywall amounts (no fractional piastres in UI); matches backend rounding.
 abstract final class PaywallMoneyDisplay {
@@ -17,6 +17,8 @@ abstract final class PaywallMoneyDisplay {
   static String formatMinorWhole(int minor, {required bool arabic}) =>
       formatMajorAmount(wholeMajorFromMinor(minor), arabic: arabic);
 
-  static String formatPerMonthFromMinor(int perMonthMinor, {required bool arabic}) =>
-      formatMajorAmount(wholeMajorFromMinor(perMonthMinor), arabic: arabic);
+  static String formatPerMonthFromMinor(
+    int perMonthMinor, {
+    required bool arabic,
+  }) => formatMajorAmount(wholeMajorFromMinor(perMonthMinor), arabic: arabic);
 }

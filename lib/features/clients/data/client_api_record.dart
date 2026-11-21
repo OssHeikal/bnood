@@ -1,4 +1,4 @@
-import 'package:bnood/core/ledger/ledger_entities.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 
 /// Parsed client payload from `/api/v1/clients` including the hidden project.
 class ClientApiRecord {
@@ -54,14 +54,17 @@ class ClientApiRecord {
       name: projectJson['name'] as String,
       unitAddress: null,
       status: projectJson['status'] as String,
-      engineerBasisPoints: readOptionalInt(projectJson['engineer_basis_points']),
+      engineerBasisPoints: readOptionalInt(
+        projectJson['engineer_basis_points'],
+      ),
       createdAt: createdAt,
       updatedAt: updatedAt,
     );
 
     final balancesRaw = json['balances'];
-    final ClientApiBalances? balances =
-        balancesRaw == null ? null : ClientApiBalances.fromJson(balancesRaw);
+    final ClientApiBalances? balances = balancesRaw == null
+        ? null
+        : ClientApiBalances.fromJson(balancesRaw);
 
     return ClientApiRecord(
       client: client,

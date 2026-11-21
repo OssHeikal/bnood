@@ -1,8 +1,8 @@
 import 'package:bnood/features/providers/data/agreement_amount_api.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/money/remote_money_units.dart';
-import 'package:bnood/features/clients/presentation/craftsman_agreement_amount_sheet.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
+import 'package:bnood/features/clients/presentation/sheets/craftsman_agreement_amount_sheet.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,13 +19,14 @@ void main() {
     expect(agreementAmountMajorFromMinor(null), isNull);
   });
 
-  testWidgets('remote amount sheet prefills major units not minor', (tester) async {
+  testWidgets('remote amount sheet prefills major units not minor', (
+    tester,
+  ) async {
     const minor = 1000000 * RemoteMoneyUnits.minorPerMajor;
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-        ],
+        overrides: [],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -51,11 +52,12 @@ void main() {
     expect(find.text('10000000'), findsNothing);
   });
 
-  testWidgets('local amount sheet still divides piastres by 100', (tester) async {
+  testWidgets('local amount sheet still divides piastres by 100', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-        ],
+        overrides: [],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),

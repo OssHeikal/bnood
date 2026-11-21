@@ -1,4 +1,4 @@
-import '../../core/api/auth_api_exception.dart';
+import '../../core/network/api/auth_api_exception.dart';
 
 /// Controller-level login result for UI routing (session, silent OTP, or error).
 sealed class LoginOutcome {

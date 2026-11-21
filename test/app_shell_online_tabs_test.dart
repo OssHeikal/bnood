@@ -9,21 +9,39 @@ void main() {
   test('remote session: clients and items tabs are online', () {
     final container = ProviderContainer();
     addTearDown(container.dispose);
-    container.read(authControllerProvider.notifier).adoptSessionForTest(
-          const User(id: 'u', phone: '+2010', name: 'Eng'),
-        );
+    container
+        .read(authControllerProvider.notifier)
+        .adoptSessionForTest(const User(id: 'u', phone: '+2010', name: 'Eng'));
 
-    expect(container.read(appShellTabOnlineProvider(AppShellTabId.clients)), isTrue);
-    expect(container.read(appShellTabOnlineProvider(AppShellTabId.home)), isTrue);
-    expect(container.read(appShellTabOnlineProvider(AppShellTabId.directory)), isTrue);
-    expect(container.read(appShellTabOnlineProvider(AppShellTabId.items)), isTrue);
+    expect(
+      container.read(appShellTabOnlineProvider(AppShellTabId.clients)),
+      isTrue,
+    );
+    expect(
+      container.read(appShellTabOnlineProvider(AppShellTabId.home)),
+      isTrue,
+    );
+    expect(
+      container.read(appShellTabOnlineProvider(AppShellTabId.directory)),
+      isTrue,
+    );
+    expect(
+      container.read(appShellTabOnlineProvider(AppShellTabId.items)),
+      isTrue,
+    );
   });
 
   test('unsigned session treats all shell tabs as online', () {
     final container = ProviderContainer();
     addTearDown(container.dispose);
     expect(container.read(authControllerProvider), const AuthState());
-    expect(container.read(appShellTabOnlineProvider(AppShellTabId.home)), isTrue);
-    expect(container.read(appShellTabOnlineProvider(AppShellTabId.items)), isTrue);
+    expect(
+      container.read(appShellTabOnlineProvider(AppShellTabId.home)),
+      isTrue,
+    );
+    expect(
+      container.read(appShellTabOnlineProvider(AppShellTabId.items)),
+      isTrue,
+    );
   });
 }

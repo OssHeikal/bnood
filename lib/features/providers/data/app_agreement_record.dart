@@ -1,5 +1,5 @@
-import 'package:bnood/core/money/remote_money_units.dart';
-import 'app_provider_record.dart';
+import 'package:bnood/core/domain/money/remote_money_units.dart';
+import 'package:bnood/features/providers/data/app_provider_record.dart';
 
 class AppAgreement {
   const AppAgreement({
@@ -47,7 +47,8 @@ class AppAgreement {
 
   int? get remainingMinorForDisplay {
     if (amountMajor == null && amountPiastres == null) return null;
-    if (remainingMajor != null) return RemoteMoneyUnits.majorToMinor(remainingMajor!);
+    if (remainingMajor != null)
+      return RemoteMoneyUnits.majorToMinor(remainingMajor!);
     return null;
   }
 
@@ -86,8 +87,12 @@ class AppAgreement {
 
     return AppAgreement(
       id: json['id'] as String,
-      clientId: json['client_id'] as String? ?? (client is Map ? client['id'] as String : ''),
-      providerId: json['provider_id'] as String? ?? (provider is Map ? provider['id'] as String : ''),
+      clientId:
+          json['client_id'] as String? ??
+          (client is Map ? client['id'] as String : ''),
+      providerId:
+          json['provider_id'] as String? ??
+          (provider is Map ? provider['id'] as String : ''),
       amountPiastres: amountPiastres,
       amountMajor: amountMajor,
       paidMajor: paidMajor,

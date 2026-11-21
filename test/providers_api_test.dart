@@ -1,5 +1,5 @@
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/providers/data/providers_api.dart';
 import 'package:bnood/features/providers/data/app_provider_record.dart';
 import 'package:dio/dio.dart';
@@ -8,7 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_session_store.dart';
 import 'support/scripted_dio_adapter.dart';
 
-ProvidersApi _providersApi(Future<ResponseBody> Function(RequestOptions options) handler) {
+ProvidersApi _providersApi(
+  Future<ResponseBody> Function(RequestOptions options) handler,
+) {
   final dio = createAppDio(FakeSessionStore(token: 'tok'));
   dio.httpClientAdapter = ScriptedDioAdapter(handler);
   return ProvidersApi(dio: dio);
@@ -69,7 +71,11 @@ void main() {
           '{"success":true,"data":[],"meta":{"page":1,"per_page":50,"total":0}}',
         );
       });
-      await api.listProviders(q: 'ali', type: AppProviderType.craftsman, page: 2);
+      await api.listProviders(
+        q: 'ali',
+        type: AppProviderType.craftsman,
+        page: 2,
+      );
       expect(captured.headers['Authorization'], 'Bearer tok');
       expect(captured.queryParameters['q'], 'ali');
       expect(captured.queryParameters['type'], 'craftsman');
@@ -112,8 +118,18 @@ void main() {
         ),
       );
       expect(
-        () => api.createProvider(name: 'X', type: AppProviderType.supplier, phone: '+2010'),
-        throwsA(isA<AuthApiException>().having((e) => e.isDuplicatePhone, 'dup', isTrue)),
+        () => api.createProvider(
+          name: 'X',
+          type: AppProviderType.supplier,
+          phone: '+2010',
+        ),
+        throwsA(
+          isA<AuthApiException>().having(
+            (e) => e.isDuplicatePhone,
+            'dup',
+            isTrue,
+          ),
+        ),
       );
       api.close();
     });

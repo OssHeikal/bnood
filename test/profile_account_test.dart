@@ -1,7 +1,7 @@
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/prefs/app_settings_store.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/data/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
@@ -10,7 +10,7 @@ import 'package:bnood/features/auth/change_password_screen.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/auth/user_profile_screen.dart';
 import 'package:bnood/features/auth/widgets/user_identity_avatar.dart';
-import 'package:bnood/features/settings/presentation/app_settings_screen.dart';
+import 'package:bnood/features/settings/presentation/screens/app_settings_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,7 +26,9 @@ Future<void> pumpUserProfile(WidgetTester tester, User user) async {
   addTearDown(() => tester.binding.setSurfaceSize(null));
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [authControllerProvider.overrideWith(() => _AuthUserWith(user))],
+      overrides: [
+        authControllerProvider.overrideWith(() => _AuthUserWith(user)),
+      ],
       child: MaterialApp(
         theme: AppFoundationTheme.light(),
         locale: const Locale('en'),
@@ -67,22 +69,37 @@ void main() {
       expect(find.text('Delete account'), findsOneWidget);
       expect(find.text('Client name'), findsNothing);
       expect(find.text('Your details on statements'), findsOneWidget);
-      expect(find.text('Shown to your client at the top of the statement'), findsOneWidget);
+      expect(
+        find.text('Shown to your client at the top of the statement'),
+        findsOneWidget,
+      );
       expect(find.text('Contact phone'), findsOneWidget);
     });
 
-    testWidgets('statement branding — no logo, no contact phone', (tester) async {
-      await pumpUserProfile(tester, const User(id: 'u1', phone: '+201012345678', name: 'Osama heikal'));
+    testWidgets('statement branding — no logo, no contact phone', (
+      tester,
+    ) async {
+      await pumpUserProfile(
+        tester,
+        const User(id: 'u1', phone: '+201012345678', name: 'Osama heikal'),
+      );
       expect(find.text('No logo added yet'), findsOneWidget);
       expect(find.text('No number will appear on statements'), findsOneWidget);
       expect(find.text('Add'), findsNWidgets(2));
       expect(find.text('Change'), findsNothing);
     });
 
-    testWidgets('statement branding — logo set, no contact phone', (tester) async {
+    testWidgets('statement branding — logo set, no contact phone', (
+      tester,
+    ) async {
       await pumpUserProfile(
         tester,
-        const User(id: 'u1', phone: '+201012345678', name: 'Osama heikal', logoUrl: 'https://cdn.example/logo.png'),
+        const User(
+          id: 'u1',
+          phone: '+201012345678',
+          name: 'Osama heikal',
+          logoUrl: 'https://cdn.example/logo.png',
+        ),
       );
       expect(find.text('Logo added'), findsOneWidget);
       expect(find.text('Change'), findsOneWidget);
@@ -90,10 +107,17 @@ void main() {
       expect(find.text('Add'), findsOneWidget);
     });
 
-    testWidgets('statement branding — no logo, contact phone set', (tester) async {
+    testWidgets('statement branding — no logo, contact phone set', (
+      tester,
+    ) async {
       await pumpUserProfile(
         tester,
-        const User(id: 'u1', phone: '+201012345678', name: 'Osama heikal', contactPhone: '+201234567890'),
+        const User(
+          id: 'u1',
+          phone: '+201012345678',
+          name: 'Osama heikal',
+          contactPhone: '+201234567890',
+        ),
       );
       expect(find.text('No logo added yet'), findsOneWidget);
       expect(find.textContaining('201234567890'), findsOneWidget);
@@ -101,7 +125,9 @@ void main() {
       expect(find.text('Add'), findsOneWidget);
     });
 
-    testWidgets('statement branding — logo and contact phone set', (tester) async {
+    testWidgets('statement branding — logo and contact phone set', (
+      tester,
+    ) async {
       await pumpUserProfile(
         tester,
         const User(
@@ -124,8 +150,14 @@ void main() {
       addTearDown(() => tester.binding.setSurfaceSize(null));
       final router = GoRouter(
         routes: [
-          GoRoute(path: AuthPaths.profile, builder: (_, _) => const UserProfileScreen()),
-          GoRoute(path: AuthPaths.changePassword, builder: (_, _) => const ChangePasswordScreen()),
+          GoRoute(
+            path: AuthPaths.profile,
+            builder: (_, _) => const UserProfileScreen(),
+          ),
+          GoRoute(
+            path: AuthPaths.changePassword,
+            builder: (_, _) => const ChangePasswordScreen(),
+          ),
         ],
         initialLocation: AuthPaths.profile,
       );
@@ -204,10 +236,10 @@ void main() {
 class _AuthUser extends AuthController {
   @override
   AuthState build() => AuthState(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: const User(id: 'u1', phone: '+201012345678', name: 'Osama heikal'),
-        bootstrapStarted: true,
-      );
+    bootstrapStatus: AuthBootstrapStatus.authenticated,
+    user: const User(id: 'u1', phone: '+201012345678', name: 'Osama heikal'),
+    bootstrapStarted: true,
+  );
 }
 
 class _AuthUserWith extends AuthController {
@@ -217,8 +249,8 @@ class _AuthUserWith extends AuthController {
 
   @override
   AuthState build() => AuthState(
-        bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: user,
-        bootstrapStarted: true,
-      );
+    bootstrapStatus: AuthBootstrapStatus.authenticated,
+    user: user,
+    bootstrapStarted: true,
+  );
 }

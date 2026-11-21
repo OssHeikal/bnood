@@ -11,9 +11,13 @@ class ShellChromeScope extends InheritedWidget {
   final bool keyboardOpen;
 
   static bool keyboardOpenOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<ShellChromeScope>()?.keyboardOpen ?? false;
+    return context
+            .dependOnInheritedWidgetOfExactType<ShellChromeScope>()
+            ?.keyboardOpen ??
+        false;
   }
 
   @override
-  bool updateShouldNotify(ShellChromeScope oldWidget) => keyboardOpen != oldWidget.keyboardOpen;
+  bool updateShouldNotify(ShellChromeScope oldWidget) =>
+      keyboardOpen != oldWidget.keyboardOpen;
 }

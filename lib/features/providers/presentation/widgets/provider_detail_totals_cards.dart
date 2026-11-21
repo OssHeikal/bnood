@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/money/remote_money_units.dart';
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../provider_detail_agreement_totals.dart';
-import 'provider_detail_metric_stack.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/money/remote_money_units.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import 'package:bnood/features/providers/presentation/models/provider_detail_agreement_totals.dart';
+import 'package:bnood/features/providers/presentation/widgets/provider_detail_metric_stack.dart';
 
 class ProviderDetailTotalsCards extends StatelessWidget {
   const ProviderDetailTotalsCards({

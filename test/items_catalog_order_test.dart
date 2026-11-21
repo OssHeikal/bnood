@@ -1,20 +1,20 @@
 import 'package:bnood/features/items/data/item_api_record.dart';
-import 'package:bnood/features/items/presentation/items_catalog_order.dart';
+import 'package:bnood/features/items/presentation/models/items_catalog_order.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final now = DateTime.utc(2026, 11, 11);
 
   CatalogItem item(String id, {bool isDefault = false}) => CatalogItem(
-        id: id,
-        name: id,
-        iconKey: 'layers',
-        colorKey: 'teal',
-        isDefault: isDefault,
-        sortOrder: 0,
-        createdAt: now,
-        updatedAt: now,
-      );
+    id: id,
+    name: id,
+    iconKey: 'layers',
+    colorKey: 'teal',
+    isDefault: isDefault,
+    sortOrder: 0,
+    createdAt: now,
+    updatedAt: now,
+  );
 
   test('reorderCatalogItems permutes full list including defaults', () {
     final all = [item('a'), item('b'), item('d', isDefault: true), item('c')];
@@ -35,7 +35,11 @@ void main() {
   });
 
   test('catalogItemIdsInOrder includes defaults', () {
-    final ids = catalogItemIdsInOrder([item('x'), item('z', isDefault: true), item('y')]);
+    final ids = catalogItemIdsInOrder([
+      item('x'),
+      item('z', isDefault: true),
+      item('y'),
+    ]);
     expect(ids, ['x', 'z', 'y']);
   });
 }

@@ -1,10 +1,10 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/content/data/content_page_record.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/content/data/content_page_provider.dart';
-import 'package:bnood/features/content/presentation/content_page_screen.dart';
-import 'package:bnood/features/subscription/presentation/paywall_screen.dart';
+import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
+import 'package:bnood/features/subscription/presentation/screens/paywall_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,13 +21,20 @@ void main() {
     continueFreeCta: 'Continue',
     legal: 'By subscribing you agree to the terms.',
     plans: const [
-      AppPaywallPlan(id: 'yearly', label: 'Yearly', monthlyEquivalentMinor: 1000),
+      AppPaywallPlan(
+        id: 'yearly',
+        label: 'Yearly',
+        monthlyEquivalentMinor: 1000,
+      ),
     ],
     v3: AppPaywallV3Data(
       trigger: 'default',
       header: const AppPaywallHeader(title: 'Premium', subtitle: ''),
       benefitItems: const [],
-      billing: const AppPaywallBilling(monthlyLabel: 'Monthly', yearlyLabel: 'Yearly'),
+      billing: const AppPaywallBilling(
+        monthlyLabel: 'Monthly',
+        yearlyLabel: 'Yearly',
+      ),
       packages: [
         AppPaywallPackage(
           slug: 'pro',
@@ -41,7 +48,9 @@ void main() {
     ),
   );
 
-  testWidgets('paywall shows terms, privacy, and cancellation links', (tester) async {
+  testWidgets('paywall shows terms, privacy, and cancellation links', (
+    tester,
+  ) async {
     await tester.pumpWidget(_paywallApp(content));
     await tester.pump();
 
@@ -50,7 +59,9 @@ void main() {
     expect(find.text('Cancellation policy'), findsOneWidget);
   });
 
-  testWidgets('terms link opens the terms page over the paywall', (tester) async {
+  testWidgets('terms link opens the terms page over the paywall', (
+    tester,
+  ) async {
     await tester.pumpWidget(_paywallApp(content));
     await tester.pump();
 

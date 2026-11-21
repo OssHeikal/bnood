@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'package:bnood/app/bnood_app.dart';
-import 'package:bnood/core/brand/app_brand_lockup.dart';
+import 'package:bnood/core/ui/brand/app_brand_lockup.dart';
 import 'package:bnood/app/app_splash_session.dart';
 import 'package:bnood/app/app_startup_splash.dart';
-import 'package:bnood/core/api/app_config_api.dart';
-import 'package:bnood/core/api/app_dio.dart';
-import 'package:bnood/core/api/auth_api.dart';
-import 'package:bnood/core/api/auth_api_providers.dart';
+import 'package:bnood/core/network/api/app_config_api.dart';
+import 'package:bnood/core/network/api/app_dio.dart';
+import 'package:bnood/core/network/api/auth_api.dart';
+import 'package:bnood/core/network/api/auth_api_providers.dart';
 import 'package:bnood/features/app_gate/data/app_config_record.dart';
 import 'package:bnood/features/app_gate/app_gate_provider.dart';
-import 'package:bnood/core/prefs/app_settings_store.dart';
+import 'package:bnood/core/data/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
-import 'package:bnood/core/storage/session_store.dart';
+import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/auth/complete_profile_screen.dart';
 import 'package:bnood/features/auth/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +47,7 @@ AuthApi _authApiWithDelayedMe(
 class _FastAppGate extends AppGateNotifier {
   @override
   Future<AppConfigData> fetchConfig({bool failOpen = true}) async {
-  final open = AppConfigData.failOpen();
+    final open = AppConfigData.failOpen();
     state = AsyncData(open);
     ref.read(appGateMemoryProvider).lastSuccess = open;
     return open;
@@ -62,8 +62,7 @@ class _FakeAppConfigApi extends AppConfigApi {
     required String platform,
     required String version,
     required String locale,
-  }) async =>
-      AppConfigData.failOpen();
+  }) async => AppConfigData.failOpen();
 }
 
 AuthApi _hangingMeApi(FakeSessionStore store) {
@@ -112,16 +111,23 @@ void main() {
 
   tearDown(AppSplashSession.resetForTest);
 
-  testWidgets('unauthenticated session lands on login after splash', (tester) async {
+  testWidgets('unauthenticated session lands on login after splash', (
+    tester,
+  ) async {
     await _pumpRoot(tester);
     expect(find.byType(AppStartupSplashPage), findsOneWidget);
-    await _pumpUntil(tester, () => find.byType(LoginScreen).evaluate().isNotEmpty);
+    await _pumpUntil(
+      tester,
+      () => find.byType(LoginScreen).evaluate().isNotEmpty,
+    );
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.byType(AppStartupSplashPage), findsNothing);
     expect(AppSplashSession.completed, isTrue);
   });
 
-  testWidgets('splash holds until bootstrap resolves when token is present', (tester) async {
+  testWidgets('splash holds until bootstrap resolves when token is present', (
+    tester,
+  ) async {
     final store = FakeSessionStore(token: 'secret-token');
     final gate = Completer<void>();
     addTearDown(() {
@@ -131,7 +137,9 @@ void main() {
       tester,
       overrides: [
         sessionStoreProvider.overrideWithValue(store),
-        authApiProvider.overrideWithValue(_authApiWithDelayedMe(store, gate: gate)),
+        authApiProvider.overrideWithValue(
+          _authApiWithDelayedMe(store, gate: gate),
+        ),
         appConfigApiProvider.overrideWithValue(_FakeAppConfigApi()),
         appGateProvider.overrideWith(_FastAppGate.new),
       ],
@@ -164,7 +172,9 @@ void main() {
     expect(find.byType(AppStartupSplashPage), findsNothing);
   });
 
-  testWidgets('reduced motion still waits for session then login', (tester) async {
+  testWidgets('reduced motion still waits for session then login', (
+    tester,
+  ) async {
     AppSplashSession.resetForTest();
     await tester.pumpWidget(
       MediaQuery(
@@ -179,7 +189,10 @@ void main() {
       ),
     );
     expect(find.byType(AppStartupSplashPage), findsOneWidget);
-    await _pumpUntil(tester, () => find.byType(LoginScreen).evaluate().isNotEmpty);
+    await _pumpUntil(
+      tester,
+      () => find.byType(LoginScreen).evaluate().isNotEmpty,
+    );
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.byType(AppStartupSplashPage), findsNothing);
   });
@@ -193,12 +206,18 @@ void main() {
       ),
     );
     expect(canvas.color.a, 1.0);
-    await _pumpUntil(tester, () => find.byType(LoginScreen).evaluate().isNotEmpty);
+    await _pumpUntil(
+      tester,
+      () => find.byType(LoginScreen).evaluate().isNotEmpty,
+    );
   });
 
   testWidgets('splash does not replay after session completed', (tester) async {
     await _pumpRoot(tester);
-    await _pumpUntil(tester, () => find.byType(LoginScreen).evaluate().isNotEmpty);
+    await _pumpUntil(
+      tester,
+      () => find.byType(LoginScreen).evaluate().isNotEmpty,
+    );
     await tester.pumpWidget(
       ProviderScope(
         overrides: [

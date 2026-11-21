@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/formatting/display_digits.dart';
-import '../../data/paywall_v3_models.dart';
-import '../../data/subscription_colors.dart';
-import '../paywall_theme.dart';
+import '../../../../core/domain/formatting/display_digits.dart';
+import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
+import 'package:bnood/features/subscription/data/subscription_colors.dart';
+import 'package:bnood/features/subscription/presentation/widgets/paywall_theme.dart';
 
 class PaywallOfferBanner extends StatefulWidget {
   const PaywallOfferBanner({super.key, required this.banner});
@@ -51,7 +51,8 @@ class _PaywallOfferBannerState extends State<PaywallOfferBanner> {
     final hours = remaining.inHours;
     final minutes = remaining.inMinutes.remainder(60);
     final seconds = remaining.inSeconds.remainder(60);
-    final text = '${hours.toString().padLeft(2, '0')}:'
+    final text =
+        '${hours.toString().padLeft(2, '0')}:'
         '${minutes.toString().padLeft(2, '0')}:'
         '${seconds.toString().padLeft(2, '0')}';
     return DisplayDigits.toWesternDigits(text);
@@ -85,7 +86,10 @@ class _PaywallOfferBannerState extends State<PaywallOfferBanner> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
                   child: Text(
                     countdown,
                     style: const TextStyle(

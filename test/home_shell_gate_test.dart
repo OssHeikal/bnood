@@ -8,7 +8,7 @@ import 'package:bnood/features/home/data/home_repository.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/home/presentation/home_screen.dart';
+import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +17,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_session_store.dart';
 
 class CountingHomeRepository extends HomeRepository {
-  CountingHomeRepository() : super(HomeApi(sessionStore: FakeSessionStore(token: 'tok')));
+  CountingHomeRepository()
+    : super(HomeApi(sessionStore: FakeSessionStore(token: 'tok')));
 
   static var dashboardLoads = 0;
 
@@ -51,30 +52,33 @@ void main() {
     CountingHomeRepository.dashboardLoads = 0;
   });
 
-  testWidgets('remote signed-in home tab mounts HomeScreen and loads dashboard', (tester) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          authControllerProvider.overrideWith(_AuthComplete.new),
-          homeRepositoryProvider.overrideWithValue(CountingHomeRepository()),
-        ],
-        child: MaterialApp(
-          locale: const Locale('ar'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const AppShellTabGate(
-            tab: AppShellTabId.home,
-            child: HomeScreen(),
+  testWidgets(
+    'remote signed-in home tab mounts HomeScreen and loads dashboard',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            authControllerProvider.overrideWith(_AuthComplete.new),
+            homeRepositoryProvider.overrideWithValue(CountingHomeRepository()),
+          ],
+          child: MaterialApp(
+            locale: const Locale('ar'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const AppShellTabGate(
+              tab: AppShellTabId.home,
+              child: HomeScreen(),
+            ),
           ),
         ),
-      ),
-    );
-    await tester.pump();
-    await tester.pumpAndSettle(const Duration(seconds: 2));
+      );
+      await tester.pump();
+      await tester.pumpAndSettle(const Duration(seconds: 2));
 
-    expect(find.text('غير متاح على الإنترنت بعد'), findsNothing);
-    expect(find.byType(HomeScreen), findsOneWidget);
-    expect(find.text('Osama'), findsOneWidget);
-    expect(CountingHomeRepository.dashboardLoads, greaterThanOrEqualTo(1));
-  });
+      expect(find.text('غير متاح على الإنترنت بعد'), findsNothing);
+      expect(find.byType(HomeScreen), findsOneWidget);
+      expect(find.text('Osama'), findsOneWidget);
+      expect(CountingHomeRepository.dashboardLoads, greaterThanOrEqualTo(1));
+    },
+  );
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/skeleton/skeleton.dart';
-import '../../../../core/widgets/skeleton/skeleton_box.dart';
-import '../../../../core/widgets/skeleton/skeleton_text.dart';
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_box.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_text.dart';
 
 /// Loading placeholder matching [ClientDetailCraftsmanRow] (RTL-safe layout).
 class ClientLinkedProviderListSkeleton extends StatelessWidget {
@@ -19,7 +19,10 @@ class ClientLinkedProviderListSkeleton extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          for (var i = 0; i < count; i++) ...[if (i > 0) AppSize.spaceMD.gap, const _LinkedProviderRowBone()],
+          for (var i = 0; i < count; i++) ...[
+            if (i > 0) AppSize.spaceMD.gap,
+            const _LinkedProviderRowBone(),
+          ],
         ],
       ),
     );
@@ -63,13 +66,19 @@ class _LinkedProviderRowBone extends StatelessWidget {
                 for (var i = 0; i < 3; i++)
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsetsDirectional.only(end: i < 2 ? AppSize.spaceXS : 0),
+                      padding: EdgeInsetsDirectional.only(
+                        end: i < 2 ? AppSize.spaceXS : 0,
+                      ),
                       child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           SkeletonText(role: SkeletonTextRole.label, width: 48),
                           SizedBox(height: AppSize.spaceXS),
-                          SkeletonBox(width: 56, height: 16, radius: AppSize.radiusSM),
+                          SkeletonBox(
+                            width: 56,
+                            height: 16,
+                            radius: AppSize.radiusSM,
+                          ),
                         ],
                       ),
                     ),

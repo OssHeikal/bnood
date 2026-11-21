@@ -1,6 +1,6 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/money/money_format.dart';
-import 'package:bnood/core/widgets/custom_text_field.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/domain/money/money_format.dart';
+import 'package:bnood/core/ui/widgets/custom_text_field.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -30,14 +30,19 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('currency field uses LTR value direction in Arabic when ltrValue is set', (tester) async {
-    await pumpAmountField(tester, const Locale('ar'));
-    final field = tester.widget<TextField>(find.byType(TextField));
-    expect(field.textDirection, TextDirection.ltr);
-    expect(field.textAlign, TextAlign.start);
-  });
+  testWidgets(
+    'currency field uses LTR value direction in Arabic when ltrValue is set',
+    (tester) async {
+      await pumpAmountField(tester, const Locale('ar'));
+      final field = tester.widget<TextField>(find.byType(TextField));
+      expect(field.textDirection, TextDirection.ltr);
+      expect(field.textAlign, TextAlign.start);
+    },
+  );
 
-  testWidgets('currency field uses LTR ambient direction in English', (tester) async {
+  testWidgets('currency field uses LTR ambient direction in English', (
+    tester,
+  ) async {
     await pumpAmountField(tester, const Locale('en'));
     final field = tester.widget<TextField>(find.byType(TextField));
     expect(field.textDirection, TextDirection.ltr);

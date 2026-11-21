@@ -1,9 +1,11 @@
 import 'package:bnood/features/clients/data/client_api_record.dart';
-import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'app_home_dashboard.dart';
-import 'home_row_models.dart';
+import 'package:bnood/core/domain/ledger/ledger_entities.dart';
+import 'package:bnood/features/home/data/app_home_dashboard.dart';
+import 'package:bnood/features/home/data/home_row_models.dart';
 
-HomeClientBalanceRow homeClientBalanceRowFromPreview(AppHomeClientPreview preview) {
+HomeClientBalanceRow homeClientBalanceRowFromPreview(
+  AppHomeClientPreview preview,
+) {
   final stamp = DateTime.utc(2026, 1, 1);
   return HomeClientBalanceRow(
     client: Client(
@@ -20,7 +22,9 @@ HomeClientBalanceRow homeClientBalanceRowFromPreview(AppHomeClientPreview previe
   );
 }
 
-HomeCraftsmanActivityRow homeCraftsmanRowFromPreview(AppHomeCraftsmanPreview preview) {
+HomeCraftsmanActivityRow homeCraftsmanRowFromPreview(
+  AppHomeCraftsmanPreview preview,
+) {
   final activity = preview.lastActivityAt ?? DateTime.utc(2026, 1, 1);
   return HomeCraftsmanActivityRow(
     craftsman: CraftsmenData(

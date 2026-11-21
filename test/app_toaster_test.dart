@@ -1,9 +1,9 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/layout/app_layout.dart';
-import 'package:bnood/core/widgets/app_toaster.dart';
-import 'package:bnood/core/widgets/toast/app_toast.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/features/statements/presentation/statement_screen_toast.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/layout/app_layout.dart';
+import 'package:bnood/core/ui/widgets/app_toaster.dart';
+import 'package:bnood/core/ui/widgets/toast/app_toast.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/statements/presentation/actions/statement_screen_toast.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -27,28 +27,31 @@ void main() {
     );
   }
 
-  testWidgets('AppToaster shows themed toast without root AppColors extension', (tester) async {
-    await tester.pumpWidget(
-      toastTestApp(
-        HomeFoundationScope(
-          child: Scaffold(
-            body: Center(
-              child: ElevatedButton(
-                onPressed: () => AppToaster.failure('فشل بدون امتداد'),
-                child: const Text('toast'),
+  testWidgets(
+    'AppToaster shows themed toast without root AppColors extension',
+    (tester) async {
+      await tester.pumpWidget(
+        toastTestApp(
+          HomeFoundationScope(
+            child: Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () => AppToaster.failure('فشل بدون امتداد'),
+                  child: const Text('toast'),
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
-    await tester.pump();
-    await tester.tap(find.text('toast'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
-    expect(tester.takeException(), isNull);
-    expect(find.text('فشل بدون امتداد'), findsOneWidget);
-  });
+      );
+      await tester.pump();
+      await tester.tap(find.text('toast'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(tester.takeException(), isNull);
+      expect(find.text('فشل بدون امتداد'), findsOneWidget);
+    },
+  );
 
   testWidgets('AppToaster success in EN dark theme', (tester) async {
     await tester.pumpWidget(
@@ -78,7 +81,9 @@ void main() {
     expect(find.text('Saved'), findsOneWidget);
   });
 
-  testWidgets('statement footer delegate keeps message above export bar', (tester) async {
+  testWidgets('statement footer delegate keeps message above export bar', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         builder: botToastBuilder,
@@ -86,11 +91,15 @@ void main() {
         theme: AppFoundationTheme.light(),
         home: HomeFoundationScope(
           child: Scaffold(
-            bottomNavigationBar: const SizedBox(height: 56, child: ColoredBox(color: Colors.black12)),
+            bottomNavigationBar: const SizedBox(
+              height: 56,
+              child: ColoredBox(color: Colors.black12),
+            ),
             body: Builder(
               builder: (context) => Center(
                 child: ElevatedButton(
-                  onPressed: () => StatementScreenToast.failure(context, 'تعذّرت المشاركة'),
+                  onPressed: () =>
+                      StatementScreenToast.failure(context, 'تعذّرت المشاركة'),
                   child: const Text('fail'),
                 ),
               ),
@@ -115,7 +124,9 @@ void main() {
     expect(find.text('تعذّرت المشاركة'), findsOneWidget);
   });
 
-  testWidgets('tablet toast is centered and capped at toastMaxWidth', (tester) async {
+  testWidgets('tablet toast is centered and capped at toastMaxWidth', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(820, 1180);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -137,7 +148,8 @@ void main() {
             body: Builder(
               builder: (context) => Center(
                 child: ElevatedButton(
-                  onPressed: () => AppToaster.success('Wide layout', layoutContext: context),
+                  onPressed: () =>
+                      AppToaster.success('Wide layout', layoutContext: context),
                   child: const Text('toast-wide'),
                 ),
               ),
@@ -155,7 +167,12 @@ void main() {
     expect(toast.message, 'Wide layout');
 
     final box = tester.renderObject<RenderBox>(
-      find.ancestor(of: find.byType(AppToast), matching: find.byType(ConstrainedBox)).first,
+      find
+          .ancestor(
+            of: find.byType(AppToast),
+            matching: find.byType(ConstrainedBox),
+          )
+          .first,
     );
     expect(box.size.width, AppLayout.toastMaxWidth);
     final screen = tester.renderObject<RenderBox>(find.byType(Scaffold));
@@ -172,18 +189,18 @@ void main() {
         theme: AppFoundationTheme.light(),
         routes: {
           '/': (_) => HomeFoundationScope(
-                child: Scaffold(
-                  body: Center(
-                    child: ElevatedButton(
-                      onPressed: () => AppToaster.warning(
-                        'Retry',
-                        action: ToastAction(label: 'Retry', onPressed: () {}),
-                      ),
-                      child: const Text('warn'),
-                    ),
+            child: Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () => AppToaster.warning(
+                    'Retry',
+                    action: ToastAction(label: 'Retry', onPressed: () {}),
                   ),
+                  child: const Text('warn'),
                 ),
               ),
+            ),
+          ),
           '/other': (_) => const Scaffold(body: Text('other')),
         },
       ),

@@ -1,13 +1,15 @@
-import 'package:bnood/core/push/notification_settings_record.dart';
+import 'package:bnood/core/network/push/notification_settings_record.dart';
 import 'package:bnood/features/settings/data/notification_settings_provider.dart';
-import 'package:bnood/features/settings/presentation/notification_settings_screen.dart';
+import 'package:bnood/features/settings/presentation/screens/notification_settings_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('notification settings shows toggle and amount field', (tester) async {
+  testWidgets('notification settings shows toggle and amount field', (
+    tester,
+  ) async {
     const record = NotificationSettingsRecord(
       lowBalanceEnabled: true,
       lowBalanceAmountMinor: 1_000_000,

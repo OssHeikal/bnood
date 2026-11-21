@@ -5,25 +5,37 @@ void main() {
   group('resolveEffectiveStatus', () {
     test('maintenance flag wins over api ok', () {
       expect(
-        AppConfigData.resolveEffectiveStatus(maintenanceEnabled: true, apiStatus: 'ok'),
+        AppConfigData.resolveEffectiveStatus(
+          maintenanceEnabled: true,
+          apiStatus: 'ok',
+        ),
         AppGateStatus.maintenance,
       );
     });
 
     test('api maintenance when flag off', () {
       expect(
-        AppConfigData.resolveEffectiveStatus(maintenanceEnabled: false, apiStatus: 'maintenance'),
+        AppConfigData.resolveEffectiveStatus(
+          maintenanceEnabled: false,
+          apiStatus: 'maintenance',
+        ),
         AppGateStatus.maintenance,
       );
     });
 
     test('priority force over optional', () {
       expect(
-        AppConfigData.resolveEffectiveStatus(maintenanceEnabled: false, apiStatus: 'force_update'),
+        AppConfigData.resolveEffectiveStatus(
+          maintenanceEnabled: false,
+          apiStatus: 'force_update',
+        ),
         AppGateStatus.forceUpdate,
       );
       expect(
-        AppConfigData.resolveEffectiveStatus(maintenanceEnabled: false, apiStatus: 'optional_update'),
+        AppConfigData.resolveEffectiveStatus(
+          maintenanceEnabled: false,
+          apiStatus: 'optional_update',
+        ),
         AppGateStatus.optionalUpdate,
       );
     });

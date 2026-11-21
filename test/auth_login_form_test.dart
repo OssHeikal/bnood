@@ -1,14 +1,14 @@
 import 'package:bnood/features/auth/auth_form_utils.dart';
 import 'package:bnood/features/auth/login_screen.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bnood/core/theme/app_theme.dart';
-import 'package:bnood/core/widgets/buttons/app_button.dart';
+import 'package:bnood/core/ui/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/buttons/app_button.dart';
 
 Widget _wrap(Widget child, Locale locale) {
   return ProviderScope(
@@ -30,7 +30,9 @@ Widget _wrap(Widget child, Locale locale) {
 }
 
 void main() {
-  testWidgets('login retains phone after validation error (AR)', (tester) async {
+  testWidgets('login retains phone after validation error (AR)', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(_wrap(const LoginScreen(), const Locale('ar')));
@@ -40,7 +42,9 @@ void main() {
     expect(find.textContaining('01012345678'), findsWidgets);
   });
 
-  testWidgets('login retains phone after validation error (EN)', (tester) async {
+  testWidgets('login retains phone after validation error (EN)', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(_wrap(const LoginScreen(), const Locale('en')));

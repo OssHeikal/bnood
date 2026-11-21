@@ -1,4 +1,4 @@
-import 'package:bnood/core/money/money_format.dart';
+import 'package:bnood/core/domain/money/money_format.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -17,7 +17,9 @@ void main() {
   test('engineer profit rounds down', () {
     expect(
       MoneyFormat.estimatedProfitPiastres(
-          totalSpendPiastres: 1000099, engineerBasisPoints: 1050),
+        totalSpendPiastres: 1000099,
+        engineerBasisPoints: 1050,
+      ),
       (1000099 * 1050) ~/ 10000,
     );
   });

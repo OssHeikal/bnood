@@ -1,11 +1,11 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
-import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
-import 'package:bnood/features/subscription/presentation/paywall_launcher.dart';
-import 'package:bnood/features/subscription/presentation/subscription_gates.dart';
-import 'package:bnood/features/subscription/presentation/subscription_limit_handler.dart';
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/subscription/presentation/actions/paywall_launcher.dart';
+import 'package:bnood/features/subscription/presentation/actions/subscription_gates.dart';
+import 'package:bnood/features/subscription/presentation/actions/subscription_limit_handler.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -103,9 +103,14 @@ void main() {
           if (paywallCallCounter != null)
             paywallPresentProvider.overrideWith(
               (ref) =>
-                  (context, {WidgetRef? ref, PaywallFetchTrigger trigger = PaywallFetchTrigger.defaultTrigger}) async {
-                paywallCallCounter.add(paywallCallCounter.length + 1);
-              },
+                  (
+                    context, {
+                    WidgetRef? ref,
+                    PaywallFetchTrigger trigger =
+                        PaywallFetchTrigger.defaultTrigger,
+                  }) async {
+                    paywallCallCounter.add(paywallCallCounter.length + 1);
+                  },
             ),
         ],
         child: MaterialApp(
@@ -124,7 +129,10 @@ void main() {
     await ProviderScope.containerOf(element).read(subscriptionProvider.future);
   }
 
-  Future<bool?> runGuard(WidgetTester tester, {String dismissLabel = 'تمام'}) async {
+  Future<bool?> runGuard(
+    WidgetTester tester, {
+    String dismissLabel = 'تمام',
+  }) async {
     await tester.tap(find.text('trigger'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
@@ -135,7 +143,9 @@ void main() {
     return _guardFuture;
   }
 
-  testWidgets('paywall disabled at cap shows info dialog not paywall', (tester) async {
+  testWidgets('paywall disabled at cap shows info dialog not paywall', (
+    tester,
+  ) async {
     final paywallCalls = <int>[];
     await pumpHarness(
       tester,
@@ -144,7 +154,10 @@ void main() {
       trigger: const _GuardTrigger(),
     );
     final element = tester.element(find.byType(_GuardTrigger));
-    expect(ProviderScope.containerOf(element).read(subscriptionProvider).valueOrNull, isNotNull);
+    expect(
+      ProviderScope.containerOf(element).read(subscriptionProvider).valueOrNull,
+      isNotNull,
+    );
 
     await tester.tap(find.text('trigger'));
     await tester.pump();
@@ -161,7 +174,9 @@ void main() {
     expect(await _guardFuture, isFalse);
   });
 
-  testWidgets('paywall enabled at cap opens paywall not limit dialog', (tester) async {
+  testWidgets('paywall enabled at cap opens paywall not limit dialog', (
+    tester,
+  ) async {
     final paywallCalls = <int>[];
     await pumpHarness(
       tester,
@@ -174,7 +189,9 @@ void main() {
     expect(find.text('وصلت للحد الأقصى للمشاريع'), findsNothing);
   });
 
-  testWidgets('test user bypasses limit gate without dialog or paywall', (tester) async {
+  testWidgets('test user bypasses limit gate without dialog or paywall', (
+    tester,
+  ) async {
     final paywallCalls = <int>[];
     final snapshot = AppSubscriptionSnapshot.fromDataJson({
       'paywall_enabled': true,

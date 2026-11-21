@@ -1,6 +1,6 @@
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../core/validation/egypt_mobile_phone_validation.dart';
+import '../../core/domain/validation/egypt_mobile_phone_validation.dart';
 
 String? validateEgyptPhone(AppLocalizations l10n, String? raw) =>
     validateRequiredEgyptMobile(l10n, raw);

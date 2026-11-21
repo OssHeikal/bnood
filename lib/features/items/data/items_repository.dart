@@ -1,6 +1,6 @@
-import 'items_api.dart';
-import 'item_api_record.dart';
-import 'item_icon_catalog.dart';
+import 'package:bnood/features/items/data/items_api.dart';
+import 'package:bnood/features/items/data/item_api_record.dart';
+import 'package:bnood/features/items/data/item_icon_catalog.dart';
 
 class ItemsRepository {
   ItemsRepository(this._api);
@@ -17,8 +17,12 @@ class ItemsRepository {
     int page = 1,
     int perPage = 50,
     ItemCatalogListStatus status = ItemCatalogListStatus.active,
-  }) =>
-      _api.listItems(q: q, page: page, perPage: perPage, status: status.queryValue);
+  }) => _api.listItems(
+    q: q,
+    page: page,
+    perPage: perPage,
+    status: status.queryValue,
+  );
 
   Future<CatalogItem> getItem(String id) => _api.getItem(id);
 
@@ -26,8 +30,7 @@ class ItemsRepository {
     required String name,
     required String iconKey,
     required String colorKey,
-  }) =>
-      _api.createItem(name: name, iconKey: iconKey, colorKey: colorKey);
+  }) => _api.createItem(name: name, iconKey: iconKey, colorKey: colorKey);
 
   Future<CatalogItem> updateItem({
     required String id,
@@ -49,9 +52,9 @@ enum ItemCatalogListStatus { active, archived }
 
 extension ItemCatalogListStatusQuery on ItemCatalogListStatus {
   String get queryValue => switch (this) {
-        ItemCatalogListStatus.active => 'active',
-        ItemCatalogListStatus.archived => 'archived',
-      };
+    ItemCatalogListStatus.active => 'active',
+    ItemCatalogListStatus.archived => 'archived',
+  };
 }
 
 Future<List<CatalogItem>> fetchAllCatalogItems(
@@ -63,7 +66,12 @@ Future<List<CatalogItem>> fetchAllCatalogItems(
   final all = <CatalogItem>[];
   var page = 1;
   while (true) {
-    final result = await repository.listItems(q: q, page: page, perPage: perPage, status: status);
+    final result = await repository.listItems(
+      q: q,
+      page: page,
+      perPage: perPage,
+      status: status,
+    );
     all.addAll(result.items);
     if (!result.hasMore) break;
     page++;

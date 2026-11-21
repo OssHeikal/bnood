@@ -2,16 +2,16 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/config/extensions/num_extensions.dart';
-import '../../../core/config/theme/app_colors.dart';
-import '../../../core/config/theme/app_size.dart';
-import '../../../core/formatting/display_digits.dart';
-import '../../../core/resources/gen/assets.gen.dart';
-import '../../subscription/data/app_subscription.dart';
-import '../../subscription/data/subscription_colors.dart';
-import '../../subscription/data/subscription_riverpod.dart';
-import '../../../core/widgets/buttons/app_button.dart';
-import '../../subscription/presentation/paywall_launcher.dart';
+import '../../../core/services/config/extensions/num_extensions.dart';
+import '../../../core/services/config/theme/app_colors.dart';
+import '../../../core/services/config/theme/app_size.dart';
+import '../../../core/domain/formatting/display_digits.dart';
+import '../../../core/ui/resources/gen/assets.gen.dart';
+import 'package:bnood/features/subscription/data/app_subscription.dart';
+import 'package:bnood/features/subscription/data/subscription_colors.dart';
+import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
+import '../../../core/ui/widgets/buttons/app_button.dart';
+import 'package:bnood/features/subscription/presentation/actions/paywall_launcher.dart';
 
 class ProfileSubscriptionCard extends ConsumerWidget {
   const ProfileSubscriptionCard({super.key});
@@ -51,23 +51,40 @@ class ProfileSubscriptionCard extends ConsumerWidget {
                   padding: const EdgeInsets.all(4),
                   decoration: ShapeDecoration(
                     color: isActivePremium ? accent : colors.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.radiusSM)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppSize.radiusSM),
+                    ),
                   ),
                   child: Assets.icons.crownOutline.svg(
                     width: 24,
                     height: 24,
-                    colorFilter: const ColorFilter.mode(SubscriptionColors.onViolet, BlendMode.srcIn),
+                    colorFilter: const ColorFilter.mode(
+                      SubscriptionColors.onViolet,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(l10n.profileSubscriptionSection, style: text.body, textAlign: TextAlign.start),
+                      Text(
+                        l10n.profileSubscriptionSection,
+                        style: text.body,
+                        textAlign: TextAlign.start,
+                      ),
                       if (isActivePremium)
-                        Text(ent.packageName, style: text.bodyEmphasis.copyWith(color: colors.primaryDark))
+                        Text(
+                          ent.packageName,
+                          style: text.bodyEmphasis.copyWith(
+                            color: colors.primaryDark,
+                          ),
+                        )
                       else
-                        Text(l10n.profileSubscriptionFreeBlurb, style: text.body.copyWith(color: muted)),
+                        Text(
+                          l10n.profileSubscriptionFreeBlurb,
+                          style: text.body.copyWith(color: muted),
+                        ),
                     ],
                   ),
                 ),
@@ -79,7 +96,17 @@ class ProfileSubscriptionCard extends ConsumerWidget {
               ],
             ),
             AppSize.spaceSM.gap,
-            if (!isActivePremium) ..._freeBody(context, ref, l10n, snap, text, muted, colors, accent),
+            if (!isActivePremium)
+              ..._freeBody(
+                context,
+                ref,
+                l10n,
+                snap,
+                text,
+                muted,
+                colors,
+                accent,
+              ),
           ],
         ),
       ),
@@ -97,8 +124,15 @@ class ProfileSubscriptionCard extends ConsumerWidget {
     final days = ent.daysRemaining;
     return [
       if (expiry != null)
-        Text(l10n.profileSubscriptionRenewsOn(_formatDate(expiry)), style: text.caption.copyWith(color: muted)),
-      if (days != null) Text(l10n.profileSubscriptionDaysRemaining(days), style: text.caption.copyWith(color: muted)),
+        Text(
+          l10n.profileSubscriptionRenewsOn(_formatDate(expiry)),
+          style: text.caption.copyWith(color: muted),
+        ),
+      if (days != null)
+        Text(
+          l10n.profileSubscriptionDaysRemaining(days),
+          style: text.caption.copyWith(color: muted),
+        ),
     ];
   }
 
@@ -119,7 +153,11 @@ class ProfileSubscriptionCard extends ConsumerWidget {
         for (final b in benefits.take(3))
           Padding(
             padding: const EdgeInsets.only(bottom: 4),
-            child: Text('• $b', style: text.caption, textAlign: TextAlign.start),
+            child: Text(
+              '• $b',
+              style: text.caption,
+              textAlign: TextAlign.start,
+            ),
           ),
       ],
       AppSize.spaceMD.gap,

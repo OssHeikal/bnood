@@ -2,10 +2,7 @@ import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
 
-enum ProfileLogoValidationFailure {
-  tooLarge,
-  unreadable,
-}
+enum ProfileLogoValidationFailure { tooLarge, unreadable }
 
 class ProfileLogoValidation {
   const ProfileLogoValidation._();

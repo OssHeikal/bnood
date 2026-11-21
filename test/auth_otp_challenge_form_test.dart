@@ -1,4 +1,4 @@
-import 'package:bnood/core/config/theme/app_theme.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/auth/widgets/auth_otp_challenge_form.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,9 @@ Widget _wrap(Widget child) {
 }
 
 void main() {
-  testWidgets('full pin submits once and resend clears the cells', (tester) async {
+  testWidgets('full pin submits once and resend clears the cells', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 

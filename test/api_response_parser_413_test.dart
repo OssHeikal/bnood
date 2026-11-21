@@ -1,5 +1,5 @@
-import 'package:bnood/core/api/api_response_parser.dart';
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/api_response_parser.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -21,7 +21,11 @@ void main() {
   });
 
   test('voucher upload error message prefers localized too-large', () {
-    final err = AuthApiException(statusCode: 413, message: 'html', code: 'invalid_size');
+    final err = AuthApiException(
+      statusCode: 413,
+      message: 'html',
+      code: 'invalid_size',
+    );
     expect(err.isInvalidSize, isTrue);
   });
 }

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/config/extensions/num_extensions.dart';
-import '../../../../core/config/theme/app_colors.dart';
-import '../../../../core/config/theme/app_shape.dart';
-import '../../../../core/config/theme/app_size.dart';
-import '../../../../core/money/remote_money_units.dart';
-import '../../../../core/resources/gen/assets.gen.dart';
-import '../../../../core/theme/app_colors.dart' as legacy;
+import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/services/config/theme/app_colors.dart';
+import '../../../../core/services/config/theme/app_shape.dart';
+import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/money/remote_money_units.dart';
+import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/ui/theme/app_colors.dart' as legacy;
 import '../../../../core/utils/extensions/bidi_isolate.dart';
-import '../../../../core/widgets/app_amount.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/app_overflow_menu.dart';
+import '../../../../core/ui/widgets/app_amount.dart';
+import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/ui/widgets/app_overflow_menu.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
 /// Provider row shared by suppliers and craftsmen.
@@ -110,8 +110,12 @@ class RemoteCraftsmanSummaryCard extends StatelessWidget {
                               if (subtitle != null) ...[
                                 AppSize.spaceXS.gap,
                                 Text(
-                                  subtitle.isolate ? LtrIsolate.isolate(subtitle.text) : subtitle.text,
-                                  style: text.caption.copyWith(color: colors.onSurfaceMuted),
+                                  subtitle.isolate
+                                      ? LtrIsolate.isolate(subtitle.text)
+                                      : subtitle.text,
+                                  style: text.caption.copyWith(
+                                    color: colors.onSurfaceMuted,
+                                  ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.start,
@@ -158,7 +162,10 @@ class RemoteCraftsmanSummaryCard extends StatelessWidget {
             ),
             if (actions != null && actions.isNotEmpty)
               Padding(
-                padding: const EdgeInsetsDirectional.only(top: AppSize.spaceXS, end: AppSize.spaceXS),
+                padding: const EdgeInsetsDirectional.only(
+                  top: AppSize.spaceXS,
+                  end: AppSize.spaceXS,
+                ),
                 child: Align(
                   alignment: AlignmentDirectional.topEnd,
                   child: AppOverflowMenu(actions: actions),
@@ -204,12 +211,18 @@ class _KindBadge extends StatelessWidget {
         shape: AppShape.superellipse(radius: AppSize.radiusSM),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceSM, vertical: 2),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSize.spaceSM,
+          vertical: 2,
+        ),
         child: Text(
           label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: context.text.caption.copyWith(color: color, fontWeight: FontWeight.w700),
+          style: context.text.caption.copyWith(
+            color: color,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     );
@@ -288,7 +301,11 @@ class _Avatar extends StatelessWidget {
           child: Center(
             child: Text(
               initial,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+              ),
             ),
           ),
         ),
@@ -301,17 +318,16 @@ List<AppOverflowMenuAction> providerOverflowActions({
   required AppLocalizations l10n,
   required VoidCallback onEdit,
   required VoidCallback onDelete,
-}) =>
-    [
-      AppOverflowMenuAction(
-        label: l10n.edit,
-        icon: Assets.icons.documentEditOutline,
-        onSelected: onEdit,
-      ),
-      AppOverflowMenuAction(
-        label: l10n.delete,
-        icon: Assets.icons.deleteSquareOutline,
-        onSelected: onDelete,
-        destructive: true,
-      ),
-    ];
+}) => [
+  AppOverflowMenuAction(
+    label: l10n.edit,
+    icon: Assets.icons.documentEditOutline,
+    onSelected: onEdit,
+  ),
+  AppOverflowMenuAction(
+    label: l10n.delete,
+    icon: Assets.icons.deleteSquareOutline,
+    onSelected: onDelete,
+    destructive: true,
+  ),
+];

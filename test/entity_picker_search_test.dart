@@ -1,6 +1,6 @@
-import 'package:bnood/core/config/theme/app_motion.dart';
-import 'package:bnood/core/config/theme/app_theme.dart';
-import 'package:bnood/core/widgets/entity_picker_page.dart';
+import 'package:bnood/core/services/config/theme/app_motion.dart';
+import 'package:bnood/core/services/config/theme/app_theme.dart';
+import 'package:bnood/core/ui/widgets/entity_picker_page.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -37,7 +37,9 @@ void main() {
     expect(find.text('No matches'), findsNothing);
   });
 
-  testWidgets('entity picker Arabic search ignores alif and ta marbuta', (tester) async {
+  testWidgets('entity picker Arabic search ignores alif and ta marbuta', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppFoundationTheme.light(),

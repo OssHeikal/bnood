@@ -1,4 +1,4 @@
-import 'models/user.dart';
+import 'package:bnood/features/auth/models/user.dart';
 
 enum AuthBootstrapStatus {
   idle,
@@ -78,8 +78,9 @@ class AuthState {
       pendingRegistration: clearPendingRegistration
           ? null
           : (pendingRegistration ?? this.pendingRegistration),
-      pendingRecovery:
-          clearPendingRecovery ? null : (pendingRecovery ?? this.pendingRecovery),
+      pendingRecovery: clearPendingRecovery
+          ? null
+          : (pendingRecovery ?? this.pendingRecovery),
       resetToken: clearResetToken ? null : (resetToken ?? this.resetToken),
       resetTokenExpiresIn: clearResetExpires
           ? null

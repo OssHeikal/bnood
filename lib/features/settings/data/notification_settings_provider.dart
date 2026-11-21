@@ -1,13 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:bnood/core/push/notification_settings_record.dart';
-import 'package:bnood/core/push/push_providers.dart';
+import 'package:bnood/core/network/push/notification_settings_record.dart';
+import 'package:bnood/core/network/push/push_providers.dart';
 
-final notificationSettingsProvider = AsyncNotifierProvider<NotificationSettingsNotifier, NotificationSettingsRecord>(
-  NotificationSettingsNotifier.new,
-);
+final notificationSettingsProvider =
+    AsyncNotifierProvider<
+      NotificationSettingsNotifier,
+      NotificationSettingsRecord
+    >(NotificationSettingsNotifier.new);
 
-class NotificationSettingsNotifier extends AsyncNotifier<NotificationSettingsRecord> {
+class NotificationSettingsNotifier
+    extends AsyncNotifier<NotificationSettingsRecord> {
   @override
   Future<NotificationSettingsRecord> build() async {
     return ref.read(pushRepositoryProvider).fetchSettings();
@@ -18,7 +21,9 @@ class NotificationSettingsNotifier extends AsyncNotifier<NotificationSettingsRec
     if (previous == null) return;
     state = AsyncData(previous.copyWith(pushEnabled: enabled));
     try {
-      final updated = await ref.read(pushRepositoryProvider).updateSettings(pushEnabled: enabled);
+      final updated = await ref
+          .read(pushRepositoryProvider)
+          .updateSettings(pushEnabled: enabled);
       state = AsyncData(updated);
     } catch (e, st) {
       state = AsyncData(previous);
@@ -31,7 +36,9 @@ class NotificationSettingsNotifier extends AsyncNotifier<NotificationSettingsRec
     if (previous == null) return;
     state = AsyncData(previous.copyWith(lowBalanceEnabled: enabled));
     try {
-      final updated = await ref.read(pushRepositoryProvider).updateSettings(lowBalanceEnabled: enabled);
+      final updated = await ref
+          .read(pushRepositoryProvider)
+          .updateSettings(lowBalanceEnabled: enabled);
       state = AsyncData(updated);
     } catch (e, st) {
       state = AsyncData(previous);
@@ -44,7 +51,9 @@ class NotificationSettingsNotifier extends AsyncNotifier<NotificationSettingsRec
     if (previous == null) return;
     state = AsyncData(previous.copyWith(lowBalanceAmountMinor: amountMinor));
     try {
-      final updated = await ref.read(pushRepositoryProvider).updateSettings(lowBalanceAmountMinor: amountMinor);
+      final updated = await ref
+          .read(pushRepositoryProvider)
+          .updateSettings(lowBalanceAmountMinor: amountMinor);
       state = AsyncData(updated);
     } catch (e, st) {
       state = AsyncData(previous);
@@ -54,11 +63,16 @@ class NotificationSettingsNotifier extends AsyncNotifier<NotificationSettingsRec
 }
 
 extension _NotificationSettingsCopy on NotificationSettingsRecord {
-  NotificationSettingsRecord copyWith({bool? pushEnabled, bool? lowBalanceEnabled, int? lowBalanceAmountMinor}) {
+  NotificationSettingsRecord copyWith({
+    bool? pushEnabled,
+    bool? lowBalanceEnabled,
+    int? lowBalanceAmountMinor,
+  }) {
     return NotificationSettingsRecord(
       pushEnabled: pushEnabled ?? this.pushEnabled,
       lowBalanceEnabled: lowBalanceEnabled ?? this.lowBalanceEnabled,
-      lowBalanceAmountMinor: lowBalanceAmountMinor ?? this.lowBalanceAmountMinor,
+      lowBalanceAmountMinor:
+          lowBalanceAmountMinor ?? this.lowBalanceAmountMinor,
     );
   }
 }

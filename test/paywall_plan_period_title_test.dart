@@ -1,5 +1,5 @@
 import 'package:bnood/features/subscription/data/app_subscription.dart';
-import 'package:bnood/features/subscription/presentation/paywall_plan_period_title.dart';
+import 'package:bnood/features/subscription/presentation/widgets/paywall_plan_period_title.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

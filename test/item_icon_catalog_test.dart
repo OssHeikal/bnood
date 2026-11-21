@@ -15,33 +15,39 @@ void main() {
     expect(itemIconCatalogKeys.last, 'layers');
   });
 
-  test('withFullItemIconCatalog returns exactly 27 keys when API sends subset', () {
-    const partial = ItemIconsCatalog(
-      colors: [],
-      iconKeys: ['layers', 'bathtub', 'sink'],
-    );
-    final full = withFullItemIconCatalog(partial);
-    expect(full.iconKeys.length, 27);
-    expect(full.iconKeys.toSet().length, 27);
-    expect(full.iconKeys, itemIconCatalogKeys);
-    expect(full.iconKeys, contains('layers'));
-  });
+  test(
+    'withFullItemIconCatalog returns exactly 27 keys when API sends subset',
+    () {
+      const partial = ItemIconsCatalog(
+        colors: [],
+        iconKeys: ['layers', 'bathtub', 'sink'],
+      );
+      final full = withFullItemIconCatalog(partial);
+      expect(full.iconKeys.length, 27);
+      expect(full.iconKeys.toSet().length, 27);
+      expect(full.iconKeys, itemIconCatalogKeys);
+      expect(full.iconKeys, contains('layers'));
+    },
+  );
 
-  test('withFullItemIconCatalog does not duplicate when API sends full or mixed lists', () {
-    const fromApi = ItemIconsCatalog(
-      colors: [ItemColorOption(key: 'teal', hex: '#0D9B8A')],
-      iconKeys: [
-        ...itemIconCatalogKeys,
-        'plumbing',
-        'category',
-        'brick_wall',
-        'paint_roller',
-      ],
-    );
-    final full = withFullItemIconCatalog(fromApi);
-    expect(full.iconKeys.length, 27);
-    expect(full.iconKeys.toSet().length, 27);
-    expect(full.iconKeys, itemIconCatalogKeys);
-    expect(full.colors.length, 1);
-  });
+  test(
+    'withFullItemIconCatalog does not duplicate when API sends full or mixed lists',
+    () {
+      const fromApi = ItemIconsCatalog(
+        colors: [ItemColorOption(key: 'teal', hex: '#0D9B8A')],
+        iconKeys: [
+          ...itemIconCatalogKeys,
+          'plumbing',
+          'category',
+          'brick_wall',
+          'paint_roller',
+        ],
+      );
+      final full = withFullItemIconCatalog(fromApi);
+      expect(full.iconKeys.length, 27);
+      expect(full.iconKeys.toSet().length, 27);
+      expect(full.iconKeys, itemIconCatalogKeys);
+      expect(full.colors.length, 1);
+    },
+  );
 }

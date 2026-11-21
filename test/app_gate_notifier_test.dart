@@ -1,6 +1,6 @@
-import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/app_gate/data/app_config_record.dart';
-import 'package:bnood/core/prefs/app_settings_store.dart';
+import 'package:bnood/core/data/prefs/app_settings_store.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/features/app_gate/app_gate_provider.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,11 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         appSettingsBootstrapProvider.overrideWithValue(
-          const AppSettingsSnapshot(themeMode: ThemeMode.light, locale: Locale('en'), prefs: null),
+          const AppSettingsSnapshot(
+            themeMode: ThemeMode.light,
+            locale: Locale('en'),
+            prefs: null,
+          ),
         ),
         appConfigApiProvider.overrideWith(
           (ref) => StubAppConfigApi(({
@@ -28,7 +32,9 @@ void main() {
       ],
     );
     addTearDown(container.dispose);
-    final data = await container.read(appGateProvider.notifier).fetchConfig(failOpen: true);
+    final data = await container
+        .read(appGateProvider.notifier)
+        .fetchConfig(failOpen: true);
     expect(data.status, AppGateStatus.ok);
   });
 }
