@@ -34,7 +34,11 @@ import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_list_tile.dart';
 import '../../core/widgets/custom_text_field.dart';
-import '../../core/widgets/entity_picker_page.dart';
+import '../../core/agreements/agreements_riverpod.dart';
+import '../../core/providers_api/app_provider_record.dart';
+import '../../core/widgets/entity_picker_load_page.dart';
+import '../../core/widgets/text_field/app_input_formatters.dart';
+import 'voucher_picker_agreements.dart';
 import '../../core/widgets/overlay_form_presentation.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
 import '../../core/widgets/dashed_border_frame.dart';
@@ -148,9 +152,10 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
     _baselineDraft = draft;
     if (draft.amountPiastres != null) {
       final remote = ref.read(remoteVouchersEnabledProvider);
-      _amountCtrl.text = remote
+      final raw = remote
           ? RemoteMoneyFormat.majorInputTextFromMinor(draft.amountPiastres!)
           : _localAmountFieldText(draft.amountPiastres!);
+      _amountCtrl.text = ThousandsGroupingFormatter.formatDisplay(raw, allowDecimal: true);
     }
     _descCtrl.text = draft.description ?? '';
     _baselineAmountText = _amountCtrl.text;
@@ -243,47 +248,51 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       return;
     }
     final repo = ref.read(repositoryProvider);
-    final clients = await repo.watchActiveClients();
-    if (!mounted) return;
-    final locale = Localizations.localeOf(context).languageCode;
-    final balances = <String, int>{};
-    for (final c in clients) {
-      final project = await repo.primaryActiveProject(c.id);
-      if (project == null) {
-        balances[c.id] = 0;
-      } else {
-        final balance = await repo.projectBalance(project.id);
-        balances[c.id] = balance.balancePiastres;
-      }
-    }
-    if (!mounted) return;
     final draft = ref.read(voucherDraftProvider);
     final l10n = AppLocalizations.of(context);
     final picked = await Navigator.of(context).push<String>(
       MaterialPageRoute(
-        builder: (_) => EntityPickerPage(
+        builder: (_) => EntityPickerLoadPage(
           title: l10n.navClients,
           presentation: _nestedPresentation,
-          entries: clients.map((c) => (c.id, c.name)).toList(),
           selectedId: draft.clientId,
-          emptyTitle: l10n.homeNoActiveClientsTitle,
-          emptyDescription: l10n.homeNoActiveClientsDescription,
-          tileBuilder: (ctx, id, selected, onSelect, showDivider) => VoucherPickerClientCard(
-            name: clients.firstWhere((c) => c.id == id).name,
-            clientId: id,
-            remainingPiastres: balances[id] ?? 0,
-            localeCode: locale,
-            selected: selected,
-            onTap: onSelect,
-            showDivider: showDivider,
-          ),
-          onCreateRoute: () => InlineCreateClientPage(presentation: _nestedPresentation),
           onBeforeCreate: (ctx) => guardCreateActiveProject(ctx, ref),
+          onCreateRoute: () => InlineCreateClientPage(presentation: _nestedPresentation),
+          load: () async {
+            final clients = await repo.watchActiveClients();
+            final balances = <String, int>{};
+            for (final c in clients) {
+              final project = await repo.primaryActiveProject(c.id);
+              if (project == null) {
+                balances[c.id] = 0;
+              } else {
+                final balance = await repo.projectBalance(project.id);
+                balances[c.id] = balance.balancePiastres;
+              }
+            }
+            return EntityPickerLoadedBundle(
+              entries: clients.map((c) => (c.id, c.name)).toList(),
+              emptyTitle: l10n.homeNoActiveClientsTitle,
+              emptyDescription: l10n.homeNoActiveClientsDescription,
+              tileBuilder: (ctx, id, selected, onSelect, showDivider) {
+                final localeCode = Localizations.localeOf(ctx).languageCode;
+                return VoucherPickerClientCard(
+                  name: clients.firstWhere((c) => c.id == id).name,
+                  clientId: id,
+                  remainingPiastres: balances[id] ?? 0,
+                  localeCode: localeCode,
+                  selected: selected,
+                  onTap: onSelect,
+                  showDivider: showDivider,
+                );
+              },
+            );
+          },
         ),
       ),
     );
-    if (picked == null) return;
-    final client = await resolveLocalClient(ref.read, picked, cached: clients);
+    if (picked == null || !mounted) return;
+    final client = await resolveLocalClient(ref.read, picked);
     final project = await repo.primaryActiveProject(picked);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
@@ -303,41 +312,45 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
 
   Future<void> _pickClientRemote() async {
     final clientsRepo = ref.read(clientsRepositoryProvider);
-    final clientsPage = await clientsRepo.listClients(status: ClientListArchiveFilter.active);
-    final clients = clientsPage.items;
-    if (!mounted) return;
-    final locale = Localizations.localeOf(context).languageCode;
-    final balances = <String, int>{};
-    for (final record in clients) {
-      balances[record.client.id] = record.balances?.remainingPiastres ?? 0;
-    }
     final draft = ref.read(voucherDraftProvider);
     final l10n = AppLocalizations.of(context);
     final picked = await Navigator.of(context).push<String>(
       MaterialPageRoute(
-        builder: (_) => EntityPickerPage(
+        builder: (_) => EntityPickerLoadPage(
           title: l10n.navClients,
           presentation: _nestedPresentation,
-          entries: clients.map((c) => (c.client.id, c.client.name)).toList(),
           selectedId: draft.clientId,
-          emptyTitle: l10n.homeNoActiveClientsTitle,
-          emptyDescription: l10n.homeNoActiveClientsDescription,
-          tileBuilder: (ctx, id, selected, onSelect, showDivider) => VoucherPickerClientCard(
-            name: clients.firstWhere((c) => c.client.id == id).client.name,
-            clientId: id,
-            remainingPiastres: balances[id] ?? 0,
-            localeCode: locale,
-            selected: selected,
-            onTap: onSelect,
-            showDivider: showDivider,
-          ),
-          onCreateRoute: () => InlineCreateClientPage(presentation: _nestedPresentation),
           onBeforeCreate: (ctx) => guardCreateActiveProject(ctx, ref),
+          onCreateRoute: () => InlineCreateClientPage(presentation: _nestedPresentation),
+          load: () async {
+            final clientsPage = await clientsRepo.listClients(status: ClientListArchiveFilter.active);
+            final clients = clientsPage.items;
+            final balances = <String, int>{
+              for (final record in clients) record.client.id: record.balances?.remainingPiastres ?? 0,
+            };
+            return EntityPickerLoadedBundle(
+              entries: clients.map((c) => (c.client.id, c.client.name)).toList(),
+              emptyTitle: l10n.homeNoActiveClientsTitle,
+              emptyDescription: l10n.homeNoActiveClientsDescription,
+              tileBuilder: (ctx, id, selected, onSelect, showDivider) {
+                final localeCode = Localizations.localeOf(ctx).languageCode;
+                return VoucherPickerClientCard(
+                  name: clients.firstWhere((c) => c.client.id == id).client.name,
+                  clientId: id,
+                  remainingPiastres: balances[id] ?? 0,
+                  localeCode: localeCode,
+                  selected: selected,
+                  onTap: onSelect,
+                  showDivider: showDivider,
+                );
+              },
+            );
+          },
         ),
       ),
     );
-    if (picked == null) return;
-    final record = await resolveRemoteClient(ref.read, picked, cached: clients);
+    if (picked == null || !mounted) return;
+    final record = await resolveRemoteClient(ref.read, picked);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
         .copyWith(
@@ -355,49 +368,51 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
   }
 
   Future<void> _pickItem() async {
-    final List<({String id, String name, String colorKey, String iconKey})> items;
-    if (ref.read(remoteItemsEnabledProvider)) {
-      final catalogItems = await fetchAllCatalogItems(
-        ref.read(itemsRepositoryProvider),
-        status: ItemCatalogListStatus.active,
-      );
-      items = catalogItems.map((i) => (id: i.id, name: i.name, colorKey: i.colorKey, iconKey: i.iconKey)).toList();
-    } else {
-      final local = await ref.read(repositoryProvider).watchActiveItems().first;
-      items = local.map((i) => (id: i.id, name: i.name, colorKey: i.colorKey, iconKey: i.iconName)).toList();
-    }
-    if (!mounted) return;
     final draft = ref.read(voucherDraftProvider);
     final l10n = AppLocalizations.of(context);
+    final remoteItems = ref.read(remoteItemsEnabledProvider);
     final picked = await Navigator.of(context).push<String>(
       MaterialPageRoute(
-        builder: (_) => EntityPickerPage(
+        builder: (_) => EntityPickerLoadPage(
           title: l10n.item,
           presentation: _nestedPresentation,
-          entries: items.map((i) => (i.id, i.name)).toList(),
           selectedId: draft.itemId,
-          tileBuilder: (ctx, id, selected, onSelect, showDivider) {
-            final item = items.firstWhere((i) => i.id == id);
-            return VoucherPickerItemCard(
-              name: item.name,
-              colorKey: item.colorKey,
-              iconName: item.iconKey,
-              selected: selected,
-              onTap: onSelect,
-              showDivider: showDivider,
+          onCreateRoute: () => const VoucherItemCreatePage(),
+          load: () async {
+            final List<({String id, String name, String colorKey, String iconKey})> items;
+            if (remoteItems) {
+              final catalogItems = await fetchAllCatalogItems(
+                ref.read(itemsRepositoryProvider),
+                status: ItemCatalogListStatus.active,
+              );
+              items = catalogItems
+                  .map((i) => (id: i.id, name: i.name, colorKey: i.colorKey, iconKey: i.iconKey))
+                  .toList();
+            } else {
+              final local = await ref.read(repositoryProvider).watchActiveItems().first;
+              items = local.map((i) => (id: i.id, name: i.name, colorKey: i.colorKey, iconKey: i.iconName)).toList();
+            }
+            return EntityPickerLoadedBundle(
+              entries: items.map((i) => (i.id, i.name)).toList(),
+              tileBuilder: (ctx, id, selected, onSelect, showDivider) {
+                final item = items.firstWhere((i) => i.id == id);
+                return VoucherPickerItemCard(
+                  name: item.name,
+                  colorKey: item.colorKey,
+                  iconName: item.iconKey,
+                  selected: selected,
+                  onTap: onSelect,
+                  showDivider: showDivider,
+                );
+              },
             );
           },
-          onCreateRoute: () => const VoucherItemCreatePage(),
         ),
       ),
     );
-    if (picked == null) return;
-    final remoteItems = ref.read(remoteItemsEnabledProvider);
-    final cachedLabel = labelFromPickerEntries(items.map((i) => (i.id, i.name)).toList(), picked);
-    final label = await resolveItemLabel(ref.read, picked, remote: remoteItems, cachedLabel: cachedLabel);
-    ref.read(voucherDraftProvider.notifier).state = ref
-        .read(voucherDraftProvider)
-        .copyWith(itemId: picked, itemLabel: label);
+    if (picked == null || !mounted) return;
+    final label = await resolveItemLabel(ref.read, picked, remote: remoteItems);
+    ref.read(voucherDraftProvider.notifier).state = ref.read(voucherDraftProvider).copyWith(itemId: picked, itemLabel: label);
     setState(() => _itemPickerError = null);
   }
 
@@ -406,77 +421,105 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       await _pickSupplierRemote();
       return;
     }
-    final suppliers = await ref.read(repositoryProvider).watchActiveSuppliers().first;
-    if (!mounted) return;
     final draft = ref.read(voucherDraftProvider);
     final l10n = AppLocalizations.of(context);
-    const linked = <String>{};
+    var linkedForPick = const <String>{};
     final picked = await Navigator.of(context).push<String>(
       MaterialPageRoute(
-        builder: (_) => EntityPickerPage(
+        builder: (_) => EntityPickerLoadPage(
           title: l10n.supplier,
           presentation: _nestedPresentation,
-          entries: suppliers.map((s) => (s.id, s.name)).toList(),
           selectedId: draft.supplierId,
-          searchKeys: suppliers.map((s) => s.phone ?? '').toList(),
-          tileBuilder: (ctx, id, selected, onSelect, showDivider) {
-            final s = suppliers.firstWhere((e) => e.id == id);
-            return VoucherPickerSupplierCard(
-              name: s.name,
-              phone: s.phone,
-              linkedToClient: linked.contains(s.id),
-              selected: selected,
-              onTap: onSelect,
-              showDivider: showDivider,
+          onCreateRoute: () => InlineCreateSupplierPage(presentation: _nestedPresentation),
+          load: () async {
+            final suppliers = await ref.read(repositoryProvider).watchActiveSuppliers().first;
+            linkedForPick = const {};
+            return EntityPickerLoadedBundle(
+              entries: suppliers.map((s) => (s.id, s.name)).toList(),
+              searchKeys: suppliers.map((s) => s.phone ?? '').toList(),
+              tileBuilder: (ctx, id, selected, onSelect, showDivider) {
+                final s = suppliers.firstWhere((e) => e.id == id);
+                final localeCode = Localizations.localeOf(ctx).languageCode;
+                return VoucherPickerSupplierCard(
+                  providerId: id,
+                  name: s.name,
+                  phone: s.phone,
+                  localeCode: localeCode,
+                  linkedToClient: false,
+                  selected: selected,
+                  onTap: onSelect,
+                  showDivider: showDivider,
+                );
+              },
             );
           },
-          onCreateRoute: () => InlineCreateSupplierPage(presentation: _nestedPresentation),
         ),
       ),
     );
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
+    final suppliers = await ref.read(repositoryProvider).watchActiveSuppliers().first;
     final label = await resolveLocalSupplierLabel(ref.read, picked, cached: suppliers);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
-        .copyWith(supplierId: picked, supplierLabel: label, providerLinkedToClient: linked.contains(picked));
+        .copyWith(supplierId: picked, supplierLabel: label, providerLinkedToClient: linkedForPick.contains(picked));
     setState(() => _linkAmountCtrl.clear());
   }
 
   Future<void> _pickSupplierRemote() async {
-    final suppliers = await ref.read(appProvidersRepositoryProvider).listAllSuppliers();
-    if (!mounted) return;
     final draft = ref.read(voucherDraftProvider);
     final clientId = draft.clientId;
-    final linked = clientId == null ? const <String>{} : await linkedProviderIdsForClient(ref, clientId, remote: true);
     final l10n = AppLocalizations.of(context);
+    var linkedForPick = const <String>{};
+    final remainingForPick = <String, int>{};
     final picked = await Navigator.of(context).push<String>(
       MaterialPageRoute(
-        builder: (_) => EntityPickerPage(
+        builder: (_) => EntityPickerLoadPage(
           title: l10n.supplier,
           presentation: _nestedPresentation,
-          entries: suppliers.map((s) => (s.id, s.name)).toList(),
           selectedId: draft.supplierId,
-          searchKeys: suppliers.map((s) => s.phone ?? '').toList(),
-          tileBuilder: (ctx, id, selected, onSelect, showDivider) {
-            final s = suppliers.firstWhere((e) => e.id == id);
-            return VoucherPickerSupplierCard(
-              name: s.name,
-              phone: s.phone,
-              linkedToClient: linked.contains(s.id),
-              selected: selected,
-              onTap: onSelect,
-              showDivider: showDivider,
+          onCreateRoute: () => InlineCreateSupplierPage(presentation: _nestedPresentation),
+          load: () async {
+            final suppliers = await ref.read(appProvidersRepositoryProvider).listAllSuppliers();
+            if (clientId != null) {
+              final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
+              final ctx = remoteAgreementContext(agreements, AppProviderType.supplier);
+              linkedForPick = ctx.linkedIds;
+              remainingForPick
+                ..clear()
+                ..addAll(ctx.remainingByProviderId);
+            } else {
+              linkedForPick = const {};
+              remainingForPick.clear();
+            }
+            return EntityPickerLoadedBundle(
+              entries: suppliers.map((s) => (s.id, s.name)).toList(),
+              searchKeys: suppliers.map((s) => s.phone ?? '').toList(),
+              tileBuilder: (ctx, id, selected, onSelect, showDivider) {
+                final s = suppliers.firstWhere((e) => e.id == id);
+                final localeCode = Localizations.localeOf(ctx).languageCode;
+                return VoucherPickerSupplierCard(
+                  providerId: id,
+                  name: s.name,
+                  phone: s.phone,
+                  localeCode: localeCode,
+                  linkedToClient: linkedForPick.contains(s.id),
+                  remainingPiastres: remainingForPick[id],
+                  selected: selected,
+                  onTap: onSelect,
+                  showDivider: showDivider,
+                );
+              },
             );
           },
-          onCreateRoute: () => InlineCreateSupplierPage(presentation: _nestedPresentation),
         ),
       ),
     );
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
+    final suppliers = await ref.read(appProvidersRepositoryProvider).listAllSuppliers();
     final label = await resolveRemoteProviderLabel(ref.read, picked, cached: suppliers);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
-        .copyWith(supplierId: picked, supplierLabel: label, providerLinkedToClient: linked.contains(picked));
+        .copyWith(supplierId: picked, supplierLabel: label, providerLinkedToClient: linkedForPick.contains(picked));
     setState(() => _linkAmountCtrl.clear());
   }
 
@@ -486,46 +529,59 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
       return;
     }
     final draft = ref.read(voucherDraftProvider);
-    if (draft.projectId == null) {
-      setState(() => _craftsmanPickerError = AppLocalizations.of(context).voucherSelectClient);
-      return;
-    }
-    final craftsmen = await ref.read(repositoryProvider).watchActiveCraftsmen().first;
-    if (!mounted) return;
+    final projectId = draft.projectId;
     final l10n = AppLocalizations.of(context);
-    final linked = await linkedCraftsmanIdsForProject(ref, draft.projectId!);
-    if (craftsmen.isEmpty) {
-      AppToaster.show(l10n.voucherSelectCraftsman, kind: ToastKind.warning);
-      return;
-    }
+    var linkedForPick = const <String>{};
+    final remainingForPick = <String, int>{};
     final picked = await Navigator.of(context).push<String>(
       MaterialPageRoute(
-        builder: (_) => EntityPickerPage(
+        builder: (_) => EntityPickerLoadPage(
           title: l10n.craftsman,
           presentation: _nestedPresentation,
-          entries: craftsmen.map((c) => (c.id, c.name)).toList(),
           selectedId: draft.craftsmanId,
-          searchKeys: craftsmen.map((c) => c.trade ?? '').toList(),
-          tileBuilder: (ctx, id, selected, onSelect, showDivider) {
-            final c = craftsmen.firstWhere((e) => e.id == id);
-            return VoucherPickerCraftsmanCard(
-              name: c.name,
-              trade: c.trade,
-              linkedToClient: linked.contains(c.id),
-              selected: selected,
-              onTap: onSelect,
-              showDivider: showDivider,
+          onCreateRoute: () => InlineCreateCraftsmanPage(presentation: _nestedPresentation),
+          load: () async {
+            final repo = ref.read(repositoryProvider);
+            final craftsmen = await repo.watchActiveCraftsmen().first;
+            if (projectId != null) {
+              final agreementCtx = await localCraftsmanAgreementContext(repo, projectId);
+              linkedForPick = agreementCtx.linkedIds;
+              remainingForPick
+                ..clear()
+                ..addAll(agreementCtx.remainingByProviderId);
+            } else {
+              linkedForPick = const {};
+              remainingForPick.clear();
+            }
+            return EntityPickerLoadedBundle(
+              entries: craftsmen.map((c) => (c.id, c.name)).toList(),
+              searchKeys: craftsmen.map((c) => c.trade ?? '').toList(),
+              tileBuilder: (ctx, id, selected, onSelect, showDivider) {
+                final c = craftsmen.firstWhere((e) => e.id == id);
+                final localeCode = Localizations.localeOf(ctx).languageCode;
+                return VoucherPickerCraftsmanCard(
+                  providerId: id,
+                  name: c.name,
+                  trade: c.trade,
+                  localeCode: localeCode,
+                  linkedToClient: linkedForPick.contains(c.id),
+                  remainingPiastres: remainingForPick[id],
+                  selected: selected,
+                  onTap: onSelect,
+                  showDivider: showDivider,
+                );
+              },
             );
           },
-          onCreateRoute: () => InlineCreateCraftsmanPage(presentation: _nestedPresentation),
         ),
       ),
     );
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
+    final craftsmen = await ref.read(repositoryProvider).watchActiveCraftsmen().first;
     final label = await resolveLocalCraftsmanLabel(ref.read, picked, cached: craftsmen);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
-        .copyWith(craftsmanId: picked, craftsmanLabel: label, providerLinkedToClient: linked.contains(picked));
+        .copyWith(craftsmanId: picked, craftsmanLabel: label, providerLinkedToClient: linkedForPick.contains(picked));
     setState(() {
       _craftsmanPickerError = null;
       _linkAmountCtrl.clear();
@@ -534,46 +590,59 @@ class _VoucherSheetState extends ConsumerState<VoucherSheet> {
 
   Future<void> _pickCraftsmanRemote() async {
     final draft = ref.read(voucherDraftProvider);
-    if (draft.clientId == null) {
-      setState(() => _craftsmanPickerError = AppLocalizations.of(context).voucherSelectClient);
-      return;
-    }
-    final craftsmen = await ref.read(appProvidersRepositoryProvider).listAllCraftsmen();
-    final linked = await linkedProviderIdsForClient(ref, draft.clientId!, remote: true);
-    if (!mounted) return;
+    final clientId = draft.clientId;
     final l10n = AppLocalizations.of(context);
-    if (craftsmen.isEmpty) {
-      AppToaster.show(l10n.voucherSelectCraftsman, kind: ToastKind.warning);
-      return;
-    }
+    var linkedForPick = const <String>{};
+    final remainingForPick = <String, int>{};
     final picked = await Navigator.of(context).push<String>(
       MaterialPageRoute(
-        builder: (_) => EntityPickerPage(
+        builder: (_) => EntityPickerLoadPage(
           title: l10n.craftsman,
           presentation: _nestedPresentation,
-          entries: craftsmen.map((c) => (c.id, c.name)).toList(),
           selectedId: draft.craftsmanId,
-          searchKeys: craftsmen.map((c) => '').toList(),
-          tileBuilder: (ctx, id, selected, onSelect, showDivider) {
-            final c = craftsmen.firstWhere((e) => e.id == id);
-            return VoucherPickerCraftsmanCard(
-              name: c.name,
-              trade: null,
-              linkedToClient: linked.contains(c.id),
-              selected: selected,
-              onTap: onSelect,
-              showDivider: showDivider,
+          onCreateRoute: () => InlineCreateCraftsmanPage(presentation: _nestedPresentation),
+          load: () async {
+            final craftsmen = await ref.read(appProvidersRepositoryProvider).listAllCraftsmen();
+            if (clientId != null) {
+              final agreements = await ref.read(appAgreementsRepositoryProvider).listAllClientAgreements(clientId);
+              final agreementCtx = remoteAgreementContext(agreements, AppProviderType.craftsman);
+              linkedForPick = agreementCtx.linkedIds;
+              remainingForPick
+                ..clear()
+                ..addAll(agreementCtx.remainingByProviderId);
+            } else {
+              linkedForPick = const {};
+              remainingForPick.clear();
+            }
+            return EntityPickerLoadedBundle(
+              entries: craftsmen.map((c) => (c.id, c.name)).toList(),
+              searchKeys: craftsmen.map((c) => '').toList(),
+              tileBuilder: (ctx, id, selected, onSelect, showDivider) {
+                final c = craftsmen.firstWhere((e) => e.id == id);
+                final localeCode = Localizations.localeOf(ctx).languageCode;
+                return VoucherPickerCraftsmanCard(
+                  providerId: id,
+                  name: c.name,
+                  trade: null,
+                  localeCode: localeCode,
+                  linkedToClient: linkedForPick.contains(c.id),
+                  remainingPiastres: remainingForPick[id],
+                  selected: selected,
+                  onTap: onSelect,
+                  showDivider: showDivider,
+                );
+              },
             );
           },
-          onCreateRoute: () => InlineCreateCraftsmanPage(presentation: _nestedPresentation),
         ),
       ),
     );
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
+    final craftsmen = await ref.read(appProvidersRepositoryProvider).listAllCraftsmen();
     final label = await resolveRemoteProviderLabel(ref.read, picked, cached: craftsmen);
     ref.read(voucherDraftProvider.notifier).state = ref
         .read(voucherDraftProvider)
-        .copyWith(craftsmanId: picked, craftsmanLabel: label, providerLinkedToClient: linked.contains(picked));
+        .copyWith(craftsmanId: picked, craftsmanLabel: label, providerLinkedToClient: linkedForPick.contains(picked));
     setState(() {
       _craftsmanPickerError = null;
       _linkAmountCtrl.clear();

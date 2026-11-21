@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'sheet_keyboard_back_scope.dart';
+
 /// Nested [Navigator] for in-sheet flows (inline create, roster amount, etc.).
 class BoundedSheetNavigator extends StatelessWidget {
   const BoundedSheetNavigator({
@@ -19,7 +21,8 @@ class BoundedSheetNavigator extends StatelessWidget {
         settings: settings,
         transitionDuration: const Duration(milliseconds: 250),
         reverseTransitionDuration: const Duration(milliseconds: 200),
-        pageBuilder: (ctx, animation, secondaryAnimation) => builder(ctx),
+        pageBuilder: (ctx, animation, secondaryAnimation) =>
+            SheetKeyboardBackScope(child: builder(ctx)),
       ),
     );
   }

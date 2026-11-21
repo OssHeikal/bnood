@@ -68,6 +68,7 @@ class CustomTextField extends StatefulWidget {
     this.showPasswordLeading = true,
     this.fieldHeight,
     this.ltrValue = false,
+    this.groupThousands = false,
     this.textInputAction,
     this.autofillHints,
   }) : search = false,
@@ -119,6 +120,7 @@ class CustomTextField extends StatefulWidget {
        showPasswordLeading = true,
        fieldHeight = null,
        ltrValue = false,
+       groupThousands = false,
        textInputAction = null,
        autofillHints = null;
 
@@ -165,6 +167,7 @@ class CustomTextField extends StatefulWidget {
   final bool showPasswordLeading;
   final double? fieldHeight;
   final bool ltrValue;
+  final bool groupThousands;
   final TextInputAction? textInputAction;
   final Iterable<String>? autofillHints;
   final bool search;
@@ -371,6 +374,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   TextDirection _textDirection(BuildContext context) {
+    if (widget.type == AppInputType.currency && widget.ltrValue) {
+      return TextDirection.ltr;
+    }
     if (widget.type == AppInputType.currency) {
       return Directionality.of(context);
     }
@@ -574,6 +580,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           maxDecimalPlaces: widget.maxDecimalPlaces,
           minValue: widget.minValue,
           maxValue: widget.maxValue,
+          groupThousands: widget.groupThousands,
         ),
         onChanged: _changed,
         onTap: widget.enableFocus ? _handleTap : null,
