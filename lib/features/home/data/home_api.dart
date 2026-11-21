@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 
-import '../home/app_home_dashboard.dart';
-import '../home/app_home_totals.dart';
-import 'api_response_parser.dart';
-import 'app_dio.dart';
-import 'auth_api_exception.dart';
-import 'auth_interceptor.dart';
-import '../storage/session_store.dart';
+import 'app_home_dashboard.dart';
+import 'app_home_totals.dart';
+import 'package:bnood/core/api/api_response_parser.dart';
+import 'package:bnood/core/api/app_dio.dart';
+import 'package:bnood/core/api/auth_api_exception.dart';
+import 'package:bnood/core/api/auth_interceptor.dart';
+import 'package:bnood/core/storage/session_store.dart';
 
 class HomeApi {
   HomeApi({

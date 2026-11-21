@@ -15,7 +15,7 @@ import '../../../core/shared/pagination/pagination.dart';
 import '../../../core/widgets/app_fallback.dart';
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/directory_search_field.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 import 'provider_create_sheet.dart';
 import 'provider_edit_sheet.dart';
 import 'provider_mutation_actions.dart';

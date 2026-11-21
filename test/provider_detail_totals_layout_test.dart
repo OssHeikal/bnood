@@ -4,7 +4,7 @@ import 'package:bnood/features/providers/data/app_provider_record.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
 import 'package:bnood/features/providers/presentation/provider_detail_provider.dart';
 import 'package:bnood/features/providers/presentation/provider_detail_screen.dart';
 import 'package:bnood/features/providers/presentation/provider_detail_snapshot.dart';

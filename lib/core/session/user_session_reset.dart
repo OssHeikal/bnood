@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/providers/data/agreements_riverpod.dart';
 import '../../features/clients/data/clients_providers.dart';
-import '../home/home_repository.dart';
-import '../home/home_riverpod.dart';
-import '../home/home_section_counts.dart';
+import '../../features/home/data/home_repository.dart';
+import '../../features/home/data/home_riverpod.dart';
+import '../../features/home/data/home_section_counts.dart';
 import '../../features/items/data/items_providers.dart';
 import '../providers/dashboard_providers.dart';
 import '../../features/providers/data/providers_riverpod.dart';

@@ -5,7 +5,7 @@ import '../../core/providers/settings_provider.dart';
 import '../../core/subscription/app_subscription.dart';
 import '../../core/subscription/subscription_colors.dart';
 import '../../core/subscription/subscription_riverpod.dart';
-import '../home/home_foundation_scope.dart';
+import '../home/presentation/home_foundation_scope.dart';
 import 'paywall_screen.dart';
 import 'widgets/paywall_error_body.dart';
 import 'widgets/paywall_loading_skeleton.dart';

@@ -7,7 +7,7 @@ import 'package:bnood/features/items/data/items_repository.dart' show ItemCatalo
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
 import 'package:bnood/core/widgets/app_card.dart';
 import 'package:bnood/core/widgets/app_empty_state.dart';
 import 'package:bnood/core/widgets/buttons/app_button.dart';

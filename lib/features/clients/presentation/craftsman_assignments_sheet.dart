@@ -27,7 +27,7 @@ import '../../../core/widgets/bounded_sheet_navigator.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/sheet_drag_handle.dart';
 import '../../../core/widgets/skeleton/skeleton.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 import '../../vouchers/presentation/inline_create_routes.dart';
 import 'craftsman_agreement_amount_sheet.dart';
 import 'widgets/craftsman_roster_choice_row.dart';

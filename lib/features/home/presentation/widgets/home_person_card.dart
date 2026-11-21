@@ -1,4 +1,4 @@
-import '../../clients/presentation/widgets/client_balance_card.dart';
+import '../../../clients/presentation/widgets/client_balance_card.dart';
 
 typedef HomePersonCard = ClientBalanceCard;
 

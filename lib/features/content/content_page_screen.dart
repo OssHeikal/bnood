@@ -12,7 +12,7 @@ import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/skeleton/skeleton.dart';
 import '../../core/widgets/skeleton/skeleton_box.dart';
 import '../../core/widgets/skeleton/skeleton_text.dart' show SkeletonText, SkeletonTextRole;
-import '../../features/home/home_foundation_scope.dart';
+import '../../features/home/presentation/home_foundation_scope.dart';
 import 'content_page_provider.dart';
 
 class ContentPageScreen extends ConsumerWidget {

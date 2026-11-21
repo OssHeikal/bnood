@@ -5,7 +5,7 @@ import '../../../../core/config/theme/app_size.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/skeleton/skeleton_box.dart';
 import '../../../../core/widgets/skeleton/skeleton_text.dart';
-import '../../../home/widgets/home_loading_skeleton.dart';
+import '../../../home/presentation/widgets/home_loading_skeleton.dart';
 
 /// Client detail body skeleton — stat grid + engineer card + row stacks.
 class ClientDetailLoadingSkeleton extends StatelessWidget {

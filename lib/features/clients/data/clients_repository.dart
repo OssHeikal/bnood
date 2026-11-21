@@ -1,4 +1,4 @@
-import 'package:bnood/core/home/home_row_models.dart';
+import 'package:bnood/features/home/data/home_row_models.dart';
 
 import 'clients_api.dart';
 import 'client_api_record.dart';

@@ -25,7 +25,7 @@ import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/sheet_drag_handle.dart';
 import '../../../core/widgets/skeleton/skeleton.dart';
 import '../../clients/presentation/widgets/client_roster_choice_row.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 
 Future<void> showProviderClientAssignmentsSheet({
   required BuildContext context,

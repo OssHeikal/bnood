@@ -10,7 +10,7 @@ import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_fallback.dart';
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/skeleton/async_value_body.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 import 'client_detail_provider.dart';
 import 'client_items_stats_provider.dart';
 import 'client_movements_navigation.dart';

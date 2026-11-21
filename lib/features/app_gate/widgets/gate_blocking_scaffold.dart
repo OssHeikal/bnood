@@ -5,7 +5,7 @@ import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/custom_app_bar.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 
 class GateBlockingScaffold extends StatelessWidget {
   const GateBlockingScaffold({

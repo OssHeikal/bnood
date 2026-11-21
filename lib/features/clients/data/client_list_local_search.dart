@@ -1,6 +1,6 @@
 import 'package:bnood/core/utils/arabic_search_normalizer.dart';
 
-import 'package:bnood/core/home/home_row_models.dart';
+import 'package:bnood/features/home/data/home_row_models.dart';
 
 List<HomeClientBalanceRow> filterHomeClientRowsBySearch(
   List<HomeClientBalanceRow> rows,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/config/extensions/num_extensions.dart';
-import '../../../core/config/theme/app_colors.dart';
-import '../../../core/config/theme/app_shape.dart';
-import '../../../core/config/theme/app_size.dart';
-import '../../../core/theme/app_colors.dart' as legacy;
-import '../../../core/widgets/app_card.dart';
-import '../../../l10n/app_localizations.dart';
+import '../../../../../core/config/extensions/num_extensions.dart';
+import '../../../../../core/config/theme/app_colors.dart';
+import '../../../../../core/config/theme/app_shape.dart';
+import '../../../../../core/config/theme/app_size.dart';
+import '../../../../../core/theme/app_colors.dart' as legacy;
+import '../../../../../core/widgets/app_card.dart';
+import 'package:bnood/l10n/app_localizations.dart';
 
 /// Remote home craftsman snapshot — name only (matches providers list compact meta).
 class HomeCraftsmanPreviewCard extends StatelessWidget {

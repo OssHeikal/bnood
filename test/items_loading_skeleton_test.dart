@@ -3,7 +3,7 @@ import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton_box.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton_text.dart';
-import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
 import 'package:bnood/features/items/presentation/widgets/items_loading_skeleton.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';

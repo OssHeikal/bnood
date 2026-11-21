@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../core/config/theme/app_size.dart';
 import '../../core/layout/bnood_list_canvas.dart';
 import '../../core/widgets/custom_app_bar.dart';
-import '../home/home_foundation_scope.dart';
+import '../home/presentation/home_foundation_scope.dart';
 import 'app_menu_body.dart';
 
 /// Full-screen **Menu** (formerly settings hub).

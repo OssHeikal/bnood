@@ -1,5 +1,5 @@
-import '../../features/clients/data/client_api_record.dart';
-import '../ledger/ledger_entities.dart';
+import 'package:bnood/features/clients/data/client_api_record.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'app_home_dashboard.dart';
 import 'home_row_models.dart';
 

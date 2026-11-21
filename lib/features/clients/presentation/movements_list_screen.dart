@@ -12,7 +12,7 @@ import '../../../core/shared/pagination/pagination.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_fallback.dart';
 import '../../../core/widgets/custom_app_bar.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 import 'client_detail_provider.dart';
 import 'client_detail_snapshot.dart';
 import 'client_movements_filters.dart';

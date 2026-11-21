@@ -7,7 +7,7 @@ import '../../core/layout/bnood_list_canvas.dart';
 import '../../core/widgets/app_fallback.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/skeleton/async_value_body.dart';
-import '../home/home_foundation_scope.dart';
+import '../home/presentation/home_foundation_scope.dart';
 import 'notification_settings_body.dart';
 import 'notification_settings_provider.dart';
 

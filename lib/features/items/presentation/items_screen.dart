@@ -18,7 +18,7 @@ import '../../../core/widgets/app_fallback.dart';
 import '../../../core/widgets/app_toaster.dart';
 import '../../../core/widgets/custom_bottom_sheet.dart';
 import '../../../core/widgets/custom_app_bar.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 import 'item_create_sheet.dart';
 import 'item_edit_sheet.dart';
 import 'items_catalog_notifier.dart';

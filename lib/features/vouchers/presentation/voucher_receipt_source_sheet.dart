@@ -8,7 +8,7 @@ import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_pressable.dart';
 import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../core/widgets/sheet_drag_handle.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 
 enum VoucherReceiptSource { camera, gallery }
 

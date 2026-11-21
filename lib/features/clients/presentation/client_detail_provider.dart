@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/providers/data/agreements_riverpod.dart';
 import '../data/client_provider_agreement_preview.dart';
-import '../../../core/craftsmen/craftsman_snapshot_limit.dart';
+import '../../../features/home/data/craftsman_snapshot_limit.dart';
 import '../data/clients_providers.dart';
 import '../../../features/providers/data/app_provider_record.dart';
 import '../../../core/money/money_format.dart';

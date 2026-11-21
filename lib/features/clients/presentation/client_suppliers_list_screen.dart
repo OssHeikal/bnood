@@ -10,7 +10,7 @@ import '../../../core/widgets/app_fallback.dart';
 import '../../../core/widgets/app_pressable.dart';
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/skeleton/async_value_body.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 import 'client_suppliers_list_provider.dart';
 import 'craftsman_assignments_sheet.dart';
 import 'widgets/client_detail_craftsman_row.dart';

@@ -13,7 +13,7 @@ import '../../core/widgets/app_pressable.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/app_toaster.dart';
 import '../../core/widgets/grouped_list_divider.dart';
-import '../home/home_foundation_scope.dart';
+import '../home/presentation/home_foundation_scope.dart';
 import 'auth_controller.dart';
 import 'auth_paths.dart';
 import 'delete_account_confirm_sheet.dart';

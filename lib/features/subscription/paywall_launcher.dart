@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config/theme/app_motion.dart';
 import '../../core/subscription/app_subscription.dart';
 import '../../core/subscription/subscription_riverpod.dart';
-import '../home/home_foundation_scope.dart';
+import '../home/presentation/home_foundation_scope.dart';
 import 'paywall_flow_screen.dart';
 import 'paywall_screen.dart';
 

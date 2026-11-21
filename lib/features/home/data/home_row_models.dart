@@ -1,4 +1,4 @@
-import '../ledger/ledger_entities.dart';
+import 'package:bnood/core/ledger/ledger_entities.dart';
 
 class HomeTotals {
   const HomeTotals({

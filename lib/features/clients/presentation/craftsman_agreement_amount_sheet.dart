@@ -14,7 +14,7 @@ import '../../providers/presentation/provider_detail_provider.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/sheet_drag_handle.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 import 'agreement_mutation_actions.dart';
 
 /// Draft save payload from the roster amount sub-sheet (`null` amount = no agreed amount).

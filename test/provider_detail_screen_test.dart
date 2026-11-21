@@ -5,7 +5,7 @@ import 'package:bnood/features/vouchers/data/app_voucher_record.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
-import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
 import 'package:bnood/features/providers/presentation/provider_detail_provider.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/providers/presentation/provider_detail_screen.dart';

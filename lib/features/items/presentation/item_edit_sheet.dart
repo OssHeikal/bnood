@@ -16,7 +16,7 @@ import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../core/widgets/sheet_footer_refresh.dart';
 import '../../../core/widgets/sheet_form_header.dart';
 import '../../../core/widgets/skeleton/async_value_body.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 import 'item_mutation_actions.dart';
 import 'widgets/item_visual_pickers.dart';
 

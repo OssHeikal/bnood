@@ -9,7 +9,7 @@ import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/complete_profile_screen.dart';
 import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/app/shell_scaffold.dart';
-import 'package:bnood/features/home/home_screen.dart';
+import 'package:bnood/features/home/presentation/home_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

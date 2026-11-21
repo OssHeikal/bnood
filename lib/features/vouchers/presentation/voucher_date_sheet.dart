@@ -15,7 +15,7 @@ import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/custom_app_bar.dart';
 import '../../../core/widgets/overlay_form_presentation.dart';
 import '../../../core/widgets/sheet_drag_handle.dart';
-import '../../home/home_foundation_scope.dart';
+import '../../home/presentation/home_foundation_scope.dart';
 
 /// Opens the app calendar date sheet; returns the confirmed day or null.
 Future<DateTime?> showVoucherDateSheet(

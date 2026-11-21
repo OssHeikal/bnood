@@ -4,7 +4,7 @@ import 'package:bnood/features/items/data/item_api_record.dart' show ItemDeleteR
 import 'package:bnood/features/items/data/items_api.dart';
 import 'package:bnood/features/items/data/items_providers.dart';
 import 'package:bnood/features/items/data/items_repository.dart';
-import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
 import 'package:bnood/features/items/presentation/item_mutation_actions.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';

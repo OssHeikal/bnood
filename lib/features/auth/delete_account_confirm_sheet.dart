@@ -11,7 +11,7 @@ import '../../core/widgets/app_modal_sheet.dart';
 import '../../core/widgets/buttons/app_button.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/sheet_drag_handle.dart';
-import '../home/home_foundation_scope.dart';
+import '../home/presentation/home_foundation_scope.dart';
 import 'auth_controller.dart';
 import 'auth_form_utils.dart';
 import 'auth_messages.dart';

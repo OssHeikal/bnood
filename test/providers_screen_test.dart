@@ -4,7 +4,7 @@ import 'package:bnood/core/shared/pagination/pagination.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
 import 'package:bnood/core/shared/pagination/paged_fetch_page.dart';
 import 'package:bnood/core/widgets/skeleton/skeleton.dart';
 import 'package:bnood/features/providers/presentation/providers_list_paging.dart';

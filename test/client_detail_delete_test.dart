@@ -6,7 +6,7 @@ import 'package:bnood/core/ledger/ledger_entities.dart';
 import 'package:bnood/features/clients/presentation/client_detail_provider.dart';
 import 'package:bnood/features/clients/presentation/client_detail_screen.dart';
 import 'package:bnood/features/clients/presentation/client_detail_snapshot.dart';
-import 'package:bnood/features/home/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';

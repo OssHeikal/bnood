@@ -6,7 +6,7 @@ import '../config/theme/app_size.dart';
 import '../config/theme/app_colors.dart';
 import '../resources/gen/assets.gen.dart';
 import '../../app/widgets/shell_nav_icon.dart';
-import '../../features/home/home_foundation_scope.dart';
+import '../../features/home/presentation/home_foundation_scope.dart';
 import 'bnood_failure.dart';
 import 'foundation_icon.dart';
 import 'sheet_drag_handle.dart';
