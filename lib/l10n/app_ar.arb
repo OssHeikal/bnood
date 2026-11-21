@@ -625,6 +625,18 @@
   "paywallPlanMonthly": "شهرية",
   "paywallSubscribeCta": "اشترك في Premium",
   "paywallContinueFree": "الاستمرار مجاناً",
+  "paywallSavingsPercent": "وفر {percent}%",
+  "@paywallSavingsPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "paywallLoadFailedTitle": "تعذّر تحميل الباقات",
+  "paywallLoadFailedBody": "تحقق من الاتصال وحاول مرة أخرى.",
+  "paywallRestorePurchase": "استعادة الشراء",
+  "paywallPerMonthUnit": "ج.م/شهر",
   "subscriptionPaymentNotConnectedYet": "الدفع داخل التطبيق غير متصل بعد.",
   "profileSubscriptionSection": "الاشتراك",
   "profileSubscriptionFreeBlurb": "ترقية Premium لفتح مشاريع نشطة بلا حد ومزايا إضافية.",

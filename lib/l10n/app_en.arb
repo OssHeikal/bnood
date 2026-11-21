@@ -641,6 +641,18 @@
   "paywallPlanMonthly": "Monthly",
   "paywallSubscribeCta": "Subscribe to Premium",
   "paywallContinueFree": "Continue for free",
+  "paywallSavingsPercent": "Save {percent}%",
+  "@paywallSavingsPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "paywallLoadFailedTitle": "Could not load plans",
+  "paywallLoadFailedBody": "Check your connection and try again.",
+  "paywallRestorePurchase": "Restore purchase",
+  "paywallPerMonthUnit": "EGP/mo",
   "subscriptionPaymentNotConnectedYet": "In-app payment is not connected yet.",
   "profileSubscriptionSection": "Subscription",
   "profileSubscriptionFreeBlurb": "Upgrade to Premium for unlimited active projects and more.",

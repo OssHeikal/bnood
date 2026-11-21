@@ -49,7 +49,7 @@ class AppMenuBody extends ConsumerWidget {
           icon: Assets.icons.crownOutline,
           chipBackground: subscriptionChip,
           iconColor: SubscriptionColors.violet,
-          onTap: () => PaywallLauncher.present(context, ref),
+          onTap: () => PaywallLauncher.presentForContext(context, ref),
         ),
       SettingsNavRow(
         label: l10n.settingsTitle,

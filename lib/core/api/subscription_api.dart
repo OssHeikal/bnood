@@ -27,15 +27,19 @@ class SubscriptionApi {
     }
   }
 
-  Future<AppSubscriptionSnapshot> getSubscription({required String languageCode}) async {
+  Future<AppSubscriptionSnapshot> getSubscription({
+    required String languageCode,
+    PaywallFetchTrigger? paywallTrigger,
+  }) async {
     try {
       final response = await _dio.get<Map<String, dynamic>>(
         '/v1/subscription',
+        queryParameters: paywallTrigger != null ? {'paywall_trigger': paywallTrigger.queryParameter} : null,
         options: Options(extra: _authenticatedExtra),
       );
       return ApiResponseParser.expectData(
         response,
-        (data) => AppSubscriptionSnapshot.fromDataJson(data ?? const {}),
+        (data) => AppSubscriptionSnapshot.fromDataJson(data ?? const {}, localeCode: languageCode),
       );
     } on AuthApiException {
       rethrow;

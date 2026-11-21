@@ -79,7 +79,7 @@ class ProfileSubscriptionCard extends ConsumerWidget {
               ],
             ),
             AppSize.spaceSM.gap,
-            if (!isActivePremium) ..._freeBody(context, l10n, snap, text, muted, colors, accent),
+            if (!isActivePremium) ..._freeBody(context, ref, l10n, snap, text, muted, colors, accent),
           ],
         ),
       ),
@@ -104,6 +104,7 @@ class ProfileSubscriptionCard extends ConsumerWidget {
 
   List<Widget> _freeBody(
     BuildContext context,
+    WidgetRef ref,
     AppLocalizations l10n,
     AppSubscriptionSnapshot snap,
     AppText text,
@@ -125,7 +126,7 @@ class ProfileSubscriptionCard extends ConsumerWidget {
       AppButton.primary(
         text: l10n.profileSubscriptionSubscribeCta,
         backgroundColor: accent,
-        onPressed: () => PaywallLauncher.present(context),
+        onPressed: () => PaywallLauncher.presentForContext(context, ref),
       ),
     ];
   }

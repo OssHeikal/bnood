@@ -1,6 +1,7 @@
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/content/content_page_record.dart';
 import 'package:bnood/core/subscription/app_subscription.dart';
+import 'package:bnood/core/subscription/paywall_v3_models.dart';
 import 'package:bnood/features/content/content_page_provider.dart';
 import 'package:bnood/features/content/content_page_screen.dart';
 import 'package:bnood/features/subscription/paywall_screen.dart';
@@ -12,16 +13,32 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  const content = AppPaywallContent(
+  final content = AppPaywallContent(
     title: 'Premium',
     subtitle: '',
-    benefits: [],
+    benefits: const [],
     subscribeCta: 'Subscribe',
     continueFreeCta: 'Continue',
     legal: 'By subscribing you agree to the terms.',
-    plans: [
+    plans: const [
       AppPaywallPlan(id: 'yearly', label: 'Yearly', monthlyEquivalentMinor: 1000),
     ],
+    v3: AppPaywallV3Data(
+      trigger: 'default',
+      header: const AppPaywallHeader(title: 'Premium', subtitle: ''),
+      benefitItems: const [],
+      billing: const AppPaywallBilling(monthlyLabel: 'Monthly', yearlyLabel: 'Yearly'),
+      packages: [
+        AppPaywallPackage(
+          slug: 'pro',
+          name: 'Pro',
+          purchaseMode: 'checkout',
+          pricing: const AppPaywallPackagePricing(),
+          ctaLabels: const AppPaywallPackageCtaLabels(yearly: 'Subscribe'),
+        ),
+      ],
+      footer: const AppPaywallFooter(),
+    ),
   );
 
   testWidgets('paywall shows terms, privacy, and cancellation links', (tester) async {

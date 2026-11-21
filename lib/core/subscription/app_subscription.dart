@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../money/remote_money_units.dart';
+import 'paywall_v3_models.dart';
 import 'subscription_colors.dart';
+
+export 'paywall_v3_models.dart';
 
 class AppSubscriptionEntitlements {
   const AppSubscriptionEntitlements({
@@ -233,6 +236,7 @@ class AppPaywallContent {
     required this.legal,
     required this.plans,
     this.offer,
+    this.v3,
   });
 
   final String title;
@@ -243,6 +247,9 @@ class AppPaywallContent {
   final String legal;
   final List<AppPaywallPlan> plans;
   final AppPaywallOffer? offer;
+  final AppPaywallV3Data? v3;
+
+  bool get usesV3Layout => v3 != null && v3!.packages.isNotEmpty;
 
   AppPaywallPlan? planById(String id) {
     for (final plan in plans) {
@@ -251,35 +258,45 @@ class AppPaywallContent {
     return null;
   }
 
-  static AppPaywallContent? fromJson(Object? raw) {
+  static AppPaywallContent? fromJson(Object? raw, {String localeCode = 'ar'}) {
     if (raw is! Map<String, dynamic>) return null;
-    final benefitsRaw = raw['benefits'];
-    final benefits = benefitsRaw is List
-        ? benefitsRaw.map((e) => e.toString()).where((s) => s.isNotEmpty).toList()
-        : const <String>[];
     final offer = AppPaywallOffer.fromJson(raw['offer']);
     final plans = _parsePaywallPlans(raw['plans'], offer);
+    final v3 = AppPaywallV3Data.parse(raw, localeCode: localeCode);
 
-    final title = raw['title'] as String?;
+    final title = v3?.header.title.isNotEmpty == true
+        ? v3!.header.title
+        : raw['title'] as String?;
     if (title == null || title.isEmpty) return null;
+
+    final subtitle = v3?.header.subtitle ?? raw['subtitle'] as String? ?? '';
+    final benefitsRaw = raw['benefits'];
+    final benefits = v3 != null && v3.benefitItems.isNotEmpty
+        ? v3.benefitItems.map((e) => e.text).toList()
+        : benefitsRaw is List
+        ? benefitsRaw.map((e) => e.toString()).where((s) => s.isNotEmpty).toList()
+        : const <String>[];
 
     return AppPaywallContent(
       title: title,
-      subtitle: raw['subtitle'] as String? ?? '',
+      subtitle: subtitle,
       benefits: benefits,
       subscribeCta:
+          v3?.primaryCta ??
           raw['cta_subscribe_label'] as String? ??
           raw['subscribe_cta'] as String? ??
           raw['cta_subscribe'] as String? ??
           '',
       continueFreeCta:
+          v3?.continueFreeCta ??
           raw['cta_continue_free_label'] as String? ??
           raw['continue_free_cta'] as String? ??
           raw['cta_continue_free'] as String? ??
           '',
-      legal: raw['legal'] as String? ?? '',
+      legal: raw['legal'] as String? ?? v3?.footer.reassurance ?? '',
       plans: plans,
       offer: offer,
+      v3: v3,
     );
   }
 }
@@ -415,11 +432,14 @@ class AppSubscriptionSnapshot {
 
   bool get shouldShowProfileSubscriptionCard => showSurfaces;
 
-  static AppSubscriptionSnapshot fromDataJson(Map<String, dynamic> json) {
+  static AppSubscriptionSnapshot fromDataJson(
+    Map<String, dynamic> json, {
+    String localeCode = 'ar',
+  }) {
     return AppSubscriptionSnapshot(
       paywallEnabled: json['paywall_enabled'] == true,
       entitlements: AppSubscriptionEntitlements.fromJson((json['entitlements'] as Map<String, dynamic>?) ?? const {}),
-      paywall: AppPaywallContent.fromJson(json['paywall']),
+      paywall: AppPaywallContent.fromJson(json['paywall'], localeCode: localeCode),
     );
   }
 }

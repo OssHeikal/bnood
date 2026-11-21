@@ -2857,6 +2857,36 @@ abstract class AppLocalizations {
   /// **'Continue for free'**
   String get paywallContinueFree;
 
+  /// No description provided for @paywallSavingsPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Save {percent}%'**
+  String paywallSavingsPercent(int percent);
+
+  /// No description provided for @paywallLoadFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load plans'**
+  String get paywallLoadFailedTitle;
+
+  /// No description provided for @paywallLoadFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your connection and try again.'**
+  String get paywallLoadFailedBody;
+
+  /// No description provided for @paywallRestorePurchase.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchase'**
+  String get paywallRestorePurchase;
+
+  /// No description provided for @paywallPerMonthUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'EGP/mo'**
+  String get paywallPerMonthUnit;
+
   /// No description provided for @subscriptionPaymentNotConnectedYet.
   ///
   /// In en, this message translates to:

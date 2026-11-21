@@ -1540,6 +1540,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paywallContinueFree => 'الاستمرار مجاناً';
 
   @override
+  String paywallSavingsPercent(int percent) {
+    return 'وفر $percent%';
+  }
+
+  @override
+  String get paywallLoadFailedTitle => 'تعذّر تحميل الباقات';
+
+  @override
+  String get paywallLoadFailedBody => 'تحقق من الاتصال وحاول مرة أخرى.';
+
+  @override
+  String get paywallRestorePurchase => 'استعادة الشراء';
+
+  @override
+  String get paywallPerMonthUnit => 'ج.م/شهر';
+
+  @override
   String get subscriptionPaymentNotConnectedYet =>
       'الدفع داخل التطبيق غير متصل بعد.';
 

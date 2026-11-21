@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 
+import 'paywall_icon_mapper.dart';
 
 class PaywallBenefitRow extends StatelessWidget {
-  const PaywallBenefitRow({super.key, required this.text});
+  const PaywallBenefitRow({super.key, required this.text, this.iconKey});
 
   final String text;
+  final String? iconKey;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 7),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _CheckGlyph(),
-          const SizedBox(width: 10),
+          if (iconKey != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 1),
+              child: paywallBenefitIcon(iconKey!),
+            )
+          else
+            const _CheckGlyph(),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               text,

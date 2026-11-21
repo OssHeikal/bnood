@@ -1556,6 +1556,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallContinueFree => 'Continue for free';
 
   @override
+  String paywallSavingsPercent(int percent) {
+    return 'Save $percent%';
+  }
+
+  @override
+  String get paywallLoadFailedTitle => 'Could not load plans';
+
+  @override
+  String get paywallLoadFailedBody => 'Check your connection and try again.';
+
+  @override
+  String get paywallRestorePurchase => 'Restore purchase';
+
+  @override
+  String get paywallPerMonthUnit => 'EGP/mo';
+
+  @override
   String get subscriptionPaymentNotConnectedYet =>
       'In-app payment is not connected yet.';
 

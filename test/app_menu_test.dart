@@ -10,6 +10,7 @@ import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/settings/app_menu_body.dart';
 import 'package:bnood/features/settings/app_preferences_screen.dart';
 import 'package:bnood/features/settings/app_settings_screen.dart';
+import 'package:bnood/core/subscription/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/paywall_launcher.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -134,7 +135,7 @@ void main() {
           authControllerProvider.overrideWith(_AuthUser.new),
           subscriptionProvider.overrideWith(_EnabledSubscription.new),
           paywallPresentProvider.overrideWith(
-            (ref) => (context, [refArg]) async {
+            (ref) => (context, {WidgetRef? ref, PaywallFetchTrigger trigger = PaywallFetchTrigger.defaultTrigger}) async {
               paywallCalls++;
             },
           ),

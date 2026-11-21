@@ -16,7 +16,7 @@ Future<bool> guardCreateActiveProject(BuildContext context, WidgetRef ref) async
   if (_allowsWithoutSurfaces(snap) || snap!.entitlements.mayCreateActiveProject) {
     return true;
   }
-  await PaywallLauncher.present(context);
+  await PaywallLauncher.present(context, ref, PaywallFetchTrigger.limitReached);
   return false;
 }
 
