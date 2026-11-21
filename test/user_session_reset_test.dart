@@ -3,7 +3,6 @@ import 'package:bnood/core/storage/session_store.dart';
 import 'package:bnood/features/home/data/app_home_dashboard.dart';
 import 'package:bnood/features/home/data/home_riverpod.dart';
 import 'package:bnood/features/home/data/home_repository.dart';
-import 'package:bnood/core/app_state/dashboard_providers.dart';
 import 'package:bnood/core/session/user_session_lifecycle.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/models/user.dart';
@@ -11,6 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'support/fake_session_store.dart';
+import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
+import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
 
 class _SwitchingHomeRepository extends HomeRepository {
   _SwitchingHomeRepository(this._receivedForUser)

@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../features/providers/data/agreements_riverpod.dart';
-import '../data/client_provider_agreement_preview.dart';
-import '../data/clients_providers.dart';
-import '../../../features/providers/data/app_provider_record.dart';
-import 'client_detail_snapshot.dart';
+import '../../clients/data/client_provider_agreement_preview.dart';
+import '../../clients/data/clients_providers.dart';
+import '../../clients/presentation/client_detail_snapshot.dart';
+import '../data/agreements_riverpod.dart';
+import '../data/app_provider_record.dart';
 
 final clientSuppliersListProvider =
     AsyncNotifierProvider.family<ClientSuppliersListNotifier, ClientSuppliersListSnapshot, String>(

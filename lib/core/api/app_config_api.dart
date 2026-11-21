@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'api_response_parser.dart';
 import 'app_dio.dart';
 import 'auth_api_exception.dart';
-import '../app_gate/app_config_record.dart';
+import 'package:bnood/features/app_gate/data/app_config_record.dart';
 import '../storage/session_store.dart';
 
 class AppConfigApi {

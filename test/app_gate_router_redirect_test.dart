@@ -18,7 +18,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_app_gate_notifier.dart';
 import 'support/fake_session_store.dart';
 import 'support/stub_pages_api.dart';
-import 'package:bnood/core/app_gate/app_config_record.dart';
+import 'package:bnood/features/app_gate/data/app_config_record.dart';
 
 AppSettingsSnapshot _bootstrap() =>
     const AppSettingsSnapshot(themeMode: ThemeMode.light, locale: Locale('en'), prefs: null);

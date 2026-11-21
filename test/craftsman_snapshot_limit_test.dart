@@ -1,7 +1,6 @@
 import 'package:bnood/features/home/data/craftsman_snapshot_limit.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/core/app_state/dashboard_providers.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
@@ -16,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/home_notifier_stubs.dart';
+import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
 
 class _SilentSubscriptionNotifier extends SubscriptionNotifier {
   @override

@@ -27,7 +27,7 @@ import '../features/auth/reset_password_screen.dart';
 import '../features/clients/presentation/client_detail_screen.dart';
 import '../features/clients/presentation/clients_list_screen.dart';
 import '../features/clients/presentation/client_craftsmen_list_screen.dart';
-import '../features/clients/presentation/client_suppliers_list_screen.dart';
+import '../features/providers/presentation/client_suppliers_list_screen.dart';
 import '../features/clients/presentation/client_items_stats_screen.dart';
 import '../features/clients/presentation/movements_list_screen.dart';
 import '../features/home/presentation/home_screen.dart';

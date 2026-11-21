@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import '../core/brand/app_brand_lockup.dart';
 import '../core/config/theme/app_colors.dart';
-import '../core/app_gate/app_config_record.dart';
+import '../features/app_gate/data/app_config_record.dart';
 import '../features/app_gate/app_gate_cold_start.dart';
 import '../features/app_gate/app_gate_provider.dart';
 import '../features/app_gate/app_gate_session.dart';

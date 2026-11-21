@@ -1,7 +1,6 @@
 import 'package:bnood/features/clients/data/client_list_archive_filter.dart';
 import 'package:bnood/core/config/theme/app_theme.dart';
 import 'package:bnood/core/ledger/ledger_entities.dart';
-import 'package:bnood/core/app_state/dashboard_providers.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/core/shared/pagination/pagination.dart';
 import 'package:bnood/features/clients/presentation/clients_list_paging.dart';
@@ -13,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/home_notifier_stubs.dart';
+import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

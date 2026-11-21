@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/app_gate/app_config_record.dart';
+import '../features/app_gate/data/app_config_record.dart';
 import '../features/app_gate/app_gate_paths.dart';
 import '../features/app_gate/app_gate_provider.dart';
 

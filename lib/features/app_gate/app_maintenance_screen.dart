@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 
-import '../../core/app_gate/app_config_record.dart';
+import 'data/app_config_record.dart';
 import 'app_gate_provider.dart';
 import 'app_gate_session.dart';
 import 'widgets/gate_blocking_scaffold.dart';

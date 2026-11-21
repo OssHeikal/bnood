@@ -13,7 +13,6 @@ import '../../../core/config/extensions/num_extensions.dart';
 import '../../../core/utils/arabic_search_normalizer.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_size.dart';
-import '../../../core/app_state/dashboard_providers.dart';
 import '../data/app_provider_record.dart';
 import '../../../core/widgets/app_fallback.dart';
 import '../../clients/presentation/agreement_mutation_actions.dart';
@@ -26,6 +25,7 @@ import '../../../core/widgets/sheet_drag_handle.dart';
 import '../../../core/widgets/skeleton/skeleton.dart';
 import '../../clients/presentation/widgets/client_roster_choice_row.dart';
 import '../../home/presentation/home_foundation_scope.dart';
+import '../../../core/app_state/client_mutation_refresh.dart';
 
 Future<void> showProviderClientAssignmentsSheet({
   required BuildContext context,

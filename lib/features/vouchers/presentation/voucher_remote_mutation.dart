@@ -10,7 +10,6 @@ import '../data/vouchers_error_handler.dart';
 import '../../subscription/presentation/subscription_error_handler.dart';
 import '../data/vouchers_riverpod.dart';
 import '../../../core/money/remote_money_format.dart';
-import '../../../core/app_state/dashboard_providers.dart';
 import '../../../core/shared/pagination/paging_refresh.dart';
 import '../../../core/widgets/app_toaster.dart';
 import '../../providers/presentation/provider_detail_provider.dart';
@@ -18,6 +17,7 @@ import 'voucher_draft.dart';
 import 'voucher_remote_receipts.dart';
 import 'voucher_remote_save_result.dart';
 import 'voucher_sheet_receipt.dart';
+import '../../../core/app_state/client_mutation_refresh.dart';
 
 String voucherDatePayload(DateTime date) => DateFormat('y-MM-dd').format(date.toLocal());
 

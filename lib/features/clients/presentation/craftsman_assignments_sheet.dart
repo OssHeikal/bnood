@@ -16,7 +16,6 @@ import '../data/client_api_record.dart';
 import '../data/client_provider_agreement_preview.dart';
 import '../data/clients_providers.dart';
 import '../../../core/ledger/ledger_entities.dart';
-import '../../../core/app_state/dashboard_providers.dart';
 import '../../../features/providers/data/app_provider_record.dart';
 import '../../../features/providers/data/providers_riverpod.dart';
 import '../../../core/widgets/app_fallback.dart';
@@ -31,6 +30,7 @@ import '../../home/presentation/home_foundation_scope.dart';
 import '../../vouchers/presentation/inline_create_routes.dart';
 import 'craftsman_agreement_amount_sheet.dart';
 import 'widgets/craftsman_roster_choice_row.dart';
+import '../../../core/app_state/client_mutation_refresh.dart';
 
 Future<void> showCraftsmanAssignmentsSheet({
   required BuildContext context,
