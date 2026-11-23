@@ -90,8 +90,9 @@ void main() {
           clientsListPageFetcherProvider.overrideWith(
             (ref) => ({required int page, required int pageSize}) async {
               version++;
-              if (page > 1)
+              if (page > 1) {
                 return const PagedFetchPage(items: [], hasMore: false);
+              }
               return PagedFetchPage(
                 items: [
                   HomeClientBalanceRow(

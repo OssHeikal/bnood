@@ -10,7 +10,6 @@ import 'package:bnood/features/auth/models/user.dart';
 import 'package:bnood/features/settings/presentation/widgets/app_menu_body.dart';
 import 'package:bnood/features/settings/presentation/screens/app_preferences_screen.dart';
 import 'package:bnood/features/settings/presentation/screens/app_settings_screen.dart';
-import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/presentation/actions/paywall_launcher.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';

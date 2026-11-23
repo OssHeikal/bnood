@@ -86,8 +86,9 @@ void main() {
         overrides: [
           clientsListPageFetcherProvider.overrideWith(
             (ref) => ({required int page, required int pageSize}) async {
-              if (page > 1)
+              if (page > 1) {
                 return const PagedFetchPage(items: [], hasMore: false);
+              }
               final filter = ref.read(clientsListFilterProvider);
               final list = switch (filter) {
                 ClientListArchiveFilter.active => [rows.first],

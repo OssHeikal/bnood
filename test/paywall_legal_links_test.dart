@@ -1,7 +1,6 @@
 import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/content/data/content_page_record.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
-import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/content/data/content_page_provider.dart';
 import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
 import 'package:bnood/features/subscription/presentation/screens/paywall_screen.dart';

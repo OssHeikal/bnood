@@ -1,6 +1,5 @@
 import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
-import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/subscription/presentation/actions/paywall_launcher.dart';

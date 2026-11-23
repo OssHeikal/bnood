@@ -72,8 +72,9 @@ void main() {
               lastExport: record,
               sinceLastExportAvailable: true,
               onChanged: (_, preset) {
-                if (preset == StatementPeriodPreset.sinceLastExport)
+                if (preset == StatementPeriodPreset.sinceLastExport) {
                   tapped = true;
+                }
               },
             ),
           ),

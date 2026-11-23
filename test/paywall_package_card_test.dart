@@ -25,7 +25,7 @@ void main() {
       ),
     ),
     ctaLabels: AppPaywallPackageCtaLabels(yearly: 'Go'),
-    highlightBenefits: const [
+    highlightBenefits: [
       AppPaywallBenefitItem(icon: 'projects_grid', text: '10 active projects'),
     ],
   );
@@ -41,7 +41,7 @@ void main() {
     yearlyEnabled: false,
     pricing: AppPaywallPackagePricing(),
     ctaLabels: AppPaywallPackageCtaLabels(contact: 'Contact us'),
-    highlightBenefits: const [
+    highlightBenefits: [
       AppPaywallBenefitItem(icon: 'spark', text: enterpriseTagline),
       AppPaywallBenefitItem(icon: 'team', text: 'Dedicated support'),
     ],
@@ -151,7 +151,7 @@ void main() {
           hasDiscount: true,
         ),
       ),
-      ctaLabels: const AppPaywallPackageCtaLabels(
+      ctaLabels: AppPaywallPackageCtaLabels(
         yearly: 'Start Pro at 2,999 EGP/yr',
       ),
     );

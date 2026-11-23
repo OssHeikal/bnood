@@ -162,8 +162,8 @@ void main() {
   "user":{"id":"u1","phone":"+201012345678","phone_verified_at":"2025-01-01T00:00:00Z"}
 }}''');
       });
-      final user = await api.me();
-      expect(user.id, 'u1');
+      final me = await api.me();
+      expect(me.user.id, 'u1');
       api.close();
     });
 

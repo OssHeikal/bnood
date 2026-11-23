@@ -62,8 +62,9 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
       context,
       ref,
       limitKind: SubscriptionLimitKind.clients,
-    ))
+    )) {
       return;
+    }
     if (!context.mounted) return;
     final createdId = await showClientCreateSheet(context);
     if (createdId != null) {
@@ -271,8 +272,9 @@ class _ScrollUnderClearance extends StatelessWidget {
             reserve -
             constraints.precedingScrollExtent;
         final height = raw > 0 ? raw : 0.0;
-        if (height == 0)
+        if (height == 0) {
           return const SliverToBoxAdapter(child: SizedBox.shrink());
+        }
         return SliverToBoxAdapter(child: SizedBox(height: height));
       },
     );
