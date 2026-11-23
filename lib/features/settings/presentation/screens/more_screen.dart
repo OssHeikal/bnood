@@ -28,6 +28,7 @@ class MoreScreen extends ConsumerWidget {
           title: title,
         ),
         body: BnoodListCanvas(
+          padding: EdgeInsetsDirectional.zero,
           child: Builder(
             builder: (context) {
               final bottomInset =

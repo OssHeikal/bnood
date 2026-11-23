@@ -58,6 +58,44 @@ void main() {
     );
   }
 
+  testWidgets('modules section lists clients then items', (tester) async {
+    final snap = await bootstrap();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appSettingsBootstrapProvider.overrideWithValue(snap),
+          authControllerProvider.overrideWith(_AuthUser.new),
+          subscriptionProvider.overrideWith(_DisabledSubscription.new),
+        ],
+        child: MaterialApp(
+          theme: AppFoundationTheme.light(),
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const Scaffold(
+            body: SingleChildScrollView(child: AppMenuBody()),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(AppMenuBody)),
+    );
+    final labels = find
+        .byType(Text)
+        .evaluate()
+        .map((e) => (e.widget as Text).data)
+        .whereType<String>()
+        .toList();
+    final modulesTitleIndex = labels.indexOf(l10n.navModulesSection);
+    final clientsIndex = labels.indexOf(l10n.navClients);
+    final itemsIndex = labels.indexOf(l10n.navItems);
+    expect(modulesTitleIndex, greaterThanOrEqualTo(0));
+    expect(clientsIndex, greaterThan(modulesTitleIndex));
+    expect(itemsIndex, greaterThan(clientsIndex));
+  });
+
   testWidgets(
     'menu lists account subscription settings then content in order when signed in',
     (tester) async {

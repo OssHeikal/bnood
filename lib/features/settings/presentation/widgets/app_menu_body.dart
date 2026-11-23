@@ -37,6 +37,13 @@ class AppMenuBody extends ConsumerWidget {
 
     final moduleRows = <Widget>[
       SettingsNavRow(
+        label: l10n.navClients,
+        icon: Assets.icons.clientsOutline,
+        chipBackground: brandChip,
+        iconColor: colors.primary,
+        onTap: () => context.go('/clients'),
+      ),
+      SettingsNavRow(
         label: l10n.navItems,
         icon: Assets.icons.itemsLayersOutline,
         chipBackground: brandChip,
