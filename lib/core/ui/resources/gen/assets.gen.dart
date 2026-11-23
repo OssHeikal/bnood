@@ -293,6 +293,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/filter_sliders_outline.svg
   SvgGenImage get filterSlidersOutline => const SvgGenImage('assets/icons/filter_sliders_outline.svg');
 
+  /// File path: assets/icons/folder_add_outline.svg
+  SvgGenImage get folderAddOutline => const SvgGenImage('assets/icons/folder_add_outline.svg');
+
   /// File path: assets/icons/google_doc_outline.svg
   SvgGenImage get googleDocOutline => const SvgGenImage('assets/icons/google_doc_outline.svg');
 
@@ -334,6 +337,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/language_square_outline.svg
   SvgGenImage get languageSquareOutline => const SvgGenImage('assets/icons/language_square_outline.svg');
+
+  /// File path: assets/icons/ledger_book_outline.svg
+  SvgGenImage get ledgerBookOutline => const SvgGenImage('assets/icons/ledger_book_outline.svg');
 
   /// File path: assets/icons/logout_02_outline.svg
   SvgGenImage get logout02Outline => const SvgGenImage('assets/icons/logout_02_outline.svg');
@@ -452,6 +458,7 @@ class $AssetsIconsGen {
     errorCircleOutline,
     fileRemoveOutline,
     filterSlidersOutline,
+    folderAddOutline,
     googleDocOutline,
     homeOutline,
     homeRoundedOutline,
@@ -466,6 +473,7 @@ class $AssetsIconsGen {
     keyOutline,
     laborHardHatOutline,
     languageSquareOutline,
+    ledgerBookOutline,
     logout02Outline,
     materialsPackageOutline,
     menuTwoLineOutline,
