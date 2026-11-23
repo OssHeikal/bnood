@@ -1,8 +1,10 @@
 import 'package:bnood/app/shell_scaffold.dart';
 import 'package:bnood/app/shell_tab_scaffold.dart';
 import 'package:bnood/app/widgets/floating_shell_dock.dart';
+import 'package:bnood/core/ui/theme/app_theme.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
@@ -49,7 +51,7 @@ void main() {
             ),
             StatefulShellBranch(
               routes: [
-                GoRoute(path: '/items', builder: (_, _) => const SizedBox()),
+                GoRoute(path: '/more', builder: (_, _) => const SizedBox()),
               ],
             ),
           ],
@@ -58,10 +60,13 @@ void main() {
     );
 
     await tester.pumpWidget(
-      MaterialApp.router(
-        routerConfig: router,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+      ProviderScope(
+        child: MaterialApp.router(
+          theme: AppTheme.light(),
+          routerConfig: router,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
       ),
     );
     await tester.pumpAndSettle();
@@ -120,7 +125,7 @@ void main() {
             ),
             StatefulShellBranch(
               routes: [
-                GoRoute(path: '/items', builder: (_, _) => const SizedBox()),
+                GoRoute(path: '/more', builder: (_, _) => const SizedBox()),
               ],
             ),
           ],
@@ -129,10 +134,13 @@ void main() {
     );
 
     await tester.pumpWidget(
-      MaterialApp.router(
-        routerConfig: router,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+      ProviderScope(
+        child: MaterialApp.router(
+          theme: AppTheme.light(),
+          routerConfig: router,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
       ),
     );
     await tester.pumpAndSettle();
@@ -184,7 +192,7 @@ void main() {
             ),
             StatefulShellBranch(
               routes: [
-                GoRoute(path: '/items', builder: (_, _) => const SizedBox()),
+                GoRoute(path: '/more', builder: (_, _) => const SizedBox()),
               ],
             ),
           ],
@@ -193,10 +201,13 @@ void main() {
     );
 
     await tester.pumpWidget(
-      MaterialApp.router(
-        routerConfig: router,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+      ProviderScope(
+        child: MaterialApp.router(
+          theme: AppTheme.light(),
+          routerConfig: router,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
       ),
     );
     await tester.pumpAndSettle();

@@ -1,20 +1,14 @@
 import 'package:bnood/app/app_shell_online_tabs.dart';
-import 'package:bnood/features/auth/auth_controller.dart';
-import 'package:bnood/features/auth/auth_state.dart';
-import 'package:bnood/features/auth/models/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('remote session: clients and items tabs are online', () {
+  test('shell tabs online flags', () {
     final container = ProviderContainer();
     addTearDown(container.dispose);
-    container
-        .read(authControllerProvider.notifier)
-        .adoptSessionForTest(const User(id: 'u', phone: '+2010', name: 'Eng'));
 
     expect(
-      container.read(appShellTabOnlineProvider(AppShellTabId.clients)),
+      container.read(appShellTabOnlineProvider(AppShellTabId.projects)),
       isTrue,
     );
     expect(
@@ -22,25 +16,25 @@ void main() {
       isTrue,
     );
     expect(
-      container.read(appShellTabOnlineProvider(AppShellTabId.directory)),
+      container.read(appShellTabOnlineProvider(AppShellTabId.providers)),
       isTrue,
     );
     expect(
-      container.read(appShellTabOnlineProvider(AppShellTabId.items)),
+      container.read(appShellTabOnlineProvider(AppShellTabId.more)),
       isTrue,
     );
   });
 
-  test('unsigned session treats all shell tabs as online', () {
-    final container = ProviderContainer();
+  test('items tab flag follows remote provider', () {
+    final container = ProviderContainer(
+      overrides: [
+        appRemoteItemsTabEnabledProvider.overrideWithValue(false),
+      ],
+    );
     addTearDown(container.dispose);
-    expect(container.read(authControllerProvider), const AuthState());
+    expect(container.read(appRemoteItemsTabEnabledProvider), isFalse);
     expect(
       container.read(appShellTabOnlineProvider(AppShellTabId.home)),
-      isTrue,
-    );
-    expect(
-      container.read(appShellTabOnlineProvider(AppShellTabId.items)),
       isTrue,
     );
   });

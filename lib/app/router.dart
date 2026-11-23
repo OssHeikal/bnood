@@ -22,7 +22,9 @@ import 'package:bnood/features/app_gate/app_optional_update_screen.dart';
 import 'package:bnood/features/content/presentation/screens/content_page_screen.dart';
 import 'package:bnood/features/settings/presentation/screens/app_preferences_screen.dart';
 import 'package:bnood/features/settings/presentation/screens/notification_settings_screen.dart';
-import 'package:bnood/features/settings/presentation/screens/app_settings_screen.dart';
+import 'package:bnood/features/settings/presentation/screens/more_screen.dart';
+import 'package:bnood/features/notifications/presentation/screens/notifications_inbox_placeholder_screen.dart';
+import 'package:bnood/features/items/presentation/screens/items_screen.dart';
 import 'package:bnood/features/auth/reset_password_screen.dart';
 import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
 import 'package:bnood/features/clients/presentation/screens/clients_list_screen.dart';
@@ -38,7 +40,6 @@ import 'app_shell_directory_body.dart';
 import 'auth_router_refresh.dart';
 import 'app_splash_session.dart';
 import 'app_startup_splash.dart';
-import 'app_shell_items_body.dart';
 import 'app_shell_online_tabs.dart';
 import 'app_shell_tab_gate.dart';
 import 'shell_scaffold.dart';
@@ -220,7 +221,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AuthPaths.settings,
-        builder: (_, _) => const AppMenuScreen(),
+        redirect: (_, _) => AuthPaths.more,
+      ),
+      GoRoute(
+        path: NotificationsInboxPlaceholderScreen.path,
+        builder: (_, _) => const NotificationsInboxPlaceholderScreen(),
       ),
       GoRoute(
         path: AuthPaths.preferences,
@@ -260,7 +265,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/clients',
                 builder: (_, _) => const AppShellTabGate(
-                  tab: AppShellTabId.clients,
+                  tab: AppShellTabId.projects,
                   child: ClientsListScreen(),
                 ),
               ),
@@ -276,7 +281,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 builder: (_, state) {
                   final tab = state.uri.queryParameters['tab'];
                   return AppShellTabGate(
-                    tab: AppShellTabId.directory,
+                    tab: AppShellTabId.providers,
                     child: AppShellDirectoryBody(
                       initialTabIndex: tab == 'craftsmen' ? 1 : 0,
                     ),
@@ -291,15 +296,19 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ),
             routes: [
               GoRoute(
-                path: '/items',
+                path: AuthPaths.more,
                 builder: (_, _) => const AppShellTabGate(
-                  tab: AppShellTabId.items,
-                  child: AppShellItemsBody(),
+                  tab: AppShellTabId.more,
+                  child: MoreScreen(),
                 ),
               ),
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/items',
+        builder: (_, _) => const ItemsScreen(),
       ),
       GoRoute(
         path: '/clients/:clientId',

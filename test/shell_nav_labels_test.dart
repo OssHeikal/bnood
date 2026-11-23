@@ -21,9 +21,10 @@ void main() {
     final l10n = AppLocalizationsEn();
     for (final label in [
       l10n.navHome,
-      l10n.navClients,
-      l10n.navDirectory,
-      l10n.navItems,
+      l10n.navProjects,
+      l10n.navProviders,
+      l10n.navMorePersonal,
+      l10n.navMoreOffice,
     ]) {
       expect(label.trim().contains(RegExp(r'\s')), isFalse, reason: label);
     }
@@ -31,12 +32,12 @@ void main() {
 
   test('ar nav tab labels are one word', () {
     final l10n = AppLocalizationsAr();
-    expect(l10n.navDirectory, 'الدليل');
     for (final label in [
       l10n.navHome,
-      l10n.navClients,
-      l10n.navDirectory,
-      l10n.navItems,
+      l10n.navProjects,
+      l10n.navProviders,
+      l10n.navMorePersonal,
+      l10n.navMoreOffice,
     ]) {
       expect(label.trim().contains(RegExp(r'\s')), isFalse, reason: label);
     }

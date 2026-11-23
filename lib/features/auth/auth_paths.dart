@@ -13,8 +13,10 @@ abstract final class AuthPaths {
   static const remote = '/remote';
   static const profile = '/profile';
   static const settings = '/settings';
+  static const more = '/more';
   static const preferences = '/settings/preferences';
   static const notifications = '/settings/notifications';
+  static const notificationsInbox = '/notifications';
 }
 
 bool userNeedsProfileCompletion(User? user) {

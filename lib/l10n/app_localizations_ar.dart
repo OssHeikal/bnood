@@ -18,6 +18,31 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navClients => 'العملاء';
 
   @override
+  String get navProjects => 'المشاريع';
+
+  @override
+  String get navProviders => 'المزودون';
+
+  @override
+  String get navMorePersonal => 'أنت';
+
+  @override
+  String get navMoreOffice => 'المكتب';
+
+  @override
+  String get navModulesSection => 'الوحدات';
+
+  @override
+  String get accountSwitchLongPressHint => 'اضغط مطولاً لاختيار الحساب';
+
+  @override
+  String get notificationsInboxTitle => 'لا توجد إشعارات بعد';
+
+  @override
+  String get notificationsInboxDescription =>
+      'ستظهر التنبيهات والتحديثات هنا عند توفرها.';
+
+  @override
   String get navDirectory => 'الدليل';
 
   @override

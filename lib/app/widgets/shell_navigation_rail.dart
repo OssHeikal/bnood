@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../../core/services/config/theme/app_size.dart';
+import 'context_nav_avatar.dart';
 import '../../core/ui/theme/app_colors.dart';
 import '../../core/ui/widgets/app_pressable.dart';
 import 'shell_nav_destination.dart';
@@ -24,8 +24,10 @@ class ShellNavigationRail extends StatelessWidget {
     required this.onVoucher,
     required this.destinations,
     required this.voucherSemanticsLabel,
+    this.moreTabIndex,
   });
 
+  final int? moreTabIndex;
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected;
   final VoidCallback onVoucher;
@@ -58,14 +60,31 @@ class ShellNavigationRail extends StatelessWidget {
     );
   }
 
-  Widget _destinationIcon({
+  Widget _destinationIcon(
+    BuildContext context, {
     required ShellNavDestination destination,
     required Color color,
+    required bool selected,
+    required int index,
   }) {
+    if (destination.tabBuilder != null) {
+      if (moreTabIndex != null && index == moreTabIndex) {
+        return ContextNavAvatarRailDestination(
+          selected: selected,
+          semanticsLabel: destination.semanticsLabel,
+        );
+      }
+      return destination.tabBuilder!(
+        context,
+        selected: selected,
+        labelSize: 12,
+        onTap: () => onDestinationSelected(index),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSize.spaceSM),
       child: ShellNavIcon(
-        asset: destination.icon,
+        asset: destination.icon!,
         color: color,
         size: destinationIconSize,
         semanticsLabel: destination.semanticsLabel,
@@ -160,12 +179,18 @@ class ShellNavigationRail extends StatelessWidget {
           for (var i = 0; i < destinations.length; i++)
             NavigationRailDestination(
               icon: _destinationIcon(
+                context,
                 destination: destinations[i],
                 color: palette.inactiveIcon,
+                selected: false,
+                index: i,
               ),
               selectedIcon: _destinationIcon(
+                context,
                 destination: destinations[i],
                 color: palette.activeIcon,
+                selected: true,
+                index: i,
               ),
               padding: const EdgeInsets.symmetric(vertical: AppSize.spaceXS),
               label: Text(destinations[i].label),

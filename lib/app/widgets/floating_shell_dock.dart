@@ -60,6 +60,7 @@ class FloatingShellDock extends StatelessWidget {
             for (var i = 0; i < destinations.length; i++)
               Expanded(
                 child: _DockTab(
+                  key: ValueKey('shell-dock-tab-$i'),
                   destination: destinations[i],
                   selected: selectedIndex == i,
                   labelSize: labelSize,
@@ -140,6 +141,7 @@ class FloatingShellDock extends StatelessWidget {
 
 class _DockTab extends StatelessWidget {
   const _DockTab({
+    super.key,
     required this.destination,
     required this.selected,
     required this.labelSize,
@@ -159,6 +161,16 @@ class _DockTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final custom = destination.tabBuilder;
+    if (custom != null) {
+      return custom(
+        context,
+        selected: selected,
+        labelSize: labelSize,
+        onTap: onTap,
+      );
+    }
+
     final brightness = Theme.of(context).brightness;
     final isDark = brightness == Brightness.dark;
     final inactiveIcon = isDark ? AppColors.darkMuted : AppColors.lightMuted;
@@ -203,7 +215,7 @@ class _DockTab extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ShellNavIcon(
-                      asset: destination.icon,
+                      asset: destination.icon!,
                       color: iconColor,
                       size: AppSize.iconCompact,
                     ),

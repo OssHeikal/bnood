@@ -5,6 +5,7 @@ class OfficeMembership {
     required this.readOnly,
     this.status = 'active',
     this.dashboardUrl,
+    this.logoUrl,
     this.isOwner = false,
     this.permissionKeys,
   });
@@ -14,6 +15,7 @@ class OfficeMembership {
   final bool readOnly;
   final String status;
   final String? dashboardUrl;
+  final String? logoUrl;
 
   /// From `/auth/me` → `offices[].role.is_owner`.
   final bool isOwner;
@@ -36,12 +38,17 @@ class OfficeMembership {
     if (rawKeys is List) {
       permissionKeys = rawKeys.whereType<String>().toList(growable: false);
     }
+    final logoRaw = json['logo_url'];
+    final logoUrl = logoRaw is String && logoRaw.trim().isNotEmpty
+        ? logoRaw.trim()
+        : null;
     return OfficeMembership(
       id: json['id'] as String,
       name: (json['name'] as String?)?.trim() ?? '',
       readOnly: readOnlyFlag || status == 'read_only',
       status: status,
       dashboardUrl: json['dashboard_url']?.toString(),
+      logoUrl: logoUrl,
       isOwner: isOwner,
       permissionKeys: permissionKeys,
     );
@@ -56,6 +63,7 @@ class OfficeMembership {
           readOnly == other.readOnly &&
           status == other.status &&
           dashboardUrl == other.dashboardUrl &&
+          logoUrl == other.logoUrl &&
           isOwner == other.isOwner &&
           _listEquals(permissionKeys, other.permissionKeys);
 
@@ -66,6 +74,7 @@ class OfficeMembership {
     readOnly,
     status,
     dashboardUrl,
+    logoUrl,
     isOwner,
     permissionKeys == null ? null : Object.hashAll(permissionKeys!),
   );

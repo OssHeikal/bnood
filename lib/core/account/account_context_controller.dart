@@ -8,8 +8,7 @@ import 'account_context_state.dart';
 import 'account_office_policy.dart';
 import 'account_scope.dart';
 import 'api_office_header.dart';
-import 'account_office_mutations.dart';
-import 'office_membership.dart';
+import 'account_office_providers.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 
@@ -47,6 +46,35 @@ class AccountContextController extends Notifier<AccountContextState> {
     await _setScope(AccountScope.office(officeId));
   }
 
+  /// Swaps to the last scope from prefs when the switcher is visible.
+  Future<void> quickSwitchToPreviousScope() async {
+    final offices =
+        ref.read(authControllerProvider).officeContext?.offices ?? const [];
+    if (userLocksToOwnedOffice(offices)) return;
+    if (!ref.read(accountSwitcherVisibleProvider)) return;
+
+    final prefs = await BnoodPrefsAccess.getInstance();
+    var target = await AccountContextStore.readPreviousScope(prefs);
+
+    if (target == null && offices.length == 1) {
+      final only = offices.first;
+      if (state.isPersonal) {
+        target = AccountScope.office(only.id);
+      } else if (state.officeId == only.id) {
+        target = const AccountScope.personal();
+      }
+    }
+
+    if (target == null || target == state.scope) return;
+    if (target.isPersonal) {
+      await selectPersonal();
+      return;
+    }
+    final id = target.officeId;
+    if (id == null || !officeMembershipListContains(offices, id)) return;
+    await selectOffice(id);
+  }
+
   Future<void> _bootstrapScope() async {
     await _restoreFromDisk();
     final auth = ref.read(authControllerProvider);
@@ -74,11 +102,13 @@ class AccountContextController extends Notifier<AccountContextState> {
   }) async {
     if (scope == state.scope) return;
 
+    final previousScope = state.scope;
     state = state.copyWith(scope: scope, restoredFromDisk: true);
     ApiOfficeHeader.syncOfficeId(scope.officeId);
 
     if (persist) {
       final prefs = await BnoodPrefsAccess.getInstance();
+      await AccountContextStore.writePreviousScope(prefs, previousScope);
       await AccountContextStore.writeScope(prefs, scope);
     }
   }

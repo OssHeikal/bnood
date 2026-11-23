@@ -12,7 +12,7 @@ alwaysApply: false
 
 Supersedes index.html bottom bar **and** older “≤5 tabs with center + slot” docs.
 
-- **Four destinations** inside a floating **pill / island**: Home, Clients, Supplier/craftsman **directory**, Items.
+- **Four destinations** inside a floating **pill / island**: Home, **Projects** (`/clients` list), **Providers** (directory), **More** (menu + modules; Items pushed from More).
 - **New voucher (+):** separate **circular satellite** adjacent to the **end** of the pill — **not** a fifth tab, **not** a huge centered FAB. **Open:** which physical end (LTR vs RTL), exact diameters, and satellite offset — owner has **not** locked; do not silently codify in code without sign-off.
 - **No** dedicated summary tab.
 - Content **scrolls behind** the dock. Apply bottom **surface gradient** (light: white fade; dark: adaptive) with **`IgnorePointer`** so scrolling/taps pass through the fade. Add **scroll bottom padding** so the last card is not hidden under pill + satellite + safe area.

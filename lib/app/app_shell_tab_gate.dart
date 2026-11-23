@@ -1,17 +1,12 @@
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
 import '../core/services/config/theme/app_colors.dart';
 import '../core/services/config/theme/app_size.dart';
-import '../core/ui/resources/gen/assets.gen.dart';
 import '../core/ui/widgets/app_fallback.dart';
 import '../core/ui/widgets/custom_app_bar.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
-import 'package:bnood/features/auth/auth_paths.dart';
 import 'app_shell_online_tabs.dart';
-import 'widgets/shell_nav_icon.dart';
 
 /// Renders [child] when the tab is online for the current session; otherwise a localized placeholder.
 class AppShellTabGate extends ConsumerWidget {
@@ -22,9 +17,9 @@ class AppShellTabGate extends ConsumerWidget {
 
   String _tabTitle(AppLocalizations l10n) => switch (tab) {
     AppShellTabId.home => l10n.navHome,
-    AppShellTabId.clients => l10n.navClients,
-    AppShellTabId.directory => l10n.navDirectory,
-    AppShellTabId.items => l10n.navItems,
+    AppShellTabId.projects => l10n.navProjects,
+    AppShellTabId.providers => l10n.navProviders,
+    AppShellTabId.more => l10n.menuTitle,
   };
 
   @override
@@ -39,18 +34,7 @@ class AppShellTabGate extends ConsumerWidget {
             backgroundColor: context.colors.canvas,
             appBar: CustomAppBar(
               title: _tabTitle(l10n),
-              actions: [
-                CustomAppBarAction(
-                  tooltip: l10n.menuTitle,
-                  onPressed: () => context.push(AuthPaths.settings),
-                  child: ShellNavIcon(
-                    asset: Assets.icons.menuTwoLineOutline,
-                    size: AppSize.icon,
-                    color: context.colors.onSurface,
-                    semanticsLabel: l10n.menuTitle,
-                  ),
-                ),
-              ],
+              actions: const [],
             ),
             body: Padding(
               padding: const EdgeInsets.all(AppSize.screenPadding),

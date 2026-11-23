@@ -14,19 +14,21 @@ void main() {
       semanticsLabel: 'Home',
     ),
     ShellNavDestination(
-      icon: ShellNavIcons.clients,
-      label: 'Clients',
-      semanticsLabel: 'Clients',
+      icon: ShellNavIcons.projects,
+      label: 'Projects',
+      semanticsLabel: 'Projects',
     ),
     ShellNavDestination(
-      icon: ShellNavIcons.directory,
-      label: 'Directory',
-      semanticsLabel: 'Directory',
+      icon: ShellNavIcons.providers,
+      label: 'Providers',
+      semanticsLabel: 'Providers',
     ),
     ShellNavDestination(
-      icon: ShellNavIcons.items,
-      label: 'Items',
-      semanticsLabel: 'Items',
+      label: 'You',
+      semanticsLabel: 'You',
+      tabBuilder: (context, {required selected, required labelSize, required onTap}) {
+        return Text('You', style: TextStyle(fontSize: labelSize));
+      },
     ),
   ];
 
@@ -67,7 +69,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Items'), findsOneWidget);
+    expect(find.text('You'), findsOneWidget);
     expect(find.byType(FloatingShellDock), findsOneWidget);
 
     final voucherHit = tester.getSize(find.bySemanticsLabel('New voucher'));
@@ -96,7 +98,7 @@ void main() {
     await tester.pump();
     expect(voucher, 1);
 
-    await tester.tap(find.text('Clients'));
+    await tester.tap(find.text('Projects'));
     await tester.pump();
     expect(tab, 1);
   });
@@ -133,7 +135,7 @@ void main() {
     await tester.pumpWidget(dock(selected: 2));
     await tester.pumpAndSettle();
 
-    final semantics = tester.getSemantics(find.text('Directory'));
+    final semantics = tester.getSemantics(find.text('Providers'));
     expect(semantics.flagsCollection.isSelected, Tristate.isTrue);
   });
 

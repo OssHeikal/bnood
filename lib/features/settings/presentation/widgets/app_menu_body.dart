@@ -36,6 +36,16 @@ class AppMenuBody extends ConsumerWidget {
     final brandChip = colors.primary.withValues(alpha: 0.12);
     final subscriptionChip = SubscriptionColors.violet.withValues(alpha: 0.14);
 
+    final moduleRows = <Widget>[
+      SettingsNavRow(
+        label: l10n.navItems,
+        icon: Assets.icons.itemsLayersOutline,
+        chipBackground: brandChip,
+        iconColor: colors.primary,
+        onTap: () => context.push('/items'),
+      ),
+    ];
+
     final topRows = <Widget>[
       SettingsNavRow(
         label: l10n.authAccountSection,
@@ -94,6 +104,12 @@ class AppMenuBody extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        SettingsListSection(
+          title: l10n.navModulesSection,
+          dividerKind: GroupedListDividerKind.insetStart,
+          children: moduleRows,
+        ),
+        AppSize.spaceXL.gap,
         SettingsListSection(
           title: null,
           dividerKind: GroupedListDividerKind.insetStart,

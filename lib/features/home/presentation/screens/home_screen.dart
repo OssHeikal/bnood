@@ -19,9 +19,9 @@ import '../../../../core/network/api/api_error_user_message.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../app/shell_tab_scaffold.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
+import '../../../../app/widgets/shell_notifications_action.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
-import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/providers/presentation/providers/providers_list_paging.dart';
 import 'package:bnood/features/providers/presentation/widgets/remote_craftsman_summary_card.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
@@ -335,18 +335,7 @@ class HomeScreen extends ConsumerWidget {
                       showOwnedOfficeHeader
                   ? null
                   : l10n.homeAppName,
-              actions: [
-                CustomAppBarAction(
-                  tooltip: l10n.menuTitle,
-                  onPressed: () => context.push(AuthPaths.settings),
-                  child: ShellNavIcon(
-                    asset: Assets.icons.menuTwoLineOutline,
-                    size: AppSize.icon,
-                    color: colors.onSurface,
-                    semanticsLabel: l10n.menuTitle,
-                  ),
-                ),
-              ],
+              actions: const [ShellNotificationsAction()],
             ),
             body: RefreshIndicator.adaptive(
               onRefresh: () => refreshHomeDashboard(ref),

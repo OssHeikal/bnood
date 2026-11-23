@@ -6,6 +6,7 @@ import 'account_scope.dart';
 abstract final class AccountContextStore {
   static const valuePersonal = 'personal';
   static const _selectionKey = 'bnood.account.selection';
+  static const _previousKey = 'bnood.account.previous';
 
   static AccountScope scopeFromStored(String? raw) {
     if (raw == null || raw.isEmpty || raw == valuePersonal) {
@@ -32,6 +33,23 @@ abstract final class AccountContextStore {
   ) async {
     if (prefs == null) return;
     await prefs.setString(_selectionKey, encodeScope(scope));
+  }
+
+  static Future<AccountScope?> readPreviousScope(SharedPreferences? prefs) async {
+    if (prefs == null) return null;
+    final raw = prefs.getString(_previousKey);
+    if (raw == null || raw.isEmpty) return null;
+    if (raw == valuePersonal) return const AccountScope.personal();
+    if (isPlausibleOfficeId(raw)) return AccountScope.office(raw);
+    return null;
+  }
+
+  static Future<void> writePreviousScope(
+    SharedPreferences? prefs,
+    AccountScope scope,
+  ) async {
+    if (prefs == null) return;
+    await prefs.setString(_previousKey, encodeScope(scope));
   }
 
   /// Crockford base32 ULID (26 chars). Loose check for local restore until M2 validates membership.

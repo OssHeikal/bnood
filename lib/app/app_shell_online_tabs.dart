@@ -7,7 +7,7 @@ final appRemoteItemsTabEnabledProvider = Provider<bool>((ref) => true);
 final appRemoteProvidersTabEnabledProvider = Provider<bool>((ref) => true);
 
 /// Bottom-nav tabs in [ShellScaffold].
-enum AppShellTabId { home, clients, directory, items }
+enum AppShellTabId { home, projects, providers, more }
 
 /// Shell tab bodies (all online in SLICE 1).
 final appShellTabOnlineProvider = Provider.family<bool, AppShellTabId>((
@@ -15,9 +15,9 @@ final appShellTabOnlineProvider = Provider.family<bool, AppShellTabId>((
   tab,
 ) {
   return switch (tab) {
-    AppShellTabId.clients => true,
-    AppShellTabId.items => ref.watch(appRemoteItemsTabEnabledProvider),
-    AppShellTabId.directory => ref.watch(appRemoteProvidersTabEnabledProvider),
+    AppShellTabId.projects => true,
+    AppShellTabId.providers => ref.watch(appRemoteProvidersTabEnabledProvider),
     AppShellTabId.home => true,
+    AppShellTabId.more => true,
   };
 });

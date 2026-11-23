@@ -18,6 +18,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navClients => 'Clients';
 
   @override
+  String get navProjects => 'Projects';
+
+  @override
+  String get navProviders => 'Providers';
+
+  @override
+  String get navMorePersonal => 'You';
+
+  @override
+  String get navMoreOffice => 'Office';
+
+  @override
+  String get navModulesSection => 'Modules';
+
+  @override
+  String get accountSwitchLongPressHint => 'Long press to choose account';
+
+  @override
+  String get notificationsInboxTitle => 'No notifications yet';
+
+  @override
+  String get notificationsInboxDescription =>
+      'Alerts and updates will appear here when available.';
+
+  @override
   String get navDirectory => 'Directory';
 
   @override

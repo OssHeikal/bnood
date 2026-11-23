@@ -116,6 +116,54 @@ abstract class AppLocalizations {
   /// **'Clients'**
   String get navClients;
 
+  /// No description provided for @navProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get navProjects;
+
+  /// No description provided for @navProviders.
+  ///
+  /// In en, this message translates to:
+  /// **'Providers'**
+  String get navProviders;
+
+  /// No description provided for @navMorePersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get navMorePersonal;
+
+  /// No description provided for @navMoreOffice.
+  ///
+  /// In en, this message translates to:
+  /// **'Office'**
+  String get navMoreOffice;
+
+  /// No description provided for @navModulesSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Modules'**
+  String get navModulesSection;
+
+  /// No description provided for @accountSwitchLongPressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press to choose account'**
+  String get accountSwitchLongPressHint;
+
+  /// No description provided for @notificationsInboxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get notificationsInboxTitle;
+
+  /// No description provided for @notificationsInboxDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts and updates will appear here when available.'**
+  String get notificationsInboxDescription;
+
   /// No description provided for @navDirectory.
   ///
   /// In en, this message translates to:

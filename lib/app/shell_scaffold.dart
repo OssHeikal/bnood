@@ -1,50 +1,96 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:bnood/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/account/account_context_providers.dart';
+import '../core/account/account_office_providers.dart';
 import '../core/services/config/theme/app_size.dart';
 import '../core/ui/layout/app_layout.dart';
 import '../core/ui/theme/app_colors.dart';
 import '../core/ui/widgets/toast/shell_dock_presence.dart';
 import 'package:bnood/features/vouchers/presentation/actions/voucher_launcher.dart';
 import 'shell_chrome_scope.dart';
+import 'widgets/context_nav_avatar.dart';
 import 'widgets/floating_shell_dock.dart';
 import 'widgets/shell_nav_destination.dart';
 import 'widgets/shell_nav_icons.dart';
 import 'widgets/shell_navigation_rail.dart';
 
-class ShellScaffold extends StatelessWidget {
+class ShellScaffold extends ConsumerStatefulWidget {
   const ShellScaffold({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
-  List<ShellNavDestination> _destinations(AppLocalizations l10n) => [
-    ShellNavDestination(
-      icon: ShellNavIcons.home,
-      label: l10n.navHome,
-      semanticsLabel: l10n.navHome,
-    ),
-    ShellNavDestination(
-      icon: ShellNavIcons.clients,
-      label: l10n.navClients,
-      semanticsLabel: l10n.navClients,
-    ),
-    ShellNavDestination(
-      icon: ShellNavIcons.directory,
-      label: l10n.navDirectory,
-      semanticsLabel: l10n.navDirectory,
-    ),
-    ShellNavDestination(
-      icon: ShellNavIcons.items,
-      label: l10n.navItems,
-      semanticsLabel: l10n.navItems,
-    ),
-  ];
+  static const moreTabIndex = 3;
+
+  @override
+  ConsumerState<ShellScaffold> createState() => _ShellScaffoldState();
+}
+
+class _ShellScaffoldState extends ConsumerState<ShellScaffold> {
+  DateTime? _lastMoreRailTapAt;
+
+  void _onDestinationSelected(int index) {
+    if (index == ShellScaffold.moreTabIndex && context.isDesktopLayout) {
+      final now = DateTime.now();
+      final visible = ref.read(accountSwitcherVisibleProvider);
+      if (visible &&
+          _lastMoreRailTapAt != null &&
+          now.difference(_lastMoreRailTapAt!) <
+              const Duration(milliseconds: 300)) {
+        unawaited(HapticFeedback.lightImpact());
+        unawaited(
+          ref.read(accountContextProvider.notifier).quickSwitchToPreviousScope(),
+        );
+      }
+      _lastMoreRailTapAt = now;
+    }
+    widget.navigationShell.goBranch(index);
+  }
+
+  List<ShellNavDestination> _destinations(AppLocalizations l10n, bool isPersonal) {
+    final moreLabel = isPersonal ? l10n.navMorePersonal : l10n.navMoreOffice;
+    return [
+      ShellNavDestination(
+        icon: ShellNavIcons.home,
+        label: l10n.navHome,
+        semanticsLabel: l10n.navHome,
+      ),
+      ShellNavDestination(
+        icon: ShellNavIcons.projects,
+        label: l10n.navProjects,
+        semanticsLabel: l10n.navProjects,
+      ),
+      ShellNavDestination(
+        icon: ShellNavIcons.providers,
+        label: l10n.navProviders,
+        semanticsLabel: l10n.navProviders,
+      ),
+      ShellNavDestination(
+        label: moreLabel,
+        semanticsLabel: moreLabel,
+        tabBuilder: (context, {required selected, required labelSize, required onTap}) {
+          return ContextNavAvatarTab(
+            selected: selected,
+            labelSize: labelSize,
+            label: moreLabel,
+            semanticsLabel: moreLabel,
+            onSelectTab: onTap,
+          );
+        },
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final destinations = _destinations(l10n);
+    final isPersonal = ref.watch(accountContextProvider.select((s) => s.isPersonal));
+    final destinations = _destinations(l10n, isPersonal);
     final voucherLabel = l10n.navAdd;
 
     if (context.isDesktopLayout) {
@@ -53,13 +99,14 @@ class ShellScaffold extends StatelessWidget {
         body: Row(
           children: [
             ShellNavigationRail(
-              selectedIndex: navigationShell.currentIndex,
+              selectedIndex: widget.navigationShell.currentIndex,
               destinations: destinations,
-              onDestinationSelected: navigationShell.goBranch,
+              moreTabIndex: ShellScaffold.moreTabIndex,
+              onDestinationSelected: _onDestinationSelected,
               onVoucher: () => VoucherLauncher.openFresh(context),
               voucherSemanticsLabel: voucherLabel,
             ),
-            Expanded(child: navigationShell),
+            Expanded(child: widget.navigationShell),
           ],
         ),
       );
@@ -68,11 +115,8 @@ class ShellScaffold extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
     final showShellDock = !keyboardOpen;
-    // Toasts resolve dock visibility at show time (sheets/dialogs above the shell keep it).
     ShellDockPresence.register(context, hasDock: true);
-    final dockClearance = keyboardOpen
-        ? 0.0
-        : FloatingShellDock.clearanceHeight;
+    final dockClearance = keyboardOpen ? 0.0 : FloatingShellDock.clearanceHeight;
     final safeBottom = MediaQuery.viewPaddingOf(context).bottom;
     final fadeHeight = dockClearance + safeBottom + AppSize.spaceXL;
 
@@ -90,7 +134,7 @@ class ShellScaffold extends StatelessWidget {
             ),
             child: ShellChromeScope(
               keyboardOpen: keyboardOpen,
-              child: navigationShell,
+              child: widget.navigationShell,
             ),
           ),
           if (showShellDock) ...[
@@ -123,9 +167,9 @@ class ShellScaffold extends StatelessWidget {
               right: 0,
               bottom: 0,
               child: FloatingShellDock(
-                selectedIndex: navigationShell.currentIndex,
+                selectedIndex: widget.navigationShell.currentIndex,
                 destinations: destinations,
-                onDestinationSelected: navigationShell.goBranch,
+                onDestinationSelected: _onDestinationSelected,
                 onVoucher: () => VoucherLauncher.openFresh(context),
                 voucherSemanticsLabel: voucherLabel,
               ),

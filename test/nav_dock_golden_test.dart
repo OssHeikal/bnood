@@ -13,19 +13,21 @@ void main() {
       semanticsLabel: 'Home',
     ),
     ShellNavDestination(
-      icon: ShellNavIcons.clients,
-      label: 'Clients',
-      semanticsLabel: 'Clients',
+      icon: ShellNavIcons.projects,
+      label: 'Projects',
+      semanticsLabel: 'Projects',
     ),
     ShellNavDestination(
-      icon: ShellNavIcons.directory,
-      label: 'Directory',
-      semanticsLabel: 'Directory',
+      icon: ShellNavIcons.providers,
+      label: 'Providers',
+      semanticsLabel: 'Providers',
     ),
     ShellNavDestination(
-      icon: ShellNavIcons.items,
-      label: 'Items',
-      semanticsLabel: 'Items',
+      label: 'You',
+      semanticsLabel: 'You',
+      tabBuilder: (context, {required selected, required labelSize, required onTap}) {
+        return Text('You', style: TextStyle(fontSize: labelSize));
+      },
     ),
   ];
 

@@ -8,31 +8,32 @@ void main() {
 
   const sampleOfficeId = '01J9Z8XQ8K9M2N3P4R5S6T7V8W';
 
-  test('round-trips personal selection', () async {
+  test('previous scope round-trip', () async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    await AccountContextStore.writeScope(prefs, const AccountScope.personal());
-    final scope = await AccountContextStore.readScope(prefs);
-    expect(scope.isPersonal, isTrue);
-  });
-
-  test('round-trips office selection', () async {
-    SharedPreferences.setMockInitialValues({});
-    final prefs = await SharedPreferences.getInstance();
-    await AccountContextStore.writeScope(
+    await AccountContextStore.writePreviousScope(
       prefs,
-      AccountScope.office(sampleOfficeId),
+      const AccountScope.personal(),
     );
-    final scope = await AccountContextStore.readScope(prefs);
-    expect(scope.officeId, sampleOfficeId);
+    final read = await AccountContextStore.readPreviousScope(prefs);
+    expect(read?.isPersonal, isTrue);
   });
 
-  test('invalid stored id falls back to personal', () async {
+  test('invalid previous office id ignored', () async {
     SharedPreferences.setMockInitialValues({
-      'bnood.account.selection': 'bad-id',
+      'bnood.account.previous': 'not-an-office-id',
     });
     final prefs = await SharedPreferences.getInstance();
-    final scope = await AccountContextStore.readScope(prefs);
-    expect(scope.isPersonal, isTrue);
+    final read = await AccountContextStore.readPreviousScope(prefs);
+    expect(read, isNull);
+  });
+
+  test('valid previous office id restored', () async {
+    SharedPreferences.setMockInitialValues({
+      'bnood.account.previous': sampleOfficeId,
+    });
+    final prefs = await SharedPreferences.getInstance();
+    final read = await AccountContextStore.readPreviousScope(prefs);
+    expect(read?.officeId, sampleOfficeId);
   });
 }
