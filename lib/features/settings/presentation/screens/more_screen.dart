@@ -2,6 +2,7 @@ import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/shell_bottom_inset.dart';
 import '../../../../app/shell_tab_scaffold.dart';
 import '../../../../core/account/account_context_providers.dart';
 import '../../../../core/services/config/theme/app_size.dart';
@@ -26,10 +27,22 @@ class MoreScreen extends ConsumerWidget {
           automaticallyImplyLeading: false,
           title: title,
         ),
-        body: const BnoodListCanvas(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: AppSize.spaceMD),
-            child: AppMenuBody(),
+        body: BnoodListCanvas(
+          child: Builder(
+            builder: (context) {
+              final bottomInset =
+                  ShellBottomInset.listScrollBottomPadding(context);
+              return SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.fromLTRB(
+                  0,
+                  AppSize.spaceMD,
+                  0,
+                  bottomInset,
+                ),
+                child: const AppMenuBody(),
+              );
+            },
           ),
         ),
       ),

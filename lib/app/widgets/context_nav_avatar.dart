@@ -141,8 +141,8 @@ class ContextNavAvatarIcon extends ConsumerWidget {
   const ContextNavAvatarIcon({
     super.key,
     required this.selected,
-    this.size = AppSize.iconCompact,
-  });
+    double? size,
+  }) : size = size ?? ShellNavigationRail.destinationIconSize;
 
   final bool selected;
   final double size;
@@ -167,20 +167,23 @@ class ContextNavAvatarIcon extends ConsumerWidget {
 
     final ringColor =
         isDark ? ui_colors.AppColors.primary : ui_colors.AppColors.primaryDark;
+    final idleRing = colors.outlineSubtle.withValues(alpha: isDark ? 0.55 : 0.85);
 
     final face = _AvatarFace(
       size: size,
       imageUrl: imageUrl,
       initials: initials,
       colors: colors,
+      selected: selected,
     );
 
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: selected
-            ? Border.all(color: ringColor, width: 1.5)
-            : Border.all(color: Colors.transparent, width: 1.5),
+        border: Border.all(
+          color: selected ? ringColor : idleRing,
+          width: selected ? 2 : 1,
+        ),
       ),
       child: face,
     );
@@ -235,12 +238,14 @@ class _AvatarFace extends StatelessWidget {
     required this.imageUrl,
     required this.initials,
     required this.colors,
+    required this.selected,
   });
 
   final double size;
   final String? imageUrl;
   final String initials;
   final AppColors colors;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -269,8 +274,10 @@ class _AvatarFace extends StatelessWidget {
       child: Text(
         value,
         style: text.bodyEmphasis.copyWith(
-          color: colors.primary,
-          fontSize: size * 0.38,
+          color: selected ? colors.primary : colors.onSurfaceMuted,
+          fontSize: size * 0.42,
+          fontWeight: FontWeight.w700,
+          height: 1,
         ),
       ),
     );

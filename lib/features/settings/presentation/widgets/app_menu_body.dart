@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/account/account_office_providers.dart';
-import '../../../../core/services/config/extensions/num_extensions.dart';
 import '../../../../core/utils/safe_external_url.dart';
 import 'package:bnood/features/account/presentation/account_switcher_actions.dart';
 import '../../../../core/services/config/theme/app_colors.dart';
@@ -48,7 +47,7 @@ class AppMenuBody extends ConsumerWidget {
 
     final topRows = <Widget>[
       SettingsNavRow(
-        label: l10n.authAccountSection,
+        label: l10n.userProfileTitle,
         icon: Assets.icons.profileCircleOutline,
         chipBackground: brandChip,
         iconColor: colors.primary,
@@ -101,6 +100,8 @@ class AppMenuBody extends ConsumerWidget {
         ),
     ];
 
+    const sectionGap = SizedBox(height: AppSize.spaceXL);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -109,13 +110,13 @@ class AppMenuBody extends ConsumerWidget {
           dividerKind: GroupedListDividerKind.insetStart,
           children: moduleRows,
         ),
-        AppSize.spaceXL.gap,
+        sectionGap,
         SettingsListSection(
-          title: null,
+          title: l10n.authAccountSection,
           dividerKind: GroupedListDividerKind.insetStart,
           children: topRows,
         ),
-        AppSize.spaceXL.gap,
+        sectionGap,
         SettingsListSection(
           title: l10n.settingsContentSection,
           dividerKind: GroupedListDividerKind.insetStart,
@@ -151,7 +152,7 @@ class AppMenuBody extends ConsumerWidget {
           ],
         ),
         if (isAuthenticated) ...[
-          AppSize.spaceXL.gap,
+          sectionGap,
           SettingsListSection(
             title: null,
             dividerKind: GroupedListDividerKind.insetStart,
@@ -163,7 +164,6 @@ class AppMenuBody extends ConsumerWidget {
               ),
             ],
           ),
-          AppSize.spaceMD.gap,
         ],
       ],
     );

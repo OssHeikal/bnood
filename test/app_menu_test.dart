@@ -90,12 +90,14 @@ void main() {
           .map((e) => (e.widget as Text).data)
           .whereType<String>()
           .toList();
-      final accountIndex = labels.indexOf(l10n.authAccountSection);
+      final accountHeaderIndex = labels.indexOf(l10n.authAccountSection);
+      final profileIndex = labels.indexOf(l10n.userProfileTitle);
       final subscriptionIndex = labels.indexOf(l10n.profileSubscriptionSection);
       final settingsIndex = labels.indexOf(l10n.settingsTitle);
       final aboutIndex = labels.indexOf(l10n.settingsContentAbout);
-      expect(accountIndex, greaterThanOrEqualTo(0));
-      expect(subscriptionIndex, greaterThan(accountIndex));
+      expect(accountHeaderIndex, greaterThanOrEqualTo(0));
+      expect(profileIndex, greaterThan(accountHeaderIndex));
+      expect(subscriptionIndex, greaterThan(profileIndex));
       expect(settingsIndex, greaterThan(subscriptionIndex));
       expect(aboutIndex, greaterThan(settingsIndex));
     },
@@ -213,6 +215,8 @@ void main() {
   });
 
   testWidgets('logout confirm still works from menu', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     final snap = await bootstrap();
     await tester.pumpWidget(
       ProviderScope(
@@ -231,9 +235,11 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Sign out'));
+    final l10n = AppLocalizations.of(tester.element(find.byType(AppMenuScreen)));
+    await tester.ensureVisible(find.text(l10n.authSignOut));
+    await tester.tap(find.text(l10n.authSignOut));
     await tester.pumpAndSettle();
-    expect(find.text('Sign out?'), findsOneWidget);
+    expect(find.text(l10n.authLogoutConfirmTitle), findsOneWidget);
   });
 
   testWidgets('menu settings row opens preferences route', (tester) async {
