@@ -338,9 +338,6 @@ class $AssetsIconsGen {
   /// File path: assets/icons/language_square_outline.svg
   SvgGenImage get languageSquareOutline => const SvgGenImage('assets/icons/language_square_outline.svg');
 
-  /// File path: assets/icons/ledger_book_outline.svg
-  SvgGenImage get ledgerBookOutline => const SvgGenImage('assets/icons/ledger_book_outline.svg');
-
   /// File path: assets/icons/logout_02_outline.svg
   SvgGenImage get logout02Outline => const SvgGenImage('assets/icons/logout_02_outline.svg');
 
@@ -370,6 +367,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/profile_circle_outline.svg
   SvgGenImage get profileCircleOutline => const SvgGenImage('assets/icons/profile_circle_outline.svg');
+
+  /// File path: assets/icons/project_folder_outline.svg
+  SvgGenImage get projectFolderOutline => const SvgGenImage('assets/icons/project_folder_outline.svg');
 
   /// File path: assets/icons/retry_double_arrow_outline.svg
   SvgGenImage get retryDoubleArrowOutline => const SvgGenImage('assets/icons/retry_double_arrow_outline.svg');
@@ -473,7 +473,6 @@ class $AssetsIconsGen {
     keyOutline,
     laborHardHatOutline,
     languageSquareOutline,
-    ledgerBookOutline,
     logout02Outline,
     materialsPackageOutline,
     menuTwoLineOutline,
@@ -484,6 +483,7 @@ class $AssetsIconsGen {
     phoneOutline,
     pickaxeOutline,
     profileCircleOutline,
+    projectFolderOutline,
     retryDoubleArrowOutline,
     retrySingleArrowOutline,
     searchOutline,
