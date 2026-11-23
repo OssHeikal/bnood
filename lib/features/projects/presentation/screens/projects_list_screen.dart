@@ -196,7 +196,9 @@ class _ProjectsListScreenState extends ConsumerState<ProjectsListScreen> {
                   accentKey: clientAccentKeyFor(row.clientId),
                   localeCode: localeCode,
                   minorPerMajor: RemoteMoneyUnits.minorPerMajor,
-                  onTap: () => context.push('/clients/${row.clientId}'),
+                  onTap: () => context.push(
+                    '/projects/${row.projectId}?clientId=${row.clientId}',
+                  ),
                 );
               },
               sliverFooters: [

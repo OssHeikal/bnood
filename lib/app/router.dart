@@ -28,6 +28,7 @@ import 'package:bnood/features/items/presentation/screens/items_screen.dart';
 import 'package:bnood/features/auth/reset_password_screen.dart';
 import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
 import 'package:bnood/features/clients/presentation/screens/clients_list_screen.dart';
+import 'package:bnood/features/projects/presentation/screens/project_detail_screen.dart';
 import 'package:bnood/features/projects/presentation/screens/projects_list_screen.dart';
 import 'package:bnood/features/clients/presentation/screens/client_craftsmen_list_screen.dart';
 import 'package:bnood/features/providers/presentation/screens/client_suppliers_list_screen.dart';
@@ -314,6 +315,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/clients',
         builder: (_, _) => const ClientsListScreen(),
+      ),
+      GoRoute(
+        path: '/projects/:projectId',
+        builder: (_, state) {
+          final clientId = state.uri.queryParameters['clientId'] ?? '';
+          return ProjectDetailScreen(
+            projectId: state.pathParameters['projectId']!,
+            clientId: clientId,
+          );
+        },
       ),
       GoRoute(
         path: '/clients/:clientId',

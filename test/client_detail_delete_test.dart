@@ -3,7 +3,8 @@ import 'package:bnood/features/clients/data/clients_providers.dart';
 import 'package:bnood/features/clients/data/clients_repository.dart';
 import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/core/domain/ledger/ledger_entities.dart';
-import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
+import 'package:bnood/features/clients/presentation/providers/client_identity_provider.dart';
+import 'package:bnood/features/clients/presentation/models/client_identity_snapshot.dart';
 import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
@@ -16,9 +17,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  ClientDetailSnapshot snapshot({String name = 'Tower B'}) {
+  ClientIdentitySnapshot snapshot({String name = 'Tower B'}) {
     final now = DateTime.utc(2026, 11, 1);
-    return ClientDetailSnapshot(
+    return ClientIdentitySnapshot(
       client: Client(
         id: 'c1',
         workspaceId: 'w',
@@ -27,21 +28,12 @@ void main() {
         createdAt: now,
         updatedAt: now,
       ),
-      project: Project(
-        id: 'p1',
-        workspaceId: 'w',
-        clientId: 'c1',
-        name: 'Project',
-        status: 'active',
-        createdAt: now,
-        updatedAt: now,
-      ),
       receivedPiastres: 0,
       spentPiastres: 0,
-      estimatedProfitPiastres: null,
-      craftsmanPreviews: const [],
-      topItems: const [],
-      latestMovements: const [],
+      remainingPiastres: 0,
+      projects: const [
+        ClientProjectPreviewRow(projectId: 'p1', projectName: 'Project'),
+      ],
     );
   }
 
@@ -54,7 +46,7 @@ void main() {
           clientsRepositoryProvider.overrideWithValue(
             _FakeClientsRepo(onDelete: () => deleteCalled = true),
           ),
-          clientDetailProvider.overrideWith(() => _StubDetail(snapshot())),
+          clientIdentityProvider.overrideWith(() => _StubIdentity(snapshot())),
         ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
@@ -124,9 +116,9 @@ class _FakeClientsRepo extends ClientsRepository {
   }
 }
 
-class _StubDetail extends ClientDetailNotifier {
-  _StubDetail(this.data);
-  final ClientDetailSnapshot data;
+class _StubIdentity extends ClientIdentityNotifier {
+  _StubIdentity(this.data);
+  final ClientIdentitySnapshot data;
   @override
-  Future<ClientDetailSnapshot> build(String arg) async => data;
+  Future<ClientIdentitySnapshot> build(String arg) async => data;
 }

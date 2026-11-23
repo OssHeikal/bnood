@@ -1,8 +1,8 @@
 import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/core/domain/ledger/ledger_entities.dart';
-import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
+import 'package:bnood/features/clients/presentation/providers/client_identity_provider.dart';
 import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
-import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/models/client_identity_snapshot.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,9 +11,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  ClientDetailSnapshot snap({required bool archived}) {
+  ClientIdentitySnapshot snap({required bool archived}) {
     final now = DateTime.utc(2026, 11, 1);
-    return ClientDetailSnapshot(
+    return ClientIdentitySnapshot(
       client: Client(
         id: 'c1',
         workspaceId: 'w',
@@ -23,31 +23,24 @@ void main() {
         createdAt: now,
         updatedAt: now,
       ),
-      project: Project(
-        id: 'p1',
-        workspaceId: 'w',
-        clientId: 'c1',
-        name: 'Project',
-        status: archived ? 'archived' : 'active',
-        createdAt: now,
-        updatedAt: now,
-      ),
       receivedPiastres: 100000,
       spentPiastres: 0,
-      estimatedProfitPiastres: null,
-      craftsmanPreviews: const [],
-      topItems: const [],
-      latestMovements: const [],
+      remainingPiastres: 100000,
+      projects: const [
+        ClientProjectPreviewRow(projectId: 'p1', projectName: 'Project'),
+      ],
     );
   }
 
   Future<void> pumpDetail(
     WidgetTester tester,
-    ClientDetailSnapshot snapshot,
+    ClientIdentitySnapshot snapshot,
   ) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [clientDetailProvider.overrideWith(() => _Stub(snapshot))],
+        overrides: [
+          clientIdentityProvider.overrideWith(() => _Stub(snapshot)),
+        ],
         child: MaterialApp(
           theme: AppFoundationTheme.light(),
           locale: const Locale('en'),
@@ -61,43 +54,21 @@ void main() {
     await tester.pump(const Duration(milliseconds: 50));
   }
 
-  testWidgets('archived detail disables mutations', (tester) async {
+  testWidgets('archived client detail disables edit', (tester) async {
     await pumpDetail(tester, snap(archived: true));
-
-    expect(find.byKey(const Key('client_detail_action_archive')), findsNothing);
-
-    await tester.tap(find.byKey(const Key('client_detail_action_receive')));
-    await tester.pumpAndSettle();
-    expect(find.byType(Dialog), findsNothing);
 
     await tester.tap(find.byKey(const Key('client_detail_overflow')));
     await tester.pumpAndSettle();
     expect(find.text('Edit'), findsNothing);
     expect(find.text('Archived Tower'), findsWidgets);
   });
-
-  testWidgets('archive confirm cancel leaves detail', (tester) async {
-    await pumpDetail(tester, snap(archived: false));
-
-    await tester.tap(find.byKey(const Key('client_detail_action_archive')));
-    await tester.pumpAndSettle();
-    expect(find.text('Archive client?'), findsOneWidget);
-
-    await tester.tap(find.text('Cancel'));
-    await tester.pumpAndSettle();
-    expect(find.text('Archived Tower'), findsWidgets);
-    expect(
-      find.byKey(const Key('client_detail_action_receive')),
-      findsOneWidget,
-    );
-  });
 }
 
-class _Stub extends ClientDetailNotifier {
+class _Stub extends ClientIdentityNotifier {
   _Stub(this.snapshot);
 
-  final ClientDetailSnapshot snapshot;
+  final ClientIdentitySnapshot snapshot;
 
   @override
-  Future<ClientDetailSnapshot> build(String arg) async => snapshot;
+  Future<ClientIdentitySnapshot> build(String arg) async => snapshot;
 }

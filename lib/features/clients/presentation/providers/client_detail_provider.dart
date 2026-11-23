@@ -1,16 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:bnood/features/providers/data/agreements_riverpod.dart';
-import 'package:bnood/features/clients/data/client_provider_agreement_preview.dart';
-import 'package:bnood/features/home/data/craftsman_snapshot_limit.dart';
-import 'package:bnood/features/clients/data/clients_providers.dart';
-import 'package:bnood/features/providers/data/app_provider_record.dart';
-import '../../../../core/domain/money/money_format.dart';
-import 'package:bnood/features/vouchers/data/vouchers_riverpod.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
-import 'package:bnood/features/clients/presentation/models/client_item_spend_rows.dart';
-import 'package:bnood/features/clients/presentation/models/client_voucher_movement_lines.dart';
+import 'package:bnood/features/projects/presentation/providers/project_detail_loader.dart';
+import 'package:bnood/features/projects/presentation/providers/project_detail_provider.dart';
 
+/// Ledger detail for the client's primary project (legacy client-id routes).
 final clientDetailProvider =
     AsyncNotifierProvider.family<
       ClientDetailNotifier,
@@ -23,7 +17,10 @@ class ClientDetailNotifier
   int _reloadSeq = 0;
 
   @override
-  Future<ClientDetailSnapshot> build(String arg) => loadSnapshot(arg);
+  Future<ClientDetailSnapshot> build(String arg) async {
+    final params = await primaryProjectParamsForClient(ref, arg);
+    return loadProjectDetailSnapshot(ref, params);
+  }
 
   Future<void> refreshSilently() async {
     final previous = state.valueOrNull;
@@ -36,7 +33,8 @@ class ClientDetailNotifier
       state = const AsyncValue.loading();
     }
     try {
-      final next = await loadSnapshot(arg);
+      final params = await primaryProjectParamsForClient(ref, arg);
+      final next = await loadProjectDetailSnapshot(ref, params);
       if (seq != _reloadSeq) return;
       state = AsyncValue.data(next);
     } catch (error, stackTrace) {
@@ -50,66 +48,6 @@ class ClientDetailNotifier
         state = AsyncValue.error(error, stackTrace);
       }
     }
-  }
-
-  Future<ClientDetailSnapshot> loadSnapshot(String clientId) async {
-    final record = await ref
-        .read(clientsRepositoryProvider)
-        .getClient(clientId);
-    final balances = record.balances;
-    final agreements = await ref
-        .read(appAgreementsRepositoryProvider)
-        .listAllClientAgreements(clientId);
-    final craftsmanPreviews = craftsmanSnapshotRows(
-      clientAgreementPreviews(agreements, AppProviderType.craftsman),
-    );
-    final supplierPreviews = craftsmanSnapshotRows(
-      clientAgreementPreviews(agreements, AppProviderType.supplier),
-    );
-    final craftsmenCount = record.craftsmenCount ?? craftsmanPreviews.length;
-    final suppliersCount = record.suppliersCount ?? supplierPreviews.length;
-
-    final itemSpend = await ref
-        .read(clientsRepositoryProvider)
-        .getClientItemSpend(clientId);
-    final itemsCount = itemSpend.items.length;
-    final topItems = clientItemRowsFromItemSpend(itemSpend.items.take(3));
-
-    final vouchers = await ref
-        .read(vouchersRepositoryProvider)
-        .listClientVouchers(clientId: clientId, page: 1, perPage: 5);
-    final latestMovements = movementLinesFromVouchers(
-      vouchers.items,
-      projectId: record.project.id,
-    );
-
-    final spentMinor = balances?.spentPiastres;
-    final profit =
-        record.project.engineerBasisPoints == null || spentMinor == null
-        ? null
-        : MoneyFormat.estimatedProfitPiastres(
-            totalSpendPiastres: spentMinor,
-            engineerBasisPoints: record.project.engineerBasisPoints!,
-          );
-
-    return ClientDetailSnapshot(
-      client: record.client,
-      project: record.project,
-      receivedPiastres: balances?.receivedPiastres,
-      spentPiastres: spentMinor,
-      estimatedProfitPiastres: profit,
-      craftsmanPreviews: craftsmanPreviews,
-      supplierPreviews: supplierPreviews,
-      craftsmenCount: craftsmenCount,
-      suppliersCount: suppliersCount,
-      itemsCount: itemsCount,
-      movementsCount: vouchers.total,
-      topItems: topItems,
-      latestMovements: latestMovements,
-      onlineIdentityOnly: false,
-      usesRemoteMoney: true,
-      remainingFromServer: balances?.remainingPiastres,
-    );
   }
 }
 

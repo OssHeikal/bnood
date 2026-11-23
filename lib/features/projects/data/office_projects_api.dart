@@ -50,6 +50,19 @@ class OfficeProjectsApi {
     ClientListArchiveFilter.archived => 'archived',
   };
 
+  Future<Map<String, dynamic>> getProject(String projectId) {
+    return _guard(() async {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '$_prefix/$projectId',
+        options: Options(extra: _authenticatedExtra),
+      );
+      return ApiResponseParser.expectData<Map<String, dynamic>>(
+        response,
+        (json) => json ?? const {},
+      );
+    });
+  }
+
   Future<ProjectsListPage> listProjects({
     required ClientListArchiveFilter status,
     String? q,

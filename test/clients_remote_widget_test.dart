@@ -1,8 +1,8 @@
 import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
-import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
+import 'package:bnood/features/clients/presentation/providers/client_identity_provider.dart';
 import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
-import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
+import 'package:bnood/features/clients/presentation/models/client_identity_snapshot.dart';
 import 'package:bnood/features/clients/presentation/screens/clients_list_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,7 @@ void main() {
     tester,
   ) async {
     final now = DateTime.utc(2026, 11, 9);
-    final snapshot = ClientDetailSnapshot(
+    final snapshot = ClientIdentitySnapshot(
       client: Client(
         id: 'c-arch',
         workspaceId: 'remote',
@@ -59,29 +59,21 @@ void main() {
         createdAt: now,
         updatedAt: now,
       ),
-      project: Project(
-        id: 'p1',
-        workspaceId: 'remote',
-        clientId: 'c-arch',
-        name: 'Archived',
-        status: 'archived',
-        createdAt: now,
-        updatedAt: now,
-      ),
       receivedPiastres: null,
       spentPiastres: null,
-      estimatedProfitPiastres: null,
-      craftsmanPreviews: const [],
-      topItems: const [],
-      latestMovements: const [],
-      onlineIdentityOnly: true,
+      projects: const [
+        ClientProjectPreviewRow(
+          projectId: 'p1',
+          projectName: 'Archived',
+        ),
+      ],
     );
 
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          clientDetailProvider.overrideWith(
-            () => _StaticDetailNotifier(snapshot),
+          clientIdentityProvider.overrideWith(
+            () => _StaticIdentityNotifier(snapshot),
           ),
         ],
         child: const MaterialApp(
@@ -101,11 +93,11 @@ void main() {
   });
 }
 
-class _StaticDetailNotifier extends ClientDetailNotifier {
-  _StaticDetailNotifier(this.snapshot);
+class _StaticIdentityNotifier extends ClientIdentityNotifier {
+  _StaticIdentityNotifier(this.snapshot);
 
-  final ClientDetailSnapshot snapshot;
+  final ClientIdentitySnapshot snapshot;
 
   @override
-  Future<ClientDetailSnapshot> build(String arg) async => snapshot;
+  Future<ClientIdentitySnapshot> build(String arg) async => snapshot;
 }

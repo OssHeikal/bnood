@@ -6,47 +6,30 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/account/account_office_providers.dart';
 import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/network/api/api_error_user_message.dart';
 import '../../../../core/domain/money/remote_money_units.dart';
 import '../../../../core/services/config/theme/app_colors.dart';
 import '../../../../core/services/config/theme/app_size.dart';
 import '../../../../core/ui/layout/app_layout.dart';
 import '../../../../core/ui/layout/bnood_max_width.dart';
-import '../../../../core/ui/layout/bnood_two_column.dart';
-import '../../../../core/network/api/api_error_user_message.dart';
-import '../../../../core/network/api/auth_api_exception.dart';
-import 'package:bnood/features/clients/data/clients_error_handler.dart';
-import 'package:bnood/features/subscription/presentation/actions/subscription_error_handler.dart';
-import 'package:bnood/features/subscription/presentation/actions/subscription_gates.dart';
-import 'package:bnood/features/clients/data/clients_providers.dart';
-import '../../../../core/domain/formatting/see_all_label.dart';
 import '../../../../core/ui/resources/gen/assets.gen.dart';
 import '../../../../core/ui/widgets/app_card.dart';
-import '../../../../core/ui/widgets/app_decision.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
-import '../../../../core/utils/whatsapp_phone.dart';
-import '../../../../core/ui/widgets/app_toaster.dart';
 import '../../../../core/ui/widgets/app_overflow_menu.dart';
+import '../../../../core/ui/widgets/app_toaster.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
 import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
-import '../../../../core/ui/widgets/toast/app_tone.dart';
+import '../../../../core/utils/whatsapp_phone.dart';
+import 'package:bnood/features/clients/presentation/actions/client_mutation_actions.dart';
+import 'package:bnood/features/clients/presentation/providers/client_identity_provider.dart';
+import 'package:bnood/features/clients/presentation/sheets/client_edit_sheet.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_balance_card.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_detail_stat_grid.dart';
+import 'package:bnood/features/clients/presentation/models/client_identity_snapshot.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_detail_loading_skeleton.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/home/presentation/widgets/home_section_header.dart';
-import 'package:bnood/features/vouchers/presentation/actions/voucher_launcher.dart';
-import 'package:bnood/features/clients/presentation/actions/client_movements_navigation.dart';
-import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
-import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
-import 'package:bnood/features/clients/presentation/sheets/client_edit_sheet.dart';
-import 'package:bnood/features/clients/presentation/actions/client_mutation_actions.dart';
-import 'package:bnood/features/clients/presentation/sheets/craftsman_assignments_sheet.dart';
-import 'package:bnood/features/clients/presentation/sheets/engineer_edit_sheet.dart';
-import 'package:bnood/features/clients/presentation/widgets/client_detail_action_grid.dart';
-import 'package:bnood/features/clients/presentation/widgets/client_detail_linked_providers_section.dart';
-import 'package:bnood/features/clients/presentation/widgets/client_detail_engineer_card.dart';
-import 'package:bnood/features/clients/presentation/widgets/client_detail_item_row.dart';
-import 'package:bnood/features/clients/presentation/widgets/client_detail_loading_skeleton.dart';
-import 'package:bnood/features/clients/presentation/widgets/interactive_movement_card.dart';
-import 'package:bnood/features/clients/presentation/widgets/client_detail_stat_grid.dart';
-import '../../../../core/app_state/client_mutation_refresh.dart';
+import '../../../../core/domain/formatting/see_all_label.dart';
 
 class ClientDetailScreen extends ConsumerWidget {
   const ClientDetailScreen({super.key, required this.clientId});
@@ -57,10 +40,8 @@ class ClientDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
-    final detail = ref.watch(clientDetailProvider(clientId));
+    final detail = ref.watch(clientIdentityProvider(clientId));
     final snapshot = detail.valueOrNull;
-
-    const remoteClients = true;
 
     return HomeFoundationScope(
       child: Builder(
@@ -95,18 +76,17 @@ class ClientDetailScreen extends ConsumerWidget {
                                 phone: client.phone,
                               ),
                             ),
-                          if (remoteClients)
-                            AppOverflowMenuAction(
-                              label: l10n.delete,
-                              icon: Assets.icons.deleteSquareOutline,
-                              destructive: true,
-                              onSelected: () => confirmDeleteClient(
-                                context: context,
-                                ref: ref,
-                                clientId: clientId,
-                                clientName: client.name,
-                              ),
+                          AppOverflowMenuAction(
+                            label: l10n.delete,
+                            icon: Assets.icons.deleteSquareOutline,
+                            destructive: true,
+                            onSelected: () => confirmDeleteClient(
+                              context: context,
+                              ref: ref,
+                              clientId: clientId,
+                              clientName: client.name,
                             ),
+                          ),
                         ],
                       ),
                       if (hasPhone)
@@ -145,9 +125,9 @@ class ClientDetailScreen extends ConsumerWidget {
               maxWidth: AppLayout.pageMaxWidth,
               child: ListView(
                 padding: EdgeInsets.fromLTRB(
-                  0,
+                  context.pageGutter,
                   AppSize.spaceSM,
-                  0,
+                  context.pageGutter,
                   AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
                 ),
                 children: [
@@ -163,7 +143,7 @@ class ClientDetailScreen extends ConsumerWidget {
                       children: [
                         const ClientDetailStatSkeleton(),
                         AppSize.spaceLG.gap,
-                        const ClientDetailLoadingSkeleton(),
+                        const Center(child: CircularProgressIndicator()),
                       ],
                     ),
                     error: (e, _) => AppCard(
@@ -175,14 +155,14 @@ class ClientDetailScreen extends ConsumerWidget {
                           AppFallbackAction(
                             label: l10n.retry,
                             onPressed: () => ref
-                                .read(clientDetailProvider(clientId).notifier)
+                                .read(clientIdentityProvider(clientId).notifier)
                                 .refreshSilently(),
                             role: AppFallbackActionRole.tertiary,
                           ),
                         ],
                       ),
                     ),
-                    data: (data) => _ClientDetailBody(
+                    data: (data) => _ClientIdentityBody(
                       clientId: clientId,
                       data: data,
                       localeCode: localeCode,
@@ -216,108 +196,24 @@ class ClientDetailScreen extends ConsumerWidget {
   }
 }
 
-class _ClientDetailBody extends ConsumerWidget {
-  const _ClientDetailBody({
+class _ClientIdentityBody extends ConsumerWidget {
+  const _ClientIdentityBody({
     required this.clientId,
     required this.data,
     required this.localeCode,
   });
 
   final String clientId;
-  final ClientDetailSnapshot data;
+  final ClientIdentitySnapshot data;
   final String localeCode;
-
-  Future<void> _confirmArchive(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context);
-    final answer = await AppDecision.show(
-      context,
-      title: l10n.archiveClientTitle,
-      description: l10n.archiveClientDescription(data.client.name),
-      confirmLabel: l10n.archive,
-      cancelLabel: l10n.cancel,
-      tone: AppTone.danger,
-      iconWidget: AppDecision.archiveDangerIcon(context),
-    );
-    if (answer != OverlayAnswer.confirmed || !context.mounted) return;
-    if (!await guardArchiveClient(context, ref)) return;
-    try {
-      await ref.read(clientsRepositoryProvider).archiveClient(clientId);
-      refreshAfterClientMutation(ref, clientId: clientId);
-      if (context.mounted) {
-        AppToaster.show(l10n.toastClientArchived, kind: ToastKind.success);
-        context.pop();
-      }
-    } on AuthApiException catch (e) {
-      if (!context.mounted) return;
-      if (await handleClientsApiAuthError(context: context, ref: ref, error: e))
-        return;
-      if (!context.mounted) return;
-      if (await handleClientsApiSubscriptionError(
-        context: context,
-        ref: ref,
-        error: e,
-      ))
-        return;
-      AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
-    }
-  }
-
-  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
-    await confirmDeleteClient(
-      context: context,
-      ref: ref,
-      clientId: clientId,
-      clientName: data.client.name,
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final isArchived = data.client.archivedAt != null;
-    final mutationsEnabled = !isArchived;
-
-    Future<void> openAssignments() async {
-      if (!mutationsEnabled) return;
-      await showCraftsmanAssignmentsSheet(
-        context: context,
-        projectId: data.project.id,
-        clientId: clientId,
-      );
-      if (context.mounted) {
-        ref.read(clientDetailProvider(clientId).notifier).refreshSilently();
-      }
-    }
-
-    Future<void> openSupplierAssignments() async {
-      if (!mutationsEnabled) return;
-      await showSupplierAssignmentsSheet(
-        context: context,
-        projectId: data.project.id,
-        clientId: clientId,
-      );
-      if (context.mounted) {
-        ref.read(clientDetailProvider(clientId).notifier).refreshSilently();
-      }
-    }
-
-    void openVoucher(String kind) {
-      if (!mutationsEnabled) return;
-      VoucherLauncher.openForClient(
-        context,
-        clientId: clientId,
-        projectId: data.project.id,
-        clientLabel: data.client.name,
-        kind: kind,
-      ).then((_) {
-        if (context.mounted) {
-          ref.read(clientDetailProvider(clientId).notifier).refreshSilently();
-        }
-      });
-    }
-
-    if (data.onlineIdentityOnly) {
-      final summary = <Widget>[
+    final projects = data.projects;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
         ClientDetailStatGrid(
           receivedPiastres: data.receivedPiastres,
           spentPiastres: data.spentPiastres,
@@ -327,234 +223,47 @@ class _ClientDetailBody extends ConsumerWidget {
               ? RemoteMoneyUnits.minorPerMajor
               : 100,
         ),
-        AppSize.spaceLG.gap,
-        ClientDetailActionGrid(
-          isArchived: isArchived,
-          mutationsEnabled: mutationsEnabled,
-          onlineIdentityOnly: true,
-          onReceive: () {},
-          onSpend: () {},
-          onStatement: () {},
-          onArchive: () => _confirmArchive(context, ref),
-          onDelete: () => _confirmDelete(context, ref),
-        ),
-        ...[
-          AppSize.spaceXL.gap,
-          ClientDetailLinkedProvidersSection(
-            title: l10n.craftsmen,
-            assignLabel: l10n.assignCraftsmen,
-            emptyTitle: l10n.clientDetailNoCraftsmen,
-            emptyDescription: l10n.clientDetailCraftsmenEmptyDescription,
-            seeAllRoute: '/clients/$clientId/craftsmen',
-            previews: data.craftsmanPreviews,
-            localeCode: localeCode,
-            mutationsEnabled: mutationsEnabled,
-            onAssign: openAssignments,
-            totalCount: data.craftsmenCount,
+        AppSize.spaceXL.gap,
+        HomeSectionHeader(
+          title: l10n.navProjects,
+          seeAllLabel: seeAllLabelWithCount(
+            l10n,
+            data.projectCount ?? projects.length,
           ),
-          ...[
-            AppSize.spaceXL.gap,
-            ClientDetailLinkedProvidersSection(
-              title: l10n.suppliers,
-              assignLabel: l10n.assignSuppliers,
-              emptyTitle: l10n.clientDetailNoSuppliers,
-              emptyDescription: l10n.clientDetailSuppliersEmptyDescription,
-              seeAllRoute: '/clients/$clientId/suppliers',
-              previews: data.supplierPreviews,
+          seeAllEnabled: false,
+        ),
+        AppSize.spaceSM.gap,
+        if (projects.isEmpty)
+          AppCard(
+            child: AppFallback.section(
+              icon: Icons.folder_open_outlined,
+              title: l10n.homeNoActiveClientsTitle,
+              description: l10n.homeNoActiveClientsDescription,
+            ),
+          )
+        else
+          for (var i = 0; i < projects.length; i++) ...[
+            if (i > 0) AppSize.spaceMD.gap,
+            ClientBalanceCard(
+              name: projects[i].projectName,
+              meta: null,
+              receivedPiastres: projects[i].receivedPiastres,
+              spentPiastres: projects[i].spentPiastres,
+              amountPiastres: projects[i].remainingPiastres,
+              accentKey: clientAccentKeyFor(clientId),
               localeCode: localeCode,
-              mutationsEnabled: mutationsEnabled,
-              onAssign: openSupplierAssignments,
-              totalCount: data.suppliersCount,
+              minorPerMajor: RemoteMoneyUnits.minorPerMajor,
+              onTap: () {
+                final projectId = projects[i].projectId;
+                context.push(
+                  '/projects/$projectId?clientId=$clientId',
+                );
+              },
             ),
           ],
-        ],
-      ];
-      final ledger = <Widget>[
-        AppCard(
-          child: AppFallback.section(
-            icon: Icons.cloud_off_outlined,
-            title: l10n.clientLedgerNotOnlineTitle,
-            description: l10n.clientLedgerNotOnlineDescription,
-          ),
-        ),
-      ];
-      return _clientDetailColumns(context, summary: summary, ledger: ledger);
-    }
-
-    final summary = <Widget>[
-      ClientDetailStatGrid(
-        receivedPiastres: data.receivedPiastres,
-        spentPiastres: data.spentPiastres,
-        remainingPiastres: data.remainingPiastres,
-        localeCode: localeCode,
-        minorPerMajor: data.usesRemoteMoney
-            ? RemoteMoneyUnits.minorPerMajor
-            : 100,
-      ),
-      AppSize.spaceLG.gap,
-      ClientDetailActionGrid(
-        isArchived: isArchived,
-        mutationsEnabled: mutationsEnabled,
-        onReceive: () => openVoucher('receive'),
-        onSpend: () => openVoucher('spend'),
-        onStatement: () {
-          if (!mutationsEnabled) return;
-          context.push('/clients/$clientId/statement');
-        },
-        onArchive: () => _confirmArchive(context, ref),
-      ),
-      AppSize.spaceXL.gap,
-      ClientDetailEngineerCard(
-        engineerBasisPoints: data.project.engineerBasisPoints,
-        estimatedProfitPiastres: data.estimatedProfitPiastres,
-        localeCode: localeCode,
-        minorPerMajor: data.usesRemoteMoney
-            ? RemoteMoneyUnits.minorPerMajor
-            : 100,
-        mutationsEnabled: mutationsEnabled,
-        onEdit: () {
-          if (!mutationsEnabled) return;
-          showEngineerFeeSheet(
-            context: context,
-            clientId: clientId,
-            projectId: data.project.id,
-            clientName: data.client.name,
-            engineerBasisPoints: data.project.engineerBasisPoints,
-          );
-        },
-      ),
-      AppSize.spaceXL.gap,
-      ClientDetailLinkedProvidersSection(
-        title: l10n.craftsmen,
-        assignLabel: l10n.assignCraftsmen,
-        emptyTitle: l10n.clientDetailNoCraftsmen,
-        emptyDescription: l10n.clientDetailCraftsmenEmptyDescription,
-        seeAllRoute: '/clients/$clientId/craftsmen',
-        previews: data.craftsmanPreviews,
-        localeCode: localeCode,
-        mutationsEnabled: mutationsEnabled,
-        onAssign: openAssignments,
-        totalCount: data.craftsmenCount,
-      ),
-      ...[
-        AppSize.spaceXL.gap,
-        ClientDetailLinkedProvidersSection(
-          title: l10n.suppliers,
-          assignLabel: l10n.assignSuppliers,
-          emptyTitle: l10n.clientDetailNoSuppliers,
-          emptyDescription: l10n.clientDetailSuppliersEmptyDescription,
-          seeAllRoute: '/clients/$clientId/suppliers',
-          previews: data.supplierPreviews,
-          localeCode: localeCode,
-          mutationsEnabled: mutationsEnabled,
-          onAssign: openSupplierAssignments,
-          totalCount: data.suppliersCount,
-        ),
       ],
-    ];
-    final ledger = <Widget>[
-      HomeSectionHeader(
-        title: l10n.navItems,
-        seeAllLabel: seeAllLabelWithCount(
-          l10n,
-          data.itemsCount ?? data.topItems.length,
-        ),
-        seeAllEnabled: mutationsEnabled,
-        onSeeAll: () => context.push('/clients/$clientId/items'),
-      ),
-      AppSize.spaceSM.gap,
-      if (data.topItems.isEmpty)
-        AppCard(
-          child: AppFallback.section(
-            icon: Icons.inventory_2_outlined,
-            title: l10n.clientDetailNoItemSpend,
-          ),
-        )
-      else
-        for (var i = 0; i < data.topItems.length; i++) ...[
-          if (i > 0) AppSize.spaceMD.gap,
-          ClientDetailItemRow(
-            itemName: data.topItems[i].name,
-            colorKey: data.topItems[i].colorKey,
-            iconName: data.topItems[i].iconName,
-            breakdown: data.topItems[i].breakdown,
-            localeCode: localeCode,
-            minorPerMajor: data.usesRemoteMoney
-                ? RemoteMoneyUnits.minorPerMajor
-                : 100,
-            onTap: data.topItems[i].itemId == null
-                ? null
-                : () => pushClientMovements(
-                    context,
-                    clientId: clientId,
-                    itemId: data.topItems[i].itemId,
-                  ),
-          ),
-        ],
-      AppSize.spaceXL.gap,
-      HomeSectionHeader(
-        title: l10n.movements,
-        seeAllLabel: seeAllLabelWithCount(
-          l10n,
-          data.movementsCount ?? data.latestMovements.length,
-        ),
-        seeAllEnabled: mutationsEnabled,
-        onSeeAll: () => context.push('/clients/$clientId/movements'),
-      ),
-      AppSize.spaceSM.gap,
-      if (data.latestMovements.isEmpty)
-        AppCard(
-          child: AppFallback.section(
-            icon: Icons.receipt_long_outlined,
-            title: l10n.clientDetailNoMovements,
-          ),
-        )
-      else
-        Column(
-          children: [
-            for (var i = 0; i < data.latestMovements.length; i++) ...[
-              if (i > 0) AppSize.spaceMD.gap,
-              InteractiveMovementCard(
-                line: data.latestMovements[i],
-                localeCode: localeCode,
-                mutationsEnabled: mutationsEnabled,
-                ledgerClientId: clientId,
-              ),
-            ],
-          ],
-        ),
-    ];
-    return _clientDetailColumns(context, summary: summary, ledger: ledger);
-  }
-}
-
-Widget _clientDetailColumns(
-  BuildContext context, {
-  required List<Widget> summary,
-  required List<Widget> ledger,
-}) {
-  if (context.isMobileLayout) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [...summary, ...ledger],
     );
   }
-  final lead = HomeSectionHeader.columnLeadBeforeContent(context);
-  return BnoodTwoColumn(
-    spacing: AppSize.spaceLG,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    start: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(height: lead),
-        ...summary,
-      ],
-    ),
-    end: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: ledger,
-    ),
-  );
 }
 
 class _ArchivedBadge extends StatelessWidget {
