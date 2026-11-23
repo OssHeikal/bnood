@@ -8,7 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('MoneyFormat ar uses western digits', () {
     final text = MoneyFormat.formatPiastres(1_234_567, locale: 'ar_EG');
-    expect(text, contains('12,345.67'));
+    expect(text, contains('12,346'));
+    expect(text, isNot(contains('.')));
     expect(text, contains('EGP'));
     expect(text, isNot(contains('ج.م')));
     expect(text, isNot(contains('١')));
@@ -22,7 +23,7 @@ void main() {
     'AppAmount remaining negative ar keeps minus and western digits',
     () async {
       final text = AppAmount.format(piastres: 5000, localeCode: 'ar');
-      expect(text, contains('50'));
+      expect(text, contains('50 EGP'));
       expect(text, contains('EGP'));
       expect(text, isNot(contains('ج.م')));
       expect(text, isNot(contains('٥')));

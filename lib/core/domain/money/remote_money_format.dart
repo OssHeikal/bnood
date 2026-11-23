@@ -7,27 +7,15 @@ class RemoteMoneyFormat {
   RemoteMoneyFormat._();
 
   static String formatMinor(int minor, {String locale = 'ar_EG'}) =>
-      formatMajor(RemoteMoneyUnits.minorToMajor(minor), locale: locale);
+      MoneyFormat.formatPiastres(minor, locale: locale);
 
+  /// Display-only formatting when only a major-unit [double] is available.
   static String formatMajor(double major, {String locale = 'ar_EG'}) {
-    final sign = major < 0 ? '−' : '';
-    final magnitude = major.abs();
-    final whole = magnitude.truncateToDouble();
-    final frac = magnitude - whole;
-    final wholeText = DisplayDigits.formatInteger(whole.toInt());
-    if (frac.abs() < 1e-9) {
-      return '$sign$wholeText ${MoneyFormat.currencyLabel}';
-    }
-    final fracMinor = (frac * RemoteMoneyUnits.minorPerMajor).round().clamp(
-      0,
-      99,
-    );
-    final fracText = fracMinor
-        .toString()
-        .padLeft(2, '0')
-        .replaceFirst(RegExp(r'0+$'), '');
-    final body = fracText.isEmpty ? wholeText : '$wholeText.$fracText';
-    return '$sign$body ${MoneyFormat.currencyLabel}';
+    final pounds = major.round();
+    final sign = pounds < 0 ? '−' : '';
+    final wholeText = DisplayDigits.formatInteger(pounds.abs());
+    final body = sign.isEmpty ? wholeText : '$sign$wholeText';
+    return '$body ${MoneyFormat.currencyLabel}';
   }
 
   static String withoutCurrencySuffix(String formatted) =>

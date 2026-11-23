@@ -4,11 +4,18 @@ import 'package:bnood/core/domain/money/remote_money_units.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('minor display uses two decimal major units', () {
-    expect(RemoteMoneyFormat.formatMinor(150), '1.5 EGP');
+  test('formatMajor rounds fractional major units for display', () {
+    expect(RemoteMoneyFormat.formatMajor(336495.91), '336,496 EGP');
+    expect(RemoteMoneyFormat.formatMajor(-12.5), '−13 EGP');
+  });
+
+  test('minor display uses whole EGP rounded half away from zero', () {
+    expect(RemoteMoneyFormat.formatMinor(150), '2 EGP');
     expect(RemoteMoneyFormat.formatMinor(100), '1 EGP');
+    expect(RemoteMoneyFormat.formatMinor(149), '1 EGP');
     expect(RemoteMoneyFormat.formatMinor(29900), '299 EGP');
     expect(RemoteMoneyFormat.formatMinor(299000), '2,990 EGP');
+    expect(RemoteMoneyFormat.formatMinor(-1250), '−13 EGP');
   });
 
   test('parse major input returns minor integers', () {

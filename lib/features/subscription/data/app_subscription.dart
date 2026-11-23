@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:bnood/core/domain/money/remote_money_units.dart';
+import 'package:bnood/core/domain/money/money_format.dart';
 import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/data/subscription_colors.dart';
 export 'paywall_v3_models.dart';
@@ -238,8 +238,8 @@ class AppPaywallPlan {
       totalBilledMinor == null ? null : _formatMajor(totalBilledMinor!);
 
   static String _formatMajor(int minor) {
-    final major = RemoteMoneyUnits.minorToMajor(minor);
-    return major.toString();
+    final whole = MoneyFormat.displayWholeEgpFromPiastres(minor);
+    return whole.toString();
   }
 }
 

@@ -7,16 +7,20 @@ class MoneyFormat {
   /// App-generated money always suffixes uppercase `EGP` (Arabic and English UI).
   static const String currencyLabel = 'EGP';
 
-  static String formatPiastres(int piastres, {String locale = 'ar_EG'}) {
-    final magnitude = piastres.abs();
-    final pounds = magnitude ~/ 100;
-    final cents = magnitude % 100;
-    final whole = DisplayDigits.formatInteger(pounds);
-    if (cents == 0) {
-      return '$whole $currencyLabel';
+  /// Display-only whole pounds from stored piastres (half away from zero).
+  static int displayWholeEgpFromPiastres(int piastres) {
+    if (piastres >= 0) {
+      return (piastres + 50) ~/ 100;
     }
-    final frac = cents.toString().padLeft(2, '0');
-    return '$whole.$frac $currencyLabel';
+    return (piastres - 50) ~/ 100;
+  }
+
+  static String formatPiastres(int piastres, {String locale = 'ar_EG'}) {
+    final pounds = displayWholeEgpFromPiastres(piastres);
+    final sign = pounds < 0 ? '−' : '';
+    final whole = DisplayDigits.formatInteger(pounds.abs());
+    final body = sign.isEmpty ? whole : '$sign$whole';
+    return '$body $currencyLabel';
   }
 
   static String withoutCurrencySuffix(String formatted) => formatted

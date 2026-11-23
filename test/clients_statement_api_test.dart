@@ -110,7 +110,7 @@ void main() {
       expect(spend.items.single.name, 'Labor');
       expect(spend.items.single.spentMinor, 150);
       expect(spend.items.single.laborMinor, 150);
-      expect(RemoteMoneyFormat.formatMinor(150), '1.5 EGP');
+      expect(RemoteMoneyFormat.formatMinor(150), '2 EGP');
     });
   });
 
