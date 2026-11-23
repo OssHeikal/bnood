@@ -38,7 +38,7 @@ void main() {
             ),
             StatefulShellBranch(
               routes: [
-                GoRoute(path: '/clients', builder: (_, _) => const SizedBox()),
+                GoRoute(path: '/projects', builder: (_, _) => const SizedBox()),
               ],
             ),
             StatefulShellBranch(
@@ -91,7 +91,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
 
     final router = GoRouter(
-      initialLocation: '/clients',
+      initialLocation: '/projects',
       routes: [
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) =>
@@ -105,7 +105,7 @@ void main() {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/clients',
+                  path: '/projects',
                   builder: (_, _) => ShellTabScaffold(
                     body: ListView(
                       key: const PageStorageKey('clients-test'),
@@ -179,7 +179,7 @@ void main() {
             ),
             StatefulShellBranch(
               routes: [
-                GoRoute(path: '/clients', builder: (_, _) => const SizedBox()),
+                GoRoute(path: '/projects', builder: (_, _) => const SizedBox()),
               ],
             ),
             StatefulShellBranch(

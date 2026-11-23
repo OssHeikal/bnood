@@ -10,18 +10,23 @@ import '../../../../core/ui/widgets/app_pressable.dart';
 import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 
 class ClientsListFilterChips extends ConsumerWidget {
-  const ClientsListFilterChips({super.key});
+  ClientsListFilterChips({
+    super.key,
+    StateProvider<ClientListArchiveFilter>? filterProvider,
+  }) : filterProvider = filterProvider ?? clientsListFilterProvider;
+
+  final StateProvider<ClientListArchiveFilter> filterProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
     final text = context.text;
-    final filter = ref.watch(clientsListFilterProvider);
+    final filter = ref.watch(filterProvider);
 
     void select(ClientListArchiveFilter next) {
       if (filter == next) return;
-      ref.read(clientsListFilterProvider.notifier).state = next;
+      ref.read(filterProvider.notifier).state = next;
     }
 
     return Align(

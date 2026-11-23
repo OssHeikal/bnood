@@ -7,7 +7,7 @@ import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/clients/presentation/screens/clients_list_screen.dart';
+import 'package:bnood/features/projects/presentation/screens/projects_list_screen.dart';
 import 'package:bnood/features/items/data/item_api_record.dart';
 import 'package:bnood/features/items/data/items_providers.dart';
 import 'package:bnood/features/items/data/items_api.dart';
@@ -30,7 +30,7 @@ void main() {
 
   tearDown(AppSplashSession.resetForTest);
 
-  testWidgets('clients tab loads list for remote session', (tester) async {
+  testWidgets('projects tab loads list for remote session', (tester) async {
     AppSplashSession.completed = true;
     await tester.pumpWidget(
       ProviderScope(
@@ -49,11 +49,11 @@ void main() {
           const User(id: 'usr', phone: '+201012345678', name: 'Eng'),
         );
     await tester.pump();
-    container.read(goRouterProvider).go('/clients');
+    container.read(goRouterProvider).go('/projects');
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 200));
     expect(find.byType(ShellScaffold), findsOneWidget);
-    expect(find.byType(ClientsListScreen), findsOneWidget);
+    expect(find.byType(ProjectsListScreen), findsOneWidget);
   });
 
   testWidgets(

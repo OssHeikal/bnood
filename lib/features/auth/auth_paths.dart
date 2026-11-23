@@ -34,6 +34,10 @@ bool isRemoteClientsLocation(String location) {
   return location.startsWith('/clients/');
 }
 
+bool isRemoteProjectsLocation(String location) {
+  return location == '/projects';
+}
+
 bool isRemoteItemsLocation(String location) {
   return location == '/items';
 }

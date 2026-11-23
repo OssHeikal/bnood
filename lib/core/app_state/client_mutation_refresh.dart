@@ -30,6 +30,7 @@ void refreshAfterClientMutation(
 }) {
   ref.read(homeRepositoryProvider).invalidateDashboard();
   bumpPagingListRefresh(ref, PagingListIds.clients);
+  bumpPagingListRefresh(ref, PagingListIds.projects);
   ref.read(homeTotalsProvider.notifier).refreshSilently();
   ref.read(homeClientBalancesProvider.notifier).refreshSilently();
   ref.read(homeCraftsmenProvider.notifier).refreshSilently();

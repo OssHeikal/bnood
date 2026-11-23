@@ -110,7 +110,7 @@ class HomeScreen extends ConsumerWidget {
                   ref.read(clientsListFilterProvider.notifier).state =
                       ClientListArchiveFilter.active;
                 }
-                context.go('/clients');
+                context.push('/clients');
               },
             ),
             AppSize.spaceSM.gap,
@@ -137,7 +137,7 @@ class HomeScreen extends ConsumerWidget {
                       actions: [
                         AppFallbackAction(
                           label: l10n.seeAll,
-                          onPressed: () => context.go('/clients'),
+                          onPressed: () => context.push('/clients'),
                           role: AppFallbackActionRole.tertiary,
                         ),
                       ],

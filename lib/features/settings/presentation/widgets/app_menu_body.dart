@@ -41,7 +41,7 @@ class AppMenuBody extends ConsumerWidget {
         icon: Assets.icons.clientsOutline,
         chipBackground: brandChip,
         iconColor: colors.primary,
-        onTap: () => context.go('/clients'),
+        onTap: () => context.push('/clients'),
       ),
       SettingsNavRow(
         label: l10n.navItems,

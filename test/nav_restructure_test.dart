@@ -62,7 +62,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ShellNotificationsAction), findsOneWidget);
 
-    container.read(goRouterProvider).go('/clients');
+    container.read(goRouterProvider).go('/projects');
     await tester.pumpAndSettle();
     expect(find.byType(ShellNotificationsAction), findsNothing);
   });

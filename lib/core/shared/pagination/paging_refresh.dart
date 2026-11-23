@@ -23,6 +23,7 @@ void bumpPagingListRefreshFromContainer(
 /// Well-known list ids — extend as new screens adopt shared pagination.
 abstract final class PagingListIds {
   static const clients = 'clients';
+  static const projects = 'projects';
   static const items = 'items';
   static const providers = 'providers';
 

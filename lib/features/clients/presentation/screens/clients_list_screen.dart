@@ -15,6 +15,7 @@ import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
 import 'package:bnood/features/clients/presentation/sheets/client_create_sheet.dart';
 import '../../../../core/ui/widgets/directory_search_field.dart';
+import '../../../../app/shell_bottom_inset.dart';
 import '../../../../app/shell_tab_scaffold.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
@@ -138,6 +139,10 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
       if (previous != next) _refreshPaging();
     });
     bindPagingListRefreshEpoch(ref, PagingListIds.clients, _refreshPaging);
+    final canPop = Navigator.of(context).canPop();
+    final bottomClearance = canPop
+        ? ShellBottomInset.listScrollBottomPadding(context)
+        : 0.0;
     return HomeFoundationScope(
       child: Builder(
         builder: (context) {
@@ -146,6 +151,27 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
           final useGrid = !context.isMobileLayout;
           return ShellTabScaffold(
             backgroundColor: colors.canvas,
+            appBar: canPop
+                ? CustomAppBar(
+                    title: l10n.navClients,
+                    actions: [
+                      CustomAppBarAction(
+                        key: const Key('clients_app_bar_add'),
+                        tooltip: l10n.addClient,
+                        tone: CustomAppBarActionTone.tint,
+                        onPressed: mutationsEnabled
+                            ? () => _addClient(context, ref)
+                            : null,
+                        child: ShellNavIcon(
+                          asset: Assets.icons.clientsAddOutline,
+                          color: colors.primaryOnTint,
+                          size: AppSize.icon,
+                          semanticsLabel: l10n.addClient,
+                        ),
+                      ),
+                    ],
+                  )
+                : null,
             body: AppPagedView<HomeClientBalanceRow>(
               controller: _pagingController,
               layout: useGrid
@@ -155,9 +181,11 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
               refreshEdgeOffset:
                   MediaQuery.paddingOf(context).top + kToolbarHeight,
               sliverHeaders: [
-                CustomSliverAppBar(
-                  title: l10n.navClients,
-                  actions: [
+                if (!canPop)
+                  CustomSliverAppBar(
+                    title: l10n.navClients,
+                    automaticallyImplyLeading: false,
+                    actions: [
                     CustomAppBarAction(
                       key: const Key('clients_app_bar_add'),
                       tooltip: l10n.addClient,
@@ -173,7 +201,11 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                       ),
                     ),
                   ],
-                ),
+                  ),
+                if (canPop)
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: AppSize.spaceSM),
+                  ),
                 SliverToBoxAdapter(
                   child: Column(
                     key: _collapsingHeaderKey,
@@ -205,7 +237,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                           gutter,
                           AppSize.spaceSM,
                         ),
-                        child: const ClientsListFilterChips(),
+                        child: ClientsListFilterChips(),
                       ),
                     ],
                   ),
@@ -244,10 +276,13 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                 );
               },
               sliverFooters: [
-                const SliverPadding(
-                  padding: EdgeInsets.only(bottom: AppSize.spaceMD),
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                    bottom: AppSize.spaceMD + bottomClearance,
+                  ),
                 ),
-                _ScrollUnderClearance(reserve: _collapsingHeaderHeight),
+                if (!canPop)
+                  _ScrollUnderClearance(reserve: _collapsingHeaderHeight),
               ],
             ),
           );

@@ -28,6 +28,7 @@ import 'package:bnood/features/items/presentation/screens/items_screen.dart';
 import 'package:bnood/features/auth/reset_password_screen.dart';
 import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
 import 'package:bnood/features/clients/presentation/screens/clients_list_screen.dart';
+import 'package:bnood/features/projects/presentation/screens/projects_list_screen.dart';
 import 'package:bnood/features/clients/presentation/screens/client_craftsmen_list_screen.dart';
 import 'package:bnood/features/providers/presentation/screens/client_suppliers_list_screen.dart';
 import 'package:bnood/features/clients/presentation/screens/client_items_stats_screen.dart';
@@ -263,10 +264,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ),
             routes: [
               GoRoute(
-                path: '/clients',
+                path: '/projects',
                 builder: (_, _) => const AppShellTabGate(
                   tab: AppShellTabId.projects,
-                  child: ClientsListScreen(),
+                  child: ProjectsListScreen(),
                 ),
               ),
             ],
@@ -309,6 +310,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/items',
         builder: (_, _) => const ItemsScreen(),
+      ),
+      GoRoute(
+        path: '/clients',
+        builder: (_, _) => const ClientsListScreen(),
       ),
       GoRoute(
         path: '/clients/:clientId',
