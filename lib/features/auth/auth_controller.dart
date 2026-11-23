@@ -37,10 +37,11 @@ class AuthController extends Notifier<AuthState> {
         );
         return;
       }
-      final user = await _api.me();
+      final me = await _api.me();
       state = state.copyWith(
         bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: user,
+        user: me.user,
+        officeContext: me.office,
       );
     } on AuthApiException catch (e) {
       if (e.isUnauthorized || e.isSessionExpired) {
@@ -48,6 +49,7 @@ class AuthController extends Notifier<AuthState> {
         state = state.copyWith(
           bootstrapStatus: AuthBootstrapStatus.unauthenticated,
           clearUser: true,
+          clearOfficeContext: true,
         );
         return;
       }
@@ -138,9 +140,11 @@ class AuthController extends Notifier<AuthState> {
         code: code,
       );
       await _store.writeToken(session.token);
+      final me = await _api.me();
       state = state.copyWith(
         bootstrapStatus: AuthBootstrapStatus.authenticated,
-        user: session.user,
+        user: me.user,
+        officeContext: me.office,
         clearPendingRegistration: true,
       );
       return null;
@@ -158,9 +162,11 @@ class AuthController extends Notifier<AuthState> {
       switch (result) {
         case LoginResultSession(:final session):
           await _store.writeToken(session.token);
+          final me = await _api.me();
           state = state.copyWith(
             bootstrapStatus: AuthBootstrapStatus.authenticated,
-            user: session.user,
+            user: me.user,
+            officeContext: me.office,
           );
           return const LoginOutcomeAuthenticated();
         case LoginRegistrationChallenge(:final challenge):
@@ -299,6 +305,7 @@ class AuthController extends Notifier<AuthState> {
       state = state.copyWith(
         bootstrapStatus: AuthBootstrapStatus.unauthenticated,
         clearUser: true,
+        clearOfficeContext: true,
         clearPendingRegistration: true,
         clearPendingRecovery: true,
         clearResetToken: true,
@@ -340,6 +347,7 @@ class AuthController extends Notifier<AuthState> {
     state = state.copyWith(
       bootstrapStatus: AuthBootstrapStatus.unauthenticated,
       clearUser: true,
+      clearOfficeContext: true,
       clearPendingRegistration: true,
       clearPendingRecovery: true,
       clearResetToken: true,

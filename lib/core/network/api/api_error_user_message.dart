@@ -13,6 +13,7 @@ String apiErrorUserMessage(AppLocalizations l10n, Object error) {
 /// Shared API failure copy (validation uses server field text via [Accept-Language]).
 String apiAuthErrorUserMessage(AppLocalizations l10n, AuthApiException error) {
   if (error.isNetwork) return l10n.apiErrorNetwork;
+  if (error.isOfficeReadOnly) return error.displayMessage;
   if (error.isThrottled) return l10n.apiErrorThrottled;
   if (error.isSessionExpired ||
       (error.isUnauthorized &&

@@ -146,6 +146,42 @@ abstract class AppLocalizations {
   /// **'Menu'**
   String get menuTitle;
 
+  /// No description provided for @accountScopePersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal'**
+  String get accountScopePersonal;
+
+  /// No description provided for @accountSwitchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose account'**
+  String get accountSwitchTitle;
+
+  /// No description provided for @accountSwitchMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountSwitchMenu;
+
+  /// No description provided for @officeOpenDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Open dashboard'**
+  String get officeOpenDashboard;
+
+  /// No description provided for @officeReadOnlyBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'This office is read-only. You can view data and export statements, but cannot add or edit transactions.'**
+  String get officeReadOnlyBanner;
+
+  /// No description provided for @officeReadOnlyActionBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'This office is read-only — this action is not available.'**
+  String get officeReadOnlyActionBlocked;
+
   /// No description provided for @settingsTitle.
   ///
   /// In en, this message translates to:

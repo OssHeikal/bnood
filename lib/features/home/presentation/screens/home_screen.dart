@@ -12,6 +12,7 @@ import '../../../../core/domain/money/remote_money_units.dart';
 import '../../../../core/ui/layout/app_layout.dart';
 import '../../../../core/ui/layout/bnood_max_width.dart';
 import '../../../../core/ui/layout/bnood_two_column.dart';
+import '../../../../core/domain/formatting/cairo_local_time.dart';
 import '../../../../core/domain/formatting/see_all_label.dart';
 import 'package:bnood/features/home/data/home_section_counts.dart';
 import '../../../../core/ui/resources/gen/assets.gen.dart';
@@ -30,7 +31,9 @@ import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
 import 'package:bnood/features/home/presentation/widgets/home_loading_skeleton.dart';
 import 'package:bnood/features/home/presentation/widgets/home_section_header.dart';
 import 'package:bnood/features/home/presentation/widgets/home_stat_grid.dart';
-import 'package:bnood/features/home/presentation/widgets/home_identity_title.dart';
+import 'package:bnood/features/account/presentation/widgets/account_switcher_title.dart';
+import 'package:bnood/features/account/presentation/widgets/office_read_only_banner.dart';
+import '../../../../core/account/account_office_providers.dart';
 import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
 
@@ -50,6 +53,11 @@ class HomeScreen extends ConsumerWidget {
     final displayName = user?.name?.trim();
     final showIdentityHeader =
         remoteMoney && displayName != null && displayName.isNotEmpty;
+    final showAccountSwitcher = ref.watch(accountSwitcherVisibleProvider);
+    final cairoNow = cairoLocalNow();
+    final greeting = cairoIsMorning(cairoNow)
+        ? l10n.homeGreetingMorning
+        : l10n.homeGreetingEvening;
     final bottomInset = MediaQuery.paddingOf(context).bottom;
 
     return HomeFoundationScope(
@@ -318,10 +326,15 @@ class HomeScreen extends ConsumerWidget {
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
               automaticallyImplyLeading: false,
-              titleWidget: showIdentityHeader
-                  ? HomeIdentityTitle(displayName: displayName)
+              titleWidget: showIdentityHeader || showAccountSwitcher
+                  ? AccountSwitcherTitle(
+                      displayName: displayName ?? '',
+                      greeting: showIdentityHeader ? greeting : null,
+                    )
                   : null,
-              title: showIdentityHeader ? null : l10n.homeAppName,
+              title: showIdentityHeader || showAccountSwitcher
+                  ? null
+                  : l10n.homeAppName,
               actions: [
                 CustomAppBarAction(
                   tooltip: l10n.menuTitle,
@@ -348,6 +361,7 @@ class HomeScreen extends ConsumerWidget {
                     bottomInset + AppSize.spaceMD,
                   ),
                   children: [
+                    const OfficeReadOnlyBanner(),
                     if (context.isMobileLayout) ...[
                       ...summaryChildren,
                       AppSize.spaceXL.gap,

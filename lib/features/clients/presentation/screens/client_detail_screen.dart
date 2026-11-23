@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/account/account_office_providers.dart';
 import '../../../../core/services/config/extensions/num_extensions.dart';
 import '../../../../core/domain/money/remote_money_units.dart';
 import '../../../../core/services/config/theme/app_colors.dart';
@@ -67,7 +68,9 @@ class ClientDetailScreen extends ConsumerWidget {
           final colors = context.colors;
           final client = snapshot?.client;
           final isArchived = client?.archivedAt != null;
-          final mutationsEnabled = client != null && !isArchived;
+          final accountWritable = ref.watch(accountOfficeMutationsEnabledProvider);
+          final mutationsEnabled =
+              client != null && !isArchived && accountWritable;
           final phone = client?.phone?.trim();
           final hasPhone = phone != null && phone.isNotEmpty;
           return Scaffold(

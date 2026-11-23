@@ -22,6 +22,9 @@ class AuthApiException implements Exception {
 
   bool get isSubscriptionFinancialReadOnly =>
       statusCode == 403 && code == 'subscription_financial_read_only';
+
+  bool get isOfficeReadOnly =>
+      statusCode == 403 && code == 'office_read_only';
   bool get isChallengeInvalid => code == 'challenge_invalid';
   bool get isThrottled => statusCode == 429 || code == 'throttled';
   bool get isUnauthorized => statusCode == 401;

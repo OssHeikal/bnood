@@ -33,6 +33,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuTitle => 'القائمة';
 
   @override
+  String get accountScopePersonal => 'شخصي';
+
+  @override
+  String get accountSwitchTitle => 'اختر الحساب';
+
+  @override
+  String get accountSwitchMenu => 'الحساب';
+
+  @override
+  String get officeOpenDashboard => 'افتح الداشبورد';
+
+  @override
+  String get officeReadOnlyBanner =>
+      'هذا المكتب للعرض فقط. يمكنك الاطلاع على البيانات وتصدير كشف الحساب، لكن لا يمكن إضافة أو تعديل الحركات.';
+
+  @override
+  String get officeReadOnlyActionBlocked =>
+      'هذا المكتب للعرض فقط — لا يمكن تنفيذ هذا الإجراء.';
+
+  @override
   String get settingsTitle => 'الإعدادات';
 
   @override

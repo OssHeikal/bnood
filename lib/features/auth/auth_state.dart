@@ -1,3 +1,4 @@
+import '../../core/account/auth_office_payload.dart';
 import 'package:bnood/features/auth/models/user.dart';
 
 enum AuthBootstrapStatus {
@@ -36,6 +37,7 @@ class AuthState {
   const AuthState({
     this.bootstrapStatus = AuthBootstrapStatus.idle,
     this.user,
+    this.officeContext,
     this.pendingRegistration,
     this.pendingRecovery,
     this.resetToken,
@@ -45,6 +47,7 @@ class AuthState {
 
   final AuthBootstrapStatus bootstrapStatus;
   final User? user;
+  final AuthOfficePayload? officeContext;
   final PendingRegistration? pendingRegistration;
   final PendingRecovery? pendingRecovery;
   final String? resetToken;
@@ -62,6 +65,8 @@ class AuthState {
     AuthBootstrapStatus? bootstrapStatus,
     User? user,
     bool clearUser = false,
+    AuthOfficePayload? officeContext,
+    bool clearOfficeContext = false,
     PendingRegistration? pendingRegistration,
     bool clearPendingRegistration = false,
     PendingRecovery? pendingRecovery,
@@ -75,6 +80,9 @@ class AuthState {
     return AuthState(
       bootstrapStatus: bootstrapStatus ?? this.bootstrapStatus,
       user: clearUser ? null : (user ?? this.user),
+      officeContext: clearOfficeContext || clearUser
+          ? null
+          : (officeContext ?? this.officeContext),
       pendingRegistration: clearPendingRegistration
           ? null
           : (pendingRegistration ?? this.pendingRegistration),

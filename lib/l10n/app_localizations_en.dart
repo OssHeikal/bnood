@@ -33,6 +33,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuTitle => 'Menu';
 
   @override
+  String get accountScopePersonal => 'Personal';
+
+  @override
+  String get accountSwitchTitle => 'Choose account';
+
+  @override
+  String get accountSwitchMenu => 'Account';
+
+  @override
+  String get officeOpenDashboard => 'Open dashboard';
+
+  @override
+  String get officeReadOnlyBanner =>
+      'This office is read-only. You can view data and export statements, but cannot add or edit transactions.';
+
+  @override
+  String get officeReadOnlyActionBlocked =>
+      'This office is read-only — this action is not available.';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override

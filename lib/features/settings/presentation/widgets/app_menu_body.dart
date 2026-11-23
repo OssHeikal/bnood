@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/account/account_office_providers.dart';
 import '../../../../core/services/config/extensions/num_extensions.dart';
+import '../../../../core/utils/safe_external_url.dart';
+import 'package:bnood/features/account/presentation/account_switcher_actions.dart';
 import '../../../../core/services/config/theme/app_colors.dart';
 import '../../../../core/services/config/theme/app_size.dart';
 import 'package:bnood/features/content/data/content_page_record.dart';
@@ -27,6 +30,9 @@ class AppMenuBody extends ConsumerWidget {
     final isAuthenticated = ref.watch(authControllerProvider).isAuthenticated;
     final showSubscription =
         isAuthenticated && ref.watch(subscriptionSurfacesEnabledProvider);
+    final showAccountSwitcher =
+        isAuthenticated && ref.watch(accountSwitcherVisibleProvider);
+    final dashboardLaunch = ref.watch(officeDashboardLaunchProvider);
     final brandChip = colors.primary.withValues(alpha: 0.12);
     final subscriptionChip = SubscriptionColors.violet.withValues(alpha: 0.14);
 
@@ -59,6 +65,22 @@ class AppMenuBody extends ConsumerWidget {
         iconColor: colors.primary,
         onTap: () => context.push(AuthPaths.preferences),
       ),
+      if (showAccountSwitcher)
+        SettingsNavRow(
+          label: l10n.accountSwitchMenu,
+          icon: Assets.icons.profileCircleOutline,
+          chipBackground: brandChip,
+          iconColor: colors.primary,
+          onTap: () => showAccountSwitcherSheet(context, ref),
+        ),
+      if (dashboardLaunch.show && dashboardLaunch.url != null)
+        SettingsNavRow(
+          label: l10n.officeOpenDashboard,
+          icon: Assets.icons.dashboardOutline,
+          chipBackground: brandChip,
+          iconColor: colors.primary,
+          onTap: () => launchAllowedUrl(dashboardLaunch.url!),
+        ),
       if (isAuthenticated)
         SettingsNavRow(
           label: l10n.notificationSettingsTitle,

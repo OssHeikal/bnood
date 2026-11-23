@@ -7,6 +7,7 @@ import 'app_dio.dart';
 import 'auth_api_exception.dart';
 import 'auth_interceptor.dart';
 import 'auth_login_result.dart';
+import 'auth_me_payload.dart';
 import 'package:bnood/features/auth/models/user.dart';
 
 class AuthApi {
@@ -134,17 +135,13 @@ class AuthApi {
     });
   }
 
-  Future<User> me() {
+  Future<AuthMePayload> me() {
     return _guard(() async {
       final response = await _dio.get<Map<String, dynamic>>(
         '$_authPrefix/me',
         options: Options(extra: _authenticatedExtra),
       );
-      return ApiResponseParser.expectData(
-        response,
-        (data) =>
-            User.fromJson((data?['user'] as Map<String, dynamic>?) ?? data!),
-      );
+      return ApiResponseParser.expectData(response, AuthMePayload.fromData);
     });
   }
 

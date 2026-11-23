@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/account/account_office_providers.dart';
 import '../../../../app/shell_bottom_inset.dart';
 import '../../../../app/shell_tab_scaffold.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
@@ -60,6 +61,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final catalog = ref.watch(itemsCatalogProvider);
+    final mutationsEnabled = ref.watch(accountOfficeMutationsEnabledProvider);
 
     bindPagingListRefreshEpoch(ref, PagingListIds.items, _refreshCatalog);
 
@@ -81,7 +83,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                   key: const Key('items_app_bar_add'),
                   tooltip: l10n.addItem,
                   tone: CustomAppBarActionTone.tint,
-                  onPressed: () => _addItem(context),
+                  onPressed: mutationsEnabled ? () => _addItem(context) : null,
                   child: ShellNavIcon(
                     asset: Assets.icons.itemsAddOutline,
                     color: colors.primaryOnTint,
