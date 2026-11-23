@@ -28,7 +28,9 @@ import 'package:bnood/features/clients/presentation/widgets/client_detail_stat_g
 import 'package:bnood/features/clients/presentation/models/client_identity_snapshot.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_detail_loading_skeleton.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/home/presentation/widgets/home_loading_skeleton.dart';
 import 'package:bnood/features/home/presentation/widgets/home_section_header.dart';
+import '../../../../core/ui/widgets/skeleton/skeleton_text.dart';
 import '../../../../core/domain/formatting/see_all_label.dart';
 
 class ClientDetailScreen extends ConsumerWidget {
@@ -142,8 +144,13 @@ class ClientDetailScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const ClientDetailStatSkeleton(),
-                        AppSize.spaceLG.gap,
-                        const Center(child: CircularProgressIndicator()),
+                        AppSize.spaceXL.gap,
+                        const SkeletonText(
+                          role: SkeletonTextRole.title,
+                          width: 96,
+                        ),
+                        AppSize.spaceSM.gap,
+                        const HomePersonListSkeleton(count: 2),
                       ],
                     ),
                     error: (e, _) => AppCard(
