@@ -1,6 +1,11 @@
 import 'package:bnood/core/account/account_context_providers.dart';
+import 'package:bnood/core/account/auth_office_payload.dart';
+import 'package:bnood/core/account/office_membership.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/core/data/prefs/app_settings_store.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
+import 'package:bnood/features/auth/auth_state.dart';
+import 'package:bnood/features/auth/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +18,7 @@ void main() {
 
   ProviderContainer newTestContainer({
     Map<String, Object> initialPrefs = const {},
+    AuthOfficePayload? officeContext,
   }) {
     SharedPreferences.setMockInitialValues(initialPrefs);
     return ProviderContainer(
@@ -24,6 +30,10 @@ void main() {
             locale: const Locale('ar'),
           ),
         ),
+        if (officeContext != null)
+          authControllerProvider.overrideWith(
+            () => _AuthWithOffice(officeContext),
+          ),
       ],
     );
   }
@@ -82,6 +92,34 @@ void main() {
     expect(resetCount, 2);
   });
 
+  test('owner with stored personal migrates to owned office', () async {
+    const ownedId = sampleOfficeId;
+    final container = newTestContainer(
+      initialPrefs: {'bnood.account.selection': 'personal'},
+      officeContext: const AuthOfficePayload(
+        offices: [
+          OfficeMembership(
+            id: ownedId,
+            name: 'Owned',
+            readOnly: true,
+            isOwner: true,
+          ),
+        ],
+      ),
+    );
+    addTearDown(container.dispose);
+    container.read(accountContextLifecycleProvider);
+    await pumpEventQueue();
+
+    final ctx = container.read(accountContextProvider);
+    expect(ctx.isPersonal, isFalse);
+    expect(ctx.officeId, ownedId);
+    expect(ApiOfficeHeader.headerValue(), ownedId);
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('bnood.account.selection'), ownedId);
+  });
+
   test('selectPersonal clears office header', () async {
     final container = newTestContainer();
     addTearDown(container.dispose);
@@ -98,4 +136,19 @@ void main() {
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getString('bnood.account.selection'), 'personal');
   });
+}
+
+class _AuthWithOffice extends AuthController {
+  _AuthWithOffice(this.officeContext);
+
+  final AuthOfficePayload officeContext;
+
+  @override
+  AuthState build() {
+    return AuthState(
+      bootstrapStatus: AuthBootstrapStatus.authenticated,
+      user: const User(id: 'u-owner', phone: '01000000000', name: 'Owner'),
+      officeContext: officeContext,
+    );
+  }
 }

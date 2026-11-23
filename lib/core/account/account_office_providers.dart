@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_context_providers.dart';
 import 'account_office_mutations.dart';
+import 'account_office_policy.dart';
 import 'office_membership.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 
@@ -14,8 +15,22 @@ final officeMembershipsProvider = Provider<List<OfficeMembership>>((ref) {
       const [];
 });
 
+final userLocksToOwnedOfficeProvider = Provider<bool>((ref) {
+  return userLocksToOwnedOffice(ref.watch(officeMembershipsProvider));
+});
+
+/// Office name in the home header when the user is locked to their owned office.
+final accountOwnedOfficeHeaderVisibleProvider = Provider<bool>((ref) {
+  if (!ref.watch(userLocksToOwnedOfficeProvider)) return false;
+  final ctx = ref.watch(accountContextProvider);
+  return !ctx.isPersonal;
+});
+
 final accountSwitcherVisibleProvider = Provider<bool>((ref) {
-  return ref.watch(officeMembershipsProvider).isNotEmpty;
+  final offices = ref.watch(officeMembershipsProvider);
+  if (offices.isEmpty) return false;
+  if (ref.watch(userLocksToOwnedOfficeProvider)) return false;
+  return true;
 });
 
 final selectedOfficeMembershipProvider = Provider<OfficeMembership?>((ref) {

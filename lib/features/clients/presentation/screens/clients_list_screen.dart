@@ -24,6 +24,7 @@ import 'package:bnood/features/subscription/presentation/actions/subscription_ga
 import 'package:bnood/features/subscription/presentation/actions/subscription_limit_handler.dart';
 import 'package:bnood/features/clients/presentation/widgets/clients_list_filter_chips.dart';
 import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
+import '../../../../core/account/account_office_providers.dart';
 import '../../../../core/app_state/client_mutation_refresh.dart';
 
 class ClientsListScreen extends ConsumerStatefulWidget {
@@ -81,7 +82,11 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
     setState(() => _collapsingHeaderHeight = height);
   }
 
-  Widget _emptyFallback(BuildContext context, ClientListArchiveFilter filter) {
+  Widget _emptyFallback(
+    BuildContext context,
+    ClientListArchiveFilter filter, {
+    required bool mutationsEnabled,
+  }) {
     final l10n = AppLocalizations.of(context);
     final empty = switch (filter) {
       ClientListArchiveFilter.archived => (
@@ -92,12 +97,12 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
       ClientListArchiveFilter.all => (
         title: l10n.clientsNoClientsTitle,
         description: l10n.homeNoActiveClientsDescription,
-        showAdd: true,
+        showAdd: mutationsEnabled,
       ),
       ClientListArchiveFilter.active => (
         title: l10n.homeNoActiveClientsTitle,
         description: l10n.homeNoActiveClientsDescription,
-        showAdd: true,
+        showAdd: mutationsEnabled,
       ),
     };
     return AppFallback.section(
@@ -108,7 +113,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
         if (empty.showAdd)
           AppFallbackAction(
             label: l10n.addClient,
-            onPressed: () => _addClient(context, ref),
+            onPressed: mutationsEnabled ? () => _addClient(context, ref) : null,
             role: AppFallbackActionRole.primary,
           ),
       ],
@@ -120,6 +125,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
     final filter = ref.watch(clientsListFilterProvider);
+    final mutationsEnabled = ref.watch(accountOfficeMutationsEnabledProvider);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _cacheCollapsingHeaderHeight(),
     );
@@ -155,7 +161,9 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                       key: const Key('clients_app_bar_add'),
                       tooltip: l10n.addClient,
                       tone: CustomAppBarActionTone.tint,
-                      onPressed: () => _addClient(context, ref),
+                      onPressed: mutationsEnabled
+                          ? () => _addClient(context, ref)
+                          : null,
                       child: ShellNavIcon(
                         asset: Assets.icons.clientsAddOutline,
                         color: colors.primaryOnTint,
@@ -203,7 +211,11 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                 ),
               ],
               builders: AppPagedBuilders(
-                empty: (ctx) => _emptyFallback(ctx, filter),
+                empty: (ctx) => _emptyFallback(
+                  ctx,
+                  filter,
+                  mutationsEnabled: mutationsEnabled,
+                ),
               ),
               itemPadding: (index) => useGrid
                   ? EdgeInsets.zero

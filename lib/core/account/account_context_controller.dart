@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/prefs/bnood_prefs_access.dart';
 import 'account_context_store.dart';
 import 'account_context_state.dart';
+import 'account_office_policy.dart';
 import 'account_scope.dart';
 import 'api_office_header.dart';
 import 'account_office_mutations.dart';
@@ -26,15 +27,33 @@ class AccountContextController extends Notifier<AccountContextState> {
       }
     });
 
-    scheduleMicrotask(_restoreFromDisk);
+    scheduleMicrotask(_bootstrapScope);
     ApiOfficeHeader.syncOfficeId(null);
     return const AccountContextState.personal();
   }
 
-  Future<void> selectPersonal() => _setScope(const AccountScope.personal());
+  Future<void> selectPersonal() async {
+    final offices =
+        ref.read(authControllerProvider).officeContext?.offices ?? const [];
+    if (userLocksToOwnedOffice(offices)) return;
+    await _setScope(const AccountScope.personal());
+  }
 
-  Future<void> selectOffice(String officeId) =>
-      _setScope(AccountScope.office(officeId));
+  Future<void> selectOffice(String officeId) async {
+    final offices =
+        ref.read(authControllerProvider).officeContext?.offices ?? const [];
+    final owned = primaryOwnedOffice(offices);
+    if (owned != null && officeId != owned.id) return;
+    await _setScope(AccountScope.office(officeId));
+  }
+
+  Future<void> _bootstrapScope() async {
+    await _restoreFromDisk();
+    final auth = ref.read(authControllerProvider);
+    if (auth.isAuthenticated) {
+      await _reconcileOffices(auth.officeContext?.offices ?? const []);
+    }
+  }
 
   Future<void> _restoreFromDisk() async {
     final prefs = await BnoodPrefsAccess.getInstance();
@@ -65,6 +84,14 @@ class AccountContextController extends Notifier<AccountContextState> {
   }
 
   Future<void> _reconcileOffices(List<OfficeMembership> offices) async {
+    final owned = primaryOwnedOffice(offices);
+    if (owned != null) {
+      if (state.scope != AccountScope.office(owned.id)) {
+        await _setScope(AccountScope.office(owned.id));
+      }
+      return;
+    }
+
     if (state.isPersonal) return;
     final id = state.officeId;
     if (id == null) return;

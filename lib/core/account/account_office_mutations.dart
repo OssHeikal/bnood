@@ -1,4 +1,5 @@
 import 'office_membership.dart';
+import 'office_permission_keys.dart';
 
 /// Whether create/edit ledger actions are allowed for the active account scope.
 bool accountOfficeMutationsEnabled({
@@ -7,7 +8,10 @@ bool accountOfficeMutationsEnabled({
 }) {
   if (isPersonal) return true;
   if (selectedOffice == null) return true;
-  return !selectedOffice.isReadOnly;
+  if (selectedOffice.isReadOnly) return false;
+  final keys = selectedOffice.permissionKeys;
+  if (keys == null) return true;
+  return officeRoleAllowsLedgerCreates(keys);
 }
 
 bool officeMembershipListContains(

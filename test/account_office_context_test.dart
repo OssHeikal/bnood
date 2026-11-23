@@ -19,6 +19,7 @@ void main() {
             'read_only': true,
             'status': 'active',
             'dashboard_url': 'https://office.bnood.test/o/1',
+            'role': {'is_owner': true, 'name_ar': 'مالك'},
           },
         ],
       },
@@ -27,6 +28,7 @@ void main() {
     expect(payload.office?.hasOffices, isTrue);
     expect(payload.office?.openDashboard, isTrue);
     expect(payload.office!.offices.single.isReadOnly, isTrue);
+    expect(payload.office!.offices.single.isOwner, isTrue);
     expect(payload.office!.offices.single.name, 'مكتب النور');
   });
 
@@ -80,5 +82,29 @@ void main() {
 
   test('AuthOfficePayload tolerates missing office block', () {
     expect(AuthOfficePayload.fromJson(null).offices, isEmpty);
+  });
+
+  test('accountOfficeMutationsEnabled view-only when permission_keys omit create', () {
+    const viewOnly = OfficeMembership(
+      id: 'o-view',
+      name: 'View',
+      readOnly: false,
+      permissionKeys: ['clients_view', 'web_access'],
+    );
+    expect(
+      accountOfficeMutationsEnabled(isPersonal: false, selectedOffice: viewOnly),
+      isFalse,
+    );
+
+    const manager = OfficeMembership(
+      id: 'o-mgr',
+      name: 'Mgr',
+      readOnly: false,
+      permissionKeys: ['clients_manage', 'web_access'],
+    );
+    expect(
+      accountOfficeMutationsEnabled(isPersonal: false, selectedOffice: manager),
+      isTrue,
+    );
   });
 }

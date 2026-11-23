@@ -12,12 +12,14 @@ Future<void> showAccountSwitcherSheet(BuildContext context, WidgetRef ref) async
   if (memberships.isEmpty) return;
 
   final ctx = ref.read(accountContextProvider);
+  final locksOwned = ref.read(userLocksToOwnedOfficeProvider);
   final choices = <SheetChoice<AccountScope>>[
-    SheetChoice(
-      value: const AccountScope.personal(),
-      label: l10n.accountScopePersonal,
-      leading: ctx.isPersonal ? const Icon(Icons.check, size: 20) : null,
-    ),
+    if (!locksOwned)
+      SheetChoice(
+        value: const AccountScope.personal(),
+        label: l10n.accountScopePersonal,
+        leading: ctx.isPersonal ? const Icon(Icons.check, size: 20) : null,
+      ),
     for (final office in memberships)
       SheetChoice(
         value: AccountScope.office(office.id),

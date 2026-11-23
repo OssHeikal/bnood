@@ -54,6 +54,8 @@ class HomeScreen extends ConsumerWidget {
     final showIdentityHeader =
         remoteMoney && displayName != null && displayName.isNotEmpty;
     final showAccountSwitcher = ref.watch(accountSwitcherVisibleProvider);
+    final showOwnedOfficeHeader =
+        ref.watch(accountOwnedOfficeHeaderVisibleProvider);
     final cairoNow = cairoLocalNow();
     final greeting = cairoIsMorning(cairoNow)
         ? l10n.homeGreetingMorning
@@ -326,13 +328,17 @@ class HomeScreen extends ConsumerWidget {
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
               automaticallyImplyLeading: false,
-              titleWidget: showIdentityHeader || showAccountSwitcher
+              titleWidget:
+                  showIdentityHeader || showAccountSwitcher || showOwnedOfficeHeader
                   ? AccountSwitcherTitle(
                       displayName: displayName ?? '',
                       greeting: showIdentityHeader ? greeting : null,
                     )
                   : null,
-              title: showIdentityHeader || showAccountSwitcher
+              title:
+                  showIdentityHeader ||
+                      showAccountSwitcher ||
+                      showOwnedOfficeHeader
                   ? null
                   : l10n.homeAppName,
               actions: [
