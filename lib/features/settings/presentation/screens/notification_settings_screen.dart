@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/services/config/theme/app_size.dart';
 import '../../../../core/ui/layout/bnood_list_canvas.dart';
+import '../../../../core/network/api/api_error_user_message.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
 import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
@@ -30,8 +31,8 @@ class NotificationSettingsScreen extends ConsumerWidget {
               loadingPlaceholder: const SizedBox(height: 120),
               error: (e, _) => AppFallback.section(
                 icon: Icons.notifications_none_outlined,
-                title: l10n.homeLoadErrorTitle,
-                description: e.toString(),
+                title: l10n.settingsLoadErrorTitle,
+                description: screenErrorDescription(l10n, e),
                 actions: [
                   AppFallbackAction(
                     label: l10n.retry,

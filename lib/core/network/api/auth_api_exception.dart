@@ -29,7 +29,7 @@ class AuthApiException implements Exception {
   bool get isThrottled => statusCode == 429 || code == 'throttled';
   bool get isUnauthorized => statusCode == 401;
 
-  bool get isNetwork => statusCode == 0 || code == 'network';
+  bool get isNetwork => code == 'network';
 
   bool get isSessionExpired =>
       isUnauthorized && !isInvalidCredentials && code != 'invalid_credentials';

@@ -54,6 +54,46 @@ void main() {
       expect(record.project.engineerBasisPoints, 750);
     });
 
+    test('parses live list row with null project and integer balances', () {
+      final record = ClientApiRecord.fromDataJson({
+        'id': '01m81qm4pyc2k7ne69yet9r02h',
+        'name': 'د/ محمد محمود',
+        'phone': '+201002003000',
+        'archived_at': null,
+        'created_at': '2026-11-22T13:37:41+00:00',
+        'updated_at': '2026-11-22T13:37:41+00:00',
+        'project': null,
+        'projects': <dynamic>[],
+        'balances': {'received': 0, 'spent': 0, 'remaining': 0},
+      });
+      expect(record.client.name, 'د/ محمد محمود');
+      expect(record.project.id, '01m81qm4pyc2k7ne69yet9r02h:auto');
+      expect(record.project.engineerBasisPoints, isNull);
+      expect(record.balances?.remainingPiastres, 0);
+    });
+
+    test('falls back to projects list when project is null', () {
+      final record = ClientApiRecord.fromDataJson({
+        'id': 'c1',
+        'name': 'Tower',
+        'phone': null,
+        'archived_at': null,
+        'created_at': '2026-11-09T10:00:00Z',
+        'updated_at': '2026-11-09T10:00:00Z',
+        'project': null,
+        'projects': [
+          {
+            'id': 'p-from-list',
+            'name': 'Tower',
+            'status': 'active',
+            'engineer_basis_points': 250,
+          },
+        ],
+      });
+      expect(record.project.id, 'p-from-list');
+      expect(record.project.engineerBasisPoints, 250);
+    });
+
     test('null engineer_basis_points when omitted from project', () {
       final record = ClientApiRecord.fromDataJson({
         'id': '01JCLIENT',
@@ -69,6 +109,21 @@ void main() {
   });
 
   group('ClientsApi', () {
+    test('list parses success envelope with null project rows', () async {
+      final api = _clientsApi(
+        (_) async => jsonResponse('''
+{"success":true,"message":"ok","data":[
+  {"id":"01m81qm4pyc2k7ne69yet9r02h","name":"د/ محمد محمود","phone":"+201002003000",
+   "archived_at":null,"created_at":"2026-11-22T13:37:41+00:00","updated_at":"2026-11-22T13:37:41+00:00",
+   "project":null,"projects":[],"balances":{"received":0,"spent":0,"remaining":0}}
+],"meta":{"page":1,"per_page":50,"total":1}}'''),
+      );
+      final page = await api.listClients(status: ClientListArchiveFilter.active);
+      expect(page.items, hasLength(1));
+      expect(page.items.single.client.id, '01m81qm4pyc2k7ne69yet9r02h');
+      api.close();
+    });
+
     test('list sends status and bearer', () async {
       late RequestOptions captured;
       final api = _clientsApi((options) async {

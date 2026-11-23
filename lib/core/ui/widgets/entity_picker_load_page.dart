@@ -5,6 +5,7 @@ import '../../services/config/extensions/num_extensions.dart';
 import '../../services/config/theme/app_colors.dart';
 import '../../services/config/theme/app_size.dart';
 import '../layout/app_form_route_canvas.dart';
+import '../../network/api/api_error_user_message.dart';
 import 'app_fallback.dart';
 import 'custom_app_bar.dart';
 import 'entity_picker_page.dart';
@@ -141,8 +142,8 @@ class _EntityPickerLoadPageState extends State<EntityPickerLoadPage> {
         padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
         child: AppFallback.section(
           icon: Icons.error_outline,
-          title: l10n.homeLoadErrorTitle,
-          description: _error.toString(),
+          title: widget.title,
+          description: screenErrorDescription(l10n, _error),
           actions: [
             AppFallbackAction(
               label: l10n.retry,

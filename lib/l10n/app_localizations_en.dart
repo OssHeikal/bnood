@@ -143,6 +143,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeLoadErrorTitle => 'Could not load home';
 
   @override
+  String get clientsLoadErrorTitle => 'Couldn\'t load clients';
+
+  @override
+  String get clientDetailLoadErrorTitle => 'Couldn\'t load client';
+
+  @override
+  String get providersLoadErrorTitle => 'Couldn\'t load directory';
+
+  @override
+  String get settingsLoadErrorTitle => 'Couldn\'t load settings';
+
+  @override
   String get clientMovementsLoadErrorTitle => 'Could not load movements';
 
   @override

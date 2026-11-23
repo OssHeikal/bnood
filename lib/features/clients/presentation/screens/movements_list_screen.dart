@@ -9,6 +9,7 @@ import 'package:bnood/features/clients/data/clients_providers.dart';
 import '../../../../core/services/config/theme/app_size.dart';
 import '../../../../core/ui/layout/app_layout.dart';
 import '../../../../core/shared/pagination/pagination.dart';
+import '../../../../core/network/api/api_error_user_message.dart';
 import '../../../../core/ui/widgets/app_card.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
@@ -222,8 +223,7 @@ class _RemoteMovementsListState extends ConsumerState<_RemoteMovementsList> {
         child: AppFallback.section(
           icon: Icons.error_outline,
           title: l10n.clientMovementsLoadErrorTitle,
-          description:
-              state.error?.toString() ?? l10n.clientMovementsLoadErrorTitle,
+          description: screenErrorDescription(l10n, state.error),
           actions: [
             AppFallbackAction(
               label: l10n.retry,

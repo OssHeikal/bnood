@@ -169,8 +169,8 @@ class ClientDetailScreen extends ConsumerWidget {
                     error: (e, _) => AppCard(
                       child: AppFallback.section(
                         icon: Icons.error_outline,
-                        title: l10n.homeLoadErrorTitle,
-                        description: e.toString(),
+                        title: l10n.clientDetailLoadErrorTitle,
+                        description: screenErrorDescription(l10n, e),
                         actions: [
                           AppFallbackAction(
                             label: l10n.retry,

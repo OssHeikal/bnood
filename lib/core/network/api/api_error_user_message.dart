@@ -2,6 +2,14 @@ import 'package:bnood/l10n/app_localizations.dart';
 
 import 'auth_api_exception.dart';
 
+/// User-facing copy for list/detail error cards (never raw [Object.toString]).
+String screenErrorDescription(AppLocalizations l10n, Object? error) {
+  if (error is AuthApiException) {
+    return apiAuthErrorUserMessage(l10n, error);
+  }
+  return l10n.apiGenericFailure;
+}
+
 /// User-facing toast copy for API and unexpected failures (never raw [Object.toString]).
 String apiErrorUserMessage(AppLocalizations l10n, Object error) {
   if (error is AuthApiException) {

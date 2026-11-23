@@ -444,8 +444,8 @@ class _CraftsmanAssignmentsSheetState
         padding: const EdgeInsets.symmetric(horizontal: AppSize.screenPadding),
         child: AppFallback.section(
           icon: Icons.error_outline,
-          title: l10n.homeLoadErrorTitle,
-          description: _error.toString(),
+          title: l10n.clientDetailLoadErrorTitle,
+          description: screenErrorDescription(l10n, _error),
           actions: [
             AppFallbackAction(
               label: l10n.retry,

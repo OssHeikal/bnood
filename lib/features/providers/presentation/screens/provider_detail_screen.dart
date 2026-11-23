@@ -12,6 +12,7 @@ import 'package:bnood/features/providers/data/app_provider_record.dart';
 import '../../../../core/ui/widgets/app_amount.dart';
 import '../../../../core/ui/resources/gen/assets.gen.dart';
 import '../../../../core/ui/widgets/app_card.dart';
+import '../../../../core/network/api/api_error_user_message.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
 import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
@@ -150,8 +151,8 @@ class _ProviderDetailScreenState extends ConsumerState<ProviderDetailScreen> {
                         return AppCard(
                           child: AppFallback.section(
                             icon: Icons.error_outline,
-                            title: l10n.homeLoadErrorTitle,
-                            description: error.toString(),
+                            title: l10n.providersLoadErrorTitle,
+                            description: screenErrorDescription(l10n, error),
                             actions: [
                               AppFallbackAction(
                                 label: l10n.retry,

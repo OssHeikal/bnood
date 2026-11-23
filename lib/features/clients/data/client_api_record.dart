@@ -35,11 +35,6 @@ class ClientApiRecord {
       updatedAt: updatedAt,
     );
 
-    final projectJson = json['project'] as Map<String, dynamic>?;
-    if (projectJson == null) {
-      throw const FormatException('Client response missing project');
-    }
-
     int? readOptionalInt(Object? raw) {
       if (raw == null) return null;
       if (raw is int) return raw;
@@ -47,13 +42,15 @@ class ClientApiRecord {
       return null;
     }
 
+    final projectJson = _resolveProjectJson(json, id: id, name: client.name);
+
     final project = Project(
       id: projectJson['id'] as String,
       workspaceId: remoteWorkspaceMarker,
       clientId: id,
       name: projectJson['name'] as String,
       unitAddress: null,
-      status: projectJson['status'] as String,
+      status: projectJson['status'] as String? ?? 'active',
       engineerBasisPoints: readOptionalInt(
         projectJson['engineer_basis_points'],
       ),
@@ -95,12 +92,42 @@ class ClientApiBalances {
     if (json is! Map<String, dynamic>) {
       throw const FormatException('Unexpected balances shape');
     }
+    int? readBalance(Object? raw) {
+      if (raw == null) return null;
+      if (raw is int) return raw;
+      if (raw is num) return raw.round();
+      return null;
+    }
+
     return ClientApiBalances(
-      receivedPiastres: json['received'] as int?,
-      spentPiastres: json['spent'] as int?,
-      remainingPiastres: json['remaining'] as int?,
+      receivedPiastres: readBalance(json['received']),
+      spentPiastres: readBalance(json['spent']),
+      remainingPiastres: readBalance(json['remaining']),
     );
   }
+}
+
+Map<String, dynamic> _resolveProjectJson(
+  Map<String, dynamic> json, {
+  required String id,
+  required String name,
+}) {
+  final direct = json['project'];
+  if (direct is Map<String, dynamic>) return direct;
+
+  final projects = json['projects'];
+  if (projects is List) {
+    for (final entry in projects) {
+      if (entry is Map<String, dynamic>) return entry;
+    }
+  }
+
+  return {
+    'id': '$id:auto',
+    'name': name,
+    'status': 'active',
+    'engineer_basis_points': null,
+  };
 }
 
 class ClientsListPage {

@@ -15,6 +15,7 @@ import '../../../../core/ui/layout/bnood_two_column.dart';
 import '../../../../core/domain/formatting/see_all_label.dart';
 import 'package:bnood/features/home/data/home_section_counts.dart';
 import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/network/api/api_error_user_message.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../app/shell_tab_scaffold.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
@@ -81,7 +82,7 @@ class HomeScreen extends ConsumerWidget {
                 isError: true,
                 icon: Icons.error_outline,
                 title: l10n.homeLoadErrorTitle,
-                description: e.toString(),
+                description: screenErrorDescription(l10n, e),
                 actionLabel: l10n.retry,
                 onAction: () =>
                     ref.read(homeTotalsProvider.notifier).refreshSilently(),
@@ -119,8 +120,8 @@ class HomeScreen extends ConsumerWidget {
               error: (e, _) => AppFallback(
                 isError: true,
                 icon: Icons.error_outline,
-                title: l10n.homeLoadErrorTitle,
-                description: e.toString(),
+                title: l10n.clientsLoadErrorTitle,
+                description: screenErrorDescription(l10n, e),
                 actionLabel: l10n.retry,
                 onAction: () => ref
                     .read(homeClientBalancesProvider.notifier)
@@ -191,7 +192,7 @@ class HomeScreen extends ConsumerWidget {
                 isError: true,
                 icon: Icons.error_outline,
                 title: l10n.homeLoadErrorTitle,
-                description: e.toString(),
+                description: screenErrorDescription(l10n, e),
                 actionLabel: l10n.retry,
                 onAction: () =>
                     ref.read(homeCraftsmenProvider.notifier).refreshSilently(),
@@ -271,7 +272,7 @@ class HomeScreen extends ConsumerWidget {
                 isError: true,
                 icon: Icons.error_outline,
                 title: l10n.homeLoadErrorTitle,
-                description: e.toString(),
+                description: screenErrorDescription(l10n, e),
                 actionLabel: l10n.retry,
                 onAction: () =>
                     ref.read(homeSuppliersProvider.notifier).refreshSilently(),

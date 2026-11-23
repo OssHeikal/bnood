@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/config/extensions/num_extensions.dart';
 import '../../../../core/services/config/theme/app_colors.dart';
 import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/network/api/api_error_user_message.dart';
 import '../../../../core/ui/widgets/app_card.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
@@ -73,8 +74,8 @@ class ClientCraftsmenListScreen extends ConsumerWidget {
                   error: (e, _) => AppCard(
                     child: AppFallback.section(
                       icon: Icons.error_outline,
-                      title: l10n.homeLoadErrorTitle,
-                      description: e.toString(),
+                      title: l10n.clientDetailLoadErrorTitle,
+                      description: screenErrorDescription(l10n, e),
                       actions: [
                         AppFallbackAction(
                           label: l10n.retry,

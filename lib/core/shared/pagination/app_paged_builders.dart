@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../network/api/api_error_user_message.dart';
 import '../../services/config/theme/app_size.dart';
 import '../../ui/widgets/app_card.dart';
 import '../../ui/widgets/app_fallback.dart';
@@ -21,6 +22,7 @@ class AppPagedBuilders<T> {
     this.contentPadding = const EdgeInsets.symmetric(
       horizontal: AppSize.screenPadding,
     ),
+    this.errorTitle,
   });
 
   final Widget Function(BuildContext context, PagingState<int, T> state)?
@@ -43,6 +45,7 @@ class AppPagedBuilders<T> {
   final int invisibleItemsThreshold;
   final int firstPageSkeletonCount;
   final EdgeInsets contentPadding;
+  final String? errorTitle;
 
   PagedChildBuilderDelegate<T> toDelegate({
     required BuildContext context,
@@ -52,6 +55,7 @@ class AppPagedBuilders<T> {
     required PagingState<int, T> state,
   }) {
     final l10n = AppLocalizations.of(context);
+    final loadErrorTitle = errorTitle ?? l10n.homeLoadErrorTitle;
 
     Widget padded(Widget child, {bool topSpacing = true}) {
       return Padding(
@@ -95,8 +99,8 @@ class AppPagedBuilders<T> {
           AppCard(
             child: AppFallback.section(
               icon: Icons.error_outline,
-              title: l10n.homeLoadErrorTitle,
-              description: state.error?.toString() ?? l10n.homeLoadErrorTitle,
+              title: loadErrorTitle,
+              description: screenErrorDescription(l10n, state.error),
               actions: [
                 AppFallbackAction(
                   label: l10n.retry,
@@ -119,8 +123,8 @@ class AppPagedBuilders<T> {
           AppCard(
             child: AppFallback.section(
               icon: Icons.error_outline,
-              title: l10n.homeLoadErrorTitle,
-              description: state.error?.toString() ?? l10n.homeLoadErrorTitle,
+              title: loadErrorTitle,
+              description: screenErrorDescription(l10n, state.error),
               actions: [
                 AppFallbackAction(
                   label: l10n.retry,

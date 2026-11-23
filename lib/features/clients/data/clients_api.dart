@@ -43,8 +43,8 @@ class ClientsApi {
         throw e.error as AuthApiException;
       }
       throw ApiResponseParser.fromDio(e);
-    } catch (e) {
-      throw ApiResponseParser.transport(e);
+    } catch (e, stackTrace) {
+      throw ApiResponseParser.fromUnexpected(e, stackTrace);
     }
   }
 

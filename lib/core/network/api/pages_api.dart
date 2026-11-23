@@ -36,9 +36,9 @@ class PagesApi {
       if (e.error is AuthApiException) {
         throw e.error as AuthApiException;
       }
-      throw ApiResponseParser.transport(e);
-    } catch (e) {
-      throw ApiResponseParser.transport(e);
+      throw ApiResponseParser.fromDio(e);
+    } catch (e, stackTrace) {
+      throw ApiResponseParser.fromUnexpected(e, stackTrace);
     }
   }
 }

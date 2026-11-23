@@ -212,6 +212,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                 ),
               ],
               builders: AppPagedBuilders(
+                errorTitle: l10n.clientsLoadErrorTitle,
                 empty: (ctx) => _emptyFallback(
                   ctx,
                   filter,

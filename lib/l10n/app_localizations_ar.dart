@@ -145,6 +145,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeLoadErrorTitle => 'تعذر تحميل الرئيسية';
 
   @override
+  String get clientsLoadErrorTitle => 'تعذر تحميل العملاء';
+
+  @override
+  String get clientDetailLoadErrorTitle => 'تعذر تحميل العميل';
+
+  @override
+  String get providersLoadErrorTitle => 'تعذر تحميل الدليل';
+
+  @override
+  String get settingsLoadErrorTitle => 'تعذر تحميل الإعدادات';
+
+  @override
   String get clientMovementsLoadErrorTitle => 'تعذر تحميل الحركات';
 
   @override

@@ -179,6 +179,7 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                 ),
               ],
               builders: AppPagedBuilders(
+                errorTitle: l10n.providersLoadErrorTitle,
                 firstPageProgress: (_, _) => const ProvidersLoadingSkeleton(),
                 empty: (ctx) => AppFallback.section(
                   leading: ShellNavIcon(

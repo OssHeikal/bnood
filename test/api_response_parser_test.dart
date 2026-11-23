@@ -65,6 +65,14 @@ void main() {
       expect(err.message, isNot(contains('socket')));
     });
 
+    test('fromUnexpected maps parse failures without network code', () {
+      final err = ApiResponseParser.fromUnexpected(
+        const FormatException('Client response missing project'),
+      );
+      expect(err.isNetwork, isFalse);
+      expect(err.code, 'parse_error');
+    });
+
     test('fromDio maps bad response', () {
       final response = _response(
         statusCode: 401,

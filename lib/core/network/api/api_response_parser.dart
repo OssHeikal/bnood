@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import 'auth_api_exception.dart';
 
@@ -91,6 +92,35 @@ abstract final class ApiResponseParser {
       statusCode: 0,
       message: 'Network request failed',
       code: 'network',
+    );
+  }
+
+  static AuthApiException fromUnexpected(Object error, [StackTrace? stackTrace]) {
+    if (kDebugMode) {
+      debugPrint('ApiResponseParser unexpected: $error');
+      if (stackTrace != null) {
+        debugPrint(stackTrace.toString());
+      }
+    }
+    if (error is AuthApiException) return error;
+    if (error is FormatException) {
+      return AuthApiException(
+        statusCode: 0,
+        code: 'parse_error',
+        message: error.message,
+      );
+    }
+    if (error is TypeError) {
+      return AuthApiException(
+        statusCode: 0,
+        code: 'parse_error',
+        message: 'Response parse failed',
+      );
+    }
+    return AuthApiException(
+      statusCode: 0,
+      code: 'unexpected',
+      message: 'Unexpected error',
     );
   }
 

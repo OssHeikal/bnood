@@ -338,6 +338,30 @@ abstract class AppLocalizations {
   /// **'Could not load home'**
   String get homeLoadErrorTitle;
 
+  /// No description provided for @clientsLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load clients'**
+  String get clientsLoadErrorTitle;
+
+  /// No description provided for @clientDetailLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load client'**
+  String get clientDetailLoadErrorTitle;
+
+  /// No description provided for @providersLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load directory'**
+  String get providersLoadErrorTitle;
+
+  /// No description provided for @settingsLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load settings'**
+  String get settingsLoadErrorTitle;
+
   /// No description provided for @clientMovementsLoadErrorTitle.
   ///
   /// In en, this message translates to:
