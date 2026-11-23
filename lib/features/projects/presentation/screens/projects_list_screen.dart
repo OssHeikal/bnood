@@ -172,7 +172,7 @@ class _ProjectsListScreenState extends ConsumerState<ProjectsListScreen> {
                 ),
               ],
               builders: AppPagedBuilders(
-                errorTitle: l10n.clientsLoadErrorTitle,
+                errorTitle: l10n.projectsLoadErrorTitle,
                 empty: (ctx) => _emptyFallback(ctx, filter),
               ),
               itemPadding: (index) => useGrid

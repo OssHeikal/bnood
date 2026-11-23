@@ -171,6 +171,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientsLoadErrorTitle => 'Couldn\'t load clients';
 
   @override
+  String get projectsLoadErrorTitle => 'Couldn\'t load projects';
+
+  @override
   String get clientDetailLoadErrorTitle => 'Couldn\'t load client';
 
   @override

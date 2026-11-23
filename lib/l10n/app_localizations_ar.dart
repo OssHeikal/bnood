@@ -173,6 +173,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientsLoadErrorTitle => 'تعذر تحميل العملاء';
 
   @override
+  String get projectsLoadErrorTitle => 'تعذر تحميل المشاريع';
+
+  @override
   String get clientDetailLoadErrorTitle => 'تعذر تحميل العميل';
 
   @override

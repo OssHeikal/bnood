@@ -392,6 +392,12 @@ abstract class AppLocalizations {
   /// **'Couldn\'t load clients'**
   String get clientsLoadErrorTitle;
 
+  /// No description provided for @projectsLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load projects'**
+  String get projectsLoadErrorTitle;
+
   /// No description provided for @clientDetailLoadErrorTitle.
   ///
   /// In en, this message translates to:

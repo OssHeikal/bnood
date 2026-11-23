@@ -35,5 +35,16 @@ String apiAuthErrorUserMessage(AppLocalizations l10n, AuthApiException error) {
   if (error.statusCode >= 500) return l10n.apiErrorServer;
   final fields = error.fieldErrors;
   if (fields != null && fields.isNotEmpty) return error.displayMessage;
+  final code = error.code?.trim();
+  final message = error.message.trim();
+  if (code != null &&
+      code.isNotEmpty &&
+      (message == code || _looksLikeMachineCode(message))) {
+    return l10n.apiGenericFailure;
+  }
   return error.displayMessage;
+}
+
+bool _looksLikeMachineCode(String text) {
+  return RegExp(r'^[a-z][a-z0-9_]*$').hasMatch(text);
 }

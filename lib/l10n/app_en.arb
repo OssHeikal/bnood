@@ -54,6 +54,7 @@
   "homeNoActiveClientsDescription": "Add a client from the Clients tab to start tracking.",
   "homeLoadErrorTitle": "Could not load home",
   "clientsLoadErrorTitle": "Couldn't load clients",
+  "projectsLoadErrorTitle": "Couldn't load projects",
   "clientDetailLoadErrorTitle": "Couldn't load client",
   "providersLoadErrorTitle": "Couldn't load directory",
   "settingsLoadErrorTitle": "Couldn't load settings",

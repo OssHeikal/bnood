@@ -51,7 +51,7 @@ void main() {
   );
   api.close();
 
-  expect(captured!.path, endsWith('/v1/office/projects'));
+  expect(captured!.path, endsWith('/v1/projects'));
   expect(captured!.queryParameters['status'], 'active');
   expect(page.items, hasLength(1));
   expect(page.items.first.projectName, 'Villa');

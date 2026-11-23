@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/account/account_office_providers.dart';
 import '../../../../core/services/config/extensions/num_extensions.dart';
 import '../../../../core/domain/money/remote_money_units.dart';
 import '../../../../core/services/config/theme/app_colors.dart';
@@ -11,21 +10,13 @@ import '../../../../core/ui/layout/app_layout.dart';
 import '../../../../core/ui/layout/bnood_max_width.dart';
 import '../../../../core/ui/layout/bnood_two_column.dart';
 import '../../../../core/network/api/api_error_user_message.dart';
-import '../../../../core/network/api/auth_api_exception.dart';
-import 'package:bnood/features/clients/data/clients_error_handler.dart';
-import 'package:bnood/features/subscription/presentation/actions/subscription_error_handler.dart';
-import 'package:bnood/features/subscription/presentation/actions/subscription_gates.dart';
-import 'package:bnood/features/clients/data/clients_providers.dart';
 import '../../../../core/domain/formatting/see_all_label.dart';
-import '../../../../core/ui/resources/gen/assets.gen.dart';
 import '../../../../core/ui/widgets/app_card.dart';
-import '../../../../core/ui/widgets/app_decision.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
 import 'package:bnood/features/projects/domain/project_detail_params.dart';
 import 'package:bnood/features/projects/presentation/providers/project_detail_provider.dart';
 import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
-import '../../../../core/ui/widgets/toast/app_tone.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/home/presentation/widgets/home_section_header.dart';
 import 'package:bnood/features/vouchers/presentation/actions/voucher_launcher.dart';
@@ -40,7 +31,6 @@ import 'package:bnood/features/clients/presentation/widgets/client_detail_item_r
 import 'package:bnood/features/clients/presentation/widgets/client_detail_loading_skeleton.dart';
 import 'package:bnood/features/clients/presentation/widgets/interactive_movement_card.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_detail_stat_grid.dart';
-import '../../../../core/app_state/client_mutation_refresh.dart';
 
 class ProjectDetailScreen extends ConsumerWidget {
   const ProjectDetailScreen({
@@ -69,9 +59,6 @@ class ProjectDetailScreen extends ConsumerWidget {
           final client = snapshot?.client;
           final project = snapshot?.project;
           final isArchived = client?.archivedAt != null;
-          final accountWritable = ref.watch(accountOfficeMutationsEnabledProvider);
-          final mutationsEnabled =
-              client != null && !isArchived && accountWritable;
           return Scaffold(
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(

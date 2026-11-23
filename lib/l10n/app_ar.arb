@@ -54,6 +54,7 @@
   "homeNoActiveClientsDescription": "أضف عميل من تبويب العملاء عشان تبدأ المتابعة.",
   "homeLoadErrorTitle": "تعذر تحميل الرئيسية",
   "clientsLoadErrorTitle": "تعذر تحميل العملاء",
+  "projectsLoadErrorTitle": "تعذر تحميل المشاريع",
   "clientDetailLoadErrorTitle": "تعذر تحميل العميل",
   "providersLoadErrorTitle": "تعذر تحميل الدليل",
   "settingsLoadErrorTitle": "تعذر تحميل الإعدادات",

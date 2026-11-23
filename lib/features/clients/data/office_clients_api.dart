@@ -16,7 +16,7 @@ class OfficeClientsApi {
   final Dio _dio;
   final bool _ownsDio;
 
-  static const _prefix = '/v1/office/clients';
+  static const _prefix = '/v1/clients';
 
   Map<String, dynamic> get _authenticatedExtra => {
     AuthInterceptor.authenticatedExtraKey: true,
