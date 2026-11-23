@@ -46,7 +46,7 @@ class OfficeClientsApi {
   Future<OfficeClientDetailRecord> getClient(String clientId) {
     return _guard(() async {
       final response = await _dio.get<Map<String, dynamic>>(
-        '$_prefix/$clientId',
+        '$_prefix/$clientId/identity',
         options: Options(extra: _authenticatedExtra),
       );
       return ApiResponseParser.expectData(
