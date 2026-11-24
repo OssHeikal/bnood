@@ -19,6 +19,7 @@ class ClientDetailActionGrid extends StatelessWidget {
     required this.onArchive,
     required this.isArchived,
     this.mutationsEnabled = true,
+    this.statementEnabled,
     this.onlineIdentityOnly = false,
     this.onDelete,
   });
@@ -30,7 +31,10 @@ class ClientDetailActionGrid extends StatelessWidget {
   final VoidCallback? onDelete;
   final bool isArchived;
   final bool mutationsEnabled;
+  final bool? statementEnabled;
   final bool onlineIdentityOnly;
+
+  bool get _statementEnabled => statementEnabled ?? mutationsEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +105,7 @@ class ClientDetailActionGrid extends StatelessWidget {
             tintBg: colors.accentTeal.tint,
             icon: Assets.icons.documentAttachmentOutline,
             onPressed: onStatement,
-            enabled: mutationsEnabled,
+            enabled: _statementEnabled,
           ),
         ),
         AppSize.spaceSM.gap,

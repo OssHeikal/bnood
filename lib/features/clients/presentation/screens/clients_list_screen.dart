@@ -26,6 +26,7 @@ import 'package:bnood/features/subscription/presentation/actions/subscription_li
 import 'package:bnood/features/clients/presentation/widgets/clients_list_filter_chips.dart';
 import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 import '../../../../core/account/account_office_providers.dart';
+import '../../../../core/account/office_permission_keys.dart';
 import '../../../../core/app_state/client_mutation_refresh.dart';
 
 class ClientsListScreen extends ConsumerStatefulWidget {
@@ -127,7 +128,10 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
     final filter = ref.watch(clientsListFilterProvider);
-    final mutationsEnabled = ref.watch(accountOfficeMutationsEnabledProvider);
+    final mutationsEnabled = ref.watch(
+      accountOfficeCanManageProvider(OfficePermissionArea.clients),
+    );
+    final showMoney = ref.watch(accountOfficeClientMoneyVisibleProvider);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _cacheCollapsingHeaderHeight(),
     );
@@ -155,20 +159,19 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                 ? CustomAppBar(
                     title: l10n.navClients,
                     actions: [
-                      CustomAppBarAction(
-                        key: const Key('clients_app_bar_add'),
-                        tooltip: l10n.addClient,
-                        tone: CustomAppBarActionTone.tint,
-                        onPressed: mutationsEnabled
-                            ? () => _addClient(context, ref)
-                            : null,
-                        child: ShellNavIcon(
-                          asset: Assets.icons.clientsAddOutline,
-                          color: colors.primaryOnTint,
-                          size: AppSize.icon,
-                          semanticsLabel: l10n.addClient,
+                      if (mutationsEnabled)
+                        CustomAppBarAction(
+                          key: const Key('clients_app_bar_add'),
+                          tooltip: l10n.addClient,
+                          tone: CustomAppBarActionTone.tint,
+                          onPressed: () => _addClient(context, ref),
+                          child: ShellNavIcon(
+                            asset: Assets.icons.clientsAddOutline,
+                            color: colors.primaryOnTint,
+                            size: AppSize.icon,
+                            semanticsLabel: l10n.addClient,
+                          ),
                         ),
-                      ),
                     ],
                   )
                 : null,
@@ -186,21 +189,20 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                     title: l10n.navClients,
                     automaticallyImplyLeading: false,
                     actions: [
-                    CustomAppBarAction(
-                      key: const Key('clients_app_bar_add'),
-                      tooltip: l10n.addClient,
-                      tone: CustomAppBarActionTone.tint,
-                      onPressed: mutationsEnabled
-                          ? () => _addClient(context, ref)
-                          : null,
-                      child: ShellNavIcon(
-                        asset: Assets.icons.clientsAddOutline,
-                        color: colors.primaryOnTint,
-                        size: AppSize.icon,
-                        semanticsLabel: l10n.addClient,
-                      ),
-                    ),
-                  ],
+                      if (mutationsEnabled)
+                        CustomAppBarAction(
+                          key: const Key('clients_app_bar_add'),
+                          tooltip: l10n.addClient,
+                          tone: CustomAppBarActionTone.tint,
+                          onPressed: () => _addClient(context, ref),
+                          child: ShellNavIcon(
+                            asset: Assets.icons.clientsAddOutline,
+                            color: colors.primaryOnTint,
+                            size: AppSize.icon,
+                            semanticsLabel: l10n.addClient,
+                          ),
+                        ),
+                    ],
                   ),
                 if (canPop)
                   SliverToBoxAdapter(
@@ -272,6 +274,7 @@ class _ClientsListScreenState extends ConsumerState<ClientsListScreen> {
                   accentKey: clientAccentKeyFor(row.client.id),
                   localeCode: localeCode,
                   minorPerMajor: RemoteMoneyUnits.minorPerMajor,
+                  hideMoney: !showMoney,
                   onTap: () => context.push('/clients/${row.client.id}'),
                 );
               },

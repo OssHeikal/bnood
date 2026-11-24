@@ -166,6 +166,10 @@ class AccountContextController extends Notifier<AccountContextState> {
     state = state.copyWith(scope: scope, restoredFromDisk: true);
     ApiOfficeHeader.syncOfficeId(scope.officeId);
 
+    if (ref.read(authControllerProvider).isAuthenticated) {
+      await ref.read(authControllerProvider.notifier).refreshMeSilently();
+    }
+
     if (restartAppOnChange) {
       requestAccountSwitchRestart(ref);
     }

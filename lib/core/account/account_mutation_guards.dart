@@ -5,14 +5,60 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../ui/widgets/app_toaster.dart';
 import 'account_office_providers.dart';
 
+bool _mutationsEnabled(BuildContext context, WidgetRef? ref) {
+  if (ref != null) {
+    return ref.read(accountOfficeMutationsEnabledProvider);
+  }
+  return ProviderScope.containerOf(
+    context,
+    listen: false,
+  ).read(accountOfficeMutationsEnabledProvider);
+}
+
+bool _canCreateVoucher(BuildContext context, WidgetRef? ref) {
+  if (ref != null) {
+    return ref.read(accountOfficeCanCreateVoucherProvider);
+  }
+  return ProviderScope.containerOf(
+    context,
+    listen: false,
+  ).read(accountOfficeCanCreateVoucherProvider);
+}
+
+bool _canManageArea(
+  BuildContext context,
+  WidgetRef? ref,
+  OfficePermissionArea area,
+) {
+  if (ref != null) {
+    return ref.read(accountOfficeCanManageProvider(area));
+  }
+  return ProviderScope.containerOf(
+    context,
+    listen: false,
+  ).read(accountOfficeCanManageProvider(area));
+}
+
 Future<bool> guardOfficeWritable(BuildContext context, WidgetRef? ref) async {
-  final enabled = ref != null
-      ? ref.read(accountOfficeMutationsEnabledProvider)
-      : ProviderScope.containerOf(
-          context,
-          listen: false,
-        ).read(accountOfficeMutationsEnabledProvider);
-  if (enabled) return true;
+  if (_mutationsEnabled(context, ref)) return true;
+  final l10n = AppLocalizations.of(context);
+  AppToaster.show(l10n.officeReadOnlyActionBlocked, kind: ToastKind.failure);
+  return false;
+}
+
+Future<bool> guardOfficeVoucherCreate(BuildContext context, WidgetRef? ref) async {
+  if (_canCreateVoucher(context, ref)) return true;
+  final l10n = AppLocalizations.of(context);
+  AppToaster.show(l10n.officeReadOnlyActionBlocked, kind: ToastKind.failure);
+  return false;
+}
+
+Future<bool> guardOfficeManage(
+  BuildContext context,
+  WidgetRef? ref,
+  OfficePermissionArea area,
+) async {
+  if (_canManageArea(context, ref, area)) return true;
   final l10n = AppLocalizations.of(context);
   AppToaster.show(l10n.officeReadOnlyActionBlocked, kind: ToastKind.failure);
   return false;

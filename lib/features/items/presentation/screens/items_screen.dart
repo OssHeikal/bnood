@@ -61,7 +61,9 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final catalog = ref.watch(itemsCatalogProvider);
-    final mutationsEnabled = ref.watch(accountOfficeMutationsEnabledProvider);
+    final mutationsEnabled = ref.watch(
+      accountOfficeCanManageProvider(OfficePermissionArea.items),
+    );
 
     bindPagingListRefreshEpoch(ref, PagingListIds.items, _refreshCatalog);
 

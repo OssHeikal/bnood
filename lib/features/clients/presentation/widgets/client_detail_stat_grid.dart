@@ -19,6 +19,7 @@ class ClientDetailStatGrid extends StatelessWidget {
     required this.remainingPiastres,
     required this.localeCode,
     this.minorPerMajor = 100,
+    this.hideMoney = false,
   });
 
   final int? receivedPiastres;
@@ -26,9 +27,11 @@ class ClientDetailStatGrid extends StatelessWidget {
   final int? remainingPiastres;
   final String localeCode;
   final int minorPerMajor;
+  final bool hideMoney;
 
   @override
   Widget build(BuildContext context) {
+    if (hideMoney) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context);
     final labelStyle = context.text.label.copyWith(fontSize: 14);
     return Column(

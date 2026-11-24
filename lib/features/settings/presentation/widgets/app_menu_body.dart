@@ -32,24 +32,30 @@ class AppMenuBody extends ConsumerWidget {
     final showAccountSwitcher =
         isAuthenticated && ref.watch(accountSwitcherVisibleProvider);
     final dashboardLaunch = ref.watch(officeDashboardLaunchProvider);
+    final canViewClients =
+        ref.watch(accountOfficeCanViewProvider(OfficePermissionArea.clients));
+    final canViewItems =
+        ref.watch(accountOfficeCanViewProvider(OfficePermissionArea.items));
     final brandChip = colors.primary.withValues(alpha: 0.12);
     final subscriptionChip = SubscriptionColors.violet.withValues(alpha: 0.14);
 
     final moduleRows = <Widget>[
-      SettingsNavRow(
-        label: l10n.navClients,
-        icon: Assets.icons.clientsOutline,
-        chipBackground: brandChip,
-        iconColor: colors.primary,
-        onTap: () => context.push('/clients'),
-      ),
-      SettingsNavRow(
-        label: l10n.navItems,
-        icon: Assets.icons.itemsLayersOutline,
-        chipBackground: brandChip,
-        iconColor: colors.primary,
-        onTap: () => context.push('/items'),
-      ),
+      if (canViewClients)
+        SettingsNavRow(
+          label: l10n.navClients,
+          icon: Assets.icons.clientsOutline,
+          chipBackground: brandChip,
+          iconColor: colors.primary,
+          onTap: () => context.push('/clients'),
+        ),
+      if (canViewItems)
+        SettingsNavRow(
+          label: l10n.navItems,
+          icon: Assets.icons.itemsLayersOutline,
+          chipBackground: brandChip,
+          iconColor: colors.primary,
+          onTap: () => context.push('/items'),
+        ),
     ];
 
     final topRows = <Widget>[
@@ -104,12 +110,13 @@ class AppMenuBody extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SettingsListSection(
-          title: l10n.navModulesSection,
-          dividerKind: GroupedListDividerKind.insetStart,
-          children: moduleRows,
-        ),
-        sectionGap,
+        if (moduleRows.isNotEmpty)
+          SettingsListSection(
+            title: l10n.navModulesSection,
+            dividerKind: GroupedListDividerKind.insetStart,
+            children: moduleRows,
+          ),
+        if (moduleRows.isNotEmpty) sectionGap,
         SettingsListSection(
           title: l10n.authAccountSection,
           dividerKind: GroupedListDividerKind.insetStart,

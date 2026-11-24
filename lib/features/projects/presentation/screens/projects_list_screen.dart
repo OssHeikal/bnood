@@ -9,6 +9,7 @@ import '../../../../core/ui/layout/app_layout.dart';
 import '../../../../core/domain/money/remote_money_units.dart';
 import 'package:bnood/features/clients/data/client_list_archive_filter.dart';
 import 'package:bnood/core/account/account_context_providers.dart';
+import '../../../../core/account/account_office_providers.dart';
 import '../../../../core/shared/pagination/pagination.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
@@ -92,6 +93,7 @@ class _ProjectsListScreenState extends ConsumerState<ProjectsListScreen> {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
     final filter = ref.watch(projectsListFilterProvider);
+    final showMoney = ref.watch(accountOfficeClientMoneyVisibleProvider);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _cacheCollapsingHeaderHeight(),
     );
@@ -196,6 +198,7 @@ class _ProjectsListScreenState extends ConsumerState<ProjectsListScreen> {
                   accentKey: clientAccentKeyFor(row.clientId),
                   localeCode: localeCode,
                   minorPerMajor: RemoteMoneyUnits.minorPerMajor,
+                  hideMoney: !showMoney,
                   onTap: () => context.push(
                     '/projects/${row.projectId}?clientId=${row.clientId}',
                   ),

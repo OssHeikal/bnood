@@ -72,6 +72,26 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> retryBootstrap() => bootstrapFromStoredSession();
 
+  /// Refreshes user + office memberships (permission_keys) without clearing session.
+  Future<void> refreshMeSilently() async {
+    if (!state.isAuthenticated) return;
+    try {
+      final me = await _api.me();
+      state = state.copyWith(user: me.user, officeContext: me.office);
+    } on AuthApiException catch (e) {
+      if (e.isUnauthorized || e.isSessionExpired) {
+        await _store.clearToken();
+        state = state.copyWith(
+          bootstrapStatus: AuthBootstrapStatus.unauthenticated,
+          clearUser: true,
+          clearOfficeContext: true,
+        );
+      }
+    } catch (_) {
+      // Keep cached session on transient failures.
+    }
+  }
+
   /// Splash timeout: do not leave the user on an infinite loader.
   void abandonBootstrapAsUnauthenticated() {
     final status = state.bootstrapStatus;

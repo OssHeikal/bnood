@@ -17,14 +17,17 @@ class HomeStatGrid extends StatelessWidget {
     required this.totals,
     required this.localeCode,
     this.minorPerMajor = 100,
+    this.hideMoney = false,
   });
 
   final HomeTotals totals;
   final String localeCode;
   final int minorPerMajor;
+  final bool hideMoney;
 
   @override
   Widget build(BuildContext context) {
+    if (hideMoney) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context);
     final labelStyle = context.text.label.copyWith(fontSize: 14);
     return Column(

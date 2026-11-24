@@ -29,6 +29,7 @@ class ClientBalanceCard extends StatelessWidget {
     this.receivedPiastres,
     this.spentPiastres,
     this.minorPerMajor = 100,
+    this.hideMoney = false,
   });
 
   final String name;
@@ -43,6 +44,7 @@ class ClientBalanceCard extends StatelessWidget {
   final String? amountCaption;
   final bool showAmountCaption;
   final int minorPerMajor;
+  final bool hideMoney;
 
   static const _stripeWidth = 4.0;
 
@@ -54,8 +56,9 @@ class ClientBalanceCard extends StatelessWidget {
     final caption = showAmountCaption
         ? (amountCaption ?? AppLocalizations.of(context).remaining)
         : null;
-    final showClientFlows = receivedPiastres != null && spentPiastres != null;
-    final hasAmount = amountPiastres != null;
+    final showClientFlows =
+        !hideMoney && receivedPiastres != null && spentPiastres != null;
+    final hasAmount = !hideMoney && amountPiastres != null;
 
     return AppCard(
       onTap: onTap,

@@ -38,6 +38,7 @@ import 'package:bnood/features/home/presentation/widgets/home_identity_title.dar
 import 'package:bnood/features/account/presentation/widgets/account_switcher_title.dart';
 import 'package:bnood/features/account/presentation/widgets/office_read_only_banner.dart';
 import '../../../../core/account/account_office_providers.dart';
+import '../../../../core/account/office_permission_keys.dart';
 import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -92,6 +93,13 @@ class HomeScreen extends ConsumerWidget {
           final craftsmen = ref.watch(homeCraftsmenProvider);
           final remoteSuppliers = ref.watch(homeSuppliersProvider);
           final sectionCounts = ref.watch(homeSectionCountsProvider);
+          final showMoney = ref.watch(accountOfficeClientMoneyVisibleProvider);
+          final showProjects = ref.watch(
+            accountOfficeCanViewProvider(OfficePermissionArea.projects),
+          );
+          final showProviders = ref.watch(
+            accountOfficeCanViewProvider(OfficePermissionArea.providers),
+          );
           final summaryChildren = <Widget>[
             Text(
               l10n.homeTotalsCaption,
@@ -114,6 +122,7 @@ class HomeScreen extends ConsumerWidget {
                 totals: t,
                 localeCode: localeCode,
                 minorPerMajor: moneyScale,
+                hideMoney: !showMoney,
               ),
             ),
           ];
@@ -178,6 +187,7 @@ class HomeScreen extends ConsumerWidget {
                         accentKey: clientAccentKeyFor(rows[i].clientId),
                         localeCode: localeCode,
                         minorPerMajor: moneyScale,
+                        hideMoney: !showMoney,
                         onTap: () => context.push(
                           '/projects/${rows[i].projectId}?clientId=${rows[i].clientId}',
                         ),
@@ -257,8 +267,10 @@ class HomeScreen extends ConsumerWidget {
                         accentKey: homeAccentKeyFor(visible[i].craftsman.id),
                         localeCode: localeCode,
                         clientsCount: visible[i].clientsCount ?? 0,
-                        paidPiastres: visible[i].paidPiastres,
-                        remainingPiastres: visible[i].remainingPiastres,
+                        paidPiastres:
+                            showMoney ? visible[i].paidPiastres : null,
+                        remainingPiastres:
+                            showMoney ? visible[i].remainingPiastres : null,
                         minorPerMajor: moneyScale,
                         onTap: () => context.push(
                           '/providers/${visible[i].craftsman.id}',
@@ -324,8 +336,10 @@ class HomeScreen extends ConsumerWidget {
                         accentKey: homeAccentKeyFor(visible[i].craftsman.id),
                         localeCode: localeCode,
                         clientsCount: visible[i].clientsCount ?? 0,
-                        paidPiastres: visible[i].paidPiastres,
-                        remainingPiastres: visible[i].remainingPiastres,
+                        paidPiastres:
+                            showMoney ? visible[i].paidPiastres : null,
+                        remainingPiastres:
+                            showMoney ? visible[i].remainingPiastres : null,
                         minorPerMajor: moneyScale,
                         onTap: () => context.push(
                           '/providers/${visible[i].craftsman.id}',
@@ -339,9 +353,9 @@ class HomeScreen extends ConsumerWidget {
           ];
 
           final snapshotChildren = <Widget>[
-            ...activeProjectsChildren,
-            AppSize.spaceXL.gap,
-            ...providerSnapshotChildren,
+            if (showProjects) ...activeProjectsChildren,
+            if (showProjects && showProviders) AppSize.spaceXL.gap,
+            if (showProviders) ...providerSnapshotChildren,
           ];
 
           return ShellTabScaffold(
@@ -367,8 +381,9 @@ class HomeScreen extends ConsumerWidget {
                   children: [
                     const OfficeReadOnlyBanner(),
                     if (context.isMobileLayout) ...[
-                      ...summaryChildren,
-                      AppSize.spaceXL.gap,
+                      if (showMoney) ...summaryChildren,
+                      if (showMoney && snapshotChildren.isNotEmpty)
+                        AppSize.spaceXL.gap,
                       ...snapshotChildren,
                     ] else
                       BnoodTwoColumn(
@@ -378,15 +393,17 @@ class HomeScreen extends ConsumerWidget {
                           key: primaryColumnKey,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            ...summaryChildren,
-                            AppSize.spaceXL.gap,
-                            ...activeProjectsChildren,
+                            if (showMoney) ...summaryChildren,
+                            if (showMoney && showProjects) AppSize.spaceXL.gap,
+                            if (showProjects) ...activeProjectsChildren,
                           ],
                         ),
                         end: Column(
                           key: providersColumnKey,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: providerSnapshotChildren,
+                          children: showProviders
+                              ? providerSnapshotChildren
+                              : const <Widget>[],
                         ),
                       ),
                   ],

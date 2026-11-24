@@ -17,6 +17,8 @@ import '../../../../core/ui/widgets/custom_app_bar.dart';
 import 'package:bnood/features/projects/domain/project_detail_params.dart';
 import 'package:bnood/features/projects/presentation/providers/project_detail_provider.dart';
 import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
+import '../../../../core/account/account_office_providers.dart';
+import '../../../../core/account/office_permission_keys.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/home/presentation/widgets/home_section_header.dart';
 import 'package:bnood/features/vouchers/presentation/actions/voucher_launcher.dart';
@@ -176,7 +178,13 @@ class _ProjectDetailBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final isArchived = data.client.archivedAt != null;
-    final mutationsEnabled = !isArchived;
+    final perms = ref.watch(officeAccountPermissionsProvider);
+    final showMoney = perms.canViewClientMoney;
+    final canCreateVoucher = perms.canCreateVoucher && !isArchived;
+    final canEditVoucher = perms.canEditVoucher && !isArchived;
+    final canManageProject =
+        perms.canManage(OfficePermissionArea.projects) && !isArchived;
+    final mutationsEnabled = canManageProject;
 
     Future<void> openAssignments() async {
       if (!mutationsEnabled) return;
@@ -195,7 +203,7 @@ class _ProjectDetailBody extends ConsumerWidget {
     }
 
     void openVoucher(String kind) {
-      if (!mutationsEnabled) return;
+      if (!canCreateVoucher) return;
       VoucherLauncher.openForClient(
         context,
         clientId: clientId,
@@ -218,16 +226,18 @@ class _ProjectDetailBody extends ConsumerWidget {
         remainingPiastres: data.remainingPiastres,
         localeCode: localeCode,
         minorPerMajor: minorPerMajor,
+        hideMoney: !showMoney,
       ),
       AppSize.spaceLG.gap,
       ClientDetailActionGrid(
         isArchived: isArchived,
-        mutationsEnabled: mutationsEnabled,
+        mutationsEnabled: canCreateVoucher && !data.onlineIdentityOnly,
+        statementEnabled: showMoney && !data.onlineIdentityOnly,
         onlineIdentityOnly: data.onlineIdentityOnly,
         onReceive: data.onlineIdentityOnly ? () {} : () => openVoucher('receive'),
         onSpend: data.onlineIdentityOnly ? () {} : () => openVoucher('spend'),
         onStatement: () {
-          if (!mutationsEnabled || data.onlineIdentityOnly) return;
+          if (!showMoney || data.onlineIdentityOnly) return;
           context.push('/clients/$clientId/statement');
         },
         onArchive: () {},
@@ -349,7 +359,7 @@ class _ProjectDetailBody extends ConsumerWidget {
       clientId: clientId,
       data: data,
       localeCode: localeCode,
-      mutationsEnabled: mutationsEnabled,
+      mutationsEnabled: canEditVoucher,
       l10n: l10n,
     );
     final onlineLedgerFallback = data.onlineIdentityOnly
@@ -496,7 +506,7 @@ class _ProjectDetailMovementsSection {
       HomeSectionHeader(
         title: l10n.movements,
         seeAllLabel: seeAllLabelWithCount(l10n, data.movementsCount ?? data.latestMovements.length),
-        seeAllEnabled: mutationsEnabled,
+        seeAllEnabled: true,
         onSeeAll: () => context.push('/clients/$clientId/movements'),
       ),
       AppSize.spaceSM.gap,
@@ -535,7 +545,7 @@ class _ProjectDetailMovementsSection {
         ProjectDetailTabFooter(
           seeAllLabel: seeAll,
           onSeeAll: () => context.push('/clients/$clientId/movements'),
-          seeAllEnabled: mutationsEnabled,
+          seeAllEnabled: true,
           seeAllKey: const Key('project_detail_tab_see_all_movements'),
         ),
       ],

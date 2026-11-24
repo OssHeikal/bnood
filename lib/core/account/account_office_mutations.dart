@@ -1,17 +1,26 @@
 import 'office_membership.dart';
 import 'office_permission_keys.dart';
+import 'office_permissions.dart';
 
-/// Whether create/edit ledger actions are allowed for the active account scope.
+/// Whether any create/manage ledger action is allowed for the active account scope.
 bool accountOfficeMutationsEnabled({
   required bool isPersonal,
   OfficeMembership? selectedOffice,
 }) {
+  final perms = isPersonal
+      ? OfficeAccountPermissions.personal()
+      : OfficeAccountPermissions.office(selectedOffice);
+  return perms.anyLedgerManageEnabled;
+}
+
+/// Area-specific manage gate (add / edit / delete).
+bool accountOfficeCanManage({
+  required bool isPersonal,
+  OfficeMembership? selectedOffice,
+  required OfficePermissionArea area,
+}) {
   if (isPersonal) return true;
-  if (selectedOffice == null) return true;
-  if (selectedOffice.isReadOnly) return false;
-  final keys = selectedOffice.permissionKeys;
-  if (keys == null) return true;
-  return officeRoleAllowsLedgerCreates(keys);
+  return OfficeAccountPermissions.office(selectedOffice).canManage(area);
 }
 
 bool officeMembershipListContains(

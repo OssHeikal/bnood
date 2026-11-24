@@ -18,6 +18,7 @@ class FloatingShellDock extends StatelessWidget {
     required this.onVoucher,
     required this.destinations,
     required this.voucherSemanticsLabel,
+    this.showVoucher = true,
   });
 
   final int selectedIndex;
@@ -25,6 +26,7 @@ class FloatingShellDock extends StatelessWidget {
   final VoidCallback onVoucher;
   final List<ShellNavDestination> destinations;
   final String voucherSemanticsLabel;
+  final bool showVoucher;
 
   static const clearanceHeight = AppSize.shellDockClearance;
 
@@ -117,8 +119,10 @@ class FloatingShellDock extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(child: pill),
-              AppSize.spaceSM.gap,
-              voucherHit,
+              if (showVoucher) ...[
+                AppSize.spaceSM.gap,
+                voucherHit,
+              ],
             ],
           );
           final bar = SizedBox(width: groupWidth, child: dockRow);

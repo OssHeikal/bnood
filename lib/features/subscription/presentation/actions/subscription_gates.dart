@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/account/account_mutation_guards.dart';
+import '../../../../core/account/account_office_providers.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
 import 'package:bnood/features/subscription/presentation/actions/subscription_limit_handler.dart';
 
@@ -24,7 +25,7 @@ Future<bool> guardCreateActiveProject(
 }
 
 Future<bool> guardFinancialMutation(BuildContext context, WidgetRef ref) async {
-  if (!await guardOfficeWritable(context, ref)) return false;
+  if (!await guardOfficeVoucherCreate(context, ref)) return false;
   final snap = ref.read(subscriptionProvider).valueOrNull;
   if (snap == null) return true;
   return SubscriptionLimitHandler.gate(
@@ -40,7 +41,7 @@ Future<bool> guardFinancialMutationFromContainer(
   BuildContext context,
   ProviderContainer container,
 ) async {
-  if (!await guardOfficeWritable(context, null)) return false;
+  if (!await guardOfficeVoucherCreate(context, null)) return false;
   final snap = container.read(subscriptionProvider).valueOrNull;
   if (snap == null) return true;
   return SubscriptionLimitHandler.gate(

@@ -25,7 +25,7 @@ class ShellScaffold extends ConsumerStatefulWidget {
 
   final StatefulNavigationShell navigationShell;
 
-  static const moreTabIndex = 3;
+  static int get moreBranchIndex => ShellNavBranch.more.routerIndex;
 
   @override
   ConsumerState<ShellScaffold> createState() => _ShellScaffoldState();
@@ -34,8 +34,80 @@ class ShellScaffold extends ConsumerStatefulWidget {
 class _ShellScaffoldState extends ConsumerState<ShellScaffold> {
   DateTime? _lastMoreRailTapAt;
 
-  void _onDestinationSelected(int index) {
-    if (index == ShellScaffold.moreTabIndex && context.isDesktopLayout) {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _redirectHiddenBranch());
+  }
+
+  void _redirectHiddenBranch() {
+    if (!mounted) return;
+    final branches = ref.read(shellVisibleBranchIndicesProvider);
+    final current = widget.navigationShell.currentIndex;
+    if (branches.contains(current)) return;
+    widget.navigationShell.goBranch(
+      branches.isNotEmpty ? branches.first : ShellNavBranch.home.routerIndex,
+    );
+  }
+
+  List<ShellNavDestination> _destinations(
+    AppLocalizations l10n,
+    bool isPersonal,
+    List<int> visibleBranches,
+  ) {
+    final moreLabel = isPersonal ? l10n.navMorePersonal : l10n.navMoreOffice;
+    ShellNavDestination? destinationFor(ShellNavBranch branch) {
+      return switch (branch) {
+        ShellNavBranch.home => ShellNavDestination(
+          icon: ShellNavIcons.home,
+          label: l10n.navHome,
+          semanticsLabel: l10n.navHome,
+        ),
+        ShellNavBranch.projects => ShellNavDestination(
+          icon: ShellNavIcons.projects,
+          label: l10n.navProjects,
+          semanticsLabel: l10n.navProjects,
+        ),
+        ShellNavBranch.providers => ShellNavDestination(
+          icon: ShellNavIcons.providers,
+          label: l10n.navProviders,
+          semanticsLabel: l10n.navProviders,
+        ),
+        ShellNavBranch.more => ShellNavDestination(
+          label: moreLabel,
+          semanticsLabel: moreLabel,
+          tabBuilder: (context, {required selected, required labelSize, required onTap}) {
+            return ContextNavAvatarTab(
+              selected: selected,
+              labelSize: labelSize,
+              label: moreLabel,
+              semanticsLabel: moreLabel,
+              onSelectTab: onTap,
+            );
+          },
+        ),
+      };
+    }
+
+    return [
+      for (final index in visibleBranches)
+        destinationFor(ShellNavBranch.values.firstWhere((b) => b.routerIndex == index))!,
+    ];
+  }
+
+  int? _moreDockIndex(List<int> visibleBranches) {
+    final idx = visibleBranches.indexOf(ShellScaffold.moreBranchIndex);
+    return idx >= 0 ? idx : null;
+  }
+
+  int _dockIndexForBranch(int branchIndex, List<int> visibleBranches) {
+    final idx = visibleBranches.indexOf(branchIndex);
+    return idx >= 0 ? idx : 0;
+  }
+
+  void _onDestinationSelected(int dockIndex, List<int> visibleBranches) {
+    final branchIndex = visibleBranches[dockIndex];
+    if (branchIndex == ShellScaffold.moreBranchIndex && context.isDesktopLayout) {
       final now = DateTime.now();
       final visible = ref.read(accountSwitcherVisibleProvider);
       if (visible &&
@@ -49,48 +121,26 @@ class _ShellScaffoldState extends ConsumerState<ShellScaffold> {
       }
       _lastMoreRailTapAt = now;
     }
-    widget.navigationShell.goBranch(index);
-  }
-
-  List<ShellNavDestination> _destinations(AppLocalizations l10n, bool isPersonal) {
-    final moreLabel = isPersonal ? l10n.navMorePersonal : l10n.navMoreOffice;
-    return [
-      ShellNavDestination(
-        icon: ShellNavIcons.home,
-        label: l10n.navHome,
-        semanticsLabel: l10n.navHome,
-      ),
-      ShellNavDestination(
-        icon: ShellNavIcons.projects,
-        label: l10n.navProjects,
-        semanticsLabel: l10n.navProjects,
-      ),
-      ShellNavDestination(
-        icon: ShellNavIcons.providers,
-        label: l10n.navProviders,
-        semanticsLabel: l10n.navProviders,
-      ),
-      ShellNavDestination(
-        label: moreLabel,
-        semanticsLabel: moreLabel,
-        tabBuilder: (context, {required selected, required labelSize, required onTap}) {
-          return ContextNavAvatarTab(
-            selected: selected,
-            labelSize: labelSize,
-            label: moreLabel,
-            semanticsLabel: moreLabel,
-            onSelectTab: onTap,
-          );
-        },
-      ),
-    ];
+    widget.navigationShell.goBranch(branchIndex);
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(shellVisibleBranchIndicesProvider, (previous, next) {
+      if (previous != next) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => _redirectHiddenBranch());
+      }
+    });
     final l10n = AppLocalizations.of(context);
     final isPersonal = ref.watch(accountContextProvider.select((s) => s.isPersonal));
-    final destinations = _destinations(l10n, isPersonal);
+    final visibleBranches = ref.watch(shellVisibleBranchIndicesProvider);
+    final destinations = _destinations(l10n, isPersonal, visibleBranches);
+    final selectedDockIndex = _dockIndexForBranch(
+      widget.navigationShell.currentIndex,
+      visibleBranches,
+    );
+    final moreDockIndex = _moreDockIndex(visibleBranches);
+    final showVoucher = ref.watch(accountOfficeCanCreateVoucherProvider);
     final voucherLabel = l10n.navAdd;
 
     if (context.isDesktopLayout) {
@@ -99,12 +149,13 @@ class _ShellScaffoldState extends ConsumerState<ShellScaffold> {
         body: Row(
           children: [
             ShellNavigationRail(
-              selectedIndex: widget.navigationShell.currentIndex,
+              selectedIndex: selectedDockIndex,
               destinations: destinations,
-              moreTabIndex: ShellScaffold.moreTabIndex,
-              onDestinationSelected: _onDestinationSelected,
+              moreTabIndex: moreDockIndex,
+              onDestinationSelected: (i) => _onDestinationSelected(i, visibleBranches),
               onVoucher: () => VoucherLauncher.openFresh(context),
               voucherSemanticsLabel: voucherLabel,
+              showVoucher: showVoucher,
             ),
             Expanded(child: widget.navigationShell),
           ],
@@ -167,11 +218,12 @@ class _ShellScaffoldState extends ConsumerState<ShellScaffold> {
               right: 0,
               bottom: 0,
               child: FloatingShellDock(
-                selectedIndex: widget.navigationShell.currentIndex,
+                selectedIndex: selectedDockIndex,
                 destinations: destinations,
-                onDestinationSelected: _onDestinationSelected,
+                onDestinationSelected: (i) => _onDestinationSelected(i, visibleBranches),
                 onVoucher: () => VoucherLauncher.openFresh(context),
                 voucherSemanticsLabel: voucherLabel,
+                showVoucher: showVoucher,
               ),
             ),
           ],

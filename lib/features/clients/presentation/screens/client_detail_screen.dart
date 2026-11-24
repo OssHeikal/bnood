@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/account/account_office_providers.dart';
+import '../../../../core/account/office_permission_keys.dart';
 import '../../../../core/services/config/extensions/num_extensions.dart';
 import '../../../../core/network/api/api_error_user_message.dart';
 import '../../../../core/domain/money/remote_money_units.dart';
@@ -51,9 +52,12 @@ class ClientDetailScreen extends ConsumerWidget {
           final colors = context.colors;
           final client = snapshot?.client;
           final isArchived = client?.archivedAt != null;
-          final accountWritable = ref.watch(accountOfficeMutationsEnabledProvider);
+          final canManageClients = ref.watch(
+            accountOfficeCanManageProvider(OfficePermissionArea.clients),
+          );
+          final showMoney = ref.watch(accountOfficeClientMoneyVisibleProvider);
           final mutationsEnabled =
-              client != null && !isArchived && accountWritable;
+              client != null && !isArchived && canManageClients;
           final phone = client?.phone?.trim();
           final hasPhone = phone != null && phone.isNotEmpty;
           return Scaffold(
@@ -67,7 +71,7 @@ class ClientDetailScreen extends ConsumerWidget {
                       AppOverflowMenu(
                         buttonKey: const Key('client_detail_overflow'),
                         actions: [
-                          if (mutationsEnabled)
+                          if (mutationsEnabled) ...[
                             AppOverflowMenuAction(
                               label: l10n.edit,
                               icon: Assets.icons.documentEditOutline,
@@ -78,17 +82,18 @@ class ClientDetailScreen extends ConsumerWidget {
                                 phone: client.phone,
                               ),
                             ),
-                          AppOverflowMenuAction(
-                            label: l10n.delete,
-                            icon: Assets.icons.deleteSquareOutline,
-                            destructive: true,
-                            onSelected: () => confirmDeleteClient(
-                              context: context,
-                              ref: ref,
-                              clientId: clientId,
-                              clientName: client.name,
+                            AppOverflowMenuAction(
+                              label: l10n.delete,
+                              icon: Assets.icons.deleteSquareOutline,
+                              destructive: true,
+                              onSelected: () => confirmDeleteClient(
+                                context: context,
+                                ref: ref,
+                                clientId: clientId,
+                                clientName: client.name,
+                              ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
                       if (hasPhone)
@@ -173,6 +178,7 @@ class ClientDetailScreen extends ConsumerWidget {
                       clientId: clientId,
                       data: data,
                       localeCode: localeCode,
+                      showMoney: showMoney,
                     ),
                   ),
                 ],
@@ -208,11 +214,13 @@ class _ClientIdentityBody extends ConsumerWidget {
     required this.clientId,
     required this.data,
     required this.localeCode,
+    required this.showMoney,
   });
 
   final String clientId;
   final ClientIdentitySnapshot data;
   final String localeCode;
+  final bool showMoney;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -229,6 +237,7 @@ class _ClientIdentityBody extends ConsumerWidget {
           minorPerMajor: data.usesRemoteMoney
               ? RemoteMoneyUnits.minorPerMajor
               : 100,
+          hideMoney: !showMoney,
         ),
         AppSize.spaceXL.gap,
         HomeSectionHeader(
@@ -260,6 +269,7 @@ class _ClientIdentityBody extends ConsumerWidget {
               accentKey: clientAccentKeyFor(clientId),
               localeCode: localeCode,
               minorPerMajor: RemoteMoneyUnits.minorPerMajor,
+              hideMoney: !showMoney,
               onTap: () {
                 final projectId = projects[i].projectId;
                 context.push(

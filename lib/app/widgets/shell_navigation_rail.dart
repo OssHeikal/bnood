@@ -25,9 +25,11 @@ class ShellNavigationRail extends StatelessWidget {
     required this.destinations,
     required this.voucherSemanticsLabel,
     this.moreTabIndex,
+    this.showVoucher = true,
   });
 
   final int? moreTabIndex;
+  final bool showVoucher;
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected;
   final VoidCallback onVoucher;
@@ -117,7 +119,8 @@ class ShellNavigationRail extends StatelessWidget {
               height: 1.2,
             );
 
-    final voucherLeading = Padding(
+    final voucherLeading = showVoucher
+        ? Padding(
       padding: const EdgeInsets.only(bottom: AppSize.spaceLG),
       child: Semantics(
         button: true,
@@ -146,7 +149,8 @@ class ShellNavigationRail extends StatelessWidget {
           ),
         ),
       ),
-    );
+    )
+        : null;
 
     return NavigationRailTheme(
       data: NavigationRailThemeData(

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:bnood/features/app_gate/data/app_config_record.dart';
 import 'package:bnood/features/app_gate/app_gate_paths.dart';
 import 'package:bnood/features/app_gate/app_gate_provider.dart';
+import 'package:bnood/features/auth/auth_controller.dart';
 
 /// Refetch app config on resume; only maintenance / force-update replace the route.
 class AppGateLifecycle extends ConsumerStatefulWidget {
@@ -37,6 +38,10 @@ class _AppGateLifecycleState extends ConsumerState<AppGateLifecycle>
   }
 
   Future<void> _onResume() async {
+    final authed = ref.read(authControllerProvider).isAuthenticated;
+    if (authed) {
+      await ref.read(authControllerProvider.notifier).refreshMeSilently();
+    }
     final config = await ref
         .read(appGateProvider.notifier)
         .fetchConfig(failOpen: true);

@@ -1,12 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_context_providers.dart';
-import 'account_office_mutations.dart';
 import 'account_office_policy.dart';
 import 'office_membership.dart';
+import 'office_permission_keys.dart';
+import 'office_permissions.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 
 export 'account_office_mutations.dart';
+export 'office_permission_keys.dart';
+export 'office_permissions.dart';
 export 'auth_office_payload.dart';
 export 'office_membership.dart';
 
@@ -43,12 +46,46 @@ final selectedOfficeMembershipProvider = Provider<OfficeMembership?>((ref) {
   return null;
 });
 
-final accountOfficeMutationsEnabledProvider = Provider<bool>((ref) {
+final officeAccountPermissionsProvider = Provider<OfficeAccountPermissions>((
+  ref,
+) {
   final ctx = ref.watch(accountContextProvider);
-  return accountOfficeMutationsEnabled(
-    isPersonal: ctx.isPersonal,
-    selectedOffice: ref.watch(selectedOfficeMembershipProvider),
+  if (ctx.isPersonal) return OfficeAccountPermissions.personal();
+  return OfficeAccountPermissions.office(
+    ref.watch(selectedOfficeMembershipProvider),
   );
+});
+
+final accountOfficeMutationsEnabledProvider = Provider<bool>((ref) {
+  return ref.watch(officeAccountPermissionsProvider).anyLedgerManageEnabled;
+});
+
+final accountOfficeCanManageProvider =
+    Provider.family<bool, OfficePermissionArea>((ref, area) {
+      return ref.watch(officeAccountPermissionsProvider).canManage(area);
+    });
+
+final accountOfficeCanViewProvider =
+    Provider.family<bool, OfficePermissionArea>((ref, area) {
+      return ref.watch(officeAccountPermissionsProvider).canView(area);
+    });
+
+final accountOfficeClientMoneyVisibleProvider = Provider<bool>((ref) {
+  return ref.watch(officeAccountPermissionsProvider).canViewClientMoney;
+});
+
+final accountOfficeCanCreateVoucherProvider = Provider<bool>((ref) {
+  return ref.watch(officeAccountPermissionsProvider).canCreateVoucher;
+});
+
+/// Visible router branches → dock tab order (maps dock index → branch index).
+final shellVisibleBranchIndicesProvider = Provider<List<int>>((ref) {
+  final perms = ref.watch(officeAccountPermissionsProvider);
+  final out = <int>[];
+  for (final branch in ShellNavBranch.values) {
+    if (perms.shellBranchVisible(branch)) out.add(branch.routerIndex);
+  }
+  return out;
 });
 
 final officeReadOnlyBannerVisibleProvider = Provider<bool>((ref) {

@@ -13,12 +13,16 @@ class ProvidersListTile extends StatelessWidget {
     required this.onOpenDetail,
     required this.onEdit,
     required this.onDelete,
+    this.canManage = true,
+    this.showMoney = true,
   });
 
   final AppProvider provider;
   final VoidCallback onOpenDetail;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final bool canManage;
+  final bool showMoney;
 
   @override
   Widget build(BuildContext context) {
@@ -35,15 +39,17 @@ class ProvidersListTile extends StatelessWidget {
       kindLabel: kindLabel,
       clientsCount: provider.clientsCount,
       phone: provider.phone,
-      paidPiastres: provider.paidMinor,
-      remainingPiastres: provider.remainingMinor,
+      paidPiastres: showMoney ? provider.paidMinor : null,
+      remainingPiastres: showMoney ? provider.remainingMinor : null,
       minorPerMajor: RemoteMoneyUnits.minorPerMajor,
       onTap: onOpenDetail,
-      overflowActions: providerOverflowActions(
-        l10n: l10n,
-        onEdit: onEdit,
-        onDelete: onDelete,
-      ),
+      overflowActions: canManage
+          ? providerOverflowActions(
+              l10n: l10n,
+              onEdit: onEdit,
+              onDelete: onDelete,
+            )
+          : null,
     );
   }
 }

@@ -15,6 +15,8 @@ import '../../../../core/shared/pagination/pagination.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
 import '../../../../core/ui/widgets/directory_search_field.dart';
+import '../../../../core/account/account_office_providers.dart';
+import '../../../../core/account/office_permission_keys.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/providers/presentation/sheets/provider_create_sheet.dart';
 import 'package:bnood/features/providers/presentation/sheets/provider_edit_sheet.dart';
@@ -79,6 +81,9 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final filter = ref.watch(providersListTypeFilterProvider);
+    final canManage =
+        ref.watch(accountOfficeCanManageProvider(OfficePermissionArea.providers));
+    final showMoney = ref.watch(accountOfficeClientMoneyVisibleProvider);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _cacheCollapsingHeaderHeight(),
     );
@@ -110,18 +115,19 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                 CustomSliverAppBar(
                   title: l10n.directoryTitle,
                   actions: [
-                    CustomAppBarAction(
-                      key: const Key('providers_app_bar_add'),
-                      tooltip: l10n.directoryAddProvider,
-                      tone: CustomAppBarActionTone.tint,
-                      onPressed: () => _addProvider(context),
-                      child: ShellNavIcon(
-                        asset: Assets.icons.addOutline,
-                        color: colors.primaryOnTint,
-                        size: AppSize.icon,
-                        semanticsLabel: l10n.directoryAddProvider,
+                    if (canManage)
+                      CustomAppBarAction(
+                        key: const Key('providers_app_bar_add'),
+                        tooltip: l10n.directoryAddProvider,
+                        tone: CustomAppBarActionTone.tint,
+                        onPressed: () => _addProvider(context),
+                        child: ShellNavIcon(
+                          asset: Assets.icons.addOutline,
+                          color: colors.primaryOnTint,
+                          size: AppSize.icon,
+                          semanticsLabel: l10n.directoryAddProvider,
+                        ),
                       ),
-                    ),
                   ],
                 ),
                 SliverToBoxAdapter(
@@ -190,11 +196,12 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                   title: _emptyTitle(l10n, filter),
                   description: l10n.providersEmptyDescription,
                   actions: [
-                    AppFallbackAction(
-                      label: l10n.directoryAddProvider,
-                      onPressed: () => _addProvider(ctx),
-                      role: AppFallbackActionRole.primary,
-                    ),
+                    if (canManage)
+                      AppFallbackAction(
+                        label: l10n.directoryAddProvider,
+                        onPressed: () => _addProvider(ctx),
+                        role: AppFallbackActionRole.primary,
+                      ),
                   ],
                 ),
               ),
@@ -213,6 +220,8 @@ class _ProvidersScreenState extends ConsumerState<ProvidersScreen> {
                 return ProvidersListTile(
                   key: ValueKey(provider.id),
                   provider: provider,
+                  showMoney: showMoney,
+                  canManage: canManage,
                   onOpenDetail: () => context.push('/providers/${provider.id}'),
                   onEdit: () =>
                       showProviderEditSheet(context, provider: provider),

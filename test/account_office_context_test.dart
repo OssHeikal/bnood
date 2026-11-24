@@ -84,7 +84,7 @@ void main() {
     expect(AuthOfficePayload.fromJson(null).offices, isEmpty);
   });
 
-  test('accountOfficeMutationsEnabled view-only when permission_keys omit create', () {
+  test('accountOfficeMutationsEnabled view-only when permission_keys omit manage', () {
     const viewOnly = OfficeMembership(
       id: 'o-view',
       name: 'View',
