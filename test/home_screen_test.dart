@@ -1,6 +1,7 @@
-import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/core/domain/ledger/ledger_entities.dart';
+import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/features/home/presentation/screens/home_screen.dart';
+import 'package:bnood/features/projects/data/project_list_row.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +14,7 @@ void main() {
   Future<void> pumpHome(
     WidgetTester tester, {
     HomeTotals? totals,
-    List<HomeClientBalanceRow>? clients,
+    List<ProjectListRow>? projects,
     List<HomeSupplierSpendRow>? suppliers,
     Locale locale = const Locale('en'),
     TextScaler textScaler = TextScaler.noScaling,
@@ -26,7 +27,7 @@ void main() {
       ProviderScope(
         overrides: [
           if (totals != null) homeTotalsOverride(totals),
-          if (clients != null) homeClientBalancesOverride(clients),
+          homeActiveProjectsOverride(projects ?? const []),
           suppliers != null
               ? homeSupplierSpendsOverride(suppliers)
               : emptyHomeSupplierSpendsOverride(),
@@ -47,21 +48,16 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('renders stat totals and active client card', (tester) async {
-    final now = DateTime.utc(2026, 11, 1);
+  testWidgets('renders stat totals and active project card', (tester) async {
     await pumpHome(
       tester,
       totals: const HomeTotals(receivedPiastres: 100000, spentPiastres: 40000),
-      clients: [
-        HomeClientBalanceRow(
-          client: Client(
-            id: 'c1',
-            workspaceId: 'w',
-            name: 'Nile Tower',
-            phone: '01000000000',
-            createdAt: now,
-            updatedAt: now,
-          ),
+      projects: const [
+        ProjectListRow(
+          projectId: 'p1',
+          projectName: 'Nile Tower',
+          clientId: 'c1',
+          clientName: 'Client One',
           remainingPiastres: 60000,
           receivedPiastres: 100000,
           spentPiastres: 40000,
@@ -71,6 +67,7 @@ void main() {
 
     expect(find.text('Received'), findsOneWidget);
     expect(find.text('Nile Tower'), findsOneWidget);
+    expect(find.text('Client One'), findsOneWidget);
     expect(find.textContaining('New'), findsNothing);
     expect(find.textContaining('Directory'), findsNothing);
   });
@@ -81,7 +78,7 @@ void main() {
       tester,
       locale: const Locale('en'),
       totals: totals,
-      clients: const [],
+      projects: const [],
     );
     expect(find.text('Bnood'), findsOneWidget);
     expect(find.text('بنود'), findsNothing);
@@ -90,7 +87,7 @@ void main() {
       tester,
       locale: const Locale('ar'),
       totals: totals,
-      clients: const [],
+      projects: const [],
     );
     expect(find.text('بنود'), findsOneWidget);
     expect(find.text('Bnood'), findsNothing);
@@ -102,28 +99,23 @@ void main() {
       locale: const Locale('ar'),
       textScaler: TextScaler.linear(1.2),
       totals: const HomeTotals(receivedPiastres: 0, spentPiastres: 0),
-      clients: const [],
+      projects: const [],
     );
 
     expect(find.text('الدليل'), findsNothing);
-    expect(find.textContaining('للعملاء الناشطين'), findsWidgets);
+    expect(find.text('مشاريع نشطة'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('negative client remaining uses signed display', (tester) async {
-    final now = DateTime.utc(2026, 11, 1);
+  testWidgets('negative project remaining uses signed display', (tester) async {
     await pumpHome(
       tester,
-      clients: [
-        HomeClientBalanceRow(
-          client: Client(
-            id: 'c2',
-            workspaceId: 'w',
-            name: 'Overdrawn Co',
-            phone: null,
-            createdAt: now,
-            updatedAt: now,
-          ),
+      projects: const [
+        ProjectListRow(
+          projectId: 'p2',
+          projectName: 'Overdrawn Site',
+          clientId: 'c2',
+          clientName: 'Overdrawn Co',
           remainingPiastres: -25000,
           receivedPiastres: 10000,
           spentPiastres: 35000,
@@ -132,7 +124,7 @@ void main() {
       totals: const HomeTotals(receivedPiastres: 10000, spentPiastres: 35000),
     );
 
-    expect(find.text('Overdrawn Co'), findsOneWidget);
+    expect(find.text('Overdrawn Site'), findsOneWidget);
     expect(find.textContaining('−'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
@@ -141,7 +133,7 @@ void main() {
     await pumpHome(
       tester,
       totals: const HomeTotals(receivedPiastres: 0, spentPiastres: 0),
-      clients: const [],
+      projects: const [],
     );
 
     expect(find.text('See all'), findsWidgets);
@@ -160,7 +152,7 @@ void main() {
           homeTotalsOverride(
             const HomeTotals(receivedPiastres: 0, spentPiastres: 0),
           ),
-          homeClientBalancesOverride(const []),
+          homeActiveProjectsOverride(const []),
           emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),
           homeSuppliersProvider.overrideWith(

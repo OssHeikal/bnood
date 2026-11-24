@@ -6,6 +6,7 @@ import '../../../../core/services/config/theme/app_colors.dart';
 import '../../../../core/services/config/theme/app_shape.dart';
 import '../../../../core/services/config/theme/app_size.dart';
 import '../../../../core/ui/theme/app_colors.dart' as legacy;
+import '../../../../core/domain/formatting/person_initials.dart';
 import '../../../../core/domain/money/remote_money_units.dart';
 import '../../../../core/ui/widgets/app_amount.dart';
 import '../../../../core/ui/widgets/app_card.dart';
@@ -52,7 +53,7 @@ class ClientDetailCraftsmanRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _SmallAvatar(
-                initial: preview.name.isNotEmpty ? preview.name[0] : '?',
+                initial: personInitials(preview.name),
                 accent: accent,
               ),
               const SizedBox(width: AppSize.spaceSM),

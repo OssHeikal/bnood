@@ -19,11 +19,18 @@ class ProjectsRepository {
   final OfficeProjectsApi officeProjectsApi;
   final bool Function() isOfficeScope;
 
-  Future<({List<ProjectListRow> items, bool hasMore, int page})> listProjects({
+  Future<({
+    List<ProjectListRow> items,
+    bool hasMore,
+    int page,
+    int total,
+  })> listProjects({
     required ClientListArchiveFilter status,
     String? q,
     int page = 1,
     int perPage = 50,
+    String sort = 'name',
+    String order = 'asc',
   }) async {
     if (isOfficeScope()) {
       final result = await officeProjectsApi.listProjects(
@@ -31,11 +38,14 @@ class ProjectsRepository {
         q: q,
         page: page,
         perPage: perPage,
+        sort: sort,
+        order: order,
       );
       return (
         items: result.items.map(projectListRowFromOfficeRecord).toList(),
         hasMore: result.hasMore,
         page: result.page,
+        total: result.total,
       );
     }
 
@@ -45,10 +55,20 @@ class ProjectsRepository {
       page: page,
       perPage: perPage,
     );
+    final items = result.items.map(projectListRowFromClientRecord).toList();
+    if (sort == 'updated_at') {
+      items.sort((a, b) {
+        final left = a.lastActivityAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+        final right = b.lastActivityAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+        final cmp = left.compareTo(right);
+        return order == 'desc' ? -cmp : cmp;
+      });
+    }
     return (
-      items: result.items.map(projectListRowFromClientRecord).toList(),
+      items: items,
       hasMore: result.hasMore,
       page: result.page,
+      total: result.total,
     );
   }
 }

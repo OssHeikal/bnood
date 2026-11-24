@@ -34,6 +34,7 @@ void refreshAfterClientMutation(
   bumpPagingListRefresh(ref, PagingListIds.projects);
   ref.read(homeTotalsProvider.notifier).refreshSilently();
   ref.read(homeClientBalancesProvider.notifier).refreshSilently();
+  ref.read(homeActiveProjectsProvider.notifier).refreshSilently();
   ref.read(homeCraftsmenProvider.notifier).refreshSilently();
   ref.read(subscriptionProvider.notifier).refreshSilently();
   final ids = <String>{};

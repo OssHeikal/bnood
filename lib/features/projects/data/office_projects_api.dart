@@ -68,6 +68,8 @@ class OfficeProjectsApi {
     String? q,
     int page = 1,
     int perPage = 50,
+    String sort = 'name',
+    String order = 'asc',
   }) {
     return _guard(() async {
       final response = await _dio.get<Map<String, dynamic>>(
@@ -77,6 +79,8 @@ class OfficeProjectsApi {
           if (q != null && q.trim().isNotEmpty) 'q': q.trim(),
           'page': page,
           'per_page': perPage,
+          'sort': sort,
+          'order': order,
         },
         options: Options(extra: _authenticatedExtra),
       );

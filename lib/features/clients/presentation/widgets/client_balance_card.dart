@@ -6,6 +6,7 @@ import '../../../../core/services/config/theme/app_shape.dart';
 import '../../../../core/services/config/theme/app_size.dart';
 import '../../../../core/ui/theme/app_colors.dart' as legacy;
 import '../../../../core/ui/resources/gen/assets.gen.dart';
+import '../../../../core/domain/formatting/person_initials.dart';
 import '../../../../core/ui/widgets/app_amount.dart';
 import '../../../../core/ui/widgets/app_card.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
@@ -78,7 +79,7 @@ class ClientBalanceCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     _Avatar(
-                      initial: name.isNotEmpty ? name[0] : '?',
+                      initial: personInitials(name),
                       accent: accent,
                     ),
                     AppSize.spaceMD.gap,
@@ -94,6 +95,17 @@ class ClientBalanceCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
+                          if (meta != null && meta!.isNotEmpty) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              meta!,
+                              style: text.caption.copyWith(
+                                color: colors.onSurfaceMuted,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
                           if (showClientFlows) ...[
                             AppSize.spaceXS.gap,
                             Align(
@@ -115,16 +127,6 @@ class ClientBalanceCard extends StatelessWidget {
                                       ),
                                       textDirection: TextDirection.ltr,
                                     ),
-                            ),
-                          ] else if (meta != null && meta!.isNotEmpty) ...[
-                            const SizedBox(height: 2),
-                            Text(
-                              meta!,
-                              style: text.caption.copyWith(
-                                color: colors.onSurfaceMuted,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ],

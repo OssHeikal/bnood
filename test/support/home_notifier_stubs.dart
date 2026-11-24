@@ -6,6 +6,7 @@ import 'package:bnood/features/clients/presentation/providers/clients_list_pagin
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
+import 'package:bnood/features/projects/data/project_list_row.dart';
 
 class StubHomeTotalsNotifier extends HomeTotalsNotifier {
   StubHomeTotalsNotifier(this.value);
@@ -81,6 +82,20 @@ Override homeTotalsOverride(HomeTotals totals) =>
 Override homeClientBalancesOverride(List<HomeClientBalanceRow> rows) =>
     homeClientBalancesProvider.overrideWith(
       () => StubHomeClientBalancesNotifier(rows),
+    );
+
+class StubHomeActiveProjectsNotifier extends HomeActiveProjectsNotifier {
+  StubHomeActiveProjectsNotifier(this.rows);
+
+  final List<ProjectListRow> rows;
+
+  @override
+  Future<List<ProjectListRow>> fetch() async => rows;
+}
+
+Override homeActiveProjectsOverride(List<ProjectListRow> rows) =>
+    homeActiveProjectsProvider.overrideWith(
+      () => StubHomeActiveProjectsNotifier(rows),
     );
 
 class StubClientsListNotifier extends ClientsListNotifier {

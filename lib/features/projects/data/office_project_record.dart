@@ -12,6 +12,7 @@ class OfficeProjectRecord {
     this.receivedPiastres,
     this.spentPiastres,
     this.balancePiastres,
+    this.updatedAt,
   });
 
   final String projectId;
@@ -22,6 +23,7 @@ class OfficeProjectRecord {
   final int? receivedPiastres;
   final int? spentPiastres;
   final int? balancePiastres;
+  final DateTime? updatedAt;
 
   static OfficeProjectRecord fromJson(Map<String, dynamic> json) {
     int? readPiastres(Object? raw) {
@@ -33,6 +35,11 @@ class OfficeProjectRecord {
 
     final clientId = json['client_id'] as String? ?? '';
     final clientName = json['client_name'] as String? ?? '';
+    DateTime? updatedAt;
+    final rawUpdated = json['updated_at'];
+    if (rawUpdated is String && rawUpdated.isNotEmpty) {
+      updatedAt = DateTime.tryParse(rawUpdated)?.toUtc();
+    }
 
     return OfficeProjectRecord(
       projectId: json['id'] as String,
@@ -43,6 +50,7 @@ class OfficeProjectRecord {
       receivedPiastres: readPiastres(json['received_piastres']),
       spentPiastres: readPiastres(json['spent_piastres']),
       balancePiastres: readPiastres(json['balance_piastres']),
+      updatedAt: updatedAt,
     );
   }
 

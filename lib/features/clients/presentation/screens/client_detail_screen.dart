@@ -127,9 +127,9 @@ class ClientDetailScreen extends ConsumerWidget {
               maxWidth: AppLayout.pageMaxWidth,
               child: ListView(
                 padding: EdgeInsets.fromLTRB(
-                  context.pageGutter,
+                  0,
                   AppSize.spaceSM,
-                  context.pageGutter,
+                  0,
                   AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
                 ),
                 children: [

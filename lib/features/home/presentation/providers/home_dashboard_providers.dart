@@ -1,9 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:bnood/features/clients/data/client_list_archive_filter.dart';
 import 'package:bnood/features/home/data/home_dashboard_mapping.dart';
 import 'package:bnood/features/home/data/home_riverpod.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/features/home/data/home_section_counts.dart';
+import 'package:bnood/features/projects/data/project_list_row.dart';
+import 'package:bnood/features/projects/data/projects_repository.dart';
 import '../../../../core/app_state/silent_async_notifier.dart';
 import '../../../../core/shared/pagination/paging_refresh.dart';
 
@@ -17,6 +20,11 @@ final homeClientBalancesProvider =
       HomeClientBalancesNotifier,
       List<HomeClientBalanceRow>
     >(HomeClientBalancesNotifier.new);
+
+final homeActiveProjectsProvider =
+    AsyncNotifierProvider<HomeActiveProjectsNotifier, List<ProjectListRow>>(
+      HomeActiveProjectsNotifier.new,
+    );
 
 final homeSupplierSpendsProvider =
     AsyncNotifierProvider<
@@ -41,11 +49,13 @@ Future<void> refreshHomeDashboard(WidgetRef ref) {
   final pending = Future.wait([
     ref.read(homeTotalsProvider.notifier).refreshSilently(),
     ref.read(homeClientBalancesProvider.notifier).refreshSilently(),
+    ref.read(homeActiveProjectsProvider.notifier).refreshSilently(),
     ref.read(homeSupplierSpendsProvider.notifier).refreshSilently(),
     ref.read(homeCraftsmenProvider.notifier).refreshSilently(),
     ref.read(homeSuppliersProvider.notifier).refreshSilently(),
   ]);
   bumpPagingListRefresh(ref, PagingListIds.clients);
+  bumpPagingListRefresh(ref, PagingListIds.projects);
   return pending;
 }
 
@@ -67,6 +77,26 @@ class HomeClientBalancesNotifier
   Future<List<HomeClientBalanceRow>> fetch() async {
     final dashboard = await ref.read(homeRepositoryProvider).getHomeDashboard();
     return dashboard.clients.map(homeClientBalanceRowFromPreview).toList();
+  }
+}
+
+class HomeActiveProjectsNotifier extends SilentAsyncNotifier<List<ProjectListRow>> {
+  static const _previewLimit = 8;
+
+  @override
+  Future<List<ProjectListRow>> fetch() async {
+    final repo = ref.read(projectsRepositoryProvider);
+    final result = await repo.listProjects(
+      status: ClientListArchiveFilter.active,
+      page: 1,
+      perPage: 50,
+      sort: 'updated_at',
+      order: 'desc',
+    );
+    final items = result.items.take(_previewLimit).toList();
+    ref.read(homeSectionCountsProvider.notifier).state =
+        ref.read(homeSectionCountsProvider).copyWith(projectsCount: result.total);
+    return items;
   }
 }
 

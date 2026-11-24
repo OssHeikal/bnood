@@ -8,6 +8,9 @@ import '../../../../core/services/config/theme/app_colors.dart';
 import '../../../../core/services/config/theme/app_size.dart';
 import 'package:bnood/features/home/data/craftsman_snapshot_limit.dart';
 import 'package:bnood/features/clients/data/client_list_archive_filter.dart';
+import 'package:bnood/features/clients/presentation/widgets/client_balance_card.dart';
+import 'package:bnood/features/home/presentation/widgets/home_person_card.dart';
+import 'package:bnood/features/projects/presentation/providers/projects_list_providers.dart';
 import '../../../../core/domain/money/remote_money_units.dart';
 import '../../../../core/ui/layout/app_layout.dart';
 import '../../../../core/ui/layout/bnood_max_width.dart';
@@ -26,7 +29,6 @@ import 'package:bnood/features/providers/presentation/providers/providers_list_p
 import 'package:bnood/features/providers/presentation/widgets/remote_craftsman_summary_card.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import '../../../../core/ui/widgets/app_card.dart';
-import 'package:bnood/features/home/presentation/widgets/home_person_card.dart';
 import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
 import 'package:bnood/features/home/presentation/widgets/home_loading_skeleton.dart';
 import 'package:bnood/features/home/presentation/widgets/home_section_header.dart';
@@ -35,7 +37,6 @@ import 'package:bnood/features/home/presentation/widgets/home_identity_title.dar
 import 'package:bnood/features/account/presentation/widgets/account_switcher_title.dart';
 import 'package:bnood/features/account/presentation/widgets/office_read_only_banner.dart';
 import '../../../../core/account/account_office_providers.dart';
-import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -65,7 +66,7 @@ class HomeScreen extends ConsumerWidget {
           final colors = context.colors;
           final text = context.text;
           final totals = ref.watch(homeTotalsProvider);
-          final clients = ref.watch(homeClientBalancesProvider);
+          final activeProjects = ref.watch(homeActiveProjectsProvider);
           final craftsmen = ref.watch(homeCraftsmenProvider);
           final remoteSuppliers = ref.watch(homeSuppliersProvider);
           final sectionCounts = ref.watch(homeSectionCountsProvider);
@@ -95,49 +96,47 @@ class HomeScreen extends ConsumerWidget {
             ),
           ];
 
-          final activeClientsChildren = <Widget>[
+          final activeProjectsChildren = <Widget>[
             HomeSectionHeader(
-              title: l10n.activeClients,
+              title: l10n.activeProjects,
               seeAllLabel: seeAllLabelWithCount(
                 l10n,
                 sectionSeeAllCount(
-                  total: sectionCounts.clientsCount,
-                  visibleLength: clients.valueOrNull?.length ?? 0,
+                  total: sectionCounts.projectsCount,
+                  visibleLength: activeProjects.valueOrNull?.length ?? 0,
                 ),
               ),
               onSeeAll: () {
-                if (remoteMoney) {
-                  ref.read(clientsListFilterProvider.notifier).state =
-                      ClientListArchiveFilter.active;
-                }
-                context.push('/clients');
+                ref.read(projectsListFilterProvider.notifier).state =
+                    ClientListArchiveFilter.active;
+                context.go('/projects');
               },
             ),
             AppSize.spaceSM.gap,
             AsyncValueBody(
-              value: clients,
+              value: activeProjects,
               loadingPlaceholder: const HomePersonListSkeleton(),
               error: (e, _) => AppFallback(
                 isError: true,
                 icon: Icons.error_outline,
-                title: l10n.clientsLoadErrorTitle,
+                title: l10n.projectsLoadErrorTitle,
                 description: screenErrorDescription(l10n, e),
                 actionLabel: l10n.retry,
                 onAction: () => ref
-                    .read(homeClientBalancesProvider.notifier)
+                    .read(homeActiveProjectsProvider.notifier)
                     .refreshSilently(),
               ),
               data: (rows) {
                 if (rows.isEmpty) {
                   return AppCard(
                     child: AppFallback.section(
-                      icon: Icons.people_outline,
-                      title: l10n.homeNoActiveClientsTitle,
-                      description: l10n.homeNoActiveClientsDescription,
+                      icon: Icons.folder_open_outlined,
+                      title: l10n.homeNoActiveProjectsTitle,
+                      description: l10n.homeNoActiveProjectsDescription,
                       actions: [
                         AppFallbackAction(
                           label: l10n.seeAll,
-                          onPressed: () => context.push('/clients'),
+                          onPressed: () => context.go('/projects'),
                           role: AppFallbackActionRole.tertiary,
                         ),
                       ],
@@ -148,16 +147,18 @@ class HomeScreen extends ConsumerWidget {
                   children: [
                     for (var i = 0; i < rows.length; i++) ...[
                       if (i > 0) AppSize.spaceMD.gap,
-                      HomePersonCard(
-                        name: rows[i].client.name,
+                      ClientBalanceCard(
+                        name: rows[i].projectName,
+                        meta: rows[i].clientName,
                         receivedPiastres: rows[i].receivedPiastres,
                         spentPiastres: rows[i].spentPiastres,
                         amountPiastres: rows[i].remainingPiastres,
-                        accentKey: homeAccentKeyFor(rows[i].client.id),
+                        accentKey: clientAccentKeyFor(rows[i].clientId),
                         localeCode: localeCode,
                         minorPerMajor: moneyScale,
-                        onTap: () =>
-                            context.push('/clients/${rows[i].client.id}'),
+                        onTap: () => context.push(
+                          '/projects/${rows[i].projectId}?clientId=${rows[i].clientId}',
+                        ),
                       ),
                     ],
                   ],
@@ -316,7 +317,7 @@ class HomeScreen extends ConsumerWidget {
           ];
 
           final snapshotChildren = <Widget>[
-            ...activeClientsChildren,
+            ...activeProjectsChildren,
             AppSize.spaceXL.gap,
             ...providerSnapshotChildren,
           ];
@@ -365,7 +366,7 @@ class HomeScreen extends ConsumerWidget {
                           children: [
                             ...summaryChildren,
                             AppSize.spaceXL.gap,
-                            ...activeClientsChildren,
+                            ...activeProjectsChildren,
                           ],
                         ),
                         end: Column(

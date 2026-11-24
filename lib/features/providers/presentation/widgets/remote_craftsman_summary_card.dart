@@ -4,6 +4,7 @@ import '../../../../core/services/config/extensions/num_extensions.dart';
 import '../../../../core/services/config/theme/app_colors.dart';
 import '../../../../core/services/config/theme/app_shape.dart';
 import '../../../../core/services/config/theme/app_size.dart';
+import '../../../../core/domain/formatting/person_initials.dart';
 import '../../../../core/domain/money/remote_money_units.dart';
 import '../../../../core/ui/resources/gen/assets.gen.dart';
 import '../../../../core/ui/theme/app_colors.dart' as legacy;
@@ -51,7 +52,7 @@ class RemoteCraftsmanSummaryCard extends StatelessWidget {
     final colors = context.colors;
     final l10n = AppLocalizations.of(context);
     final accent = legacy.AppColors.accent(accentKey);
-    final initial = name.isNotEmpty ? name.characters.first : '?';
+    final initial = personInitials(name);
     final actions = overflowActions;
     final kind = kindLabel?.trim();
     final subtitle = _subtitle(l10n);

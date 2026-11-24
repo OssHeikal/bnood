@@ -118,6 +118,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeClients => 'Active clients';
 
   @override
+  String get activeProjects => 'Active projects';
+
+  @override
   String get homeAppName => 'Bnood';
 
   @override
@@ -163,6 +166,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get homeNoActiveClientsDescription =>
       'Add a client from the Clients tab to start tracking.';
+
+  @override
+  String get homeNoActiveProjectsTitle => 'No active projects';
+
+  @override
+  String get homeNoActiveProjectsDescription =>
+      'Add a project from the Projects tab to start tracking.';
 
   @override
   String get homeLoadErrorTitle => 'Could not load home';

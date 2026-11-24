@@ -12,6 +12,7 @@ class ProjectListRow {
     this.remainingPiastres,
     this.receivedPiastres,
     this.spentPiastres,
+    this.lastActivityAt,
   });
 
   final String projectId;
@@ -21,6 +22,7 @@ class ProjectListRow {
   final int? remainingPiastres;
   final int? receivedPiastres;
   final int? spentPiastres;
+  final DateTime? lastActivityAt;
 }
 
 ProjectListRow projectListRowFromClientRecord(ClientApiRecord record) {
@@ -33,6 +35,7 @@ ProjectListRow projectListRowFromClientRecord(ClientApiRecord record) {
     remainingPiastres: balances?.remainingPiastres,
     receivedPiastres: balances?.receivedPiastres,
     spentPiastres: balances?.spentPiastres,
+    lastActivityAt: record.client.updatedAt,
   );
 }
 
@@ -45,6 +48,7 @@ ProjectListRow projectListRowFromOfficeRecord(OfficeProjectRecord record) {
     remainingPiastres: record.balancePiastres,
     receivedPiastres: record.receivedPiastres,
     spentPiastres: record.spentPiastres,
+    lastActivityAt: record.updatedAt,
   );
 }
 

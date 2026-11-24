@@ -5,6 +5,7 @@ import '../../../../core/services/config/theme/app_colors.dart';
 import '../../../../core/services/config/theme/app_shape.dart';
 import '../../../../core/services/config/theme/app_size.dart';
 import '../../../../core/ui/theme/app_colors.dart' as legacy;
+import '../../../../core/domain/formatting/person_initials.dart';
 import '../../../../core/ui/widgets/app_amount.dart';
 import '../../../../core/ui/resources/gen/assets.gen.dart';
 import '../../../../core/ui/widgets/app_card.dart';
@@ -77,7 +78,7 @@ class DirectoryPersonCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       _Avatar(
-                        initial: name.isNotEmpty ? name[0] : '?',
+                        initial: personInitials(name),
                         accent: accent,
                       ),
                       AppSize.spaceMD.gap,

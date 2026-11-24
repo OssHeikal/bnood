@@ -118,6 +118,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get activeClients => 'عملاء نشطون';
 
   @override
+  String get activeProjects => 'مشاريع نشطة';
+
+  @override
   String get homeAppName => 'بنود';
 
   @override
@@ -165,6 +168,13 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get homeNoActiveClientsDescription =>
       'أضف عميل من تبويب العملاء عشان تبدأ المتابعة.';
+
+  @override
+  String get homeNoActiveProjectsTitle => 'مفيش مشاريع نشطة';
+
+  @override
+  String get homeNoActiveProjectsDescription =>
+      'أضف مشروع من تبويب المشاريع عشان تبدأ المتابعة.';
 
   @override
   String get homeLoadErrorTitle => 'تعذر تحميل الرئيسية';

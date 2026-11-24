@@ -18,7 +18,7 @@ void main() {
           homeTotalsOverride(
             const HomeTotals(receivedPiastres: 2500000, spentPiastres: 1800000),
           ),
-          homeClientBalancesOverride(const []),
+          homeActiveProjectsOverride(const []),
           emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),
           emptyHomeSuppliersOverride(),

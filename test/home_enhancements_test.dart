@@ -44,7 +44,7 @@ void main() {
         homeTotalsOverride(
           const HomeTotals(receivedPiastres: 0, spentPiastres: 0),
         ),
-        homeClientBalancesOverride(const []),
+        homeActiveProjectsOverride(const []),
         homeCraftsmenProvider.overrideWith(
           () => StubHomeCraftsmenNotifier([
             HomeCraftsmanActivityRow(

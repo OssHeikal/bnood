@@ -29,7 +29,7 @@ void main() {
           homeTotalsProvider.overrideWith(
             () => PendingHomeTotalsNotifier(gate.future),
           ),
-          homeClientBalancesOverride(const []),
+          homeActiveProjectsOverride(const []),
           emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),
           emptyHomeSuppliersOverride(),

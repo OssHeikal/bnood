@@ -21,7 +21,7 @@ void main() {
         ProviderScope(
           overrides: [
             homeTotalsProvider.overrideWith(() => totalsNotifier),
-            homeClientBalancesOverride(const []),
+            homeActiveProjectsOverride(const []),
             emptyHomeSupplierSpendsOverride(),
             emptyHomeCraftsmenOverride(),
             emptyHomeSuppliersOverride(),
@@ -61,7 +61,7 @@ void main() {
       ProviderScope(
         overrides: [
           homeTotalsProvider.overrideWith(() => totalsNotifier),
-          homeClientBalancesOverride(const []),
+          homeActiveProjectsOverride(const []),
           emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),
           emptyHomeSuppliersOverride(),
@@ -98,6 +98,7 @@ void main() {
         overrides: [
           homeTotalsProvider.overrideWith(() => totalsNotifier),
           homeClientBalancesOverride(const []),
+          homeActiveProjectsOverride(const []),
           emptyHomeSupplierSpendsOverride(),
           emptyHomeCraftsmenOverride(),
           emptyHomeSuppliersOverride(),

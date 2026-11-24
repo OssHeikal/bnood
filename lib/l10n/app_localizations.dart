@@ -308,6 +308,12 @@ abstract class AppLocalizations {
   /// **'Active clients'**
   String get activeClients;
 
+  /// No description provided for @activeProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Active projects'**
+  String get activeProjects;
+
   /// No description provided for @homeAppName.
   ///
   /// In en, this message translates to:
@@ -379,6 +385,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add a client from the Clients tab to start tracking.'**
   String get homeNoActiveClientsDescription;
+
+  /// No description provided for @homeNoActiveProjectsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No active projects'**
+  String get homeNoActiveProjectsTitle;
+
+  /// No description provided for @homeNoActiveProjectsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a project from the Projects tab to start tracking.'**
+  String get homeNoActiveProjectsDescription;
 
   /// No description provided for @homeLoadErrorTitle.
   ///
