@@ -100,19 +100,13 @@ class _NotificationsInboxScreenState extends ConsumerState<NotificationsInboxScr
       child: Scaffold(
         appBar: CustomAppBar(
           title: l10n.notificationsScreenTitle,
-          actions: [
-            CustomAppBarAction(
-              tooltip: l10n.notificationsMarkAllRead,
-              onPressed: _markAllRead,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceSM),
-                child: Text(
-                  l10n.notificationsMarkAllRead,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(color: colors.primary),
-                ),
-              ),
-            ),
-          ],
+          // actions: [
+          //   AppButton.text(
+          //     text: l10n.notificationsMarkAllRead,
+          //     onPressed: _markAllRead,
+          //     textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: colors.primary),
+          //   ),
+          // ],
         ),
         body: AppPagedView<InboxNotificationRecord>(
           controller: _pagingController,
