@@ -58,4 +58,61 @@ void main() {
   expect(page.items.first.clientName, 'Ahmed');
   expect(page.items.first.balancePiastres, 1000);
 });
+
+  test('listProjects uses meta.total when page has fewer rows than total', () async {
+    final api = _api((options) async {
+      return ResponseBody.fromString(
+        '''
+{
+  "success": true,
+  "message": "office_projects",
+  "data": [
+    {
+      "id": "01m847kyb5b4hbq77s1bgekcs3",
+      "name": "Villa",
+      "client_id": "01client",
+      "client_name": "Client",
+      "status": "active",
+      "balance_piastres": 0,
+      "received_piastres": 0,
+      "spent_piastres": 0
+    },
+    {
+      "id": "01m847kyb9bc6qrjzx0h49dcca",
+      "name": "Apartment",
+      "client_id": "01client2",
+      "client_name": "Client 2",
+      "status": "active",
+      "balance_piastres": 0,
+      "received_piastres": 0,
+      "spent_piastres": 0
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 50,
+    "total": 7,
+    "from": 1,
+    "to": 7
+  }
+}
+''',
+        200,
+        headers: {'content-type': ['application/json']},
+      );
+    });
+
+    final page = await api.listProjects(
+      status: ClientListArchiveFilter.active,
+      page: 1,
+      perPage: 50,
+      sort: 'updated_at',
+      order: 'desc',
+    );
+    api.close();
+
+    expect(page.items, hasLength(2));
+    expect(page.total, 7);
+  });
 }

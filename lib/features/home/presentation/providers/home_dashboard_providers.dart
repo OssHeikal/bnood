@@ -111,7 +111,8 @@ class HomeCraftsmenNotifier
   @override
   Future<List<HomeCraftsmanActivityRow>> fetch() async {
     final dashboard = await ref.read(homeRepositoryProvider).getHomeDashboard();
-    ref.read(homeSectionCountsProvider.notifier).state = HomeSectionCounts(
+    final sectionCounts = ref.read(homeSectionCountsProvider);
+    ref.read(homeSectionCountsProvider.notifier).state = sectionCounts.copyWith(
       clientsCount: dashboard.clientsCount ?? dashboard.clients.length,
       craftsmenCount: dashboard.craftsmenCount ?? dashboard.craftsmen.length,
       suppliersCount: dashboard.suppliersCount ?? dashboard.suppliers.length,
