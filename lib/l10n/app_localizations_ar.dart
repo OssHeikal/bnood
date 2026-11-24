@@ -61,10 +61,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get accountScopePersonal => 'شخصي';
 
   @override
+  String get accountScopeOffice => 'مكتب';
+
+  @override
   String get accountSwitchTitle => 'اختر الحساب';
 
   @override
-  String get accountSwitchMenu => 'الحساب';
+  String get accountSwitchMenu => 'تبديل الحساب';
 
   @override
   String get officeOpenDashboard => 'افتح الداشبورد';

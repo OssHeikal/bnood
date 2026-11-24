@@ -3,6 +3,7 @@ import 'package:bnood/core/account/auth_office_payload.dart';
 import 'package:bnood/core/account/office_membership.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/core/data/prefs/app_settings_store.dart';
+import 'package:bnood/core/network/api/auth_api_exception.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
@@ -120,6 +121,40 @@ void main() {
     expect(prefs.getString('bnood.account.selection'), ownedId);
   });
 
+  test('logout clears persisted scope and office header', () async {
+    final container = newTestContainer(
+      initialPrefs: {
+        'bnood.account.selection': sampleOfficeId,
+        'bnood.account.previous': 'personal',
+      },
+      officeContext: const AuthOfficePayload(
+        offices: [
+          OfficeMembership(
+            id: sampleOfficeId,
+            name: 'Office',
+            readOnly: false,
+            isOwner: false,
+          ),
+        ],
+      ),
+    );
+    addTearDown(container.dispose);
+    container.read(accountContextLifecycleProvider);
+    await pumpEventQueue();
+
+    expect(container.read(accountContextProvider).officeId, sampleOfficeId);
+
+    await container.read(authControllerProvider.notifier).logout();
+    await pumpEventQueue();
+
+    expect(container.read(accountContextProvider).isPersonal, isTrue);
+    expect(ApiOfficeHeader.headerValue(), isNull);
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.containsKey('bnood.account.selection'), isFalse);
+    expect(prefs.containsKey('bnood.account.previous'), isFalse);
+  });
+
   test('selectPersonal clears office header', () async {
     final container = newTestContainer();
     addTearDown(container.dispose);
@@ -150,5 +185,13 @@ class _AuthWithOffice extends AuthController {
       user: const User(id: 'u-owner', phone: '01000000000', name: 'Owner'),
       officeContext: officeContext,
     );
+  }
+
+  @override
+  Future<AuthApiException?> logout() async {
+    state = const AuthState(
+      bootstrapStatus: AuthBootstrapStatus.unauthenticated,
+    );
+    return null;
   }
 }

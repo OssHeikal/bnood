@@ -81,14 +81,6 @@ class AppMenuBody extends ConsumerWidget {
         iconColor: colors.primary,
         onTap: () => context.push(AuthPaths.preferences),
       ),
-      if (showAccountSwitcher)
-        SettingsNavRow(
-          label: l10n.accountSwitchMenu,
-          icon: Assets.icons.profileCircleOutline,
-          chipBackground: brandChip,
-          iconColor: colors.primary,
-          onTap: () => showAccountSwitcherSheet(context, ref),
-        ),
       if (dashboardLaunch.show && dashboardLaunch.url != null)
         SettingsNavRow(
           label: l10n.officeOpenDashboard,
@@ -164,6 +156,14 @@ class AppMenuBody extends ConsumerWidget {
             title: null,
             dividerKind: GroupedListDividerKind.insetStart,
             children: [
+              if (showAccountSwitcher)
+                SettingsNavRow(
+                  label: l10n.accountSwitchMenu,
+                  icon: Assets.icons.profileCircleOutline,
+                  chipBackground: brandChip,
+                  iconColor: colors.primary,
+                  onTap: () => showAccountSwitcherSheet(context, ref),
+                ),
               SettingsDestructiveRow(
                 label: l10n.authSignOut,
                 icon: Assets.icons.logout02Outline,

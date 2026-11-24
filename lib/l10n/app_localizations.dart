@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Personal'**
   String get accountScopePersonal;
 
+  /// No description provided for @accountScopeOffice.
+  ///
+  /// In en, this message translates to:
+  /// **'Office'**
+  String get accountScopeOffice;
+
   /// No description provided for @accountSwitchTitle.
   ///
   /// In en, this message translates to:
@@ -209,7 +215,7 @@ abstract class AppLocalizations {
   /// No description provided for @accountSwitchMenu.
   ///
   /// In en, this message translates to:
-  /// **'Account'**
+  /// **'Switch account'**
   String get accountSwitchMenu;
 
   /// No description provided for @officeOpenDashboard.

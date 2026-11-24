@@ -61,10 +61,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountScopePersonal => 'Personal';
 
   @override
+  String get accountScopeOffice => 'Office';
+
+  @override
   String get accountSwitchTitle => 'Choose account';
 
   @override
-  String get accountSwitchMenu => 'Account';
+  String get accountSwitchMenu => 'Switch account';
 
   @override
   String get officeOpenDashboard => 'Open dashboard';

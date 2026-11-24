@@ -18,7 +18,7 @@ class AccountContextController extends Notifier<AccountContextState> {
     ref.listen<AuthState>(authControllerProvider, (previous, next) {
       final wasAuthed = previous?.isAuthenticated ?? false;
       if (wasAuthed && !next.isAuthenticated) {
-        unawaited(_setScope(const AccountScope.personal(), persist: true));
+        unawaited(_clearScopeOnLogout());
         return;
       }
       if (next.isAuthenticated) {
@@ -94,6 +94,13 @@ class AccountContextController extends Notifier<AccountContextState> {
     }
     state = state.copyWith(scope: scope, restoredFromDisk: true);
     ApiOfficeHeader.syncOfficeId(scope.officeId);
+  }
+
+  Future<void> _clearScopeOnLogout() async {
+    state = const AccountContextState.personal();
+    ApiOfficeHeader.syncOfficeId(null);
+    final prefs = await BnoodPrefsAccess.getInstance();
+    await AccountContextStore.clearPersisted(prefs);
   }
 
   Future<void> _setScope(

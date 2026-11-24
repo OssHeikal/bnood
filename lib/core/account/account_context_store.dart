@@ -52,6 +52,13 @@ abstract final class AccountContextStore {
     await prefs.setString(_previousKey, encodeScope(scope));
   }
 
+  /// Clears persisted scope and quick-switch memory on sign-out.
+  static Future<void> clearPersisted(SharedPreferences? prefs) async {
+    if (prefs == null) return;
+    await prefs.remove(_selectionKey);
+    await prefs.remove(_previousKey);
+  }
+
   /// Crockford base32 ULID (26 chars). Loose check for local restore until M2 validates membership.
   static bool isPlausibleOfficeId(String value) {
     if (value.length != 26) return false;
