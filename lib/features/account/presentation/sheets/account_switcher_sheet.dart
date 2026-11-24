@@ -312,7 +312,7 @@ Future<AccountScope?> showAccountSwitcherSheetModal(
   required AccountScope currentScope,
 }) {
   return AppModalSheet.show<AccountScope>(
-    context: context,
+    context: AppModalSheet.presenterContext(context),
     scrollable: false,
     body: HomeFoundationScope(
       child: AccountSwitcherSheet(

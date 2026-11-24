@@ -42,6 +42,16 @@ abstract final class AppModalSheet {
   static const footerChromeKey = Key('app_modal_sheet_footer_chrome');
   static const bottomInsetKey = Key('app_modal_sheet_bottom_inset');
 
+  /// Prefer root overlay for safe-area reads (e.g. app bar / nested navigators).
+  static BuildContext presenterContext(BuildContext context) {
+    final navigator = Navigator.maybeOf(context, rootNavigator: true);
+    final overlay = navigator?.overlay;
+    if (overlay != null) {
+      return overlay.context;
+    }
+    return context;
+  }
+
   static Future<T?> show<T>({
     required BuildContext context,
     Widget? header,
@@ -54,18 +64,19 @@ abstract final class AppModalSheet {
     bool isDismissible = true,
     bool enableDrag = true,
   }) {
-    final brightness = Theme.of(context).brightness;
+    final presenter = presenterContext(context);
+    final brightness = Theme.of(presenter).brightness;
     final colors = brightness == Brightness.dark
         ? AppColors.dark
         : AppColors.light;
-    final openerViewPadding = MediaQuery.viewPaddingOf(context);
-    final openerPaddingInsets = MediaQuery.paddingOf(context);
+    final openerViewPadding = MediaQuery.viewPaddingOf(presenter);
+    final openerPaddingInsets = MediaQuery.paddingOf(presenter);
     final homeIndicatorBottom = openerViewPadding.bottom > 0
         ? openerViewPadding.bottom
         : openerPaddingInsets.bottom;
     final openerKeyboard = MediaQuery.viewInsetsOf(context).bottom;
     return showModalBottomSheet<T>(
-      context: context,
+      context: presenter,
       barrierColor: AppOverlay.barrierColor(context),
       useRootNavigator: useRootNavigator,
       isScrollControlled: true,
