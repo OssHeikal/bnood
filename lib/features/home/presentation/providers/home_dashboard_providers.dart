@@ -81,7 +81,7 @@ class HomeClientBalancesNotifier
 }
 
 class HomeActiveProjectsNotifier extends SilentAsyncNotifier<List<ProjectListRow>> {
-  static const _previewLimit = 8;
+  static const _previewLimit = 3;
 
   @override
   Future<List<ProjectListRow>> fetch() async {
