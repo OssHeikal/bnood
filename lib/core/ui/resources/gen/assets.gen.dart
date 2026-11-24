@@ -350,6 +350,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/mobile_phone_outline.svg
   SvgGenImage get mobilePhoneOutline => const SvgGenImage('assets/icons/mobile_phone_outline.svg');
 
+  /// File path: assets/icons/notification.svg
+  SvgGenImage get notification => const SvgGenImage('assets/icons/notification.svg');
+
   /// File path: assets/icons/paint_roller_outline.svg
   SvgGenImage get paintRollerOutline => const SvgGenImage('assets/icons/paint_roller_outline.svg');
 
@@ -477,6 +480,7 @@ class $AssetsIconsGen {
     materialsPackageOutline,
     menuTwoLineOutline,
     mobilePhoneOutline,
+    notification,
     paintRollerOutline,
     paymentCardOutline,
     pdfOutline,

@@ -20,7 +20,7 @@ class ShellNotificationsAction extends StatelessWidget {
       tooltip: l10n.notificationSettingsTitle,
       onPressed: () => context.push(NotificationsInboxPlaceholderScreen.path),
       child: ShellNavIcon(
-        asset: Assets.icons.emptyInboxOutline,
+        asset: Assets.icons.notification,
         size: AppSize.icon,
         color: context.colors.onSurface,
         semanticsLabel: l10n.notificationSettingsTitle,

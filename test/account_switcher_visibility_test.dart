@@ -2,6 +2,9 @@ import 'package:bnood/core/account/account_context_providers.dart';
 import 'package:bnood/core/account/account_office_providers.dart';
 import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/account/presentation/widgets/account_switcher_title.dart';
+import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
+import 'package:bnood/features/home/data/home_row_models.dart';
+import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
@@ -15,6 +18,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bnood/core/app_state/settings_provider.dart';
 import 'package:bnood/core/data/prefs/app_settings_store.dart';
 
+import 'support/home_notifier_stubs.dart';
+
 const _officeId = '01J9Z8XQ8K9M2N3P4R5S6T7V8W';
 
 class _AuthMember extends AuthController {
@@ -22,7 +27,7 @@ class _AuthMember extends AuthController {
   AuthState build() {
     return AuthState(
       bootstrapStatus: AuthBootstrapStatus.authenticated,
-      user: const User(id: 'u1', phone: '01000000001', name: 'عضو'),
+      user: const User(id: 'u1', phone: '01000000001', name: 'م/ ياسر مهندس'),
       officeContext: const AuthOfficePayload(
         offices: [
           OfficeMembership(
@@ -101,6 +106,41 @@ Future<void> _pumpSwitcherTitle(
   await tester.pumpAndSettle();
 }
 
+Future<void> _pumpHomeHeader(
+  WidgetTester tester, {
+  required AuthController Function() authFactory,
+  Map<String, Object> prefs = const {},
+}) async {
+  SharedPreferences.setMockInitialValues(prefs);
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        authControllerProvider.overrideWith(authFactory),
+        appSettingsBootstrapProvider.overrideWithValue(
+          AppSettingsSnapshot(
+            prefs: null,
+            themeMode: ThemeMode.system,
+            locale: const Locale('ar'),
+          ),
+        ),
+        homeTotalsOverride(const HomeTotals(receivedPiastres: 0, spentPiastres: 0)),
+        homeActiveProjectsOverride(const []),
+        emptyHomeSupplierSpendsOverride(),
+        emptyHomeCraftsmenOverride(),
+        emptyHomeSuppliersOverride(),
+      ],
+      child: MaterialApp(
+        theme: AppFoundationTheme.light(),
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const HomeScreen(),
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -120,6 +160,21 @@ void main() {
     expect(container.read(accountSwitcherVisibleProvider), isTrue);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
     expect(find.text('مكتب النور'), findsOneWidget);
+  });
+
+  testWidgets('named member on home keeps switcher chevron', (tester) async {
+    await _pumpHomeHeader(
+      tester,
+      authFactory: _AuthMember.new,
+      prefs: {'bnood.account.selection': _officeId},
+    );
+
+    expect(find.byIcon(Icons.expand_more), findsOneWidget);
+    expect(
+      find.text('مكتب النور'),
+      findsOneWidget,
+      reason: 'office context shows office title with switcher affordance',
+    );
   });
 
   testWidgets('owner sees office title without switcher', (tester) async {

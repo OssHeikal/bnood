@@ -15,6 +15,7 @@ import '../../../../core/domain/money/remote_money_units.dart';
 import '../../../../core/ui/layout/app_layout.dart';
 import '../../../../core/ui/layout/bnood_max_width.dart';
 import '../../../../core/ui/layout/bnood_two_column.dart';
+import '../../../../core/domain/formatting/cairo_local_time.dart';
 import '../../../../core/domain/formatting/see_all_label.dart';
 import 'package:bnood/features/home/data/home_section_counts.dart';
 import '../../../../core/ui/resources/gen/assets.gen.dart';
@@ -59,6 +60,23 @@ class HomeScreen extends ConsumerWidget {
     final showOwnedOfficeHeader =
         ref.watch(accountOwnedOfficeHeaderVisibleProvider);
     final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final cairoNow = cairoLocalNow();
+    final homeGreeting = cairoIsMorning(cairoNow)
+        ? l10n.homeGreetingMorning
+        : l10n.homeGreetingEvening;
+    final Widget? homeTitleWidget;
+    if (showAccountSwitcher) {
+      homeTitleWidget = AccountSwitcherTitle(
+        displayName: displayName ?? '',
+        greeting: showIdentityHeader ? homeGreeting : null,
+      );
+    } else if (showIdentityHeader) {
+      homeTitleWidget = HomeIdentityTitle(displayName: displayName);
+    } else if (showOwnedOfficeHeader) {
+      homeTitleWidget = AccountSwitcherTitle(displayName: displayName ?? '');
+    } else {
+      homeTitleWidget = null;
+    }
 
     return HomeFoundationScope(
       child: Builder(
@@ -326,16 +344,8 @@ class HomeScreen extends ConsumerWidget {
             backgroundColor: colors.canvas,
             appBar: CustomAppBar(
               automaticallyImplyLeading: false,
-              titleWidget: showIdentityHeader
-                  ? HomeIdentityTitle(displayName: displayName)
-                  : (showAccountSwitcher || showOwnedOfficeHeader)
-                  ? AccountSwitcherTitle(displayName: displayName ?? '')
-                  : null,
-              title: showIdentityHeader ||
-                      showAccountSwitcher ||
-                      showOwnedOfficeHeader
-                  ? null
-                  : l10n.homeAppName,
+              titleWidget: homeTitleWidget,
+              title: homeTitleWidget != null ? null : l10n.homeAppName,
               actions: const [ShellNotificationsAction()],
             ),
             body: RefreshIndicator.adaptive(

@@ -92,7 +92,7 @@ class AppMenuBody extends ConsumerWidget {
       if (isAuthenticated)
         SettingsNavRow(
           label: l10n.notificationSettingsTitle,
-          icon: Assets.icons.mobilePhoneOutline,
+          icon: Assets.icons.notification,
           chipBackground: brandChip,
           iconColor: colors.primary,
           onTap: () => context.push(AuthPaths.notifications),
