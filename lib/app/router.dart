@@ -23,7 +23,7 @@ import 'package:bnood/features/content/presentation/screens/content_page_screen.
 import 'package:bnood/features/settings/presentation/screens/app_preferences_screen.dart';
 import 'package:bnood/features/settings/presentation/screens/notification_settings_screen.dart';
 import 'package:bnood/features/settings/presentation/screens/more_screen.dart';
-import 'package:bnood/features/notifications/presentation/screens/notifications_inbox_placeholder_screen.dart';
+import 'package:bnood/features/notifications/presentation/screens/notifications_inbox_screen.dart';
 import 'package:bnood/features/items/presentation/screens/items_screen.dart';
 import 'package:bnood/features/auth/reset_password_screen.dart';
 import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
@@ -242,8 +242,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         redirect: (_, _) => AuthPaths.more,
       ),
       GoRoute(
-        path: NotificationsInboxPlaceholderScreen.path,
-        builder: (_, _) => const NotificationsInboxPlaceholderScreen(),
+        path: NotificationsInboxScreen.path,
+        builder: (_, _) => const NotificationsInboxScreen(),
       ),
       GoRoute(
         path: AuthPaths.preferences,

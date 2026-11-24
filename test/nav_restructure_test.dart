@@ -8,7 +8,10 @@ import 'package:bnood/core/data/storage/session_store.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_paths.dart';
 import 'package:bnood/features/auth/models/user.dart';
-import 'package:bnood/features/notifications/presentation/screens/notifications_inbox_placeholder_screen.dart';
+import 'package:bnood/core/shared/pagination/paged_fetch_page.dart';
+import 'package:bnood/features/notifications/presentation/providers/notifications_inbox_paging.dart';
+import 'package:bnood/features/notifications/presentation/providers/notifications_unread_provider.dart';
+import 'package:bnood/features/notifications/presentation/screens/notifications_inbox_screen.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +36,12 @@ void main() {
         overrides: [
           appSettingsBootstrapProvider.overrideWithValue(bootstrap),
           sessionStoreProvider.overrideWithValue(FakeSessionStore()),
+          notificationsInboxPageFetcherProvider.overrideWith(
+            (ref) => ({required int page, required int pageSize}) async {
+              return const PagedFetchPage(items: [], hasMore: false);
+            },
+          ),
+          notificationsUnreadCountProvider.overrideWith((ref) async => 0),
         ],
         child: const BnoodApp(),
       ),
@@ -67,19 +76,19 @@ void main() {
     expect(find.byType(ShellNotificationsAction), findsNothing);
   });
 
-  testWidgets('notifications inbox placeholder opens from home', (tester) async {
+  testWidgets('notifications inbox opens from home', (tester) async {
     AppSplashSession.completed = true;
     final container = await pumpBnood(tester);
     container.read(goRouterProvider).go('/home');
     await tester.pumpAndSettle();
 
     await tester.tap(find.byType(ShellNotificationsAction));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
 
-    final l10n = AppLocalizations.of(
-      tester.element(find.byType(NotificationsInboxPlaceholderScreen)),
+    expect(
+      container.read(goRouterProvider).state.matchedLocation,
+      NotificationsInboxScreen.path,
     );
-    expect(find.text(l10n.notificationsInboxTitle), findsOneWidget);
-    expect(find.byType(NotificationsInboxPlaceholderScreen), findsOneWidget);
   });
 }

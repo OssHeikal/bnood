@@ -43,6 +43,15 @@ class AppLocalizationsAr extends AppLocalizations {
       'ستظهر التنبيهات والتحديثات هنا عند توفرها.';
 
   @override
+  String get notificationsScreenTitle => 'الإشعارات';
+
+  @override
+  String get notificationsMarkAllRead => 'تعليم الكل كمقروء';
+
+  @override
+  String get notificationsMarkAllReadDone => 'تم تعليم كل الإشعارات كمقروءة';
+
+  @override
   String get navDirectory => 'الدليل';
 
   @override

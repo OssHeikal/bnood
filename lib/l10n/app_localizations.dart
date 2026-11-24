@@ -164,6 +164,24 @@ abstract class AppLocalizations {
   /// **'Alerts and updates will appear here when available.'**
   String get notificationsInboxDescription;
 
+  /// No description provided for @notificationsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsScreenTitle;
+
+  /// No description provided for @notificationsMarkAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get notificationsMarkAllRead;
+
+  /// No description provided for @notificationsMarkAllReadDone.
+  ///
+  /// In en, this message translates to:
+  /// **'All notifications marked as read'**
+  String get notificationsMarkAllReadDone;
+
   /// No description provided for @navDirectory.
   ///
   /// In en, this message translates to:

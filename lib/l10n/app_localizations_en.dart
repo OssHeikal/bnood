@@ -43,6 +43,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Alerts and updates will appear here when available.';
 
   @override
+  String get notificationsScreenTitle => 'Notifications';
+
+  @override
+  String get notificationsMarkAllRead => 'Mark all read';
+
+  @override
+  String get notificationsMarkAllReadDone => 'All notifications marked as read';
+
+  @override
   String get navDirectory => 'Directory';
 
   @override
