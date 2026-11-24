@@ -1,7 +1,4 @@
 import 'package:bnood/core/account/account_office_providers.dart';
-import 'package:bnood/core/account/office_membership.dart';
-import 'package:bnood/core/account/office_permission_keys.dart';
-import 'package:bnood/core/account/office_permissions.dart';
 import 'package:bnood/core/ui/theme/app_theme.dart';
 import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';

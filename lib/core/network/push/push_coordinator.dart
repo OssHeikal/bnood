@@ -236,8 +236,9 @@ class PushCoordinator {
     if (context == null) return false;
     final router = _ref.read(goRouterProvider);
     final loc = router.routerDelegate.currentConfiguration.uri.path;
-    if (loc == AppStartupSplashPage.path || loc == AuthPaths.bootstrap)
+    if (loc == AppStartupSplashPage.path || loc == AuthPaths.bootstrap) {
       return false;
+    }
     if (isAuthFlowLocation(loc) &&
         loc != AuthPaths.changePassword &&
         loc != AuthPaths.completeProfile) {
@@ -340,8 +341,9 @@ final pushLifecycleProvider = Provider<void>((ref) {
         ? previous?.user?.id
         : null;
     final nextId = next.isAuthenticated ? next.user?.id : null;
-    if (prevId == nextId && previous?.isAuthenticated == next.isAuthenticated)
+    if (prevId == nextId && previous?.isAuthenticated == next.isAuthenticated) {
       return;
+    }
     Future.microtask(() => sync(next));
   });
 });

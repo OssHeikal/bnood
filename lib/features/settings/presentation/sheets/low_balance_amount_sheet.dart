@@ -92,8 +92,9 @@ class _LowBalanceAmountSheetState extends ConsumerState<LowBalanceAmountSheet> {
 
   String? _validate(String? value) {
     final minor = RemoteMoneyFormat.parseMajorInput(value ?? '');
-    if (minor == null || minor <= 0)
+    if (minor == null || minor <= 0) {
       return AppLocalizations.of(context).notificationSettingsAmountInvalid;
+    }
     return null;
   }
 

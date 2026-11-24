@@ -346,10 +346,12 @@ class AppPaywallPackage {
 
   String? effectivePeriodWhen(String period) {
     if (isContact) return null;
-    if (period == 'monthly' && !monthlyEnabled && yearlyEnabled)
+    if (period == 'monthly' && !monthlyEnabled && yearlyEnabled) {
       return 'yearly';
-    if (period == 'yearly' && !yearlyEnabled && monthlyEnabled)
+    }
+    if (period == 'yearly' && !yearlyEnabled && monthlyEnabled) {
       return 'monthly';
+    }
     if (!periodEnabled(period)) return null;
     return period;
   }
@@ -778,8 +780,9 @@ class AppPaywallV3Data {
 
   String initialPackageSlug() {
     final recommended = recommendedPackageSlug;
-    if (recommended != null && packageBySlug(recommended) != null)
+    if (recommended != null && packageBySlug(recommended) != null) {
       return recommended;
+    }
     for (final pkg in packages) {
       if (!pkg.isCurrentPlan) return pkg.slug;
     }

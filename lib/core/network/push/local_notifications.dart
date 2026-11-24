@@ -53,8 +53,9 @@ class LocalNotifications {
     final n = message.notification;
     final title = n?.title;
     final body = n?.body;
-    if ((title == null || title.isEmpty) && (body == null || body.isEmpty))
+    if ((title == null || title.isEmpty) && (body == null || body.isEmpty)) {
       return;
+    }
 
     final details = NotificationDetails(
       android: AndroidNotificationDetails(

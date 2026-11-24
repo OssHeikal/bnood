@@ -6,7 +6,6 @@ import 'package:bnood/core/domain/ledger/ledger_entities.dart';
 import 'package:bnood/features/clients/presentation/providers/client_identity_provider.dart';
 import 'package:bnood/features/clients/presentation/models/client_identity_snapshot.dart';
 import 'package:bnood/features/clients/presentation/screens/client_detail_screen.dart';
-import 'package:bnood/features/clients/presentation/models/client_detail_snapshot.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';

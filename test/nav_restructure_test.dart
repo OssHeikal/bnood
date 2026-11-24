@@ -12,7 +12,6 @@ import 'package:bnood/core/shared/pagination/paged_fetch_page.dart';
 import 'package:bnood/features/notifications/presentation/providers/notifications_inbox_paging.dart';
 import 'package:bnood/features/notifications/presentation/providers/notifications_unread_provider.dart';
 import 'package:bnood/features/notifications/presentation/screens/notifications_inbox_screen.dart';
-import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

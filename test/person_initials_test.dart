@@ -20,7 +20,7 @@ void main() {
   test('strips honorific prefixes for arabic names', () {
     expect(
       personInitials('أ/ سارة محمود'),
-      'س${officeInitialsSeparator}م',
+      'س$officeInitialsSeparatorم',
     );
     expect(personInitials('م. أحمد علي'), 'ا$officeInitialsSeparatorع');
   });

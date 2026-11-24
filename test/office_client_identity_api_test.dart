@@ -1,5 +1,4 @@
 import 'package:bnood/core/network/api/app_dio.dart';
-import 'package:bnood/features/clients/data/office_client_detail_record.dart';
 import 'package:bnood/features/clients/data/office_clients_api.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';

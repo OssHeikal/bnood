@@ -19,7 +19,6 @@ import '../../../../core/services/config/theme/app_size.dart';
 import '../../../../core/shared/pagination/pagination.dart';
 import '../../../../core/ui/resources/gen/assets.gen.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
-import '../../../../core/ui/widgets/app_toaster.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
 
 class NotificationsInboxScreen extends ConsumerStatefulWidget {
@@ -49,19 +48,7 @@ class _NotificationsInboxScreenState extends ConsumerState<NotificationsInboxScr
     super.dispose();
   }
 
-  Future<void> _markAllRead() async {
-    final l10n = AppLocalizations.of(context);
-    try {
-      await ref.read(notificationsRepositoryProvider).markAllRead();
-      refreshNotificationsUnreadCount(ref);
-      _pagingController.refresh();
-      if (!mounted) return;
-      AppToaster.show(l10n.notificationsMarkAllReadDone, kind: ToastKind.success, layoutContext: context);
-    } catch (_) {
-      if (!mounted) return;
-      AppToaster.show(l10n.homeLoadErrorTitle, kind: ToastKind.failure, layoutContext: context);
-    }
-  }
+
 
   Future<void> _onTap(InboxNotificationRecord item) async {
     final payload = <String, String>{
@@ -100,13 +87,6 @@ class _NotificationsInboxScreenState extends ConsumerState<NotificationsInboxScr
       child: Scaffold(
         appBar: CustomAppBar(
           title: l10n.notificationsScreenTitle,
-          // actions: [
-          //   AppButton.text(
-          //     text: l10n.notificationsMarkAllRead,
-          //     onPressed: _markAllRead,
-          //     textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: colors.primary),
-          //   ),
-          // ],
         ),
         body: AppPagedView<InboxNotificationRecord>(
           controller: _pagingController,

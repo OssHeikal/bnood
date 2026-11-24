@@ -151,7 +151,7 @@ class PaywallPackageCard extends StatelessWidget {
                       isDark: isDark,
                     ),
                   )
-                else if (showPriceTrailing && pricing != null)
+                else if (showPriceTrailing)
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       minWidth: 84,

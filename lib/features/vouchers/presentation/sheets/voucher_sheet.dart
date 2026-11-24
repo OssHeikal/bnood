@@ -584,19 +584,22 @@ class VoucherSheetState extends ConsumerState<VoucherSheet> {
         context: context,
         ref: ref,
         error: e,
-      ))
+      )) {
         return;
+      }
       if (!mounted) return;
       if (await handleSubscriptionApiError(
         context: context,
         ref: ref,
         error: e,
-      ))
+      )) {
         return;
+      }
       AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
+      }
     } finally {
       if (mounted) setState(() => _deleting = false);
     }
@@ -694,19 +697,22 @@ class VoucherSheetState extends ConsumerState<VoucherSheet> {
         context: context,
         ref: ref,
         error: e,
-      ))
+      )) {
         return;
+      }
       if (!mounted) return;
       if (await handleSubscriptionApiError(
         context: context,
         ref: ref,
         error: e,
-      ))
+      )) {
         return;
+      }
       AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }

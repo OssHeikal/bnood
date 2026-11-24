@@ -370,8 +370,9 @@ class _ClientStatementScreenState extends ConsumerState<ClientStatementScreen> {
           context: context,
           ref: ref,
           error: e,
-        ))
+        )) {
           return;
+        }
         if (!mounted) return;
         StatementScreenToast.failure(
           context,

@@ -43,8 +43,9 @@ String resolvePushNavigationLocation(Map<String, String> data) {
 }
 
 String _targetLocation(String? target) {
-  if (target == PushBroadcastTarget.subscription)
+  if (target == PushBroadcastTarget.subscription) {
     return pushSubscriptionLocation;
+  }
   return authenticatedHomeForPath();
 }
 

@@ -26,7 +26,6 @@ import 'package:bnood/features/subscription/presentation/actions/subscription_li
 import 'package:bnood/features/clients/presentation/widgets/clients_list_filter_chips.dart';
 import 'package:bnood/features/clients/presentation/providers/clients_list_providers.dart';
 import '../../../../core/account/account_office_providers.dart';
-import '../../../../core/account/office_permission_keys.dart';
 import '../../../../core/app_state/client_mutation_refresh.dart';
 
 class ClientsListScreen extends ConsumerStatefulWidget {

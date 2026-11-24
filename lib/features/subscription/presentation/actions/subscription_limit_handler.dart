@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/formatting/display_digits.dart';
 import 'package:bnood/features/subscription/data/app_subscription.dart';
-import 'package:bnood/features/subscription/data/paywall_v3_models.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
 import '../../../../core/ui/widgets/app_decision.dart';
 import '../../../../core/ui/widgets/toast/app_tone.dart';

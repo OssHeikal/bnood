@@ -47,8 +47,9 @@ class AppAgreement {
 
   int? get remainingMinorForDisplay {
     if (amountMajor == null && amountPiastres == null) return null;
-    if (remainingMajor != null)
+    if (remainingMajor != null) {
       return RemoteMoneyUnits.majorToMinor(remainingMajor!);
+    }
     return null;
   }
 

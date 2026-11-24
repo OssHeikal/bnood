@@ -276,8 +276,9 @@ class _ProviderClientAssignmentsSheetState
       }
       AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }

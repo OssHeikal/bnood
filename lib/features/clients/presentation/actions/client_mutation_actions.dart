@@ -55,8 +55,9 @@ Future<Client?> _saveRemoteCreate(
     context,
     ref,
     limitKind: SubscriptionLimitKind.clients,
-  ))
+  )) {
     return null;
+  }
 
   final repo = ref.read(clientsRepositoryProvider);
   try {
@@ -238,15 +239,17 @@ Future<bool> confirmDeleteClient({
     return true;
   } on AuthApiException catch (e) {
     if (!context.mounted) return false;
-    if (await handleClientsApiAuthError(context: context, ref: ref, error: e))
+    if (await handleClientsApiAuthError(context: context, ref: ref, error: e)) {
       return false;
+    }
     if (!context.mounted) return false;
     if (await handleClientsApiSubscriptionError(
       context: context,
       ref: ref,
       error: e,
-    ))
+    )) {
       return false;
+    }
     AppToaster.show(apiErrorUserMessage(l10n, e), kind: ToastKind.failure);
     return false;
   }

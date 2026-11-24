@@ -70,7 +70,7 @@ class _FakeShell extends StatelessWidget {
                     semanticsLabel: 'Home',
                   ),
                   ShellNavDestination(
-                    icon: ShellNavIcons.items,
+                    icon: ShellNavIcons.projects,
                     label: 'Items',
                     semanticsLabel: 'Items',
                   ),

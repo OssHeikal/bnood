@@ -75,8 +75,9 @@ class AppPagedBuilders<T> {
         return padded(PagedListSkeleton(count: firstPageSkeletonCount));
       },
       newPageProgressIndicatorBuilder: (ctx) {
-        if (newPageProgress != null)
+        if (newPageProgress != null) {
           return padded(newPageProgress!(ctx), topSpacing: false);
+        }
         return padded(
           const Center(
             child: Padding(

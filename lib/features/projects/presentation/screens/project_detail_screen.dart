@@ -18,7 +18,6 @@ import 'package:bnood/features/projects/domain/project_detail_params.dart';
 import 'package:bnood/features/projects/presentation/providers/project_detail_provider.dart';
 import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
 import '../../../../core/account/account_office_providers.dart';
-import '../../../../core/account/office_permission_keys.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/home/presentation/widgets/home_section_header.dart';
 import 'package:bnood/features/vouchers/presentation/actions/voucher_launcher.dart';

@@ -67,8 +67,9 @@ class ProviderDetailNotifier
     try {
       provider = await providersRepo.getProvider(providerId);
     } on AuthApiException catch (e) {
-      if (e.isNotFound || e.isProviderNotFound)
+      if (e.isNotFound || e.isProviderNotFound) {
         throw const ProviderDetailNotFound();
+      }
       rethrow;
     }
 
