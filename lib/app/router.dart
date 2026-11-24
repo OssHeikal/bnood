@@ -50,6 +50,10 @@ import '../core/services/analytics/routing/analytics_route_observer.dart';
 import '../core/services/config/navigation/root_navigator_key.dart';
 import '../core/services/error_reporting/sentry_navigation_observers.dart';
 import '../core/ui/widgets/toast/shell_dock_presence.dart';
+import '../core/account/office_route_guards.dart';
+import '../core/account/office_statement_route_guard.dart';
+import '../core/account/account_mutation_guards.dart';
+import 'package:flutter/scheduler.dart';
 
 const _localHome = '/home';
 
@@ -91,6 +95,18 @@ String? _authRedirect(Ref ref, GoRouterState state) {
     }
     if (!needsProfile && loc == AuthPaths.completeProfile) {
       return home;
+    }
+    final officeDenied = officePermissionRedirect(ref, loc);
+    if (officeDenied != null) {
+      if (isStatementRoute(loc)) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          final ctx = rootNavigatorKey.currentContext;
+          if (ctx != null && ctx.mounted) {
+            notifyOfficePermissionDenied(ctx);
+          }
+        });
+      }
+      return officeDenied;
     }
     if (loc == AuthPaths.remote) {
       return home;
@@ -357,8 +373,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/clients/:clientId/statement',
-        builder: (_, state) =>
-            ClientStatementScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) {
+          final clientId = state.pathParameters['clientId']!;
+          return OfficeStatementRouteGuard(
+            clientId: clientId,
+            child: ClientStatementScreen(clientId: clientId),
+          );
+        },
       ),
       GoRoute(
         path: '/providers/:providerId',

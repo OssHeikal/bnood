@@ -17,6 +17,7 @@ class ProviderDetailMetricsRow extends StatelessWidget {
     required this.paidMinor,
     this.remainingMinor,
     this.minorPerMajor = RemoteMoneyUnits.minorPerMajor,
+    this.hideMoney = false,
   });
 
   final String agreedLabel;
@@ -27,9 +28,11 @@ class ProviderDetailMetricsRow extends StatelessWidget {
   final int paidMinor;
   final int? remainingMinor;
   final int minorPerMajor;
+  final bool hideMoney;
 
   @override
   Widget build(BuildContext context) {
+    if (hideMoney) return const SizedBox.shrink();
     final showAgreed = agreedMinor != null;
     final showRemaining = remainingMinor != null;
 

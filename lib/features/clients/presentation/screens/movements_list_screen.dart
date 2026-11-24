@@ -21,6 +21,7 @@ import 'package:bnood/features/clients/presentation/providers/client_movements_p
 import 'package:bnood/features/clients/presentation/widgets/client_movements_filter_bar.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_movements_filter_sheets.dart';
 import 'package:bnood/features/clients/presentation/widgets/interactive_movement_card.dart';
+import '../../../../core/account/account_office_providers.dart';
 
 class MovementsListScreen extends ConsumerWidget {
   const MovementsListScreen({super.key, required this.clientId, this.itemId});
@@ -212,6 +213,9 @@ class _RemoteMovementsListState extends ConsumerState<_RemoteMovementsList> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
+    final voucherMutations =
+        ref.watch(accountOfficeVoucherMutationsEnabledProvider);
+    final showMoney = ref.watch(accountOfficeClientMoneyVisibleProvider);
 
     bindPagingListRefreshEpoch(
       ref,
@@ -320,7 +324,8 @@ class _RemoteMovementsListState extends ConsumerState<_RemoteMovementsList> {
                 itemBuilder: (context, line, index) => InteractiveMovementCard(
                   line: line,
                   localeCode: localeCode,
-                  mutationsEnabled: true,
+                  mutationsEnabled: voucherMutations,
+                  hideAmount: !showMoney,
                   ledgerClientId: widget.clientId,
                 ),
               ),

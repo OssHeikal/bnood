@@ -21,6 +21,7 @@ class InteractiveMovementCard extends ConsumerStatefulWidget {
     this.partyClientName,
     this.ledgerClientId,
     this.padding = const EdgeInsets.symmetric(vertical: AppSize.spaceSM),
+    this.hideAmount = false,
   });
 
   final ClientDetailMovementLine line;
@@ -31,6 +32,7 @@ class InteractiveMovementCard extends ConsumerStatefulWidget {
   final String? partyClientName;
   final String? ledgerClientId;
   final EdgeInsetsGeometry padding;
+  final bool hideAmount;
 
   @override
   ConsumerState<InteractiveMovementCard> createState() =>
@@ -86,6 +88,7 @@ class _InteractiveMovementCardState
         contextMode: widget.contextMode,
         partyClientId: widget.partyClientId,
         partyClientName: widget.partyClientName,
+        hideAmount: widget.hideAmount,
       ),
     );
   }

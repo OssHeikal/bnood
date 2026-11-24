@@ -16,6 +16,7 @@ class ProviderDetailTotalsCards extends StatelessWidget {
     required this.paidLabel,
     required this.remainingLabel,
     required this.localeCode,
+    this.hideMoney = false,
   });
 
   final ProviderAgreementTotals totals;
@@ -23,9 +24,11 @@ class ProviderDetailTotalsCards extends StatelessWidget {
   final String paidLabel;
   final String remainingLabel;
   final String localeCode;
+  final bool hideMoney;
 
   @override
   Widget build(BuildContext context) {
+    if (hideMoney) return const SizedBox.shrink();
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,

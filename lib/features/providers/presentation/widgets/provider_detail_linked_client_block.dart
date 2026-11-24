@@ -18,6 +18,8 @@ class ProviderDetailLinkedClientBlock extends ConsumerWidget {
     required this.providerType,
     required this.localeCode,
     required this.onChanged,
+    this.canManage = true,
+    this.hideMoney = false,
   });
 
   final ProviderDetailClientRow row;
@@ -26,6 +28,8 @@ class ProviderDetailLinkedClientBlock extends ConsumerWidget {
   final AppProviderType providerType;
   final String localeCode;
   final Future<void> Function() onChanged;
+  final bool canManage;
+  final bool hideMoney;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,38 +39,42 @@ class ProviderDetailLinkedClientBlock extends ConsumerWidget {
     return ProviderDetailClientAgreementCard(
       row: row,
       localeCode: localeCode,
-      titleTrailing: LinkedAgreementOverflowMenu(
-        menuKey: Key('provider_detail_agreement_menu_${agreement.id}'),
-        actions: linkedAgreementOverflowActions(
-          l10n: l10n,
-          onEdit: () async {
-            await showRemoteAgreementAmountEditSheet(
-              context: context,
-              ref: ref,
-              agreementId: agreement.id,
-              clientId: agreement.clientId,
-              providerId: providerId,
-              clientName: row.clientName,
-              craftsmanName: providerName,
-              initialAmountPiastres: agreement.amountMinorForDisplay,
-            );
-            if (context.mounted) await onChanged();
-          },
-          onUnlink: () async {
-            final ok = await confirmUnlinkAgreementWithPaidGuard(
-              context: context,
-              ref: ref,
-              agreement: agreement,
-              paidGuardClientName: row.clientName,
-              unlinkDialogPartyName: providerName,
-              providerType: providerType,
-              clientId: agreement.clientId,
-              providerId: providerId,
-            );
-            if (ok && context.mounted) await onChanged();
-          },
-        ),
-      ),
+      hideMoney: hideMoney,
+      canManage: canManage,
+      titleTrailing: canManage
+          ? LinkedAgreementOverflowMenu(
+              menuKey: Key('provider_detail_agreement_menu_${agreement.id}'),
+              actions: linkedAgreementOverflowActions(
+                l10n: l10n,
+                onEdit: () async {
+                  await showRemoteAgreementAmountEditSheet(
+                    context: context,
+                    ref: ref,
+                    agreementId: agreement.id,
+                    clientId: agreement.clientId,
+                    providerId: providerId,
+                    clientName: row.clientName,
+                    craftsmanName: providerName,
+                    initialAmountPiastres: agreement.amountMinorForDisplay,
+                  );
+                  if (context.mounted) await onChanged();
+                },
+                onUnlink: () async {
+                  final ok = await confirmUnlinkAgreementWithPaidGuard(
+                    context: context,
+                    ref: ref,
+                    agreement: agreement,
+                    paidGuardClientName: row.clientName,
+                    unlinkDialogPartyName: providerName,
+                    providerType: providerType,
+                    clientId: agreement.clientId,
+                    providerId: providerId,
+                  );
+                  if (ok && context.mounted) await onChanged();
+                },
+              ),
+            )
+          : null,
     );
   }
 }

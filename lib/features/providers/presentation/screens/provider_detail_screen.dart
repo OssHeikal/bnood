@@ -17,6 +17,7 @@ import '../../../../core/ui/widgets/app_fallback.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
 import '../../../../core/ui/widgets/skeleton/async_value_body.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
+import '../../../../core/account/account_office_providers.dart';
 import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
 import 'package:bnood/features/home/presentation/widgets/home_section_header.dart';
 import 'package:bnood/features/providers/presentation/models/provider_detail_agreement_totals.dart';
@@ -63,6 +64,11 @@ class _ProviderDetailScreenState extends ConsumerState<ProviderDetailScreen> {
     final provider = detail.valueOrNull?.provider;
     final phone = provider?.phone?.trim();
     final hasPhone = phone != null && phone.isNotEmpty;
+    final canManage =
+        ref.watch(accountOfficeCanManageProvider(OfficePermissionArea.providers));
+    final showMoney = ref.watch(accountOfficeClientMoneyVisibleProvider);
+    final voucherMutations =
+        ref.watch(accountOfficeVoucherMutationsEnabledProvider);
 
     return HomeFoundationScope(
       child: Builder(
@@ -75,7 +81,7 @@ class _ProviderDetailScreenState extends ConsumerState<ProviderDetailScreen> {
               subtitle: hasPhone ? phone : null,
               subtitleLtr: true,
               actions: [
-                if (provider != null) ...[
+                if (provider != null && canManage) ...[
                   CustomAppBarAction(
                     key: const Key('provider_detail_edit'),
                     tooltip: l10n.edit,
@@ -173,6 +179,9 @@ class _ProviderDetailScreenState extends ConsumerState<ProviderDetailScreen> {
                         providerId: widget.providerId,
                         data: data,
                         localeCode: localeCode,
+                        canManageProviders: canManage,
+                        showMoney: showMoney,
+                        voucherMutationsEnabled: voucherMutations,
                       ),
                     ),
                   ],
@@ -191,11 +200,17 @@ class _ProviderDetailBody extends ConsumerWidget {
     required this.providerId,
     required this.data,
     required this.localeCode,
+    required this.canManageProviders,
+    required this.showMoney,
+    required this.voucherMutationsEnabled,
   });
 
   final String providerId;
   final ProviderDetailSnapshot data;
   final String localeCode;
+  final bool canManageProviders;
+  final bool showMoney;
+  final bool voucherMutationsEnabled;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -225,10 +240,8 @@ class _ProviderDetailBody extends ConsumerWidget {
     final agreementTotals = data.clientAgreements.isNotEmpty
         ? aggregateProviderAgreements(data.clientAgreements)
         : null;
-    const mutationsEnabled = true;
-
     final summary = <Widget>[
-      if (agreementTotals != null) ...[
+      if (showMoney && agreementTotals != null) ...[
         ProviderDetailTotalsCards(
           key: const Key('provider_detail_agreement_totals_header'),
           totals: agreementTotals,
@@ -240,7 +253,7 @@ class _ProviderDetailBody extends ConsumerWidget {
           localeCode: localeCode,
         ),
         AppSize.spaceXL.gap,
-      ] else if (!isCraftsman) ...[
+      ] else if (showMoney && !isCraftsman) ...[
         AppCard(
           key: const Key('provider_detail_supplier_paid_header'),
           padding: const EdgeInsets.all(AppSize.spaceMD),
@@ -259,8 +272,9 @@ class _ProviderDetailBody extends ConsumerWidget {
       ...[
         HomeSectionHeader(
           title: l10n.providerDetailLinkedClientsTitle,
-          actionLabel: l10n.linkClients,
-          onAction: openLinkClients,
+          actionLabel: canManageProviders ? l10n.linkClients : null,
+          onAction: canManageProviders ? openLinkClients : null,
+          actionEnabled: canManageProviders,
           actionKey: const Key('provider_detail_link_clients'),
         ),
         AppSize.spaceSM.gap,
@@ -270,11 +284,12 @@ class _ProviderDetailBody extends ConsumerWidget {
               icon: Icons.people_outline,
               title: l10n.providerDetailNoLinkedClients,
               actions: [
-                AppFallbackAction(
-                  label: l10n.linkClients,
-                  onPressed: openLinkClients,
-                  role: AppFallbackActionRole.tertiary,
-                ),
+                if (canManageProviders)
+                  AppFallbackAction(
+                    label: l10n.linkClients,
+                    onPressed: openLinkClients,
+                    role: AppFallbackActionRole.tertiary,
+                  ),
               ],
             ),
           )
@@ -288,6 +303,8 @@ class _ProviderDetailBody extends ConsumerWidget {
               providerType: provider.type,
               localeCode: localeCode,
               onChanged: afterAgreementChanged,
+              canManage: canManageProviders,
+              hideMoney: !showMoney,
             ),
           ],
         AppSize.spaceXL.gap,
@@ -306,7 +323,8 @@ class _ProviderDetailBody extends ConsumerWidget {
             ),
             line: providerVoucherMovementLine(data.voucherHistory[i]),
             localeCode: localeCode,
-            mutationsEnabled: mutationsEnabled,
+            mutationsEnabled: voucherMutationsEnabled,
+            hideAmount: !showMoney,
             contextMode: ClientMovementCardContext.partyDetail,
             partyClientId: data.voucherHistory[i].voucher.clientId,
             partyClientName: data.voucherHistory[i].clientName,

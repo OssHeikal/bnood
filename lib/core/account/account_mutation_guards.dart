@@ -41,15 +41,13 @@ bool _canManageArea(
 
 Future<bool> guardOfficeWritable(BuildContext context, WidgetRef? ref) async {
   if (_mutationsEnabled(context, ref)) return true;
-  final l10n = AppLocalizations.of(context);
-  AppToaster.show(l10n.officeReadOnlyActionBlocked, kind: ToastKind.failure);
+  notifyOfficePermissionDenied(context);
   return false;
 }
 
 Future<bool> guardOfficeVoucherCreate(BuildContext context, WidgetRef? ref) async {
   if (_canCreateVoucher(context, ref)) return true;
-  final l10n = AppLocalizations.of(context);
-  AppToaster.show(l10n.officeReadOnlyActionBlocked, kind: ToastKind.failure);
+  notifyOfficePermissionDenied(context);
   return false;
 }
 
@@ -59,7 +57,11 @@ Future<bool> guardOfficeManage(
   OfficePermissionArea area,
 ) async {
   if (_canManageArea(context, ref, area)) return true;
+  notifyOfficePermissionDenied(context);
+  return false;
+}
+
+void notifyOfficePermissionDenied(BuildContext context) {
   final l10n = AppLocalizations.of(context);
   AppToaster.show(l10n.officeReadOnlyActionBlocked, kind: ToastKind.failure);
-  return false;
 }

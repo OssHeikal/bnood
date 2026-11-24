@@ -17,12 +17,16 @@ class ProviderDetailClientAgreementCard extends StatelessWidget {
     required this.localeCode,
     this.radius = AppSize.radiusMD,
     this.titleTrailing,
+    this.hideMoney = false,
+    this.canManage = true,
   });
 
   final ProviderDetailClientRow row;
   final String localeCode;
   final double radius;
   final Widget? titleTrailing;
+  final bool hideMoney;
+  final bool canManage;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +71,7 @@ class ProviderDetailClientAgreementCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (titleTrailing != null) ...[
+                if (canManage && titleTrailing != null) ...[
                   const SizedBox(width: AppSize.spaceXS),
                   titleTrailing!,
                 ],
@@ -81,7 +85,7 @@ class ProviderDetailClientAgreementCard extends StatelessWidget {
                 textAlign: TextAlign.start,
               ),
             ],
-            if (hasAgreed && amountMinor != null) ...[
+            if (!hideMoney && hasAgreed && amountMinor != null) ...[
               AppSize.spaceMD.gap,
               ProviderDetailMetricsRow(
                 agreedLabel: l10n.craftsmanAgreedAmount,
@@ -93,7 +97,7 @@ class ProviderDetailClientAgreementCard extends StatelessWidget {
                 remainingMinor: agreement.remainingMinorForDisplay,
                 minorPerMajor: minorPerMajor,
               ),
-            ] else if (!hasAgreed) ...[
+            ] else if (!hideMoney && !hasAgreed) ...[
               AppSize.spaceMD.gap,
               ProviderDetailMetricsRow(
                 agreedLabel: l10n.craftsmanAgreedAmount,

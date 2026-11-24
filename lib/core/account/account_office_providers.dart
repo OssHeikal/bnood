@@ -78,6 +78,15 @@ final accountOfficeCanCreateVoucherProvider = Provider<bool>((ref) {
   return ref.watch(officeAccountPermissionsProvider).canCreateVoucher;
 });
 
+final accountOfficeVoucherEditEnabledProvider = Provider<bool>((ref) {
+  return ref.watch(officeAccountPermissionsProvider).canEditVoucher;
+});
+
+final accountOfficeVoucherMutationsEnabledProvider = Provider<bool>((ref) {
+  final perms = ref.watch(officeAccountPermissionsProvider);
+  return perms.canEditVoucher || perms.canDeleteVoucher;
+});
+
 /// Visible router branches → dock tab order (maps dock index → branch index).
 final shellVisibleBranchIndicesProvider = Provider<List<int>>((ref) {
   final perms = ref.watch(officeAccountPermissionsProvider);

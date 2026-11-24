@@ -34,6 +34,7 @@ class ClientMovementCard extends StatelessWidget {
     this.contextMode = ClientMovementCardContext.clientLedger,
     this.partyClientId,
     this.partyClientName,
+    this.hideAmount = false,
   });
 
   final ClientDetailMovementLine line;
@@ -42,6 +43,7 @@ class ClientMovementCard extends StatelessWidget {
   final ClientMovementCardContext contextMode;
   final String? partyClientId;
   final String? partyClientName;
+  final bool hideAmount;
 
   static String formatMovementDate(DateTime date, String localeCode) {
     final locale = localeCode == 'ar' ? 'ar_EG' : 'en_US';
@@ -163,21 +165,22 @@ class ClientMovementCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: AlignmentDirectional.centerEnd,
-                      child: AppAmount(
-                        piastres: t.amountPiastres,
-                        role: isReceive
-                            ? AppAmountRole.receive
-                            : AppAmountRole.spend,
-                        size: AppAmountSize.medium,
-                        localeCode: localeCode,
-                        minorPerMajor: line.usesRemoteMinorUnits
-                            ? RemoteMoneyUnits.minorPerMajor
-                            : 100,
+                    if (!hideAmount)
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: AppAmount(
+                          piastres: t.amountPiastres,
+                          role: isReceive
+                              ? AppAmountRole.receive
+                              : AppAmountRole.spend,
+                          size: AppAmountSize.medium,
+                          localeCode: localeCode,
+                          minorPerMajor: line.usesRemoteMinorUnits
+                              ? RemoteMoneyUnits.minorPerMajor
+                              : 100,
+                        ),
                       ),
-                    ),
                     AppSize.spaceXS.gap,
                     Text(
                       dateLabel,

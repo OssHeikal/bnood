@@ -181,7 +181,8 @@ class _ProjectDetailBody extends ConsumerWidget {
     final perms = ref.watch(officeAccountPermissionsProvider);
     final showMoney = perms.canViewClientMoney;
     final canCreateVoucher = perms.canCreateVoucher && !isArchived;
-    final canEditVoucher = perms.canEditVoucher && !isArchived;
+    final voucherMutations =
+        (perms.canEditVoucher || perms.canDeleteVoucher) && !isArchived;
     final canManageProject =
         perms.canManage(OfficePermissionArea.projects) && !isArchived;
     final mutationsEnabled = canManageProject;
@@ -359,7 +360,8 @@ class _ProjectDetailBody extends ConsumerWidget {
       clientId: clientId,
       data: data,
       localeCode: localeCode,
-      mutationsEnabled: canEditVoucher,
+      mutationsEnabled: voucherMutations,
+      hideAmount: !showMoney,
       l10n: l10n,
     );
     final onlineLedgerFallback = data.onlineIdentityOnly
@@ -492,6 +494,7 @@ class _ProjectDetailMovementsSection {
     required this.data,
     required this.localeCode,
     required this.mutationsEnabled,
+    required this.hideAmount,
     required this.l10n,
   });
 
@@ -499,6 +502,7 @@ class _ProjectDetailMovementsSection {
   final ClientDetailSnapshot data;
   final String localeCode;
   final bool mutationsEnabled;
+  final bool hideAmount;
   final AppLocalizations l10n;
 
   List<Widget> tabletLedgerSection(BuildContext context) {
@@ -529,6 +533,7 @@ class _ProjectDetailMovementsSection {
           line: data.latestMovements[i],
           localeCode: localeCode,
           mutationsEnabled: mutationsEnabled,
+          hideAmount: hideAmount,
           ledgerClientId: clientId,
         ),
       ],
