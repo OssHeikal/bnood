@@ -31,19 +31,16 @@ import 'package:bnood/features/clients/presentation/widgets/client_detail_item_r
 import 'package:bnood/features/clients/presentation/widgets/client_detail_loading_skeleton.dart';
 import 'package:bnood/features/clients/presentation/widgets/interactive_movement_card.dart';
 import 'package:bnood/features/clients/presentation/widgets/client_detail_stat_grid.dart';
+import 'project_detail_phone_layout.dart';
+import 'project_detail_tab_footer.dart';
 
 class ProjectDetailScreen extends ConsumerWidget {
-  const ProjectDetailScreen({
-    super.key,
-    required this.clientId,
-    required this.projectId,
-  });
+  const ProjectDetailScreen({super.key, required this.clientId, required this.projectId});
 
   final String clientId;
   final String projectId;
 
-  ProjectDetailParams get _params =>
-      (clientId: clientId, projectId: projectId);
+  ProjectDetailParams get _params => (clientId: clientId, projectId: projectId);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -59,70 +56,105 @@ class ProjectDetailScreen extends ConsumerWidget {
           final client = snapshot?.client;
           final project = snapshot?.project;
           final isArchived = client?.archivedAt != null;
+          final bottomPad = AppSize.spaceMD + MediaQuery.paddingOf(context).bottom;
+
+          Widget archivedBanner() {
+            if (!isArchived) return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.only(bottom: AppSize.spaceMD),
+              child: _ArchivedBadge(label: l10n.clientArchivedBadge),
+            );
+          }
+
           return Scaffold(
             backgroundColor: colors.canvas,
-            appBar: CustomAppBar(
-              title: project?.name ?? l10n.navProjects,
-              subtitle: client?.name,
-            ),
-            body: BnoodMaxWidth(
-              maxWidth: AppLayout.pageMaxWidth,
-              child: ListView(
-                padding: EdgeInsets.fromLTRB(
-                  0,
-                  AppSize.spaceSM,
-                  0,
-                  AppSize.spaceMD + MediaQuery.paddingOf(context).bottom,
-                ),
+            appBar: CustomAppBar(title: project?.name ?? l10n.navProjects, subtitle: client?.name),
+            body: AsyncValueBody(
+              value: detail,
+              loadingPlaceholder: _paddedScrollBody(
+                context,
+                bottomPad,
                 children: [
-                  if (isArchived)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: AppSize.spaceMD),
-                      child: _ArchivedBadge(label: l10n.clientArchivedBadge),
-                    ),
-                  AsyncValueBody(
-                    value: detail,
-                    loadingPlaceholder: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const ClientDetailStatSkeleton(),
-                        AppSize.spaceLG.gap,
-                        const ClientDetailLoadingSkeleton(),
+                  archivedBanner(),
+                  const ClientDetailStatSkeleton(),
+                  AppSize.spaceLG.gap,
+                  const ClientDetailLoadingSkeleton(),
+                ],
+              ),
+              error: (e, _) => _paddedScrollBody(
+                context,
+                bottomPad,
+                children: [
+                  archivedBanner(),
+                  AppCard(
+                    child: AppFallback.section(
+                      icon: Icons.error_outline,
+                      title: l10n.clientDetailLoadErrorTitle,
+                      description: screenErrorDescription(l10n, e),
+                      actions: [
+                        AppFallbackAction(
+                          label: l10n.retry,
+                          onPressed: () => ref.read(projectDetailProvider(_params).notifier).refreshSilently(),
+                          role: AppFallbackActionRole.tertiary,
+                        ),
                       ],
-                    ),
-                    error: (e, _) => AppCard(
-                      child: AppFallback.section(
-                        icon: Icons.error_outline,
-                        title: l10n.clientDetailLoadErrorTitle,
-                        description: screenErrorDescription(l10n, e),
-                        actions: [
-                          AppFallbackAction(
-                            label: l10n.retry,
-                            onPressed: () => ref
-                                .read(projectDetailProvider(_params).notifier)
-                                .refreshSilently(),
-                            role: AppFallbackActionRole.tertiary,
-                          ),
-                        ],
-                      ),
-                    ),
-                    data: (data) => _ProjectDetailBody(
-                      clientId: clientId,
-                      projectId: projectId,
-                      detailParams: _params,
-                      data: data,
-                      localeCode: localeCode,
                     ),
                   ),
                 ],
               ),
+              data: (data) {
+                final body = _ProjectDetailBody(
+                  clientId: clientId,
+                  projectId: projectId,
+                  detailParams: _params,
+                  data: data,
+                  localeCode: localeCode,
+                );
+                if (context.isMobileLayout) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (isArchived)
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                            context.pageGutter,
+                            AppSize.spaceSM,
+                            context.pageGutter,
+                            AppSize.spaceMD,
+                          ),
+                          child: _ArchivedBadge(label: l10n.clientArchivedBadge),
+                        )
+                      else
+                        SizedBox(height: AppSize.spaceSM),
+                      Expanded(child: body),
+                    ],
+                  );
+                }
+                return BnoodMaxWidth(
+                  maxWidth: AppLayout.pageMaxWidth,
+                  child: ListView(
+                    padding: EdgeInsets.fromLTRB(0, AppSize.spaceSM, 0, bottomPad),
+                    children: [archivedBanner(), body],
+                  ),
+                );
+              },
             ),
           );
         },
       ),
     );
   }
+}
 
+Widget _paddedScrollBody(BuildContext context, double bottomPad, {required List<Widget> children}) {
+  if (context.isMobileLayout) {
+    final gutter = context.pageGutter;
+    return ListView(padding: EdgeInsets.fromLTRB(gutter, AppSize.spaceSM, gutter, bottomPad), children: children);
+  }
+  return BnoodMaxWidth(
+    maxWidth: AppLayout.pageMaxWidth,
+    child: ListView(padding: EdgeInsets.fromLTRB(0, AppSize.spaceSM, 0, bottomPad), children: children),
+  );
 }
 
 class _ProjectDetailBody extends ConsumerWidget {
@@ -148,11 +180,7 @@ class _ProjectDetailBody extends ConsumerWidget {
 
     Future<void> openAssignments() async {
       if (!mutationsEnabled) return;
-      await showCraftsmanAssignmentsSheet(
-        context: context,
-        projectId: data.project.id,
-        clientId: clientId,
-      );
+      await showCraftsmanAssignmentsSheet(context: context, projectId: data.project.id, clientId: clientId);
       if (context.mounted) {
         ref.read(projectDetailProvider(detailParams).notifier).refreshSilently();
       }
@@ -160,11 +188,7 @@ class _ProjectDetailBody extends ConsumerWidget {
 
     Future<void> openSupplierAssignments() async {
       if (!mutationsEnabled) return;
-      await showSupplierAssignmentsSheet(
-        context: context,
-        projectId: data.project.id,
-        clientId: clientId,
-      );
+      await showSupplierAssignmentsSheet(context: context, projectId: data.project.id, clientId: clientId);
       if (context.mounted) {
         ref.read(projectDetailProvider(detailParams).notifier).refreshSilently();
       }
@@ -185,229 +209,341 @@ class _ProjectDetailBody extends ConsumerWidget {
       });
     }
 
-    if (data.onlineIdentityOnly) {
-      final summary = <Widget>[
-        ClientDetailStatGrid(
-          receivedPiastres: data.receivedPiastres,
-          spentPiastres: data.spentPiastres,
-          remainingPiastres: data.remainingPiastres,
+    final minorPerMajor = data.usesRemoteMoney ? RemoteMoneyUnits.minorPerMajor : 100;
+
+    final scrollHeader = <Widget>[
+      ClientDetailStatGrid(
+        receivedPiastres: data.receivedPiastres,
+        spentPiastres: data.spentPiastres,
+        remainingPiastres: data.remainingPiastres,
+        localeCode: localeCode,
+        minorPerMajor: minorPerMajor,
+      ),
+      AppSize.spaceLG.gap,
+      ClientDetailActionGrid(
+        isArchived: isArchived,
+        mutationsEnabled: mutationsEnabled,
+        onlineIdentityOnly: data.onlineIdentityOnly,
+        onReceive: data.onlineIdentityOnly ? () {} : () => openVoucher('receive'),
+        onSpend: data.onlineIdentityOnly ? () {} : () => openVoucher('spend'),
+        onStatement: () {
+          if (!mutationsEnabled || data.onlineIdentityOnly) return;
+          context.push('/clients/$clientId/statement');
+        },
+        onArchive: () {},
+        onDelete: data.onlineIdentityOnly ? () {} : null,
+      ),
+      if (!data.onlineIdentityOnly) ...[
+        AppSize.spaceXL.gap,
+        ClientDetailEngineerCard(
+          engineerBasisPoints: data.project.engineerBasisPoints,
+          estimatedProfitPiastres: data.estimatedProfitPiastres,
           localeCode: localeCode,
-          minorPerMajor: data.usesRemoteMoney
-              ? RemoteMoneyUnits.minorPerMajor
-              : 100,
-        ),
-        AppSize.spaceLG.gap,
-        ClientDetailActionGrid(
-          isArchived: isArchived,
+          minorPerMajor: minorPerMajor,
           mutationsEnabled: mutationsEnabled,
-          onlineIdentityOnly: true,
-          onReceive: () {},
-          onSpend: () {},
-          onStatement: () {},
-          onArchive: () {},
-          onDelete: () {},
+          onEdit: () {
+            if (!mutationsEnabled) return;
+            showEngineerFeeSheet(
+              context: context,
+              clientId: clientId,
+              projectId: data.project.id,
+              clientName: data.client.name,
+              engineerBasisPoints: data.project.engineerBasisPoints,
+            );
+          },
         ),
-        ...[
-          AppSize.spaceXL.gap,
-          ClientDetailLinkedProvidersSection(
-            title: l10n.craftsmen,
-            assignLabel: l10n.assignCraftsmen,
-            emptyTitle: l10n.clientDetailNoCraftsmen,
-            emptyDescription: l10n.clientDetailCraftsmenEmptyDescription,
-            seeAllRoute: '/clients/$clientId/craftsmen',
-            previews: data.craftsmanPreviews,
-            localeCode: localeCode,
-            mutationsEnabled: mutationsEnabled,
-            onAssign: openAssignments,
-            totalCount: data.craftsmenCount,
-          ),
-          ...[
-            AppSize.spaceXL.gap,
-            ClientDetailLinkedProvidersSection(
-              title: l10n.suppliers,
-              assignLabel: l10n.assignSuppliers,
-              emptyTitle: l10n.clientDetailNoSuppliers,
-              emptyDescription: l10n.clientDetailSuppliersEmptyDescription,
-              seeAllRoute: '/clients/$clientId/suppliers',
-              previews: data.supplierPreviews,
-              localeCode: localeCode,
-              mutationsEnabled: mutationsEnabled,
-              onAssign: openSupplierAssignments,
-              totalCount: data.suppliersCount,
+      ],
+    ];
+
+    final craftsmenSeeAll = seeAllLabelWithCount(
+      l10n,
+      sectionSeeAllCount(total: data.craftsmenCount, visibleLength: data.craftsmanPreviews.length),
+    );
+    final suppliersSeeAll = seeAllLabelWithCount(
+      l10n,
+      sectionSeeAllCount(total: data.suppliersCount, visibleLength: data.supplierPreviews.length),
+    );
+
+    final craftsmenSection = ClientDetailLinkedProvidersSection(
+      title: l10n.craftsmen,
+      assignLabel: l10n.assignCraftsmen,
+      emptyTitle: l10n.clientDetailNoCraftsmen,
+      emptyDescription: l10n.clientDetailCraftsmenEmptyDescription,
+      seeAllRoute: '/clients/$clientId/craftsmen',
+      previews: data.craftsmanPreviews,
+      localeCode: localeCode,
+      mutationsEnabled: mutationsEnabled,
+      onAssign: openAssignments,
+      totalCount: data.craftsmenCount,
+    );
+
+    final suppliersSection = ClientDetailLinkedProvidersSection(
+      title: l10n.suppliers,
+      assignLabel: l10n.assignSuppliers,
+      emptyTitle: l10n.clientDetailNoSuppliers,
+      emptyDescription: l10n.clientDetailSuppliersEmptyDescription,
+      seeAllRoute: '/clients/$clientId/suppliers',
+      previews: data.supplierPreviews,
+      localeCode: localeCode,
+      mutationsEnabled: mutationsEnabled,
+      onAssign: openSupplierAssignments,
+      totalCount: data.suppliersCount,
+    );
+
+    final craftsmenPhoneTab = ClientDetailLinkedProvidersSection(
+      title: l10n.craftsmen,
+      assignLabel: l10n.assignCraftsmen,
+      emptyTitle: l10n.clientDetailNoCraftsmen,
+      emptyDescription: l10n.clientDetailCraftsmenEmptyDescription,
+      seeAllRoute: '/clients/$clientId/craftsmen',
+      previews: data.craftsmanPreviews,
+      localeCode: localeCode,
+      mutationsEnabled: mutationsEnabled,
+      onAssign: openAssignments,
+      totalCount: data.craftsmenCount,
+      tabBodyMode: true,
+      footer: ProjectDetailTabFooter(
+        filledActionLabel: mutationsEnabled ? l10n.assignCraftsmen : null,
+        onFilledAction: openAssignments,
+        filledEnabled: mutationsEnabled,
+        seeAllLabel: craftsmenSeeAll,
+        onSeeAll: () => context.push('/clients/$clientId/craftsmen'),
+        seeAllEnabled: mutationsEnabled,
+        seeAllKey: const Key('project_detail_tab_see_all_craftsmen'),
+      ),
+    );
+
+    final suppliersPhoneTab = ClientDetailLinkedProvidersSection(
+      title: l10n.suppliers,
+      assignLabel: l10n.assignSuppliers,
+      emptyTitle: l10n.clientDetailNoSuppliers,
+      emptyDescription: l10n.clientDetailSuppliersEmptyDescription,
+      seeAllRoute: '/clients/$clientId/suppliers',
+      previews: data.supplierPreviews,
+      localeCode: localeCode,
+      mutationsEnabled: mutationsEnabled,
+      onAssign: openSupplierAssignments,
+      totalCount: data.suppliersCount,
+      tabBodyMode: true,
+      footer: ProjectDetailTabFooter(
+        filledActionLabel: mutationsEnabled ? l10n.assignSuppliers : null,
+        onFilledAction: openSupplierAssignments,
+        filledEnabled: mutationsEnabled,
+        seeAllLabel: suppliersSeeAll,
+        onSeeAll: () => context.push('/clients/$clientId/suppliers'),
+        seeAllEnabled: mutationsEnabled,
+        seeAllKey: const Key('project_detail_tab_see_all_suppliers'),
+      ),
+    );
+
+    final itemsTab = _ProjectDetailItemsSection(
+      clientId: clientId,
+      data: data,
+      localeCode: localeCode,
+      minorPerMajor: minorPerMajor,
+      mutationsEnabled: mutationsEnabled,
+      l10n: l10n,
+    );
+
+    final movementsSection = _ProjectDetailMovementsSection(
+      clientId: clientId,
+      data: data,
+      localeCode: localeCode,
+      mutationsEnabled: mutationsEnabled,
+      l10n: l10n,
+    );
+    final onlineLedgerFallback = data.onlineIdentityOnly
+        ? AppCard(
+            child: AppFallback.section(
+              icon: Icons.cloud_off_outlined,
+              title: l10n.clientLedgerNotOnlineTitle,
+              description: l10n.clientLedgerNotOnlineDescription,
             ),
-          ],
-        ],
-      ];
-      final ledger = <Widget>[
+          )
+        : null;
+
+    if (context.isMobileLayout) {
+      final phoneHeader = [...scrollHeader, AppSize.spaceLG.gap];
+      return ProjectDetailPhoneLayout(
+        headerChildren: phoneHeader,
+        tabLabels: [l10n.navItems, l10n.craftsmen, l10n.suppliers, l10n.movements],
+        itemsTab: itemsTab.buildPhoneTab(context),
+        craftsmenTab: craftsmenPhoneTab,
+        suppliersTab: suppliersPhoneTab,
+        movementsTab: onlineLedgerFallback ?? movementsSection.buildPhoneTab(context),
+      );
+    }
+
+    final summary = <Widget>[
+      ...scrollHeader,
+      AppSize.spaceXL.gap,
+      craftsmenSection,
+      AppSize.spaceXL.gap,
+      suppliersSection,
+    ];
+
+    final ledger = <Widget>[
+      if (data.onlineIdentityOnly)
         AppCard(
           child: AppFallback.section(
             icon: Icons.cloud_off_outlined,
             title: l10n.clientLedgerNotOnlineTitle,
             description: l10n.clientLedgerNotOnlineDescription,
           ),
-        ),
-      ];
-      return _clientDetailColumns(context, summary: summary, ledger: ledger);
-    }
-
-    final summary = <Widget>[
-      ClientDetailStatGrid(
-        receivedPiastres: data.receivedPiastres,
-        spentPiastres: data.spentPiastres,
-        remainingPiastres: data.remainingPiastres,
-        localeCode: localeCode,
-        minorPerMajor: data.usesRemoteMoney
-            ? RemoteMoneyUnits.minorPerMajor
-            : 100,
-      ),
-      AppSize.spaceLG.gap,
-      ClientDetailActionGrid(
-        isArchived: isArchived,
-        mutationsEnabled: mutationsEnabled,
-        onReceive: () => openVoucher('receive'),
-        onSpend: () => openVoucher('spend'),
-        onStatement: () {
-          if (!mutationsEnabled) return;
-          context.push('/clients/$clientId/statement');
-        },
-        onArchive: () {},
-      ),
-      AppSize.spaceXL.gap,
-      ClientDetailEngineerCard(
-        engineerBasisPoints: data.project.engineerBasisPoints,
-        estimatedProfitPiastres: data.estimatedProfitPiastres,
-        localeCode: localeCode,
-        minorPerMajor: data.usesRemoteMoney
-            ? RemoteMoneyUnits.minorPerMajor
-            : 100,
-        mutationsEnabled: mutationsEnabled,
-        onEdit: () {
-          if (!mutationsEnabled) return;
-          showEngineerFeeSheet(
-            context: context,
-            clientId: clientId,
-            projectId: data.project.id,
-            clientName: data.client.name,
-            engineerBasisPoints: data.project.engineerBasisPoints,
-          );
-        },
-      ),
-      AppSize.spaceXL.gap,
-      ClientDetailLinkedProvidersSection(
-        title: l10n.craftsmen,
-        assignLabel: l10n.assignCraftsmen,
-        emptyTitle: l10n.clientDetailNoCraftsmen,
-        emptyDescription: l10n.clientDetailCraftsmenEmptyDescription,
-        seeAllRoute: '/clients/$clientId/craftsmen',
-        previews: data.craftsmanPreviews,
-        localeCode: localeCode,
-        mutationsEnabled: mutationsEnabled,
-        onAssign: openAssignments,
-        totalCount: data.craftsmenCount,
-      ),
-      ...[
+        )
+      else ...[
+        ...itemsTab.tabletLedgerSection(context),
         AppSize.spaceXL.gap,
-        ClientDetailLinkedProvidersSection(
-          title: l10n.suppliers,
-          assignLabel: l10n.assignSuppliers,
-          emptyTitle: l10n.clientDetailNoSuppliers,
-          emptyDescription: l10n.clientDetailSuppliersEmptyDescription,
-          seeAllRoute: '/clients/$clientId/suppliers',
-          previews: data.supplierPreviews,
-          localeCode: localeCode,
-          mutationsEnabled: mutationsEnabled,
-          onAssign: openSupplierAssignments,
-          totalCount: data.suppliersCount,
-        ),
+        ...movementsSection.tabletLedgerSection(context),
       ],
     ];
-    final ledger = <Widget>[
-      HomeSectionHeader(
-        title: l10n.navItems,
-        seeAllLabel: seeAllLabelWithCount(
-          l10n,
-          data.itemsCount ?? data.topItems.length,
-        ),
-        seeAllEnabled: mutationsEnabled,
-        onSeeAll: () => context.push('/clients/$clientId/items'),
-      ),
-      AppSize.spaceSM.gap,
-      if (data.topItems.isEmpty)
-        AppCard(
-          child: AppFallback.section(
-            icon: Icons.inventory_2_outlined,
-            title: l10n.clientDetailNoItemSpend,
-          ),
-        )
-      else
-        for (var i = 0; i < data.topItems.length; i++) ...[
-          if (i > 0) AppSize.spaceMD.gap,
-          ClientDetailItemRow(
-            itemName: data.topItems[i].name,
-            colorKey: data.topItems[i].colorKey,
-            iconName: data.topItems[i].iconName,
-            breakdown: data.topItems[i].breakdown,
-            localeCode: localeCode,
-            minorPerMajor: data.usesRemoteMoney
-                ? RemoteMoneyUnits.minorPerMajor
-                : 100,
-            onTap: data.topItems[i].itemId == null
-                ? null
-                : () => pushClientMovements(
-                    context,
-                    clientId: clientId,
-                    itemId: data.topItems[i].itemId,
-                  ),
-          ),
-        ],
-      AppSize.spaceXL.gap,
-      HomeSectionHeader(
-        title: l10n.movements,
-        seeAllLabel: seeAllLabelWithCount(
-          l10n,
-          data.movementsCount ?? data.latestMovements.length,
-        ),
-        seeAllEnabled: mutationsEnabled,
-        onSeeAll: () => context.push('/clients/$clientId/movements'),
-      ),
-      AppSize.spaceSM.gap,
-      if (data.latestMovements.isEmpty)
-        AppCard(
-          child: AppFallback.section(
-            icon: Icons.receipt_long_outlined,
-            title: l10n.clientDetailNoMovements,
-          ),
-        )
-      else
-        Column(
-          children: [
-            for (var i = 0; i < data.latestMovements.length; i++) ...[
-              if (i > 0) AppSize.spaceMD.gap,
-              InteractiveMovementCard(
-                line: data.latestMovements[i],
-                localeCode: localeCode,
-                mutationsEnabled: mutationsEnabled,
-                ledgerClientId: clientId,
-              ),
-            ],
-          ],
-        ),
-    ];
+
     return _clientDetailColumns(context, summary: summary, ledger: ledger);
   }
 }
 
-Widget _clientDetailColumns(
-  BuildContext context, {
-  required List<Widget> summary,
-  required List<Widget> ledger,
-}) {
-  if (context.isMobileLayout) {
+class _ProjectDetailItemsSection {
+  const _ProjectDetailItemsSection({
+    required this.clientId,
+    required this.data,
+    required this.localeCode,
+    required this.minorPerMajor,
+    required this.mutationsEnabled,
+    required this.l10n,
+  });
+
+  final String clientId;
+  final ClientDetailSnapshot data;
+  final String localeCode;
+  final int minorPerMajor;
+  final bool mutationsEnabled;
+  final AppLocalizations l10n;
+
+  List<Widget> tabletLedgerSection(BuildContext context) {
+    return [
+      HomeSectionHeader(
+        title: l10n.navItems,
+        seeAllLabel: seeAllLabelWithCount(l10n, data.itemsCount ?? data.topItems.length),
+        seeAllEnabled: mutationsEnabled,
+        onSeeAll: () => context.push('/clients/$clientId/items'),
+      ),
+      AppSize.spaceSM.gap,
+      ..._itemRows(context),
+    ];
+  }
+
+  Widget buildPhoneTab(BuildContext context) {
+    final seeAll = seeAllLabelWithCount(l10n, data.itemsCount ?? data.topItems.length);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [...summary, ...ledger],
+      children: [
+        ..._itemRows(context),
+        AppSize.spaceXL.gap,
+        ProjectDetailTabFooter(
+          seeAllLabel: seeAll,
+          onSeeAll: () => context.push('/clients/$clientId/items'),
+          seeAllEnabled: mutationsEnabled,
+          seeAllKey: const Key('project_detail_tab_see_all_items'),
+        ),
+      ],
     );
   }
+
+  List<Widget> _itemRows(BuildContext context) {
+    if (data.topItems.isEmpty) {
+      return [
+        AppCard(
+          child: AppFallback.section(icon: Icons.inventory_2_outlined, title: l10n.clientDetailNoItemSpend),
+        ),
+      ];
+    }
+    return [
+      for (var i = 0; i < data.topItems.length; i++) ...[
+        if (i > 0) AppSize.spaceMD.gap,
+        ClientDetailItemRow(
+          itemName: data.topItems[i].name,
+          colorKey: data.topItems[i].colorKey,
+          iconName: data.topItems[i].iconName,
+          breakdown: data.topItems[i].breakdown,
+          localeCode: localeCode,
+          minorPerMajor: minorPerMajor,
+          onTap: data.topItems[i].itemId == null
+              ? null
+              : () => pushClientMovements(context, clientId: clientId, itemId: data.topItems[i].itemId),
+        ),
+      ],
+    ];
+  }
+}
+
+class _ProjectDetailMovementsSection {
+  const _ProjectDetailMovementsSection({
+    required this.clientId,
+    required this.data,
+    required this.localeCode,
+    required this.mutationsEnabled,
+    required this.l10n,
+  });
+
+  final String clientId;
+  final ClientDetailSnapshot data;
+  final String localeCode;
+  final bool mutationsEnabled;
+  final AppLocalizations l10n;
+
+  List<Widget> tabletLedgerSection(BuildContext context) {
+    return [
+      HomeSectionHeader(
+        title: l10n.movements,
+        seeAllLabel: seeAllLabelWithCount(l10n, data.movementsCount ?? data.latestMovements.length),
+        seeAllEnabled: mutationsEnabled,
+        onSeeAll: () => context.push('/clients/$clientId/movements'),
+      ),
+      AppSize.spaceSM.gap,
+      ..._movementCards(),
+    ];
+  }
+
+  List<Widget> _movementCards() {
+    if (data.latestMovements.isEmpty) {
+      return [
+        AppCard(
+          child: AppFallback.section(icon: Icons.receipt_long_outlined, title: l10n.clientDetailNoMovements),
+        ),
+      ];
+    }
+    return [
+      for (var i = 0; i < data.latestMovements.length; i++) ...[
+        if (i > 0) AppSize.spaceMD.gap,
+        InteractiveMovementCard(
+          line: data.latestMovements[i],
+          localeCode: localeCode,
+          mutationsEnabled: mutationsEnabled,
+          ledgerClientId: clientId,
+        ),
+      ],
+    ];
+  }
+
+  Widget buildPhoneTab(BuildContext context) {
+    final seeAll = seeAllLabelWithCount(l10n, data.movementsCount ?? data.latestMovements.length);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ..._movementCards(),
+        AppSize.spaceXL.gap,
+        ProjectDetailTabFooter(
+          seeAllLabel: seeAll,
+          onSeeAll: () => context.push('/clients/$clientId/movements'),
+          seeAllEnabled: mutationsEnabled,
+          seeAllKey: const Key('project_detail_tab_see_all_movements'),
+        ),
+      ],
+    );
+  }
+}
+
+Widget _clientDetailColumns(BuildContext context, {required List<Widget> summary, required List<Widget> ledger}) {
   final lead = HomeSectionHeader.columnLeadBeforeContent(context);
   return BnoodTwoColumn(
     spacing: AppSize.spaceLG,
@@ -419,10 +555,7 @@ Widget _clientDetailColumns(
         ...summary,
       ],
     ),
-    end: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: ledger,
-    ),
+    end: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: ledger),
   );
 }
 
@@ -443,16 +576,10 @@ class _ArchivedBadge extends StatelessWidget {
           border: Border.all(color: colors.outlineSubtle),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSize.spaceMD,
-            vertical: AppSize.spaceXS,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceMD, vertical: AppSize.spaceXS),
           child: Text(
             label,
-            style: context.text.caption.copyWith(
-              color: colors.onSurfaceMuted,
-              fontWeight: FontWeight.w700,
-            ),
+            style: context.text.caption.copyWith(color: colors.onSurfaceMuted, fontWeight: FontWeight.w700),
           ),
         ),
       ),

@@ -25,6 +25,8 @@ class ClientDetailLinkedProvidersSection extends StatelessWidget {
     required this.mutationsEnabled,
     required this.onAssign,
     this.totalCount,
+    this.tabBodyMode = false,
+    this.footer,
   });
 
   final String title;
@@ -37,61 +39,72 @@ class ClientDetailLinkedProvidersSection extends StatelessWidget {
   final bool mutationsEnabled;
   final VoidCallback onAssign;
   final int? totalCount;
+  final bool tabBodyMode;
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final text = context.text;
     final colors = context.colors;
-    final seeAll = seeAllLabelWithCount(
-      l10n,
-      sectionSeeAllCount(total: totalCount, visibleLength: previews.length),
-    );
+    final seeAll = tabBodyMode
+        ? null
+        : seeAllLabelWithCount(
+            l10n,
+            sectionSeeAllCount(
+              total: totalCount,
+              visibleLength: previews.length,
+            ),
+          );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            Expanded(child: Text(title, style: text.sectionTitle)),
-            AppPressable(
-              enabled: mutationsEnabled,
-              onPressed: mutationsEnabled ? onAssign : null,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                child: Text(
-                  assignLabel,
-                  style: text.caption.copyWith(
-                    color: mutationsEnabled
-                        ? colors.primaryDark
-                        : colors.onSurfaceMuted,
-                    fontWeight: FontWeight.w700,
+        if (!tabBodyMode) ...[
+          Row(
+            children: [
+              Expanded(child: Text(title, style: text.sectionTitle)),
+              AppPressable(
+                enabled: mutationsEnabled,
+                onPressed: mutationsEnabled ? onAssign : null,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+                  child: Text(
+                    assignLabel,
+                    style: text.caption.copyWith(
+                      color: mutationsEnabled
+                          ? colors.primaryDark
+                          : colors.onSurfaceMuted,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
-            ),
-            AppSize.spaceSM.gap,
-            AppPressable(
-              enabled: mutationsEnabled,
-              onPressed: mutationsEnabled
-                  ? () => context.push(seeAllRoute)
-                  : null,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                child: Text(
-                  seeAll,
-                  style: text.caption.copyWith(
-                    color: mutationsEnabled
-                        ? colors.primaryDark
-                        : colors.onSurfaceMuted,
-                    fontWeight: FontWeight.w700,
+              AppSize.spaceSM.gap,
+              AppPressable(
+                enabled: mutationsEnabled,
+                onPressed: mutationsEnabled
+                    ? () => context.push(seeAllRoute)
+                    : null,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+                  child: Text(
+                    seeAll!,
+                    style: text.caption.copyWith(
+                      color: mutationsEnabled
+                          ? colors.primaryDark
+                          : colors.onSurfaceMuted,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        AppSize.spaceSM.gap,
+            ],
+          ),
+          AppSize.spaceSM.gap,
+        ],
         if (previews.isEmpty)
           AppCard(
             child: AppFallback.section(
@@ -99,7 +112,7 @@ class ClientDetailLinkedProvidersSection extends StatelessWidget {
               title: emptyTitle,
               description: emptyDescription,
               actions: [
-                if (mutationsEnabled)
+                if (mutationsEnabled && !tabBodyMode)
                   AppFallbackAction(
                     label: assignLabel,
                     onPressed: onAssign,
@@ -116,6 +129,10 @@ class ClientDetailLinkedProvidersSection extends StatelessWidget {
               localeCode: localeCode,
             ),
           ],
+        if (tabBodyMode && footer != null) ...[
+          AppSize.spaceXL.gap,
+          footer!,
+        ],
       ],
     );
   }
