@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_context_controller.dart';
 import 'account_context_state.dart';
-import 'account_switch_restart.dart';
 
 export 'account_context_controller.dart';
 export 'account_context_reset.dart';
@@ -17,16 +16,5 @@ final accountContextProvider =
       AccountContextController.new,
     );
 
-String? _accountSelectionKey(AccountContextState state) {
-  if (state.isPersonal) return 'personal';
-  return 'office:${state.officeId}';
-}
-
-/// Resets cached ledger data when [accountContextProvider] changes identity.
-final accountContextLifecycleProvider = Provider<void>((ref) {
-  ref.listen<AccountContextState>(accountContextProvider, (previous, next) {
-    if (previous == null) return;
-    if (_accountSelectionKey(previous) == _accountSelectionKey(next)) return;
-    requestAccountSwitchRestart(ref);
-  });
-});
+/// Keeps account lifecycle registered on the widget tree (reserved for future hooks).
+final accountContextLifecycleProvider = Provider<void>((ref) {});

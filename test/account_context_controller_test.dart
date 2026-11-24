@@ -71,7 +71,7 @@ void main() {
 
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getString('bnood.account.selection'), sampleOfficeId);
-    container.dispose();
+    await pumpEventQueue();
 
     final recreated = await newTestContainer(
       officeContext: offices,
@@ -131,6 +131,76 @@ void main() {
     expect(prefs.getString('bnood.account.selection'), sampleOfficeId);
   });
 
+  test('office selection is persisted before root restart runs', () async {
+    const offices = AuthOfficePayload(
+      offices: [
+        OfficeMembership(
+          id: sampleOfficeId,
+          name: 'Office',
+          readOnly: false,
+          isOwner: false,
+        ),
+      ],
+    );
+    var restartCount = 0;
+    AppRootRestart.bind(() {
+      restartCount++;
+    });
+
+    final container = await newTestContainer(officeContext: offices);
+    addTearDown(container.dispose);
+    container.read(accountContextLifecycleProvider);
+    await pumpEventQueue();
+
+    await container
+        .read(accountContextProvider.notifier)
+        .selectOffice(sampleOfficeId);
+    await pumpEventQueue();
+
+    expect(restartCount, 1);
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('bnood.account.selection'), sampleOfficeId);
+    expect(ApiOfficeHeader.headerValue(), sampleOfficeId);
+  });
+
+  test('restarted container restores office scope from prefs', () async {
+    const offices = AuthOfficePayload(
+      offices: [
+        OfficeMembership(
+          id: sampleOfficeId,
+          name: 'Office',
+          readOnly: false,
+          isOwner: false,
+        ),
+      ],
+    );
+    final first = await newTestContainer(officeContext: offices);
+    addTearDown(first.dispose);
+    first.read(accountContextLifecycleProvider);
+    await pumpEventQueue();
+    await first
+        .read(accountContextProvider.notifier)
+        .selectOffice(sampleOfficeId);
+    await pumpEventQueue();
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('bnood.account.selection'), sampleOfficeId);
+    AppRootRestart.unbind();
+    await pumpEventQueue();
+    first.dispose();
+
+    final restarted = await newTestContainer(
+      officeContext: offices,
+      initialPrefs: {'bnood.account.selection': sampleOfficeId},
+    );
+    addTearDown(restarted.dispose);
+    restarted.read(accountContextLifecycleProvider);
+    await pumpEventQueue();
+
+    expect(restarted.read(accountContextProvider).officeId, sampleOfficeId);
+    expect(ApiOfficeHeader.headerValue(), sampleOfficeId);
+  });
+
   test('account switch requests root restart', () async {
     var restartCount = 0;
     AppRootRestart.bind(() => restartCount++);
@@ -167,10 +237,15 @@ void main() {
       ),
     );
     addTearDown(container.dispose);
+    container.read(authControllerProvider);
     container.read(accountContextLifecycleProvider);
+    await pumpEventQueue();
     await pumpEventQueue();
 
     final ctx = container.read(accountContextProvider);
+    await pumpEventQueue();
+    await pumpEventQueue();
+
     expect(ctx.isPersonal, isFalse);
     expect(ctx.officeId, ownedId);
     expect(ApiOfficeHeader.headerValue(), ownedId);
