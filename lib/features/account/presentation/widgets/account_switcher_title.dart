@@ -99,20 +99,31 @@ class AccountSwitcherTitle extends ConsumerWidget {
 
     final entitlements = ref.watch(subscriptionEntitlementsProvider);
     final surfaces = ref.watch(subscriptionSurfacesEnabledProvider);
-    final premiumAvatar =
-        surfaces && (entitlements?.showPremiumAvatar ?? false);
-    final logoUrl = ref.watch(
+    final personalLogo = ref.watch(
       authControllerProvider.select((s) => s.user?.logoUrl),
     );
+    final avatar = accountHeaderAvatar(
+      isPersonal: ctx.isPersonal,
+      personalName: displayName,
+      personalLogoUrl: personalLogo,
+      office: selectedOffice,
+    );
+    final premiumAvatar =
+        ctx.isPersonal &&
+        surfaces &&
+        (entitlements?.showPremiumAvatar ?? false);
 
     return Row(
       children: [
         UserIdentityAvatar(
-          displayName: displayName,
-          imageUrl: logoUrl,
+          displayName: avatar.displayName,
+          imageUrl: avatar.imageUrl,
           size: AppSize.buttonHeight,
           semanticsLabel: l10n.userProfileTitle,
-          onTap: () => context.push(AuthPaths.profile),
+          onTap: avatar.opensProfile
+              ? () => context.push(AuthPaths.profile)
+              : null,
+          fit: ctx.isPersonal ? BoxFit.contain : BoxFit.cover,
           backgroundColor: premiumAvatar
               ? entitlements!.premiumAvatarColor
               : null,

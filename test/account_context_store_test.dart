@@ -36,4 +36,14 @@ void main() {
     final read = await AccountContextStore.readPreviousScope(prefs);
     expect(read?.officeId, sampleOfficeId);
   });
+
+  test('lowercase office id from the API round-trips', () async {
+    const lowercaseId = '01m847kyartbxh7kmjy94hek1g';
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    await AccountContextStore.writeScope(prefs, AccountScope.office(lowercaseId));
+    final read = await AccountContextStore.readScope(prefs);
+    expect(read.officeId, lowercaseId);
+    expect(read.isPersonal, isFalse);
+  });
 }

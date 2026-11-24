@@ -15,6 +15,7 @@ class UserIdentityAvatar extends StatelessWidget {
     this.semanticsLabel,
     this.backgroundColor,
     this.foregroundColor,
+    this.fit = BoxFit.contain,
   });
 
   final String displayName;
@@ -24,6 +25,7 @@ class UserIdentityAvatar extends StatelessWidget {
   final String? semanticsLabel;
   final Color? backgroundColor;
   final Color? foregroundColor;
+  final BoxFit fit;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class UserIdentityAvatar extends StatelessWidget {
             url,
             width: size,
             height: size,
-            fit: BoxFit.contain,
+            fit: fit,
             errorBuilder: (_, _, _) =>
                 _initialsFace(text, initials, fontSize, colors),
           )

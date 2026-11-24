@@ -63,9 +63,10 @@ abstract final class AccountContextStore {
     await prefs.remove(_previousKey);
   }
 
-  /// Crockford base32 ULID (26 chars). Loose check for local restore until M2 validates membership.
+  /// Crockford base32 ULID (26 chars). Case-insensitive: the API sends lowercase.
+  /// Loose check for local restore until membership is validated.
   static bool isPlausibleOfficeId(String value) {
     if (value.length != 26) return false;
-    return RegExp(r'^[0-9A-HJKMNP-TV-Z]{26}$').hasMatch(value);
+    return RegExp(r'^[0-9A-HJKMNP-TV-Z]{26}$').hasMatch(value.toUpperCase());
   }
 }

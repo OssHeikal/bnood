@@ -27,7 +27,12 @@ class _AuthMember extends AuthController {
   AuthState build() {
     return AuthState(
       bootstrapStatus: AuthBootstrapStatus.authenticated,
-      user: const User(id: 'u1', phone: '01000000001', name: 'م/ ياسر مهندس'),
+      user: const User(
+        id: 'u1',
+        phone: '01000000001',
+        name: 'م/ ياسر مهندس',
+        logoUrl: 'https://cdn.example/user.png',
+      ),
       officeContext: const AuthOfficePayload(
         offices: [
           OfficeMembership(
@@ -35,6 +40,7 @@ class _AuthMember extends AuthController {
             name: 'مكتب النور',
             readOnly: false,
             isOwner: false,
+            logoUrl: 'https://cdn.example/office.png',
           ),
         ],
       ),
@@ -55,6 +61,7 @@ class _AuthOwner extends AuthController {
             name: 'مكتب المالك',
             readOnly: true,
             isOwner: true,
+            logoUrl: 'https://cdn.example/owner-office.png',
           ),
         ],
       ),
@@ -94,9 +101,7 @@ Future<void> _pumpSwitcherTitle(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: const HomeFoundationScope(
-          child: Scaffold(
-            body: AccountSwitcherTitle(displayName: 'تجربة'),
-          ),
+          child: Scaffold(body: AccountSwitcherTitle(displayName: 'تجربة')),
         ),
       ),
     ),
@@ -123,7 +128,9 @@ Future<void> _pumpHomeHeader(
             locale: const Locale('ar'),
           ),
         ),
-        homeTotalsOverride(const HomeTotals(receivedPiastres: 0, spentPiastres: 0)),
+        homeTotalsOverride(
+          const HomeTotals(receivedPiastres: 0, spentPiastres: 0),
+        ),
         homeActiveProjectsOverride(const []),
         emptyHomeSupplierSpendsOverride(),
         emptyHomeCraftsmenOverride(),
@@ -174,7 +181,12 @@ void main() {
 
     await _pumpSwitcherTitle(tester, container: container);
 
-    expect(find.byType(UserIdentityAvatar), findsOneWidget);
+    final avatar = tester.widget<UserIdentityAvatar>(
+      find.byType(UserIdentityAvatar),
+    );
+    expect(avatar.imageUrl, 'https://cdn.example/office.png');
+    expect(avatar.displayName, 'مكتب النور');
+    expect(avatar.onTap, isNull);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
   });
 
@@ -207,6 +219,11 @@ void main() {
     expect(container.read(accountContextProvider).officeId, _officeId);
     expect(find.byIcon(Icons.expand_more), findsNothing);
     expect(find.text('مكتب المالك'), findsOneWidget);
+    final avatar = tester.widget<UserIdentityAvatar>(
+      find.byType(UserIdentityAvatar),
+    );
+    expect(avatar.imageUrl, 'https://cdn.example/owner-office.png');
+    expect(avatar.onTap, isNotNull);
     expect(find.text('شخصي'), findsNothing);
   });
 }

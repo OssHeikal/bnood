@@ -11,8 +11,7 @@ export 'auth_office_payload.dart';
 export 'office_membership.dart';
 
 final officeMembershipsProvider = Provider<List<OfficeMembership>>((ref) {
-  return ref.watch(authControllerProvider).officeContext?.offices ??
-      const [];
+  return ref.watch(authControllerProvider).officeContext?.offices ?? const [];
 });
 
 final userLocksToOwnedOfficeProvider = Provider<bool>((ref) {
@@ -82,6 +81,29 @@ final officeDashboardLaunchProvider = Provider<OfficeDashboardLaunch>((ref) {
   }
   return (show: false, url: null);
 });
+
+/// Home header face: personal logo, or the selected office logo.
+/// Profile opens from that face only for a personal scope or the office owner.
+({String displayName, String? imageUrl, bool opensProfile})
+accountHeaderAvatar({
+  required bool isPersonal,
+  required String personalName,
+  String? personalLogoUrl,
+  OfficeMembership? office,
+}) {
+  if (!isPersonal && office != null) {
+    return (
+      displayName: office.name,
+      imageUrl: office.logoUrl,
+      opensProfile: office.isOwner,
+    );
+  }
+  return (
+    displayName: personalName,
+    imageUrl: personalLogoUrl,
+    opensProfile: true,
+  );
+}
 
 String accountDisplayTitle({
   required bool isPersonal,

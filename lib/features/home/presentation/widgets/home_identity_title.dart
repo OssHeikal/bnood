@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/account/account_context_providers.dart';
+import '../../../../core/account/account_office_providers.dart';
 import '../../../../core/services/config/extensions/num_extensions.dart';
 import '../../../../core/services/config/theme/app_colors.dart';
 import '../../../../core/services/config/theme/app_size.dart';
@@ -34,20 +36,33 @@ class HomeIdentityTitle extends ConsumerWidget {
         : l10n.homeGreetingEvening;
     final entitlements = ref.watch(subscriptionEntitlementsProvider);
     final surfaces = ref.watch(subscriptionSurfacesEnabledProvider);
-    final premiumAvatar =
-        surfaces && (entitlements?.showPremiumAvatar ?? false);
-    final logoUrl = ref.watch(
+    final ctx = ref.watch(accountContextProvider);
+    final office = ref.watch(selectedOfficeMembershipProvider);
+    final personalLogo = ref.watch(
       authControllerProvider.select((s) => s.user?.logoUrl),
     );
+    final avatar = accountHeaderAvatar(
+      isPersonal: ctx.isPersonal,
+      personalName: displayName,
+      personalLogoUrl: personalLogo,
+      office: office,
+    );
+    final premiumAvatar =
+        ctx.isPersonal &&
+        surfaces &&
+        (entitlements?.showPremiumAvatar ?? false);
 
     return Row(
       children: [
         UserIdentityAvatar(
-          displayName: displayName,
-          imageUrl: logoUrl,
+          displayName: avatar.displayName,
+          imageUrl: avatar.imageUrl,
           size: AppSize.buttonHeight,
           semanticsLabel: l10n.userProfileTitle,
-          onTap: () => context.push(AuthPaths.profile),
+          onTap: avatar.opensProfile
+              ? () => context.push(AuthPaths.profile)
+              : null,
+          fit: ctx.isPersonal ? BoxFit.contain : BoxFit.cover,
           backgroundColor: premiumAvatar
               ? entitlements!.premiumAvatarColor
               : null,
