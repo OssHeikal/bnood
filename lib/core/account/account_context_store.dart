@@ -22,9 +22,13 @@ abstract final class AccountContextStore {
     return scope.isPersonal ? valuePersonal : scope.officeId!;
   }
 
-  static Future<AccountScope> readScope(SharedPreferences? prefs) async {
+  static AccountScope readScopeSync(SharedPreferences? prefs) {
     if (prefs == null) return const AccountScope.personal();
     return scopeFromStored(prefs.getString(_selectionKey));
+  }
+
+  static Future<AccountScope> readScope(SharedPreferences? prefs) async {
+    return readScopeSync(prefs);
   }
 
   static Future<void> writeScope(

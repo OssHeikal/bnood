@@ -5,6 +5,7 @@ import 'package:bnood/features/account/presentation/widgets/account_switcher_tit
 import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/features/home/presentation/screens/home_screen.dart';
+import 'package:bnood/features/auth/widgets/user_identity_avatar.dart';
 import 'package:bnood/features/auth/auth_controller.dart';
 import 'package:bnood/features/auth/auth_state.dart';
 import 'package:bnood/features/auth/models/user.dart';
@@ -160,6 +161,21 @@ void main() {
     expect(container.read(accountSwitcherVisibleProvider), isTrue);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
     expect(find.text('مكتب النور'), findsOneWidget);
+  });
+
+  testWidgets('switcher title shows identity avatar beside chevron', (
+    tester,
+  ) async {
+    final container = _scopeContainer(
+      authFactory: _AuthMember.new,
+      prefs: {'bnood.account.selection': _officeId},
+    );
+    addTearDown(container.dispose);
+
+    await _pumpSwitcherTitle(tester, container: container);
+
+    expect(find.byType(UserIdentityAvatar), findsOneWidget);
+    expect(find.byIcon(Icons.expand_more), findsOneWidget);
   });
 
   testWidgets('named member on home keeps switcher chevron', (tester) async {

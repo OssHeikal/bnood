@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../app_state/settings_provider.dart';
 import '../data/prefs/bnood_prefs_access.dart';
 import 'account_context_store.dart';
 import 'account_context_state.dart';
@@ -27,8 +28,14 @@ class AccountContextController extends Notifier<AccountContextState> {
     });
 
     scheduleMicrotask(_bootstrapScope);
-    ApiOfficeHeader.syncOfficeId(null);
-    return const AccountContextState.personal();
+    return _initialStateFromDisk();
+  }
+
+  AccountContextState _initialStateFromDisk() {
+    final prefs = ref.read(appSettingsBootstrapProvider).prefs;
+    final scope = AccountContextStore.readScopeSync(prefs);
+    ApiOfficeHeader.syncOfficeId(scope.officeId);
+    return AccountContextState(scope: scope, restoredFromDisk: true);
   }
 
   Future<void> selectPersonal() async {
@@ -121,6 +128,8 @@ class AccountContextController extends Notifier<AccountContextState> {
   }
 
   Future<void> _reconcileOffices(List<OfficeMembership> offices) async {
+    if (offices.isEmpty) return;
+
     final owned = primaryOwnedOffice(offices);
     if (owned != null) {
       if (state.scope != AccountScope.office(owned.id)) {

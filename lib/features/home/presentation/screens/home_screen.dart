@@ -69,11 +69,15 @@ class HomeScreen extends ConsumerWidget {
       homeTitleWidget = AccountSwitcherTitle(
         displayName: displayName ?? '',
         greeting: showIdentityHeader ? homeGreeting : null,
+        showAvatar: showIdentityHeader,
       );
     } else if (showIdentityHeader) {
       homeTitleWidget = HomeIdentityTitle(displayName: displayName);
     } else if (showOwnedOfficeHeader) {
-      homeTitleWidget = AccountSwitcherTitle(displayName: displayName ?? '');
+      homeTitleWidget = AccountSwitcherTitle(
+        displayName: displayName ?? '',
+        showAvatar: showIdentityHeader,
+      );
     } else {
       homeTitleWidget = null;
     }

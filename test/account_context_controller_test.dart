@@ -17,16 +17,17 @@ void main() {
 
   const sampleOfficeId = '01J9Z8XQ8K9M2N3P4R5S6T7V8W';
 
-  ProviderContainer newTestContainer({
+  Future<ProviderContainer> newTestContainer({
     Map<String, Object> initialPrefs = const {},
     AuthOfficePayload? officeContext,
-  }) {
+  }) async {
     SharedPreferences.setMockInitialValues(initialPrefs);
+    final prefs = await SharedPreferences.getInstance();
     return ProviderContainer(
       overrides: [
         appSettingsBootstrapProvider.overrideWithValue(
           AppSettingsSnapshot(
-            prefs: null,
+            prefs: prefs,
             themeMode: ThemeMode.system,
             locale: const Locale('ar'),
           ),
@@ -40,12 +41,65 @@ void main() {
   }
 
   tearDown(() {
+    SharedPreferences.setMockInitialValues({});
     debugAccountScopedResetHook = null;
     ApiOfficeHeader.syncOfficeId(null);
   });
 
+  test('container recreate restores office selection and header', () async {
+    const offices = AuthOfficePayload(
+      offices: [
+        OfficeMembership(
+          id: sampleOfficeId,
+          name: 'Office',
+          readOnly: false,
+          isOwner: false,
+        ),
+      ],
+    );
+    final container = await newTestContainer(officeContext: offices);
+    addTearDown(container.dispose);
+    container.read(accountContextLifecycleProvider);
+    await pumpEventQueue();
+
+    await container
+        .read(accountContextProvider.notifier)
+        .selectOffice(sampleOfficeId);
+    await pumpEventQueue();
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('bnood.account.selection'), sampleOfficeId);
+    container.dispose();
+
+    final recreated = await newTestContainer(
+      officeContext: offices,
+      initialPrefs: {'bnood.account.selection': sampleOfficeId},
+    );
+    addTearDown(recreated.dispose);
+    recreated.read(accountContextLifecycleProvider);
+    await pumpEventQueue();
+
+    expect(recreated.read(accountContextProvider).officeId, sampleOfficeId);
+    expect(ApiOfficeHeader.headerValue(), sampleOfficeId);
+  });
+
+  test('empty office list does not clear stored office scope', () async {
+    final container = await newTestContainer(
+      initialPrefs: {'bnood.account.selection': sampleOfficeId},
+      officeContext: const AuthOfficePayload(offices: []),
+    );
+    addTearDown(container.dispose);
+    container.read(accountContextLifecycleProvider);
+    await pumpEventQueue();
+
+    expect(container.read(accountContextProvider).officeId, sampleOfficeId);
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('bnood.account.selection'), sampleOfficeId);
+  });
+
   test('restoreFromDisk applies stored office and syncs header', () async {
-    final container = newTestContainer(
+    final container = await newTestContainer(
       initialPrefs: {'bnood.account.selection': sampleOfficeId},
     );
     addTearDown(container.dispose);
@@ -59,7 +113,7 @@ void main() {
   });
 
   test('selectOffice persists and updates header', () async {
-    final container = newTestContainer();
+    final container = await newTestContainer();
     addTearDown(container.dispose);
     container.read(accountContextLifecycleProvider);
     await pumpEventQueue();
@@ -79,7 +133,7 @@ void main() {
     var resetCount = 0;
     debugAccountScopedResetHook = () => resetCount++;
 
-    final container = newTestContainer();
+    final container = await newTestContainer();
     addTearDown(container.dispose);
     container.read(accountContextLifecycleProvider);
     await pumpEventQueue();
@@ -95,7 +149,7 @@ void main() {
 
   test('owner with stored personal migrates to owned office', () async {
     const ownedId = sampleOfficeId;
-    final container = newTestContainer(
+    final container = await newTestContainer(
       initialPrefs: {'bnood.account.selection': 'personal'},
       officeContext: const AuthOfficePayload(
         offices: [
@@ -122,7 +176,7 @@ void main() {
   });
 
   test('logout clears persisted scope and office header', () async {
-    final container = newTestContainer(
+    final container = await newTestContainer(
       initialPrefs: {
         'bnood.account.selection': sampleOfficeId,
         'bnood.account.previous': 'personal',
@@ -156,7 +210,7 @@ void main() {
   });
 
   test('selectPersonal clears office header', () async {
-    final container = newTestContainer();
+    final container = await newTestContainer();
     addTearDown(container.dispose);
     container.read(accountContextLifecycleProvider);
     await pumpEventQueue();
