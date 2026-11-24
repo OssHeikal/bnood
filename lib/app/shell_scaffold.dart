@@ -88,6 +88,7 @@ class _ShellScaffoldState extends ConsumerState<ShellScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    final ledgerEpoch = ref.watch(appLedgerScopeEpochProvider);
     final l10n = AppLocalizations.of(context);
     final isPersonal = ref.watch(accountContextProvider.select((s) => s.isPersonal));
     final destinations = _destinations(l10n, isPersonal);
@@ -106,7 +107,12 @@ class _ShellScaffoldState extends ConsumerState<ShellScaffold> {
               onVoucher: () => VoucherLauncher.openFresh(context),
               voucherSemanticsLabel: voucherLabel,
             ),
-            Expanded(child: widget.navigationShell),
+            Expanded(
+              child: KeyedSubtree(
+                key: ValueKey('shell-branch-$ledgerEpoch'),
+                child: widget.navigationShell,
+              ),
+            ),
           ],
         ),
       );
@@ -134,7 +140,10 @@ class _ShellScaffoldState extends ConsumerState<ShellScaffold> {
             ),
             child: ShellChromeScope(
               keyboardOpen: keyboardOpen,
-              child: widget.navigationShell,
+              child: KeyedSubtree(
+                key: ValueKey('shell-branch-$ledgerEpoch'),
+                child: widget.navigationShell,
+              ),
             ),
           ),
           if (showShellDock) ...[

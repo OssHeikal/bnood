@@ -13,7 +13,12 @@ import '../../shared/pagination/paging_refresh.dart';
 import 'package:bnood/features/subscription/data/subscription_riverpod.dart';
 import 'package:bnood/features/clients/presentation/providers/client_craftsmen_list_provider.dart';
 import 'package:bnood/features/clients/presentation/providers/client_detail_provider.dart';
+import 'package:bnood/features/clients/presentation/providers/client_identity_provider.dart';
 import 'package:bnood/features/clients/presentation/providers/client_items_stats_provider.dart';
+import 'package:bnood/features/projects/data/projects_repository.dart';
+import 'package:bnood/features/projects/presentation/providers/project_detail_provider.dart';
+import 'package:bnood/features/projects/presentation/providers/projects_list_paging.dart';
+import 'package:bnood/features/projects/presentation/providers/projects_list_providers.dart';
 import 'package:bnood/features/providers/presentation/providers/client_suppliers_list_provider.dart';
 import 'package:bnood/features/providers/presentation/providers/provider_detail_provider.dart';
 
@@ -46,6 +51,7 @@ void _resetUserScopedState({
   invalidate(homeRepositoryProvider);
   invalidate(homeTotalsProvider);
   invalidate(homeClientBalancesProvider);
+  invalidate(homeActiveProjectsProvider);
   invalidate(homeSupplierSpendsProvider);
   invalidate(homeCraftsmenProvider);
   invalidate(homeSuppliersProvider);
@@ -58,11 +64,18 @@ void _resetUserScopedState({
   invalidate(itemIconsCatalogProvider);
 
   invalidate(clientDetailProvider);
+  invalidate(clientIdentityProvider);
   invalidate(clientCraftsmenListProvider);
   invalidate(clientSuppliersListProvider);
   invalidate(clientItemsStatsProvider);
 
   invalidate(providerDetailProvider);
+  invalidate(projectDetailProvider);
+
+  invalidate(projectsListPageFetcherProvider);
+  invalidate(projectsListSearchQueryProvider);
+  invalidate(projectsListFilterProvider);
+  invalidate(projectsRepositoryProvider);
 
   invalidate(appProvidersRepositoryProvider);
   invalidate(clientsRepositoryProvider);
