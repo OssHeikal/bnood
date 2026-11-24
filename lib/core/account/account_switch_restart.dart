@@ -1,15 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../app/router.dart';
-import 'account_context_reset.dart';
 
-/// Bumps when the active ledger account changes so shell subtrees fully rebuild.
-final appLedgerScopeEpochProvider = StateProvider<int>((ref) => 0);
+import '../../app/app_root_restart.dart';
 
-const accountShellHomePath = '/home';
-
-/// Clears ledger caches, rebuilds shell scope, and returns navigation to Home.
-void performAccountSwitchRestart(Ref ref) {
-  resetAccountScopedState(ref);
-  ref.read(appLedgerScopeEpochProvider.notifier).state++;
-  ref.read(goRouterProvider).go(accountShellHomePath);
+/// After a user-driven account identity change, reload the app under a fresh scope.
+void requestAccountSwitchRestart(Ref ref) {
+  unawaited(
+    Future.microtask(AppRootRestart.request),
+  );
 }

@@ -27,6 +27,6 @@ final accountContextLifecycleProvider = Provider<void>((ref) {
   ref.listen<AccountContextState>(accountContextProvider, (previous, next) {
     if (previous == null) return;
     if (_accountSelectionKey(previous) == _accountSelectionKey(next)) return;
-    performAccountSwitchRestart(ref);
+    requestAccountSwitchRestart(ref);
   });
 });

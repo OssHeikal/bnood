@@ -2,7 +2,6 @@ import 'package:bnood/core/account/account_context_providers.dart';
 import 'package:bnood/core/account/account_office_providers.dart';
 import 'package:bnood/core/services/config/theme/app_theme.dart';
 import 'package:bnood/features/account/presentation/widgets/account_switcher_title.dart';
-import 'package:bnood/features/home/presentation/providers/home_dashboard_providers.dart';
 import 'package:bnood/features/home/data/home_row_models.dart';
 import 'package:bnood/features/home/presentation/screens/home_screen.dart';
 import 'package:bnood/features/auth/widgets/user_identity_avatar.dart';
@@ -146,6 +145,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   tearDown(() {
+    SharedPreferences.setMockInitialValues({});
     ApiOfficeHeader.syncOfficeId(null);
   });
 

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../app_state/settings_provider.dart';
+import '../app_state/bootstrap_prefs.dart';
 import '../data/prefs/bnood_prefs_access.dart';
 import 'account_context_store.dart';
 import 'account_context_state.dart';
@@ -32,7 +32,7 @@ class AccountContextController extends Notifier<AccountContextState> {
   }
 
   AccountContextState _initialStateFromDisk() {
-    final prefs = ref.read(appSettingsBootstrapProvider).prefs;
+    final prefs = tryReadBootstrapPrefs(ref);
     final scope = AccountContextStore.readScopeSync(prefs);
     ApiOfficeHeader.syncOfficeId(scope.officeId);
     return AccountContextState(scope: scope, restoredFromDisk: true);

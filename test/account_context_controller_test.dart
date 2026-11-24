@@ -1,3 +1,4 @@
+import 'package:bnood/app/app_root_restart.dart';
 import 'package:bnood/core/account/account_context_providers.dart';
 import 'package:bnood/core/account/auth_office_payload.dart';
 import 'package:bnood/core/account/office_membership.dart';
@@ -42,6 +43,7 @@ void main() {
 
   tearDown(() {
     SharedPreferences.setMockInitialValues({});
+    AppRootRestart.resetForTest();
     debugAccountScopedResetHook = null;
     ApiOfficeHeader.syncOfficeId(null);
   });
@@ -129,9 +131,9 @@ void main() {
     expect(prefs.getString('bnood.account.selection'), sampleOfficeId);
   });
 
-  test('account switch invokes cache reset hook', () async {
-    var resetCount = 0;
-    debugAccountScopedResetHook = () => resetCount++;
+  test('account switch requests root restart', () async {
+    var restartCount = 0;
+    AppRootRestart.bind(() => restartCount++);
 
     final container = await newTestContainer();
     addTearDown(container.dispose);
@@ -141,10 +143,12 @@ void main() {
     await container
         .read(accountContextProvider.notifier)
         .selectOffice(sampleOfficeId);
-    expect(resetCount, 1);
+    await pumpEventQueue();
+    expect(restartCount, 1);
 
     await container.read(accountContextProvider.notifier).selectPersonal();
-    expect(resetCount, 2);
+    await pumpEventQueue();
+    expect(restartCount, 2);
   });
 
   test('owner with stored personal migrates to owned office', () async {
