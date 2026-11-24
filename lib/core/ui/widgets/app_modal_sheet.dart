@@ -40,6 +40,7 @@ class AppModalSheetScope extends InheritedWidget {
 abstract final class AppModalSheet {
   static const sheetBoundsKey = Key('app_modal_sheet_bounds');
   static const footerChromeKey = Key('app_modal_sheet_footer_chrome');
+  static const bottomInsetKey = Key('app_modal_sheet_bottom_inset');
 
   static Future<T?> show<T>({
     required BuildContext context,
@@ -76,12 +77,18 @@ abstract final class AppModalSheet {
       shape: const RoundedRectangleBorder(),
       builder: (ctx) {
         final media = MediaQuery.of(ctx);
+        var resolvedHomeIndicator = homeIndicatorBottom;
+        if (resolvedHomeIndicator <= 0) {
+          resolvedHomeIndicator = media.viewPadding.bottom > 0
+              ? media.viewPadding.bottom
+              : media.padding.bottom;
+        }
         final viewPad = media.viewPadding.copyWith(
           top: openerViewPadding.top > 0
               ? openerViewPadding.top
               : media.viewPadding.top,
-          bottom: homeIndicatorBottom > 0
-              ? homeIndicatorBottom
+          bottom: resolvedHomeIndicator > 0
+              ? resolvedHomeIndicator
               : media.viewPadding.bottom,
           left: openerViewPadding.left > 0
               ? openerViewPadding.left
@@ -108,7 +115,7 @@ abstract final class AppModalSheet {
           scrollable: scrollable,
           maxHeight: maxHeight,
           keyboardBottom: keyboard,
-          homeIndicatorBottom: homeIndicatorBottom,
+          homeIndicatorBottom: resolvedHomeIndicator,
         );
 
         sheet = Material(
@@ -265,7 +272,13 @@ class _ModalSheetSlotsState extends State<_ModalSheetSlots> {
             Flexible(fit: FlexFit.loose, child: _wrapBody(widget.body))
           else
             _wrapBody(widget.body),
-          _padFooter(widget.footer),
+          if (widget.footer != null)
+            _padFooter(widget.footer)
+          else if (widget.keyboardBottom == 0)
+            SizedBox(
+              key: AppModalSheet.bottomInsetKey,
+              height: _footerChromeBottom,
+            ),
         ],
       ),
     );

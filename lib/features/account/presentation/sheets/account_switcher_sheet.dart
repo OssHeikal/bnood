@@ -38,9 +38,6 @@ class AccountSwitcherSheet extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
     final text = context.text;
-    final homeBottom = AppModalSheetScope.homeIndicatorOf(context);
-    final bottomGap = AppSize.spaceLG + homeBottom;
-
     final user = ref.watch(authControllerProvider.select((s) => s.user));
     final personalName = user?.name?.trim().isNotEmpty == true
         ? user!.name!.trim()
@@ -66,11 +63,11 @@ class AccountSwitcherSheet extends ConsumerWidget {
     ];
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(
+      padding: const EdgeInsets.fromLTRB(
         AppSize.screenPadding,
         AppSize.spaceSM,
         AppSize.screenPadding,
-        bottomGap,
+        0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
