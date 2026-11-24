@@ -1,6 +1,15 @@
+import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
+import 'package:bnood/features/notifications/data/inbox_notification_record.dart';
+import 'package:bnood/features/notifications/data/notifications_repository.dart';
+import 'package:bnood/features/notifications/presentation/providers/notifications_inbox_paging.dart';
+import 'package:bnood/features/notifications/presentation/providers/notifications_unread_provider.dart';
+import 'package:bnood/features/notifications/presentation/widgets/notification_inbox_card.dart';
+import 'package:bnood/features/notifications/presentation/widgets/notifications_inbox_loading_skeleton.dart';
+import 'package:bnood/features/subscription/presentation/actions/paywall_launcher.dart';
 import 'package:bnood/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../app/router.dart';
 import '../../../../app/widgets/shell_nav_icon.dart';
 import '../../../../core/account/account_context_providers.dart';
@@ -10,15 +19,8 @@ import '../../../../core/services/config/theme/app_size.dart';
 import '../../../../core/shared/pagination/pagination.dart';
 import '../../../../core/ui/resources/gen/assets.gen.dart';
 import '../../../../core/ui/widgets/app_fallback.dart';
+import '../../../../core/ui/widgets/app_toaster.dart';
 import '../../../../core/ui/widgets/custom_app_bar.dart';
-import 'package:bnood/features/home/presentation/widgets/home_foundation_scope.dart';
-import 'package:bnood/features/notifications/data/inbox_notification_record.dart';
-import 'package:bnood/features/notifications/data/notifications_repository.dart';
-import 'package:bnood/features/notifications/presentation/providers/notifications_inbox_paging.dart';
-import 'package:bnood/features/notifications/presentation/providers/notifications_unread_provider.dart';
-import 'package:bnood/features/notifications/presentation/widgets/notification_inbox_card.dart';
-import 'package:bnood/features/notifications/presentation/widgets/notifications_inbox_loading_skeleton.dart';
-import 'package:bnood/features/subscription/presentation/actions/paywall_launcher.dart';
 
 class NotificationsInboxScreen extends ConsumerStatefulWidget {
   const NotificationsInboxScreen({super.key});
@@ -26,12 +28,10 @@ class NotificationsInboxScreen extends ConsumerStatefulWidget {
   static const path = '/notifications';
 
   @override
-  ConsumerState<NotificationsInboxScreen> createState() =>
-      _NotificationsInboxScreenState();
+  ConsumerState<NotificationsInboxScreen> createState() => _NotificationsInboxScreenState();
 }
 
-class _NotificationsInboxScreenState
-    extends ConsumerState<NotificationsInboxScreen> {
+class _NotificationsInboxScreenState extends ConsumerState<NotificationsInboxScreen> {
   late final AppPagingController<InboxNotificationRecord> _pagingController;
 
   @override
@@ -56,22 +56,17 @@ class _NotificationsInboxScreenState
       refreshNotificationsUnreadCount(ref);
       _pagingController.refresh();
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.notificationsMarkAllReadDone)),
-      );
+      AppToaster.show(l10n.notificationsMarkAllReadDone, kind: ToastKind.success, layoutContext: context);
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.homeLoadErrorTitle)),
-      );
+      AppToaster.show(l10n.homeLoadErrorTitle, kind: ToastKind.failure, layoutContext: context);
     }
   }
 
   Future<void> _onTap(InboxNotificationRecord item) async {
     final payload = <String, String>{
       'type': item.type,
-      for (final entry in item.data.entries)
-        entry.key: entry.value?.toString() ?? '',
+      for (final entry in item.data.entries) entry.key: entry.value?.toString() ?? '',
     };
     final location = resolvePushNavigationLocation(payload);
     if (!mounted) return;
@@ -113,9 +108,7 @@ class _NotificationsInboxScreenState
                 padding: const EdgeInsets.symmetric(horizontal: AppSize.spaceSM),
                 child: Text(
                   l10n.notificationsMarkAllRead,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: colors.primary,
-                  ),
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(color: colors.primary),
                 ),
               ),
             ),
@@ -126,13 +119,9 @@ class _NotificationsInboxScreenState
           layout: AppPagedLayout.sliverListSeparated,
           pullToRefresh: true,
           scrollPhysics: const AlwaysScrollableScrollPhysics(),
-          itemBuilder: (context, item, _) => NotificationInboxCard(
-            item: item,
-            onTap: () => _onTap(item),
-          ),
+          itemBuilder: (context, item, _) => NotificationInboxCard(item: item, onTap: () => _onTap(item)),
           builders: AppPagedBuilders<InboxNotificationRecord>(
-            firstPageProgress: (_, _) =>
-                const NotificationsInboxLoadingSkeleton(),
+            firstPageProgress: (_, _) => const NotificationsInboxLoadingSkeleton(),
             empty: (context) => SizedBox(
               height: 280,
               child: Padding(
